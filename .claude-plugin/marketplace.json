@@ -1,0 +1,39 @@
+{
+  "name": "vais-marketplace",
+  "owner": {
+    "name": "VAIS Voice",
+    "email": "ghlee0304@ncsoft.com"
+  },
+  "metadata": {
+    "description": "VAIS Code — 9단계 개발 워크플로우 플러그인",
+    "version": "0.9.1"
+  },
+  "plugins": [
+    {
+      "name": "vais-code",
+      "description": "9-step development workflow plugin with chaining syntax, parallel design, and gap analysis.",
+      "version": "0.9.1",
+      "author": {
+        "name": "VAIS Voice",
+        "email": "ghlee0304@ncsoft.com"
+      },
+      "repository": "https://github.com/ghlee3401/vais-claude-code",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/ghlee3401/vais-claude-code.git"
+      },
+      "license": "MIT",
+      "category": "development",
+      "keywords": [
+        "workflow",
+        "development",
+        "wireframe",
+        "gap-analysis",
+        "code-review",
+        "planning",
+        "agent-team",
+        "korean"
+      ]
+    }
+  ]
+}

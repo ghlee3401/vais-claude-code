@@ -1,0 +1,6 @@
+node_modules/
+.vais/
+.bkit/
+*.log
+.DS_Store
+bkit-claude-code/

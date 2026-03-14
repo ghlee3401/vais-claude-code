@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+/**
+ * VAIS Code - Document Tracker (PostToolUse: Write|Edit)
+ * 문서 작성/수정 시 워크플로우 상태 자동 업데이트
+ */
+const path = require('path');
+const { readStdin, parseHookInput, outputAllow } = require('../lib/io');
+const { debugLog } = require('../lib/debug');
+const { updatePhase, getActiveFeature } = require('../lib/status');
+const { loadConfig } = require('../lib/paths');
+
+const input = readStdin();
+const { filePath } = parseHookInput(input);
+
+if (!filePath) {
+  outputAllow();
+  process.exit(0);
+}
+
+const config = loadConfig();
+const docPaths = config.workflow?.docPaths || {};
+const activeFeature = getActiveFeature();
+
+// 작성된 파일이 워크플로우 문서인지 확인
+if (activeFeature) {
+  for (const [phase, template] of Object.entries(docPaths)) {
+    const expected = template.replace(/\{feature\}/g, activeFeature);
+    if (filePath.includes(expected)) {
+      // design-db는 design 단계의 일부이므로 design으로 매핑
+      const actualPhase = phase === 'design-db' ? 'design' : phase;
+      updatePhase(activeFeature, actualPhase, 'completed');
+      debugLog('DocTracker', 'Phase completed via doc write', { phase: actualPhase, feature: activeFeature });
+
+      const phaseNames = config.workflow?.phaseNames || {};
+      const phaseName = phaseNames[phase] || phase;
+      outputAllow(`✅ "${activeFeature}" - ${phaseName} 문서 작성 완료. 워크플로우 상태가 업데이트되었습니다.`);
+      process.exit(0);
+    }
+  }
+}
+
+outputAllow();
+process.exit(0);

@@ -1,0 +1,23 @@
+{
+  "name": "vais-code",
+  "version": "0.9.1",
+  "description": "VAIS Code - 체이닝 문법(: 순차, + 병렬), 설계 병렬화(UI+DB), 실행 검증 통합 Gap 분석을 지원하는 9단계 개발 워크플로우 플러그인.",
+  "author": {
+    "name": "VAIS Voice",
+    "email": "ghlee0304@ncsoft.com",
+    "url": "https://github.com/ghlee3401"
+  },
+  "repository": "https://github.com/ghlee3401/vais-claude-code",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "development",
+    "wireframe",
+    "gap-analysis",
+    "code-review",
+    "planning",
+    "agent-team",
+    "korean"
+  ],
+  "outputStyles": "./output-styles/"
+}

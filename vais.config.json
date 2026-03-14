@@ -1,0 +1,93 @@
+{
+  "version": "0.9.1",
+  "workflow": {
+    "phases": ["research", "plan", "ia", "wireframe", "design", "fe", "be", "check", "review"],
+    "phaseNames": {
+      "research": "조사·탐색",
+      "plan": "기획",
+      "ia": "IA 설계",
+      "wireframe": "와이어프레임",
+      "design": "설계 (UI+DB)",
+      "fe": "프론트엔드",
+      "be": "백엔드",
+      "check": "Gap 분석",
+      "review": "검토"
+    },
+    "docPaths": {
+      "research": "docs/01-research/{feature}.md",
+      "plan": "docs/02-plan/{feature}.md",
+      "ia": "docs/03-ia/{feature}.md",
+      "wireframe": "docs/04-wireframe/{feature}.md",
+      "design": "docs/05-design/{feature}.md",
+      "design-db": "docs/05-design/{feature}-db.md",
+      "check": "docs/06-check/{feature}.md",
+      "review": "docs/07-review/{feature}.md"
+    }
+  },
+  "parallelGroups": {
+    "design": ["ui-design", "db-design"],
+    "implementation": ["fe", "be"]
+  },
+  "chaining": {
+    "sequential": ":",
+    "parallel": "+"
+  },
+  "gapAnalysis": {
+    "matchThreshold": 90,
+    "maxIterations": 5,
+    "autoIterate": true
+  },
+  "review": {
+    "autoReview": true,
+    "checklistRequired": true
+  },
+  "team": {
+    "enabled": true,
+    "maxTeammates": 5
+  },
+  "orchestration": {
+    "gates": ["plan", "fe"],
+    "gateAction": "confirm",
+    "skipGatesInRange": false
+  },
+  "featureNameSuggestions": {
+    "_description": "자주 쓰는 피처 이름 예시 (kebab-case 권장, 강제 아님)",
+    "인증·사용자": [
+      "login",
+      "signup",
+      "oauth",
+      "user-profile",
+      "my-page",
+      "password-reset"
+    ],
+    "결제·커머스": [
+      "payment",
+      "cart",
+      "checkout",
+      "order-history",
+      "wishlist",
+      "coupon"
+    ],
+    "콘텐츠": [
+      "feed",
+      "post",
+      "comment",
+      "search",
+      "notification",
+      "bookmark"
+    ],
+    "소셜": [
+      "chat",
+      "follow",
+      "share",
+      "invite",
+      "review"
+    ],
+    "관리·운영": [
+      "dashboard",
+      "settings",
+      "admin-panel",
+      "analytics"
+    ]
+  }
+}
