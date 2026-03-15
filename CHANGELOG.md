@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.10.0] - 2026-03-15
+
+### Added
+
+- **Manager 에이전트** — 프로젝트 최상위 의사결정자. 전체 히스토리 기억, 피처 간 의존성 관리, Tech Lead 지시
+  - `/vais manager` — Query 모드 (프로젝트 현황, 피처 히스토리, 의존성, 기술 부채 조회)
+  - `/vais manager "자연어"` — Command 모드 (판단 후 Tech Lead에 위임)
+  - 두 가지 모드: Query (질의 → memory 조회 → 답변), Command (실행 요청 → 판단 → Tech Lead 지시)
+- **Memory 시스템** (`lib/memory.js`) — `.vais/memory.json` 영속 메모리
+  - 7가지 엔트리 타입: decision, change, feedback, dependency, debt, error, milestone
+  - 피처별/타입별/기간별 조회, 의존성 맵, 기술 부채 관리, 프로젝트 요약
+- **doc-tracker memory 연동** — 단계 완료 시 milestone 자동 기록
+
+### Changed
+
+- **auto 워크플로우** — Manager → Tech Lead 경유 구조로 변경
+- **fix 워크플로우** — Manager 경유 크로스-피처 영향 분석 추가 (Step 0, Step 7)
+- **SKILL.md** — manager 트리거 키워드 추가 (매니저, 현황, 히스토리, 부채, 의존성, 브리핑)
+- **vais.config.json** — manager 설정 섹션 추가, team.maxTeammates 5→6
+- **에이전트 계층 구조**: Manager (What & Why) → Tech Lead (How) → 전문 에이전트팀
+
+---
+
 ## [0.9.1] - 2026-03-15
 
 ### Changed
