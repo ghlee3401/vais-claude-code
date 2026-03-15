@@ -41,9 +41,18 @@
     "autoReview": true,
     "checklistRequired": true
   },
+  "manager": {
+    "enabled": true,
+    "memory": {
+      "path": ".vais/memory.json",
+      "maxEntries": 500
+    },
+    "autoInvoke": ["auto", "fix"],
+    "entryTypes": ["decision", "change", "feedback", "dependency", "debt", "error", "milestone"]
+  },
   "team": {
     "enabled": true,
-    "maxTeammates": 5
+    "maxTeammates": 6
   },
   "orchestration": {
     "gates": ["plan", "fe"],

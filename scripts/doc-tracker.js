@@ -7,6 +7,7 @@ const path = require('path');
 const { readStdin, parseHookInput, outputAllow } = require('../lib/io');
 const { debugLog } = require('../lib/debug');
 const { updatePhase, getActiveFeature } = require('../lib/status');
+const { addEntry } = require('../lib/memory');
 const { loadConfig } = require('../lib/paths');
 
 const input = readStdin();
@@ -30,6 +31,21 @@ if (activeFeature) {
       const actualPhase = phase === 'design-db' ? 'design' : phase;
       updatePhase(activeFeature, actualPhase, 'completed');
       debugLog('DocTracker', 'Phase completed via doc write', { phase: actualPhase, feature: activeFeature });
+
+      // Manager memory에 milestone 기록
+      try {
+        const phaseNames = config.workflow?.phaseNames || {};
+        const phaseName = phaseNames[actualPhase] || actualPhase;
+        addEntry({
+          type: 'milestone',
+          feature: activeFeature,
+          phase: actualPhase,
+          summary: `${phaseName} 단계 완료 — ${path.basename(filePath)}`,
+          details: { filePath, phase: actualPhase },
+        });
+      } catch (memErr) {
+        debugLog('DocTracker', 'Memory write failed (non-critical)', { error: memErr.message });
+      }
 
       const phaseNames = config.workflow?.phaseNames || {};
       const phaseName = phaseNames[phase] || phase;
