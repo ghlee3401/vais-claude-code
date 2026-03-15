@@ -19,7 +19,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQue
 
 ## 현재 상태
 
-!`node "${CLAUDE_SKILL_DIR}/../../scripts/get-context.js" "$1" 2>/dev/null`
+Read 도구로 `.vais/status.json`을 읽어 현재 피처 진행 상태를 파악하세요. 파일이 없으면 새 프로젝트입니다.
 
 ## 공통 규칙
 
@@ -58,4 +58,6 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQue
 
 ## 실행 지침
 
-!`cat "${CLAUDE_SKILL_DIR}/phases/$0.md" 2>/dev/null || echo "알 수 없는 액션: $0. /vais help 로 사용법을 확인하세요."`
+1. Read 도구로 **`${CLAUDE_SKILL_DIR}/phases/$0.md`** 파일을 읽으세요.
+2. 파일이 존재하면 그 안의 지침에 따라 실행하세요.
+3. 파일이 없으면: "알 수 없는 액션: $0. `/vais help`로 사용법을 확인하세요."
