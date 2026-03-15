@@ -1,6 +1,16 @@
 ### 🔧 fix — 영향 분석 기반 수정
 
-사용자가 UI나 기능 수정을 요청할 때, **영향 범위를 먼저 파악**하고 연관된 코드·문서를 일괄 수정합니다.
+사용자가 UI나 기능 수정을 요청할 때, **Manager를 통해 영향 범위를 파악**하고 연관된 코드·문서를 일괄 수정합니다.
+
+> **Manager 경유**: fix는 Manager 에이전트를 호출합니다. Manager가 memory 기반으로 크로스-피처 영향을 분석한 후 Tech Lead에게 수정을 지시합니다.
+
+#### Step 0: Manager 호출
+
+Agent 도구로 **manager** 에이전트를 호출합니다:
+- 사용자 수정 요청 원문 전달
+- Manager가 `.vais/memory.json`에서 과거 의사결정, 피처 간 의존성 조회
+- 크로스-피처 영향 분석 후 Tech Lead에게 지시
+- 아래 Step 1~6은 Manager → Tech Lead 위임 후 실행되는 흐름입니다.
 
 #### Step 1: 피처 자동 감지
 
@@ -104,3 +114,11 @@ AskUserQuestion으로 확인:
 ```markdown
 | v1.x | {오늘 날짜} | fix: {수정 요약} — 영향: {변경된 파일 수}개 파일 |
 ```
+
+#### Step 7: Manager Memory 기록
+
+Tech Lead 실행 완료 후 Manager가 memory에 기록:
+- **change**: 수정 내용, 영향 범위, 체이닝 경로
+- **dependency**: 새로 발견된 피처 간 의존성 (있는 경우)
+- **debt**: 임시 처리된 부분, 추후 개선 필요사항 (있는 경우)
+- **decision**: 정책 변경 등 의사결정 (있는 경우)
