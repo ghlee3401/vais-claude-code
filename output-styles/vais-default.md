@@ -77,3 +77,4 @@ description: VAIS Code 기본 응답 스타일. 구조화된 개발 워크플로
 | v0.9.0 | 2026-03-14 | wireframe 스킬 통합, fix 체이닝 방식 전환, check Gap 방향 판단 |
 | v0.9.1 | 2026-03-15 | README 전면 개선, 날짜 통일 |
 | v0.10.0 | 2026-03-15 | Manager 에이전트 추가, Memory 시스템 도입 |
+| v0.10.1 | 2026-03-16 | 전체 점검: convention 잔존 참조 정리, bash-guard 패턴 동기화, 문서·테스트 보강 |
