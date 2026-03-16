@@ -26,7 +26,7 @@ const activeFeature = getActiveFeature();
 if (activeFeature) {
   for (const [phase, template] of Object.entries(docPaths)) {
     const expected = template.replace(/\{feature\}/g, activeFeature);
-    if (filePath.includes(expected)) {
+    if (filePath.endsWith(expected) || filePath.endsWith(path.normalize(expected))) {
       // design-db는 design 단계의 일부이므로 design으로 매핑
       const actualPhase = phase === 'design-db' ? 'design' : phase;
       updatePhase(activeFeature, actualPhase, 'completed');
