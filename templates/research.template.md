@@ -85,7 +85,7 @@
 
 ### 6.2 실행 가이드
 
-> 아래 명령어를 순서대로 실행하세요. 각 피처는 `plan → convention → ... → check` 워크플로우를 따릅니다.
+> 아래 명령어를 순서대로 실행하세요. 각 피처는 `plan → ia → wireframe → design → fe+be → check → review` 워크플로우를 따릅니다.
 
 **Step 1: 첫 번째 피처 전체 워크플로우 실행**
 ```bash

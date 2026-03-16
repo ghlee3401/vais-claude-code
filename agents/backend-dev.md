@@ -23,7 +23,6 @@ tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
 
 - **기획서의 코딩 규칙을 반드시 먼저 읽습니다** (`docs/02-plan/{feature}.md`)
 - **DB 설계 문서를 먼저 읽습니다** (`docs/05-design/{feature}-db.md` — 있는 경우)
-- 기획서를 반드시 먼저 읽습니다
 - API 문서를 코드와 함께 작성합니다
 - 환경 변수로 설정을 관리합니다
 - 미들웨어 패턴을 활용합니다

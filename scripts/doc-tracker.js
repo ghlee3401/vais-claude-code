@@ -34,13 +34,13 @@ if (activeFeature) {
 
       // Manager memory에 milestone 기록
       try {
-        const phaseNames = config.workflow?.phaseNames || {};
-        const phaseName = phaseNames[actualPhase] || actualPhase;
+        const pn = config.workflow?.phaseNames || {};
+        const mileStoneName = pn[actualPhase] || actualPhase;
         addEntry({
           type: 'milestone',
           feature: activeFeature,
           phase: actualPhase,
-          summary: `${phaseName} 단계 완료 — ${path.basename(filePath)}`,
+          summary: `${mileStoneName} 단계 완료 — ${path.basename(filePath)}`,
           details: { filePath, phase: actualPhase },
         });
       } catch (memErr) {
