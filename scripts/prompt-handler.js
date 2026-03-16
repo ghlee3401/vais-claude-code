@@ -55,7 +55,7 @@ for (const [key, name] of Object.entries(phaseNames)) {
   nameToKey[key] = key;
 }
 
-// 체이닝 패턴 감지: "plan:convention:ia", "fe+be", 혼합
+// 체이닝 패턴 감지: "plan:ia:wireframe", "fe+be", 혼합
 const chainingPattern = /^\/vais\s+([\w+:]+)\s+(.+)$/i;
 const chainingMatch = userPrompt.match(chainingPattern);
 

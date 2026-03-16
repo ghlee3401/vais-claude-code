@@ -3,7 +3,6 @@
 UI 설계와 DB 설계를 **병렬로** 진행합니다.
 
 1. **피처 레지스트리 확인** (`.vais/features/$1.json`) — 기능 목록, 정책, 기술 스택, `hasDatabase` 플래그 참조
-2. 기획서에서 `hasDatabase` 플래그 확인
 2. **DB 필요 시 → DB 종류 선택**:
    - **auto 모드**: 기본값 SQLite
    - **수동 모드**: AskUserQuestion으로 선택:

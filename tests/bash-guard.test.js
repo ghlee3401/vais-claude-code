@@ -8,15 +8,18 @@ const assert = require('node:assert/strict');
 
 // bash-guard의 핵심 로직을 인라인으로 재현 (스크립트와 동일한 정규식 패턴)
 const BLOCKED = [
-  { pattern: /rm\s+-r\s*f\s+\/(?!\S)/, reason: '루트 디렉토리 삭제 시도' },
-  { pattern: /rm\s+-r\s*f\s+~/, reason: '홈 디렉토리 삭제 시도' },
-  { pattern: /rm\s+-r\s*f\s+\.(?:\/?\s|$)/, reason: '현재 디렉토리 전체 삭제 시도' },
+  { pattern: /rm\s+(-[a-z]*r[a-z]*f|-[a-z]*f[a-z]*r)\s+\/(?!\S)/, reason: '루트 디렉토리 삭제 시도' },
+  { pattern: /rm\s+(-[a-z]*r[a-z]*f|-[a-z]*f[a-z]*r)\s+~/, reason: '홈 디렉토리 삭제 시도' },
+  { pattern: /rm\s+(-[a-z]*r[a-z]*f|-[a-z]*f[a-z]*r)\s+\.(?:\/?\s|$)/, reason: '현재 디렉토리 전체 삭제 시도' },
+  { pattern: /rm\s+--recursive\s+--force\s+[\/~.]/, reason: '재귀 강제 삭제 시도' },
   { pattern: /drop\s+database/i, reason: 'DB 전체 삭제 시도' },
   { pattern: /drop\s+table/i, reason: 'DB 테이블 삭제 시도' },
-  { pattern: /truncate/i, reason: 'DB 테이블 초기화 시도' },
+  { pattern: /truncate\s+table/i, reason: 'DB 테이블 초기화 시도' },
   { pattern: /git\s+push\s+.*--force/, reason: '강제 푸시는 팀 작업에 위험합니다' },
   { pattern: /mkfs/, reason: '파일시스템 포맷 시도' },
   { pattern: /:\(\)\{.*\|.*&\}/, reason: 'Fork bomb 감지' },
+  { pattern: />\s*\/dev\/sd[a-z]/, reason: '디스크 직접 쓰기 시도' },
+  { pattern: /dd\s+.*of=\/dev\//, reason: 'dd로 디스크 직접 쓰기 시도' },
 ];
 
 const ASK = [
@@ -80,8 +83,28 @@ describe('bash-guard 차단', () => {
     assert.equal(result.decision, 'block');
   });
 
-  it('TRUNCATE를 차단한다', () => {
+  it('TRUNCATE TABLE을 차단한다', () => {
     const result = checkGuard('TRUNCATE TABLE users');
+    assert.equal(result.decision, 'block');
+  });
+
+  it('rm -fr (플래그 순서 변경)을 차단한다', () => {
+    const result = checkGuard('rm -fr /');
+    assert.equal(result.decision, 'block');
+  });
+
+  it('rm --recursive --force를 차단한다', () => {
+    const result = checkGuard('rm --recursive --force /tmp');
+    assert.equal(result.decision, 'block');
+  });
+
+  it('디스크 직접 쓰기를 차단한다', () => {
+    const result = checkGuard('echo data > /dev/sda');
+    assert.equal(result.decision, 'block');
+  });
+
+  it('dd 디스크 쓰기를 차단한다', () => {
+    const result = checkGuard('dd if=/dev/zero of=/dev/sda bs=1M');
     assert.equal(result.decision, 'block');
   });
 
