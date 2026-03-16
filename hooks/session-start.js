@@ -13,7 +13,7 @@ debugLog('SessionStart', 'Hook executed', { cwd: process.cwd() });
 ensureVaisDirs();
 
 const config = loadConfig();
-const VERSION = config.version || '0.6.3';
+const VERSION = config.version || '0.10.0';
 const status = getStatus();
 const activeFeature = getActiveFeature();
 const featureNames = Object.keys(status.features || {});

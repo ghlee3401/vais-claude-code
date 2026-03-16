@@ -42,7 +42,7 @@ tools: Read, Write, Edit, Glob, AskUserQuestion
 ```markdown
 > 참조 문서:
 > - plan 2.1: 기능 요구사항
-> - convention 1.1: 네이밍 규칙
+> - plan 코딩 규칙: 네이밍 규칙
 > - wireframe 2.3: 메인 화면 레이아웃
 ```
 
