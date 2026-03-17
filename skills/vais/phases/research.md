@@ -9,7 +9,7 @@
 5. **피처명은 영어** (kebab-case: `login`, `payment`, `chat`)
 6. **구현 순서 결정**: 의존성 → 기술적 선행조건 → 비즈니스 우선순위
 7. 경쟁/참고 서비스 간단 분석
-8. `docs/01-research/$1.md`에 저장
+8. `docs/01-research/{feature}.md`에 저장
 9. 완료 시 실행 가이드 출력:
    - 구현 순서대로 `/vais plan {피처명}` 또는 `/vais auto {피처명}` 명령어 목록
    - 체이닝 예시 포함

@@ -2,7 +2,7 @@
 
 UI 설계와 DB 설계를 **병렬로** 진행합니다.
 
-1. **피처 레지스트리 확인** (`.vais/features/$1.json`) — 기능 목록, 정책, 기술 스택, `hasDatabase` 플래그 참조
+1. **피처 레지스트리 확인** (`.vais/features/{feature}.json`) — 기능 목록, 정책, 기술 스택, `hasDatabase` 플래그 참조
 2. **DB 필요 시 → DB 종류 선택**:
    - **auto 모드**: 기본값 SQLite
    - **수동 모드**: AskUserQuestion으로 선택:
@@ -15,11 +15,11 @@ UI 설계와 DB 설계를 **병렬로** 진행합니다.
      - 디자인 토큰, 공통 컴포넌트 명세
      - **화면별 상세 정의**: 각 화면의 와이어프레임 참조 + 사용 컴포넌트 + 상태 + 인터랙션 + 데이터 흐름 통합
      - 기획서(plan)의 기능 목록 및 정책 정의 참조
-     - `docs/05-design/$1.md`에 저장
+     - `docs/05-design/{feature}.md`에 저장
    - **DB 설계** (backend-dev 에이전트):
      - ERD (Mermaid), 스키마, 인덱스, 관계
      - ORM 권장: SQLite→better-sqlite3/Drizzle, PostgreSQL→Prisma, Supabase→@supabase/supabase-js
-     - `docs/05-design/$1-db.md`에 저장
+     - `docs/05-design/{feature}-db.md`에 저장
 4. **DB 불필요 시** → UI 설계만
 
 **에이전트 매핑:**

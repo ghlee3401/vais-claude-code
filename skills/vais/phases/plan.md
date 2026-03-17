@@ -1,6 +1,6 @@
 ### 📋 plan — 기획 + Plan-Plus
 
-1. research 문서가 있으면 먼저 읽기 (`docs/01-research/$1.md`)
+1. research 문서가 있으면 먼저 읽기 (`docs/01-research/{feature}.md`)
 2. 프로젝트 기존 코드와 구조 파악
 3. `templates/plan.template.md` 템플릿 기반으로 기획서 작성
 4. **Plan-Plus 3단계 검증**:
@@ -20,8 +20,8 @@
      3. "Material UI (Google Material Design)"
      4. "직접 구현 (라이브러리 없이)"
    - 선택 결과를 기술 스택 표에 기록
-9. `docs/02-plan/$1.md`에 저장
-10. **피처 레지스트리 저장** — 기획서 작성 후 반드시 `.vais/features/$1.json`에 기능 목록을 구조화 저장:
+9. `docs/02-plan/{feature}.md`에 저장
+10. **피처 레지스트리 저장** — 기획서 작성 후 반드시 `.vais/features/{feature}.json`에 기능 목록을 구조화 저장:
     ```json
     {
       "features": [
