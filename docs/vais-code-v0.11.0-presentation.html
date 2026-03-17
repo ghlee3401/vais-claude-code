@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAIS Code v0.11.0 — 기술 소개</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --bg2: #1e293b;
+    --accent: #38bdf8;
+    --accent2: #818cf8;
+    --accent3: #34d399;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --card: #1e293b;
+    --border: #334155;
+    --warn: #fbbf24;
+    --err: #f87171;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Pretendard', -apple-system, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+  }
+  .slide {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    height: 100vh;
+    animation: fadeIn 0.3s ease;
+  }
+  .slide.active { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Navigation */
+  .nav {
+    position: fixed; bottom: 30px; right: 40px;
+    display: flex; gap: 12px; z-index: 100;
+  }
+  .nav button {
+    background: var(--bg2); border: 1px solid var(--border);
+    color: var(--text); padding: 10px 20px; border-radius: 8px;
+    cursor: pointer; font-size: 14px; transition: all 0.2s;
+  }
+  .nav button:hover { background: var(--accent); color: var(--bg); }
+  .progress {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.3s ease;
+  }
+  .page-num {
+    position: fixed; bottom: 34px; left: 40px;
+    color: var(--muted); font-size: 14px;
+  }
+
+  /* Typography */
+  h1 { font-size: 48px; font-weight: 800; margin-bottom: 16px; line-height: 1.2; }
+  h2 { font-size: 36px; font-weight: 700; margin-bottom: 24px; color: var(--accent); }
+  h3 { font-size: 24px; font-weight: 600; margin-bottom: 16px; color: var(--accent2); }
+  p, li { font-size: 20px; line-height: 1.7; color: var(--text); }
+  .subtitle { font-size: 24px; color: var(--muted); margin-bottom: 40px; }
+  .small { font-size: 16px; color: var(--muted); }
+  .highlight { color: var(--accent); font-weight: 600; }
+  .highlight2 { color: var(--accent2); font-weight: 600; }
+  .highlight3 { color: var(--accent3); font-weight: 600; }
+  .warn { color: var(--warn); }
+
+  /* Layout */
+  .cols { display: flex; gap: 40px; margin-top: 20px; }
+  .col { flex: 1; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+  .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 20px; }
+
+  /* Cards */
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+  }
+  .card h3 { margin-bottom: 12px; }
+  .card p, .card li { font-size: 17px; }
+  .card-accent { border-left: 4px solid var(--accent); }
+  .card-green { border-left: 4px solid var(--accent3); }
+  .card-purple { border-left: 4px solid var(--accent2); }
+  .card-warn { border-left: 4px solid var(--warn); }
+
+  /* Code */
+  code {
+    background: #0f172a; border: 1px solid var(--border);
+    padding: 2px 8px; border-radius: 4px; font-size: 17px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    color: var(--accent3);
+  }
+  pre {
+    background: #0f172a; border: 1px solid var(--border);
+    padding: 24px; border-radius: 12px; overflow-x: auto;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 16px; line-height: 1.6; margin-top: 16px;
+    color: var(--text);
+  }
+  pre .comment { color: var(--muted); }
+  pre .keyword { color: var(--accent2); }
+  pre .string { color: var(--accent3); }
+  pre .fn { color: var(--accent); }
+
+  /* Table */
+  table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+  th { background: var(--bg2); color: var(--accent); text-align: left; padding: 12px 16px; font-size: 16px; border-bottom: 2px solid var(--accent); }
+  td { padding: 10px 16px; font-size: 16px; border-bottom: 1px solid var(--border); }
+  tr:hover td { background: rgba(56, 189, 248, 0.05); }
+
+  /* Flow */
+  .flow {
+    display: flex; align-items: center; gap: 8px;
+    flex-wrap: wrap; margin: 20px 0; font-size: 18px;
+  }
+  .flow-item {
+    background: var(--bg2); border: 1px solid var(--border);
+    padding: 10px 16px; border-radius: 8px; white-space: nowrap;
+  }
+  .flow-item.active { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .flow-arrow { color: var(--muted); font-size: 20px; }
+
+  /* Lists */
+  ul { list-style: none; padding-left: 0; }
+  ul li { padding: 6px 0; }
+  ul li::before { content: '→ '; color: var(--accent); font-weight: bold; }
+  ol { padding-left: 24px; }
+  ol li { padding: 4px 0; }
+  ol li::marker { color: var(--accent); font-weight: 700; }
+
+  /* Diagram box */
+  .diagram {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px; margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace; font-size: 17px;
+    line-height: 1.8; white-space: pre; overflow-x: auto;
+  }
+
+  /* Badge */
+  .badge {
+    display: inline-block; padding: 4px 12px; border-radius: 20px;
+    font-size: 13px; font-weight: 600; margin: 2px;
+  }
+  .badge-blue { background: rgba(56,189,248,0.15); color: var(--accent); }
+  .badge-purple { background: rgba(129,140,248,0.15); color: var(--accent2); }
+  .badge-green { background: rgba(52,211,153,0.15); color: var(--accent3); }
+  .badge-yellow { background: rgba(251,191,36,0.15); color: var(--warn); }
+  .badge-red { background: rgba(248,113,113,0.15); color: var(--err); }
+
+  /* Title slide special */
+  .title-slide h1 { font-size: 64px; margin-bottom: 8px; }
+  .title-slide .version {
+    display: inline-block; background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 80px; font-weight: 900; margin-bottom: 16px;
+  }
+  .title-slide .tagline { font-size: 28px; color: var(--muted); max-width: 700px; }
+
+  /* Section divider */
+  .section-divider { text-align: center; }
+  .section-divider h1 { font-size: 56px; }
+  .section-divider .num {
+    font-size: 120px; font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== SLIDE 1: Title ========== -->
+<div class="slide active title-slide" style="justify-content: center;">
+  <div class="version">VAIS Code</div>
+  <h1>v0.11.0 기술 소개</h1>
+  <p class="tagline">
+    Claude Code 플러그인 기반 9단계 AI 개발 워크플로우
+  </p>
+  <p class="small" style="margin-top: 40px;">
+    체이닝 문법 · 병렬 에이전트 · 피드백 루프 · Gap 분석 · Manager Memory
+  </p>
+  <p class="small" style="margin-top: 16px; color: var(--muted);">2026.03</p>
+</div>
+
+<!-- ========== SLIDE 2: 목차 ========== -->
+<div class="slide">
+  <h2>📑 목차</h2>
+  <div class="grid2">
+    <div class="card card-accent">
+      <h3>Part 1 — 개요</h3>
+      <ul>
+        <li>VAIS Code란?</li>
+        <li>핵심 가치와 차별점</li>
+        <li>전체 아키텍처</li>
+      </ul>
+    </div>
+    <div class="card card-purple">
+      <h3>Part 2 — 워크플로우</h3>
+      <ul>
+        <li>9단계 파이프라인</li>
+        <li>체이닝 문법 (: 순차, + 병렬)</li>
+        <li>게이트 &amp; 핑퐁 피드백 루프</li>
+      </ul>
+    </div>
+    <div class="card card-green">
+      <h3>Part 3 — 시스템 구조</h3>
+      <ul>
+        <li>에이전트 팀 구성</li>
+        <li>훅(Hook) 시스템</li>
+        <li>상태 관리 &amp; Memory</li>
+      </ul>
+    </div>
+    <div class="card card-warn">
+      <h3>Part 4 — 실전 활용</h3>
+      <ul>
+        <li>파일 구조</li>
+        <li>실행 데모 흐름</li>
+        <li>v0.11.0 변경 사항</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 3: Section 1 ========== -->
+<div class="slide section-divider">
+  <div class="num">01</div>
+  <h1>개요</h1>
+  <p class="subtitle">VAIS Code는 무엇이고, 왜 필요한가?</p>
+</div>
+
+<!-- ========== SLIDE 4: What is VAIS Code ========== -->
+<div class="slide">
+  <h2>VAIS Code란?</h2>
+  <p style="font-size: 22px; margin-bottom: 30px;">
+    Claude Code <span class="highlight">플러그인</span>으로 동작하는
+    <span class="highlight2">9단계 AI 개발 워크플로우</span> 도구
+  </p>
+  <div class="grid3">
+    <div class="card card-accent">
+      <h3>🎯 문제</h3>
+      <p>AI 코딩 도구에게 "만들어줘" 하면<br>
+      기획 없이 바로 코딩 → 요구사항 누락,<br>
+      설계 없는 코드, 검증 불가</p>
+    </div>
+    <div class="card card-purple">
+      <h3>💡 해결</h3>
+      <p>조사→기획→설계→구현→검증까지<br>
+      <strong>단계별 산출물</strong>을 강제하여<br>
+      체계적 개발 워크플로우 보장</p>
+    </div>
+    <div class="card card-green">
+      <h3>✨ 결과</h3>
+      <p>기획서 기반 코딩 규칙 준수,<br>
+      설계 대비 <strong>Gap 분석</strong>으로<br>
+      90%+ 일치율 자동 검증</p>
+    </div>
+  </div>
+  <div style="margin-top: 30px;">
+    <span class="badge badge-blue">Claude Code Plugin</span>
+    <span class="badge badge-purple">MIT License</span>
+    <span class="badge badge-green">한국어 네이티브</span>
+    <span class="badge badge-yellow">v0.11.0</span>
+  </div>
+</div>
+
+<!-- ========== SLIDE 5: 핵심 가치 ========== -->
+<div class="slide">
+  <h2>핵심 가치 &amp; 차별점</h2>
+  <div class="grid2">
+    <div class="card card-accent">
+      <h3>📋 기획 없이 코드 금지</h3>
+      <p>기획서가 없으면 코딩 시작 불가.<br>
+      기획서에 코딩 규칙, 기능 목록, 정책이 포함되어<br>
+      이후 모든 단계의 <strong>단일 진실 소스</strong>(SSOT) 역할</p>
+    </div>
+    <div class="card card-purple">
+      <h3>🔗 체이닝 문법</h3>
+      <p><code>plan:ia:wireframe</code> → 순차 실행<br>
+      <code>fe+be</code> → 병렬 실행<br>
+      <code>plan:design:fe+be:check</code> → 혼합<br>
+      직관적 DSL로 워크플로우 조합</p>
+    </div>
+    <div class="card card-green">
+      <h3>🔎 Gap 분석 자동 검증</h3>
+      <p>설계 문서 vs 구현 코드를 자동 비교.<br>
+      일치율 90% 미만이면 <strong>최대 5회</strong> 자동 반복.<br>
+      OWASP Top 10 보안 검사 포함</p>
+    </div>
+    <div class="card card-warn">
+      <h3>🧠 Manager Memory</h3>
+      <p>모든 의사결정, 피처 간 의존성,<br>
+      기술 부채를 영속 저장.<br>
+      다음 세션에서도 <strong>맥락 유지</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 6: Architecture Overview ========== -->
+<div class="slide">
+  <h2>전체 아키텍처</h2>
+  <div class="diagram">┌─────────────────────────────────────────────────────────────┐
+│  <span style="color:var(--accent);">사용자</span>                                                      │
+│    │                                                        │
+│    ▼  <span style="color:var(--muted);">/vais auto login</span>                                       │
+│  ┌──────────────┐                                           │
+│  │  <span style="color:var(--accent);">SKILL.md</span>     │ ← 스킬 진입점 (액션 라우팅)               │
+│  └──────┬───────┘                                           │
+│         ▼                                                   │
+│  ┌──────────────┐    ┌──────────────┐    ┌───────────────┐  │
+│  │  <span style="color:var(--warn);">Manager</span>      │───→│  <span style="color:var(--accent2);">Tech Lead</span>   │───→│  <span style="color:var(--accent3);">에이전트 팀</span>   │  │
+│  │  (opus)      │    │  (opus)      │    │  (sonnet)     │  │
+│  │  memory.json │    │  오케스트레이션│    │  designer     │  │
+│  └──────────────┘    └──────────────┘    │  frontend-dev │  │
+│         ▲                    │           │  backend-dev  │  │
+│         │              ┌─────┴─────┐    │  reviewer     │  │
+│    피드백/기록         │           │    └───────────────┘  │
+│                   ┌────┴────┐ ┌───┴────┐                   │
+│                   │ <span style="color:var(--accent);">Hooks</span>   │ │ <span style="color:var(--accent2);">Status</span> │                   │
+│                   │ 7개 훅  │ │ .vais/ │                   │
+│                   └─────────┘ └────────┘                   │
+└─────────────────────────────────────────────────────────────┘</div>
+</div>
+
+<!-- ========== SLIDE 7: Section 2 ========== -->
+<div class="slide section-divider">
+  <div class="num">02</div>
+  <h1>워크플로우</h1>
+  <p class="subtitle">9단계 파이프라인, 체이닝, 게이트</p>
+</div>
+
+<!-- ========== SLIDE 8: 9단계 파이프라인 ========== -->
+<div class="slide">
+  <h2>9단계 개발 파이프라인</h2>
+  <div class="flow">
+    <div class="flow-item">🔭 조사·탐색</div><span class="flow-arrow">→</span>
+    <div class="flow-item active">📋 기획</div><span class="flow-arrow">→</span>
+    <div class="flow-item">🗺 IA</div><span class="flow-arrow">→</span>
+    <div class="flow-item">🖼 와이어프레임</div><span class="flow-arrow">→</span>
+    <div class="flow-item">🎨 설계(UI+DB)</div><span class="flow-arrow">→</span>
+    <div class="flow-item">💻 FE</div><span class="flow-arrow">→</span>
+    <div class="flow-item">⚙️ BE</div><span class="flow-arrow">→</span>
+    <div class="flow-item">🔎 Gap</div><span class="flow-arrow">→</span>
+    <div class="flow-item">🔍 검토</div>
+  </div>
+  <table>
+    <tr><th>단계</th><th>산출물</th><th>에이전트</th><th>비고</th></tr>
+    <tr><td>🔭 research</td><td>docs/01-research/</td><td>Tech Lead 직접</td><td>아이디어 → 기능 도출</td></tr>
+    <tr><td>📋 plan</td><td>docs/02-plan/ + .vais/features/</td><td>Tech Lead 직접</td><td><span class="badge badge-yellow">게이트</span> 코딩 규칙 포함</td></tr>
+    <tr><td>🗺 ia</td><td>docs/03-ia/</td><td>designer</td><td>사이트맵, 네비게이션</td></tr>
+    <tr><td>🖼 wireframe</td><td>docs/04-wireframe/</td><td>designer</td><td>ASCII + HTML 와이어프레임</td></tr>
+    <tr><td>🎨 design</td><td>docs/05-design/</td><td>designer + backend-dev</td><td><span class="badge badge-purple">병렬</span> UI + DB 설계</td></tr>
+    <tr><td>💻 fe</td><td>src/</td><td>frontend-dev</td><td><span class="badge badge-yellow">게이트</span> <span class="badge badge-purple">병렬</span></td></tr>
+    <tr><td>⚙️ be</td><td>src/ or server/</td><td>backend-dev</td><td><span class="badge badge-purple">병렬</span> (fe와 동시)</td></tr>
+    <tr><td>🔎 check</td><td>docs/06-check/</td><td>reviewer</td><td>Gap 분석 + 보안 검사</td></tr>
+    <tr><td>🔍 review</td><td>docs/07-review/</td><td>reviewer</td><td>QA + 최종 리뷰</td></tr>
+  </table>
+</div>
+
+<!-- ========== SLIDE 9: 체이닝 문법 ========== -->
+<div class="slide">
+  <h2>체이닝 문법</h2>
+  <p class="subtitle">: (순차) + (병렬)을 조합하여 워크플로우 커스터마이징</p>
+  <div class="grid2">
+    <div>
+      <h3>문법 규칙</h3>
+      <table>
+        <tr><th>기호</th><th>의미</th><th>예시</th></tr>
+        <tr><td><code>:</code></td><td>순차 실행</td><td><code>plan:ia:wireframe</code></td></tr>
+        <tr><td><code>+</code></td><td>병렬 실행</td><td><code>fe+be</code></td></tr>
+        <tr><td>혼합</td><td>순차 + 병렬</td><td><code>plan:design:fe+be:check</code></td></tr>
+      </table>
+      <div style="margin-top: 24px;">
+        <h3>레벨 시스템</h3>
+        <table>
+          <tr><th>레벨</th><th>범위</th><th>용도</th></tr>
+          <tr><td>Quick</td><td>plan → check (7단계)</td><td>MVP, 프로토타입</td></tr>
+          <tr><td>Full</td><td>research → review (9단계)</td><td>프로덕션</td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <h3>실행 예시</h3>
+<pre>
+<span class="comment"># 단일 실행</span>
+<span class="keyword">/vais</span> plan 로그인기능
+
+<span class="comment"># 순차 체이닝: 기획→IA→와이어프레임</span>
+<span class="keyword">/vais</span> plan:ia:wireframe 로그인기능
+
+<span class="comment"># 병렬: 프론트 + 백엔드 동시</span>
+<span class="keyword">/vais</span> fe+be 로그인기능
+
+<span class="comment"># 혼합: 기획→설계→구현(병렬)→검증</span>
+<span class="keyword">/vais</span> plan:design:fe+be:check 로그인기능
+
+<span class="comment"># 전체 자동</span>
+<span class="keyword">/vais</span> auto 로그인기능
+
+<span class="comment"># 범위 지정 (한글)</span>
+<span class="string">"기획부터 백엔드까지"</span>
+→ <span class="fn">plan:ia:wireframe:design:fe+be</span>
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 10: 게이트 & 핑퐁 ========== -->
+<div class="slide">
+  <h2>게이트 &amp; 핑퐁 피드백 루프</h2>
+  <p class="subtitle">v0.11.0의 핵심 변경 — 사용자가 "계속"을 누를 때까지 멈춤</p>
+  <div class="cols">
+    <div class="col">
+      <h3>게이트 체크포인트</h3>
+      <p><code>vais.config.json</code>의 <code>orchestration.gates</code>에서 설정</p>
+      <p>기본값: <span class="badge badge-yellow">plan</span> <span class="badge badge-yellow">fe</span></p>
+      <div class="card card-accent" style="margin-top: 16px;">
+        <p><strong>plan 게이트</strong> — 기획 완료 후 방향 확인</p>
+        <p><strong>fe 게이트</strong> — 구현 시작 전 설계 결과 확인</p>
+      </div>
+    </div>
+    <div class="col">
+      <h3>핑퐁 루프 (v0.11.0 신규)</h3>
+      <div class="diagram" style="font-size: 15px; line-height: 1.7;">
+<span style="color:var(--accent3);">게이트 도달</span>
+  │
+  ▼
+<span style="color:var(--accent);">AskUserQuestion</span>
+  ├─ "계속"        → 다음 단계 ✅
+  ├─ "수정 요청"   → 피드백 수신
+  │     │
+  │     ▼
+  │   피드백 반영 → 문서/코드 수정
+  │     │
+  │     ▼
+  │   📝 수정 결과 요약 출력
+  │     │
+  │     ▼
+  │   <span style="color:var(--accent);">AskUserQuestion (재확인)</span>
+  │     ├─ "계속"      → 다음 단계 ✅
+  │     ├─ "추가 수정" → ↑ 반복 🔄
+  │     └─ "중단"      → 저장 후 종료 🛑
+  │
+  └─ "중단"        → 저장 후 종료 🛑</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 11: Section 3 ========== -->
+<div class="slide section-divider">
+  <div class="num">03</div>
+  <h1>시스템 구조</h1>
+  <p class="subtitle">에이전트, 훅, 상태 관리</p>
+</div>
+
+<!-- ========== SLIDE 12: Agent Team ========== -->
+<div class="slide">
+  <h2>에이전트 팀 구성</h2>
+  <p class="subtitle">5개 전문 에이전트 + 오케스트레이션 패턴</p>
+  <div class="grid3" style="grid-template-columns: repeat(5, 1fr); gap: 14px;">
+    <div class="card card-warn" style="padding: 16px;">
+      <h3 style="font-size: 18px;">📋 Manager</h3>
+      <p style="font-size: 14px;">
+        <span class="badge badge-red">opus</span><br>
+        프로젝트 기억<br>
+        전략적 판단<br>
+        크로스-피처 분석<br>
+        Tech Lead 지시
+      </p>
+    </div>
+    <div class="card card-accent" style="padding: 16px;">
+      <h3 style="font-size: 18px;">🏗 Tech Lead</h3>
+      <p style="font-size: 14px;">
+        <span class="badge badge-red">opus</span><br>
+        아키텍처 결정<br>
+        팀 오케스트레이션<br>
+        게이트 관리<br>
+        품질 관리
+      </p>
+    </div>
+    <div class="card card-purple" style="padding: 16px;">
+      <h3 style="font-size: 18px;">🎨 Designer</h3>
+      <p style="font-size: 14px;">
+        <span class="badge badge-blue">sonnet</span><br>
+        IA 설계<br>
+        와이어프레임<br>
+        UI/UX 설계<br>
+        디자인 토큰
+      </p>
+    </div>
+    <div class="card card-green" style="padding: 16px;">
+      <h3 style="font-size: 18px;">💻 FE / ⚙️ BE</h3>
+      <p style="font-size: 14px;">
+        <span class="badge badge-blue">sonnet</span><br>
+        프론트엔드 구현<br>
+        백엔드 API<br>
+        DB 설계/연동<br>
+        테스트 코드
+      </p>
+    </div>
+    <div class="card" style="padding: 16px; border-left: 4px solid var(--err);">
+      <h3 style="font-size: 18px;">🔍 Reviewer</h3>
+      <p style="font-size: 14px;">
+        <span class="badge badge-blue">sonnet</span><br>
+        Gap 분석<br>
+        OWASP 보안<br>
+        QA 검증<br>
+        코드 리뷰
+      </p>
+    </div>
+  </div>
+  <div style="margin-top: 24px;">
+    <h3>오케스트레이션 패턴</h3>
+    <table>
+      <tr><th>패턴</th><th>설명</th><th>적용 단계</th></tr>
+      <tr><td><span class="highlight">leader</span></td><td>Tech Lead가 직접 수행</td><td>research, plan</td></tr>
+      <tr><td><span class="highlight2">delegate</span></td><td>전문 에이전트에 위임</td><td>ia, wireframe, fe, be</td></tr>
+      <tr><td><span class="highlight3">parallel</span></td><td>여러 에이전트 동시 호출</td><td>design(UI+DB), fe+be</td></tr>
+      <tr><td><span class="warn">council</span></td><td>reviewer + 리드 공동 검토</td><td>check, review</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ========== SLIDE 13: 비용 최적화 ========== -->
+<div class="slide">
+  <h2>모델 비용 최적화</h2>
+  <p class="subtitle">판단은 Opus, 구현은 Sonnet — 역할별 모델 분리</p>
+  <div class="cols">
+    <div class="col">
+      <div class="diagram" style="font-size: 16px;">
+<span style="color:var(--err); font-weight:bold;">opus</span>  ━━━━━━━━━━━━━━━━━━━━
+  │
+  │  <span style="color:var(--muted);">판단, 전략, 아키텍처</span>
+  │
+  ├── Manager    (프로젝트 기억/판단)
+  └── Tech Lead  (아키텍처/오케스트레이션)
+
+
+<span style="color:var(--accent); font-weight:bold;">sonnet</span> ━━━━━━━━━━━━━━━━━━━━
+  │
+  │  <span style="color:var(--muted);">코드 구현, 문서 작성</span>
+  │
+  ├── Designer      (IA/와이어프레임/설계)
+  ├── Frontend Dev  (FE 구현)
+  ├── Backend Dev   (BE 구현 + DB)
+  └── Reviewer      (Gap/QA/리뷰)</div>
+    </div>
+    <div class="col">
+      <div class="card card-accent" style="margin-bottom: 20px;">
+        <h3>핵심 원리</h3>
+        <ul>
+          <li>기획/아키텍처: <span class="highlight">정확성 우선</span> → opus</li>
+          <li>코드 구현: <span class="highlight3">속도/비용 효율</span> → sonnet</li>
+          <li>단순 탐색: haiku 활용 가능</li>
+        </ul>
+      </div>
+      <div class="card card-green">
+        <h3>비용 절감 효과</h3>
+        <p>9단계 중 2단계만 opus 사용.<br>
+        나머지 7단계는 sonnet으로 처리하여<br>
+        <strong>전체 비용 60~70% 절감</strong> (추정)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 14: Hook System ========== -->
+<div class="slide">
+  <h2>훅(Hook) 시스템</h2>
+  <p class="subtitle">Claude Code 이벤트에 자동 반응하는 5개 훅</p>
+  <table>
+    <tr><th>훅</th><th>이벤트</th><th>스크립트</th><th>역할</th></tr>
+    <tr>
+      <td><span class="badge badge-blue">SessionStart</span></td>
+      <td>세션 시작</td>
+      <td>hooks/session-start.js</td>
+      <td>.vais/ 디렉토리 생성, 현재 피처 상태 표시</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-purple">PreToolUse</span></td>
+      <td>Bash 실행 전</td>
+      <td>scripts/bash-guard.js</td>
+      <td><code>rm -rf</code>, <code>DROP TABLE</code>, <code>sudo</code> 등 위험 명령 차단</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-green">PostToolUse</span></td>
+      <td>Write|Edit 후</td>
+      <td>scripts/doc-tracker.js</td>
+      <td>문서 작성 감지 → 워크플로우 상태 자동 업데이트 + memory 기록</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-yellow">UserPromptSubmit</span></td>
+      <td>사용자 입력</td>
+      <td>scripts/prompt-handler.js</td>
+      <td>의도 감지 → 적절한 <code>/vais</code> 명령 제안, 체이닝/범위 파싱</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">Stop</span></td>
+      <td>응답 완료</td>
+      <td>scripts/stop-handler.js</td>
+      <td>진행률 프로그레스바 + 다음 단계 안내 출력</td>
+    </tr>
+  </table>
+  <div class="card card-accent" style="margin-top: 20px;">
+    <h3>v0.11.0 변경</h3>
+    <p>no-op 훅 2개 (<code>notification.js</code>, <code>subagent-stop.js</code>) 제거 → 불필요한 오버헤드 제거</p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 15: Bash Guard 상세 ========== -->
+<div class="slide">
+  <h2>Bash Guard — 위험 명령 차단</h2>
+  <p class="subtitle">PreToolUse 훅으로 위험한 셸 명령을 실행 전 차단</p>
+  <div class="cols">
+    <div class="col">
+      <h3 style="color: var(--err);">🚫 차단 (BLOCKED)</h3>
+<pre>
+<span class="comment"># v0.11.0에서 강화된 패턴</span>
+rm -rf /                <span class="comment"># 루트 삭제</span>
+<span class="keyword">sudo</span> rm -rf /tmp       <span class="comment"># sudo 우회 차단</span>
+rm -r -f ~/             <span class="comment"># 분리 플래그 차단</span>
+rm -rf <span class="string">$HOME</span>            <span class="comment"># 환경변수 차단</span>
+DROP DATABASE users;    <span class="comment"># DB 삭제</span>
+git push --force        <span class="comment"># 강제 푸시</span>
+<span class="keyword">sudo</span> mkfs /dev/sda      <span class="comment"># 디스크 포맷</span>
+chmod -R 777 /          <span class="comment"># 루트 권한 변경 (신규)</span>
+dd of=/dev/sda          <span class="comment"># 디스크 직접 쓰기</span>
+:(){ :|:& };:           <span class="comment"># Fork bomb</span>
+</pre>
+    </div>
+    <div class="col">
+      <h3 style="color: var(--warn);">⚠️ 경고 (ASK)</h3>
+<pre>
+rm -r some_dir/    <span class="comment"># 확인 후 허용</span>
+git reset --hard   <span class="comment"># 변경사항 유실 경고</span>
+DELETE FROM users  <span class="comment"># 대량 삭제 경고</span>
+</pre>
+      <div class="card card-green" style="margin-top: 24px;">
+        <h3>✅ 허용</h3>
+<pre style="border: none; padding: 12px; margin: 0;">
+npm install
+git push origin main
+ls -la /tmp
+node script.js
+</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 16: 상태 관리 ========== -->
+<div class="slide">
+  <h2>상태 관리 시스템</h2>
+  <p class="subtitle">.vais/ 디렉토리에 모든 상태를 JSON으로 영속 관리</p>
+  <div class="cols">
+    <div class="col">
+      <h3>파일 구조</h3>
+<pre>
+.vais/
+├── <span class="fn">status.json</span>          <span class="comment"># 워크플로우 상태</span>
+│   ├── activeFeature
+│   └── features
+│       └── login
+│           ├── currentPhase
+│           ├── phases (9개)
+│           └── gapAnalysis
+│
+├── <span class="fn">memory.json</span>          <span class="comment"># Manager Memory</span>
+│   └── entries[]
+│       ├── decision
+│       ├── change
+│       ├── feedback
+│       ├── dependency
+│       ├── debt
+│       ├── error
+│       └── milestone
+│
+├── <span class="fn">features/</span>            <span class="comment"># 피처 레지스트리</span>
+│   └── login.json
+│       ├── features[]  (F1, F2...)
+│       ├── policies
+│       ├── techStack
+│       └── hasDatabase
+│
+└── <span class="fn">project-config.json</span>  <span class="comment"># 프로젝트별 설정</span>
+</pre>
+    </div>
+    <div class="col">
+      <h3>lib/ 모듈 매핑</h3>
+      <table>
+        <tr><th>모듈</th><th>관리 대상</th><th>주요 함수</th></tr>
+        <tr><td>paths.js</td><td>경로 레지스트리</td><td>loadConfig, resolveDocPath, findDoc</td></tr>
+        <tr><td>status.js</td><td>워크플로우 상태</td><td>initFeature, updatePhase, saveGapAnalysis</td></tr>
+        <tr><td>memory.js</td><td>Manager Memory</td><td>addEntry, getEntriesByFeature, getDependencyMap</td></tr>
+        <tr><td>io.js</td><td>훅 I/O</td><td>readStdin, outputAllow, outputBlock</td></tr>
+        <tr><td>debug.js</td><td>디버그 로깅</td><td>debugLog (VAIS_DEBUG=1 시 활성화)</td></tr>
+      </table>
+      <div class="card card-purple" style="margin-top: 20px;">
+        <h3>설정 우선순위</h3>
+        <ol>
+          <li>프로젝트 루트의 <code>vais.config.json</code></li>
+          <li>플러그인 내장 <code>vais.config.json</code></li>
+        </ol>
+        <p class="small">프로젝트별 커스터마이징 가능 (게이트, 임계치 등)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 17: Memory System ========== -->
+<div class="slide">
+  <h2>Manager Memory 시스템</h2>
+  <p class="subtitle">프로젝트의 모든 의사결정과 컨텍스트를 영속 기억</p>
+  <div class="cols">
+    <div class="col">
+      <h3>7가지 엔트리 타입</h3>
+      <table>
+        <tr><th>타입</th><th>용도</th><th>예시</th></tr>
+        <tr><td><span class="badge badge-blue">decision</span></td><td>기술/비즈니스 결정</td><td>"React 대신 Next.js 선택 — SSR 필요"</td></tr>
+        <tr><td><span class="badge badge-green">change</span></td><td>fix로 인한 변경</td><td>"로그인 JWT→세션으로 변경"</td></tr>
+        <tr><td><span class="badge badge-purple">feedback</span></td><td>게이트 사용자 피드백</td><td>"소셜 로그인도 추가해주세요"</td></tr>
+        <tr><td><span class="badge badge-yellow">dependency</span></td><td>피처 간 의존</td><td>"cart → login 의존 (인증 토큰)"</td></tr>
+        <tr><td><span class="badge badge-red">debt</span></td><td>기술 부채</td><td>"에러 핸들링 미완 — 나중에"</td></tr>
+        <tr><td style="color:var(--err);">error</td><td>실패/재시도</td><td>"빌드 실패 — 타입 에러"</td></tr>
+        <tr><td><span class="badge badge-green">milestone</span></td><td>단계 완료</td><td>"plan 단계 완료"</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <h3>활용 시나리오</h3>
+      <div class="card card-accent" style="margin-bottom: 12px;">
+        <h3 style="font-size: 16px;">🔍 Query 모드</h3>
+        <p style="font-size: 15px;">"이 프로젝트 현황 알려줘"<br>→ memory 조회 → 피처 목록, 진행률, 최근 활동 요약</p>
+      </div>
+      <div class="card card-purple" style="margin-bottom: 12px;">
+        <h3 style="font-size: 16px;">⚡ 크로스-피처 영향 분석</h3>
+        <p style="font-size: 15px;">"login 수정해줘"<br>→ dependency 맵 조회 → cart, payment 영향 알림</p>
+      </div>
+      <div class="card card-green">
+        <h3 style="font-size: 16px;">📋 기술 부채 관리</h3>
+        <p style="font-size: 15px;">미해결 부채 목록 조회, 해결 시 <code>resolveDebt()</code>로 표시</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 18: Section 4 ========== -->
+<div class="slide section-divider">
+  <div class="num">04</div>
+  <h1>실전 활용</h1>
+  <p class="subtitle">파일 구조, 데모 흐름, 변경 사항</p>
+</div>
+
+<!-- ========== SLIDE 19: File Structure ========== -->
+<div class="slide">
+  <h2>프로젝트 파일 구조</h2>
+  <div class="cols">
+    <div class="col">
+<pre style="font-size: 15px; line-height: 1.6;">
+vais-claude-code/
+│
+├── <span class="fn">.claude-plugin/</span>
+│   ├── plugin.json          <span class="comment"># 플러그인 메타데이터</span>
+│   └── marketplace.json     <span class="comment"># 마켓플레이스 등록</span>
+│
+├── <span class="fn">agents/</span>                  <span class="comment"># 5개 에이전트 정의</span>
+│   ├── manager.md           <span class="comment"># opus — 전략/기억</span>
+│   ├── tech-lead.md         <span class="comment"># opus — 오케스트레이션</span>
+│   ├── designer.md          <span class="comment"># sonnet — UI/UX</span>
+│   ├── frontend-dev.md      <span class="comment"># sonnet — FE</span>
+│   ├── backend-dev.md       <span class="comment"># sonnet — BE</span>
+│   └── reviewer.md          <span class="comment"># sonnet — 검증</span>
+│
+├── <span class="fn">skills/vais/</span>             <span class="comment"># 스킬 시스템</span>
+│   ├── SKILL.md             <span class="comment"># 진입점 + 라우팅</span>
+│   └── phases/              <span class="comment"># 18개 액션 정의</span>
+│       ├── auto.md          <span class="comment"># 전체 자동</span>
+│       ├── plan.md → review.md
+│       ├── fix.md           <span class="comment"># 수정 체이닝</span>
+│       ├── status.md, next.md
+│       └── help.md, commit.md, test.md
+</pre>
+    </div>
+    <div class="col">
+<pre style="font-size: 15px; line-height: 1.6;">
+│
+├── <span class="fn">lib/</span>                     <span class="comment"># 코어 라이브러리 (5개)</span>
+│   ├── paths.js             <span class="comment"># 경로 레지스트리</span>
+│   ├── status.js            <span class="comment"># 워크플로우 상태</span>
+│   ├── memory.js            <span class="comment"># Manager Memory</span>
+│   ├── io.js                <span class="comment"># 훅 I/O</span>
+│   └── debug.js             <span class="comment"># 디버그 로깅</span>
+│
+├── <span class="fn">scripts/</span>                 <span class="comment"># 훅 스크립트 (4개)</span>
+│   ├── bash-guard.js        <span class="comment"># 위험 명령 차단</span>
+│   ├── doc-tracker.js       <span class="comment"># 문서 상태 추적</span>
+│   ├── prompt-handler.js    <span class="comment"># 의도 감지</span>
+│   ├── stop-handler.js      <span class="comment"># 진행률 출력</span>
+│   └── get-context.js       <span class="comment"># 동적 컨텍스트</span>
+│
+├── <span class="fn">hooks/</span>
+│   ├── hooks.json           <span class="comment"># 훅 등록</span>
+│   └── session-start.js     <span class="comment"># 세션 초기화</span>
+│
+├── <span class="fn">templates/</span>               <span class="comment"># 문서 템플릿 (8개)</span>
+├── <span class="fn">tests/</span>                   <span class="comment"># 테스트 (67개 통과)</span>
+├── <span class="fn">output-styles/</span>           <span class="comment"># 응답 스타일</span>
+├── vais.config.json         <span class="comment"># 워크플로우 설정</span>
+└── AGENTS.md                <span class="comment"># 에이전트 지침</span>
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 20: Demo Flow ========== -->
+<div class="slide">
+  <h2>실행 데모 흐름 — <code>/vais auto login</code></h2>
+  <div class="diagram" style="font-size: 15px; line-height: 1.8;">
+<span style="color:var(--warn);">1. Manager</span>
+   memory.json 조회 → 기존 피처 의존성 확인 → Tech Lead에게 지시
+
+<span style="color:var(--accent);">2. Tech Lead — research</span>
+   아이디어 정리 → docs/01-research/login.md 작성
+
+<span style="color:var(--accent);">3. Tech Lead — plan</span>  <span style="color:var(--warn);">⬅ 게이트</span>
+   기획서 작성 → 피처 레지스트리 저장 → <span style="color:var(--accent3);">AskUserQuestion (핑퐁 루프)</span>
+   └─ 사용자: "소셜 로그인도 넣어줘" → 반영 → 요약 → "계속"
+
+<span style="color:var(--accent2);">4. designer — ia</span>
+   사이트맵 + 네비게이션 설계
+
+<span style="color:var(--accent2);">5. designer — wireframe</span>
+   ASCII/HTML 와이어프레임 생성
+
+<span style="color:var(--accent2);">6. 병렬 — design</span>
+   ├─ designer → UI 설계 (디자인 토큰, 컴포넌트)
+   └─ backend-dev → DB 설계 (ERD, 스키마)
+
+<span style="color:var(--accent3);">7. 병렬 — fe+be</span>  <span style="color:var(--warn);">⬅ 게이트 (fe 시작 전)</span>
+   ├─ frontend-dev → React 컴포넌트 구현
+   └─ backend-dev → API + DB 연동
+
+<span style="color:var(--err);">8. reviewer — check</span>
+   Gap 분석: 설계 vs 코드 비교 → 90% 미만이면 자동 반복 (최대 5회)
+
+<span style="color:var(--err);">9. reviewer — review</span>
+   QA 시나리오 검증 + OWASP 보안 검사 + 최종 리뷰</div>
+</div>
+
+<!-- ========== SLIDE 21: 피처 레지스트리 ========== -->
+<div class="slide">
+  <h2>피처 레지스트리 — 추적의 핵심</h2>
+  <p class="subtitle">plan에서 생성 → 모든 단계에서 참조 → check에서 검증</p>
+  <div class="cols">
+    <div class="col">
+      <h3>구조 (<code>.vais/features/login.json</code>)</h3>
+<pre style="font-size: 15px;">
+{
+  <span class="string">"featureName"</span>: <span class="string">"login"</span>,
+  <span class="string">"features"</span>: [
+    {
+      <span class="string">"id"</span>: <span class="string">"F1"</span>,
+      <span class="string">"name"</span>: <span class="string">"이메일 로그인"</span>,
+      <span class="string">"description"</span>: <span class="string">"이메일+비밀번호 인증"</span>,
+      <span class="string">"screens"</span>: [<span class="string">"로그인 화면"</span>],
+      <span class="string">"priority"</span>: <span class="string">"Must"</span>,
+      <span class="string">"status"</span>: <span class="string">"미구현"</span>
+    },
+    {
+      <span class="string">"id"</span>: <span class="string">"F2"</span>,
+      <span class="string">"name"</span>: <span class="string">"소셜 로그인"</span>,
+      <span class="string">"status"</span>: <span class="string">"완료"</span>
+    }
+  ],
+  <span class="string">"policies"</span>: { <span class="string">"auth"</span>: <span class="string">"JWT"</span> },
+  <span class="string">"techStack"</span>: { <span class="string">"fe"</span>: <span class="string">"Next.js"</span> },
+  <span class="string">"hasDatabase"</span>: <span class="keyword">true</span>
+}
+</pre>
+    </div>
+    <div class="col">
+      <h3>단계별 활용</h3>
+      <table>
+        <tr><th>단계</th><th>활용</th></tr>
+        <tr><td>📋 plan</td><td><span class="highlight3">생성</span> — 기능 목록 구조화 저장</td></tr>
+        <tr><td>🗺 ia</td><td>참조 — 화면 목록 확인</td></tr>
+        <tr><td>🖼 wireframe</td><td>참조 — 모든 화면 포함 여부 체크</td></tr>
+        <tr><td>🎨 design</td><td>참조 — 기능별 컴포넌트 매핑</td></tr>
+        <tr><td>💻 fe / ⚙️ be</td><td><span class="highlight">갱신</span> — 구현 시 status를 "완료"로</td></tr>
+        <tr><td>🔎 check</td><td><span style="color:var(--err); font-weight:600;">검증</span> — 전체 구현율 산출</td></tr>
+        <tr><td>🔍 review</td><td>참조 — 최종 완성도 확인</td></tr>
+      </table>
+      <div class="card card-accent" style="margin-top: 16px;">
+        <h3>단일 진실 소스 (SSOT)</h3>
+        <p>기능 목록이 <strong>한 곳</strong>에만 존재.<br>
+        plan에서 정의 → 이후 단계에서 동일 레지스트리를 읽고 갱신.<br>
+        문서 간 기능 목록 불일치 방지.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 22: Gap Analysis ========== -->
+<div class="slide">
+  <h2>Gap 분석 — 자동 검증 루프</h2>
+  <p class="subtitle">설계 문서 vs 구현 코드를 자동 비교, 90% 미만이면 자동 재시도</p>
+  <div class="cols">
+    <div class="col">
+      <h3>프로세스</h3>
+      <ol style="font-size: 18px; line-height: 2;">
+        <li>피처 레지스트리에서 요구사항 추출</li>
+        <li>Glob/Grep으로 구현 코드 탐색</li>
+        <li>각 요구사항의 구현 여부 판정</li>
+        <li>일치율 산출: (구현 수 / 전체) × 100</li>
+        <li>OWASP Top 10 보안 검사</li>
+        <li>QA 시나리오 생성</li>
+        <li><span class="highlight">Gap 방향 판단</span>: 코드 수정? 스펙 수정?</li>
+        <li>90% 미만 → <span class="warn">최대 5회 자동 반복</span></li>
+      </ol>
+    </div>
+    <div class="col">
+      <div class="diagram" style="font-size: 15px;">
+<span style="color:var(--accent3);">check 시작</span>
+  │
+  ▼
+빌드 검증 (npm build / tsc)
+  │
+  ▼
+Gap 분석 실행
+  │
+  ├─ 일치율 ≥ 90% → <span style="color:var(--accent3);">통과 ✅</span>
+  │
+  └─ 일치율 < 90%
+       │
+       ▼
+     Gap 방향 판단
+       ├─ 코드 누락 → 코드 수정
+       └─ 스펙 과잉 → 사용자 확인
+       │
+       ▼
+     반복 (iteration++)
+       │
+       ├─ iteration ≤ 5 → 재분석 🔄
+       └─ iteration > 5 → 중단, 보고 🛑</div>
+      <div class="card card-warn" style="margin-top: 12px;">
+        <h3>설정 (vais.config.json)</h3>
+<pre style="border: none; padding: 8px; margin: 0; font-size: 14px;">
+"gapAnalysis": {
+  "matchThreshold": 90,
+  "maxIterations": 5,
+  "autoIterate": true
+}
+</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 23: /vais fix ========== -->
+<div class="slide">
+  <h2><code>/vais fix</code> — 영향 분석 기반 수정</h2>
+  <p class="subtitle">수정 요청 시 Manager가 영향 범위를 분석 후 적절한 단계 체이닝</p>
+  <div class="cols">
+    <div class="col">
+      <h3>수정 흐름</h3>
+      <div class="diagram" style="font-size: 15px;">
+사용자: "로그인 화면 디자인 바꿔줘"
+  │
+  ▼
+<span style="color:var(--warn);">Manager</span>
+  ├── memory 조회 (과거 결정)
+  ├── dependency 맵 확인
+  └── 영향 범위 분석
+  │
+  ▼
+<span style="color:var(--accent);">영향 분류</span>
+  ├── UI만 → wireframe:design:fe
+  ├── API만 → design:be
+  ├── 전체 → design:fe+be:check
+  └── 정책 → plan:design:fe+be:check
+  │
+  ▼
+<span style="color:var(--accent2);">Tech Lead → 팀 실행</span>
+  │
+  ▼
+<span style="color:var(--warn);">Manager → memory 기록 (change)</span></div>
+    </div>
+    <div class="col">
+      <h3>크로스-피처 영향 감지</h3>
+      <div class="card card-warn">
+<pre style="border: none; padding: 12px; margin: 0; font-size: 15px;">
+⚠️ 크로스-피처 영향 감지
+
+"login" 수정 시 다음 피처에 영향:
+
+• <span class="highlight">cart</span>
+  login 인증 토큰 의존
+  → 인증 로직 변경 시 cart도 수정 필요
+
+• <span class="highlight2">payment</span>
+  cart 경유로 login에 간접 의존
+
+진행할까요?
+</pre>
+      </div>
+      <div class="card card-green" style="margin-top: 12px;">
+        <h3>안전 장치</h3>
+        <ul>
+          <li>fix → check → fix 재귀 방지</li>
+          <li>영향 받는 피처 목록 사용자 확인</li>
+          <li>모든 변경 memory에 기록</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 24: v0.11.0 Changes ========== -->
+<div class="slide">
+  <h2>v0.11.0 변경 사항</h2>
+  <p class="subtitle">코드 리뷰 반영 + 게이트 핑퐁 루프</p>
+  <div class="grid2">
+    <div>
+      <h3>보안 &amp; 안정성</h3>
+      <table>
+        <tr><th>항목</th><th>변경</th></tr>
+        <tr><td>bash-guard</td><td><code>sudo</code>, 분리 플래그, <code>$HOME</code>, <code>chmod 777</code> 차단 추가</td></tr>
+        <tr><td>doc-tracker</td><td><code>includes()</code> → <code>endsWith()</code> 경로 오탐 수정</td></tr>
+        <tr><td>prompt-handler</td><td>단독 키워드 → 복합 키워드 (false positive 감소)</td></tr>
+        <tr><td>status.js</td><td>updatePhase 재귀 → 재로드 방식</td></tr>
+        <tr><td>에러 로깅</td><td>모든 catch에 <code>debugLog</code> 추가 (3개 모듈)</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>기능 &amp; 품질</h3>
+      <table>
+        <tr><th>항목</th><th>변경</th></tr>
+        <tr><td>게이트 루프</td><td><span class="highlight3">핑퐁 피드백 루프</span> 추가 — "계속"까지 대기</td></tr>
+        <tr><td>no-op 훅 제거</td><td>notification.js, subagent-stop.js 삭제</td></tr>
+        <tr><td>타이포그래피</td><td>design 템플릿 기본값 + H3/Small 추가</td></tr>
+        <tr><td>OWASP</td><td>review 템플릿에 A06/A08/A09/A10 추가</td></tr>
+        <tr><td>버전 통일</td><td>plugin/marketplace/config 모두 0.11.0</td></tr>
+        <tr><td>변경 이력</td><td>AGENTS.md 시맨틱 버전 순 정렬</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="card card-green" style="margin-top: 24px;">
+    <p style="font-size: 18px; text-align: center;">
+      <strong>테스트: 25 suites, 67 tests — 전체 통과 ✅</strong>
+    </p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 25: Summary ========== -->
+<div class="slide">
+  <h2>요약</h2>
+  <div class="grid2" style="margin-top: 10px;">
+    <div class="card card-accent">
+      <h3>🎯 VAIS Code가 해결하는 것</h3>
+      <ul>
+        <li>AI가 기획 없이 코드부터 작성하는 문제</li>
+        <li>설계와 구현의 괴리 (Gap)</li>
+        <li>세션 간 맥락 유실</li>
+        <li>피처 간 의존성 파악 불가</li>
+        <li>수정 시 영향 범위 모름</li>
+      </ul>
+    </div>
+    <div class="card card-green">
+      <h3>✨ 핵심 역량</h3>
+      <ul>
+        <li><span class="highlight">9단계 파이프라인</span> — 체계적 산출물</li>
+        <li><span class="highlight2">체이닝 문법</span> — 유연한 워크플로우</li>
+        <li><span class="highlight3">병렬 에이전트</span> — design(UI+DB), fe+be</li>
+        <li><span class="warn">Gap 분석</span> — 90%+ 자동 검증</li>
+        <li><span class="highlight">Manager Memory</span> — 영속 맥락</li>
+        <li><span class="highlight2">핑퐁 게이트</span> — 사용자 통제 보장</li>
+      </ul>
+    </div>
+  </div>
+  <div style="text-align: center; margin-top: 40px;">
+    <p style="font-size: 24px; color: var(--muted);">
+      <code>/vais auto {피처명}</code> 으로 시작하세요
+    </p>
+    <p class="small" style="margin-top: 20px;">
+      VAIS Code v0.11.0 · MIT License · github.com/ghlee3401/vais-claude-code
+    </p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 26: Q&A ========== -->
+<div class="slide section-divider">
+  <div class="num" style="font-size: 80px;">Q&A</div>
+  <h1 style="font-size: 40px; margin-top: 20px;">감사합니다</h1>
+  <p class="subtitle" style="margin-top: 20px;">
+    VAIS Code v0.11.0<br>
+    <code>/vais help</code> 로 시작하세요
+  </p>
+</div>
+
+<!-- Navigation -->
+<div class="progress" id="progress"></div>
+<div class="page-num" id="pageNum"></div>
+<div class="nav">
+  <button onclick="prevSlide()">← 이전</button>
+  <button onclick="nextSlide()">다음 →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, slides.length - 1));
+    slides[current].classList.add('active');
+    document.getElementById('progress').style.width = ((current + 1) / slides.length * 100) + '%';
+    document.getElementById('pageNum').textContent = `${current + 1} / ${slides.length}`;
+  }
+
+  function nextSlide() { showSlide(current + 1); }
+  function prevSlide() { showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    if (e.key === 'End') { e.preventDefault(); showSlide(slides.length - 1); }
+  });
+
+  // Touch support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
