@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.11.2] - 2026-03-17
+
+### Changed
+
+- **init(역설계) 템플릿 통일** — 각 단계별 `templates/*.template.md` 참조 추가, 정상 설계와 동일한 문서 구조 보장
+- **플레이스홀더 통일** — 모든 phase 스킬 파일의 경로 표기를 `$1` → `{feature}`로 변경 (`vais.config.json` docPaths와 일치)
+- **init feature registry 생성** — 역설계 시에도 `.vais/features/{feature}.json` 생성하도록 Step 4 추가
+- **init check/review 범위 명시** — 역설계는 research~design만 생성, check/review는 별도 실행임을 명시
+
+---
+
 ## [0.11.1] - 2026-03-17
 
 ### Added
