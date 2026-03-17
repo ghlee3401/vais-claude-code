@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.11.1] - 2026-03-17
+
+### Added
+
+- **`.claude/settings.json` 훅 등록** — 플러그인 미설치 환경에서도 Stop, UserPromptSubmit, PreToolUse, PostToolUse 훅이 동작하도록 프로젝트 설정 파일 추가
+
+---
+
 ## [0.10.0] - 2026-03-15
 
 ### Added
