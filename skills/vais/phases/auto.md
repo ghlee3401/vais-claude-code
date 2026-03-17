@@ -32,9 +32,11 @@ Manager (판단)
 - **설계**: designer (UI 설계) + backend-dev (DB 설계) — Agent 병렬 호출
 - **구현**: frontend-dev + backend-dev — Agent 병렬 호출
 
-**게이트 체크포인트** 도달 시:
-- AskUserQuestion으로 중간 결과 확인
-- "계속", "수정 후 계속", "여기서 중단" 중 선택
+**게이트 체크포인트** 도달 시 (핑퐁 루프):
+- AskUserQuestion으로 중간 결과를 보여주고 확인
+- "계속", "수정 요청", "여기서 중단" 중 선택
+- "수정 요청" 선택 시 → 피드백 반영 → 수정 결과 요약 출력 → **다시 AskUserQuestion으로 확인** (계속/추가 수정/중단)
+- 사용자가 "계속"을 명시적으로 선택할 때까지 다음 단계로 절대 넘어가지 않음
 - 사용자 피드백은 Manager가 memory에 feedback 타입으로 기록
 
 **진행률**: TodoWrite로 시각화
