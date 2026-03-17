@@ -1,8 +1,8 @@
 ### 🔍 review — 검토
 
 1. 해당 피처의 모든 문서와 코드 읽기
-2. **피처 레지스트리 확인** (`.vais/features/$1.json`) — 모든 기능의 구현 상태(`status`) 최종 확인. `"미구현"` 항목이 있으면 지적
-3. **Gap 분석 결과 먼저 확인** (`docs/06-check/$1.md`)
+2. **피처 레지스트리 확인** (`.vais/features/{feature}.json`) — 모든 기능의 구현 상태(`status`) 최종 확인. `"미구현"` 항목이 있으면 지적
+3. **Gap 분석 결과 먼저 확인** (`docs/06-check/{feature}.md`)
 4. **QA 시나리오 검증** — check 문서의 QA 리스트 기반:
    - 핵심 기능 시나리오 Pass/Fail 판정
    - 엣지 케이스 Pass/Fail 판정
@@ -17,4 +17,4 @@
    - [ ] 접근성 준수
    - [ ] 반응형 대응
    - [ ] 테스트 커버리지 충분
-6. `docs/07-review/$1.md`에 리뷰 결과 저장 (QA 결과 포함)
+6. `docs/07-review/{feature}.md`에 리뷰 결과 저장 (QA 결과 포함)

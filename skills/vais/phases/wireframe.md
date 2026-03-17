@@ -3,14 +3,14 @@
 옵션: `--format ascii|html|mermaid` (기본: ascii), `--device mobile|tablet|desktop|all` (기본: mobile)
 
 1. IA 문서 먼저 읽기
-2. **피처 레지스트리 확인** (`.vais/features/$1.json`) — 모든 기능과 화면이 와이어프레임에 반영되었는지 대조
+2. **피처 레지스트리 확인** (`.vais/features/{feature}.json`) — 모든 기능과 화면이 와이어프레임에 반영되었는지 대조
 3. 각 화면의 와이어프레임 생성 — 레지스트리의 `screens[]` 기준
 4. 반응형 레이아웃 (모바일/태블릿/데스크탑)
 5. **컴포넌트 어노테이션**: `data-component`, `data-props` 속성 추가
    ```html
    <div data-component="LoginForm" data-props="onSubmit, isLoading, error">...</div>
    ```
-6. `docs/04-wireframe/$1.md`에 설명 문서 저장
+6. `docs/04-wireframe/{feature}.md`에 설명 문서 저장
 
 #### 출력 형식
 
@@ -28,7 +28,7 @@
 
 **2. HTML 와이어프레임**
 
-실제 브라우저에서 확인 가능한 HTML 파일을 `wireframes/$1/` 디렉토리에 생성합니다.
+실제 브라우저에서 확인 가능한 HTML 파일을 `wireframes/{feature}/` 디렉토리에 생성합니다.
 - 각 화면별 `{screen-name}.html` 파일
 - `index.html`에 전체 화면 목록과 네비게이션
 - Tailwind CSS CDN 사용

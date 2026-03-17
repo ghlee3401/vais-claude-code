@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.12.0] - 2026-03-17
+
+### Added
+
+- **UI/UX Pro Max 번들** (`vendor/ui-ux-pro-max/`) — nextlevelbuilder/ui-ux-pro-max-skill (MIT) 번들 통합
+  - 50+ 스타일, 161 컬러 팔레트, 57 폰트 페어링, 161 제품 유형, 99 UX 가이드라인
+  - BM25 검색 엔진 (Python) + CSV 데이터셋
+  - design 단계에서 `--design-system` 명령으로 디자인 토큰 자동 생성
+  - `design-system/{feature}/MASTER.md` 출력 → designer 에이전트가 소비
+
+### Changed
+
+- **design 단계 역할 분리** — UI/UX Pro Max가 토큰 생성, designer 에이전트가 토큰 소비
+- **designer 에이전트** — 토큰 소비자 역할 명확화, design-system/ 참조 규칙 추가
+- **fe 단계** — `design-system/{feature}/MASTER.md` 참조 단계 추가
+
+---
+
+## [0.11.2] - 2026-03-17
+
+### Changed
+
+- **init(역설계) 템플릿 통일** — 각 단계별 `templates/*.template.md` 참조 추가, 정상 설계와 동일한 문서 구조 보장
+- **플레이스홀더 통일** — 모든 phase 스킬 파일의 경로 표기를 `$1` → `{feature}`로 변경 (`vais.config.json` docPaths와 일치)
+- **init feature registry 생성** — 역설계 시에도 `.vais/features/{feature}.json` 생성하도록 Step 4 추가
+- **init check/review 범위 명시** — 역설계는 research~design만 생성, check/review는 별도 실행임을 명시
+
+---
+
 ## [0.11.1] - 2026-03-17
 
 ### Added
