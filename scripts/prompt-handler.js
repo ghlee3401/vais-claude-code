@@ -25,10 +25,10 @@ const INTENT_PATTERNS = [
   { keywords: ['기획', '계획', 'plan', '요구사항', 'prd', '기능 정의'], phase: 'plan' },
   { keywords: ['ia', 'information architecture', '정보 구조', '사이트맵', 'sitemap', '네비게이션'], phase: 'ia' },
   { keywords: ['와이어프레임', 'wireframe', '목업', 'mockup', '화면 구성', '레이아웃'], phase: 'wireframe' },
-  { keywords: ['ui', 'ux', '디자인', 'design', '인터랙션', '스타일 가이드', 'db', '데이터베이스', 'database', '스키마', 'schema', 'erd'], phase: 'design' },
+  { keywords: ['ui 설계', 'ux 설계', 'ui설계', 'ux설계', '디자인 토큰', 'design token', '인터랙션 설계', '스타일 가이드', 'db 설계', 'db설계', '데이터베이스 설계', 'database design', '스키마 설계', 'schema design', 'erd 설계'], phase: 'design' },
   { keywords: ['프론트', 'frontend', 'fe', 'react', 'next', 'vue', '컴포넌트', '화면 개발'], phase: 'fe' },
   { keywords: ['백엔드', 'backend', 'be', 'api', '서버', 'express', 'nest', 'fastapi'], phase: 'be' },
-  { keywords: ['gap', 'check', '빌드', '검증', '분석'], phase: 'check' },
+  { keywords: ['gap 분석', 'gap분석', '/vais check', 'vais check', '빌드 검증', '빌드검증'], phase: 'check' },
   { keywords: ['리뷰', 'review', '검토', '코드 리뷰', '품질', '보안 점검'], phase: 'review' },
   { keywords: ['/vais fix', 'vais fix'], phase: 'fix' },
 ];

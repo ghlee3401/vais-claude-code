@@ -57,27 +57,7 @@
         ]
       }
     ],
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/subagent-stop.js",
-            "timeout": 3000
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/notification.js",
-            "timeout": 3000
-          }
-        ]
-      }
-    ]
+    "SubagentStop": [],
+    "Notification": []
   }
 }
