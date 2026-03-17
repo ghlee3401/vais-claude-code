@@ -65,10 +65,10 @@ git clone https://github.com/ghlee3401/vais-claude-code.git ~/.claude/plugins/va
 ## 빠른 시작
 
 ```bash
-/vais auto SNS앱                          # 전체 자동 (tech-lead 오케스트레이션)
-/vais plan:ia:wireframe 로그인기능         # 순차 체이닝
-/vais fe+be 로그인기능                     # 병렬 체이닝
-/vais plan 로그인기능                      # 단일 실행
+/vais auto 기능명                          # 전체 자동 (tech-lead 오케스트레이션)
+/vais plan:ia:wireframe 기능명             # 순차 체이닝
+/vais fe+be 기능명                         # 병렬 체이닝
+/vais plan 기능명                          # 단일 실행
 /vais status                               # 진행 상태 확인
 ```
 
@@ -107,19 +107,19 @@ git clone https://github.com/ghlee3401/vais-claude-code.git ~/.claude/plugins/va
 
 | 방식 | 문법 | 예시 |
 |------|------|------|
-| 단일 | `/vais {단계} {기능}` | `/vais plan 로그인기능` |
-| 순차 (`:`) | `/vais {단계}:{단계} {기능}` | `/vais plan:ia:wireframe 로그인기능` |
-| 병렬 (`+`) | `/vais {단계}+{단계} {기능}` | `/vais fe+be 로그인기능` |
-| 혼합 | 순차와 병렬 조합 | `/vais plan:ia:design:fe+be:check 로그인기능` |
-| 전체 | `/vais auto {기능}` | `/vais auto 로그인기능` |
+| 단일 | `/vais {단계} {기능}` | `/vais plan 기능명` |
+| 순차 (`:`) | `/vais {단계}:{단계} {기능}` | `/vais plan:ia:wireframe 기능명` |
+| 병렬 (`+`) | `/vais {단계}+{단계} {기능}` | `/vais fe+be 기능명` |
+| 혼합 | 순차와 병렬 조합 | `/vais plan:ia:design:fe+be:check 기능명` |
+| 전체 | `/vais auto {기능}` | `/vais auto 기능명` |
 
 ### 범위 패턴 (자동 체이닝)
 
 한국어 범위 표현을 자동으로 체이닝 문법으로 변환합니다:
 
 ```bash
-/vais plan부터 check까지 로그인기능
-# → 자동 변환: /vais plan:ia:wireframe:design:fe+be:check 로그인기능
+/vais plan부터 check까지 기능명
+# → 자동 변환: /vais plan:ia:wireframe:design:fe+be:check 기능명
 ```
 
 `parallelGroups` 설정에 따라 병렬 구간(`fe+be`)이 자동 적용됩니다.
@@ -127,7 +127,7 @@ git clone https://github.com/ghlee3401/vais-claude-code.git ~/.claude/plugins/va
 ### 혼합 체이닝 실행 흐름
 
 ```
-/vais plan:ia:design:fe+be:check 로그인기능
+/vais plan:ia:design:fe+be:check 기능명
 
 ① plan 완료 →
 ② ia 완료 →
@@ -405,7 +405,7 @@ vais-claude-code/
 
 ### Q: 특정 단계만 실행할 수 있나요?
 
-네. `/vais plan 로그인기능`처럼 단일 실행하거나, `/vais plan:ia 로그인기능`으로 체이닝할 수 있습니다.
+네. `/vais plan 기능명`처럼 단일 실행하거나, `/vais plan:ia 기능명`으로 체이닝할 수 있습니다.
 
 ### Q: 기존 프로젝트에도 적용할 수 있나요?
 
@@ -423,7 +423,7 @@ vais-claude-code/
 
 커맨드는 영문(`/vais plan`)이지만, 기능명은 한국어/영문 모두 지원합니다:
 ```bash
-/vais plan 로그인기능    # 한국어 OK
+/vais plan 기능명    # 한국어 OK
 /vais plan user-auth     # 영문 OK
 ```
 
