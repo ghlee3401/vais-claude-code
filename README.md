@@ -81,24 +81,19 @@ git clone https://github.com/ghlee3401/vais-claude-code.git ~/.claude/plugins/va
 
 ## 개발 워크플로우 (9단계)
 
-```
-🔭조사·탐색 → 📋기획 → 🗺IA → 🖼와이어프레임 → 🎨설계(UI+DB) → 💻프론트 → ⚙️백엔드 → 🔎Gap분석 → 🔍검토
-```
+| # | 단계 | 설명 | 산출물 |
+|---|------|------|--------|
+| 01 | 🔭 조사·탐색 | 아이디어 정리, MVP 범위 결정 | `docs/01-research/{feature}.md` |
+| 02 | 📋 기획 | 요구사항, 정책, 코딩 규칙 정의 | `docs/02-plan/{feature}.md` |
+| 03 | 🗺 IA 설계 | 사이트맵, 네비게이션, 화면 흐름 | `docs/03-ia/{feature}.md` |
+| 04 | 🖼 와이어프레임 | ASCII/HTML 와이어프레임 | `docs/04-wireframe/{feature}.md` |
+| 05 | 🎨 설계 (UI+DB) | UI 디자인 토큰 + DB 스키마 (병렬) | `docs/05-design/{feature}.md` `{feature}-db.md` |
+| 06 | 💻 프론트엔드 | 컴포넌트 구현 | 코드 직접 생성 |
+| 07 | ⚙️ 백엔드 | API + DB 연동 (FE와 병렬) | 코드 직접 생성 |
+| 08 | 🔎 Gap 분석 | 빌드 검증 + 설계 대비 일치율 산출 | `docs/06-check/{feature}.md` |
+| 09 | 🔍 검토 | QA 시나리오 판정 + 최종 리뷰 | `docs/07-review/{feature}.md` |
 
-### 산출물 경로
-
-| 단계 | 산출물 경로 |
-|------|-----------|
-| 조사·탐색 | `docs/01-research/{feature}.md` |
-| 기획 (+ 코딩 규칙) | `docs/02-plan/{feature}.md` |
-| IA | `docs/03-ia/{feature}.md` |
-| 와이어프레임 | `docs/04-wireframe/{feature}.md` |
-| UI 설계 | `docs/05-design/{feature}.md` |
-| DB 설계 | `docs/05-design/{feature}-db.md` |
-| Gap 분석 | `docs/06-check/{feature}.md` |
-| 검토 | `docs/07-review/{feature}.md` |
-
-프론트엔드·백엔드 단계는 코드가 산출물이므로 별도 문서를 생성하지 않습니다.
+> 프론트엔드·백엔드 단계는 코드가 산출물이므로 별도 문서를 생성하지 않습니다.
 
 ---
 
