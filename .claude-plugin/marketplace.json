@@ -6,13 +6,13 @@
   },
   "metadata": {
     "description": "VAIS Code — 9단계 개발 워크플로우 플러그인",
-    "version": "0.11.2"
+    "version": "0.12.0"
   },
   "plugins": [
     {
       "name": "vais-code",
       "description": "9-step development workflow plugin with chaining syntax, parallel design, and gap analysis.",
-      "version": "0.11.2",
+      "version": "0.12.0",
       "author": {
         "name": "VAIS Voice",
         "email": "ghlee0304@ncsoft.com"
