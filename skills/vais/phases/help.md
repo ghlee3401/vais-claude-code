@@ -23,9 +23,6 @@ AskUserQuestion:
 📋 단계별:
   /vais research ~ review      — 각 단계 개별 실행
 
-🔧 수정:
-  /vais fix {기능}              — 영향 분석 후 일괄 수정
-
 🔧 유틸리티:
   /vais status | next | test | commit
 ```
