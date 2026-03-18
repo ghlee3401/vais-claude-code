@@ -1,5 +1,5 @@
 {
-  "version": "0.12.0",
+  "version": "0.13.0",
   "workflow": {
     "phases": ["research", "plan", "ia", "wireframe", "design", "fe", "be", "check", "review"],
     "phaseNames": {
