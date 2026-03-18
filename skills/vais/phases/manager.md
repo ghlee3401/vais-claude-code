@@ -50,7 +50,7 @@ Agent 도구로 **manager** 에이전트를 호출합니다.
    - memory에서 관련 컨텍스트를 수집하세요
    - 크로스-피처 영향을 분석하세요
    - 신규 → tech-lead에게 auto 워크플로우 지시
-   - 수정 → 영향 분석 후 tech-lead에게 fix 체이닝 지시
+   - 수정 → 영향 분석 후 tech-lead에게 수정 체이닝 지시
    - 실행 완료 후 반드시 memory에 결과를 기록하세요
 5. 모든 판단과 결과는 `.vais/memory.json`에 기록하세요.
 ```
