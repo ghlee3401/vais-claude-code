@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.13.0] - 2026-03-18
+
+### Changed
+
+- **fix 액션을 manager로 통합** — `/vais fix`를 제거하고 영향 분석·수정 체이닝·검증 로직을 Manager Command 모드에 흡수
+  - 기존: `/vais fix` → Manager 호출 → Tech Lead 위임 (불필요한 중간 단계)
+  - 변경: `/vais manager "수정 요청"` → 직접 영향 분석 → Tech Lead 위임 (단일 진입점)
+  - Manager가 수정 유형별 영향 범위 분석, 체이닝 결정, 검증까지 일괄 처리
+- **agents/manager.md** — 영향 분석 테이블, 수정 체이닝 매핑, 재귀 방지, 검증 로직 추가
+- **prompt-handler.js** — `/vais fix` 키워드를 manager로 라우팅
+- **SKILL.md** — manager 설명에 "영향 분석 기반 수정" 추가, 트리거에서 `fix` 제거
+
+### Removed
+
+- `skills/vais/phases/fix.md` — fix 단독 액션 삭제
+- SKILL.md 액션 목록에서 `fix [feature]` 행 삭제
+- help.md 커맨드 목록에서 `/vais fix` 제거
+
+---
+
 ## [0.12.0] - 2026-03-17
 
 ### Added
@@ -53,7 +73,7 @@
 ### Changed
 
 - **auto 워크플로우** — Manager → Tech Lead 경유 구조로 변경
-- **fix 워크플로우** — Manager 경유 크로스-피처 영향 분석 추가 (Step 0, Step 7)
+- **fix 워크플로우** — Manager 경유 크로스-피처 영향 분석 추가 (Step 0, Step 7) *(v0.13.0에서 manager로 통합됨)*
 - **SKILL.md** — manager 트리거 키워드 추가 (매니저, 현황, 히스토리, 부채, 의존성, 브리핑)
 - **vais.config.json** — manager 설정 섹션 추가, team.maxTeammates 5→6
 - **에이전트 계층 구조**: Manager (What & Why) → Tech Lead (How) → 전문 에이전트팀

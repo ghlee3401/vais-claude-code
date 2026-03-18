@@ -2,7 +2,7 @@
 
 > 기획부터 배포까지, 팀 개발을 빠르고 튼튼하게.
 
-**v0.12.0** · 최종 수정 2026-03-17
+**v0.13.0** · 최종 수정 2026-03-18
 
 VAIS Code는 Claude Code 플러그인으로, 체계적인 9단계 개발 워크플로우를 제공합니다.
 체이닝 문법(순차 `:` / 병렬 `+`), 설계 병렬화(UI+DB), 빌드 검증 통합 Gap 분석을 지원합니다.
@@ -143,6 +143,7 @@ git clone https://github.com/ghlee3401/vais-claude-code.git ~/.claude/plugins/va
 | 커맨드 | 설명 |
 |--------|------|
 | `/vais init {기능}` | 기존 프로젝트 분석 → VAIS 문서 역생성 |
+| `/vais manager [질문/지시]` | 프로젝트 매니저 — 히스토리 조회, 전략 판단, 영향 분석 기반 수정, Tech Lead 지시 |
 | `/vais auto {기능}` | 전체 자동 워크플로우 |
 | `/vais research {기능}` | 아이디어 정리 + MVP 범위 결정 |
 | `/vais plan {기능}` | 기획서 작성 (코딩 규칙 포함) + Plan-Plus 검증 |
@@ -153,7 +154,6 @@ git clone https://github.com/ghlee3401/vais-claude-code.git ~/.claude/plugins/va
 | `/vais be {기능}` | 백엔드 구현 |
 | `/vais check {기능}` | 빌드 검증 + Gap 분석 + QA 시나리오 생성 |
 | `/vais review {기능}` | 코드 리뷰 + QA 판정 + 최종 승인 |
-| `/vais fix {기능}` | 영향 분석 → 코드·문서 일괄 수정 → 검증 |
 
 ### 유틸리티 커맨드
 
@@ -280,10 +280,11 @@ frontend 단계에서 기존 CSS/스타일 파일을 자동 감지합니다:
 
 ## 에이전트 팀
 
-5명의 전문 에이전트가 역할 기반으로 협업합니다.
+5명의 전문 에이전트 + 1명의 매니저가 역할 기반으로 협업합니다.
 
 | 에이전트 | 모델 | 역할 | 담당 단계 |
 |---------|------|------|----------|
+| manager | opus | 프로젝트 기억, 전략 판단, 영향 분석 기반 수정, Tech Lead 지시 | 최상위 의사결정 |
 | tech-lead | opus | 아키텍처 결정, 팀 오케스트레이션 | 전체 총괄 |
 | designer | sonnet | UI/UX, 와이어프레임 | ia, wireframe, design (UI) |
 | frontend-dev | sonnet | 프론트엔드 구현 | fe |
@@ -344,7 +345,7 @@ CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 claude
 | `gapAnalysis.matchThreshold` | 90 | Gap 분석 통과 기준 (%) |
 | `gapAnalysis.maxIterations` | 5 | 자동 수정 최대 반복 횟수 |
 | `orchestration.gates` | `["plan", "fe"]` | 자동 모드에서 사용자 확인 체크포인트 |
-| `team.maxTeammates` | 5 | 동시 에이전트 최대 수 |
+| `team.maxTeammates` | 6 | 동시 에이전트 최대 수 |
 
 ---
 

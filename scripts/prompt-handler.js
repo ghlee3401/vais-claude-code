@@ -30,7 +30,7 @@ const INTENT_PATTERNS = [
   { keywords: ['백엔드', 'backend', 'be', 'api', '서버', 'express', 'nest', 'fastapi'], phase: 'be' },
   { keywords: ['gap 분석', 'gap분석', '/vais check', 'vais check', '빌드 검증', '빌드검증'], phase: 'check' },
   { keywords: ['리뷰', 'review', '검토', '코드 리뷰', '품질', '보안 점검'], phase: 'review' },
-  { keywords: ['/vais fix', 'vais fix'], phase: 'fix' },
+  { keywords: ['/vais fix', 'vais fix'], phase: 'manager' },
 ];
 
 const activeFeature = getActiveFeature();
