@@ -14,12 +14,15 @@
   - `design_system_generate`: 디자인 토큰 MASTER.md 자동 생성
   - `design_stack_search`: 스택별 (html-tailwind, react, nextjs) UI 가이드라인 검색
   - `lazyLoad: true` — design/wireframe 단계에서만 활성화, 컨텍스트 사용량 절감
-- **HTTP Hooks — 외부 서비스 연동** (`hooks/hooks.json`)
-  - `phaseComplete`: 단계 완료 시 웹훅 전송
-  - `gapAnalysisAlert`: Gap 분석 결과 알림
-  - `reviewComplete`: 리뷰 완료 알림
-  - `VAIS_WEBHOOK_URL` 환경변수로 활성화 (기본 비활성)
-  - `doc-tracker.js`에 실제 HTTP 웹훅 전송 로직 구현
+- **HTTP Webhook 공용 유틸리티** (`lib/webhook.js`)
+  - `sendWebhook(event, data)` — fire-and-forget HTTP POST 전송
+  - `VAIS_WEBHOOK_URL` 환경변수로 활성화 (미설정 시 무동작)
+  - 전송 실패해도 워크플로우 차단 안 함
+  - 4개 훅 스크립트에 연동:
+    - `session-start.js` → `session_start` (세션 시작, 프로젝트/피처 정보)
+    - `doc-tracker.js` → `phase_complete` (단계 완료, 피처/단계/파일)
+    - `stop-handler.js` → `stop` (응답 완료, 진행률/다음 단계)
+  - 웹훅 테스트 4개 추가 (서버 수신 확인, 실패 안전성 검증)
 - **Memory Timestamps** — 메모리 신선도 추적
   - `memory.json` v1 → v2: `lastModified` 필드 추가, 저장 시 자동 갱신
   - `getMemoryAge()` 유틸리티: 마지막 수정 시간, 경과 분, stale 여부 반환

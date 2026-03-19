@@ -7,6 +7,7 @@ const { readStdin, outputAllow } = require('../lib/io');
 const { debugLog } = require('../lib/debug');
 const { getActiveFeature, getProgressSummary } = require('../lib/status');
 const { loadConfig } = require('../lib/paths');
+const { sendWebhook } = require('../lib/webhook');
 
 readStdin(); // stdin 소비 (내용 미사용)
 
@@ -84,6 +85,14 @@ lines.push('╚═════════════════════�
 
 const output = lines.join('\n');
 debugLog('StopHandler', 'Status summary', { feature: activeFeature, currentPhase, completedCount });
+
+sendWebhook('stop', {
+  feature: activeFeature,
+  currentPhase,
+  progress: `${completedCount}/${totalCount}`,
+  nextPhase: nextPhase || null,
+});
+
 outputAllow(output);
 process.exit(0);
 
