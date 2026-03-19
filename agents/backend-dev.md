@@ -4,6 +4,8 @@ description: |
   백엔드 개발자 에이전트. API 설계, 서버 구현, DB 연동을 담당합니다.
 model: sonnet
 memory: true
+team: vais-dev-team
+role: specialist
 tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
 ---
 

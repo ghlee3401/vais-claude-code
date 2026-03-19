@@ -37,10 +37,11 @@ function loadMemory() {
 }
 
 describe('memory - createEmptyMemory', () => {
-  it('빈 메모리 객체 생성', () => {
+  it('빈 메모리 객체 생성 (v2 + lastModified)', () => {
     const mem = loadMemory();
     const empty = mem.createEmptyMemory();
-    assert.equal(empty.version, 1);
+    assert.equal(empty.version, 2);
+    assert.ok(empty.lastModified);
     assert.deepEqual(empty.entries, []);
   });
 });
@@ -182,6 +183,44 @@ describe('memory - getEntriesByDateRange', () => {
 
     const futureEntries = mem.getEntriesByDateRange(new Date(now.getTime() + 3600000).toISOString());
     assert.equal(futureEntries.length, 0);
+  });
+});
+
+describe('memory - lastModified & getMemoryAge', () => {
+  it('저장 시 lastModified 자동 갱신', () => {
+    const mem = loadMemory();
+    mem.addEntry({ type: 'decision', feature: 'login', summary: 'test' });
+    const data = mem.getMemory();
+    assert.ok(data.lastModified);
+    assert.equal(data.version, 2);
+  });
+
+  it('getMemoryAge 반환값 확인', () => {
+    const mem = loadMemory();
+    mem.addEntry({ type: 'decision', feature: 'login', summary: 'test' });
+    const age = mem.getMemoryAge();
+    assert.ok(age.lastModified);
+    assert.equal(typeof age.minutesAgo, 'number');
+    assert.ok(age.minutesAgo < 1); // 방금 저장했으므로
+    assert.equal(age.isStale, false);
+  });
+
+  it('v1 메모리 로드 시 자동 마이그레이션', () => {
+    const mem = loadMemory();
+    // .vais 디렉토리 생성 후 v1 형식으로 직접 저장
+    fs.mkdirSync(path.join(tmpDir, '.vais'), { recursive: true });
+    const v1Data = { version: 1, entries: [{ id: 'm-001', type: 'decision', summary: 'old' }] };
+    fs.writeFileSync(path.join(tmpDir, '.vais', 'memory.json'), JSON.stringify(v1Data), 'utf8');
+
+    // 캐시 클리어 후 재로드
+    Object.keys(require.cache).forEach(key => {
+      if (key.includes('lib/memory') || key.includes('lib/paths')) delete require.cache[key];
+    });
+    const mem2 = require('../lib/memory');
+    const data = mem2.getMemory();
+    assert.equal(data.version, 2);
+    assert.ok(data.lastModified);
+    assert.equal(data.entries.length, 1);
   });
 });
 

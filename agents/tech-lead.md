@@ -4,6 +4,9 @@ description: |
   기술 리드 에이전트. 전체 아키텍처 결정, 기술 스택 선정, 팀 오케스트레이션을 담당합니다.
 model: opus
 memory: true
+team: vais-dev-team
+role: lead
+delegates_to: [designer, frontend-dev, backend-dev, reviewer]
 tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, WebSearch
 ---
 

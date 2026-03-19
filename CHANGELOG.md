@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.14.0] - 2026-03-19
+
+### Added
+
+- **Agent Teams 네이티브 통합** — Claude Code Agent Teams 구조 적용
+  - `vais.config.json`에 `agentTeam` 설정 추가 (orchestrator, roles, routing)
+  - `plugin.json`에 `agentTeam` 선언 (에이전트 디렉토리, 오케스트레이터)
+  - 6개 에이전트 frontmatter에 `team`, `role`, `delegates_to` 메타데이터 추가
+  - 병렬 라우팅(design, implementation)과 council 패턴을 선언적 구성으로 정의
+- **MCP Tool Search — vendor 디자인 시스템 lazy loading** (`mcp/design-system-server.json`)
+  - `design_search`: BM25 기반 스타일/컬러/폰트/UX 검색
+  - `design_system_generate`: 디자인 토큰 MASTER.md 자동 생성
+  - `design_stack_search`: 스택별 (html-tailwind, react, nextjs) UI 가이드라인 검색
+  - `lazyLoad: true` — design/wireframe 단계에서만 활성화, 컨텍스트 사용량 절감
+- **HTTP Hooks — 외부 서비스 연동** (`hooks/hooks.json`)
+  - `phaseComplete`: 단계 완료 시 웹훅 전송
+  - `gapAnalysisAlert`: Gap 분석 결과 알림
+  - `reviewComplete`: 리뷰 완료 알림
+  - `VAIS_WEBHOOK_URL` 환경변수로 활성화 (기본 비활성)
+  - `doc-tracker.js`에 실제 HTTP 웹훅 전송 로직 구현
+- **Memory Timestamps** — 메모리 신선도 추적
+  - `memory.json` v1 → v2: `lastModified` 필드 추가, 저장 시 자동 갱신
+  - `getMemoryAge()` 유틸리티: 마지막 수정 시간, 경과 분, stale 여부 반환
+  - v1 메모리 자동 마이그레이션 (기존 데이터 무손실)
+  - 테스트 3개 추가 (lastModified 갱신, getMemoryAge, v1 마이그레이션)
+- **ESLint + EditorConfig** — 코드 품질 기반 도구
+  - `.editorconfig`: indent 2 spaces, LF, UTF-8, trailing whitespace 제거
+  - `.eslintrc.json`: no-eval, eqeqeq, no-var, prefer-const 등 핵심 규칙
+  - vendor/, docs/ 디렉토리 제외
+
+---
+
 ## [0.13.0] - 2026-03-18
 
 ### Changed

@@ -47,6 +47,35 @@ if (activeFeature) {
         debugLog('DocTracker', 'Memory write failed (non-critical)', { error: memErr.message });
       }
 
+      // HTTP Hook 트리거 (VAIS_WEBHOOK_URL 설정 시)
+      const webhookUrl = process.env.VAIS_WEBHOOK_URL;
+      if (webhookUrl) {
+        try {
+          const http = require(webhookUrl.startsWith('https') ? 'https' : 'http');
+          const payload = JSON.stringify({
+            event: 'phase_complete',
+            feature: activeFeature,
+            phase: actualPhase,
+            file: path.basename(filePath),
+            timestamp: new Date().toISOString(),
+          });
+          const url = new URL(webhookUrl);
+          const req = http.request({
+            hostname: url.hostname,
+            port: url.port,
+            path: url.pathname,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) },
+            timeout: 5000,
+          });
+          req.on('error', (err) => debugLog('DocTracker', 'Webhook failed (non-critical)', { error: err.message }));
+          req.write(payload);
+          req.end();
+        } catch (hookErr) {
+          debugLog('DocTracker', 'Webhook error (non-critical)', { error: hookErr.message });
+        }
+      }
+
       const phaseNames = config.workflow?.phaseNames || {};
       const phaseName = phaseNames[phase] || phase;
       outputAllow(`✅ "${activeFeature}" - ${phaseName} 문서 작성 완료. 워크플로우 상태가 업데이트되었습니다.`);

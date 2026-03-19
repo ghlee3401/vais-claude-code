@@ -1,0 +1,39 @@
+{
+  "_comment": "MCP Server 설정 — vendor/ui-ux-pro-max 디자인 시스템을 MCP Tool Search로 lazy loading",
+  "name": "vais-design-system",
+  "description": "VAIS 디자인 시스템 검색 (BM25). 50+ 스타일, 161 컬러, 57 폰트 페어링을 필요할 때만 로드합니다.",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "design_search",
+      "description": "디자인 시스템 BM25 검색 — 스타일, 컬러, 폰트, UX 가이드라인 조회. design 단계에서만 사용.",
+      "parameters": {
+        "query": { "type": "string", "description": "검색 쿼리 (예: 'modern minimalist dark')" },
+        "domain": { "type": "string", "enum": ["style", "color", "chart", "landing", "product", "ux", "typography", "google-fonts"], "description": "검색 도메인" },
+        "max_results": { "type": "number", "default": 3, "description": "최대 결과 수" }
+      },
+      "command": "python3 ${CLAUDE_PLUGIN_ROOT}/vendor/ui-ux-pro-max/scripts/search.py \"${query}\" --domain ${domain} --max-results ${max_results}"
+    },
+    {
+      "name": "design_system_generate",
+      "description": "디자인 토큰 자동 생성 — MASTER.md 출력. design 단계에서 designer 에이전트가 소비.",
+      "parameters": {
+        "query": { "type": "string", "description": "프로젝트 스타일 설명 (예: 'e-commerce modern clean')" },
+        "project_name": { "type": "string", "description": "피처명 (kebab-case)" },
+        "persist": { "type": "boolean", "default": true, "description": "design-system/ 디렉토리에 저장" }
+      },
+      "command": "python3 ${CLAUDE_PLUGIN_ROOT}/vendor/ui-ux-pro-max/scripts/search.py \"${query}\" --design-system --persist -p \"${project_name}\""
+    },
+    {
+      "name": "design_stack_search",
+      "description": "스택별 UI 가이드라인 검색 — html-tailwind, react, nextjs",
+      "parameters": {
+        "query": { "type": "string", "description": "검색 쿼리" },
+        "stack": { "type": "string", "enum": ["html-tailwind", "react", "nextjs"], "description": "대상 스택" }
+      },
+      "command": "python3 ${CLAUDE_PLUGIN_ROOT}/vendor/ui-ux-pro-max/scripts/search.py \"${query}\" --stack ${stack}"
+    }
+  ],
+  "lazy_load": true,
+  "activation_phases": ["design", "wireframe"]
+}
