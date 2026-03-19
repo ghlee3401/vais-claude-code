@@ -9,6 +9,7 @@ const { debugLog } = require('../lib/debug');
 const { updatePhase, getActiveFeature } = require('../lib/status');
 const { addEntry } = require('../lib/memory');
 const { loadConfig } = require('../lib/paths');
+const { sendWebhook } = require('../lib/webhook');
 
 const input = readStdin();
 const { filePath } = parseHookInput(input);
@@ -47,34 +48,12 @@ if (activeFeature) {
         debugLog('DocTracker', 'Memory write failed (non-critical)', { error: memErr.message });
       }
 
-      // HTTP Hook 트리거 (VAIS_WEBHOOK_URL 설정 시)
-      const webhookUrl = process.env.VAIS_WEBHOOK_URL;
-      if (webhookUrl) {
-        try {
-          const http = require(webhookUrl.startsWith('https') ? 'https' : 'http');
-          const payload = JSON.stringify({
-            event: 'phase_complete',
-            feature: activeFeature,
-            phase: actualPhase,
-            file: path.basename(filePath),
-            timestamp: new Date().toISOString(),
-          });
-          const url = new URL(webhookUrl);
-          const req = http.request({
-            hostname: url.hostname,
-            port: url.port,
-            path: url.pathname,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) },
-            timeout: 5000,
-          });
-          req.on('error', (err) => debugLog('DocTracker', 'Webhook failed (non-critical)', { error: err.message }));
-          req.write(payload);
-          req.end();
-        } catch (hookErr) {
-          debugLog('DocTracker', 'Webhook error (non-critical)', { error: hookErr.message });
-        }
-      }
+      // 웹훅 알림 (VAIS_WEBHOOK_URL 설정 시)
+      sendWebhook('phase_complete', {
+        feature: activeFeature,
+        phase: actualPhase,
+        file: path.basename(filePath),
+      });
 
       const phaseNames = config.workflow?.phaseNames || {};
       const phaseName = phaseNames[phase] || phase;

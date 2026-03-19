@@ -7,6 +7,7 @@
 const { debugLog } = require('../lib/debug');
 const { ensureVaisDirs, loadConfig } = require('../lib/paths');
 const { getStatus, getActiveFeature, getProgressSummary } = require('../lib/status');
+const { sendWebhook } = require('../lib/webhook');
 
 debugLog('SessionStart', 'Hook executed', { cwd: process.cwd() });
 
@@ -45,6 +46,12 @@ ctx += `| \`/vais help\` | 사용법 안내 |\n\n`;
 const response = {
   additionalContext: ctx,
 };
+
+sendWebhook('session_start', {
+  project: process.cwd(),
+  activeFeature: activeFeature || null,
+  featureCount: featureNames.length,
+});
 
 console.log(JSON.stringify(response));
 process.exit(0);

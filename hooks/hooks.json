@@ -58,52 +58,6 @@
       }
     ],
     "SubagentStop": [],
-    "Notification": [],
-    "httpHooks": {
-      "_comment": "HTTP Hooks — 외부 서비스 연동 (Slack, 대시보드 등). URL을 설정하면 활성화됩니다.",
-      "phaseComplete": {
-        "type": "http",
-        "url": "${VAIS_WEBHOOK_URL:-}",
-        "method": "POST",
-        "headers": { "Content-Type": "application/json" },
-        "body": {
-          "event": "phase_complete",
-          "feature": "${feature}",
-          "phase": "${phase}",
-          "timestamp": "${timestamp}"
-        },
-        "timeout": 5000,
-        "enabled": false
-      },
-      "gapAnalysisAlert": {
-        "type": "http",
-        "url": "${VAIS_WEBHOOK_URL:-}",
-        "method": "POST",
-        "headers": { "Content-Type": "application/json" },
-        "body": {
-          "event": "gap_analysis",
-          "feature": "${feature}",
-          "matchRate": "${matchRate}",
-          "iteration": "${iteration}",
-          "timestamp": "${timestamp}"
-        },
-        "timeout": 5000,
-        "enabled": false
-      },
-      "reviewComplete": {
-        "type": "http",
-        "url": "${VAIS_WEBHOOK_URL:-}",
-        "method": "POST",
-        "headers": { "Content-Type": "application/json" },
-        "body": {
-          "event": "review_complete",
-          "feature": "${feature}",
-          "result": "${result}",
-          "timestamp": "${timestamp}"
-        },
-        "timeout": 5000,
-        "enabled": false
-      }
-    }
+    "Notification": []
   }
 }
