@@ -6,14 +6,6 @@
 const { readStdin, parseHookInput, outputAllow, outputBlock } = require('../lib/io');
 const { debugLog } = require('../lib/debug');
 
-const input = readStdin();
-const { command } = parseHookInput(input);
-
-if (!command) {
-  outputAllow();
-  process.exit(0);
-}
-
 const BLOCKED = [
   // rm -rf 변형: 분리된 플래그(-r -f), sudo, 환경변수($HOME 등), 경로 조작(/../) 포함
   { pattern: /(?:sudo\s+)?rm\s+(?:-[a-z]*r[a-z]*f|-[a-z]*f[a-z]*r|-r\s+-f|-f\s+-r|--recursive\s+--force|--force\s+--recursive)\s+[\/~.]/, reason: '위험한 재귀 강제 삭제 시도' },
@@ -35,21 +27,49 @@ const ASK = [
   { pattern: /delete\s+from/i, reason: 'DB 레코드 대량 삭제' },
 ];
 
-for (const { pattern, reason } of BLOCKED) {
-  if (pattern.test(command)) {
-    debugLog('BashGuard', 'BLOCKED', { command, reason });
-    outputBlock(`⛔ 차단됨: ${reason}\n명령: ${command}`);
-    process.exit(0);
+/**
+ * 명령어 검사 함수 (테스트에서도 사용 가능)
+ */
+function checkGuard(command) {
+  if (!command) return { decision: 'allow' };
+
+  for (const { pattern, reason } of BLOCKED) {
+    if (pattern.test(command)) {
+      return { decision: 'block', reason: `⛔ 차단됨: ${reason}\n명령: ${command}` };
+    }
   }
+
+  for (const { pattern, reason } of ASK) {
+    if (pattern.test(command)) {
+      return { decision: 'warn', reason };
+    }
+  }
+
+  return { decision: 'allow' };
 }
 
-for (const { pattern, reason } of ASK) {
-  if (pattern.test(command)) {
-    debugLog('BashGuard', 'WARNING', { command, reason });
-    outputAllow(`⚠️ 주의: ${reason}\n실행하려는 명령: \`${command}\`\n사용자에게 확인을 받으세요.`);
+// 테스트에서 require로 사용할 수 있도록 export
+module.exports = { BLOCKED, ASK, checkGuard };
+
+// 직접 실행 시에만 stdin 처리
+if (require.main === module) {
+  const input = readStdin();
+  const { command } = parseHookInput(input);
+
+  const result = checkGuard(command);
+
+  if (result.decision === 'block') {
+    debugLog('BashGuard', 'BLOCKED', { command, reason: result.reason });
+    outputBlock(result.reason);
     process.exit(0);
   }
-}
 
-outputAllow();
-process.exit(0);
+  if (result.decision === 'warn') {
+    debugLog('BashGuard', 'WARNING', { command, reason: result.reason });
+    outputAllow(`⚠️ 주의: ${result.reason}\n실행하려는 명령: \`${command}\`\n사용자에게 확인을 받으세요.`);
+    process.exit(0);
+  }
+
+  outputAllow();
+  process.exit(0);
+}

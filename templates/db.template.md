@@ -73,4 +73,4 @@ INSERT INTO {table_name} (column1, column2) VALUES
 |---------|------|--------|
 | v1.0 | | 초기 작성 |
 
-<!-- template version: v0.8.1 -->
+<!-- template version: v0.14.0 -->

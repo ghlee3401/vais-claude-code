@@ -78,8 +78,12 @@
   },
   "orchestration": {
     "gates": ["plan", "fe"],
-    "gateAction": "confirm",
-    "skipGatesInRange": false
+    "gateAction": "confirm"
+  },
+  "featureNameValidation": {
+    "pattern": "^[a-zA-Z0-9가-힣_-]+$",
+    "maxLength": 100,
+    "description": "허용: 한글, 영문, 숫자, -, _ (공백, 특수문자, 경로 문자 불가)"
   },
   "featureNameSuggestions": {
     "_description": "자주 쓰는 피처 이름 예시 (kebab-case 권장, 강제 아님)",

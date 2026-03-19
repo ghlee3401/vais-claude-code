@@ -198,3 +198,50 @@ describe('getActiveFeature', () => {
     assert.equal(status.getActiveFeature(), null);
   });
 });
+
+describe('validateFeatureName', () => {
+  it('유효한 영문 피처명을 허용한다', () => {
+    const status = loadStatus();
+    assert.ok(status.validateFeatureName('user-auth'));
+  });
+
+  it('유효한 한글 피처명을 허용한다', () => {
+    const status = loadStatus();
+    assert.ok(status.validateFeatureName('로그인기능'));
+  });
+
+  it('언더스코어를 허용한다', () => {
+    const status = loadStatus();
+    assert.ok(status.validateFeatureName('my_feature'));
+  });
+
+  it('경로 탐색 문자를 거부한다', () => {
+    const status = loadStatus();
+    assert.ok(!status.validateFeatureName('../evil'));
+  });
+
+  it('공백을 거부한다', () => {
+    const status = loadStatus();
+    assert.ok(!status.validateFeatureName('my feature'));
+  });
+
+  it('슬래시를 거부한다', () => {
+    const status = loadStatus();
+    assert.ok(!status.validateFeatureName('path/traversal'));
+  });
+
+  it('빈 문자열을 거부한다', () => {
+    const status = loadStatus();
+    assert.ok(!status.validateFeatureName(''));
+  });
+
+  it('null을 거부한다', () => {
+    const status = loadStatus();
+    assert.ok(!status.validateFeatureName(null));
+  });
+
+  it('특수문자를 거부한다', () => {
+    const status = loadStatus();
+    assert.ok(!status.validateFeatureName('feat;rm -rf'));
+  });
+});

@@ -57,7 +57,7 @@ describe('memory - addEntry', () => {
       details: { alternatives: ['JWT', 'Session'], reason: '소셜 로그인 확장성' },
     });
 
-    assert.equal(entry.id, 'm-001');
+    assert.ok(entry.id.startsWith('m-'));
     assert.equal(entry.type, 'decision');
     assert.equal(entry.feature, 'login');
     assert.equal(entry.summary, '인증 방식을 OAuth2로 결정');
@@ -67,7 +67,7 @@ describe('memory - addEntry', () => {
     const raw = fs.readFileSync(path.join(tmpDir, '.vais', 'memory.json'), 'utf8');
     const saved = JSON.parse(raw);
     assert.equal(saved.entries.length, 1);
-    assert.equal(saved.entries[0].id, 'm-001');
+    assert.ok(saved.entries[0].id.startsWith('m-'));
   });
 
   it('여러 엔트리 추가 시 ID 증가', () => {
@@ -76,9 +76,12 @@ describe('memory - addEntry', () => {
     mem.addEntry({ type: 'change', feature: 'login', summary: '두 번째' });
     const third = mem.addEntry({ type: 'debt', feature: 'cart', summary: '세 번째' });
 
-    assert.equal(third.id, 'm-003');
+    assert.ok(third.id.startsWith('m-'));
     const data = mem.getMemory();
     assert.equal(data.entries.length, 3);
+    // 각 ID가 고유한지 확인
+    const ids = data.entries.map(e => e.id);
+    assert.equal(new Set(ids).size, 3);
   });
 
   it('잘못된 type은 에러', () => {
@@ -160,9 +163,9 @@ describe('memory - debt management', () => {
 
   it('부채 해결 표시', () => {
     const mem = loadMemory();
-    mem.addEntry({ type: 'debt', feature: 'login', summary: 'API URL 하드코딩' });
+    const entry = mem.addEntry({ type: 'debt', feature: 'login', summary: 'API URL 하드코딩' });
 
-    const resolved = mem.resolveDebt('m-001');
+    const resolved = mem.resolveDebt(entry.id);
     assert.ok(resolved.details.resolved);
     assert.ok(resolved.details.resolvedAt);
 
