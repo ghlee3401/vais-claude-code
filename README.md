@@ -2,7 +2,7 @@
 
 > 기획부터 배포까지, 팀 개발을 빠르고 튼튼하게.
 
-**v0.14.0** · 최종 수정 2026-03-19
+**v0.14.1** · 최종 수정 2026-03-19
 
 VAIS Code는 Claude Code 플러그인으로, 체계적인 9단계 개발 워크플로우를 제공합니다.
 체이닝 문법(순차 `:` / 병렬 `+`), 설계 병렬화(UI+DB), 빌드 검증 통합 Gap 분석을 지원합니다.
@@ -62,6 +62,17 @@ git clone https://github.com/ghlee3401/vais-claude-code.git ~/.claude/plugins/va
 
 설치 후 Claude Code를 재시작하면 자동으로 플러그인이 로드됩니다.
 
+### 설치 확인
+
+Claude Code에서 다음 명령을 실행하여 정상 설치를 확인합니다:
+
+```bash
+/vais help
+```
+
+VAIS Code 사용법 안내가 표시되면 설치가 완료된 것입니다.
+표시되지 않으면 Claude Code를 재시작하거나, `~/.claude/plugins/` 디렉토리에 플러그인이 있는지 확인하세요.
+
 ---
 
 ## 빠른 시작
@@ -77,6 +88,30 @@ git clone https://github.com/ghlee3401/vais-claude-code.git ~/.claude/plugins/va
 피처명 없이 실행하면 기존 피처 목록에서 선택하거나 새 피처명을 입력할 수 있습니다.
 
 자세한 실행 방식은 [실행 방식 (체이닝 문법)](#실행-방식-체이닝-문법) 참고.
+
+### 첫 번째 피처 만들기
+
+처음 사용한다면 아래 순서를 따라해 보세요:
+
+```bash
+# 1. 전체 자동 모드로 시작 (가장 간단)
+/vais auto login
+
+# 2. 또는 단계별로 직접 진행
+/vais research login          # 아이디어 정리
+/vais plan login              # 기획서 작성
+/vais ia login                # IA 설계
+/vais wireframe login         # 와이어프레임
+/vais design login            # UI+DB 설계
+/vais fe+be login             # 프론트+백엔드 (병렬)
+/vais check login             # Gap 분석
+/vais review login            # 최종 리뷰
+
+# 3. 진행 상태 확인
+/vais status
+```
+
+> **참고**: 에이전트 팀은 병렬 실행(`fe+be`)이나 자동 모드(`auto`)에서만 사용됩니다. 단일 실행 시에는 메인 Claude가 직접 처리하므로, 솔로 개발자도 동일한 워크플로우를 사용할 수 있습니다.
 
 ---
 
@@ -444,6 +479,47 @@ vais-claude-code/
 
 `AGENTS.md` 파일을 통해 Claude Code 외의 AI 코딩 도구(Cursor, Copilot 등)에서도
 동일한 개발 규칙을 적용할 수 있습니다.
+
+---
+
+## 트러블슈팅
+
+### 플러그인이 로드되지 않을 때
+
+1. Claude Code 재시작
+2. `~/.claude/plugins/vais-code/` 디렉토리 확인
+3. `/vais help` 실행하여 응답 확인
+
+### Gap 분석이 90%에 도달하지 않을 때
+
+Gap 분석은 최대 5회 반복합니다. 5회 후에도 90% 미만이면:
+
+1. `/vais check {기능}` 결과에서 미구현 항목 목록을 확인
+2. 수동으로 누락된 기능을 구현
+3. `/vais check {기능}`을 다시 실행
+
+### 피처명 오류
+
+피처명에는 한글, 영문, 숫자, `-`, `_`만 사용할 수 있습니다:
+
+```bash
+# OK
+/vais plan user-auth
+/vais plan 로그인기능
+
+# 오류 — 공백, 슬래시, 특수문자 불가
+/vais plan "my feature"     # 공백 불가
+/vais plan path/to/feature  # 슬래시 불가
+```
+
+### .vais/status.json 손상 시
+
+`.vais/status.json`을 삭제하면 초기 상태로 돌아갑니다:
+
+```bash
+rm .vais/status.json
+/vais init {기능명}    # 다시 초기화
+```
 
 ---
 

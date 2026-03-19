@@ -11,11 +11,15 @@ const fs = require('fs');
 const pluginRoot = path.resolve(__dirname, '..');
 const libPath = path.join(pluginRoot, 'lib');
 
-// 모듈 직접 로드 (require 경로 문제 방지)
+// 모듈 직접 로드 (require.resolve로 경로 검증)
 function loadModules() {
-  const pathsMod = require(path.join(libPath, 'paths'));
-  const statusMod = require(path.join(libPath, 'status'));
-  return { pathsMod, statusMod };
+  try {
+    const pathsMod = require(require.resolve(path.join(libPath, 'paths')));
+    const statusMod = require(require.resolve(path.join(libPath, 'status')));
+    return { pathsMod, statusMod };
+  } catch (e) {
+    throw new Error(`VAIS lib 모듈 로드 실패: ${e.message}`);
+  }
 }
 
 try {

@@ -30,7 +30,7 @@
           {
             "type": "command",
             "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/doc-tracker.js",
-            "timeout": 3000
+            "timeout": 5000
           }
         ]
       }
@@ -52,7 +52,7 @@
           {
             "type": "command",
             "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/prompt-handler.js",
-            "timeout": 3000
+            "timeout": 5000
           }
         ]
       }

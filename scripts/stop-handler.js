@@ -46,8 +46,9 @@ const currentPhase = summary.currentPhase;
 const currentPhaseName = phaseNames[currentPhase] || currentPhase;
 
 // 완료된 단계 수 계산
+const summaryPhases = summary.phases || {};
 const completedCount = phases.filter(
-  p => summary.phases[p]?.status === 'completed'
+  p => summaryPhases[p]?.status === 'completed'
 ).length;
 const totalCount = phases.length;
 const progressBar = buildProgressBar(completedCount, totalCount);

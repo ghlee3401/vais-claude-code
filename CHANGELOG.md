@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.14.1] - 2026-03-19
+
+### Fixed
+
+- **[CRITICAL] bash-guard 테스트/코드 패턴 통합** — 테스트가 패턴을 인라인 복사하던 구조에서 실제 스크립트의 `checkGuard()` 함수를 import하도록 리팩토링. 패턴 불일치로 인한 보안 취약점 해소
+- **[CRITICAL] Feature name path traversal 방지** — `validateFeatureName()` 추가. `../evil`, `path/traversal` 등 경로 탐색 문자 차단. 허용: 한글, 영문, 숫자, `-`, `_`
+- **[CRITICAL] 원자적 파일 쓰기** — `status.js`, `memory.js`에서 `writeFileSync` → `tmp + rename` 패턴으로 전환. 동시 세션에서의 데이터 손실 방지
+- **Memory maxEntries 제한** — `addEntry()` 시 `vais.config.json`의 `maxEntries`(기본 500) 초과분 자동 삭제
+- **Memory ID 충돌 방지** — 순차 번호(`m-001`)에서 타임스탬프+랜덤 기반(`m-{ts}-{hex}`)으로 전환
+- **Config cache TTL** — 무한 캐싱에서 30초 TTL로 변경. 세션 중 설정 파일 변경 시 자동 반영
+- **Webhook 재시도 + URL 검증** — 1회 재시도 로직 추가, URL 사전 검증, 프로토콜 감지를 URL.protocol 기반으로 개선
+- **debug.js** — 로그 쓰기 실패 시 stderr 경고 출력 (기존: 무시)
+- **io.js** — stdin 접근 에러와 JSON 파싱 에러를 구분하여 stderr에 원인 표시
+- **paths.js resolveDocPath** — 미치환 템플릿 변수(`{xxx}`) 잔존 시 빈 문자열 반환
+- **generate-dashboard.js** — `escapeHtml`에 `"` → `&quot;`, `'` → `&#39;` 추가
+- **get-context.js** — `require.resolve()`로 모듈 경로 사전 검증
+- **stop-handler.js** — `summary.phases` 누락 시 방어 처리 추가
+- **vais.config.json** — 미사용 `skipGatesInRange` 필드 제거
+
+### Added
+
+- `featureNameValidation` 설정 블록 (`vais.config.json`)
+- `clearConfigCache()` 함수 (`lib/paths.js`) — 테스트에서 캐시 초기화용
+- `validateFeatureName()` export (`lib/status.js`)
+- **MCP 서버 파라미터 제한** — `minLength`, `maxLength`, `minimum`, `maximum` 추가
+- **plugin.json** — `homepage`, `bugs`, `requiredClaudeCodeVersion` 필드 추가
+- **output-styles** — 병렬 실행 결과, 에러 상태 포맷 추가. 버전 표시를 `v{version}` 동적 플레이스홀더로 변경
+- **vendor/README.md** — 디자인 시스템 라이선스, 용도, 크기 정보 문서화
+- **README** — 설치 확인 섹션, 첫 피처 워크스루, 트러블슈팅 섹션 추가
+- **tests/prompt-handler.test.js** — 체이닝/범위 패턴 매칭 테스트 11건
+- **tests/status.test.js** — `validateFeatureName` 테스트 9건
+- 전체 101건 테스트 통과
+
+### Changed
+
+- **hooks.json** — doc-tracker, prompt-handler 타임아웃 3초 → 5초
+- **marketplace.json** — 버전 0.13.0 → 0.14.1
+- 전체 템플릿 버전 v0.14.1로 통일
+
+---
+
 ## [0.14.0] - 2026-03-19
 
 ### Added
