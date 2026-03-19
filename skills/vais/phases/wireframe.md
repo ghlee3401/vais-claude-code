@@ -2,9 +2,9 @@
 
 옵션: `--format ascii|html|mermaid` (기본: ascii), `--device mobile|tablet|desktop|all` (기본: mobile)
 
-1. IA 문서 먼저 읽기
+1. IA 문서 먼저 읽기 — **특히 섹션 3 "태스크 플로우"의 Step별 행동·분기를 확인**
 2. **피처 레지스트리 확인** (`.vais/features/{feature}.json`) — 모든 기능과 화면이 와이어프레임에 반영되었는지 대조
-3. 각 화면의 와이어프레임 생성 — 레지스트리의 `screens[]` 기준
+3. 각 화면의 와이어프레임 생성 — 레지스트리의 `screens[]` 기준, 태스크 플로우의 성공/실패/예외 상태를 모두 반영
 4. 반응형 레이아웃 (모바일/태블릿/데스크탑)
 5. **컴포넌트 어노테이션**: `data-component`, `data-props` 속성 추가
    ```html
