@@ -5,6 +5,8 @@ description: |
   디자인 토큰은 UI/UX Pro Max가 생성한 것을 소비합니다.
 model: sonnet
 memory: true
+team: vais-dev-team
+role: specialist
 tools: Read, Write, Edit, Glob, AskUserQuestion
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "vais-code",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "VAIS Code - 체이닝 문법(: 순차, + 병렬), 설계 병렬화(UI+DB), 실행 검증 통합 Gap 분석을 지원하는 9단계 개발 워크플로우 플러그인.",
   "author": {
     "name": "VAIS Voice",
@@ -19,5 +19,16 @@
     "agent-team",
     "korean"
   ],
-  "outputStyles": "./output-styles/"
+  "outputStyles": "./output-styles/",
+  "agentTeam": {
+    "name": "vais-dev-team",
+    "agents": "./agents/",
+    "orchestrator": "manager"
+  },
+  "mcpServers": {
+    "vais-design-system": {
+      "config": "./mcp/design-system-server.json",
+      "lazyLoad": true
+    }
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "version": "0.13.0",
+  "version": "0.14.0",
   "workflow": {
     "phases": ["research", "plan", "ia", "wireframe", "design", "fe", "be", "check", "review"],
     "phaseNames": {
@@ -52,7 +52,29 @@
   },
   "team": {
     "enabled": true,
-    "maxTeammates": 6
+    "maxTeammates": 6,
+    "agentTeam": {
+      "name": "vais-dev-team",
+      "description": "VAIS 9단계 개발 워크플로우 팀",
+      "orchestrator": "manager",
+      "roles": {
+        "manager": { "model": "opus", "phases": ["*"], "delegates_to": ["tech-lead"] },
+        "tech-lead": { "model": "opus", "phases": ["research", "plan", "check", "review"], "delegates_to": ["designer", "frontend-dev", "backend-dev", "reviewer"] },
+        "designer": { "model": "sonnet", "phases": ["ia", "wireframe", "design"] },
+        "frontend-dev": { "model": "sonnet", "phases": ["fe"] },
+        "backend-dev": { "model": "sonnet", "phases": ["design-db", "be"] },
+        "reviewer": { "model": "sonnet", "phases": ["check", "review"] }
+      },
+      "routing": {
+        "parallel": {
+          "design": ["designer", "backend-dev"],
+          "implementation": ["frontend-dev", "backend-dev"]
+        },
+        "council": {
+          "review": ["reviewer", "tech-lead"]
+        }
+      }
+    }
   },
   "orchestration": {
     "gates": ["plan", "fe"],

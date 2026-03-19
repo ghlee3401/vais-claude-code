@@ -4,6 +4,8 @@ description: |
   프론트엔드 개발자 에이전트. React/Next.js 등 프론트엔드 구현을 담당합니다.
 model: sonnet
 memory: true
+team: vais-dev-team
+role: specialist
 tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
 ---
 

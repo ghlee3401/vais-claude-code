@@ -4,6 +4,9 @@ description: |
   프로젝트 매니저 에이전트. 전체 히스토리 기억, 의사결정, 피처 간 의존성 관리, Tech Lead 지시를 담당합니다.
 model: opus
 memory: true
+team: vais-dev-team
+role: orchestrator
+delegates_to: [tech-lead]
 tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
 ---
 

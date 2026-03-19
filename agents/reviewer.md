@@ -4,6 +4,8 @@ description: |
   코드 리뷰어 에이전트. Gap 분석, 코드 품질, 보안, 성능을 검증합니다.
 model: sonnet
 memory: true
+team: vais-dev-team
+role: specialist
 tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
 ---
 
