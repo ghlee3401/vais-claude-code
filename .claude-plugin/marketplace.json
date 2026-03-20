@@ -11,6 +11,10 @@
   "plugins": [
     {
       "name": "vais-code",
+      "source": {
+        "source": "github",
+        "repo": "ghlee3401/vais-claude-code"
+      },
       "description": "6-step development workflow plugin with chaining syntax, 4-Gate system, and QA return path.",
       "version": "0.15.0",
       "author": {
@@ -18,10 +22,6 @@
         "email": "ghlee0304@ncsoft.com"
       },
       "repository": "https://github.com/ghlee3401/vais-claude-code",
-      "source": {
-        "source": "url",
-        "url": "https://github.com/ghlee3401/vais-claude-code.git"
-      },
       "license": "MIT",
       "category": "development",
       "keywords": [
