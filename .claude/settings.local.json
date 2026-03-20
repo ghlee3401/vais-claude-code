@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/ghlee0304/Desktop/workplace/vais-claude-code/templates -type f -name *.md)",
+      "Bash(node --test tests/status.test.js tests/prompt-handler.test.js)",
+      "Bash(node --test tests/memory.test.js)",
+      "Bash(node --test tests/paths.test.js)",
+      "Bash(node --test tests/*.test.js)",
+      "Bash(git status:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(node -e \"const fs = require\\(''fs''\\); try { JSON.parse\\(fs.readFileSync\\(''vais.config.json'',''utf8''\\)\\); console.log\\(''vais.config.json: VALID''\\); } catch\\(e\\) { console.log\\(''vais.config.json: INVALID -'', e.message\\); }\")",
+      "Bash(node -e \"const fs = require\\(''fs''\\); try { JSON.parse\\(fs.readFileSync\\(''.claude-plugin/plugin.json'',''utf8''\\)\\); console.log\\(''plugin.json: VALID''\\); } catch\\(e\\) { console.log\\(''plugin.json: INVALID -'', e.message\\); }\")",
+      "Bash(node -e \"const fs = require\\(''fs''\\); try { JSON.parse\\(fs.readFileSync\\(''.claude-plugin/marketplace.json'',''utf8''\\)\\); console.log\\(''marketplace.json: VALID''\\); } catch\\(e\\) { console.log\\(''marketplace.json: INVALID -'', e.message\\); }\")",
+      "Bash(node -e \"const fs = require\\(''fs''\\); try { JSON.parse\\(fs.readFileSync\\(''hooks/hooks.json'',''utf8''\\)\\); console.log\\(''hooks.json: VALID''\\); } catch\\(e\\) { console.log\\(''hooks.json: INVALID -'', e.message\\); }\")",
+      "Bash(node hooks/session-start.js)",
+      "Bash(node scripts/prompt-handler.js)",
+      "Bash(node scripts/doc-tracker.js)",
+      "Bash(node scripts/stop-handler.js)",
+      "Bash(node scripts/bash-guard.js)",
+      "Bash(where claude:*)",
+      "WebFetch(domain:docs.claude.ai)",
+      "WebFetch(domain:docs.anthropic.com)"
+    ]
+  }
+}
