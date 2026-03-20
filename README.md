@@ -2,7 +2,7 @@
 
 > 기획부터 배포까지, 팀 개발을 빠르고 튼튼하게.
 
-**v0.15.1** · 최종 수정 2026-03-20
+**v0.15.2** · 최종 수정 2026-03-20
 
 VAIS Code는 Claude Code 플러그인으로, 체계적인 6단계 개발 워크플로우를 제공합니다.
 체이닝 문법(순차 `:` / 병렬 `+`), 4-Gate 시스템, Interface Contract, QA 리턴 경로를 지원합니다.
@@ -495,13 +495,16 @@ vais-claude-code/
 │   ├── stop-handler.js       # 다음 단계 안내
 │   ├── prompt-handler.js     # 의도/체이닝 감지
 │   ├── generate-dashboard.js # HTML 대시보드 생성
-│   └── validate-plugin.js   # 플러그인/마켓플레이스 검증
+│   ├── validate-plugin.js   # 플러그인/마켓플레이스 검증
+│   └── seo-audit.js         # SEO 감사
 ├── skills/
 │   ├── vais/
 │   │   ├── SKILL.md          # 슬림 라우터 (Skills 2.0)
 │   │   └── phases/           # phase별 참조 파일
-│   └── validate-plugin/
-│       └── SKILL.md          # 플러그인 검증 (독립 스킬)
+│   ├── validate-plugin/
+│   │   └── SKILL.md          # 플러그인 검증 (독립 스킬)
+│   └── vais-seo/
+│       └── SKILL.md          # SEO 감사 (독립 스킬)
 ├── agents/
 │   ├── manager.md            # 프로젝트 매니저 (opus)
 │   ├── designer.md           # UI/UX 디자이너 (sonnet)
