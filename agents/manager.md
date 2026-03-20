@@ -1,12 +1,7 @@
 ---
 name: manager
-description: |
-  프로젝트 매니저 에이전트. Plan 직접 실행, 전체 오케스트레이션, 히스토리 기억, Gate 판정, Interface Contract 생성, QA 리턴 라우팅을 담당합니다.
+description: 프로젝트 매니저 에이전트. Plan 직접 실행, 전체 오케스트레이션, 히스토리 기억, Gate 판정, Interface Contract 생성, QA 리턴 라우팅을 담당합니다.
 model: opus
-memory: true
-team: vais-dev-team
-role: orchestrator
-delegates_to: [designer, infra-dev, frontend-dev, backend-dev, qa]
 tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
 ---
 

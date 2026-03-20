@@ -1,14 +1,13 @@
 ---
 name: vais
-description: VAIS Code 통합 워크플로우 스킬. 6단계 개발 워크플로우를 관리합니다.
-
+description: >
+  VAIS Code 통합 워크플로우 스킬. 6단계 개발 워크플로우를 관리합니다.
   Triggers: vais, help, 도움말, 사용법, 개발, 기획, 설계, 구현, 리뷰, 검토, plan, design, implement,
   상태, status, 다음, next, qa, QA, gap, test, commit, init, 초기화, 적용, 기존 프로젝트, 수정, 고쳐, 바꿔, 변경,
   아이디어, research, 조사, 뭐 만들, 만들고 싶, auto, 자동, 시작, 부터, 까지,
   wireframe, 와이어프레임, 화면설계, 목업, mockup, layout, 레이아웃, 화면 구성,
   infra, 인프라, DB, 환경설정, 마이그레이션, 스키마,
-  manager, 매니저, 현황, 히스토리, 부채, 의존성, 브리핑
-
+  manager, 매니저, 현황, 히스토리, 부채, 의존성, 브리핑.
   Do NOT use for: 단순 질문, 코드 없는 대화
 argument-hint: "[action] [feature]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
