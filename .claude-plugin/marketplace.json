@@ -5,14 +5,14 @@
     "email": "ghlee0304@ncsoft.com"
   },
   "metadata": {
-    "description": "VAIS Code — 9단계 개발 워크플로우 플러그인",
-    "version": "0.14.1"
+    "description": "VAIS Code — 6단계 개발 워크플로우 플러그인",
+    "version": "0.15.0"
   },
   "plugins": [
     {
       "name": "vais-code",
-      "description": "9-step development workflow plugin with chaining syntax, parallel design, and gap analysis.",
-      "version": "0.14.1",
+      "description": "6-step development workflow plugin with chaining syntax, 4-Gate system, and QA return path.",
+      "version": "0.15.0",
       "author": {
         "name": "VAIS Voice",
         "email": "ghlee0304@ncsoft.com"
@@ -27,9 +27,9 @@
       "keywords": [
         "workflow",
         "development",
-        "wireframe",
+        "infrastructure",
         "gap-analysis",
-        "code-review",
+        "qa",
         "planning",
         "agent-team",
         "korean"

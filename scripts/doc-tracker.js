@@ -28,21 +28,19 @@ if (activeFeature) {
   for (const [phase, template] of Object.entries(docPaths)) {
     const expected = template.replace(/\{feature\}/g, activeFeature);
     if (filePath.endsWith(expected) || filePath.endsWith(path.normalize(expected))) {
-      // design-db는 design 단계의 일부이므로 design으로 매핑
-      const actualPhase = phase === 'design-db' ? 'design' : phase;
-      updatePhase(activeFeature, actualPhase, 'completed');
-      debugLog('DocTracker', 'Phase completed via doc write', { phase: actualPhase, feature: activeFeature });
+      updatePhase(activeFeature, phase, 'completed');
+      debugLog('DocTracker', 'Phase completed via doc write', { phase: phase, feature: activeFeature });
 
       // Manager memory에 milestone 기록
       try {
         const pn = config.workflow?.phaseNames || {};
-        const milestoneName = pn[actualPhase] || actualPhase;
+        const milestoneName = pn[phase] || phase;
         addEntry({
           type: 'milestone',
           feature: activeFeature,
-          phase: actualPhase,
+          phase: phase,
           summary: `${milestoneName} 단계 완료 — ${path.basename(filePath)}`,
-          details: { filePath, phase: actualPhase },
+          details: { filePath, phase: phase },
         });
       } catch (memErr) {
         debugLog('DocTracker', 'Memory write failed (non-critical)', { error: memErr.message });
@@ -51,7 +49,7 @@ if (activeFeature) {
       // 웹훅 알림 (VAIS_WEBHOOK_URL 설정 시)
       sendWebhook('phase_complete', {
         feature: activeFeature,
-        phase: actualPhase,
+        phase: phase,
         file: path.basename(filePath),
       });
 

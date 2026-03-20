@@ -1,7 +1,7 @@
 {
   "name": "vais-code",
-  "version": "0.14.1",
-  "description": "VAIS Code - 체이닝 문법(: 순차, + 병렬), 설계 병렬화(UI+DB), 실행 검증 통합 Gap 분석을 지원하는 9단계 개발 워크플로우 플러그인.",
+  "version": "0.15.0",
+  "description": "VAIS Code - 체이닝 문법(: 순차, + 병렬), 4-Gate 시스템, Interface Contract, QA 리턴 경로를 지원하는 6단계 개발 워크플로우 플러그인.",
   "author": {
     "name": "VAIS Voice",
     "email": "ghlee0304@ncsoft.com",
@@ -15,9 +15,9 @@
   "keywords": [
     "workflow",
     "development",
-    "wireframe",
+    "infrastructure",
     "gap-analysis",
-    "code-review",
+    "qa",
     "planning",
     "agent-team",
     "korean"

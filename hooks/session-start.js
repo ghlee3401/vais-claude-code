@@ -20,7 +20,7 @@ const activeFeature = getActiveFeature();
 const featureNames = Object.keys(status.features || {});
 
 let ctx = `# VAIS Code v${VERSION}\n\n`;
-ctx += `> 🔭조사·탐색 → 📋기획 → 🗺IA → 🖼와이어프레임 → 🎨설계(UI+DB) → 💻프론트 → ⚙️백엔드 → 🔎Gap분석 → 🔍검토\n\n`;
+ctx += `> 📋기획 → 🎨설계 → 🔧인프라 → 💻프론트 + ⚙️백엔드 → ✅QA\n\n`;
 
 // 진행 중인 피처가 있으면 간단히 표시
 if (featureNames.length > 0) {

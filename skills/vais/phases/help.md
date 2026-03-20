@@ -13,15 +13,15 @@ AskUserQuestion:
 ```
 💠 VAIS Code — 커맨드 목록
 
-📌 워크플로우: 🔭조사·탐색 → 📋기획 → 🗺IA → 🖼와이어프레임 → 🎨설계(UI+DB) → 💻프론트 → ⚙️백엔드 → 🔎Gap분석 → 🔍검토
+📌 워크플로우: 📋기획 → 🎨설계 → 🔧인프라 → 💻프론트 + ⚙️백엔드 → ✅QA
 
 🚀 주요 커맨드:
-  /vais auto {기능}            — 전체 자동 실행
-  /vais plan:ia:wireframe {기능} — 순차 체이닝
+  /vais auto {기능}                 — 전체 자동 실행
+  /vais plan:design:infra {기능}    — 순차 체이닝
   /vais fe+be {기능}                — 병렬 체이닝
 
 📋 단계별:
-  /vais research ~ review      — 각 단계 개별 실행
+  /vais plan ~ qa                   — 각 단계 개별 실행
 
 🔧 유틸리티:
   /vais status | next | test | commit
@@ -34,7 +34,7 @@ AskUserQuestion:
 AskUserQuestion:
 - 질문: "지금 어떤 상황인가요?"
 - 선택지:
-  1. "아이디어가 있는데 뭘 만들지 정리하고 싶어요" → `/vais research` 실행
+  1. "아이디어가 있는데 뭘 만들지 정리하고 싶어요" → `/vais plan` 실행 (Research 흡수됨)
   2. "만들 기능이 정해져 있어요" → Step 3
   3. "기존 프로젝트에 기능을 추가하고 싶어요" → Step 3
 

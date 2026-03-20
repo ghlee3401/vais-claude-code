@@ -1,31 +1,23 @@
 {
-  "version": "0.14.1",
+  "version": "0.15.0",
   "workflow": {
-    "phases": ["research", "plan", "ia", "wireframe", "design", "fe", "be", "check", "review"],
+    "phases": ["plan", "design", "infra", "fe", "be", "qa"],
     "phaseNames": {
-      "research": "조사·탐색",
       "plan": "기획",
-      "ia": "IA 설계",
-      "wireframe": "와이어프레임",
-      "design": "설계 (UI+DB)",
+      "design": "설계",
+      "infra": "인프라",
       "fe": "프론트엔드",
       "be": "백엔드",
-      "check": "Gap 분석",
-      "review": "검토"
+      "qa": "QA"
     },
     "docPaths": {
-      "research": "docs/01-research/{feature}.md",
-      "plan": "docs/02-plan/{feature}.md",
-      "ia": "docs/03-ia/{feature}.md",
-      "wireframe": "docs/04-wireframe/{feature}.md",
-      "design": "docs/05-design/{feature}.md",
-      "design-db": "docs/05-design/{feature}-db.md",
-      "check": "docs/06-check/{feature}.md",
-      "review": "docs/07-review/{feature}.md"
+      "plan": "docs/01-plan/{feature}.md",
+      "design": "docs/02-design/{feature}.md",
+      "infra": "docs/03-infra/{feature}.md",
+      "qa": "docs/04-qa/{feature}.md"
     }
   },
   "parallelGroups": {
-    "design": ["ui-design", "db-design"],
     "implementation": ["fe", "be"]
   },
   "chaining": {
@@ -37,7 +29,7 @@
     "maxIterations": 5,
     "autoIterate": true
   },
-  "review": {
+  "qa": {
     "autoReview": true,
     "checklistRequired": true
   },
@@ -55,30 +47,52 @@
     "maxTeammates": 6,
     "agentTeam": {
       "name": "vais-dev-team",
-      "description": "VAIS 9단계 개발 워크플로우 팀",
+      "description": "VAIS 6단계 개발 워크플로우 팀",
       "orchestrator": "manager",
       "roles": {
-        "manager": { "model": "opus", "phases": ["*"], "delegates_to": ["tech-lead"] },
-        "tech-lead": { "model": "opus", "phases": ["research", "plan", "check", "review"], "delegates_to": ["designer", "frontend-dev", "backend-dev", "reviewer"] },
-        "designer": { "model": "sonnet", "phases": ["ia", "wireframe", "design"] },
+        "manager": { "model": "opus", "phases": ["*"], "delegates_to": ["designer", "infra-dev", "frontend-dev", "backend-dev", "qa"] },
+        "designer": { "model": "sonnet", "phases": ["design"] },
+        "infra-dev": { "model": "sonnet", "phases": ["infra"] },
         "frontend-dev": { "model": "sonnet", "phases": ["fe"] },
-        "backend-dev": { "model": "sonnet", "phases": ["design-db", "be"] },
-        "reviewer": { "model": "sonnet", "phases": ["check", "review"] }
+        "backend-dev": { "model": "sonnet", "phases": ["be"] },
+        "qa": { "model": "sonnet", "phases": ["qa"] }
       },
       "routing": {
         "parallel": {
-          "design": ["designer", "backend-dev"],
           "implementation": ["frontend-dev", "backend-dev"]
-        },
-        "council": {
-          "review": ["reviewer", "tech-lead"]
         }
       }
     }
   },
   "orchestration": {
-    "gates": ["plan", "fe"],
-    "gateAction": "confirm"
+    "gates": ["plan", "design", "infra", "fe"],
+    "gateAction": "confirm",
+    "gateChecklists": {
+      "plan": [
+        "피처 레지스트리 생성 완료",
+        "데이터 모델 정의 완료",
+        "기술 스택 선정 완료",
+        "YAGNI 검증 통과"
+      ],
+      "design": [
+        "모든 화면에 컴포넌트 명세 존재",
+        "디자인 토큰 참조 명시",
+        "화면 간 네비게이션 플로우 정의",
+        "에러/로딩/빈 상태 정의",
+        "Interface Contract 생성 완료"
+      ],
+      "infra": [
+        "DB 스키마가 데이터 모델과 일치",
+        "마이그레이션 파일 생성 완료",
+        "환경 변수 템플릿 생성",
+        "프로젝트 빌드 성공"
+      ],
+      "fe": [
+        "빌드 성공",
+        "FE/BE 모두 Interface Contract 참조",
+        "피처 레지스트리 status 업데이트 완료"
+      ]
+    }
   },
   "featureNameValidation": {
     "pattern": "^[a-zA-Z0-9가-힣_-]+$",

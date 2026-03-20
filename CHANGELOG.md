@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.15.0] - 2026-03-20
+
+### Changed (Breaking)
+
+- **9→6단계 워크플로우 리스트럭처링**
+  - research + plan → **plan** (아이디어 탐색, MVP 범위, 요구사항, 정책, 코딩 규칙 통합)
+  - ia + wireframe + design → **design** (IA + 와이어프레임 + UI 설계 통합)
+  - check + review → **qa** (Gap 분석 + 코드 리뷰 + 보안 + QA 통합)
+  - 문서 경로: `docs/01-plan/`, `docs/02-design/`, `docs/03-infra/`, `docs/04-qa/`
+- **에이전트 팀 재편**
+  - manager + tech-lead → **manager** (Plan 실행 + 전체 오케스트레이션 + Gate 판정)
+  - reviewer → **qa** (Gap + 리뷰 + 보안 + 테스트 통합)
+  - `agents/tech-lead.md`, `agents/reviewer.md` 삭제
+- **Gate 2→4개 확장** — plan, design, infra, fe 각 단계 완료 시 바이너리 체크리스트 판정
+- **설계 병렬화 제거** — design 단계에서 UI+DB 병렬 실행 제거. DB는 infra 단계에서 처리
+
+### Added
+
+- **infra 단계** — DB 스키마, 마이그레이션, ORM, 환경변수, 프로젝트 설정 담당
+- **infra-dev 에이전트** (`agents/infra-dev.md`) — infra 단계 전담
+- **qa 에이전트** (`agents/qa.md`) — QA 단계 전담 (리턴 경로 포함)
+- **Interface Contract** — Gate 2에서 Manager가 Plan(데이터 모델) + Design(화면-데이터) 합성 → API 스펙 확정
+- **QA 리턴 경로** — QA 산출물에 `target agent + fix_hint + return_to` 포함. Manager가 라우팅
+- **Manager 컨텍스트 위생** — 매 단계 산출물 파일 저장. Gate 판정 시 해당 단계 산출물 + 체크리스트만 로드
+- **수정 체이닝 테이블** — UI/레이아웃, 스타일, 기능 변경, 정책 변경, 데이터 변경 등 유형별 최적 체이닝 경로
+- `templates/infra.template.md`, `templates/qa.template.md` 신규 생성
+- `skills/vais/phases/infra.md`, `skills/vais/phases/qa.md` 신규 생성
+
+### Removed
+
+- `agents/tech-lead.md` — manager에 흡수
+- `agents/reviewer.md` — qa로 대체
+- `skills/vais/phases/research.md` — plan에 흡수
+- `skills/vais/phases/ia.md` — design에 흡수
+- `skills/vais/phases/wireframe.md` — design에 흡수
+- `skills/vais/phases/check.md` — qa에 흡수
+- `skills/vais/phases/review.md` — qa에 흡수
+- `templates/research.template.md`, `ia.template.md`, `wireframe.template.md`, `db.template.md`, `check.template.md`, `review.template.md`
+
+---
+
 ## [0.14.1] - 2026-03-19
 
 ### Fixed

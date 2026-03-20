@@ -76,7 +76,7 @@ describe('resolveDocPath / findDoc', () => {
     const paths = loadPaths();
     // 프로젝트에 config가 없으면 플러그인 기본 config 사용
     const docPath = paths.resolveDocPath('plan', '로그인기능');
-    assert.ok(docPath.includes('02-plan'));
+    assert.ok(docPath.includes('01-plan'));
     assert.ok(docPath.includes('로그인기능'));
   });
 
@@ -87,7 +87,7 @@ describe('resolveDocPath / findDoc', () => {
 
   it('findDoc은 파일이 있으면 경로 반환', () => {
     const paths = loadPaths();
-    const docDir = path.join(tmpDir, 'docs', '02-plan');
+    const docDir = path.join(tmpDir, 'docs', '01-plan');
     fs.mkdirSync(docDir, { recursive: true });
     fs.writeFileSync(path.join(docDir, '테스트.md'), '# test');
 

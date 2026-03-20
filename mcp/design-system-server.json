@@ -35,5 +35,5 @@
     }
   ],
   "lazy_load": true,
-  "activation_phases": ["design", "wireframe"]
+  "activation_phases": ["design"]
 }

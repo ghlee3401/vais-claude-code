@@ -1,9 +1,36 @@
-### 🎨 design — UI + DB 병렬 설계
+### 🎨 design — IA + 와이어프레임 + UI 설계 통합
 
-UI 설계와 DB 설계를 **병렬로** 진행합니다.
+IA 설계, 와이어프레임, UI 설계를 **하나의 단계**에서 통합 수행합니다.
 
-1. **피처 레지스트리 확인** (`.vais/features/{feature}.json`) — 기능 목록, 정책, 기술 스택, `hasDatabase` 플래그 참조
-2. **UI/UX Pro Max로 디자인 토큰 생성** (필수 — designer 에이전트보다 먼저 실행):
+#### Part 1: IA 설계
+
+1. **기획서 읽기** (`docs/01-plan/{feature}.md`)
+2. **피처 레지스트리 확인** (`.vais/features/{feature}.json`) — plan에서 정의된 기능 목록·화면·정책을 참조하여 누락 없이 IA에 반영
+3. 사이트맵, 네비게이션 구조 설계 — 레지스트리의 모든 기능(`features[]`)과 화면(`screens[]`)을 포함
+4. **태스크 기반 유저플로우 작성** — 레지스트리의 각 기능을 사용자 태스크로 분해. 태스크별로:
+   - 사용자 목표, 시작점, 종료 조건 정의
+   - Step별 사용자 행동 → 시스템 반응 → 분기(성공/실패/예외) Mermaid 다이어그램 작성
+   - 크로스 태스크 의존성(선후 관계, 공유 상태) 정리
+5. 화면 흐름도 — 태스크 플로우에서 도출된 화면 간 이동 경로
+
+#### Part 2: 와이어프레임
+
+6. 각 화면의 와이어프레임 생성 — 레지스트리의 `screens[]` 기준, 태스크 플로우의 성공/실패/예외 상태를 모두 반영
+7. 반응형 레이아웃 (모바일/태블릿/데스크탑)
+8. **컴포넌트 어노테이션**: `data-component`, `data-props` 속성 추가
+   ```html
+   <div data-component="LoginForm" data-props="onSubmit, isLoading, error">...</div>
+   ```
+
+**와이어프레임 형식 (기본: ASCII)**
+- 박스는 `┌─┐│└─┘` 문자 사용
+- 버튼은 `[ Button ]`, 입력필드는 `[____________]`
+- 디바이스별 규격: Mobile 40칸 / Tablet 60칸 / Desktop 80칸
+- `(*)` 필수입력, `(→ 화면명)` 화면이동, `(popup)` 팝업/모달
+
+#### Part 3: UI 설계
+
+9. **UI/UX Pro Max로 디자인 토큰 생성** (필수 — 와이어프레임 이후 실행):
    - `vendor/ui-ux-pro-max/SKILL.md`의 워크플로우를 따릅니다
    - 기획서의 기술 스택·제품 유형·스타일 키워드를 기반으로 디자인 시스템 생성:
      ```bash
@@ -14,33 +41,16 @@ UI 설계와 DB 설계를 **병렬로** 진행합니다.
      ```bash
      python3 vendor/ui-ux-pro-max/scripts/search.py "<키워드>" --design-system --persist -p "{feature}" --page "<화면명>"
      ```
-   - 추가 도메인 검색 (필요 시):
-     ```bash
-     python3 vendor/ui-ux-pro-max/scripts/search.py "<키워드>" --domain <color|typography|ux|style|chart>
-     ```
-3. **DB 필요 시 → DB 종류 선택**:
-   - **auto 모드**: 기본값 SQLite
-   - **수동 모드**: AskUserQuestion으로 선택:
-     1. "SQLite (추천 — 설정 없이 바로 시작)"
-     2. "PostgreSQL / MySQL (로컬 또는 Docker)"
-     3. "Supabase / Firebase (클라우드 BaaS)"
-   - 외부 서비스 선택 시 `.env` 변수명 안내
-4. **DB 필요 시** → 병렬 실행:
-   - **UI 설계** (designer 에이전트):
-     - `design-system/{feature}/MASTER.md`의 디자인 토큰을 **그대로 사용** (직접 토큰을 만들지 않음)
-     - 토큰 기반으로 **화면별 상세 정의**: 각 화면의 와이어프레임 참조 + 사용 컴포넌트 + 상태 + 인터랙션 + 데이터 흐름 통합
-     - 기획서(plan)의 기능 목록 및 정책 정의 참조
-     - `templates/design.template.md` 구조를 따라 작성
-     - `docs/05-design/{feature}.md`에 저장
-   - **DB 설계** (backend-dev 에이전트):
-     - ERD (Mermaid), 스키마, 인덱스, 관계
-     - ORM 권장: SQLite→better-sqlite3/Drizzle, PostgreSQL→Prisma, Supabase→@supabase/supabase-js
-     - `docs/05-design/{feature}-db.md`에 저장
-5. **DB 불필요 시** → UI 설계만
+10. **화면별 상세 정의** — 디자인 토큰 기반으로:
+    - `design-system/{feature}/MASTER.md`의 디자인 토큰을 **그대로 사용** (직접 토큰을 만들지 않음)
+    - 각 화면의 와이어프레임 참조 + 사용 컴포넌트 + 상태 + 인터랙션 + 데이터 흐름 통합
+    - 기획서(plan)의 기능 목록 및 정책 정의 참조
+11. `docs/02-design/{feature}.md`에 저장 (`templates/design.template.md` 구조)
 
-**역할 분리:**
+**에이전트**: designer
+
+**역할:**
 | 역할 | 담당 | 산출물 |
 |------|------|--------|
 | **디자인 토큰 생성** | UI/UX Pro Max (search.py) | `design-system/{feature}/MASTER.md` |
-| **화면별 상세 설계** | designer 에이전트 | `docs/05-design/{feature}.md` |
-| **DB 설계** | backend-dev 에이전트 | `docs/05-design/{feature}-db.md` |
+| **IA + 와이어프레임 + UI 설계** | designer 에이전트 | `docs/02-design/{feature}.md` |

@@ -33,7 +33,7 @@ if (!summary) {
     '╔═ VAIS Code ════════════════════════',
     `║ 💠 v${version}`,
     `║ 📁 ${activeFeature}`,
-    `║ 💡 시작: \`/vais research ${activeFeature}\``,
+    `║ 💡 시작: \`/vais plan ${activeFeature}\``,
     '╚══════════════════════════════════════',
   ];
   outputAllow(lines.join('\n'));
@@ -78,7 +78,7 @@ if (gapLine) lines.push(`║ ${gapLine}`);
 
 if (nextPhase) {
   lines.push(`║ 💡 다음: \`/vais ${nextPhase} ${activeFeature}\` (${nextPhaseName})`);
-} else if (currentPhase === 'review') {
+} else if (currentPhase === 'qa') {
   lines.push(`║ 🎉 모든 단계 완료! \`/vais status\`로 최종 확인하세요.`);
 }
 

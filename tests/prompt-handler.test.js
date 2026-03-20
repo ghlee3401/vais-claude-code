@@ -12,13 +12,13 @@ const chainingPattern = /^\/vais\s+([\w+:]+)\s+(.+)$/i;
 // 범위 패턴
 const rangePattern = /(\w+)\s*부터\s*(\w+)\s*까지/;
 
-const PHASES = ['research', 'plan', 'ia', 'wireframe', 'design', 'fe', 'be', 'check', 'review'];
+const PHASES = ['plan', 'design', 'infra', 'fe', 'be', 'qa'];
 
 describe('체이닝 패턴 감지', () => {
   it('순차 체이닝을 감지한다', () => {
-    const match = '/vais plan:ia:wireframe login'.match(chainingPattern);
+    const match = '/vais plan:design:infra login'.match(chainingPattern);
     assert.ok(match);
-    assert.equal(match[1], 'plan:ia:wireframe');
+    assert.equal(match[1], 'plan:design:infra');
     assert.equal(match[2], 'login');
   });
 
@@ -30,9 +30,9 @@ describe('체이닝 패턴 감지', () => {
   });
 
   it('혼합 체이닝을 감지한다', () => {
-    const match = '/vais plan:ia:design:fe+be:check login'.match(chainingPattern);
+    const match = '/vais plan:design:infra:fe+be:qa login'.match(chainingPattern);
     assert.ok(match);
-    assert.equal(match[1], 'plan:ia:design:fe+be:check');
+    assert.equal(match[1], 'plan:design:infra:fe+be:qa');
     assert.equal(match[2], 'login');
   });
 
@@ -44,36 +44,36 @@ describe('체이닝 패턴 감지', () => {
   });
 
   it('한글 피처명을 감지한다', () => {
-    const match = '/vais plan:ia 로그인기능'.match(chainingPattern);
+    const match = '/vais plan:design 로그인기능'.match(chainingPattern);
     assert.ok(match);
     assert.equal(match[2], '로그인기능');
   });
 });
 
 describe('범위 패턴 감지', () => {
-  it('plan부터 check까지를 감지한다', () => {
-    const match = 'plan부터 check까지'.match(rangePattern);
+  it('plan부터 qa까지를 감지한다', () => {
+    const match = 'plan부터 qa까지'.match(rangePattern);
     assert.ok(match);
     assert.equal(match[1], 'plan');
-    assert.equal(match[2], 'check');
+    assert.equal(match[2], 'qa');
   });
 
-  it('research부터 review까지를 감지한다', () => {
-    const match = 'research부터 review까지'.match(rangePattern);
+  it('plan부터 be까지를 감지한다', () => {
+    const match = 'plan부터 be까지'.match(rangePattern);
     assert.ok(match);
-    assert.equal(match[1], 'research');
-    assert.equal(match[2], 'review');
+    assert.equal(match[1], 'plan');
+    assert.equal(match[2], 'be');
   });
 
   it('공백 변형을 감지한다', () => {
-    const match = 'plan 부터 check 까지'.match(rangePattern);
+    const match = 'plan 부터 qa 까지'.match(rangePattern);
     assert.ok(match);
   });
 });
 
 describe('체이닝 세그먼트 검증', () => {
   it('유효한 순차 세그먼트를 검증한다', () => {
-    const chainExpr = 'plan:ia:wireframe';
+    const chainExpr = 'plan:design:infra';
     const segments = chainExpr.split(':');
     const allValid = segments.every(seg => {
       const parts = seg.split('+');
@@ -93,7 +93,7 @@ describe('체이닝 세그먼트 검증', () => {
   });
 
   it('잘못된 단계명을 거부한다', () => {
-    const chainExpr = 'plan:invalid:wireframe';
+    const chainExpr = 'plan:invalid:design';
     const segments = chainExpr.split(':');
     const allValid = segments.every(seg => {
       const parts = seg.split('+');

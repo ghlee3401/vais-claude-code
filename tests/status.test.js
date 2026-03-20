@@ -82,8 +82,8 @@ describe('updatePhase', () => {
     status.initFeature('테스트');
     status.updatePhase('테스트', 'plan', 'completed');
     const result = status.getStatus();
-    // convention 제거로 plan 다음은 ia
-    assert.equal(result.features['테스트'].currentPhase, 'ia');
+    // plan 다음은 design
+    assert.equal(result.features['테스트'].currentPhase, 'design');
   });
 
   it('존재하지 않는 피처에 updatePhase 호출 시 자동 초기화', () => {
@@ -150,7 +150,7 @@ describe('setRunRange / getRunRange / completeRunRange', () => {
   it('범위 실행 완료를 표시한다', () => {
     const status = loadStatus();
     status.initFeature('완료테스트');
-    status.setRunRange('완료테스트', 'plan', 'check');
+    status.setRunRange('완료테스트', 'plan', 'qa');
     status.completeRunRange('완료테스트');
 
     const range = status.getRunRange('완료테스트');
@@ -170,12 +170,12 @@ describe('getProgressSummary', () => {
     const status = loadStatus();
     status.initFeature('요약테스트');
     status.updatePhase('요약테스트', 'plan', 'completed');
-    status.updatePhase('요약테스트', 'ia', 'in-progress');
+    status.updatePhase('요약테스트', 'design', 'in-progress');
 
     const summary = status.getProgressSummary('요약테스트');
     assert.ok(summary);
     assert.equal(summary.feature, '요약테스트');
-    assert.equal(summary.currentPhase, 'ia');
+    assert.equal(summary.currentPhase, 'design');
     assert.ok(summary.progressCompact.includes('✅'));
     assert.ok(summary.progressCompact.includes('🔄'));
   });

@@ -23,10 +23,12 @@ tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
 
 ## 구현 원칙
 
-- **기획서를 반드시 먼저 읽습니다** (`docs/02-plan/{feature}.md`) — 코딩 규칙 + UI 컴포넌트 라이브러리 확인
-- **설계 문서를 반드시 먼저 읽습니다** (`docs/05-design/{feature}.md`) — 컴포넌트 명세, 상태 관리
+- **기획서를 반드시 먼저 읽습니다** (`docs/01-plan/{feature}.md`) — 코딩 규칙 + UI 컴포넌트 라이브러리 확인
+- **설계 문서를 반드시 먼저 읽습니다** (`docs/02-design/{feature}.md`) — IA, 와이어프레임, 컴포넌트 명세, 상태 관리
+- **Interface Contract 참조** (`docs/02-design/{feature}-ic.md`) — API 엔드포인트, 요청/응답 스키마, 에러 코드 확인
+- **Infra 문서 참조** (`docs/03-infra/{feature}.md`) — DB 스키마, 환경 변수 확인
 - **선택된 UI 컴포넌트 라이브러리를 적극 활용합니다** — 직접 구현보다 라이브러리 컴포넌트 우선
-- 와이어프레임의 **컴포넌트 어노테이션**(`data-component`, `data-props`)을 기반으로 컴포넌트를 매핑합니다
+- 설계 문서의 **컴포넌트 어노테이션**(`data-component`, `data-props`)을 기반으로 컴포넌트를 매핑합니다
 - 재사용 가능한 컴포넌트로 분리합니다
 - TypeScript 사용을 권장합니다
 - 테스트 코드를 함께 작성합니다
@@ -78,10 +80,11 @@ npx shadcn@latest add button input card dialog toast table form
 > 참조 문서:
 > - plan 코딩 규칙: 네이밍 규칙 (PascalCase 컴포넌트)
 > - design 2.1: 버튼 컴포넌트 (Primary/Secondary/Ghost)
-> - wireframe 5: 컴포넌트 어노테이션 (LoginForm, EmailInput)
+> - design 와이어프레임: 컴포넌트 어노테이션 (LoginForm, EmailInput)
+> - interface contract: API 엔드포인트, 에러 코드
 ```
 
-check 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
+qa 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
 
 ---
 
@@ -92,3 +95,4 @@ check 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 
 | v0.7.0 | 2026-03-14 | 초기 에이전트 정의 |
 | v0.8.0 | 2026-03-14 | UI 컴포넌트 라이브러리 활용 가이드 추가 |
 | v0.8.1 | 2026-03-14 | 화면별 상세 정의 기반 구현 흐름 반영 |
+| v2.0.0 | 2026-03-20 | 9→6단계: 문서 경로 갱신, Interface Contract 참조 추가 |

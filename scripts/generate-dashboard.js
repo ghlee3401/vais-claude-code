@@ -17,15 +17,12 @@ const PLUGIN_DIR = path.resolve(__dirname, '..');
 const OUTPUT_FILE = path.join(PROJECT_DIR, 'docs', 'dashboard.html');
 
 const PHASE_META = [
-  { key: 'research',  icon: '🔭', num: '01', name: '조사·탐색',       color: '#6366f1' },
-  { key: 'plan',      icon: '📋', num: '02', name: '기획',            color: '#2563eb' },
-  { key: 'ia',        icon: '🗺',  num: '03', name: 'IA 설계',        color: '#7c3aed' },
-  { key: 'wireframe', icon: '🖼',  num: '04', name: '와이어프레임',     color: '#0891b2' },
-  { key: 'design',    icon: '🎨', num: '05', name: '설계 (UI+DB)',    color: '#059669' },
-  { key: 'fe',        icon: '💻', num: '06', name: '프론트엔드',       color: '#d97706' },
-  { key: 'be',        icon: '⚙️',  num: '07', name: '백엔드',         color: '#dc2626' },
-  { key: 'check',     icon: '🔎', num: '08', name: 'Gap 분석',       color: '#0d9488' },
-  { key: 'review',    icon: '🔍', num: '09', name: '검토',            color: '#7c3aed' },
+  { key: 'plan',   icon: '📋', num: '01', name: '기획',       color: '#2563eb' },
+  { key: 'design', icon: '🎨', num: '02', name: '설계',       color: '#059669' },
+  { key: 'infra',  icon: '🔧', num: '03', name: '인프라',     color: '#7c3aed' },
+  { key: 'fe',     icon: '💻', num: '04', name: '프론트엔드', color: '#d97706' },
+  { key: 'be',     icon: '⚙️', num: '05', name: '백엔드',     color: '#dc2626' },
+  { key: 'qa',     icon: '✅', num: '06', name: 'QA',         color: '#0d9488' },
 ];
 
 // ── 유틸 ──────────────────────────────────────────
@@ -52,7 +49,7 @@ function discoverFeatures() {
     if (!/^\d{2}-/.test(sub)) continue;
     for (const f of fs.readdirSync(subPath)) {
       if (f.endsWith('.md')) {
-        features.add(f.replace(/-db\.md$/, '.md').replace(/\.md$/, ''));
+        features.add(f.replace(/\.md$/, ''));
       }
     }
   }
@@ -166,16 +163,6 @@ function collectData() {
       const docFile = path.join(PROJECT_DIR, template.replace(/\{feature\}/g, feature));
       const content = readText(docFile);
       if (content) docs[phase.key] = content;
-
-      // design-db
-      if (phase.key === 'design') {
-        const dbTemplate = docPaths['design-db'];
-        if (dbTemplate) {
-          const dbFile = path.join(PROJECT_DIR, dbTemplate.replace(/\{feature\}/g, feature));
-          const dbContent = readText(dbFile);
-          if (dbContent) docs['design-db'] = dbContent;
-        }
-      }
     }
 
     return { name: feature, registry, docs };
@@ -196,24 +183,15 @@ function generateHtml(data) {
   const featuresContent = featureData.map((f, i) => {
     // Phase tabs
     const phasesWithDocs = PHASE_META.filter(p => f.docs[p.key]);
-    const hasDesignDb = !!f.docs['design-db'];
 
-    const tabs = phasesWithDocs.map((p, j) => {
-      let extra = '';
-      if (p.key === 'design' && hasDesignDb) {
-        extra = `<button class="phase-tab" data-feature="${f.name}" data-phase="design-db" onclick="showPhase('${f.name}','design-db')" style="border-color:#059669">📊 DB 설계</button>`;
-      }
-      return `<button class="phase-tab ${j === 0 ? 'active' : ''}" data-feature="${f.name}" data-phase="${p.key}" onclick="showPhase('${f.name}','${p.key}')" style="border-color:${p.color}">${p.icon} ${p.name}</button>${extra}`;
-    }).join('\n');
+    const tabs = phasesWithDocs.map((p, j) =>
+      `<button class="phase-tab ${j === 0 ? 'active' : ''}" data-feature="${f.name}" data-phase="${p.key}" onclick="showPhase('${f.name}','${p.key}')" style="border-color:${p.color}">${p.icon} ${p.name}</button>`
+    ).join('\n');
 
     // Phase contents
-    const phaseContents = phasesWithDocs.map((p, j) => {
-      let panels = `<div class="phase-content ${j === 0 ? 'active' : ''}" id="content-${f.name}-${p.key}">${md2html(f.docs[p.key])}</div>`;
-      if (p.key === 'design' && hasDesignDb) {
-        panels += `<div class="phase-content" id="content-${f.name}-design-db">${md2html(f.docs['design-db'])}</div>`;
-      }
-      return panels;
-    }).join('\n');
+    const phaseContents = phasesWithDocs.map((p, j) =>
+      `<div class="phase-content ${j === 0 ? 'active' : ''}" id="content-${f.name}-${p.key}">${md2html(f.docs[p.key])}</div>`
+    ).join('\n');
 
     // Feature registry summary
     let registrySummary = '';
