@@ -1,22 +1,16 @@
 {
   "name": "vais-code",
   "version": "0.15.0",
-  "description": "VAIS Code - 체이닝 문법(: 순차, + 병렬), 4-Gate 시스템, Interface Contract, QA 리턴 경로를 지원하는 6단계 개발 워크플로우 플러그인.",
+  "description": "VAIS Code - 6단계 개발 워크플로우 플러그인. 체이닝 문법, 4-Gate 시스템, Interface Contract, QA 리턴 경로 지원.",
   "author": {
     "name": "VAIS Voice",
-    "email": "ghlee0304@ncsoft.com",
-    "url": "https://github.com/ghlee3401"
+    "email": "ghlee0304@ncsoft.com"
   },
   "repository": "https://github.com/ghlee3401/vais-claude-code",
-  "homepage": "https://github.com/ghlee3401/vais-claude-code",
-  "bugs": { "url": "https://github.com/ghlee3401/vais-claude-code/issues" },
   "license": "MIT",
   "keywords": [
     "workflow",
     "development",
-    "infrastructure",
-    "gap-analysis",
-    "qa",
     "planning",
     "agent-team",
     "korean"
