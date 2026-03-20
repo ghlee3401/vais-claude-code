@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "VAIS Code — 6단계 개발 워크플로우 플러그인",
-    "version": "0.15.0"
+    "version": "0.15.1"
   },
   "plugins": [
     {
@@ -16,7 +16,7 @@
         "repo": "ghlee3401/vais-claude-code"
       },
       "description": "6-step development workflow plugin with chaining syntax, 4-Gate system, and QA return path.",
-      "version": "0.15.0",
+      "version": "0.15.1",
       "author": {
         "name": "VAIS Voice",
         "email": "ghlee0304@ncsoft.com"
