@@ -41,6 +41,22 @@ tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
 
 qa 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
 
+## 외부 참고 문헌 주석 (`@see`)
+
+외부 사이트/문서를 참고하여 코드를 작성할 때, 해당 코드 블록 **바로 위에** `@see` 주석을 추가합니다.
+
+```ts
+// @see https://expressjs.com/en/guide/error-handling.html
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({ error: err.message });
+});
+```
+
+- 형식: `// @see {URL}` (JS/TS), `# @see {URL}` (Python/Shell), `<!-- @see {URL} -->` (HTML), `-- @see {URL}` (SQL)
+- URL은 전체 경로를 축약 없이 작성합니다
+- 여러 참고가 있으면 `@see`를 줄마다 하나씩 작성합니다
+- 자명한 표준 라이브러리 사용은 생략 가능합니다
+
 ---
 
 ## 변경 이력
@@ -50,3 +66,5 @@ qa 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식
 | v0.7.0 | 2026-03-14 | 초기 에이전트 정의 |
 | v0.8.0 | 2026-03-14 | 문서 경로 업데이트 (docs/05-design) |
 | v2.0.0 | 2026-03-20 | 9→6단계: DB 설계 분리(→infra-dev), Interface Contract 참조 추가 |
+| v2.1.0 | 2026-03-23 | 외부 참고 문헌 @see 주석 컨벤션 추가 |
+| v2.1.1 | 2026-03-23 | QA 피드백: SQL 주석 문자 추가 |

@@ -74,6 +74,22 @@ tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
 > 📎 참조 문서: `docs/01-plan/{feature}.md`, `docs/02-design/{feature}.md`
 ```
 
+## 외부 참고 문헌 주석 (`@see`)
+
+외부 사이트/문서를 참고하여 코드를 작성할 때, 해당 코드 블록 **바로 위에** `@see` 주석을 추가합니다.
+
+```ts
+// @see https://orm.drizzle.team/docs/sql-schema-declaration
+export const users = sqliteTable('users', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+});
+```
+
+- 형식: `// @see {URL}` (JS/TS), `# @see {URL}` (Python/Shell), `-- @see {URL}` (SQL)
+- URL은 전체 경로를 축약 없이 작성합니다
+- 여러 참고가 있으면 `@see`를 줄마다 하나씩 작성합니다
+- 자명한 표준 라이브러리 사용은 생략 가능합니다
+
 ---
 
 ## 변경 이력
@@ -81,3 +97,4 @@ tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
 | version | date | change |
 |---------|------|--------|
 | v1.0.0 | 2026-03-20 | 초기 에이전트 정의 (9→6단계 리스트럭처링) |
+| v1.1.0 | 2026-03-23 | 외부 참고 문헌 @see 주석 컨벤션 추가 |

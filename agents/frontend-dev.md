@@ -82,6 +82,24 @@ npx shadcn@latest add button input card dialog toast table form
 
 qa 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
 
+## 외부 참고 문헌 주석 (`@see`)
+
+외부 사이트/문서를 참고하여 코드를 작성할 때, 해당 코드 블록 **바로 위에** `@see` 주석을 추가합니다.
+
+```tsx
+// @see https://nextjs.org/docs/app/api-reference/functions/generate-metadata#twitter
+// @see https://developer.x.com/en/docs/x-for-websites/cards/overview/markup
+twitter: {
+  card: 'summary_large_image',
+  title: DEFAULT_TITLE,
+}
+```
+
+- 형식: `// @see {URL}` (JS/TS), `# @see {URL}` (Python/Shell), `<!-- @see {URL} -->` (HTML), `/* @see {URL} */` (CSS)
+- URL은 전체 경로를 축약 없이 작성합니다
+- 여러 참고가 있으면 `@see`를 줄마다 하나씩 작성합니다
+- 자명한 표준 라이브러리 사용은 생략 가능합니다
+
 ---
 
 ## 변경 이력
@@ -92,3 +110,5 @@ qa 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식
 | v0.8.0 | 2026-03-14 | UI 컴포넌트 라이브러리 활용 가이드 추가 |
 | v0.8.1 | 2026-03-14 | 화면별 상세 정의 기반 구현 흐름 반영 |
 | v2.0.0 | 2026-03-20 | 9→6단계: 문서 경로 갱신, Interface Contract 참조 추가 |
+| v2.1.0 | 2026-03-23 | 외부 참고 문헌 @see 주석 컨벤션 추가 |
+| v2.1.1 | 2026-03-23 | QA 피드백: CSS 주석 문자 추가 |

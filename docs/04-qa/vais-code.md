@@ -1,648 +1,588 @@
-# vais-code — QA 최종 보고서
+# QA Report: vais-code-conventions-reference-comment
 
-> **분석 일시:** 2026-03-21
-> **리뷰어:** QA Agent (Claude Sonnet)
-> **상태:** PASS (프로덕션 배포 가능)
+**작성일**: 2026-03-23
+**QA 에이전트**: Claude Haiku 4.5
+**대상**: 외부 참고 문헌 @see 주석 컨벤션 추가 (4개 파일 변경)
 
 ---
 
 ## 개요
 
-VAIS Code 플러그인의 종합 QA 검증입니다. 다음 6단계를 통합 수행했습니다:
+VAIS Code 프로젝트(Claude Code 플러그인 자체)에 새로운 코딩 컨벤션 "@see 주석"이 추가되었습니다. 이는 외부 참고 문헌을 참조한 코드에 표준화된 주석을 남기는 규칙입니다.
 
-1. **빌드/실행 검증** ✅ (Step 1 완료)
-2. **Gap 분석** ✅ (Step 2 완료)
-3. **보안 스캔** ✅ (Step 3 완료)
-4. **QA 시나리오 검증** (Step 4)
-5. **코드 품질 리뷰** (Step 5)
-6. **Expert Code Review** (Step 5.5)
-7. **리턴 경로 산출 + 최종 판정** (Step 6)
+**검증 대상**:
+1. `vais.config.json` — 새로운 `conventions.referenceComment` 섹션
+2. `agents/frontend-dev.md` — "외부 참고 문헌 주석" 섹션 추가 (v2.1.0)
+3. `agents/backend-dev.md` — "외부 참고 문헌 주석" 섹션 추가 (v2.1.0)
+4. `agents/infra-dev.md` — "외부 참고 문헌 주석" 섹션 추가 (v1.1.0)
 
 ---
 
-## Step 1: 빌드/실행 검증 (재확인)
+## Step 1: 파일 무결성 검증
 
-### 검증 결과
+### 1.1 JSON 파싱 검증
 
-| 항목 | 상태 | 비고 |
+**대상**: `vais.config.json`
+
+| 항목 | 결과 | 상태 |
 |------|------|------|
-| 의존성 설치 | ✅ | 외부 NPM 의존성 없음 (순수 Node.js) |
-| 플러그인 검증 | ✅ | `.claude-plugin/plugin.json` 구조 정상 |
-| 스크립트 로드 | ✅ | 10개 스크립트 모두 정상 로드 |
-| 라이브러리 로드 | ✅ | 10개 라이브러리 모두 정상 로드 |
-| 단위 테스트 | ✅ | **183/183 tests pass (100%)** |
-| 핵심 기능 | ✅ | 상태 추적, 메모리, 웹훅, 검증 모두 동작 |
+| JSON 구문 검증 | ✅ 성공 | PASS |
+| 인코딩 (UTF-8) | ✅ 확인됨 | PASS |
+| `conventions.referenceComment` 섹션 | ✅ 존재 | PASS |
 
-**결론: PASS** ✅
+**구조 상세**:
 
----
-
-## Step 2: Gap 분석 — 설계 vs 구현
-
-### 분석 결과
-
-`.vais/features/vais-code.json`에 정의된 20개 기능을 기준으로 구현 현황을 확인했습니다.
-
-**일치율: 100% (20/20 항목 구현 완료)**
-
-#### 피처별 검증
-
-| # | 피처 ID | 피처명 | 우선순위 | 구현 | 검증 |
-|---|---------|--------|---------|------|------|
-| 1 | F1 | 6단계 워크플로우 | Must | ✅ | vais.config.json phases 배열, lib/status.js 라우팅 |
-| 2 | F2 | 체이닝 문법 (: / +) | Must | ✅ | scripts/prompt-handler.js line 56-86 정규식 처리 |
-| 3 | F3 | 4-Gate 시스템 | Must | ✅ | vais.config.json orchestration.gates 정의 |
-| 4 | F4 | 에이전트 팀 | Must | ✅ | vais.config.json agentTeam 정의 (manager + 5개 역할) |
-| 5 | F5 | Manager Memory | Must | ✅ | lib/memory.js (270줄, 영속 저장) |
-| 6 | F6 | 워크플로우 상태 관리 | Must | ✅ | lib/status.js (350줄, .vais/status.json) |
-| 7 | F7 | 피처 레지스트리 | Must | ✅ | .vais/features/vais-code.json 20개 피처 정의 |
-| 8 | F8 | SessionStart 훅 | Must | ✅ | hooks/session-start.js (58줄) |
-| 9 | F9 | Bash Guard | Must | ✅ | scripts/bash-guard.js (76줄, 19개 패턴 차단) |
-| 10 | F10 | Document Tracker | Must | ✅ | scripts/doc-tracker.js (66줄) |
-| 11 | F11 | Stop Handler | Must | ✅ | scripts/stop-handler.js (110줄) |
-| 12 | F12 | Prompt Handler | Must | ✅ | scripts/prompt-handler.js (160줄) |
-| 13 | F13 | 웹훅 알림 | Nice | ✅ | lib/webhook.js (93줄, 1회 재시도) |
-| 14 | F14 | HTML 대시보드 | Nice | ✅ | scripts/generate-dashboard.js (550줄) |
-| 15 | F15 | 문서 템플릿 | Must | ✅ | vais.config.json docPaths (4가지 템플릿) |
-| 16 | F16 | Gap 분석 + QA 리턴 경로 | Must | ✅ | lib/status.js gapAnalysis, agents/qa.md 리턴 경로 |
-| 17 | F17 | Interface Contract | Must | ✅ | vais.config.json design gate checklist |
-| 18 | F18 | Init (역분석) | Must | ✅ | scripts/get-context.js (88줄) |
-| 19 | F19 | 디버그 로깅 | Nice | ✅ | lib/debug.js (26줄, VAIS_DEBUG 환경변수) |
-| 20 | F20 | 크로스 툴 호환 | Nice | ✅ | AGENTS.md (109줄) |
-
-### 정책 준수 확인
-
-| 정책 | 상태 | 검증 |
-|------|------|------|
-| featureNameValidation | ✅ | `^[a-zA-Z0-9가-힣_-]+$`, max 100자 |
-| atomicWrite | ✅ | `fs.writeFileSync` 원자성 보장 |
-| memoryMaxEntries | ✅ | 500개 초과 시 자동 삭제 구현 |
-| gapThreshold | ✅ | 90% 일치율, 최대 5회 반복 |
-| webhookRetry | ✅ | 1회 재시도, 5초 타임아웃, 실패 시 미차단 |
-
-**결론: PASS** ✅ (100% 일치율)
-
----
-
-## Step 3: 보안 스캔 (재확인)
-
-### OWASP Top 10 기반 검사
-
-| # | 취약점 | 상태 | 상세 검증 |
-|----|--------|------|----------|
-| 1 | Broken Access Control | ✅ | eval/Function 사용 없음 |
-| 2 | Cryptographic Failures | ✅ | .env 파일 없음, 환경변수만 사용 |
-| 3 | Injection | ✅ | child_process 없음, SQL 없음 |
-| 4 | Insecure Design | ✅ | 입력 검증 (URL validation) 있음 |
-| 5 | Security Misconfiguration | ✅ | 민감 정보 노출 없음 |
-| 6 | Vulnerable Components | ✅ | 외부 NPM 의존성 없음 |
-| 7 | Authentication Failures | N/A | 플러그인 자체는 인증 관할 외 |
-| 8 | Data Integrity | ✅ | 파일 쓰기 원자성 보장 |
-| 9 | Logging & Monitoring | ✅ | 디버그 로깅 구현 (VAIS_DEBUG=1) |
-| 10 | SSRF | ✅ | 웹훅 URL 유효성 검증 (new URL()) |
-
-**결론: PASS** ✅
-
----
-
-## Step 4: QA 시나리오 검증
-
-### 요구사항 추출
-
-vais-code는 **VAIS 통합 개발 워크플로우 시스템**입니다. 주요 요구사항:
-
-1. 6단계 순서 보장 (plan → design → infra → fe+be → qa)
-2. 상태 추적 및 복구
-3. 체이닝 문법 지원 (순차/병렬/범위)
-4. 위험 명령 차단
-5. 자동 상태 갱신
-6. 의도 감지
-7. 메모리 영속 저장
-8. 웹훅 알림
-9. 시각화 (대시보드)
-
-### QA 시나리오 검증 (25개)
-
-#### P0 (Critical) — 핵심 기능
-
-| # | 시나리오 | 검증 조건 | 상태 |
-|----|---------|---------|------|
-| 1 | 6단계 순서 실행 | plan → ... → qa 순서 보장 | ✅ |
-| 2 | 활성 피처 저장/복구 | status.json activeFeature 영속 | ✅ |
-| 3 | 단계 상태 업데이트 | updatePhase 호출 후 상태 변경 | ✅ |
-| 4 | 문서 자동 감지 | doc-tracker.js가 경로 인식 | ✅ |
-| 5 | SessionStart 훅 | 세션 시작 시 .vais/ 초기화 | ✅ |
-| 6 | 메모리 entry 저장 | addEntry 후 memory.json 기록 | ✅ |
-| 7 | 메모리 상한선 | 500개 초과 시 자동 삭제 (FIFO) | ✅ |
-| 8 | Bash Guard 차단 | rm -rf / 패턴 차단 | ✅ |
-| 9 | Bash Guard 경고 | git reset --hard 경고 표시 | ✅ |
-| 10 | Stop Handler 진행도 | 현재 단계 + 진행도 정확히 표시 | ✅ |
-
-#### P1 (High) — 주요 기능
-
-| # | 시나리오 | 검증 조건 | 상태 |
-|----|---------|---------|------|
-| 11 | 체이닝 순차 (plan:design) | 정규식 매칭 + 파싱 성공 | ✅ |
-| 12 | 체이닝 병렬 (fe+be) | parallelGroups 인식 | ✅ |
-| 13 | 범위 실행 (plan부터 be까지) | 범위를 체이닝으로 변환 | ✅ |
-| 14 | 의도 감지: plan | 키워드 '기획' → phase: plan | ✅ |
-| 15 | 의도 감지: qa | 키워드 'QA' → phase: qa | ✅ |
-| 16 | 웹훅 전송 성공 | VAIS_WEBHOOK_URL 설정 시 POST | ✅ |
-| 17 | 웹훅 실패 미차단 | 웹훅 실패해도 워크플로우 계속 | ✅ |
-| 18 | Gap 분석 저장 | gapAnalysis 필드 저장 | ✅ |
-| 19 | 대시보드 생성 | docs/dashboard.html 생성 | ✅ |
-| 20 | 레지스트리 표시 | 대시보드에 피처 상태 표시 | ✅ |
-
-#### P2 (Medium) — 엣지 케이스
-
-| # | 시나리오 | 검증 조건 | 상태 |
-|----|---------|---------|------|
-| 21 | 활성 피처 없음 | 버전 정보만 표시 | ✅ |
-| 22 | 메모리 미존재 | 빈 배열로 초기화 | ✅ |
-| 23 | 설정 캐싱 | 30초 내 재로드 불가 | ✅ |
-| 24 | 잘못된 상태 파일 | 파싱 실패 시 기본값 반환 | ✅ |
-| 25 | 디버그 비활성 | VAIS_DEBUG 미설정 시 로그 안 함 | ✅ |
-
-**통과율: 25/25 (100%)** ✅
-
----
-
-## Step 5: 코드 품질 리뷰
-
-### 5.1 네이밍 컨벤션
-
-| 항목 | 규칙 | 준수율 | 예시 |
-|------|------|--------|------|
-| 변수명 | camelCase | 98% | `activeFeature`, `currentPhase`, `progressBar` |
-| 함수명 | camelCase | 98% | `readStdin()`, `parseHookInput()`, `debugLog()` |
-| 상수명 | UPPER_SNAKE_CASE | 100% | `BLOCKED`, `ASK`, `WEBHOOK_TIMEOUT` |
-| 모듈 내보내기 | 명시적 module.exports | 100% | 모든 모듈이 명시적 export |
-
-### 5.2 에러 핸들링
-
-**커버리지: 95%** — 모든 I/O, 네트워크, JSON 파싱에 try-catch 적용
-
-예시:
-```javascript
-// lib/paths.js — 설정 로드
-function loadConfig() {
-  try {
-    const configPath = CONFIG.vaisConfig();
-    _configCache = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-    return _configCache;
-  } catch (e) {
-    debugLog('Paths', 'loadConfig failed', { error: e.message });
-    return { version: '0.1.0', workflow: { phases: [] } };  // graceful degradation
+```json
+{
+  "conventions": {
+    "referenceComment": {
+      "description": "외부 사이트/문서를 참고하여 코드를 작성한 경우, 해당 코드 블록 위에 @see 주석을 추가한다",
+      "format": "{commentChar} @see {URL}",
+      "placement": "참고한 코드 블록 바로 위",
+      "examples": {
+        "js/ts": "// @see https://nextjs.org/docs/app/api-reference/functions/generate-metadata#twitter",
+        "python": "# @see https://docs.python.org/3/library/asyncio.html",
+        "html": "<!-- @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta -->",
+        "css": "/* @see https://tailwindcss.com/docs/customizing-colors */",
+        "shell": "# @see https://www.gnu.org/software/bash/manual/bash.html#Pipelines"
+      },
+      "rules": [
+        "참고한 URL 전체를 작성한다 (축약 금지)",
+        "한 코드 블록에 여러 참고가 있으면 @see를 줄마다 하나씩 작성한다",
+        "참고 코드 블록 바로 위에 작성한다 (빈 줄 없이)",
+        "자명한 표준 라이브러리 사용은 @see 생략 가능"
+      ]
+    }
   }
 }
 ```
 
-### 5.3 코드 중복도
+**평가**: ✅ JSON 구조 정상, 모든 필드 존재
 
-**분석: 매우 낮음 (DRY 원칙 준수)**
+### 1.2 마크다운 파일 구조 무결성
 
-- `lib/io.js`: 공통 I/O 유틸 중앙화
-- `lib/webhook.js`: 웹훅 로직 별도 모듈
-- `lib/memory.js`: 메모리 관리 전담
-- 각 스크립트: 고유 책임만 담당 (SRP)
+**대상**: `agents/frontend-dev.md`, `agents/backend-dev.md`, `agents/infra-dev.md`
 
-### 5.4 테스트 커버리지
+| 파일 | Frontmatter | 섹션 구조 | 변경 이력 | 상태 |
+|------|-----------|----------|---------|------|
+| frontend-dev.md | ✅ Valid | ✅ 정상 | ✅ v2.1.0 추가됨 | PASS |
+| backend-dev.md | ✅ Valid | ✅ 정상 | ✅ v2.1.0 추가됨 | PASS |
+| infra-dev.md | ✅ Valid | ✅ 정상 | ✅ v1.1.0 추가됨 | PASS |
 
-| 모듈 | 테스트 케이스 | 상태 |
-|------|-------------|------|
-| bash-guard | 22개 | ✅ |
-| doc-tracker | 15개 | ✅ |
-| generate-dashboard | 18개 | ✅ |
-| io | 10개 | ✅ |
-| memory | 20개 | ✅ |
-| paths | 12개 | ✅ |
-| prompt-handler | 24개 | ✅ |
-| seo-audit | 16개 | ✅ |
-| status | 18개 | ✅ |
-| stop-handler | 12개 | ✅ |
-| webhook | 8개 | ✅ |
-| **합계** | **183개** | **100% PASS** |
+**평가**: ✅ 모든 파일 구조 정상
 
-### 5.5 성능 분석
+---
 
-#### 메모리 관리
+## Step 2: Gap 분석
 
-✅ **Good:**
-- 메모리 항목 500개 상한선 (자동 FIFO 삭제)
-- 설정 캐시 30초 TTL
-- 이벤트 리스너 정리 (req.resume(), req.destroy())
+### 2.1 코드 작성 에이전트 확인
 
-#### 파일 I/O 최적화
+프로젝트의 에이전트 구성:
 
-✅ **Good:**
-- 초기화 단계에서만 fs.readFileSync 사용
-- 웹훅은 비동기 fire-and-forget
-- 대시보드 생성은 배치 작업
+| 에이전트 | 역할 | 코드 작성 | @see 필요 | 현 상태 |
+|---------|------|---------|---------|---------|
+| **manager** | 오케스트레이터 (Plan 실행) | 부분적 (마크다운) | ❌ | N/A |
+| **designer** | UI/UX 설계 (코드 작성 X) | ❌ | ❌ | N/A |
+| **infra-dev** | DB/환경 구성 | ✅ 예 | ✅ | ✅ 추가됨 |
+| **frontend-dev** | React/Next.js 구현 | ✅ 예 | ✅ | ✅ 추가됨 |
+| **backend-dev** | API/서버 로직 | ✅ 예 | ✅ | ✅ 추가됨 |
+| **qa** | 검증 (코드 작성 X) | ❌ | ❌ | N/A |
 
-#### 네트워크 성능
+**결론**: ✅ 필요한 3개 에이전트 모두 반영 완료
 
-✅ **Good:**
-- 웹훅 타임아웃: 5초 (무한 대기 방지)
-- 1회 재시도만 수행
-- URL 유효성 사전 검증
+### 2.2 각 에이전트의 @see 컨벤션 반영 상황
 
-### 5.6 접근성 (Accessibility)
+#### frontend-dev.md (v2.1.0)
 
-HTML 대시보드 (`scripts/generate-dashboard.js`) 평가:
+**위치**: 라인 85-102
 
-| 항목 | 준수 | 비고 |
+**내용 검증**:
+
+```markdown
+## 외부 참고 문헌 주석 (`@see`)
+
+외부 사이트/문서를 참고하여 코드를 작성할 때, 해당 코드 블록 **바로 위에** `@see` 주석을 추가합니다.
+
+```tsx
+// @see https://nextjs.org/docs/app/api-reference/functions/generate-metadata#twitter
+// @see https://developer.x.com/en/docs/x-for-websites/cards/overview/markup
+twitter: {
+  card: 'summary_large_image',
+  title: DEFAULT_TITLE,
+}
+```
+
+- 형식: `// @see {URL}` (JS/TS), `# @see {URL}` (Python/Shell), `<!-- @see {URL} -->` (HTML)
+- URL은 전체 경로를 축약 없이 작성합니다
+- 여러 참고가 있으면 `@see`를 줄마다 하나씩 작성합니다
+- 자명한 표준 라이브러리 사용은 생략 가능합니다
+```
+
+**평가**:
+- ✅ 명확한 설명 제공
+- ✅ 실제 Next.js 메타데이터 예시
+- ✅ 여러 @see 줄 예시 포함 (규칙 2 반영)
+- ✅ 4가지 규칙 명시
+- ⚠️ **Gap**: CSS 주석 문자 미명시 (프론트엔드는 CSS 자주 사용)
+
+#### backend-dev.md (v2.1.0)
+
+**위치**: 라인 44-59
+
+**내용 검증**:
+
+```markdown
+## 외부 참고 문헌 주석 (`@see`)
+
+외부 사이트/문서를 참고하여 코드를 작성할 때, 해당 코드 블록 **바로 위에** `@see` 주석을 추가합니다.
+
+```ts
+// @see https://expressjs.com/en/guide/error-handling.html
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({ error: err.message });
+});
+```
+
+- 형식: `// @see {URL}` (JS/TS), `# @see {URL}` (Python/Shell), `<!-- @see {URL} -->` (HTML)
+- URL은 전체 경로를 축약 없이 작성합니다
+- 여러 참고가 있으면 `@see`를 줄마다 하나씩 작성합니다
+- 자명한 표준 라이브러리 사용은 생략 가능합니다
+```
+
+**평가**:
+- ✅ Express.js 에러 핸들링 예시 (백엔드 특화)
+- ✅ 4가지 규칙 명시
+- ✅ 언어별 형식 명확
+- ⚠️ **Gap**: SQL 주석 문자 미명시 (백엔드도 쿼리 작성 가능)
+
+#### infra-dev.md (v1.1.0)
+
+**위치**: 라인 77-92
+
+**내용 검증**:
+
+```markdown
+## 외부 참고 문헌 주석 (`@see`)
+
+외부 사이트/문서를 참고하여 코드를 작성할 때, 해당 코드 블록 **바로 위에** `@see` 주석을 추가합니다.
+
+```ts
+// @see https://orm.drizzle.team/docs/sql-schema-declaration
+export const users = sqliteTable('users', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+});
+```
+
+- 형식: `// @see {URL}` (JS/TS), `# @see {URL}` (Python/Shell), `-- @see {URL}` (SQL)
+- URL은 전체 경로를 축약 없이 작성합니다
+- 여러 참고가 있으면 `@see`를 줄마다 하나씩 작성합니다
+- 자명한 표준 라이브러리 사용은 생략 가능합니다
+```
+
+**평가**:
+- ✅ Drizzle ORM 예시 (infra-dev 특화)
+- ✅ **SQL 주석 문자 (`--`) 포함** — 다른 에이전트와 차별화
+- ✅ 4가지 규칙 완벽 반영
+- ✅ **가장 완전한 구현**
+
+### 2.3 설정과 에이전트 프롬프트의 일관성
+
+| 항목 | vais.config.json | frontend-dev | backend-dev | infra-dev | 일관성 |
+|------|-----------------|-----------|-------------|-----------|--------|
+| 형식 템플릿 | ✅ | ✅ | ✅ | ✅ | ✅ 완벽 |
+| URL 축약 금지 | ✅ | ✅ | ✅ | ✅ | ✅ 완벽 |
+| 여러 줄 참고 | ✅ | ✅ | ✅ | ✅ | ✅ 완벽 |
+| 코드 블록 바로 위 | ✅ | ✅ | ✅ | ✅ | ✅ 완벽 |
+| 표준 라이브러리 생략 | ✅ | ✅ | ✅ | ✅ | ✅ 완벽 |
+
+**결론**: ✅ **완벽히 일관됨**
+
+### 2.4 언어별 주석 문자 매핑 완성도
+
+**vais.config.json의 예시**:
+
+| 언어 | 주석 문자 |
+|------|----------|
+| JavaScript/TypeScript | `//` |
+| Python | `#` |
+| HTML | `<!-- -->` |
+| CSS | `/* */` |
+| Shell/Bash | `#` |
+
+**에이전트별 반영 상황**:
+
+| 언어 | 주석 | frontend-dev | backend-dev | infra-dev | Gap |
+|------|------|------------|------------|-----------|-----|
+| JS/TS | `//` | ✅ | ✅ | ✅ | 없음 |
+| Python | `#` | ✅ | ✅ | ✅ | 없음 |
+| HTML | `<!-- -->` | ✅ | ✅ | — | 없음 |
+| CSS | `/* */` | ⚠️ 미명시 | — | — | **frontend 누락** |
+| Shell | `#` | ✅ | ✅ | ✅ | 없음 |
+| SQL | `--` | — | ⚠️ 미명시 | ✅ | **backend 누락** |
+
+**Gap 분석**:
+
+| # | 에이전트 | 누락 항목 | 심각도 | 이유 |
+|---|---------|---------|--------|------|
+| 1 | **frontend-dev** | CSS (`/* */`) | 중간 | 프론트엔드는 Tailwind/SCSS/CSS-in-JS 자주 사용 |
+| 2 | **backend-dev** | SQL (`--`) | 중간 | 백엔드도 ORM 외에 쿼리 작성 가능 |
+
+**Gap 일치율**: 11/13 = **85%** → ⚠️ 90% 미만
+
+---
+
+## Step 3: 코드 품질 리뷰
+
+### 3.1 vais.config.json의 conventions 구조
+
+**구조 평가**:
+
+| 항목 | 평가 | 상세 |
 |------|------|------|
-| 시맨틱 HTML | ✅ | `<h1>`, `<h2>`, `<table>` 사용 |
-| 색상 대비 | ✅ | CSS 커스텀 프로퍼티로 명확한 대비 |
-| 키보드 네비게이션 | ✅ | 버튼 클릭 이벤트 처리 |
-| alt 텍스트 | N/A | 아이콘 기반 (텍스트 충분) |
-| 반응형 디자인 | ✅ | @media (max-width: 768px) 지원 |
-| 폰트 크기 | ✅ | 14px 이상 기본 크기 |
+| 필드 네이밍 | ✅ 명확 | `referenceComment`, `description`, `format` 등 일관성 |
+| 구조 논리 | ✅ 우수 | Description → Format → Placement → Examples → Rules 순서 이상적 |
+| 타입 안정성 | ✅ 확실 | JSON 타입 일관 (문자열, 객체, 배열) |
+| 확장성 | ✅ 우수 | 언어 추가 용이, 규칙 추가 가능 |
 
-### 5.7 종합 코드 품질 점수
+**장점**:
+- ✅ 선언적 구조로 설계됨
+- ✅ 에이전트가 참조하기 용이
+- ✅ 머신 파싱 가능
 
-| 카테고리 | 점수 | 비고 |
-|---------|------|------|
-| 가독성 | 9/10 | 명확한 네이밍, 적절한 주석 |
-| 유지보수성 | 8.5/10 | 모듈화 적절, 중복 최소 |
-| 신뢰성 | 9/10 | 강력한 에러 처리, graceful degradation |
-| 테스트 | 9.5/10 | 183개 테스트 100% pass |
-| 성능 | 8.5/10 | 메모리 관리, 캐싱 최적화 |
-| 보안 | 9/10 | 입력 검증, 민감 정보 미노출 |
-| **평균** | **8.9/10** | 프로덕션 수준 |
+**문제점**:
+- ⚠️ Config와 프롬프트 이중 관리 (DRY 위반, 변경 시 4곳 모두 수정 필요)
+
+### 3.2 에이전트 프롬프트의 섹션 배치
+
+**배치 순서**:
+
+```
+## 문서 참조 규칙
+    ↓
+## 외부 참고 문헌 주석 (@see)
+    ↓
+## 변경 이력
+```
+
+**평가**:
+- ✅ 논리적 순서 (내부 참고 → 외부 참고 → 변경 추적)
+- ✅ "문서 참조" 직후 배치로 관련성 명확
+- ✅ 변경 이력 전에 위치하여 새 기능임을 강조
+
+### 3.3 예시 코드의 실제 사용 패턴 반영
+
+| 에이전트 | 예시 | 특성 | 평가 |
+|---------|------|------|------|
+| **frontend-dev** | Next.js 메타데이터 | 실제 프로젝트 패턴 | ✅ |
+| **backend-dev** | Express.js 미들웨어 | 에러 핸들링 | ✅ |
+| **infra-dev** | Drizzle ORM 스키마 | DB 설계 전형 | ✅ |
+
+**평가**: ✅ 모든 예시가 에이전트 역할에 부합
+
+### 3.4 규칙의 명확성 검증
+
+**4가지 규칙**:
+
+| # | 규칙 | 명확성 | 모호함 |
+|---|------|--------|--------|
+| 1 | URL 전체 작성 | ✅ 명확 | 없음 |
+| 2 | 여러 줄 참고 | ✅ 명확 | 없음 |
+| 3 | 바로 위에 작성 | ✅ 명확 | "바로 위"의 정의 (빈 줄 0개) 명시됨 |
+| 4 | 표준 라이브러리 생략 | ⚠️ 모호 | **"자명한"의 기준이 주관적** |
+
+**규칙 4 분석**:
+
+"자명한 표준 라이브러리"의 예시:
+- ✅ `console.log()` — 누구나 알고 있음
+- ✅ `JSON.stringify()` — 표준 내장
+- ⚠️ `Array.prototype.map()` — 함수형 프로그래밍 초보자는?
+- ⚠️ `Promise.all()` — 복잡한 비동기 패턴
+
+**영향**: 개발자마다 다르게 해석할 수 있음 → 일관성 약화
+
+**개선 제안**:
+```
+"자명한 표준 라이브러리 사용은 @see 생략 가능
+ (예: console.log, print, len, JSON.stringify).
+ 첫 도입 라이브러리나 복잡한 사용 패턴은 @see 명시"
+```
 
 ---
 
-## Step 5.5: Expert Code Review (Google Staff Engineer L7 관점)
+## Step 4: Expert Code Review (Google Staff Engineer 관점)
 
-Google Staff Engineer(15년 경력) 입장에서 8개 관점으로 심층 크리틱을 수행합니다.
+### 4.1 아키텍처 평가: 이중 관리 구조
 
-### 1. 가독성 (Readability)
-
-**좋은 점:**
-
-코드가 매우 읽기 쉽습니다. 새로운 팀원이 컨텍스트 없이도 이해할 수 있습니다. 특히 `lib/memory.js`와 `lib/status.js` 같은 핵심 모듈은 함수명이 정확하게 의도를 드러냅니다:
-
-```javascript
-getProgressSummary(feature)      // 진행 상황 조회
-updatePhase(feature, phase)      // 단계 상태 업데이트
-addEntry(type, summary, details) // 메모리 엔트리 추가
-```
-
-주석도 적절합니다. 복잡한 정규식에는 명확한 설명이 있고, "왜" 이 패턴을 차단하는지 이유가 명확합니다.
-
-**개선 필요 (Nit):**
-
-`scripts/generate-dashboard.js`의 `md2html` 함수(line 65-137)는 90줄 정규식 체이닝입니다. 이를 단위 함수로 분해하면 더 좋을 것 같습니다:
-
-```javascript
-function transformHeaders(html) { /* h1-h4 */ }
-function transformLists(html) { /* ul/li */ }
-function transformTables(html) { /* tables */ }
-function transformCode(html) { /* code blocks */ }
-
-function md2html(md) {
-  let html = escapeHtml(md);
-  html = transformCode(html);
-  html = transformHeaders(html);
-  // ...
-  return html;
-}
-```
-
-현재도 읽을 수 있지만, 각 변환 로직이 명확해지고 테스트하기도 쉬워집니다.
-
-### 2. 단순성 (Simplicity)
-
-**좋은 점:**
-
-YAGNI 원칙을 잘 따릅니다. 각 스크립트가 정확히 한 가지만 합니다. 추상화도 적절 수준입니다. 과도하게 팩토리나 빌더를 만들지 않았고, 필요한 곳에만 모듈화했습니다.
-
-설정 캐싱도 깔끔합니다:
-
-```javascript
-// lib/paths.js — TTL 기반 캐시 (30초)
-const CONFIG_CACHE_TTL = 30000;
-let _configCache = null;
-let _configCacheTime = 0;
-
-function loadConfig() {
-  const now = Date.now();
-  if (_configCache && (now - _configCacheTime) < CONFIG_CACHE_TTL) {
-    return _configCache;  // 캐시 사용
-  }
-  // ... 새로 로드
-}
-```
-
-**개선 필요 (Nit):**
-
-`scripts/prompt-handler.js`의 INTENT_PATTERNS 배열(line 22-31)이 개선 여지가 있습니다. 지금은 linear search를 합니다. 향후 확장성을 고려하면 Set 기반 인덱싱이 낫습니다:
-
-```javascript
-// 현재: O(n) 검색
-for (const { keywords, phase } of INTENT_PATTERNS) {
-  if (keywords.some(k => promptLower.includes(k))) {
-    detectedPhase = phase;
-    break;
-  }
-}
-
-// 개선: O(1) 검색
-const INTENT_INDEX = new Map(); // phase -> Set of keywords
-for (const [phase, keywords] of INTENT_INDEX) {
-  if (keywords.has(promptLower)) detectedPhase = phase;
-}
-```
-
-### 3. 신뢰성 (Reliability)
-
-**좋은 점:**
-
-에러 처리가 매우 견고합니다. 모든 JSON 파싱이 try-catch로 감싸져 있고, 실패 시 graceful degradation을 합니다:
-
-```javascript
-catch (e) {
-  debugLog('Paths', 'loadConfig failed', { error: e.message });
-  return { version: '0.1.0', workflow: { phases: [] } };  // 기본값 반환
-}
-```
-
-이렇게 하면 설정 파일이 깨져도 워크플로우가 멈추지 않습니다.
-
-웹훅 에러 처리도 뛰어납니다. 외부 서비스 실패가 내 워크플로우를 멈추게 하지 않으면서도 (fire-and-forget), 재시도 로직과 타임아웃까지 있습니다.
-
-**잠재적 이슈 (Nit):**
-
-`lib/memory.js` line 60-70의 항목 제거 로직:
-
-```javascript
-while (entries.length > MAX_ENTRIES) {
-  entries.shift();  // FIFO
-}
-```
-
-동시성 문제는 없을까요? 현재 Node.js 단일 스레드 구조에서는 안전하지만, 향후 여러 에이전트가 동시에 메모리를 수정한다면 원자성이 보장되지 않습니다. 지금은 문제 없지만 주의 필요합니다.
-
-### 4. 테스트 가능성 (Testability)
-
-**좋은 점:**
-
-코드가 매우 테스트하기 쉽습니다. 의존성 주입이 명시적입니다. 예를 들어:
-
-```javascript
-function checkGuard(command) {
-  // 순수 함수 — mocking 불필요
-  if (!command) return { decision: 'allow' };
-  // ...
-}
-```
-
-테스트 파일에서 단순히 함수를 호출하고 반환값을 검증합니다. 메모리 모듈도 `getEntries()` 함수가 있어서 상태를 쿼리할 수 있습니다.
-
-**개선 필요 (Nit):**
-
-`lib/webhook.js`의 HTTP 클라이언트를 주입 가능하게 만들면 테스트가 더 명확해질 것 같습니다:
-
-```javascript
-function sendWebhook(event, data, options = {}) {
-  const http = options.http || require(parsedUrl.protocol === 'https:' ? 'https' : 'http');
-  // ...
-}
-```
-
-이렇게 하면 테스트에서 fake HTTP 객체를 주입할 수 있습니다.
-
-### 5. 성능 (Performance)
-
-**좋은 점:**
-
-I/O가 최소화되어 있습니다. 초기화 이후로는 파일 읽기가 거의 없고, 메모리 캐시를 적극 활용합니다. 정규식도 효율적입니다. Catastrophic backtracking 위험이 없는 단순한 패턴들입니다.
-
-대시보드 생성도 한 번의 배치 작업으로 끝나고, 매 요청마다 파일을 읽지 않습니다.
-
-**개선 필요 (Nit):**
-
-`scripts/generate-dashboard.js`의 md2html 함수는 순차적으로 정규식을 적용합니다. 대용량 마크다운에서는 약간의 오버헤드가 있을 수 있습니다. AST 기반 파서로 한 번의 패스로 처리하면 더 빠를 것 같습니다. 하지만 현재 사이즈(마크다운 문서 수십 개)에서는 무시할 수 있는 수준입니다.
-
-### 6. 보안 (Security)
-
-**좋은 점:**
-
-보안이 우수합니다. eval/Function 사용이 없고, 입력 검증이 철저합니다. 웹훅 URL 검증:
-
-```javascript
-try {
-  new URL(webhookUrl);  // 유효한 URL 확인
-} catch (e) {
-  debugLog('Webhook', 'Invalid webhook URL', { url: webhookUrl, error: e.message });
-  return;
-}
-```
-
-Bash Guard도 탁월합니다. 위험한 명령을 광범위하게 차단하면서도 false positive를 줄이도록 설계했습니다. 예를 들어 `rm -r` 자체를 차단하지 않고, `rm -rf /` (재귀 + 강제 + 루트) 패턴만 차단합니다.
-
-**개선 필요 (Nit):**
-
-`lib/webhook.js`의 Content-Length 계산이 있지만, payload가 매우 크거나 인코딩 이슈가 있다면? 현재는 안전하지만, streaming으로 처리하는 게 더 나을 것 같습니다. (지금은 payload가 작으니 문제 없음)
-
-### 7. 설계 패턴 (Design Patterns)
-
-**좋은 점:**
-
-관심사 분리(SoC)가 명확합니다:
+**구조**:
 
 ```
-lib/paths.js     → 경로 관리
-lib/status.js    → 상태 추적
-lib/memory.js    → 메모리 관리
-lib/webhook.js   → 웹훅
-lib/io.js        → 표준 I/O
+vais.config.json (단일 정보원)
+    ↓ 중복 기록
+agents/frontend-dev.md
+agents/backend-dev.md
+agents/infra-dev.md
 ```
 
-각 모듈이 한 가지 책임만 합니다. Unix 철학의 좋은 예입니다.
+**이중 관리의 장점**:
 
-훅 패턴도 좋습니다. `PreToolUse`, `PostToolUse`, `SessionStart`, `Stop` 같은 생명주기 훅을 명확히 정의했습니다. Event-driven architecture의 깔끔한 예입니다.
+1. **명시성**: 각 프롬프트에서 완전히 독립적으로 이해 가능
+   - "설정으로 가서 찾아보세요" 불필요
+   - 에이전트가 문서 읽기만으로 완전 이해
 
-**주의 필요 (Nit):**
+2. **에이전트별 맞춤화**: 언어별 예시를 특화 가능
+   - frontend-dev는 Next.js 예시
+   - backend-dev는 Express.js 예시
+   - infra-dev는 Drizzle ORM 예시
 
-모듈 간 의존성 관계를 주의해야 합니다. 순환 의존성(circular dependency)이 생기지 않도록 주의해야 합니다. 현재 코드에서는 그런 일이 없지만, 향후 확장할 때 조심하는 게 좋습니다.
+3. **격리된 리뷰**: 프롬프트만 보고 완전히 독립적인 검증 가능
 
-### 8. API 설계 (API Design)
+**이중 관리의 단점**:
 
-**좋은 점:**
+1. **DRY 원칙 위반**: 동일 내용이 4곳에 기록
+   - 변경 시 모든 곳 업데이트 필요
+   - 누락 위험 (현재는 일관되어 있음 ✅)
 
-공개 API가 직관적이고 일관적입니다. 모든 모듈의 함수들이 동사 + 명사 형식입니다:
+2. **동기화 관리**: 시간 경과에 따라 drift 가능
+   - 새 언어 추가 시: config만 수정하고 프롬프트 누락 가능
+   - 규칙 변경 시: 4곳 중 1-2곳만 수정되는 실수 가능
 
-```javascript
-addEntry()                // 메모리 추가
-getEntries()              // 메모리 조회
-updatePhase()             // 단계 업데이트
-getProgressSummary()      // 진행 상황 요약
-sendWebhook()             // 웹훅 전송
-parseHookInput()          // 훅 입력 파싱
+3. **메모리/토큰 증가**: 프롬프트 토큰 비용 증가
+
+### 4.2 8가지 Staff Engineer 크리틱
+
+#### 1. 구조 설계의 명확성 ✅
+
+**평가**: 우수
+
+설정과 프롬프트의 역할이 명확하게 분리됨:
+- Config: 머신이 읽을 수 있는 형식
+- 프롬프트: 인간이 이해하기 쉬운 형식
+
+하지만 현재는 이 둘이 동일한 정보를 중복 기록하고 있음.
+
+#### 2. 확장성과 유지보수성 ⚠️
+
+**평가**: 중간
+
+**문제**: Ruby, Go, Java 언어 추가 시 4곳 모두 수정 필요
+
+**예시** - SQL 지원 추가:
+```
+변경 필요:
+1. vais.config.json ✅
+2. frontend-dev.md (불필요, SQL 사용 안 함)
+3. backend-dev.md (필요, 하지만 빠뜨릴 수 있음) ⚠️
+4. infra-dev.md ✅
+
+위험: backend-dev 누락 가능
 ```
 
-일관성이 높아서 배우기 쉽습니다. 에러 처리도 일관적입니다. 모든 JSON 읽기 에러는 "실패 시 기본값 반환"이라는 일관된 패턴입니다.
+#### 3. 에이전트 역할 경계 설정 ✅
 
-**개선 필요 (Nit):**
+**평가**: 우수
 
-`scripts/prompt-handler.js`의 출력 함수들이 약간 비일관적입니다:
+@see를 정확히 3개 에이전트만 추가:
+- ✅ designer, manager, qa 제외 (코드 작성 안 함)
+- ✅ infra-dev, frontend-dev, backend-dev 포함 (코드 작성함)
 
-```javascript
-outputAllow(`메시지`);    // 메시지와 함께
-outputAllow();            // 메시지 없이
-outputEmpty();            // 다른 함수
+역할 경계가 명확히 그어짐.
+
+#### 4. 언어별 주석 문자 완성도 ⚠️
+
+**평가**: 부분적 (85%)
+
+| 언어 | fe | be | infra | Gap |
+|------|----|----|-------|-----|
+| JS/TS | ✅ | ✅ | ✅ | 없음 |
+| Python | ✅ | ✅ | ✅ | 없음 |
+| CSS | ❌ | — | — | **fe 누락** |
+| SQL | — | ❌ | ✅ | **be 누락** |
+| HTML | ✅ | ✅ | — | 없음 |
+
+**가장 심각한 Gap**:
+1. frontend-dev에서 CSS 누락 (프론트엔드는 CSS 자주 사용)
+2. backend-dev에서 SQL 누락 (백엔드는 쿼리 작성 가능)
+
+#### 5. 규칙의 명확성 ⚠️
+
+**평가**: 부분적
+
+규칙 4 "자명한 표준 라이브러리"의 기준이 모호함.
+
+개발자마다 다르게 해석 가능:
+- 초급: `Array.map()` → 자명하지 않음
+- 중급: `Array.map()` → 자명
+- 고급: `Promise.allSettled()` → 자명하지 않음
+
+#### 6. 버전 관리와 변경 이력 ✅
+
+**평가**: 우수
+
+모든 파일에 버전과 날짜 명시:
+- frontend-dev.md: v2.1.0 (2026-03-23) ✅
+- backend-dev.md: v2.1.0 (2026-03-23) ✅
+- infra-dev.md: v1.1.0 (2026-03-23) ✅
+
+변경 추적 완벽.
+
+#### 7. 테스트 불가능성 ⚠️
+
+**평가**: 약함
+
+**문제**: @see 준수를 자동으로 검증할 방법 없음
+
+- Config는 JSON이므로 파싱 검증 가능
+- 에이전트 프롬프트는 마크다운 (자동 검증 불가)
+
+**불가능한 검증**:
+```bash
+# 할 수 없는 것:
+- 에이전트가 생성한 코드에 @see가 있는가?
+- @see 위치가 정확한가?
+- URL이 축약되지 않았는가?
 ```
 
-일관성 있게 하려면:
+#### 8. 에이전트 온보딩 ✅
 
-```javascript
-function output(level, message = '') {
-  // level: 'allow', 'empty', 'block'
-  // ...
-}
-```
+**평가**: 우수
 
-이렇게 하면 API가 더 uniform합니다.
-
-### 종합 평가
-
-**강점:**
-1. 견고한 에러 처리
-2. 간결한 설계 (YAGNI, SoC)
-3. 높은 테스트 커버리지 (183개)
-4. 우수한 보안
-
-**개선 기회:**
-1. md2html 함수 분해 (가독성 개선)
-2. INTENT_INDEX Set 기반 최적화 (성능)
-3. HTTP 클라이언트 주입 (테스트)
-4. output 함수 API 통일 (일관성)
-
-**Must-fix가 있는가?**
-
-**아니요.** 모든 기능이 정확하게 작동하고, 보안 문제도 없습니다.
-
-### 우선 수정 항목: "한 가지"
-
-만약 지금 당장 수정해야 한다면, **`scripts/generate-dashboard.js`의 md2html 함수를 단위 함수로 분해**하는 걸 권장합니다.
-
-**이유:**
-1. **가독성**: 각 변환이 명확해집니다.
-2. **유지보수**: 새로운 마크다운 기능을 추가할 때 어디에 넣을지 명확합니다.
-3. **테스트**: 각 변환을 개별 테스트할 수 있습니다.
-4. **성능**: 향후 스트림 기반 처리로 마이그레이션하기 쉬워집니다.
+신규 에이전트가 프롬프트를 읽으면 완전히 독립적으로 이해 가능:
+1. "외부 참고 문헌" 섹션 읽음
+2. 형식, 규칙, 예시 모두 명확
+3. Config 참조 불필요
 
 ---
 
-## Step 6: 리턴 경로 산출 + 최종 판정
+## Step 5: 발견된 이슈 및 수정 경로
 
-### 발견된 이슈
+### Critical: Gap 분석 미달
 
-QA 검증 결과 다음과 같은 이슈를 발견했습니다:
+| 이슈 | 심각도 | 내용 |
+|------|--------|------|
+| CSS 주석 미명시 (@frontend-dev) | ⭐⭐⭐ | 프론트엔드는 CSS/SCSS 자주 사용 |
+| SQL 주석 미명시 (@backend-dev) | ⭐⭐⭐ | 백엔드도 쿼리 작성 가능 |
 
-| # | 이슈 | 심각도 | 대상 에이전트 | 카테고리 | 수정 힌트 |
-|---|------|--------|-------------|---------|----------|
-| 1 | md2html 함수 복잡도 | P1 | dev | code-quality | 단위 함수로 분해 (transformHeaders, transformLists, transformTables 등) |
-| 2 | INTENT_PATTERNS 검색 최적화 | P2 | dev | performance | Set 기반 인덱싱으로 O(n) → O(1) 전환 |
-| 3 | HTTP 클라이언트 주입 가능화 | P2 | dev | testability | webhook.js의 HTTP 클라이언트를 options으로 주입 |
-| 4 | output 함수 API 일관성 | P2 | dev | api-design | outputAllow/outputEmpty/outputBlock 시그니처 통일 |
-| 5 | 파일 동시성 제한 문서화 | P3 | dev | documentation | memory.json의 concurrent access 제한 명시 (README 또는 코드 주석) |
+### Patch 1: frontend-dev.md — CSS 추가
 
-### 이슈 심각도 기준
+| 항목 | 값 |
+|------|-----|
+| 파일 | `/sessions/bold-blissful-bohr/mnt/projects--vais-claude-code/agents/frontend-dev.md` |
+| 라인 | 98 |
+| 현재 | `- 형식: \`// @see {URL}\` (JS/TS), \`# @see {URL}\` (Python/Shell), \`<!-- @see {URL} -->\` (HTML)` |
+| 수정 | `- 형식: \`// @see {URL}\` (JS/TS), \`# @see {URL}\` (Python/Shell), \`<!-- @see {URL} -->\` (HTML), \`/* @see {URL} */\` (CSS)` |
+| 수정 대상 에이전트 | **frontend-dev** |
+| 우선순위 | ⭐⭐⭐ 높음 |
 
-- **P0 (Critical)**: 기능 미작동, 보안 취약점, 데이터 손실 가능
-- **P1 (High)**: 코드 품질, 유지보수성 저하
-- **P2 (Medium)**: 성능, 테스트 용이성 개선
-- **P3 (Low)**: 문서, 주석 개선
+### Patch 2: backend-dev.md — SQL 추가
 
-### 리턴 경로
+| 항목 | 값 |
+|------|-----|
+| 파일 | `/sessions/bold-blissful-bohr/mnt/projects--vais-claude-code/agents/backend-dev.md` |
+| 라인 | 55 |
+| 현재 | `- 형식: \`// @see {URL}\` (JS/TS), \`# @see {URL}\` (Python/Shell), \`<!-- @see {URL} -->\` (HTML)` |
+| 수정 | `- 형식: \`// @see {URL}\` (JS/TS), \`# @see {URL}\` (Python/Shell), \`<!-- @see {URL} -->\` (HTML), \`-- @see {URL}\` (SQL)` |
+| 수정 대상 에이전트 | **backend-dev** |
+| 우선순위 | ⭐⭐⭐ 높음 |
 
-**return_to**: dev (모든 이슈가 개발 팀 영역)
+### Optional: 규칙 4 명확화
 
-**중요 사항:** 위 이슈들은 모두 선택사항(선택적 개선)이며, **워크플로우 기능이나 보안에는 영향을 주지 않습니다.**
-
----
-
-## QA 결과 요약
-
-| 항목 | 상태 | 비고 |
-|------|------|------|
-| 빌드 검증 | ✅ | 183/183 tests pass |
-| Gap 일치율 | ✅ | 100% (20/20 항목) |
-| 보안 스캔 | ✅ | OWASP Top 10 pass |
-| QA 시나리오 | ✅ | 100% (25/25 시나리오) |
-| 코드 품질 | ✅ | 8.9/10 (프로덕션 수준) |
-| Expert Review | ✅ | Must-fix 0건 |
-| Critical 이슈 | ✅ | 0건 |
-
----
-
-## 최종 판정: PASS
-
-### 판정 기준 확인
-
-- **Critical 이슈:** 0건 ✅
-- **Gap 일치율:** 100% (90% 이상 필요) ✅
-- **QA 시나리오:** 100% (90% 이상 필요) ✅
-
-### 결론
-
-**PASS — vais-code 피처는 프로덕션 배포 가능 상태입니다.**
-
-모든 핵심 기능이 구현되었고, 보안 취약점이 없으며, 테스트 커버리지가 높습니다. 발견된 이슈들은 모두 개선 사항(선택적)이며, 워크플로우 기능에는 영향을 주지 않습니다.
+| 항목 | 값 |
+|------|-----|
+| 파일 | `vais.config.json` (라인 113) + 3개 에이전트 프롬프트 |
+| 현재 | `"자명한 표준 라이브러리 사용은 @see 생략 가능"` |
+| 수정 | `"자명한 표준 라이브러리 사용은 @see 생략 가능 (예: console.log, JSON.stringify, print, len). 첫 도입 라이브러리나 복잡한 사용 패턴은 @see 명시"` |
+| 우선순위 | ⭐⭐ 중간 |
 
 ---
 
-## 부록
+## Step 6: 최종 판정
 
-### A. 리뷰 체크리스트
+### 6.1 검증 결과 종합
 
-#### 필수 항목
+| 검증 항목 | 상태 | 점수 |
+|----------|------|------|
+| 파일 무결성 | ✅ PASS | 100% |
+| Gap 분석 | ⚠️ 미달 | 85% (90% 미만) |
+| 설정-프롬프트 일관성 | ✅ PASS | 100% |
+| 코드 품질 | ✅ PASS | 95% |
+| Expert Review | ✅ 우수 | 90% |
+| **종합** | **⚠️ CONDITIONAL PASS** | **94%** |
 
-- [x] 기획서의 모든 요구사항이 구현되었는가? → **예**, 20/20 피처 100% 구현
-- [x] 기획서의 코딩 규칙이 준수되었는가? → **예**, camelCase, 모듈화, 에러 처리 일관적
-- [x] SQL 인젝션, XSS 등 보안 취약점이 없는가? → **예**, eval/Function 없음, 입력 검증 있음
-- [x] 에러 핸들링이 적절한가? → **예**, try-catch 95% 커버리지, graceful degradation
-- [x] 환경 변수에 민감 정보가 노출되지 않는가? → **예**, VAIS_WEBHOOK_URL만 사용
-- [x] QA 시나리오 통과율이 90% 이상인가? → **예**, 100% (25/25)
+### 6.2 합격 판정
 
-#### 권장 항목
+**최종 판정**: ✅ **CONDITIONAL PASS**
 
-- [x] 테스트 코드가 충분한가? → **예**, 183개 테스트, 100% pass
-- [x] 성능 병목이 없는가? → **예**, 메모리 캐시, I/O 최소화
-- [x] 코드 중복이 없는가? → **예**, DRY 원칙 준수
-- [x] 네이밍이 명확한가? → **예**, 98% camelCase 일관성
-- [x] 접근성이 준수되었는가? → **예** (대시보드), 시맨틱 HTML
+**조건**:
+1. ✅ 파일 무결성 검증 통과
+2. ✅ 설정-프롬프트 일관성 완벽
+3. ⚠️ Gap 분석 미달 (85% < 90%)
+   - CSS @frontend-dev 누락
+   - SQL @backend-dev 누락
 
-### B. 코드 메트릭
+**합격 조건**:
+- [ ] Patch 1: frontend-dev.md에 CSS 추가
+- [ ] Patch 2: backend-dev.md에 SQL 추가
+- [ ] 재검증으로 99% 이상 일치율 확보
 
-| 메트릭 | 값 |
-|--------|-----|
-| 총 라인 수 (lib + scripts) | ~1,800 |
-| 모듈 수 | 10 |
-| 스크립트 수 | 10 |
-| 테스트 케이스 | 183 |
-| 테스트 통과율 | 100% |
-| 평균 함수 길이 | 20 줄 |
-| 순환 복잡도 | 낮음 (평균 < 5) |
+### 6.3 합격 기준 (vais.config.json 참조)
 
-### C. 참고 문서
+```json
+"gapAnalysis": {
+  "matchThreshold": 90,
+  "maxIterations": 5,
+  "autoIterate": true
+}
+```
 
-**핵심 파일:**
-- `.vais/features/vais-code.json` — 피처 레지스트리
-- `vais.config.json` — 워크플로우 설정
-- `lib/status.js` (350줄) — 상태 관리
-- `lib/memory.js` (270줄) — 메모리 관리
-- `lib/webhook.js` (93줄) — 웹훅
-- `scripts/bash-guard.js` (76줄) — 명령 차단
-- `scripts/prompt-handler.js` (160줄) — 프롬프트 분석
-- `scripts/generate-dashboard.js` (550줄) — 대시보드
-- `tests/*.test.js` — 단위 테스트 (183개)
+**현재 상태**: 85% → **90% 미만** → ❌ 미달
+
+**필요 수정**: 2개 라인 추가 (5분 이내)
 
 ---
 
-**QA 검증 완료:** 2026-03-21
-**검증자:** QA Agent (Claude Sonnet)
-**최종 상태:** PASS (프로덕션 배포 가능)
+## 부록: Gap 분석 상세
+
+### 언어별 @see 주석 형식 커버리지
+
+| 언어 | 주석 | vais.config.json | frontend-dev | backend-dev | infra-dev | 필요 곳 | 반영 | %율 |
+|------|------|-----------------|-----------|-----------|-----------|--------|------|-----|
+| JavaScript/TypeScript | `//` | ✅ | ✅ | ✅ | ✅ | 3 | 3 | 100% |
+| Python | `#` | ✅ | ✅ | ✅ | ✅ | 3 | 3 | 100% |
+| HTML | `<!-- -->` | ✅ | ✅ | ✅ | — | 2 | 2 | 100% |
+| **CSS** | `/* */` | ✅ | ❌ | — | — | 1 | 0 | **0%** |
+| **SQL** | `--` | ✅ | — | ❌ | ✅ | 2 | 1 | **50%** |
+| Shell/Bash | `#` | ✅ | ✅ | ✅ | ✅ | 3 | 3 | 100% |
+
+**종합**: 14/16 = 87.5% → ⚠️ 90% 미만
+
+**가장 심각한 Gap**:
+1. **CSS** (0/1) — frontend-dev 절대 누락
+2. **SQL** (1/2) — backend-dev 누락
+
+---
+
+## 최종 요약
+
+### 판정: ✅ **CONDITIONAL PASS**
+
+**현황**:
+- ✅ 파일 무결성: 정상
+- ✅ 구조 설계: 우수
+- ✅ 규칙 일관성: 완벽
+- ⚠️ Gap 완성도: 87% (목표 90%)
+
+**필수 수정**:
+1. frontend-dev.md 라인 98에 CSS 추가
+2. backend-dev.md 라인 55에 SQL 추가
+
+**예상 수정 시간**: 5분 이내
+
+**권장 개선**:
+1. 규칙 4 "자명한 표준 라이브러리" 구체화
+2. @see 준수 검증 스크립트 개발
+
+---
+
+**QA 에이전트**: Claude Haiku 4.5
+**검증 날짜**: 2026-03-23
+**다음 단계**: Patch 1, 2 적용 후 재검증 (최소 요구사항)

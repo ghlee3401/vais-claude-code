@@ -94,6 +94,26 @@
       ]
     }
   },
+  "conventions": {
+    "referenceComment": {
+      "description": "외부 사이트/문서를 참고하여 코드를 작성한 경우, 해당 코드 블록 위에 @see 주석을 추가한다",
+      "format": "{commentChar} @see {URL}",
+      "placement": "참고한 코드 블록 바로 위",
+      "examples": {
+        "js/ts": "// @see https://nextjs.org/docs/app/api-reference/functions/generate-metadata#twitter",
+        "python": "# @see https://docs.python.org/3/library/asyncio.html",
+        "html": "<!-- @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta -->",
+        "css": "/* @see https://tailwindcss.com/docs/customizing-colors */",
+        "shell": "# @see https://www.gnu.org/software/bash/manual/bash.html#Pipelines"
+      },
+      "rules": [
+        "참고한 URL 전체를 작성한다 (축약 금지)",
+        "한 코드 블록에 여러 참고가 있으면 @see를 줄마다 하나씩 작성한다",
+        "참고 코드 블록 바로 위에 작성한다 (빈 줄 없이)",
+        "자명한 표준 라이브러리 사용은 @see 생략 가능"
+      ]
+    }
+  },
   "featureNameValidation": {
     "pattern": "^[a-zA-Z0-9가-힣_-]+$",
     "maxLength": 100,
