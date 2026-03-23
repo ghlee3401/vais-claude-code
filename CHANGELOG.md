@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.16.0] - 2026-03-23
+
+### Added
+
+- **SEO Audit Next.js 강화** — `scripts/seo-audit.js`에 Next.js `generateMetadata` API 검사 추가 (~250줄)
+  - `auditNextJSMetadata()`, `auditStaticMetadataFields()`, `auditGenerateMetadataPattern()`, `auditViewportExport()`, `auditMetadataBase()`, `auditNextJSFileMetadata()` 함수 추가
+  - Next.js 메타데이터 생성 패턴 및 정적 메타데이터 필드 자동 검사
+- **SEO Audit 테스트** — `tests/seo-audit.test.js` 신규 작성 (35개 테스트, 9개 suite)
+  - SEO Audit 함수 검증 및 에러 핸들링 테스트
+- **Designer Agent 디자인 크리틱 추가** — `agents/designer.md` v2.1.0
+  - 시니어 디자이너 관점 UI 코드 리뷰 (7개 관점: Visual Hierarchy, Spacing, Typography, Color, Consistency, Accessibility, Feedback & States)
+- **Design Phase 보강** — `skills/vais/phases/design.md`에 Part 4: Design Review 추가 (Steps 12-16)
+  - UI 코드 리뷰 및 디자인 크리틱 통합
+- **QA Agent Expert Code Review 추가** — `agents/qa.md` v1.1.0
+  - Google Staff Engineer(L7) 관점 심층 코드 크리틱 (8개 관점)
+- **QA Phase 보강** — `skills/vais/phases/qa.md`에 Step 5.5: Expert Code Review 추가
+- **QA Report 생성** — `docs/04-qa/vais-code.md` — 전체 QA 보고서
+
+### Changed
+
+- **SEO Audit 확장성 개선** — 기존 기본 SEO 검사에서 Next.js 특화 검사로 확장
+- **Design/QA 단계 깊이 강화** — UI 코드 크리틱과 전문가 코드 리뷰 프로세스 추가
+
+---
+
 ## [0.15.0] - 2026-03-20
 
 ### Changed (Breaking)

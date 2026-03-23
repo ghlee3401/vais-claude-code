@@ -33,178 +33,36 @@ const TITLE_MAX = 60;
 const DESC_MIN = 70;
 const DESC_MAX = 160;
 
-// ─── 결과 수집기 ─────────────────────────────────────────
-
-class SEOResult {
-  constructor() {
-    this.issues = [];
-    this.filesScanned = 0;
-    this.framework = null;
-  }
-
-  add(severity, category, message, file, suggestion) {
-    this.issues.push({ severity, category, message, file: file || null, suggestion: suggestion || null });
-  }
-
-  get score() {
-    let s = 100;
-    for (const i of this.issues) {
-      if (i.severity === SEVERITY.HIGH) s -= 5;
-      else if (i.severity === SEVERITY.MED) s -= 2;
-      else s -= 1;
-    }
-    return Math.max(0, Math.min(100, s));
-  }
-
-  get summary() {
-    const high = this.issues.filter(i => i.severity === SEVERITY.HIGH).length;
-    const med = this.issues.filter(i => i.severity === SEVERITY.MED).length;
-    const low = this.issues.filter(i => i.severity === SEVERITY.LOW).length;
-    return { score: this.score, high, med, low, total: this.issues.length, files: this.filesScanned };
-  }
-
-  toJSON() {
-    return { summary: this.summary, framework: this.framework, issues: this.issues };
-  }
-
-  toCLI() {
-    const S = this.summary;
-    const lines = [];
-
-    lines.push('');
-    lines.push('╔═ SEO Audit ═══════════════════════════════════════════');
-    lines.push(`║ 📊 점수: ${S.score}/100  (${S.files}개 파일 검사)`);
-    if (this.framework) lines.push(`║ 🔧 감지된 프레임워크: ${this.framework}`);
-    lines.push(`║ ❌ 높음: ${S.high}  ⚠️ 중간: ${S.med}  ℹ️ 낮음: ${S.low}`);
-    lines.push('╚═══════════════════════════════════════════════════════');
-    lines.push('');
-
-    const high = this.issues.filter(i => i.severity === SEVERITY.HIGH);
-    const med = this.issues.filter(i => i.severity === SEVERITY.MED);
-    const low = this.issues.filter(i => i.severity === SEVERITY.LOW);
-
-    if (high.length > 0) {
-      lines.push('── 높은 심각도 (반드시 수정) ─────────────────────────────');
-      for (const i of high) {
-        lines.push(`  ❌ [${i.category}] ${i.message}`);
-        if (i.file) lines.push(`     📄 ${i.file}`);
-        if (i.suggestion) lines.push(`     💡 ${i.suggestion}`);
-      }
-      lines.push('');
-    }
-
-    if (med.length > 0) {
-      lines.push('── 중간 심각도 (권장 수정) ──────────────────────────────');
-      for (const i of med) {
-        lines.push(`  ⚠️  [${i.category}] ${i.message}`);
-        if (i.file) lines.push(`     📄 ${i.file}`);
-        if (i.suggestion) lines.push(`     💡 ${i.suggestion}`);
-      }
-      lines.push('');
-    }
-
-    if (low.length > 0) {
-      lines.push('── 낮은 심각도 (개선 권장) ──────────────────────────────');
-      for (const i of low) {
-        lines.push(`  ℹ️  [${i.category}] ${i.message}`);
-        if (i.suggestion) lines.push(`     💡 ${i.suggestion}`);
-      }
-      lines.push('');
-    }
-
-    if (S.total === 0) {
-      lines.push('  ✅ 모든 검사를 통과했습니다!');
-      lines.push('');
-    }
-
-    return lines.join('\n');
-  }
-}
-
-// ─── 유틸 ─────────────────────────────────────────────
-
-function fileExists(p) {
-  try { fs.accessSync(p); return true; } catch { return false; }
-}
-
-function findFiles(dir, exts, maxDepth = 6, depth = 0) {
-  if (depth > maxDepth) return [];
-  const results = [];
-  let entries;
-  try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return []; }
-  for (const e of entries) {
-    if (e.name.startsWith('.') || e.name === 'node_modules' || e.name === 'dist' || e.name === '.next' || e.name === '.nuxt') continue;
-    const full = path.join(dir, e.name);
-    if (e.isDirectory()) {
-      results.push(...findFiles(full, exts, maxDepth, depth + 1));
-    } else if (exts.some(ext => e.name.endsWith(ext))) {
-      results.push(full);
+  const hasRobotsTxt = fileExists(path.join(root, 'robots.txt'))
+    || fileExists(path.join(root, 'public', 'robots.txt'));
+  if (!hasRobotsTxt) {
+    // Next.js App Router의 파일 기반 robots.ts는 아래에서 별도 체크
+    const hasRobotsTs = result.framework === 'Next.js' && isAppRouterProject(root)
+      && ['robots.ts', 'robots.js'].some(f =>
+        fileExists(path.join(root, 'app', f)) || fileExists(path.join(root, 'src', 'app', f)));
+    if (!hasRobotsTs) {
+      const suggestion = result.framework === 'Next.js'
+        ? 'app/robots.ts를 생성하거나 public/robots.txt를 추가하세요.'
+        : 'public/robots.txt 생성: User-agent: *\\nAllow: /\\nSitemap: https://example.com/sitemap.xml';
+      result.add(SEVERITY.HIGH, 'robots.txt', 'robots.txt 파일이 없습니다.', null, suggestion);
     }
   }
-  return results;
-}
 
-function extractTag(html, tag) {
-  const re = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, 'i');
-  const m = html.match(re);
-  return m ? m[1].trim() : null;
-}
-
-function extractMeta(html, name) {
-  const re = new RegExp(`<meta\\s[^>]*name=["']${name}["'][^>]*content=["']([^"']*)["']`, 'i');
-  const m = html.match(re);
-  if (m) return m[1];
-  // content가 앞에 올 수도 있음
-  const re2 = new RegExp(`<meta\\s[^>]*content=["']([^"']*)["'][^>]*name=["']${name}["']`, 'i');
-  const m2 = html.match(re2);
-  return m2 ? m2[1] : null;
-}
-
-function extractMetaProperty(html, prop) {
-  const re = new RegExp(`<meta\\s[^>]*property=["']${prop}["'][^>]*content=["']([^"']*)["']`, 'i');
-  const m = html.match(re);
-  if (m) return m[1];
-  const re2 = new RegExp(`<meta\\s[^>]*content=["']([^"']*)["'][^>]*property=["']${prop}["']`, 'i');
-  const m2 = html.match(re2);
-  return m2 ? m2[1] : null;
-}
-
-// ─── 검사기들 ─────────────────────────────────────────
-
-function detectFramework(root) {
-  const pkgPath = path.join(root, 'package.json');
-  if (!fileExists(pkgPath)) return null;
-  try {
-    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-    const deps = { ...pkg.dependencies, ...pkg.devDependencies };
-    if (deps['next']) return 'Next.js';
-    if (deps['nuxt'] || deps['nuxt3']) return 'Nuxt';
-    if (deps['gatsby']) return 'Gatsby';
-    if (deps['astro']) return 'Astro';
-    if (deps['@sveltejs/kit']) return 'SvelteKit';
-    if (deps['react']) return 'React';
-    if (deps['vue']) return 'Vue';
-    if (deps['angular'] || deps['@angular/core']) return 'Angular';
-  } catch {}
-  return null;
-}
-
-function auditProjectLevel(root, result) {
-  // robots.txt
-  if (!fileExists(path.join(root, 'robots.txt')) && !fileExists(path.join(root, 'public', 'robots.txt'))) {
-    result.add(SEVERITY.HIGH, 'robots.txt', 'robots.txt 파일이 없습니다.', null,
-      'public/robots.txt 생성: User-agent: *\\nAllow: /\\nSitemap: https://example.com/sitemap.xml');
+  // Next.js App Router 파일 기반 메타데이터 검사
+  let nextjsFileMeta = null;
+  if (result.framework === 'Next.js' && isAppRouterProject(root)) {
+    nextjsFileMeta = auditNextJSFileMetadata(root, result);
   }
 
   // sitemap.xml
   const hasSitemap = fileExists(path.join(root, 'sitemap.xml'))
     || fileExists(path.join(root, 'public', 'sitemap.xml'))
-    || fileExists(path.join(root, 'public', 'sitemap-0.xml'));
+    || fileExists(path.join(root, 'public', 'sitemap-0.xml'))
+    || (nextjsFileMeta && nextjsFileMeta.hasSitemapFile);
 
   if (!hasSitemap) {
-    // Next.js는 next-sitemap 패키지로 자동 생성 가능
     const suggestion = result.framework === 'Next.js'
-      ? 'next-sitemap 패키지 설치: npm i next-sitemap'
+      ? 'app/sitemap.ts를 생성하거나 next-sitemap 패키지를 설치하세요: npm i next-sitemap'
       : 'sitemap.xml 파일을 생성하여 주요 URL을 나열하세요.';
     result.add(SEVERITY.HIGH, 'sitemap', 'sitemap.xml 파일이 없습니다.', null, suggestion);
   }
@@ -372,16 +230,285 @@ function auditHTML(html, filePath, relPath, result, allTitles, allDescs) {
   }
 }
 
+/**
+ * Next.js generateMetadata / metadata export 상세 검사
+ *
+ * 검사 항목:
+ * 1. metadata 객체 필드 완전성 (title, description, openGraph, twitter 등)
+ * 2. generateMetadata async 패턴 검증
+ * 3. generateViewport / viewport export 감지
+ * 4. metadataBase 설정 여부
+ * 5. 레이아웃 vs 페이지 metadata 범위 분석
+ * 6. next/head 레거시 사용 경고 (App Router)
+ */
+function auditNextJSMetadata(content, relPath, result, isAppRouter) {
+  const isLayout = /layout\.(tsx?|jsx?)$/.test(relPath);
+  const isPage = /page\.(tsx?|jsx?)$/.test(relPath);
+  if (!isLayout && !isPage) return;
+
+  const hasStaticMetadata = /export\s+const\s+metadata\s*[:=]/m.test(content);
+  const hasGenerateMetadata = /export\s+(async\s+)?function\s+generateMetadata/m.test(content)
+    || /export\s+const\s+generateMetadata\s*=/m.test(content);
+  const hasNextHead = content.includes('next/head') || content.includes('<Head');
+  const hasMetadata = hasStaticMetadata || hasGenerateMetadata;
+
+  // App Router에서 next/head 사용은 레거시 패턴
+  if (isAppRouter && hasNextHead && !hasMetadata) {
+    result.add(SEVERITY.HIGH, 'nextjs-metadata',
+      'App Router에서 next/head는 동작하지 않습니다.', relPath,
+      'export const metadata 또는 export async function generateMetadata로 마이그레이션하세요.');
+    return;
+  }
+
+  if (isAppRouter && hasNextHead && hasMetadata) {
+    result.add(SEVERITY.MED, 'nextjs-metadata',
+      'next/head와 metadata API가 혼용되고 있습니다.', relPath,
+      'App Router에서는 metadata API만 사용하세요. next/head import를 제거하세요.');
+  }
+
+  // metadata가 전혀 없는 경우
+  if (!hasMetadata && !hasNextHead) {
+    const severity = isLayout ? SEVERITY.HIGH : SEVERITY.MED;
+    result.add(severity, 'nextjs-metadata',
+      `Next.js ${isLayout ? '레이아웃' : '페이지'}에 metadata 설정이 없습니다.`, relPath,
+      'export const metadata = { title: "...", description: "..." } 를 추가하세요.');
+    return;
+  }
+
+  // ── 정적 metadata 객체 필드 완전성 검사 ──
+  if (hasStaticMetadata) {
+    auditStaticMetadataFields(content, relPath, result, isLayout);
+  }
+
+  // ── generateMetadata 패턴 검사 ──
+  if (hasGenerateMetadata) {
+    auditGenerateMetadataPattern(content, relPath, result);
+  }
+
+  // ── viewport export 검사 ──
+  auditViewportExport(content, relPath, result);
+
+  // ── metadataBase 검사 (루트 레이아웃) ──
+  if (isLayout && isRootLayout(relPath)) {
+    auditMetadataBase(content, relPath, result);
+  }
+}
+
+function isRootLayout(relPath) {
+  // app/layout.tsx 또는 src/app/layout.tsx
+  const normalized = relPath.replace(/\\/g, '/');
+  return /^(src\/)?app\/layout\.(tsx?|jsx?)$/.test(normalized);
+}
+
+function auditStaticMetadataFields(content, relPath, result, isLayout) {
+  // metadata 객체 블록 추출 (간이 파서 — 중괄호 매칭)
+  const metadataMatch = content.match(/export\s+const\s+metadata\s*[:=]\s*\{/m);
+  if (!metadataMatch) return;
+
+  const startIdx = metadataMatch.index + metadataMatch[0].length - 1;
+  const block = extractBalancedBraces(content, startIdx);
+  if (!block) return;
+
+  // 필수 필드 검사
+  for (const field of NEXTJS_METADATA_FIELDS.required) {
+    if (!hasFieldInObject(block, field)) {
+      result.add(SEVERITY.HIGH, 'nextjs-metadata',
+        `metadata에 필수 필드 '${field}'이(가) 없습니다.`, relPath,
+        `metadata 객체에 ${field}: "..." 를 추가하세요.`);
+    }
+  }
+
+  // 권장 필드 검사
+  for (const field of NEXTJS_METADATA_FIELDS.recommended) {
+    if (!hasFieldInObject(block, field)) {
+      result.add(SEVERITY.LOW, 'nextjs-metadata',
+        `metadata에 권장 필드 '${field}'이(가) 없습니다.`, relPath,
+        `소셜 공유 및 SEO 개선을 위해 ${field} 필드를 추가하세요.`);
+    }
+  }
+
+  // title이 Template 패턴인지 확인 (레이아웃에서 권장)
+  if (isLayout && hasFieldInObject(block, 'title')) {
+    const hasTitleTemplate = block.includes('template') && block.includes('default');
+    if (!hasTitleTemplate) {
+      result.add(SEVERITY.LOW, 'nextjs-metadata',
+        '레이아웃 metadata.title에 template 패턴이 없습니다.', relPath,
+        'title: { template: "%s | 사이트명", default: "사이트명" } 형태를 권장합니다.');
+    }
+  }
+
+  // openGraph 필드 상세 검사
+  if (hasFieldInObject(block, 'openGraph')) {
+    const ogBlock = extractNestedBlock(block, 'openGraph');
+    if (ogBlock) {
+      const ogRequired = ['title', 'description', 'images'];
+      for (const f of ogRequired) {
+        if (!hasFieldInObject(ogBlock, f)) {
+          result.add(SEVERITY.MED, 'nextjs-metadata',
+            `openGraph에 '${f}' 필드가 없습니다.`, relPath,
+            `소셜 미디어 공유 최적화를 위해 openGraph.${f}를 추가하세요.`);
+        }
+      }
+    }
+  }
+
+  // twitter 카드 검사
+  if (hasFieldInObject(block, 'twitter')) {
+    const twBlock = extractNestedBlock(block, 'twitter');
+    if (twBlock && !hasFieldInObject(twBlock, 'card')) {
+      result.add(SEVERITY.LOW, 'nextjs-metadata',
+        "twitter.card 타입이 지정되지 않았습니다.", relPath,
+        "twitter: { card: 'summary_large_image' } 를 추가하세요.");
+    }
+  }
+}
+
+function auditGenerateMetadataPattern(content, relPath, result) {
+  // async 패턴 확인
+  const hasAsync = /export\s+async\s+function\s+generateMetadata/.test(content);
+  const hasFunctionDecl = /export\s+function\s+generateMetadata/.test(content);
+  const hasArrow = /export\s+const\s+generateMetadata\s*=/.test(content);
+
+  // params 인자 사용 확인 (동적 라우트)
+  if (relPath.includes('[') && (hasAsync || hasFunctionDecl)) {
+    const paramMatch = content.match(/generateMetadata\s*\(\s*\{?\s*params/);
+    if (!paramMatch) {
+      result.add(SEVERITY.MED, 'nextjs-metadata',
+        '동적 라우트에서 generateMetadata가 params를 받지 않습니다.', relPath,
+        'generateMetadata({ params }: Props)로 동적 파라미터를 활용하세요.');
+    }
+  }
+
+  // return 타입에 기본 필드 포함 확인 (간이 검사)
+  const returnMatch = content.match(/return\s*\{([^}]*(?:\{[^}]*\}[^}]*)*)\}/m);
+  if (returnMatch) {
+    const returnBlock = returnMatch[1];
+    if (!returnBlock.includes('title')) {
+      result.add(SEVERITY.MED, 'nextjs-metadata',
+        'generateMetadata 반환값에 title이 없습니다.', relPath,
+        '반환 객체에 title 필드를 포함하세요.');
+    }
+    if (!returnBlock.includes('description')) {
+      result.add(SEVERITY.MED, 'nextjs-metadata',
+        'generateMetadata 반환값에 description이 없습니다.', relPath,
+        '반환 객체에 description 필드를 포함하세요.');
+    }
+  }
+}
+
+function auditViewportExport(content, relPath, result) {
+  // Next.js 14+에서 viewport는 metadata와 분리
+  const hasViewportInMetadata = /metadata\s*[:=][\s\S]*?viewport\s*:/m.test(content);
+  const hasViewportExport = /export\s+const\s+viewport\s*[:=]/m.test(content)
+    || /export\s+(async\s+)?function\s+generateViewport/m.test(content);
+
+  if (hasViewportInMetadata && !hasViewportExport) {
+    result.add(SEVERITY.MED, 'nextjs-viewport',
+      'viewport가 metadata 객체 안에 있습니다.', relPath,
+      'Next.js 14+에서는 export const viewport = { ... }로 별도 export하세요.');
+  }
+}
+
+function auditMetadataBase(content, relPath, result) {
+  const hasMetadataBase = content.includes('metadataBase');
+  if (!hasMetadataBase) {
+    result.add(SEVERITY.MED, 'nextjs-metadata',
+      '루트 레이아웃에 metadataBase가 설정되지 않았습니다.', relPath,
+      "export const metadata = { metadataBase: new URL('https://example.com'), ... }");
+  }
+}
+
+// ── 유틸: 중괄호 균형 추출 ──
+function extractBalancedBraces(str, startIdx) {
+  if (str[startIdx] !== '{') return null;
+  let depth = 0;
+  for (let i = startIdx; i < str.length; i++) {
+    if (str[i] === '{') depth++;
+    else if (str[i] === '}') {
+      depth--;
+      if (depth === 0) return str.substring(startIdx, i + 1);
+    }
+  }
+  return null;
+}
+
+function hasFieldInObject(block, field) {
+  // 키: 값 패턴 매칭 (따옴표 유무 모두 지원)
+  const re = new RegExp(`(?:^|[{,\\s])['"]?${field}['"]?\\s*[:=]`, 'm');
+  return re.test(block);
+}
+
+function extractNestedBlock(block, field) {
+  const re = new RegExp(`['"]?${field}['"]?\\s*[:=]\\s*\\{`);
+  const match = block.match(re);
+  if (!match) return null;
+  const startIdx = block.indexOf('{', match.index + match[0].length - 1);
+  return extractBalancedBraces(block, startIdx);
+}
+
+/**
+ * Next.js App Router 파일 기반 메타데이터 감지
+ * opengraph-image, icon, sitemap, robots 등의 파일 컨벤션 검사
+ */
+function auditNextJSFileMetadata(root, result) {
+  const appDir = fileExists(path.join(root, 'src', 'app'))
+    ? path.join(root, 'src', 'app')
+    : path.join(root, 'app');
+
+  if (!fileExists(appDir)) return;
+
+  // sitemap.ts/js 파일 기반 생성 확인
+  const hasSitemapFile = ['sitemap.ts', 'sitemap.js', 'sitemap.tsx', 'sitemap.jsx']
+    .some(f => fileExists(path.join(appDir, f)));
+
+  // robots.ts/js 파일 기반 생성 확인
+  const hasRobotsFile = ['robots.ts', 'robots.js', 'robots.tsx', 'robots.jsx']
+    .some(f => fileExists(path.join(appDir, f)));
+
+  // manifest 검사
+  const hasManifest = ['manifest.ts', 'manifest.js', 'manifest.json', 'manifest.webmanifest']
+    .some(f => fileExists(path.join(appDir, f)) || fileExists(path.join(root, 'public', f)));
+
+  if (!hasManifest) {
+    result.add(SEVERITY.LOW, 'nextjs-file-metadata',
+      'Web App Manifest 파일이 없습니다.', null,
+      'app/manifest.ts 또는 public/manifest.json을 추가하면 PWA 지원이 향상됩니다.');
+  }
+
+  // opengraph-image 확인 (루트)
+  const ogImageExts = ['.tsx', '.jsx', '.ts', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg'];
+  const hasOGImage = ogImageExts.some(ext => fileExists(path.join(appDir, `opengraph-image${ext}`)));
+  if (!hasOGImage) {
+    result.add(SEVERITY.LOW, 'nextjs-file-metadata',
+      '파일 기반 opengraph-image가 없습니다.', null,
+      'app/opengraph-image.tsx를 추가하면 동적 OG 이미지를 자동 생성할 수 있습니다.');
+  }
+
+  return { hasSitemapFile, hasRobotsFile };
+}
+
+function isAppRouterProject(root) {
+  return fileExists(path.join(root, 'app')) || fileExists(path.join(root, 'src', 'app'));
+}
+
 function auditJSXFile(content, filePath, relPath, result) {
   // JSX/TSX 에서 SEO 관련 패턴 검사 (Next.js, React 등)
 
-  // Next.js metadata export 확인
+  // Next.js 상세 검사 (App Router)
+  if (result.framework === 'Next.js') {
+    const root = path.dirname(filePath).replace(/[/\\](src[/\\])?app([/\\].*)?$/, '');
+    const isAppRouter = isAppRouterProject(root);
+    auditNextJSMetadata(content, relPath, result, isAppRouter);
+    return; // Next.js 전용 검사가 더 정밀하므로 기존 로직 스킵
+  }
+
+  // 기존 프레임워크 기본 검사 (Next.js 외)
   if (relPath.includes('layout') || relPath.includes('page')) {
     const hasMetadata = content.includes('export const metadata') || content.includes('generateMetadata');
     const hasHead = content.includes('next/head') || content.includes('<Head');
     if (!hasMetadata && !hasHead) {
-      result.add(SEVERITY.MED, 'framework', 'Next.js 페이지/레이아웃에 metadata 설정이 없습니다.', relPath,
-        'export const metadata = { title: "...", description: "..." } 를 추가하세요.');
+      result.add(SEVERITY.MED, 'framework', '페이지/레이아웃에 metadata 설정이 없습니다.', relPath,
+        'SEO를 위해 Head 컴포넌트 또는 metadata 설정을 추가하세요.');
     }
   }
 

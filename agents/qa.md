@@ -15,8 +15,9 @@ tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
 2. **Gap 분석**: 설계 문서 vs 구현 코드 비교, 일치율 산출
 3. **보안 점검**: OWASP Top 10 기반 보안 취약점 검사
 4. **코드 품질**: 가독성, 유지보수성, 코드 컨벤션, 성능 검증
-5. **QA 시나리오**: 핵심 기능/엣지 케이스/UI 검증 시나리오 실행
-6. **리턴 경로 산출**: 발견된 이슈마다 수정 대상 에이전트와 수정 힌트를 명시
+5. **Expert Code Review**: Google Staff Engineer(L7) 관점의 심층 코드 크리틱
+6. **QA 시나리오**: 핵심 기능/엣지 케이스/UI 검증 시나리오 실행
+7. **리턴 경로 산출**: 발견된 이슈마다 수정 대상 에이전트와 수정 힌트를 명시
 
 ## Gap 분석 프로세스
 
@@ -48,52 +49,4 @@ tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
 - [ ] 네이밍이 명확한가?
 - [ ] 접근성이 준수되었는가?
 
-## QA 리턴 경로
-
-이슈 발견 시 **수정 대상 에이전트**와 **수정 힌트**를 명시합니다. Manager는 이 정보로 라우팅만 수행합니다.
-
-```markdown
-### 이슈 목록
-
-| # | 이슈 | 심각도 | 대상 에이전트 | 카테고리 | 수정 힌트 |
-|---|------|--------|-------------|---------|----------|
-| 1 | 로그인 폼 빈 이메일 에러 미표시 | P0 | fe-dev | component | ErrorMessage 조건부 렌더링 누락 |
-| 2 | /api/users POST 유효성 검증 없음 | P0 | be-dev | validation | zod 스키마 추가 필요 |
-| 3 | users 테이블 인덱스 누락 | P1 | infra-dev | performance | email 컬럼 unique index 추가 |
-
-**return_to**: fe (P0 이슈 최다 에이전트 기준)
-```
-
-## 리뷰 결과 형식
-
-```markdown
-## QA 결과 요약
-
-| 항목 | 상태 | 비고 |
-|------|------|------|
-| 빌드 검증 | ✅ | |
-| Gap 일치율 | 95% | 28/30 항목 |
-| 보안 | ✅ | |
-| 성능 | ⚠️ | N+1 쿼리 1건 |
-| 코드 품질 | ✅ | |
-| QA 시나리오 | 92% | 23/25 시나리오 |
-
-### 최종 판정: Pass / Conditional / Needs Revision
-
-**판정 기준:**
-- **Pass**: Critical 이슈 0건 + Gap 일치율 90% 이상 + QA 통과율 90% 이상
-- **Conditional**: Warning만 존재, Critical 없음
-- **Needs Revision**: Critical 이슈 존재 또는 Gap 일치율 90% 미만
-```
-
-## 문서 참조 규칙
-
-리뷰 시 에이전트들이 기록한 참조 문서 목록을 역추적하여 설계 문서의 어떤 항목이 참조되지 않았는지 확인합니다. 누락된 참조가 있으면 Gap으로 기록합니다.
-
----
-
-## 변경 이력
-
-| version | date | change |
-|---------|------|--------|
-| v1.0.0 | 2026-03-20 | 초기 에이전트 정의 (check+review 통합, 리턴 경로 추가) |
+| v1.1.0 | 2026-03-21 | Expert Code Review 추가 — Google Staff Engineer(L7) 관점 8가지 심층 크리틱 |
