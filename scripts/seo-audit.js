@@ -33,6 +33,153 @@ const TITLE_MAX = 60;
 const DESC_MIN = 70;
 const DESC_MAX = 160;
 
+const NEXTJS_METADATA_FIELDS = {
+  required: ['title', 'description'],
+  recommended: ['openGraph', 'twitter', 'icons', 'keywords']
+};
+
+// ─── SEOResult 클래스 ─────────────────────────────────────────────
+
+class SEOResult {
+  constructor() {
+    this.issues = [];
+    this.filesScanned = 0;
+    this.framework = null;
+  }
+
+  add(severity, category, message, filePath = null, suggestion = null) {
+    this.issues.push({
+      severity,
+      category,
+      message,
+      filePath,
+      suggestion
+    });
+  }
+
+  get summary() {
+    const high = this.issues.filter(i => i.severity === SEVERITY.HIGH).length;
+    const med = this.issues.filter(i => i.severity === SEVERITY.MED).length;
+    const low = this.issues.filter(i => i.severity === SEVERITY.LOW).length;
+    return { high, med, low };
+  }
+
+  toJSON() {
+    return {
+      framework: this.framework,
+      filesScanned: this.filesScanned,
+      summary: this.summary,
+      issues: this.issues
+    };
+  }
+
+  toCLI() {
+    const { high, med, low } = this.summary;
+    let output = '';
+    output += `\n=== SEO Audit Report ===\n`;
+    output += `Framework: ${this.framework || 'Unknown'}\n`;
+    output += `Files Scanned: ${this.filesScanned}\n`;
+    output += `\nSummary:\n`;
+    output += `  High: ${high}\n`;
+    output += `  Medium: ${med}\n`;
+    output += `  Low: ${low}\n`;
+    output += `\nIssues:\n`;
+
+    if (this.issues.length === 0) {
+      output += '  No issues found!\n';
+    } else {
+      for (const issue of this.issues) {
+        output += `  [${issue.severity.toUpperCase()}] ${issue.category}: ${issue.message}\n`;
+        if (issue.filePath) {
+          output += `    File: ${issue.filePath}\n`;
+        }
+        if (issue.suggestion) {
+          output += `    Suggestion: ${issue.suggestion}\n`;
+        }
+      }
+    }
+
+    output += `\n`;
+    return output;
+  }
+}
+
+// ─── 헬퍼 함수 ─────────────────────────────────────────────────────
+
+function fileExists(p) {
+  return fs.existsSync(p);
+}
+
+function extractTag(html, tagName) {
+  const re = new RegExp(`<${tagName}[^>]*>([^<]*)</${tagName}>`, 'i');
+  const match = html.match(re);
+  return match ? match[1].trim() : null;
+}
+
+function extractMeta(html, name) {
+  const re = new RegExp(`<meta\\s+name=["']${name}["']\\s+content=["']([^"']*)["']`, 'i');
+  const match = html.match(re);
+  return match ? match[1].trim() : null;
+}
+
+function extractMetaProperty(html, property) {
+  const re = new RegExp(`<meta\\s+property=["']${property}["']\\s+content=["']([^"']*)["']`, 'i');
+  const match = html.match(re);
+  return match ? match[1].trim() : null;
+}
+
+function detectFramework(root) {
+  const pkgPath = path.join(root, 'package.json');
+  if (!fileExists(pkgPath)) return null;
+
+  try {
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+
+    if (deps['next']) return 'Next.js';
+    if (deps['nuxt']) return 'Nuxt';
+    if (deps['react']) return 'React';
+    if (deps['vue']) return 'Vue';
+    if (deps['svelte']) return 'Svelte';
+    if (deps['astro']) return 'Astro';
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function findFiles(root, extensions) {
+  const results = [];
+
+  function walkDir(dir) {
+    if (!fileExists(dir)) return;
+
+    try {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        // Skip node_modules, .git, etc.
+        if (['node_modules', '.git', '.next', 'dist', 'build'].includes(entry.name)) continue;
+
+        const fullPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+          walkDir(fullPath);
+        } else if (extensions.some(ext => entry.name.endsWith(ext))) {
+          results.push(fullPath);
+        }
+      }
+    } catch {
+      // Ignore permission errors
+    }
+  }
+
+  walkDir(root);
+  return results;
+}
+
+// ─── 프로젝트 레벨 감사 ─────────────────────────────────────────────
+
+function auditProjectLevel(root, result) {
   const hasRobotsTxt = fileExists(path.join(root, 'robots.txt'))
     || fileExists(path.join(root, 'public', 'robots.txt'));
   if (!hasRobotsTxt) {
