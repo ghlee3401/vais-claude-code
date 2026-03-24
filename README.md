@@ -495,13 +495,13 @@ vais-claude-code/
 │   ├── stop-handler.js       # 다음 단계 안내
 │   ├── prompt-handler.js     # 의도/체이닝 감지
 │   ├── generate-dashboard.js # HTML 대시보드 생성
-│   ├── validate-plugin.js   # 플러그인/마켓플레이스 검증
+│   ├── vais-validate-plugin.js # 플러그인/마켓플레이스 검증
 │   └── seo-audit.js         # SEO 감사
 ├── skills/
 │   ├── vais/
 │   │   ├── SKILL.md          # 슬림 라우터 (Skills 2.0)
 │   │   └── phases/           # phase별 참조 파일
-│   ├── validate-plugin/
+│   ├── vais-validate-plugin/
 │   │   └── SKILL.md          # 플러그인 검증 (독립 스킬)
 │   └── vais-seo/
 │       └── SKILL.md          # SEO 감사 (독립 스킬)

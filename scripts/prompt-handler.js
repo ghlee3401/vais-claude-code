@@ -31,6 +31,20 @@ const INTENT_PATTERNS = [
 ];
 
 const activeFeature = getActiveFeature();
+
+// URL 감지 → SEO 스킬 제안
+const URL_PATTERN = /https?:\/\/[^\s]+/i;
+const urlMatch = userPrompt.match(URL_PATTERN);
+if (urlMatch && !promptLower.includes('/vais-seo') && !promptLower.includes('/vais ')) {
+  const url = urlMatch[0];
+  debugLog('PromptHandler', 'URL detected, suggesting SEO audit', { url });
+  outputAllow(
+    `🔍 URL이 감지되었습니다: ${url}\n` +
+    `SEO 감사를 실행하려면: \`/vais-seo ${url}\``
+  );
+  process.exit(0);
+}
+
 let detectedPhase = null;
 
 for (const { keywords, phase } of INTENT_PATTERNS) {
