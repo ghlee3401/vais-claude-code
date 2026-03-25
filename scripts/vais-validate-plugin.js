@@ -651,6 +651,8 @@ function validateMarketplaceJson(root, result) {
     if (data.metadata.pluginRoot) {
       result.note(cat, `pluginRoot: '${data.metadata.pluginRoot}' — 플러그인 소스 경로에 접두어 적용됨.`);
     }
+
+    // metadata 내 description/version은 허용됨 (최상위에 두면 스키마 검증 실패)
   }
 }
 
@@ -669,6 +671,29 @@ function validateMarketplacePlugin(plugin, index, root, result) {
     result.error(cat, `${prefix}: 'source' 필드가 없습니다. 플러그인 위치를 지정해야 합니다.`);
   } else {
     validatePluginSource(plugin.source, prefix, root, result);
+
+    // 자기참조 github 소스 감지
+    if (
+      typeof plugin.source === 'object' &&
+      plugin.source.source === 'github' &&
+      plugin.source.repo
+    ) {
+      const pluginJsonPath = path.join(root, '.claude-plugin', 'plugin.json');
+      const pluginJsonData = fileExists(pluginJsonPath) ? readJSON(pluginJsonPath) : null;
+
+      if (pluginJsonData && !pluginJsonData.__error && pluginJsonData.repository) {
+        // repository URL에서 owner/repo 추출 (예: https://github.com/owner/repo)
+        const repoMatch = pluginJsonData.repository.match(/github\.com\/([^/]+\/[^/.]+?)(?:\.git)?(?:\/.*)?$/);
+        if (repoMatch) {
+          const repoOwnerRepo = repoMatch[1];
+          if (repoOwnerRepo === plugin.source.repo) {
+            result.error(cat,
+              `${prefix}: source가 마켓플레이스 자체 리포지토리를 참조합니다. 같은 리포 내 플러그인은 상대 경로 (예: './') 를 사용하세요. 자기참조 github 소스는 동기화 실패를 유발할 수 있습니다.`
+            );
+          }
+        }
+      }
+    }
   }
 
   // version

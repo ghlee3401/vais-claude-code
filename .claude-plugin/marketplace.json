@@ -11,10 +11,7 @@
   "plugins": [
     {
       "name": "vais-code",
-      "source": {
-        "source": "github",
-        "repo": "ghlee3401/vais-claude-code"
-      },
+      "source": "./",
       "description": "6-step development workflow plugin with chaining syntax, 4-Gate system, and QA return path.",
       "version": "0.16.1",
       "author": {

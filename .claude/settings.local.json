@@ -21,7 +21,8 @@
       "Bash(node scripts/bash-guard.js)",
       "Bash(where claude:*)",
       "WebFetch(domain:docs.claude.ai)",
-      "WebFetch(domain:docs.anthropic.com)"
+      "WebFetch(domain:docs.anthropic.com)",
+      "Skill(vais-code:vais)"
     ]
   }
 }
