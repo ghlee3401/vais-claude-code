@@ -78,3 +78,5 @@ AskUserQuestion: "3가지 설계안 중 어떤 걸 선택하시겠습니까?"
 11. `docs/02-design/{feature}.md`에 저장 (`templates/design.template.md` 구조)
 
 | **디자인 리뷰** | designer 에이전트 | `docs/02-design/{feature}-review.md` |
+
+**에이전트**: designer

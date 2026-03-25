@@ -99,3 +99,5 @@ Step 1 완료 후, **기획서 생성 전에** AskUserQuestion으로 확인:
 - UI 컴포넌트 라이브러리 선택
 - YAGNI 검증 결과
 - 변경 이력 (version, date, change 표)
+
+**에이전트**: manager (직접 실행)
