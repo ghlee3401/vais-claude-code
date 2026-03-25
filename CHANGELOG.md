@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.19.1] - 2026-03-25
+
+### Fixed
+
+- **commit phase 확인 누락 방지** — 버전 범프 불필요(None) 판단 시에도 반드시 AskUserQuestion으로 사용자 확인 필수 규칙 추가
+
+---
+
 ## [0.19.0] - 2026-03-25
 
 ### Changed
