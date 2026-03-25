@@ -1,6 +1,7 @@
 ---
 name: vais-default
 description: VAIS Code 기본 응답 스타일. 구조화된 개발 워크플로우에 맞는 깔끔한 응답 형식.
+keep-coding-instructions: true
 ---
 
 # VAIS Code 응답 스타일
@@ -100,3 +101,4 @@ description: VAIS Code 기본 응답 스타일. 구조화된 개발 워크플로
 | v0.10.1 | 2026-03-16 | 전체 점검: convention 잔존 참조 정리, bash-guard 패턴 동기화, 문서·테스트 보강 |
 | v0.14.1 | 2026-03-19 | 보안·안정성 전면 개선: 원자적 쓰기, path traversal 방지, 병렬/에러 포맷 추가 |
 | v0.15.0 | 2026-03-20 | 9→6단계 리스트럭처링: 단계 아이콘/이름 갱신, 진행률 6칸 |
+| v0.17.0 | 2026-03-25 | outputStyles plugin.json 복원, keep-coding-instructions 추가, SessionStart hook 연동 |
