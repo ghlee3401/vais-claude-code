@@ -10,11 +10,28 @@
 4. **피처명은 영어** (kebab-case: `login`, `payment`, `chat`)
 5. 경쟁/참고 서비스 간단 분석
 
+#### Checkpoint 1 — 요구사항 확인
+
+Step 1 완료 후, **기획서 생성 전에** AskUserQuestion으로 확인:
+- 이해한 Problem, Scope, 핵심 기능을 요약 제시
+- "요구사항 이해가 맞나요? 빠진 건 없나요?"
+- 사용자 확인 전까지 기획서를 생성하지 않음
+
+#### Checkpoint 2 — 명확화 질문
+
+불명확한 요소를 정리하여 질문:
+- 엣지 케이스, 에러 처리, 기존 시스템과의 호환성, 기술 제약
+- 정리된 질문 목록을 AskUserQuestion으로 제시
+- 답변 후 기획서 생성 진행
+
 #### Step 2: 기획서 작성
 
 1. 프로젝트 기존 코드와 구조 파악
 2. `templates/plan.template.md` 템플릿 기반으로 기획서 작성
-3. **Plan-Plus 3단계 검증**:
+3. **Executive Summary 작성**: 4-perspective 테이블 (Problem/Solution/Function UX Effect/Core Value) — 각 1~2문장
+4. **Success Criteria 작성**: 측정 가능한 성공 기준 + 검증 방법. QA에서 평가됨
+5. **Impact Analysis 작성**: Changed Resources + Current Consumers (기존 프로젝트의 경우)
+6. **Plan-Plus 3단계 검증**:
    - **의도 탐색**: "이 기능이 정말 해결하려는 문제가 뭔가?"
    - **대안 탐색**: "기존 라이브러리나 다른 접근법은 없나?"
    - **YAGNI 리뷰**: "지금 당장 필요한 것만 포함했나?"
@@ -38,6 +55,18 @@
 9. **API 엔드포인트 개요** — 주요 엔드포인트, Method, 설명을 기획서에 포함 (Gate 2에서 Interface Contract로 확정됨)
 
 #### Step 4: 저장
+
+#### Context Anchor 생성
+
+기획서 작성 완료 후:
+1. Executive Summary의 Problem/Solution에서 **WHY** 추출
+2. 타겟 사용자에서 **WHO** 추출
+3. 리스크/정책에서 **RISK** 추출
+4. Success Criteria에서 **SUCCESS** 추출
+5. MVP 범위에서 **SCOPE** 추출
+6. 문서 상단 (Executive Summary 바로 아래)에 Context Anchor 테이블 작성
+
+> Context Anchor는 이후 Design→FE→BE→QA 문서에 복사되어 세션 간 컨텍스트를 유지합니다.
 
 10. `docs/01-plan/{feature}.md`에 저장
 11. **피처 레지스트리 저장** — 기획서 작성 후 반드시 `.vais/features/{feature}.json`에 기능 목록을 구조화 저장:

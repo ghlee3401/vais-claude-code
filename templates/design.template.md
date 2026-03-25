@@ -2,6 +2,46 @@
 
 > 참조 문서: `docs/01-plan/{feature}.md`
 
+## Context Anchor
+
+(Plan 문서에서 복사)
+
+| Key | Value |
+|-----|-------|
+| **WHY** | |
+| **WHO** | |
+| **RISK** | |
+| **SUCCESS** | |
+| **SCOPE** | |
+
+---
+
+## Architecture Options
+
+### Option A — Minimal Changes
+{최소 변경. 기존 코드 최대 재사용. 빠르지만 결합도 높을 수 있음}
+
+### Option B — Clean Architecture
+{관심사 분리 최적. 유지보수 최고. 파일 많고 리팩토링 필요}
+
+### Option C — Pragmatic Balance
+{적절한 경계. 과도한 설계 없이 좋은 구조. 기본 추천}
+
+### Comparison
+
+| 기준 | A: Minimal | B: Clean | C: Pragmatic |
+|------|:----------:|:--------:|:------------:|
+| 복잡도 | 낮음 | 높음 | 중간 |
+| 유지보수 | 낮음 | 높음 | 중간 |
+| 구현 속도 | 빠름 | 느림 | 중간 |
+| 리스크 | 중간 | 낮음 | 낮음 |
+
+### Selected: Option {X}
+
+**Rationale**: {선택 근거}
+
+---
+
 ## Part 1: IA (Information Architecture)
 
 ### 1.1 사이트맵
@@ -218,10 +258,28 @@ graph TD
 
 ---
 
+## Session Guide
+
+### Module Map
+
+| Module | Files | Description |
+|--------|-------|-------------|
+| module-1 | {파일 목록} | {설명} |
+| module-2 | {파일 목록} | {설명} |
+
+### Recommended Session Plan
+
+| Session | Modules | Description |
+|---------|---------|-------------|
+| Session 1 | module-1 | {핵심 구조} |
+| Session 2 | module-2 | {세부 구현} |
+
+---
+
 ## 변경 이력
 
 | version | date | change |
 |---------|------|--------|
 | v1.0 | | 초기 작성 |
 
-<!-- template version: v0.16.1 -->
+<!-- template version: v0.18.0 -->

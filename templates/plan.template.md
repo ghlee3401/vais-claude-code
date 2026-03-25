@@ -1,5 +1,28 @@
 # {feature} - 기획서
 
+## Executive Summary
+
+| Perspective | Content |
+|-------------|---------|
+| **Problem** | {해결하려는 문제 1~2문장} |
+| **Solution** | {제안하는 해결책 1~2문장} |
+| **Function/UX Effect** | {사용자가 체감하는 변화} |
+| **Core Value** | {비즈니스/기술적 핵심 가치} |
+
+---
+
+## Context Anchor
+
+| Key | Value |
+|-----|-------|
+| **WHY** | {왜 이 기능이 필요한가} |
+| **WHO** | {누구를 위한 것인가} |
+| **RISK** | {주요 위험 요소} |
+| **SUCCESS** | {성공 기준 요약} |
+| **SCOPE** | {범위 한 줄 요약} |
+
+---
+
 ## 0. 아이디어 개요
 
 ### 아이디어 한 줄 설명
@@ -131,6 +154,33 @@
 | 확장성 | | |
 | 접근성 | | |
 
+## Success Criteria
+
+| ID | Criterion | Verification |
+|----|-----------|--------------|
+| SC-01 | {측정 가능한 성공 기준} | {검증 방법} |
+| SC-02 | {측정 가능한 성공 기준} | {검증 방법} |
+
+> QA 단계에서 각 기준을 ✅ Met / ⚠️ Partial / ❌ Not Met 으로 평가합니다.
+
+## Impact Analysis
+
+### Changed Resources
+
+| Resource | Type | Change Description |
+|----------|------|-------------------|
+| {파일/컴포넌트/API} | {create/modify/delete} | {변경 내용} |
+
+### Current Consumers
+
+| Resource | Operation | Code Path | Impact |
+|----------|-----------|-----------|--------|
+| {변경 대상} | {CRUD} | {사용 위치} | {영향} |
+
+### Verification
+- [ ] 모든 consumer 확인 완료
+- [ ] breaking change 없음 확인
+
 ## 7. 기술 스택
 
 <!-- Quick auto: 인테이크에서 선택한 기술 스택을 여기에 자동 기입합니다 -->
@@ -207,4 +257,4 @@ erDiagram
 |---------|------|--------|
 | v1.0 | | 초기 작성 |
 
-<!-- template version: v0.16.1 -->
+<!-- template version: v0.18.0 -->

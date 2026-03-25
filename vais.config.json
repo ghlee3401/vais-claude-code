@@ -1,20 +1,22 @@
 {
-  "version": "0.17.0",
+  "version": "0.18.0",
   "workflow": {
-    "phases": ["plan", "design", "infra", "fe", "be", "qa"],
+    "phases": ["plan", "design", "infra", "fe", "be", "qa", "report"],
     "phaseNames": {
       "plan": "기획",
       "design": "설계",
       "infra": "인프라",
       "fe": "프론트엔드",
       "be": "백엔드",
-      "qa": "QA"
+      "qa": "QA",
+      "report": "보고서"
     },
     "docPaths": {
       "plan": "docs/01-plan/{feature}.md",
       "design": "docs/02-design/{feature}.md",
       "infra": "docs/03-infra/{feature}.md",
-      "qa": "docs/04-qa/{feature}.md"
+      "qa": "docs/04-qa/{feature}.md",
+      "report": "docs/05-report/{feature}.md"
     }
   },
   "parallelGroups": {

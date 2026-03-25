@@ -24,6 +24,21 @@
 7. **Gap 방향 판단**: Gap 항목을 유형별로 그룹화(코드 미구현 / 설계-코드 불일치 / 문서 누락)하여 **그룹 단위로** AskUserQuestion 호출. 그룹별로 "구현을 설계에 맞출지 / 설계를 구현에 맞출지" 선택 요청
 8. **자동 반복**: 일치율 `gapAnalysis.matchThreshold`(기본 90%) 미만 → 미구현 항목 자동 구현 시도 (최대 `gapAnalysis.maxIterations`회, 기본 5회)
 
+#### Step 2.5: Architecture & Convention Compliance
+
+1. Plan의 코딩 규칙 vs 실제 코드 비교 (네이밍, 폴더 구조, import 순서)
+2. Design의 Architecture Option 선택 vs 실제 구조 비교 (계층, 의존성 방향)
+3. 결과를 qa.template.md의 Architecture Compliance / Convention Compliance 섹션에 기록
+4. Compliance Score 산출
+
+#### Step 2.6: Success Criteria Evaluation
+
+1. Plan의 **Success Criteria** 각 항목 읽기
+2. 구현 코드에서 증거 수집 (파일:라인 또는 테스트 결과)
+3. 각 항목을 **✅ Met / ⚠️ Partial / ❌ Not Met** 평가
+4. Success Rate 산출: `(Met 수 / 전체 수) × 100%`
+5. ❌ Not Met 항목은 자동으로 Critical 이슈로 분류
+
 #### Step 3: 보안 스캔
 
 1. OWASP Top 10 체크리스트 기반 검사
@@ -71,6 +86,14 @@
 ```
 
 Manager는 `return_to` 값으로 해당 에이전트에게 이슈를 라우팅합니다.
+
+#### Checkpoint 5 — 리뷰 결정
+
+Critical/Important 이슈를 심각도별로 정리하여 AskUserQuestion:
+- **"지금 모두 수정"** — 전체 이슈 수정 후 재검증
+- **"Critical만 수정"** — Critical 이슈만 수정
+- **"그대로 진행"** — 현 상태 수용, Report로 이동
+사용자 선택에 따라 분기.
 
 #### 최종 판정
 

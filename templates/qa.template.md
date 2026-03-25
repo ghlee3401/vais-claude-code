@@ -97,6 +97,46 @@
 | 접근성 | ✅/⚠️/❌ | |
 | 테스트 커버리지 | ✅/⚠️/❌ | |
 
+## Architecture Compliance
+
+### Layer Dependency
+
+| Layer | Expected Dependencies | Actual | Status |
+|-------|----------------------|--------|--------|
+| {계층명} | {기대 의존성} | {실제} | ✅/❌ |
+
+### Dependency Violations
+
+| File | Layer | Violation | Recommendation |
+|------|-------|-----------|----------------|
+
+## Convention Compliance
+
+### Naming Convention
+
+| Category | Convention | Checked | Compliance % | Violations |
+|----------|-----------|---------|-------------|------------|
+| 파일명 | {규칙} | {n}개 | {m}% | |
+| 변수명 | {규칙} | {n}개 | {m}% | |
+| 컴포넌트명 | {규칙} | {n}개 | {m}% | |
+
+### Folder Structure
+
+| Expected Path | Exists | Correct | Notes |
+|---------------|--------|---------|-------|
+
+### Import Order
+
+- [ ] 외부 라이브러리 → 내부 모듈 → 상대 경로 → 타입 → 스타일
+
+## Success Criteria Evaluation
+
+| ID | Criterion | Status | Evidence |
+|----|-----------|--------|----------|
+| SC-01 | {Plan에서 정의한 기준} | ✅ Met / ⚠️ Partial / ❌ Not Met | {근거: 파일:라인 또는 테스트 결과} |
+
+**Success Rate**: {n}/{m} criteria met ({p}%)
+
 ## 9. 성능
 
 | 항목 | 상태 | 비고 |
@@ -137,4 +177,4 @@
 |---------|------|--------|
 | v1.0 | {date} | 초기 작성 |
 
-<!-- template version: v0.16.1 -->
+<!-- template version: v0.18.0 -->

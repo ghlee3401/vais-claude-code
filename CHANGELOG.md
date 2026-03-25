@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.18.0] - 2026-03-25
+
+### Added
+
+- **PDCA 문서 퀄리티 대폭 개선** — bkit 수준의 문서 구조 달성
+  - Plan 템플릿: Executive Summary, Context Anchor, Success Criteria, Impact Analysis 추가
+  - Design 템플릿: Architecture Options (3안 비교), Session Guide (Module Map) 추가
+  - QA 템플릿: Architecture/Convention Compliance, Success Criteria Evaluation 추가
+  - Report 템플릿/phase 신규 생성 — Value Delivered, Keep/Problem/Try 회고
+- **Phase 간 컨텍스트 연결 메커니즘**
+  - Plan: Checkpoint 1 (요구사항 확인) + Checkpoint 2 (명확화 질문)
+  - Design: Upstream Context Loading + Checkpoint 3 (설계안 선택) + Session Guide 생성
+  - FE/BE: Upstream Context Loading + Code Comment Convention (`// Design Ref:`, `// Plan SC:`)
+  - QA: Checkpoint 5 (리뷰 결정) + Architecture/Convention 검증 + Success Criteria 평가
+- **output-style 미적용 수정** — plugin.json `outputStyles` 필드 복원, SessionStart hook 하단 리포트 주입
+- **report 액션 등록** — `/vais report {feature}` 워크플로우 지원
+
+### Changed
+
+- 모든 템플릿 버전을 v0.18.0으로 통일
+- `vais.config.json` phases 배열에 `"report"` 추가, phaseNames에 `"보고서"` 추가
+
+---
+
+## [0.17.0] - 2026-03-25
+
+### Changed
+
+- 버전 범프 (0.16.1 → 0.17.0)
+
+---
+
 ## [0.16.1] - 2026-03-24
 
 ### Fixed
