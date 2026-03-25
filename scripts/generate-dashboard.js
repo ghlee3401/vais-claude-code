@@ -64,28 +64,28 @@ function loadFeatureRegistry(feature) {
 /** 간단한 Markdown → HTML 변환 (외부 라이브러리 불필요) */
 function md2html(md) {
   if (!md) return '';
-  let html = escapeHtml(md);
+  let html = md;
 
-  // code blocks (``` ... ```)
+  // code blocks (``` ... ```) — 코드 내용은 이스케이프
   html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) =>
-    `<pre class="code-block"><code class="language-${lang || 'text'}">${code.trim()}</code></pre>`
+    `<pre class="code-block"><code class="language-${lang || 'text'}">${escapeHtml(code.trim())}</code></pre>`
   );
 
-  // inline code
-  html = html.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
+  // inline code — 코드 내용은 이스케이프
+  html = html.replace(/`([^`]+)`/g, (_, code) => `<code class="inline-code">${escapeHtml(code)}</code>`);
 
-  // headers
-  html = html.replace(/^#{4}\s+(.+)$/gm, '<h4>$1</h4>');
-  html = html.replace(/^#{3}\s+(.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^#{2}\s+(.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/^#{1}\s+(.+)$/gm, '<h1>$1</h1>');
+  // headers — 텍스트 이스케이프
+  html = html.replace(/^#{4}\s+(.+)$/gm, (_, t) => `<h4>${escapeHtml(t)}</h4>`);
+  html = html.replace(/^#{3}\s+(.+)$/gm, (_, t) => `<h3>${escapeHtml(t)}</h3>`);
+  html = html.replace(/^#{2}\s+(.+)$/gm, (_, t) => `<h2>${escapeHtml(t)}</h2>`);
+  html = html.replace(/^#{1}\s+(.+)$/gm, (_, t) => `<h1>${escapeHtml(t)}</h1>`);
 
   // horizontal rule
   html = html.replace(/^---+$/gm, '<hr>');
 
   // bold & italic
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  html = html.replace(/\*\*(.+?)\*\*/g, (_, t) => `<strong>${escapeHtml(t)}</strong>`);
+  html = html.replace(/\*(.+?)\*/g, (_, t) => `<em>${escapeHtml(t)}</em>`);
 
   // tables
   html = html.replace(/((?:\|.+\|\n)+)/g, (tableBlock) => {
@@ -95,13 +95,11 @@ function md2html(md) {
     let out = '<div class="table-wrap"><table>';
     rows.forEach((row, i) => {
       // skip separator row (|---|---|)
-      if (/^\|[\s\-:]+\|$/.test(row.replace(/\|/g, m => m))) {
-        if (/^[\s|:-]+$/.test(row)) return;
-      }
+      if (/^[\s|:\-]+$/.test(row)) return;
       const cells = row.split('|').filter((_, idx, arr) => idx > 0 && idx < arr.length - 1);
       const tag = i === 0 ? 'th' : 'td';
       const trClass = i === 0 ? ' class="header-row"' : '';
-      out += `<tr${trClass}>${cells.map(c => `<${tag}>${c.trim()}</${tag}>`).join('')}</tr>`;
+      out += `<tr${trClass}>${cells.map(c => `<${tag}>${escapeHtml(c.trim())}</${tag}>`).join('')}</tr>`;
     });
     out += '</table></div>';
     return out;
@@ -177,7 +175,7 @@ function generateHtml(data) {
   const { status, memory, featureData } = data;
 
   const featuresNav = featureData.map((f, i) =>
-    `<button class="nav-feature ${i === 0 ? 'active' : ''}" onclick="showFeature('${f.name}')">${f.name}</button>`
+    `<button class="nav-feature ${i === 0 ? 'active' : ''}" data-feature="${escapeHtml(f.name)}" onclick="showFeature(this.dataset.feature)">${escapeHtml(f.name)}</button>`
   ).join('\n');
 
   const featuresContent = featureData.map((f, i) => {
@@ -185,12 +183,12 @@ function generateHtml(data) {
     const phasesWithDocs = PHASE_META.filter(p => f.docs[p.key]);
 
     const tabs = phasesWithDocs.map((p, j) =>
-      `<button class="phase-tab ${j === 0 ? 'active' : ''}" data-feature="${f.name}" data-phase="${p.key}" onclick="showPhase('${f.name}','${p.key}')" style="border-color:${p.color}">${p.icon} ${p.name}</button>`
+      `<button class="phase-tab ${j === 0 ? 'active' : ''}" data-feature="${escapeHtml(f.name)}" data-phase="${p.key}" onclick="showPhase(this.dataset.feature, this.dataset.phase)" style="border-color:${p.color}">${p.icon} ${p.name}</button>`
     ).join('\n');
 
     // Phase contents
     const phaseContents = phasesWithDocs.map((p, j) =>
-      `<div class="phase-content ${j === 0 ? 'active' : ''}" id="content-${f.name}-${p.key}">${md2html(f.docs[p.key])}</div>`
+      `<div class="phase-content ${j === 0 ? 'active' : ''}" id="content-${escapeHtml(f.name)}-${p.key}">${md2html(f.docs[p.key])}</div>`
     ).join('\n');
 
     // Feature registry summary
@@ -214,7 +212,7 @@ function generateHtml(data) {
           </div>
           <div class="table-wrap"><table>
             <tr class="header-row"><th>ID</th><th>기능</th><th>우선순위</th><th>상태</th></tr>
-            ${f.registry.features.map(r => `<tr><td>${r.id || ''}</td><td>${escapeHtml(r.name || '')}</td><td>${r.priority || ''}</td><td>${statusBadge(r.status)}</td></tr>`).join('')}
+            ${f.registry.features.map(r => `<tr><td>${escapeHtml(r.id || '')}</td><td>${escapeHtml(r.name || '')}</td><td>${escapeHtml(r.priority || '')}</td><td>${statusBadge(r.status)}</td></tr>`).join('')}
           </table></div>
         </div>`;
     }
@@ -483,7 +481,7 @@ body {
 </main>
 
 <script>
-mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'strict' });
 
 function showFeature(name) {
   document.querySelectorAll('.feature-panel').forEach(p => p.classList.remove('active'));

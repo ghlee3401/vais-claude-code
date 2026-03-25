@@ -9,6 +9,7 @@ const { ensureVaisDirs, loadConfig } = require('../lib/paths');
 const { getStatus, getActiveFeature, getProgressSummary } = require('../lib/status');
 const { sendWebhook } = require('../lib/webhook');
 
+function main() {
 debugLog('SessionStart', 'Hook executed', { cwd: process.cwd() });
 
 ensureVaisDirs();
@@ -55,3 +56,10 @@ sendWebhook('session_start', {
 
 console.log(JSON.stringify(response));
 process.exit(0);
+}
+
+module.exports = { main };
+
+if (require.main === module) {
+  main();
+}

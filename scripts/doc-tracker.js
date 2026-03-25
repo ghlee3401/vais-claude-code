@@ -11,6 +11,7 @@ const { addEntry } = require('../lib/memory');
 const { loadConfig } = require('../lib/paths');
 const { sendWebhook } = require('../lib/webhook');
 
+function main() {
 const input = readStdin();
 const { filePath } = parseHookInput(input);
 
@@ -63,3 +64,10 @@ if (activeFeature) {
 
 outputAllow();
 process.exit(0);
+}
+
+module.exports = { main };
+
+if (require.main === module) {
+  main();
+}

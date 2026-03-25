@@ -106,9 +106,7 @@ class SEOResult {
 
 // ─── 헬퍼 함수 ─────────────────────────────────────────────────────
 
-function fileExists(p) {
-  return fs.existsSync(p);
-}
+const { fileExists } = require('../lib/fs-utils');
 
 function extractTag(html, tagName) {
   const re = new RegExp(`<${tagName}[^>]*>([^<]*)</${tagName}>`, 'i');

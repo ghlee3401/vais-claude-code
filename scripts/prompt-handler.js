@@ -8,16 +8,6 @@ const { debugLog } = require('../lib/debug');
 const { getActiveFeature, getProgressSummary } = require('../lib/status');
 const { loadConfig } = require('../lib/paths');
 
-const input = readStdin();
-const userPrompt = input.prompt || input.user_message || input.message || '';
-
-if (!userPrompt || userPrompt.length < 3) {
-  outputEmpty();
-  process.exit(0);
-}
-
-const promptLower = userPrompt.toLowerCase();
-
 // 워크플로우 관련 키워드 감지
 const INTENT_PATTERNS = [
   { keywords: ['init', '초기화', '적용', '기존 프로젝트', '문서 생성', '역분석', '코드 분석'], phase: 'init' },
@@ -29,6 +19,17 @@ const INTENT_PATTERNS = [
   { keywords: ['qa', 'gap 분석', 'gap분석', '리뷰', 'review', '검토', '코드 리뷰', '빌드 검증', '빌드검증', '보안 점검', '품질'], phase: 'qa' },
   { keywords: ['/vais fix', 'vais fix'], phase: 'manager' },
 ];
+
+function main() {
+const input = readStdin();
+const userPrompt = input.prompt || input.user_message || input.message || '';
+
+if (!userPrompt || userPrompt.length < 3) {
+  outputEmpty();
+  process.exit(0);
+}
+
+const promptLower = userPrompt.toLowerCase();
 
 const activeFeature = getActiveFeature();
 
@@ -171,3 +172,10 @@ if (detectedPhase && activeFeature) {
 }
 
 process.exit(0);
+}
+
+module.exports = { main, INTENT_PATTERNS };
+
+if (require.main === module) {
+  main();
+}

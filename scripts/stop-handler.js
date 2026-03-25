@@ -9,6 +9,18 @@ const { getActiveFeature, getProgressSummary } = require('../lib/status');
 const { loadConfig } = require('../lib/paths');
 const { sendWebhook } = require('../lib/webhook');
 
+/**
+ * 텍스트 프로그레스바 생성
+ * 예: [████████░░] 8/10
+ */
+function buildProgressBar(done, total, width = 10) {
+  if (total === 0) return '';
+  const filled = Math.round((done / total) * width);
+  const empty = width - filled;
+  return '[' + '█'.repeat(filled) + '░'.repeat(empty) + ']';
+}
+
+function main() {
 readStdin(); // stdin 소비 (내용 미사용)
 
 const config = loadConfig();
@@ -96,14 +108,10 @@ sendWebhook('stop', {
 
 outputAllow(output);
 process.exit(0);
+}
 
-/**
- * 텍스트 프로그레스바 생성
- * 예: [████████░░] 8/10
- */
-function buildProgressBar(done, total, width = 10) {
-  if (total === 0) return '';
-  const filled = Math.round((done / total) * width);
-  const empty = width - filled;
-  return '[' + '█'.repeat(filled) + '░'.repeat(empty) + ']';
+module.exports = { main, buildProgressBar };
+
+if (require.main === module) {
+  main();
 }

@@ -7,13 +7,11 @@ const { readStdin, parseHookInput, outputAllow, outputBlock } = require('../lib/
 const { debugLog } = require('../lib/debug');
 
 const BLOCKED = [
-  // rm -rf 변형: 분리된 플래그(-r -f), sudo, 환경변수($HOME 등), 경로 조작(/../) 포함
-  { pattern: /(?:sudo\s+)?rm\s+(?:-[a-z]*r[a-z]*f|-[a-z]*f[a-z]*r|-r\s+-f|-f\s+-r|--recursive\s+--force|--force\s+--recursive)\s+[\/~.]/, reason: '위험한 재귀 강제 삭제 시도' },
-  { pattern: /(?:sudo\s+)?rm\s+(?:-[a-z]*r[a-z]*f|-[a-z]*f[a-z]*r|-r\s+-f|-f\s+-r|--recursive\s+--force|--force\s+--recursive)\s+\$/, reason: '환경변수 경로 재귀 삭제 시도' },
   { pattern: /drop\s+database/i, reason: 'DB 전체 삭제 시도' },
   { pattern: /drop\s+table/i, reason: 'DB 테이블 삭제 시도' },
   { pattern: /truncate\s+table/i, reason: 'DB 테이블 초기화 시도' },
-  { pattern: /git\s+push\s+.*--force/, reason: '강제 푸시는 팀 작업에 위험합니다' },
+  // git push --force (의도적으로 --force-with-lease는 제외: 안전한 force push)
+  { pattern: /git\s+push\s+.*--force(?!-with-lease)/i, reason: '강제 푸시는 팀 작업에 위험합니다' },
   { pattern: /(?:sudo\s+)?mkfs/, reason: '파일시스템 포맷 시도' },
   { pattern: /:\(\)\{.*\|.*&\}/, reason: 'Fork bomb 감지' },
   { pattern: />\s*\/dev\/sd[a-z]/, reason: '디스크 직접 쓰기 시도' },

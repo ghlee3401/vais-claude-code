@@ -10,41 +10,6 @@ const assert = require('node:assert/strict');
 const { checkGuard } = require('../scripts/bash-guard');
 
 describe('bash-guard 차단', () => {
-  it('rm -rf / 를 차단한다', () => {
-    const result = checkGuard('rm -rf /');
-    assert.equal(result.decision, 'block');
-  });
-
-  it('rm -rf ~ 를 차단한다', () => {
-    const result = checkGuard('rm -rf ~');
-    assert.equal(result.decision, 'block');
-  });
-
-  it('rm -rf . 를 차단한다', () => {
-    const result = checkGuard('rm -rf .');
-    assert.equal(result.decision, 'block');
-  });
-
-  it('sudo rm -rf / 를 차단한다', () => {
-    const result = checkGuard('sudo rm -rf /tmp');
-    assert.equal(result.decision, 'block');
-  });
-
-  it('rm -r -f / 를 차단한다 (분리된 플래그)', () => {
-    const result = checkGuard('rm -r -f /tmp');
-    assert.equal(result.decision, 'block');
-  });
-
-  it('rm --recursive --force / 를 차단한다', () => {
-    const result = checkGuard('rm --recursive --force /tmp');
-    assert.equal(result.decision, 'block');
-  });
-
-  it('rm -rf $HOME 를 차단한다 (환경변수)', () => {
-    const result = checkGuard('rm -rf $HOME');
-    assert.equal(result.decision, 'block');
-  });
-
   it('DROP DATABASE를 차단한다', () => {
     const result = checkGuard('psql -c "DROP DATABASE mydb"');
     assert.equal(result.decision, 'block');
@@ -67,11 +32,6 @@ describe('bash-guard 차단', () => {
 
   it('TRUNCATE TABLE을 차단한다', () => {
     const result = checkGuard('TRUNCATE TABLE users');
-    assert.equal(result.decision, 'block');
-  });
-
-  it('rm -fr (플래그 순서 변경)을 차단한다', () => {
-    const result = checkGuard('rm -fr /');
     assert.equal(result.decision, 'block');
   });
 

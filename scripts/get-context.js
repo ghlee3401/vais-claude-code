@@ -22,6 +22,7 @@ function loadModules() {
   }
 }
 
+function main() {
 try {
   const { pathsMod, statusMod } = loadModules();
   const config = pathsMod.loadConfig();
@@ -84,4 +85,11 @@ try {
   console.log(lines.join('\n'));
 } catch (e) {
   console.log('상태 로드 실패 — 새 프로젝트로 시작합니다.');
+}
+}
+
+module.exports = { main, loadModules };
+
+if (require.main === module) {
+  main();
 }

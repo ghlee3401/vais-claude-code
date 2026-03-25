@@ -163,9 +163,7 @@ class ValidationResult {
 
 // ─── 유틸리티 ─────────────────────────────────────────────────
 
-function fileExists(p) {
-  try { fs.accessSync(p); return true; } catch { return false; }
-}
+const { fileExists } = require('../lib/fs-utils');
 
 function readJSON(p) {
   try {
