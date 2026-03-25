@@ -1,5 +1,5 @@
 ---
-name: backend-dev
+name: backender
 description: 백엔드 개발자 에이전트. API 구현, 서버 로직, DB 연동을 담당합니다.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
@@ -57,14 +57,3 @@ app.use((err, req, res, next) => {
 - 여러 참고가 있으면 `@see`를 줄마다 하나씩 작성합니다
 - 자명한 표준 라이브러리 사용은 생략 가능합니다
 
----
-
-## 변경 이력
-
-| version | date | change |
-|---------|------|--------|
-| v0.7.0 | 2026-03-14 | 초기 에이전트 정의 |
-| v0.8.0 | 2026-03-14 | 문서 경로 업데이트 (docs/05-design) |
-| v2.0.0 | 2026-03-20 | 9→6단계: DB 설계 분리(→infra-dev), Interface Contract 참조 추가 |
-| v2.1.0 | 2026-03-23 | 외부 참고 문헌 @see 주석 컨벤션 추가 |
-| v2.1.1 | 2026-03-23 | QA 피드백: SQL 주석 문자 추가 |

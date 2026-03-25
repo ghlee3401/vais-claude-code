@@ -1,5 +1,5 @@
 {
-  "version": "0.18.1",
+  "version": "0.19.0",
   "workflow": {
     "phases": ["plan", "design", "infra", "fe", "be", "qa", "report"],
     "phaseNames": {
@@ -52,16 +52,16 @@
       "description": "VAIS 6단계 개발 워크플로우 팀",
       "orchestrator": "manager",
       "roles": {
-        "manager": { "model": "opus", "phases": ["*"], "delegates_to": ["designer", "infra-dev", "frontend-dev", "backend-dev", "qa"] },
+        "manager": { "model": "opus", "phases": ["*"], "delegates_to": ["designer", "builder", "frontender", "backender", "reviewer"] },
         "designer": { "model": "sonnet", "phases": ["design"] },
-        "infra-dev": { "model": "sonnet", "phases": ["infra"] },
-        "frontend-dev": { "model": "sonnet", "phases": ["fe"] },
-        "backend-dev": { "model": "sonnet", "phases": ["be"] },
-        "qa": { "model": "sonnet", "phases": ["qa"] }
+        "builder": { "model": "sonnet", "phases": ["infra"] },
+        "frontender": { "model": "sonnet", "phases": ["fe"] },
+        "backender": { "model": "sonnet", "phases": ["be"] },
+        "reviewer": { "model": "sonnet", "phases": ["qa"] }
       },
       "routing": {
         "parallel": {
-          "implementation": ["frontend-dev", "backend-dev"]
+          "implementation": ["frontender", "backender"]
         }
       }
     }

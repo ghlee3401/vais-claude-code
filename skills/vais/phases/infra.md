@@ -22,7 +22,7 @@
 9. **프로젝트 설정 확인** — package.json, tsconfig 등 필요한 설정 추가/확인
 10. `docs/03-infra/{feature}.md`에 인프라 문서 저장 (`templates/infra.template.md` 구조)
 
-**에이전트**: infra-dev
+**에이전트**: builder
 
 **산출물:**
 - `docs/03-infra/{feature}.md` — 인프라 설계 문서 (ERD, 스키마, 환경 설정)

@@ -30,7 +30,7 @@ Manager
 ```
 
 **병렬 구간:**
-- **구현**: frontend-dev + backend-dev — Agent 병렬 호출
+- **구현**: frontender + backender — Agent 병렬 호출
 
 **게이트 체크포인트** 도달 시 (핑퐁 루프):
 - 바이너리 체크리스트 검증 후 AskUserQuestion으로 중간 결과를 보여주고 확인
@@ -56,9 +56,9 @@ Manager
 3. 직접 실행 및 에이전트 위임:
    - Plan: 직접 실행
    - Design: designer 에이전트에 위임
-   - Infra: infra-dev 에이전트에 위임
-   - FE+BE: frontend-dev + backend-dev 병렬 위임
-   - QA: qa 에이전트에 위임
+   - Infra: builder 에이전트에 위임
+   - FE+BE: frontender + backender 병렬 위임
+   - QA: reviewer 에이전트에 위임
 4. 게이트: plan, design(IC 생성 포함), infra, fe
 5. 완료 후 결과를 memory에 기록:
    - 주요 의사결정 (decision)

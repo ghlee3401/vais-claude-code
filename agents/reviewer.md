@@ -1,5 +1,5 @@
 ---
-name: qa
+name: reviewer
 description: QA 에이전트. 빌드 검증, Gap 분석, 보안 점검, 코드 품질 리뷰, QA 시나리오 검증을 통합 수행합니다.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite

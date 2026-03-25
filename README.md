@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.18.1** · Claude Code Plugin
+**v0.19.0** · Claude Code Plugin
 
 > 한 줄이면 기획부터 QA까지. AI가 6단계 개발 워크플로우를 자동으로 진행합니다.
 
@@ -247,11 +247,11 @@ QA 통과 후 전체 프로젝트를 회고합니다.
                     └──────┬──────────────┘
            ┌───────────────┼───────────────┐
       ┌────▼────┐    ┌────▼────┐    ┌─────▼─────┐
-      │ Designer │    │Infra-dev│    │    QA     │
+      │ Designer │    │ Builder │    │ Reviewer  │
       │ 설계     │    │ 인프라   │    │ 품질 검증  │
       └─────────┘    └─────────┘    └───────────┘
                     ┌────▼────────────▼────┐
-                    │  FE-dev  +  BE-dev   │
+                    │ Frontender+Backender │
                     │   (병렬 실행)         │
                     └─────────────────────┘
 ```
@@ -260,10 +260,10 @@ QA 통과 후 전체 프로젝트를 회고합니다.
 |---------|------|------|
 | manager | opus | Plan 실행, Gate 판정, 오케스트레이션 |
 | designer | sonnet | IA + 와이어프레임 + UI |
-| infra-dev | sonnet | DB + 환경 + 프로젝트 설정 |
-| frontend-dev | sonnet | 프론트엔드 구현 |
-| backend-dev | sonnet | 백엔드 API + 데이터 액세스 |
-| qa | sonnet | Gap 분석 + 코드 리뷰 + 보안 |
+| builder | sonnet | DB + 환경 + 프로젝트 설정 |
+| frontender | sonnet | 프론트엔드 구현 |
+| backender | sonnet | 백엔드 API + 데이터 액세스 |
+| reviewer | sonnet | Gap 분석 + 코드 리뷰 + 보안 |
 
 > **참고**: 단일 실행(`/vais plan`)이나 순차 체이닝에서는 에이전트 없이 메인 Claude가 직접 처리합니다. 에이전트는 병렬 실행(`fe+be`)이나 자동 모드(`auto`)에서만 사용됩니다.
 

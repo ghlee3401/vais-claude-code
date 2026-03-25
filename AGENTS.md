@@ -17,7 +17,7 @@
 
 ### 병렬 실행 구간
 
-- **구현**: frontend-dev + backend-dev 병렬
+- **구현**: frontender + backender 병렬
 
 ### Gate 체크포인트 (4개)
 
@@ -50,10 +50,10 @@ Plan → [Gate 1] → Design → [Gate 2] → Infra → [Gate 3] → FE+BE → [
 |---------|------|------|
 | manager | Plan 실행 + 전체 오케스트레이션 + Gate 판정 | opus |
 | designer | IA + 와이어프레임 + UI 설계 | sonnet |
-| infra-dev | DB 스키마 + 환경 + 프로젝트 설정 | sonnet |
-| frontend-dev | 프론트엔드 구현 | sonnet |
-| backend-dev | 백엔드 API 구현 | sonnet |
-| qa | Gap 분석 + 코드 리뷰 + QA 검증 | sonnet |
+| builder | DB 스키마 + 환경 + 프로젝트 설정 | sonnet |
+| frontender | 프론트엔드 구현 | sonnet |
+| backender | 백엔드 API 구현 | sonnet |
+| reviewer | Gap 분석 + 코드 리뷰 + QA 검증 | sonnet |
 
 ## 문서 위치
 
@@ -82,20 +82,3 @@ kebab-case 영문 소문자를 권장합니다. 아래는 서비스에서 자주
 
 프로젝트별로 다르므로 `docs/01-plan/` 기획서의 기술 스택 섹션을 참조합니다.
 
----
-
-## 변경 이력
-
-| version | date | change |
-|---------|------|--------|
-| v0.7.0 | 2026-03-14 | 초기 에이전트 지침 생성 |
-| v0.8.0 | 2026-03-14 | 9단계 워크플로우 반영, frontend/backend 병렬 복원 |
-| v0.8.1 | 2026-03-14 | 기능정의서·정책정의서·화면정의서 통합 반영 |
-| v0.8.2 | 2026-03-14 | Stop Handler 항상 표시 |
-| v0.8.3 | 2026-03-14 | 피처 레지스트리 자동 추적 |
-| v0.8.4 | 2026-03-14 | 단계명 간소화: frontend→fe, backend→be |
-| v0.9.0 | 2026-03-14 | wireframe 통합, fix 체이닝 |
-| v0.10.0 | 2026-03-15 | Manager 에이전트, Memory 시스템 도입 |
-| v0.11.0 | 2026-03-16 | 코드 리뷰 반영: bash-guard 강화, 에러 로깅 |
-| v0.12.0 | 2026-03-17 | UI/UX Pro Max 번들 |
-| v0.15.0 | 2026-03-20 | 9→6단계 리스트럭처링: research+plan 통합, ia+wireframe+design 통합, check+review→qa, manager+tech-lead 통합, infra 단계 추가, 4-Gate 시스템, Interface Contract, QA 리턴 경로 |

@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.19.0] - 2026-03-25
+
+### Changed
+
+- **에이전트 리네이밍** — 역할 기반 `-er` 패턴으로 통일
+  - `infra-dev` → `builder`
+  - `frontend-dev` → `frontender`
+  - `backend-dev` → `backender`
+  - `qa` → `reviewer`
+- **agent .md 변경이력 제거** — 토큰 절약 (AGENTS.md 포함)
+- 전체 참조 일괄 업데이트: vais.config.json, SKILL.md, AGENTS.md, README, phase 파일, output-styles
+
+---
+
 ## [0.18.1] - 2026-03-25
 
 ### Added

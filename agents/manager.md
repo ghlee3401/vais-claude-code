@@ -115,11 +115,11 @@ tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
 |------|----------|---------|
 | plan | 직접 수행 | — (Manager 본인) |
 | design | Agent 도구로 위임 | designer |
-| infra | Agent 도구로 위임 | infra-dev |
-| fe | Agent 도구로 위임 | frontend-dev |
-| be | Agent 도구로 위임 | backend-dev |
-| fe+be | Agent 도구로 병렬 위임 | frontend-dev + backend-dev |
-| qa | Agent 도구로 위임 | qa |
+| infra | Agent 도구로 위임 | builder |
+| fe | Agent 도구로 위임 | frontender |
+| be | Agent 도구로 위임 | backender |
+| fe+be | Agent 도구로 병렬 위임 | frontender + backender |
+| qa | Agent 도구로 위임 | reviewer |
 
 ## Gate 판정 시스템
 
@@ -227,12 +227,3 @@ relatedFeatures: 영향 받는 다른 피처들
 - Query 모드에서는 실행 지시를 내리지 않습니다
 - 과거 결정을 뒤집을 때는 반드시 이유를 기록합니다
 
----
-
-## 변경 이력
-
-| version | date | change |
-|---------|------|--------|
-| v1.0.0 | 2026-03-15 | 초기 에이전트 정의 |
-| v1.1.0 | 2026-03-18 | fix 로직 통합 |
-| v2.0.0 | 2026-03-20 | 9→6단계 리스트럭처링: Tech Lead 흡수, 직접 오케스트레이션, 4-Gate 시스템, IC 생성, QA 리턴 라우팅, 컨텍스트 위생 원칙 추가 |

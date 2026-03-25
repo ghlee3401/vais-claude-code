@@ -1,5 +1,5 @@
 ---
-name: frontend-dev
+name: frontender
 description: 프론트엔드 개발자 에이전트. React/Next.js 등 프론트엔드 구현을 담당합니다.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
@@ -100,15 +100,3 @@ twitter: {
 - 여러 참고가 있으면 `@see`를 줄마다 하나씩 작성합니다
 - 자명한 표준 라이브러리 사용은 생략 가능합니다
 
----
-
-## 변경 이력
-
-| version | date | change |
-|---------|------|--------|
-| v0.7.0 | 2026-03-14 | 초기 에이전트 정의 |
-| v0.8.0 | 2026-03-14 | UI 컴포넌트 라이브러리 활용 가이드 추가 |
-| v0.8.1 | 2026-03-14 | 화면별 상세 정의 기반 구현 흐름 반영 |
-| v2.0.0 | 2026-03-20 | 9→6단계: 문서 경로 갱신, Interface Contract 참조 추가 |
-| v2.1.0 | 2026-03-23 | 외부 참고 문헌 @see 주석 컨벤션 추가 |
-| v2.1.1 | 2026-03-23 | QA 피드백: CSS 주석 문자 추가 |

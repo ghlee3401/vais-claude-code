@@ -80,7 +80,7 @@
 
 | # | 이슈 | 심각도 | 대상 에이전트 | 카테고리 | 수정 힌트 |
 |---|------|--------|-------------|---------|----------|
-| 1 | 설명 | P0/P1/P2 | fe-dev/be-dev/infra-dev | 분류 | 구체적 수정 방향 |
+| 1 | 설명 | P0/P1/P2 | frontender/backender/builder | 분류 | 구체적 수정 방향 |
 
 **return_to**: {P0 이슈 최다 에이전트}
 ```
@@ -105,4 +105,4 @@ Critical/Important 이슈를 심각도별로 정리하여 AskUserQuestion:
 
 `docs/04-qa/{feature}.md`에 저장 (`templates/qa.template.md` 구조)
 
-**에이전트**: qa
+**에이전트**: reviewer

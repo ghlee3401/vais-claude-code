@@ -57,10 +57,10 @@ keep-coding-instructions: true
 
 ```
 ## 💻 프론트엔드 결과
-[frontend-dev 작업 결과]
+[frontender 작업 결과]
 
 ## ⚙️ 백엔드 결과
-[backend-dev 작업 결과]
+[backender 작업 결과]
 ```
 
 ## 에러 상태 표시
