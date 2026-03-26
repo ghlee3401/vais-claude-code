@@ -133,6 +133,49 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/seo-audit.js <대상경로>
 | HTTPS | 링크에서 http:// 사용 여부 | 중간 |
 | lang 속성 | `<html lang="...">` 설정 | 중간 |
 
+### L. 크롤러 접근성 (Crawlability)
+
+| 항목 | 검사 내용 | 심각도 |
+|------|---------|--------|
+| 조건부 null 반환 | 서버 컴포넌트에서 조건부 `return null`로 콘텐츠가 크롤러에 노출되지 않는 경우 | 높음 |
+| 인증 게이트 | 인증되지 않은 사용자에게 페이지 콘텐츠를 차단하여 크롤러 접근 불가 | 높음 |
+| 페이지 리다이렉트 | 과도한 리다이렉트 체인으로 크롤러 도달 지연 또는 실패 | 중간 |
+
+### M. SSR/CSR 렌더링 분석
+
+| 항목 | 검사 내용 | 심각도 |
+|------|---------|--------|
+| use client 페이지 | 페이지 최상위에 `'use client'`가 있어 SSR 미적용 | 중간 |
+| dynamic ssr:false | `dynamic(() => ..., { ssr: false })`로 서버 렌더링 비활성화 | 중간 |
+| Suspense 콘텐츠 | `<Suspense>` 폴백에 SEO 핵심 콘텐츠가 포함되지 않는 경우 | 낮음 |
+
+### N. Core Web Vitals 힌트
+
+| 항목 | 검사 내용 | 심각도 |
+|------|---------|--------|
+| next/image 미사용 | `<img>` 태그 직접 사용 시 `next/image` 권장 (LCP 최적화) | 중간 |
+| 크기 미지정 | 이미지에 `width`/`height` 속성 미지정으로 CLS 유발 | 중간 |
+| 폰트 로딩 | `next/font` 미사용 또는 `font-display` 미설정으로 FOIT/FOUT 발생 | 낮음 |
+| iframe 크기 | `<iframe>`에 고정 크기 미지정으로 레이아웃 시프트 유발 | 낮음 |
+
+### O. 국제화(i18n) SEO
+
+| 항목 | 검사 내용 | 심각도 |
+|------|---------|--------|
+| hreflang | `<link rel="alternate" hreflang="...">` 미설정 | 중간 |
+| alternates | Next.js `metadata.alternates.languages` 미설정 | 중간 |
+| locale 미들웨어 | i18n 미들웨어 미구성으로 locale 기반 라우팅 누락 | 낮음 |
+
+### 점수 시스템
+
+100점 만점에서 발견된 이슈마다 **카테고리 가중치 x 심각도 감점**을 차감합니다.
+
+- **심각도 감점**: HIGH = 5점, MEDIUM = 2점, LOW = 1점
+- **카테고리 가중치**: crawlability(2.0), robots.txt/sitemap/title/noindex/ssr(1.5), viewport/nextjs-metadata(1.2), 기타 0.3~1.0
+- **최종 점수** = max(0, round(100 - 총 감점))
+
+점수 산출 엔진: `scripts/seo-scoring.js`
+
 ---
 
 ## 프레임워크별 추가 검사

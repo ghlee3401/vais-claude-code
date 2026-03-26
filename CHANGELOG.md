@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.22.0] - 2026-03-26
+
+### Added
+
+- **vais-seo v2: Clean Architecture 리팩토링** — 단일 seo-audit.js(738줄)를 카테고리별 모듈로 분리
+  - `scripts/seo-helpers.js` — 공유 상수/헬퍼 (circular dependency 해결)
+  - `scripts/seo-scoring.js` — 카테고리별 가중치 기반 점수 엔진 (100점 만점)
+  - `scripts/auditors/html-audit.js` — A~K 기존 카테고리
+  - `scripts/auditors/nextjs-audit.js` — Next.js 메타데이터 검사
+  - `scripts/auditors/crawlability.js` — **L. 크롤러 접근성** (return null, 인증 게이트, 리다이렉트 탐지)
+  - `scripts/auditors/ssr-analysis.js` — **M. SSR/CSR 렌더링 분석** (use client, dynamic ssr:false, Suspense)
+  - `scripts/auditors/web-vitals.js` — **N. Core Web Vitals 힌트** (next/image, CLS, 폰트)
+  - `scripts/auditors/i18n-seo.js` — **O. 국제화 SEO** (hreflang, alternates, locale)
+- **SKILL.md**: 16개 카테고리(A~O) + 점수 시스템 문서화
+
 ## [0.21.0] - 2026-03-26
 
 ### Added
