@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.19.1** · Claude Code Plugin
+**v0.20.0** · Claude Code Plugin
 
 > 한 줄이면 기획부터 QA까지. AI가 6단계 개발 워크플로우를 자동으로 진행합니다.
 

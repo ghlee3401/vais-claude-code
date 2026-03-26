@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.20.0] - 2026-03-26
+
+### Added
+
+- **SessionStart Progress Bar** — 피처 진행률을 시각적 바로 표시 (`lib/ui/progress-bar.js`)
+- **SessionStart Workflow Map** — 7단계 워크플로우를 화살표 체인으로 시각화 (`lib/ui/workflow-map.js`)
+- **Output Style 자동 주입** — `vais-default.md`를 SessionStart에서 자동 주입 (SSoT)
+
+### Changed
+
+- **SessionStart hook 모듈화** — `buildReportRule()` 하드코딩 제거, thin orchestrator로 리팩토링
+- **에러 격리 강화** — Progress Bar, Workflow Map, Output Style 각각 독립 try-catch
+
+---
+
 ## [0.19.1] - 2026-03-25
 
 ### Fixed
