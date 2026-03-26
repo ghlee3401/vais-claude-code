@@ -19,8 +19,11 @@ Plan 읽기 완료 후, 3가지 설계안을 제시:
 
 #### Checkpoint 3 — 설계안 선택
 
-AskUserQuestion: "3가지 설계안 중 어떤 걸 선택하시겠습니까?"
+AskUserQuestion **(preview 포함)**: "3가지 설계안 중 어떤 걸 선택하시겠습니까?"
+- 각 Option에 **폴더 구조/파일 목록을 preview로 표시** (monospace, 10줄 이내)
+- preview 예시: 주요 폴더 트리 + 핵심 파일 + 예상 파일 수
 - 추천안에 "(Recommended)" 표시
+- 사용자가 구조를 시각적으로 비교한 뒤 선택
 - 사용자 선택 후 해당 Option 기반으로 설계 문서 작성
 
 #### Part 1: IA 설계

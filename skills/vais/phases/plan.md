@@ -7,6 +7,7 @@
 3. 핵심 기능 브레인스토밍 + **MVP 범위 결정**:
    - 중요도/난이도 매트릭스로 우선순위
    - MVP 최소 기능 선별, 이후 버전으로 미룰 기능 분류
+   - **AskUserQuestion (multiSelect: true)**: 브레인스토밍한 기능 목록을 옵션으로 제시하여 MVP에 포함할 기능을 복수 선택하게 함. 옵션은 우선순위별로 그룹화 (Must/Should/Nice). auto 모드에서는 Must 전체 자동 선택
 4. **피처명은 영어** (kebab-case: `login`, `payment`, `chat`)
 5. 경쟁/참고 서비스 간단 분석
 
@@ -42,11 +43,12 @@ Step 1 완료 후, **기획서 생성 전에** AskUserQuestion으로 확인:
    - 커밋 컨벤션, API 컨벤션, 에러 처리 패턴
 7. **UI 컴포넌트 라이브러리 선택**:
    - **auto 모드**: 기술 스택에 따라 자동 추천 (React/Next.js → shadcn/ui, Vue → 직접 구현)
-   - **수동 모드**: AskUserQuestion으로 선택:
-     1. "shadcn/ui (추천 — Radix + Tailwind, 커스터마이징 자유)"
-     2. "Ant Design (관리자/대시보드에 강함)"
-     3. "Material UI (Google Material Design)"
-     4. "직접 구현 (라이브러리 없이)"
+   - **수동 모드**: AskUserQuestion **(preview 포함)**으로 선택. 각 옵션에 실제 컴포넌트 코드 예시를 preview로 표시:
+     1. "shadcn/ui (추천 — Radix + Tailwind, 커스터마이징 자유)" — preview: `<Button variant="outline">Click</Button>` + 폴더 구조
+     2. "Ant Design (관리자/대시보드에 강함)" — preview: `<Button type="primary">Click</Button>` + 폴더 구조
+     3. "Material UI (Google Material Design)" — preview: `<Button variant="contained">Click</Button>` + 폴더 구조
+     4. "직접 구현 (라이브러리 없이)" — preview: 커스텀 컴포넌트 폴더 구조
+   - preview는 5~10줄 이내 monospace 코드 블록
    - 선택 결과를 기술 스택 표에 기록
 
 #### Step 3: 데이터 모델 & API 개요

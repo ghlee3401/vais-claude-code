@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.21.0] - 2026-03-26
+
+### Added
+
+- **인터랙티브 패턴 보강** — 11개 phase 파일에 multiSelect, preview, scope 패턴 추가
+  - **multiSelect**: plan(MVP 기능), frontend(컴포넌트), qa(이슈 선택), init(피처 선택) — 4개 phase
+  - **preview**: design(설계안 구조), plan(UI 라이브러리), architect(DB 설정), commit(버전 diff) — 4개 phase
+  - **scope**: frontend(모듈 범위), backend(API 그룹), qa(검사 범위) — 3개 phase
+  - **신규 AskUserQuestion**: backend(구현 승인), manager(영향 확인), next(다음 단계), status(액션 실행) — 4개 phase
+  - 모든 신규 패턴에 auto 모드 호환 (기본값 자동 선택)
+- **PDCA 문서**: interactive-patterns Plan/Design/Analysis/Report
+
 ## [0.20.2] - 2026-03-26
 
 ### Changed

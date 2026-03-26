@@ -18,6 +18,25 @@
 - 모듈/파일 수준: `// Design Ref: §{섹션} — {설계 결정 근거}`
 - 핵심 로직: `// Plan SC: {성공 기준 내용}`
 
+#### Scope 선택 (구현 범위)
+
+Design 문서의 **Session Guide**가 있으면 Module Map을 표시하고 AskUserQuestion으로 이번 세션 구현 범위를 선택:
+- 옵션: "전체 구현 (Recommended)", Module Map의 각 모듈 (최대 3개 옵션)
+- **multiSelect가 아닌 단일 선택** — 한 세션에 하나의 scope에 집중
+- Session Guide가 없으면 전체 구현으로 진행
+- auto 모드: 전체 구현
+
+선택한 scope에 해당하는 화면/컴포넌트만 구현 대상으로 필터링.
+
+#### 컴포넌트 구현 순서 (multiSelect)
+
+scope 선택 후, 해당 범위 내 구현할 화면/컴포넌트 목록을 AskUserQuestion **(multiSelect: true)**으로 제시:
+- 옵션: scope 내 주요 화면/컴포넌트 (설계 문서에서 추출, 최대 4개 그룹)
+- 사용자가 이번 세션에서 구현할 항목을 복수 선택
+- auto 모드: 전체 선택
+
+#### 구현 시작
+
 1. **피처 레지스트리 참조** (`.vais/features/{feature}.json`) — 구현해야 할 기능 목록(`features[]`) 전체 확인. 각 기능 구현 후 `status`를 `"진행중"` → `"완료"`로 업데이트
 2. **기획서 참조** (`docs/01-plan/{feature}.md`) — 정책 정의, 코딩 규칙, UI 컴포넌트 라이브러리 확인
 3. **디자인 시스템 참조** (`design-system/{feature}/MASTER.md`) — 색상, 타이포, 간격, 스타일 토큰. 화면별 오버라이드가 있으면 `design-system/{feature}/pages/` 우선

@@ -79,10 +79,11 @@ chore: bump version to v0.x.y
 
 #### Step 5: 확인 및 실행
 
-1. 버전 범프 + 커밋 메시지를 한번에 정리하여 AskUserQuestion:
-   - 변경 파일 목록
-   - 버전: {현재} → {신규} (또는 "범프 없음")
-   - 커밋 메시지 초안
-   - 옵션: "커밋 실행", "메시지 수정", "취소"
+1. 버전 범프 + 커밋 메시지를 한번에 정리하여 AskUserQuestion **(preview 포함)**:
+   - 옵션에 preview로 변경 요약을 표시:
+     - "커밋 실행 (Recommended)" — preview: 변경 파일 목록 + 버전 diff (`{현재} → {신규}`) + 커밋 메시지 전문
+     - "메시지 수정" — preview: 커밋 메시지 초안 (수정 가능)
+     - "취소" — preview: 없음
+   - preview는 변경 파일 수, 추가/삭제 줄 수, 버전 변경 사항을 한눈에 파악할 수 있도록 구성
 2. 승인 후 커밋 실행
 3. AskUserQuestion: "push도 할까요?" — 옵션: "push", "나중에"

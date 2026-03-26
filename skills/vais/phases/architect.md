@@ -5,10 +5,11 @@
 3. **설계 문서 읽기** (`docs/02-design/{feature}.md`) — 화면별 데이터 요구사항 확인
 4. **DB 필요 시 → DB 종류 선택**:
    - **auto 모드**: 기본값 SQLite
-   - **수동 모드**: AskUserQuestion으로 선택:
-     1. "SQLite (추천 — 설정 없이 바로 시작)"
-     2. "PostgreSQL / MySQL (로컬 또는 Docker)"
-     3. "Supabase / Firebase (클라우드 BaaS)"
+   - **수동 모드**: AskUserQuestion **(preview 포함)**으로 선택. 각 옵션에 설정 코드와 폴더 구조를 preview로 표시:
+     1. "SQLite (추천 — 설정 없이 바로 시작)" — preview: `better-sqlite3` 설정 + `db/` 폴더 구조
+     2. "PostgreSQL / MySQL (로컬 또는 Docker)" — preview: Prisma 설정 + `prisma/schema.prisma` 구조
+     3. "Supabase / Firebase (클라우드 BaaS)" — preview: 클라이언트 초기화 코드 + `.env` 변수 목록
+   - preview는 5~8줄 이내 monospace 코드 블록
    - 외부 서비스 선택 시 `.env` 변수명 안내
 5. **DB 스키마 설계**:
    - ERD (Mermaid)
