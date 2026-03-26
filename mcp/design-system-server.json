@@ -16,7 +16,7 @@
     },
     {
       "name": "design_system_generate",
-      "description": "디자인 토큰 자동 생성 — MASTER.md 출력. design 단계에서 designer 에이전트가 소비.",
+      "description": "디자인 토큰 자동 생성 — MASTER.md 출력. design 단계에서 design 에이전트가 소비.",
       "parameters": {
         "query": { "type": "string", "minLength": 1, "maxLength": 200, "description": "프로젝트 스타일 설명 (예: 'e-commerce modern clean')" },
         "project_name": { "type": "string", "minLength": 1, "maxLength": 100, "pattern": "^[a-zA-Z0-9_-]+$", "description": "피처명 (kebab-case)" },

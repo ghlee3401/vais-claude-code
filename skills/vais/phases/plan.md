@@ -78,7 +78,7 @@ Step 1 완료 후, **기획서 생성 전에** AskUserQuestion으로 확인:
       ],
       "policies": { "auth": "...", "validation": "..." },
       "hasDatabase": true,
-      "techStack": { "fe": "Next.js", "be": "..." }
+      "techStack": { "frontend": "Next.js", "backend": "..." }
     }
     ```
     - 기획서의 **기능 목록 표**에서 모든 기능을 `features` 배열로 추출

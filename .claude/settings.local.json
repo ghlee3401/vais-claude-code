@@ -22,7 +22,29 @@
       "Bash(where claude:*)",
       "WebFetch(domain:docs.claude.ai)",
       "WebFetch(domain:docs.anthropic.com)",
-      "Skill(vais-code:vais)"
+      "Skill(vais-code:vais)",
+      "Read(//home/ghlee0304-ubuntu/.claude/plugins/**)",
+      "Read(//home/ghlee0304-ubuntu/.claude/**)",
+      "Bash(cat /home/ghlee0304-ubuntu/.claude/plugins/cache/bkit-marketplace/bkit/2.0.6/skills/*/metadata.json)",
+      "Bash(ls /home/ghlee0304-ubuntu/.claude/plugins/cache/bkit-marketplace/bkit/2.0.6/skills/*/metadata.json)",
+      "Bash(head -20 /home/ghlee0304-ubuntu/.claude/plugins/cache/bkit-marketplace/bkit/2.0.6/skills/bkit-rules/*.md)",
+      "Bash(cat /home/ghlee0304-ubuntu/.claude/plugins/cache/bkit-marketplace/bkit/2.0.6/commands/*/metadata.json)",
+      "Bash(ls /home/ghlee0304-ubuntu/.claude/plugins/cache/bkit-marketplace/bkit/2.0.6/commands/*/)",
+      "Skill(bkit:bkit)",
+      "Bash(find /home/ghlee0304-ubuntu/workspace/vais-claude-code -type d -not -path */.* -not -path */node_modules*)",
+      "Bash(npm test:*)",
+      "Bash(npx jest:*)",
+      "Bash(node --experimental-vm-modules ./node_modules/.bin/jest)",
+      "Bash(node /home/ghlee0304-ubuntu/workspace/vais-claude-code/scripts/prompt-handler.js)",
+      "Skill(bkit:pdca)",
+      "Bash(git mv:*)",
+      "Bash(cp /home/ghlee0304-ubuntu/workspace/vais-claude-code/skills/vais/SKILL.md /home/ghlee0304-ubuntu/.claude/plugins/marketplaces/vais-marketplace/skills/vais/SKILL.md)",
+      "Bash(cp /home/ghlee0304-ubuntu/workspace/vais-claude-code/skills/vais/phases/auto.md /home/ghlee0304-ubuntu/.claude/plugins/marketplaces/vais-marketplace/skills/vais/phases/auto.md)",
+      "Bash(cp /home/ghlee0304-ubuntu/workspace/vais-claude-code/skills/vais/phases/infra.md /home/ghlee0304-ubuntu/.claude/plugins/marketplaces/vais-marketplace/skills/vais/phases/infra.md)",
+      "Bash(cp /home/ghlee0304-ubuntu/workspace/vais-claude-code/skills/vais/phases/qa.md /home/ghlee0304-ubuntu/.claude/plugins/marketplaces/vais-marketplace/skills/vais/phases/qa.md)",
+      "Bash(cp /home/ghlee0304-ubuntu/workspace/vais-claude-code/skills/vais/phases/*.md /home/ghlee0304-ubuntu/.claude/plugins/marketplaces/vais-marketplace/skills/vais/phases/)",
+      "Bash(rm -f /home/ghlee0304-ubuntu/.claude/plugins/marketplaces/vais-marketplace/skills/vais/phases/validate.md)",
+      "Bash(node:*)"
     ]
   }
 }

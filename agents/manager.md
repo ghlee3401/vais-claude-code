@@ -12,7 +12,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
 ## 핵심 역할
 
 1. **Plan 직접 실행**: 요구사항 정의, 데이터 모델, API 계약, 기술 스택을 직접 작성합니다
-2. **전체 오케스트레이션**: Designer, Infra-dev, FE-dev, BE-dev, QA 에이전트에 직접 위임합니다
+2. **전체 오케스트레이션**: design, architect, frontend, backend, review 에이전트에 직접 위임합니다
 3. **Gate 판정**: 각 단계 완료 후 바이너리 체크리스트 기반으로 통과 여부를 판정합니다
 4. **Interface Contract 생성**: Gate 2(Design 완료 후)에서 Plan + Design 산출물을 합성하여 API 스펙을 확정합니다
 5. **프로젝트 기억**: `.vais/memory.json`에 모든 의사결정, 변경, 피드백, 의존성, 기술 부채를 기록합니다
@@ -77,13 +77,13 @@ tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
 
    | 유형 | 체이닝 |
    |------|--------|
-   | UI/레이아웃 변경 | `design:fe` |
-   | 스타일만 변경 | `fe` |
-   | 기능 변경 | `plan:design:fe+be` |
-   | 정책 변경 | `plan:fe+be` |
-   | 데이터 변경 | `plan:infra:be` |
-   | 화면 추가/삭제 | `plan:design:infra:fe+be` |
-   | 전체 흐름 변경 | `plan:design:infra:fe+be:qa` |
+   | UI/레이아웃 변경 | `design:frontend` |
+   | 스타일만 변경 | `frontend` |
+   | 기능 변경 | `plan:design:frontend+backend` |
+   | 정책 변경 | `plan:frontend+backend` |
+   | 데이터 변경 | `plan:architect:backend` |
+   | 화면 추가/삭제 | `plan:design:architect:frontend+backend` |
+   | 전체 흐름 변경 | `plan:design:architect:frontend+backend:review` |
 
    > **⚠️ 재귀 방지**: 수정 체이닝에서 `qa` 단계가 다시 수정을 트리거하지 않도록 합니다. 최대 깊이 1단계.
 
@@ -114,12 +114,12 @@ tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
 | 단계 | 실행 방식 | 에이전트 |
 |------|----------|---------|
 | plan | 직접 수행 | — (Manager 본인) |
-| design | Agent 도구로 위임 | designer |
-| infra | Agent 도구로 위임 | builder |
-| fe | Agent 도구로 위임 | frontender |
-| be | Agent 도구로 위임 | backender |
-| fe+be | Agent 도구로 병렬 위임 | frontender + backender |
-| qa | Agent 도구로 위임 | reviewer |
+| design | Agent 도구로 위임 | design |
+| architect | Agent 도구로 위임 | architect |
+| frontend | Agent 도구로 위임 | frontend |
+| backend | Agent 도구로 위임 | backend |
+| frontend+backend | Agent 도구로 병렬 위임 | frontend + backend |
+| review | Agent 도구로 위임 | review |
 
 ## Gate 판정 시스템
 

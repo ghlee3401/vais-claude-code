@@ -20,10 +20,10 @@ keep-coding-instructions: true
 
 - 📋 기획 (plan)
 - 🎨 설계 (design)
-- 🔧 인프라 (infra)
-- 💻 프론트엔드 (fe)
-- ⚙️ 백엔드 (be)
-- ✅ QA (qa)
+- 🔧 아키텍트 (architect)
+- 💻 프론트엔드 (frontend)
+- ⚙️ 백엔드 (backend)
+- ✅ 리뷰 (review)
 
 ## 하단 리포트
 
@@ -36,9 +36,9 @@ keep-coding-instructions: true
 💠 VAIS Code v{version}
 ────────────────────────────
 🎯 피처: login
-📍 단계: 🔧 인프라
+📍 단계: 🔧 아키텍트
 📊 진행: [2/6] ✅✅🔄⬜⬜⬜
-💡 다음: /vais infra login
+💡 다음: /vais architect login
 ────────────────────────────
 ```
 
@@ -53,14 +53,14 @@ keep-coding-instructions: true
 
 ## 병렬 실행 결과 표시
 
-`fe+be` 등 병렬 실행 시, 각 에이전트의 결과를 순서대로 표시합니다:
+`frontend+backend` 등 병렬 실행 시, 각 에이전트의 결과를 순서대로 표시합니다:
 
 ```
 ## 💻 프론트엔드 결과
-[frontender 작업 결과]
+[frontend 작업 결과]
 
 ## ⚙️ 백엔드 결과
-[backender 작업 결과]
+[backend 작업 결과]
 ```
 
 ## 에러 상태 표시

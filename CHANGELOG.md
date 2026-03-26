@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.20.1] - 2026-03-26
+
+### Changed
+
+- **Agent 리네이밍** — 도메인 중심 명명으로 통일 (manager만 역할자 유지)
+  - `designer` → `design`
+  - `builder` → `architect`
+  - `frontender` → `frontend`
+  - `backender` → `backend`
+  - `reviewer` → `review`
+- **Phase 리네이밍** — 약어를 풀네임으로 변경
+  - `infra` → `architect`
+  - `fe` → `frontend`
+  - `be` → `backend`
+  - `qa` → `review`
+- **체이닝 문법 변경** — `/vais frontend+backend`, `/vais plan:design:architect`
+- **전체 참조 업데이트** — vais.config.json, AGENTS.md, README.md, SKILL.md, phase 파일, 스크립트, 테스트 등 25+ 파일
+
 ## [0.20.0] - 2026-03-26
 
 ### Added

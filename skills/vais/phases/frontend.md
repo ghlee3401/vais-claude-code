@@ -1,4 +1,4 @@
-### 💻 fe — 프론트엔드 구현
+### 💻 frontend — 프론트엔드 구현
 
 #### Upstream Context Loading
 
@@ -23,7 +23,7 @@
 3. **디자인 시스템 참조** (`design-system/{feature}/MASTER.md`) — 색상, 타이포, 간격, 스타일 토큰. 화면별 오버라이드가 있으면 `design-system/{feature}/pages/` 우선
 4. **설계 문서의 화면별 상세 정의 참조** (`docs/02-design/{feature}.md`) — IA, 와이어프레임, 화면별 컴포넌트, 상태, 인터랙션, 데이터 흐름 확인
 5. **Interface Contract 참조** (`docs/02-design/{feature}-ic.md`) — API 엔드포인트, 요청/응답 스키마, 에러 코드 확인
-6. **인프라 문서 참조** (`docs/03-infra/{feature}.md`) — 프로젝트 설정, 환경 변수 확인
+6. **인프라 문서 참조** (`docs/03-architect/{feature}.md`) — 프로젝트 설정, 환경 변수 확인
 7. **UI 컴포넌트 라이브러리 설정**:
    - 기획서에서 선택된 라이브러리 확인
    - **라이브러리가 있으면**: 설치 및 초기화 (예: `npx shadcn@latest init`)
@@ -42,4 +42,4 @@
 10. 반응형, 접근성 구현
 11. 실제 코드 생성
 
-**에이전트**: frontender
+**에이전트**: frontend

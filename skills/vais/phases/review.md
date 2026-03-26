@@ -1,4 +1,4 @@
-### ✅ qa — 빌드 검증 + Gap 분석 + 코드 리뷰
+### ✅ review — 빌드 검증 + Gap 분석 + 코드 리뷰
 
 **빌드/실행 검증 → Gap 분석 → 보안 스캔 → QA 시나리오 → 코드 리뷰 → 리턴 경로 산출** 순서로 진행합니다.
 
@@ -13,7 +13,7 @@
 #### Step 2: Gap 분석
 
 1. **피처 레지스트리 로드** (`.vais/features/{feature}.json`) — plan에서 정의된 기능 목록을 기준으로 Gap 분석
-2. **설계 문서 수집**: plan, design, infra 문서 읽기
+2. **설계 문서 수집**: plan, design, architect 문서 읽기
 3. **구현 코드 수집**: 해당 피처 코드 전체 읽기
 4. **자동 비교**: 레지스트리의 `features[]` 각 항목 vs 코드 구현 여부. 구현된 기능은 레지스트리 `status`를 `"완료"`로 업데이트
 5. **일치율**: `(구현된 수 / 전체 수) x 100` — 레지스트리 기준
@@ -80,7 +80,7 @@
 
 | # | 이슈 | 심각도 | 대상 에이전트 | 카테고리 | 수정 힌트 |
 |---|------|--------|-------------|---------|----------|
-| 1 | 설명 | P0/P1/P2 | frontender/backender/builder | 분류 | 구체적 수정 방향 |
+| 1 | 설명 | P0/P1/P2 | frontend/backend/architect | 분류 | 구체적 수정 방향 |
 
 **return_to**: {P0 이슈 최다 에이전트}
 ```
@@ -103,6 +103,6 @@ Critical/Important 이슈를 심각도별로 정리하여 AskUserQuestion:
 | **Conditional** | Warning만, Critical 없음 |
 | **Needs Revision** | Critical 존재 또는 Gap < 90% |
 
-`docs/04-qa/{feature}.md`에 저장 (`templates/qa.template.md` 구조)
+`docs/04-review/{feature}.md`에 저장 (`templates/qa.template.md` 구조)
 
-**에이전트**: reviewer
+**에이전트**: review

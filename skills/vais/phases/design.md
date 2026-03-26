@@ -73,10 +73,10 @@ AskUserQuestion: "3가지 설계안 중 어떤 걸 선택하시겠습니까?"
 2. 세션별 추천 구현 순서를 **Recommended Session Plan**으로 작성
 3. `## Session Guide` 섹션으로 문서 하단에 추가
 
-> Session Guide는 이후 `/vais fe`, `/vais be` 실행 시 구현 순서를 안내합니다.
+> Session Guide는 이후 `/vais frontend`, `/vais backend` 실행 시 구현 순서를 안내합니다.
 
 11. `docs/02-design/{feature}.md`에 저장 (`templates/design.template.md` 구조)
 
-| **디자인 리뷰** | designer 에이전트 | `docs/02-design/{feature}-review.md` |
+| **디자인 리뷰** | design 에이전트 | `docs/02-design/{feature}-review.md` |
 
-**에이전트**: designer
+**에이전트**: design

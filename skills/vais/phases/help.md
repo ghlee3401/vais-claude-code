@@ -15,15 +15,15 @@ AskUserQuestion:
 ```
 💠 VAIS Code — 커맨드 목록
 
-📌 워크플로우: 📋기획 → 🎨설계 → 🔧인프라 → 💻프론트 + ⚙️백엔드 → ✅QA
+📌 워크플로우: 📋기획 → 🎨설계 → 🔧아키텍트 → 💻프론트 + ⚙️백엔드 → ✅리뷰
 
 🚀 주요 커맨드:
-  /vais auto {기능}                 — 전체 자동 실행
-  /vais plan:design:infra {기능}    — 순차 체이닝
-  /vais fe+be {기능}                — 병렬 체이닝
+  /vais auto {기능}                            — 전체 자동 실행
+  /vais plan:design:architect {기능}           — 순차 체이닝
+  /vais frontend+backend {기능}                — 병렬 체이닝
 
 📋 단계별:
-  /vais plan ~ qa                   — 각 단계 개별 실행
+  /vais plan ~ review                          — 각 단계 개별 실행
 
 🔧 유틸리티:
   /vais status | next | test | commit

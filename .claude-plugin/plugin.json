@@ -1,7 +1,7 @@
 {
   "name": "vais-code",
   "description": "VAIS Code - 6단계 개발 워크플로우 플러그인. 체이닝 문법, 4-Gate 시스템, Interface Contract, QA 리턴 경로 지원.",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "author": {
     "name": "VAIS Voice",
     "email": "ghlee0304@ncsoft.com"

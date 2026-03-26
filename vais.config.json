@@ -1,26 +1,26 @@
 {
-  "version": "0.20.0",
+  "version": "0.20.1",
   "workflow": {
-    "phases": ["plan", "design", "infra", "fe", "be", "qa", "report"],
+    "phases": ["plan", "design", "architect", "frontend", "backend", "review", "report"],
     "phaseNames": {
       "plan": "기획",
       "design": "설계",
-      "infra": "인프라",
-      "fe": "프론트엔드",
-      "be": "백엔드",
-      "qa": "QA",
+      "architect": "아키텍트",
+      "frontend": "프론트엔드",
+      "backend": "백엔드",
+      "review": "리뷰",
       "report": "보고서"
     },
     "docPaths": {
       "plan": "docs/01-plan/{feature}.md",
       "design": "docs/02-design/{feature}.md",
-      "infra": "docs/03-infra/{feature}.md",
-      "qa": "docs/04-qa/{feature}.md",
+      "architect": "docs/03-architect/{feature}.md",
+      "review": "docs/04-review/{feature}.md",
       "report": "docs/05-report/{feature}.md"
     }
   },
   "parallelGroups": {
-    "implementation": ["fe", "be"]
+    "implementation": ["frontend", "backend"]
   },
   "chaining": {
     "sequential": ":",
@@ -52,22 +52,22 @@
       "description": "VAIS 6단계 개발 워크플로우 팀",
       "orchestrator": "manager",
       "roles": {
-        "manager": { "model": "opus", "phases": ["*"], "delegates_to": ["designer", "builder", "frontender", "backender", "reviewer"] },
-        "designer": { "model": "sonnet", "phases": ["design"] },
-        "builder": { "model": "sonnet", "phases": ["infra"] },
-        "frontender": { "model": "sonnet", "phases": ["fe"] },
-        "backender": { "model": "sonnet", "phases": ["be"] },
-        "reviewer": { "model": "sonnet", "phases": ["qa"] }
+        "manager": { "model": "opus", "phases": ["*"], "delegates_to": ["design", "architect", "frontend", "backend", "review"] },
+        "design": { "model": "sonnet", "phases": ["design"] },
+        "architect": { "model": "sonnet", "phases": ["architect"] },
+        "frontend": { "model": "sonnet", "phases": ["frontend"] },
+        "backend": { "model": "sonnet", "phases": ["backend"] },
+        "review": { "model": "sonnet", "phases": ["review"] }
       },
       "routing": {
         "parallel": {
-          "implementation": ["frontender", "backender"]
+          "implementation": ["frontend", "backend"]
         }
       }
     }
   },
   "orchestration": {
-    "gates": ["plan", "design", "infra", "fe"],
+    "gates": ["plan", "design", "architect", "frontend"],
     "gateAction": "confirm",
     "gateChecklists": {
       "plan": [
@@ -83,13 +83,13 @@
         "에러/로딩/빈 상태 정의",
         "Interface Contract 생성 완료"
       ],
-      "infra": [
+      "architect": [
         "DB 스키마가 데이터 모델과 일치",
         "마이그레이션 파일 생성 완료",
         "환경 변수 템플릿 생성",
         "프로젝트 빌드 성공"
       ],
-      "fe": [
+      "frontend": [
         "빌드 성공",
         "FE/BE 모두 Interface Contract 참조",
         "피처 레지스트리 status 업데이트 완료"

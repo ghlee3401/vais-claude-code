@@ -19,10 +19,10 @@ const OUTPUT_FILE = path.join(PROJECT_DIR, 'docs', 'dashboard.html');
 const PHASE_META = [
   { key: 'plan',   icon: '📋', num: '01', name: '기획',       color: '#2563eb' },
   { key: 'design', icon: '🎨', num: '02', name: '설계',       color: '#059669' },
-  { key: 'infra',  icon: '🔧', num: '03', name: '인프라',     color: '#7c3aed' },
-  { key: 'fe',     icon: '💻', num: '04', name: '프론트엔드', color: '#d97706' },
-  { key: 'be',     icon: '⚙️', num: '05', name: '백엔드',     color: '#dc2626' },
-  { key: 'qa',     icon: '✅', num: '06', name: 'QA',         color: '#0d9488' },
+  { key: 'architect', icon: '🔧', num: '03', name: '아키텍트',   color: '#7c3aed' },
+  { key: 'frontend', icon: '💻', num: '04', name: '프론트엔드', color: '#d97706' },
+  { key: 'backend',  icon: '⚙️', num: '05', name: '백엔드',     color: '#dc2626' },
+  { key: 'review',   icon: '✅', num: '06', name: '리뷰',       color: '#0d9488' },
 ];
 
 // ── 유틸 ──────────────────────────────────────────

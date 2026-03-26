@@ -1,4 +1,4 @@
-### 🔧 infra — 인프라 설정
+### 🔧 architect — 인프라/아키텍처 설정
 
 1. **기획서 읽기** (`docs/01-plan/{feature}.md`) — 데이터 모델, 기술 스택, `hasDatabase` 확인
 2. **피처 레지스트리 확인** (`.vais/features/{feature}.json`) — 기능 목록, 정책, 기술 스택 참조
@@ -20,11 +20,11 @@
 7. **ORM 모델/스키마 생성** — 선택한 ORM에 맞는 모델 파일
 8. **환경 변수 템플릿** — `.env.example` 생성
 9. **프로젝트 설정 확인** — package.json, tsconfig 등 필요한 설정 추가/확인
-10. `docs/03-infra/{feature}.md`에 인프라 문서 저장 (`templates/infra.template.md` 구조)
+10. `docs/03-architect/{feature}.md`에 인프라 문서 저장 (`templates/infra.template.md` 구조)
 
-**에이전트**: builder
+**에이전트**: architect
 
 **산출물:**
-- `docs/03-infra/{feature}.md` — 인프라 설계 문서 (ERD, 스키마, 환경 설정)
+- `docs/03-architect/{feature}.md` — 인프라 설계 문서 (ERD, 스키마, 환경 설정)
 - 마이그레이션 파일, ORM 모델 파일 (실제 코드)
 - `.env.example` (환경 변수 템플릿)

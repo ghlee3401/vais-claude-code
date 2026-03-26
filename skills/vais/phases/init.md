@@ -34,7 +34,7 @@
    - Part 2 와이어프레임: 기존 페이지/컴포넌트 레이아웃 구조 문서화
    - Part 3 UI 설계: 디자인 토큰, 공통 컴포넌트 명세, 화면별 상세 정의
 
-3. **infra** → `docs/03-infra/{feature}.md`
+3. **architect** → `docs/03-architect/{feature}.md`
    - `templates/infra.template.md` 구조를 따라 작성
    - 기존 DB 스키마/모델에서 ERD 역추출
    - 마이그레이션 현황, 환경 설정
@@ -50,7 +50,7 @@
   ],
   "policies": { "auth": "...", "validation": "..." },
   "hasDatabase": true,
-  "techStack": { "fe": "Next.js", "be": "..." }
+  "techStack": { "frontend": "Next.js", "backend": "..." }
 }
 ```
 
@@ -60,12 +60,12 @@
 
 1. `.vais/status.json`에 피처 등록
 2. AskUserQuestion: "다음 단계를 선택하세요"
-   - "QA 실행 (`/vais qa {feature}`)" — 문서 vs 코드 일치 확인 → 현재 단계를 `qa`로 설정
+   - "리뷰 실행 (`/vais review {feature}`)" — 문서 vs 코드 일치 확인 → 현재 단계를 `review`로 설정
    - "기획부터 재검토 (`/vais plan {feature}`)" — 역생성 문서를 기반으로 기획 재정비 → 현재 단계를 `plan`으로 설정
    - "특정 단계부터 개발 계속" — 원하는 단계 선택 → 선택한 단계로 설정
    - "문서만 확인" — 생성된 문서 검토 → 현재 단계를 `plan`으로 설정
 
-> **참고**: init은 QA 문서를 직접 생성하지 않습니다. 역설계 후 `/vais qa {feature}`로 QA를 실행하면 `docs/04-qa/{feature}.md`가 생성됩니다.
+> **참고**: init은 리뷰 문서를 직접 생성하지 않습니다. 역설계 후 `/vais review {feature}`로 리뷰를 실행하면 `docs/04-review/{feature}.md`가 생성됩니다.
 
 #### 주의사항
 
