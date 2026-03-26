@@ -25,7 +25,7 @@ Manager
   → design 위임 (design) → [Gate 2: Interface Contract 생성]
   → architect 위임 (architect) → [Gate 3]
   → frontend + backend 병렬 위임 (frontend+backend) → [Gate 4]
-  → review 위임 (review)
+  → qa 위임 (qa)
   → 결과를 memory에 기록
 ```
 
@@ -58,7 +58,7 @@ Manager
    - Design: design 에이전트에 위임
    - Architect: architect 에이전트에 위임
    - Frontend+Backend: frontend + backend 병렬 위임
-   - Review: review 에이전트에 위임
+   - QA: qa 에이전트에 위임
 4. 게이트: plan, design(IC 생성 포함), architect, frontend
 5. 완료 후 결과를 memory에 기록:
    - 주요 의사결정 (decision)

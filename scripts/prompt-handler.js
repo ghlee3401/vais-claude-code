@@ -16,7 +16,7 @@ const INTENT_PATTERNS = [
   { keywords: ['인프라', 'infra', 'architect', '아키텍트', 'db 설정', '환경 설정', '마이그레이션', 'migration', '스키마', 'schema'], phase: 'architect' },
   { keywords: ['프론트', 'frontend', 'react', 'next', 'vue', '컴포넌트', '화면 개발'], phase: 'frontend' },
   { keywords: ['백엔드', 'backend', 'api', '서버', 'express', 'nest', 'fastapi'], phase: 'backend' },
-  { keywords: ['review', '리뷰', 'gap 분석', 'gap분석', '검토', '코드 리뷰', '빌드 검증', '빌드검증', '보안 점검', '품질', 'qa'], phase: 'review' },
+  { keywords: ['qa', 'QA', 'gap 분석', 'gap분석', '검토', '코드 리뷰', '빌드 검증', '빌드검증', '보안 점검', '품질'], phase: 'qa' },
   { keywords: ['/vais fix', 'vais fix'], phase: 'manager' },
 ];
 

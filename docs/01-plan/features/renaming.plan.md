@@ -216,3 +216,19 @@
 - JSON 수정 시 들여쓰기/포맷 유지
 - 기존 기능 변경 없음 (순수 리네이밍)
 - 커밋은 `/vais commit` 플로우 사용
+
+---
+
+## 9. 추가 변경 (v0.20.2)
+
+### review → qa 롤백
+
+v0.20.1에서 `reviewer` → `review`로 변경했으나, `qa`가 더 직관적이라는 판단으로 다시 변경:
+
+| 구분 | v0.20.1 | v0.20.2 |
+|------|---------|---------|
+| Agent | review | **qa** |
+| Phase | review | **qa** |
+| 문서 경로 | docs/04-review/ | **docs/04-qa/** |
+
+나머지 (design, architect, frontend, backend, manager)는 v0.20.1 그대로 유지.

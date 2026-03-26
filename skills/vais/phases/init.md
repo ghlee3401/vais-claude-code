@@ -60,12 +60,12 @@
 
 1. `.vais/status.json`에 피처 등록
 2. AskUserQuestion: "다음 단계를 선택하세요"
-   - "리뷰 실행 (`/vais review {feature}`)" — 문서 vs 코드 일치 확인 → 현재 단계를 `review`로 설정
+   - "QA 실행 (`/vais qa {feature}`)" — 문서 vs 코드 일치 확인 → 현재 단계를 `qa`로 설정
    - "기획부터 재검토 (`/vais plan {feature}`)" — 역생성 문서를 기반으로 기획 재정비 → 현재 단계를 `plan`으로 설정
    - "특정 단계부터 개발 계속" — 원하는 단계 선택 → 선택한 단계로 설정
    - "문서만 확인" — 생성된 문서 검토 → 현재 단계를 `plan`으로 설정
 
-> **참고**: init은 리뷰 문서를 직접 생성하지 않습니다. 역설계 후 `/vais review {feature}`로 리뷰를 실행하면 `docs/04-review/{feature}.md`가 생성됩니다.
+> **참고**: init은 QA 문서를 직접 생성하지 않습니다. 역설계 후 `/vais qa {feature}`로 QA를 실행하면 `docs/04-qa/{feature}.md`가 생성됩니다.
 
 #### 주의사항
 

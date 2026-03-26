@@ -23,7 +23,7 @@ keep-coding-instructions: true
 - 🔧 아키텍트 (architect)
 - 💻 프론트엔드 (frontend)
 - ⚙️ 백엔드 (backend)
-- ✅ 리뷰 (review)
+- ✅ QA (qa)
 
 ## 하단 리포트
 

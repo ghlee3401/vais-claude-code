@@ -1,21 +1,21 @@
 {
-  "version": "0.20.1",
+  "version": "0.20.2",
   "workflow": {
-    "phases": ["plan", "design", "architect", "frontend", "backend", "review", "report"],
+    "phases": ["plan", "design", "architect", "frontend", "backend", "qa", "report"],
     "phaseNames": {
       "plan": "기획",
       "design": "설계",
       "architect": "아키텍트",
       "frontend": "프론트엔드",
       "backend": "백엔드",
-      "review": "리뷰",
+      "qa": "QA",
       "report": "보고서"
     },
     "docPaths": {
       "plan": "docs/01-plan/{feature}.md",
       "design": "docs/02-design/{feature}.md",
       "architect": "docs/03-architect/{feature}.md",
-      "review": "docs/04-review/{feature}.md",
+      "qa": "docs/04-qa/{feature}.md",
       "report": "docs/05-report/{feature}.md"
     }
   },
@@ -52,12 +52,12 @@
       "description": "VAIS 6단계 개발 워크플로우 팀",
       "orchestrator": "manager",
       "roles": {
-        "manager": { "model": "opus", "phases": ["*"], "delegates_to": ["design", "architect", "frontend", "backend", "review"] },
+        "manager": { "model": "opus", "phases": ["*"], "delegates_to": ["design", "architect", "frontend", "backend", "qa"] },
         "design": { "model": "sonnet", "phases": ["design"] },
         "architect": { "model": "sonnet", "phases": ["architect"] },
         "frontend": { "model": "sonnet", "phases": ["frontend"] },
         "backend": { "model": "sonnet", "phases": ["backend"] },
-        "review": { "model": "sonnet", "phases": ["review"] }
+        "qa": { "model": "sonnet", "phases": ["qa"] }
       },
       "routing": {
         "parallel": {

@@ -39,7 +39,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
 > - plan 3.2: 인증 요구사항
 ```
 
-review 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
+qa 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
 
 ## 외부 참고 문헌 주석 (`@see`)
 

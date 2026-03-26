@@ -1,4 +1,4 @@
-### ✅ review — 빌드 검증 + Gap 분석 + 코드 리뷰
+### ✅ qa — 빌드 검증 + Gap 분석 + 코드 리뷰
 
 **빌드/실행 검증 → Gap 분석 → 보안 스캔 → QA 시나리오 → 코드 리뷰 → 리턴 경로 산출** 순서로 진행합니다.
 
@@ -103,6 +103,6 @@ Critical/Important 이슈를 심각도별로 정리하여 AskUserQuestion:
 | **Conditional** | Warning만, Critical 없음 |
 | **Needs Revision** | Critical 존재 또는 Gap < 90% |
 
-`docs/04-review/{feature}.md`에 저장 (`templates/qa.template.md` 구조)
+`docs/04-qa/{feature}.md`에 저장 (`templates/qa.template.md` 구조)
 
-**에이전트**: review
+**에이전트**: qa

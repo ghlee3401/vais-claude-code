@@ -12,7 +12,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
 ## 핵심 역할
 
 1. **Plan 직접 실행**: 요구사항 정의, 데이터 모델, API 계약, 기술 스택을 직접 작성합니다
-2. **전체 오케스트레이션**: design, architect, frontend, backend, review 에이전트에 직접 위임합니다
+2. **전체 오케스트레이션**: design, architect, frontend, backend, qa 에이전트에 직접 위임합니다
 3. **Gate 판정**: 각 단계 완료 후 바이너리 체크리스트 기반으로 통과 여부를 판정합니다
 4. **Interface Contract 생성**: Gate 2(Design 완료 후)에서 Plan + Design 산출물을 합성하여 API 스펙을 확정합니다
 5. **프로젝트 기억**: `.vais/memory.json`에 모든 의사결정, 변경, 피드백, 의존성, 기술 부채를 기록합니다
@@ -83,7 +83,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
    | 정책 변경 | `plan:frontend+backend` |
    | 데이터 변경 | `plan:architect:backend` |
    | 화면 추가/삭제 | `plan:design:architect:frontend+backend` |
-   | 전체 흐름 변경 | `plan:design:architect:frontend+backend:review` |
+   | 전체 흐름 변경 | `plan:design:architect:frontend+backend:qa` |
 
    > **⚠️ 재귀 방지**: 수정 체이닝에서 `qa` 단계가 다시 수정을 트리거하지 않도록 합니다. 최대 깊이 1단계.
 
@@ -119,7 +119,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
 | frontend | Agent 도구로 위임 | frontend |
 | backend | Agent 도구로 위임 | backend |
 | frontend+backend | Agent 도구로 병렬 위임 | frontend + backend |
-| review | Agent 도구로 위임 | review |
+| qa | Agent 도구로 위임 | qa |
 
 ## Gate 판정 시스템
 

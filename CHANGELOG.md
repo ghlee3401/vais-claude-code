@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.20.2] - 2026-03-26
+
+### Changed
+
+- **review → qa 롤백** — `review`보다 `qa`가 더 직관적이라는 판단
+  - Agent: `review` → `qa`
+  - Phase: `review` → `qa`
+  - 문서 경로: `docs/04-review/` → `docs/04-qa/`
+
 ## [0.20.1] - 2026-03-26
 
 ### Changed

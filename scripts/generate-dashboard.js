@@ -22,7 +22,7 @@ const PHASE_META = [
   { key: 'architect', icon: '🔧', num: '03', name: '아키텍트',   color: '#7c3aed' },
   { key: 'frontend', icon: '💻', num: '04', name: '프론트엔드', color: '#d97706' },
   { key: 'backend',  icon: '⚙️', num: '05', name: '백엔드',     color: '#dc2626' },
-  { key: 'review',   icon: '✅', num: '06', name: '리뷰',       color: '#0d9488' },
+  { key: 'qa',       icon: '✅', num: '06', name: 'QA',         color: '#0d9488' },
 ];
 
 // ── 유틸 ──────────────────────────────────────────

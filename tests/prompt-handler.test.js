@@ -130,8 +130,8 @@ describe('prompt-handler 키워드 감지 + activeFeature', () => {
     assert(result.additionalContext, 'additionalContext 포함');
   });
 
-  it('리뷰 키워드 + activeFeature → review 컨텍스트 출력', () => {
-    const result = runPromptHandler('리뷰 부탁합니다', 'test-feature');
+  it('QA 키워드 + activeFeature → qa 컨텍스트 출력', () => {
+    const result = runPromptHandler('QA 검토 부탁합니다', 'test-feature');
     assert(result.additionalContext, 'additionalContext 포함');
   });
 
@@ -172,15 +172,15 @@ describe('prompt-handler 체이닝 패턴', () => {
     assert(result.additionalContext.includes('병렬'), '병렬 실행 언급');
   });
 
-  it('/vais plan:design:architect:frontend+backend:review feature → 혼합 체이닝', () => {
-    const result = runPromptHandler('/vais plan:design:architect:frontend+backend:review feature', 'any-feature');
+  it('/vais plan:design:architect:frontend+backend:qa feature → 혼합 체이닝', () => {
+    const result = runPromptHandler('/vais plan:design:architect:frontend+backend:qa feature', 'any-feature');
     assert(result.additionalContext, 'additionalContext 포함');
   });
 });
 
 describe('prompt-handler 범위 패턴', () => {
-  it('plan부터 review까지 → 범위 실행 메시지', () => {
-    const result = runPromptHandler('plan부터 review까지 실행해주세요', 'full-feature');
+  it('plan부터 qa까지 → 범위 실행 메시지', () => {
+    const result = runPromptHandler('plan부터 qa까지 실행해주세요', 'full-feature');
     assert(result.additionalContext, 'additionalContext 포함');
     assert(result.additionalContext.includes('범위'), '범위 실행 메시지');
   });
