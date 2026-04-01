@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.26.1** · 내 개인 Claude Code 플러그인
+**v0.26.2** · 내 개인 Claude Code 플러그인
 
 > C-Suite AI 팀. `/vais cto {feature}` 하나로 기획부터 구현까지.
 
@@ -209,6 +209,7 @@ vais-claude-code/
 
 | 버전 | 주요 변경 |
 |------|---------|
+| v0.26.2 | CTO PDCA 요구사항 탐색 + 범위 선택 3옵션 복원 |
 | v0.26.1 | C-Suite Push 규칙 문서화, /vais commit 강제화 |
 | v0.26.0 | C-Suite 모델 opus 통일, governance 강화 |
 | v0.25.0 | c-suite-delegation: 구현 단계 직접 호출 제거, CTO 단일 진입점 |
