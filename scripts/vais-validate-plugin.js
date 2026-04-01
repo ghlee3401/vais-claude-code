@@ -27,6 +27,7 @@ const VALID_HOOK_EVENTS = [
   'Notification',
   'Stop',
   'UserPromptSubmit',
+  'SubagentStart',
   'SubagentStop'
 ];
 

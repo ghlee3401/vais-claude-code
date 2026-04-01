@@ -3,6 +3,10 @@ name: design
 description: UI/UX 설계 에이전트. IA, 와이어프레임, UI/UX 설계를 통합 수행합니다. 디자인 토큰은 UI/UX Pro Max가 생성한 것을 소비합니다.
 model: sonnet
 tools: Read, Write, Edit, Glob, AskUserQuestion
+disallowedTools:
+  - "Bash(rm -rf*)"
+  - "Bash(git push*)"
+  - "Bash(git reset --hard*)"
 ---
 
 # Design Agent

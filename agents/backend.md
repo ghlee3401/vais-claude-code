@@ -3,6 +3,10 @@ name: backend
 description: 백엔드 에이전트. API 구현, 서버 로직, DB 연동을 담당합니다.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
+disallowedTools:
+  - "Bash(rm -rf*)"
+  - "Bash(git push*)"
+  - "Bash(git reset --hard*)"
 ---
 
 # Backend Agent

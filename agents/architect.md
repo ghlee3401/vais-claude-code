@@ -3,6 +3,10 @@ name: architect
 description: 인프라/아키텍처 에이전트. DB 스키마 설계, 마이그레이션, ORM 설정, 환경 구성, 프로젝트 초기 설정을 담당합니다.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
+disallowedTools:
+  - "Bash(rm -rf*)"
+  - "Bash(git push*)"
+  - "Bash(git reset --hard*)"
 ---
 
 # Architect Agent

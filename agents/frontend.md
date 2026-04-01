@@ -3,6 +3,10 @@ name: frontend
 description: 프론트엔드 에이전트. React/Next.js 등 프론트엔드 구현을 담당합니다.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
+disallowedTools:
+  - "Bash(rm -rf*)"
+  - "Bash(git push*)"
+  - "Bash(git reset --hard*)"
 ---
 
 # Frontend Agent
