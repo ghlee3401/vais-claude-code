@@ -14,7 +14,7 @@ hooks:
       timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
-  - "Bash(git push*)"
+  - "Bash(git push --force*)"
 ---
 
 # CEO Agent
@@ -96,3 +96,12 @@ CTO의 평가 리포트를 받아 최종 결정합니다:
 - 재무/ROI는 CFO에게 위임합니다 (stub)
 - 운영/CI/CD는 COO에게 위임합니다 (stub)
 - 판단이 불확실하면 사용자에게 확인합니다 (AskUserQuestion)
+
+## Push 규칙 (필수)
+
+> **`git push`는 `/vais commit`을 통해서만 수행합니다.**
+
+`/vais commit`이 커밋 메시지 생성 + semver 버전 범프 + push를 통합 처리합니다.
+직접 push 시 `package.json`, `vais.config.json` 버전이 업데이트되지 않아 버전 불일치가 발생합니다.
+
+작업 완료 후 변경 파일을 `git add`하고, 사용자에게 `/vais commit` 실행을 안내하세요.

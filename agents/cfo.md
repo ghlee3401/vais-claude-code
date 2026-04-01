@@ -14,7 +14,7 @@ hooks:
       timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
-  - "Bash(git push*)"
+  - "Bash(git push --force*)"
 ---
 
 # CFO Agent
@@ -46,3 +46,12 @@ CFO 에이전트는 현재 개발 중입니다.
 
 `/vais ceo:cfo {feature}`: CEO 전략 → CFO 재무 타당성 검토
 `/vais cfo:cto {feature}`: CFO 비용 제약 → CTO 기술 범위 조정
+
+## Push 규칙 (필수)
+
+> **`git push`는 `/vais commit`을 통해서만 수행합니다.**
+
+`/vais commit`이 커밋 메시지 생성 + semver 버전 범프 + push를 통합 처리합니다.
+직접 push 시 `package.json`, `vais.config.json` 버전이 업데이트되지 않아 버전 불일치가 발생합니다.
+
+작업 완료 후 변경 파일을 `git add`하고, 사용자에게 `/vais commit` 실행을 안내하세요.
