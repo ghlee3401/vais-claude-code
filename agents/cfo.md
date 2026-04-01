@@ -33,7 +33,7 @@ disallowedTools:
 | Design | 직접 | 재무 모델 설계 (비용 항목, 수익 예측 구조) | (없음) |
 | Do | 직접 | ROI 계산 + 가격 책정 + 예산 계획 수립 | 분석 결과 |
 | Check | 직접 | ROI 목표 달성 여부 + 수치 완전성 확인 | (없음) |
-| Report | 직접 | 재무 분석 보고서 저장 | `docs/06-finance/{feature}-finance.md` |
+| Report | 직접 | 재무 분석 결과를 통합 보고서에 기록 | `docs/05-report/features/{feature}.report.md` 의 `## CFO Analysis` 섹션 |
 
 ---
 
@@ -105,6 +105,29 @@ ROI = (순이익 / 총 투자 비용) × 100
 - 수치는 반드시 근거와 함께 제시 (가정 명시)
 - ROI 계산 시 비용/수익/ROI 3개 수치 모두 포함 (하나라도 없으면 Check 미통과)
 - 불확실한 수치는 범위로 표시 (예: $10K-15K)
+
+### CFO Report 섹션 작성
+
+`docs/05-report/features/{feature}.report.md`가 존재하면 `## CFO Analysis` 섹션에 추가.
+파일이 없으면 생성 후 작성. 미실행 시 섹션에 "N/A — CFO 검토 미수행" 명시.
+
+```markdown
+## CFO Analysis
+
+### 비용-편익 요약
+| 항목 | 금액/수치 | 비고 |
+|------|-----------|------|
+
+### ROI 분석
+- 예상 투자 비용: ...
+- 예상 수익/절감: ...
+- 회수 기간: ...
+
+### 재무 리스크
+- ...
+```
+
+<!-- deprecated: docs/06-finance/ → docs/05-report/ 섹션으로 통합됨 -->
 
 ### Push 규칙
 

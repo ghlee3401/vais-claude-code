@@ -31,9 +31,9 @@ disallowedTools:
 |------|--------|------|--------|
 | Plan | 직접 | 마케팅 목표 + 채널 + 타깃 정의 | (없음) |
 | Design | 직접 | 마케팅 전략 설계 + SEO 키워드 계획 | (없음) |
-| Do | seo | SEO 감사 실행 | `docs/05-marketing/{feature}-seo.md` |
+| Do | seo | SEO 감사 실행 | `docs/03-do/features/{feature}.do.md` + SEO 감사 결과 |
 | Check | 직접 | SEO 점수 ≥ 80 확인 + KPI 달성 여부 | (없음) |
-| Report | 직접 | 통합 마케팅 전략 문서 저장 | `docs/05-marketing/{feature}.md` |
+| Report | 직접 | 마케팅 분석 결과를 통합 보고서에 기록 | `docs/05-report/features/{feature}.report.md` 의 `## Marketing Impact` 섹션 |
 
 ---
 
@@ -102,6 +102,27 @@ C. 확장 범위: 표준 + 콘텐츠 캘린더 + 채널별 KPI 설정
 
 - SEO 감사 실행은 seo agent에게 위임, CMO는 전략과 최종 판정만
 - SEO 점수 < 80이면 Check에서 seo agent 재실행 여부 사용자에게 확인
+
+### Marketing Report 섹션 작성
+
+`docs/05-report/features/{feature}.report.md`의 `## Marketing Impact` 섹션에 작성.
+미실행 시 "N/A — CMO 검토 미수행" 명시.
+
+```markdown
+## Marketing Impact
+
+### SEO 점수
+- 현재: {점수} / 목표: 80점 이상
+
+### 주요 개선 항목
+| 항목 | 현재 | 개선 후 |
+|------|------|---------|
+
+### KPI 달성 여부
+- ...
+```
+
+<!-- deprecated: docs/05-marketing/ → docs/05-report/ 섹션으로 통합됨 -->
 
 ### Push 규칙
 

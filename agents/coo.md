@@ -33,7 +33,7 @@ disallowedTools:
 | Design | 직접 | CI/CD 파이프라인 설계 + 모니터링 아키텍처 | (없음) |
 | Do | 직접 | 파이프라인/모니터링 설정 파일 작성 + 검증 | 설정 파일 |
 | Check | 직접 | 운영 지표 달성 여부 + 파이프라인 단계 완전성 | (없음) |
-| Report | 직접 | 운영 보고서 저장 | `docs/07-ops/{feature}-ops.md` |
+| Report | 직접 | 운영 분석 결과를 통합 보고서에 기록 | `docs/05-report/features/{feature}.report.md` 의 `## Operations Status` 섹션 |
 
 ---
 
@@ -101,6 +101,28 @@ C. 확장 범위: 표준 + SRE 검토 + 운영 런북 작성
 - CI/CD 파이프라인 모든 단계가 정의되어야 Check 통과 (단계 누락 시 재작업)
 - 설정 파일은 실제 프로젝트 구조 기반으로 작성 (추측 금지, 먼저 코드 구조 확인)
 - 배포 스크립트 작성 시 rollback 절차 포함
+
+### Operations Report 섹션 작성
+
+`docs/05-report/features/{feature}.report.md`의 `## Operations Status` 섹션에 작성.
+미실행 시 "N/A — COO 검토 미수행" 명시.
+
+```markdown
+## Operations Status
+
+### CI/CD 파이프라인 상태
+- 배포 상태: ...
+- 빌드 성공률: ...
+
+### 모니터링 지표
+| 지표 | 현재 | 목표 |
+|------|------|------|
+
+### 운영 이슈
+- ...
+```
+
+<!-- deprecated: docs/07-ops/ → docs/05-report/ 섹션으로 통합됨 -->
 
 ### Push 규칙
 
