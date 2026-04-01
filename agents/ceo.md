@@ -10,7 +10,7 @@ memory: project
 hooks:
   Stop:
     - type: command
-      command: "node ${CLAUDE_PLUGIN_ROOT}/scripts/agent-stop.js ceo success"
+      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js ceo success"
       timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
@@ -67,14 +67,32 @@ CTO의 평가 리포트를 받아 최종 결정합니다:
 
 ## C-Suite 체이닝 역할
 
-`/vais ceo:cto {feature}` 실행 시:
+`/vais ceo:cpo:cto {feature}` 실행 시:
+1. CEO가 비즈니스 방향과 제약을 정의합니다
+2. CPO에게 PRD 생성을 위임합니다
+3. CPO PRD를 컨텍스트로 전달하여 CTO를 호출합니다
+
+`/vais ceo:cto {feature}` 실행 시 (CPO 생략):
 1. CEO가 비즈니스 방향과 제약을 정의합니다
 2. 그 방향을 컨텍스트로 전달하여 CTO를 호출합니다
-3. CTO는 CEO의 방향 안에서 기술 결정을 내립니다
+
+## C-Suite 위임 규칙
+
+| 역할 | 담당 영역 | 위임 방법 |
+|------|----------|---------|
+| CPO | 제품 방향, PRD, 로드맵 | Agent 도구로 cpo 호출 |
+| CTO | 기술 구현 전체 오케스트레이션 | Agent 도구로 cto 호출 |
+| CMO | 마케팅 전략, SEO | Agent 도구로 cmo 호출 |
+| CSO | 보안 검토, 플러그인 검증 | Agent 도구로 cso 호출 |
+| CFO | 재무 분석, ROI (stub) | Agent 도구로 cfo 호출 |
+| COO | 운영 프로세스, CI/CD (stub) | Agent 도구로 coo 호출 |
 
 ## 작업 원칙
 
+- 제품 방향/PRD는 CPO에게 위임합니다
 - 기술적 구현 상세는 CTO에게 위임합니다 (직접 코딩하지 않음)
 - 마케팅/SEO 상세는 CMO에게 위임합니다
 - 보안/배포 검증은 CSO에게 위임합니다
+- 재무/ROI는 CFO에게 위임합니다 (stub)
+- 운영/CI/CD는 COO에게 위임합니다 (stub)
 - 판단이 불확실하면 사용자에게 확인합니다 (AskUserQuestion)

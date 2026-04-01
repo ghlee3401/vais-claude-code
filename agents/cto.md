@@ -11,7 +11,7 @@ memory: project
 hooks:
   Stop:
     - type: command
-      command: "node ${CLAUDE_PLUGIN_ROOT}/scripts/agent-stop.js cto success"
+      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js cto success"
       timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
