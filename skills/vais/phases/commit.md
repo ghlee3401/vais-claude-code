@@ -13,7 +13,7 @@ git 변경사항을 분석하여 Conventional Commits 형식의 커밋 메시지
 2. 스테이징 없으면 `git diff --stat` 및 `git diff`로 워킹 디렉토리 변경 분석
 3. 변경 범위와 성격을 기반으로 Conventional Commits 메시지 생성
 4. semver 범프 제안 (patch/minor/major)
-5. **버전 일괄 반영**: `package.json`, `vais.config.json` 등 버전 필드를 새 버전으로 업데이트
+5. **버전 일괄 반영**: `package.json`, `vais.config.json`, `README.md` 상단 버전 표기 및 버전 히스토리 테이블을 새 버전으로 업데이트
 6. 변경된 버전 파일을 스테이징에 포함
 7. 최종 커밋 메시지 확인 후 커밋 실행
 8. `git push origin {현재 브랜치}` 실행
