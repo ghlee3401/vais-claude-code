@@ -1,27 +1,12 @@
 ---
 name: cpo
-description: CPO 에이전트 호출. 제품 방향 설정 + PRD 생성 + 로드맵 정의. pm sub-agents 오케스트레이션.
+description: CPO 에이전트 호출. 제품 도메인 오케스트레이션 (PRD 생성 + 로드맵).
 ---
 
-### 📦 cpo — 제품 총괄
+# CPO Phase
 
-Agent 도구로 **cpo** 에이전트를 호출합니다.
+`${CLAUDE_PLUGIN_ROOT}/agents/cpo.md`를 읽고 그 안의 지침에 따라 실행하세요.
 
-#### 모드 판별
-
-사용자 입력을 분석하여 모드를 결정합니다:
-
-**Query 모드** (질문형):
-- 피처명만 입력: `/vais cpo login` → 해당 피처 PRD 현황
-- 피처명 없이: `/vais cpo` → 전체 PRD 목록 + 제품 방향 요약
-- 질문형: "어떤 피처 기획 중이야?", "PRD 있어?", "우선순위" 등
-
-**Command 모드** (PRD 생성):
-- 실행 의도: "결제 기능 PRD 만들어", "로그인 기획해", "로드맵 짜줘"
-
-#### 전달할 정보
-
-- 사용자 입력 원문: "$1"
-- `.vais/status.json` — 현재 피처 진행 상태
-- `docs/00-pm/` 디렉토리 — 기존 PRD 목록
-- CEO 전략 컨텍스트 (체이닝 시)
+전달 인자:
+- action: `$0`
+- feature: `$1`
