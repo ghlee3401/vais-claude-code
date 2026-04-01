@@ -1,6 +1,7 @@
 ---
 name: vais-validate-plugin
 description: >
+  ⚠️ DEPRECATED: v2.0.0부터 CSO 에이전트 Gate B로 통합되었습니다. `/vais cso {feature}` 사용.
   Claude Code 플러그인 검증 스킬. 플러그인 코드가 마켓플레이스 및 플러그인 배포 요구사항에 맞는지 검사합니다.
   Triggers: validate, 검증, 플러그인 체크, plugin check, marketplace, 배포, 패키징,
   plugin.json, hooks.json, marketplace.json, 플러그인 검사, 배포 준비.
@@ -9,7 +10,31 @@ argument-hint: "[plugin-path]"
 allowed-tools: Read, Bash, Glob, Grep, TodoWrite
 ---
 
-# 🔍 Claude Code 플러그인 검증
+# ⚠️ DEPRECATED: vais-validate-plugin → CSO Gate B
+
+> **v2.0.0부터 플러그인 검증은 CSO 에이전트 Gate B에 통합되었습니다.**
+
+## 자동 리다이렉트
+
+```
+/vais-validate-plugin {path}   →  /vais cso {feature}
+/vais validate-plugin          →  CSO Gate B 자동 실행 (권장)
+```
+
+이 스킬을 호출하면 자동으로 CSO Gate B가 실행됩니다.
+
+**CSO 사용법:**
+```bash
+/vais cso {feature}            # 보안 검토(Gate A) + 플러그인 검증(Gate B)
+/vais cto:cso {feature}        # CTO 구현 → CSO 검증
+/vais ceo:cto:cso {feature}    # 전체 C-Suite 체이닝
+```
+
+완전한 가이드: `skills/vais/phases/cso.md` 및 `agents/cso.md`
+
+---
+
+# 🔍 Claude Code 플러그인 검증 (레거시 참조용)
 
 플러그인 코드가 Claude Code 플러그인 및 마켓플레이스 배포 요구사항에 부합하는지 검사합니다.
 

@@ -1,5 +1,46 @@
 {
-  "version": "0.22.0",
+  "version": "2.0.0",
+  "plugin": {
+    "name": "vais-code",
+    "description": "Virtual AI C-Suite for software development",
+    "distributionUrl": "https://github.com/ghlee3401/vais-claude-code"
+  },
+  "cSuite": {
+    "orchestrator": "cto",
+    "deprecated": {
+      "manager": "cto"
+    },
+    "roles": {
+      "cto": { "required": true,  "model": "opus",   "layer": "strategy-tech",    "agent": "agents/cto.md" },
+      "ceo": { "required": false, "model": "opus",   "layer": "strategy-biz",     "agent": "agents/ceo.md" },
+      "cpo": { "required": false, "model": "opus",   "layer": "strategy-product", "agent": "agents/cpo.md" },
+      "cmo": { "required": false, "model": "sonnet", "layer": "growth",           "agent": "agents/cmo.md" },
+      "cso": { "required": false, "model": "sonnet", "layer": "quality",          "agent": "agents/cso.md" },
+      "cdo": { "required": false, "model": "sonnet", "layer": "data",             "agent": "agents/cdo.md" },
+      "cro": { "required": false, "model": "sonnet", "layer": "growth",           "agent": "agents/cro.md" },
+      "coo": { "required": false, "model": "sonnet", "layer": "ops",              "agent": "agents/coo.md" }
+    },
+    "autoKeywords": {
+      "cso": ["payment", "auth", "login", "security", "결제", "인증", "보안"],
+      "cmo": ["landing", "marketing", "launch", "마케팅", "랜딩", "캠페인"],
+      "cdo": ["analytics", "dashboard", "metrics", "분석", "대시보드", "지표"],
+      "ceo": ["new product", "신규 서비스", "방향", "전략", "strategy"],
+      "coo": ["deploy", "release", "배포", "릴리스", "운영", "infra"]
+    }
+  },
+  "observability": {
+    "enabled": true,
+    "stateFile": ".vais/agent-state.json",
+    "eventLog": ".vais/event-log.jsonl",
+    "maxEventLogSizeMB": 10,
+    "rotateAfterDays": 30,
+    "archivePath": ".vais/archive/"
+  },
+  "mcp": {
+    "enabled": false,
+    "server": "mcp/vais-server/",
+    "port": 8765
+  },
   "workflow": {
     "phases": ["plan", "design", "architect", "frontend", "backend", "qa", "report"],
     "phaseNames": {

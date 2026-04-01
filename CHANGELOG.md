@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.23.0] - 2026-04-01
+
+### Added
+
+- **C-Suite 아키텍처 v2.0** — 6-레이어 플랫폼 아키텍처 (Phase 1 + Phase 2)
+  - `agents/cto.md` — CTO 에이전트 (manager 역할 계승 + 오케스트레이션)
+  - `agents/ceo.md` — CEO 에이전트 (비즈니스 전략 + Reference Absorption 지휘)
+  - `agents/cmo.md` — CMO 에이전트 (마케팅 + SEO 감사 통합)
+  - `agents/cso.md` — CSO 에이전트 (보안 Gate A + 플러그인 검증 Gate B)
+  - `skills/vais/phases/cto|ceo|cmo|cso|absorb.md` — 각 C-Suite 워크플로우 지침
+- **lib/observability/** — Layer 4 State/Event 모듈
+  - `state-writer.js` — `.vais/agent-state.json` 실시간 에이전트 상태 관리
+  - `event-logger.js` — `.vais/event-log.jsonl` 감사 로그 (append-only JSONL)
+  - `schema.js` — 이벤트 타입 상수 + 페이로드 스키마
+  - `rotation.js` — 로그 로테이션 유틸
+- **lib/absorb-evaluator.js** — Reference Absorption 평가 엔진
+  - checkDuplicate / checkOverlap / assessQuality / assessFit / evaluate / record
+  - `.vais/absorption-ledger.jsonl` append-only 기록
+- **scripts/** — Hook 호출 CLI 래퍼
+  - `agent-start.js`, `agent-stop.js`, `phase-transition.js`
+- **hooks/events.json** — 이벤트 스키마 문서 (MCP/대시보드 소비용)
+- **package.json** — Claude plugin 메타데이터 (`claude-plugin` 필드)
+
+### Changed
+
+- `vais.config.json` → v2.0.0 플랫폼 버전 + `cSuite`, `observability`, `plugin`, `mcp` 섹션 추가
+- `hooks/hooks.json` — SubagentStart/Stop 이벤트 훅 추가
+- `agents/manager.md` — deprecated redirect → CTO
+- `skills/vais/phases/auto.md` — deprecated redirect → CTO
+- `skills/vais-seo/SKILL.md` — deprecated redirect → CMO (`/vais cmo`)
+- `skills/vais-validate-plugin/SKILL.md` — deprecated redirect → CSO (`/vais cso`)
+- `skills/vais/SKILL.md` — cto/ceo/cmo/cso/absorb 액션 추가, manager/auto deprecated 처리
+
 ## [0.22.0] - 2026-03-26
 
 ### Added

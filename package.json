@@ -1,0 +1,18 @@
+{
+  "name": "vais-code",
+  "version": "2.0.0",
+  "description": "Virtual AI C-Suite for software development — Claude Code Plugin",
+  "author": "ghlee3401",
+  "license": "MIT",
+  "type": "module",
+  "claude-plugin": {
+    "skills": ["skills/vais/SKILL.md"],
+    "agents": ["agents/"],
+    "hooks": ["hooks/hooks.json"],
+    "mcp": ["mcp/vais-server/"]
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["claude-code", "claude-plugin", "ai-agents", "c-suite", "vais"]
+}

@@ -1,6 +1,7 @@
 ---
 name: vais-seo
 description: >
+  ⚠️ DEPRECATED: v2.0.0부터 CMO 에이전트로 통합되었습니다. `/vais cmo {feature}` 또는 `/vais seo {feature}` 사용.
   SEO 감사 및 최적화 스킬. 웹 프로젝트의 HTML 파일을 분석하여 Google SEO 기본 가이드 기준으로
   검색엔진 최적화 상태를 점검하고 개선안을 제시합니다.
   Triggers: seo, SEO, 검색엔진, 검색 최적화, meta tag, 메타태그, title tag, sitemap, 사이트맵,
@@ -11,7 +12,30 @@ argument-hint: "[path-or-url]"
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, TodoWrite
 ---
 
-# 🔍 VAIS SEO — 검색엔진 최적화 감사
+# ⚠️ DEPRECATED: vais-seo → CMO
+
+> **v2.0.0부터 SEO 감사는 CMO 에이전트에 통합되었습니다.**
+
+## 자동 리다이렉트
+
+```
+/vais-seo {path}       →  /vais cmo {feature}
+/vais seo {feature}    →  /vais cmo {feature}  (권장)
+```
+
+이 스킬을 호출하면 자동으로 CMO 에이전트가 실행됩니다.
+
+**CMO 사용법:**
+```bash
+/vais cmo {feature}     # SEO 감사 + 마케팅 전략
+/vais ceo:cmo {feature} # CEO 전략 → CMO 실행
+```
+
+완전한 가이드: `skills/vais/phases/cmo.md` 및 `agents/cmo.md`
+
+---
+
+# 🔍 VAIS SEO — 검색엔진 최적화 감사 (레거시 참조용)
 
 Google SEO 기본 가이드(Google Search Central)를 기준으로 웹 프로젝트의 SEO 상태를 점검합니다.
 
