@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.25.0] - 2026-04-01
+
+### Changed
+
+- **SKILL.md** — 체이닝 문법(`:` 순차, `+` 병렬) 제거. 에이전트 자율 위임 구조로 전환
+- **README** — 전면 재작성. GitHub docs 스타일, 체이닝 섹션 제거, Command Format / Executive Roles 구조 정비
+
+### Removed
+
+- 체이닝 파싱 섹션 (`## 체이닝 파싱`, `## 병렬 에이전트 매핑`)
+- 체이닝 액션 예시 (`ceo:cpo:cto`, `ceo:cto`, `plan:design:architect`, `frontend+backend`)
+
+---
+
 ## [0.24.0] - 2026-04-01
 
 ### Added
