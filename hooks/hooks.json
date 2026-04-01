@@ -62,7 +62,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/agent-start.js ${AGENT_NAME:-unknown} ${PHASE:-unknown}",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/agent-start.mjs ${AGENT_NAME:-unknown} ${PHASE:-unknown}",
             "timeout": 5000
           }
         ]
@@ -73,7 +73,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/agent-stop.js ${AGENT_NAME:-unknown} ${OUTCOME:-success}",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/agent-stop.mjs ${AGENT_NAME:-unknown} ${OUTCOME:-success}",
             "timeout": 5000
           }
         ]

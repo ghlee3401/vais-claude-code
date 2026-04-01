@@ -2,7 +2,7 @@
 // Design Ref: §2.2 — SubagentStart 훅에서 호출되는 얇은 CLI 래퍼. 로직은 lib/observability/에 위임
 // 사용: node scripts/agent-start.js <role> <phase> [task]
 
-import { StateWriter, EventLogger, EVENT_TYPES } from '../lib/observability/index.js'
+import { StateWriter, EventLogger, EVENT_TYPES } from '../lib/observability/index.mjs'
 
 const [role, phase, task = ''] = process.argv.slice(2)
 

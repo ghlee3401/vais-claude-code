@@ -2,7 +2,7 @@
 // Design Ref: §2.2 — SubagentStop 훅에서 호출되는 얇은 CLI 래퍼
 // 사용: node scripts/agent-stop.js <role> <outcome> [outputDoc]
 
-import { StateWriter, EventLogger, EVENT_TYPES } from '../lib/observability/index.js'
+import { StateWriter, EventLogger, EVENT_TYPES } from '../lib/observability/index.mjs'
 
 const [role, outcome = 'success', outputDoc = ''] = process.argv.slice(2)
 

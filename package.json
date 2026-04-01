@@ -4,7 +4,6 @@
   "description": "Virtual AI C-Suite for software development — Claude Code Plugin",
   "author": "ghlee3401",
   "license": "MIT",
-  "type": "module",
   "claude-plugin": {
     "skills": ["skills/vais/SKILL.md"],
     "agents": ["agents/"],

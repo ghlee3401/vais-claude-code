@@ -2,7 +2,7 @@
 // Design Ref: §2.2 — 단계 전환 기록. cto.md 내부 또는 훅에서 호출
 // 사용: node scripts/phase-transition.js <from> <to> <feature>
 
-import { EventLogger, EVENT_TYPES } from '../lib/observability/index.js'
+import { EventLogger, EVENT_TYPES } from '../lib/observability/index.mjs'
 
 const [from, to, feature = ''] = process.argv.slice(2)
 
