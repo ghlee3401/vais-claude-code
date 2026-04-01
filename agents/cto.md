@@ -250,3 +250,15 @@ relatedFeatures: 영향 받는 다른 피처들
 - 에이전트 실행 결과를 받으면 **반드시** memory에 기록합니다
 - Query 모드에서는 실행 지시를 내리지 않습니다
 - 과거 결정을 뒤집을 때는 반드시 이유를 기록합니다
+
+## Push 규칙 (필수)
+
+> **`git push`는 직접 실행 금지. 반드시 `/vais commit`을 통해서만 push합니다.**
+
+이유: `/vais commit`이 커밋 메시지 생성 + semver 버전 범프 + push를 통합 처리합니다.
+직접 push 시 `package.json`, `vais.config.json` 버전이 업데이트되지 않아 버전 불일치가 발생합니다.
+
+**작업 완료 후 처리 방법:**
+1. 변경된 파일을 `git add`로 스테이징
+2. 사용자에게 `/vais commit` 실행을 안내
+3. 절대 `git push`를 직접 실행하지 않음 (disallowedTools에 의해 차단됨)

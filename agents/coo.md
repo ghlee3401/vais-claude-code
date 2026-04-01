@@ -14,7 +14,7 @@ hooks:
       timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
-  - "Bash(git push --force*)"
+  - "Bash(git push*)"
 ---
 
 # COO Agent
