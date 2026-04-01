@@ -81,7 +81,13 @@ function main() {
   }
 
   // --- Output ---
-  const response = { additionalContext: ctx };
+  const response = {
+    systemMessage: `VAIS Code v${VERSION} activated (Claude Code)`,
+    hookSpecificOutput: {
+      hookEventName: 'SessionStart',
+      additionalContext: ctx,
+    },
+  };
 
   sendWebhook('session_start', {
     project: process.cwd(),
