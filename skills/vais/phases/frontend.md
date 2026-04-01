@@ -1,64 +1,10 @@
-### 💻 frontend — 프론트엔드 구현
+## ⚠️ 이 커맨드는 CTO를 통해 실행됩니다
 
-#### Upstream Context Loading
+이 액션은 더 이상 직접 실행되지 않습니다.
 
-1. Plan 문서 **전체** 읽기 (`docs/01-plan/{feature}.md`) — Context Anchor, Success Criteria, 정책 정의, 코딩 규칙 확인
-2. Design 문서 **전체** 읽기 (`docs/02-design/{feature}.md`) — Architecture Option 선택 근거, 화면별 상세 정의, Session Guide 확인
-3. Decision Record 표시:
-   ```
-   📋 Decision Record
-   [Plan] 기술 스택: {선택} — {근거}
-   [Plan] UI 컴포넌트: {선택} — {근거}
-   [Design] Architecture: Option {X} — {근거}
-   ```
+👉 **`/vais cto {feature}`** 를 실행하세요.
 
-#### Code Comment Convention
+CTO가 다음 단계를 순서대로 오케스트레이션합니다:
+  plan → design → architect → backend + frontend → qa
 
-구현 시 아래 주석 패턴을 핵심 결정 지점에 적용:
-- 모듈/파일 수준: `// Design Ref: §{섹션} — {설계 결정 근거}`
-- 핵심 로직: `// Plan SC: {성공 기준 내용}`
-
-#### Scope 선택 (구현 범위)
-
-Design 문서의 **Session Guide**가 있으면 Module Map을 표시하고 AskUserQuestion으로 이번 세션 구현 범위를 선택:
-- 옵션: "전체 구현 (Recommended)", Module Map의 각 모듈 (최대 3개 옵션)
-- **multiSelect가 아닌 단일 선택** — 한 세션에 하나의 scope에 집중
-- Session Guide가 없으면 전체 구현으로 진행
-- auto 모드: 전체 구현
-
-선택한 scope에 해당하는 화면/컴포넌트만 구현 대상으로 필터링.
-
-#### 컴포넌트 구현 순서 (multiSelect)
-
-scope 선택 후, 해당 범위 내 구현할 화면/컴포넌트 목록을 AskUserQuestion **(multiSelect: true)**으로 제시:
-- 옵션: scope 내 주요 화면/컴포넌트 (설계 문서에서 추출, 최대 4개 그룹)
-- 사용자가 이번 세션에서 구현할 항목을 복수 선택
-- auto 모드: 전체 선택
-
-#### 구현 시작
-
-1. **피처 레지스트리 참조** (`.vais/features/{feature}.json`) — 구현해야 할 기능 목록(`features[]`) 전체 확인. 각 기능 구현 후 `status`를 `"진행중"` → `"완료"`로 업데이트
-2. **기획서 참조** (`docs/01-plan/{feature}.md`) — 정책 정의, 코딩 규칙, UI 컴포넌트 라이브러리 확인
-3. **디자인 시스템 참조** (`design-system/{feature}/MASTER.md`) — 색상, 타이포, 간격, 스타일 토큰. 화면별 오버라이드가 있으면 `design-system/{feature}/pages/` 우선
-4. **설계 문서의 화면별 상세 정의 참조** (`docs/02-design/{feature}.md`) — IA, 와이어프레임, 화면별 컴포넌트, 상태, 인터랙션, 데이터 흐름 확인
-5. **Interface Contract 참조** (`docs/02-design/{feature}-ic.md`) — API 엔드포인트, 요청/응답 스키마, 에러 코드 확인
-6. **인프라 문서 참조** (`docs/03-architect/{feature}.md`) — 프로젝트 설정, 환경 변수 확인
-7. **UI 컴포넌트 라이브러리 설정**:
-   - 기획서에서 선택된 라이브러리 확인
-   - **라이브러리가 있으면**: 설치 및 초기화 (예: `npx shadcn@latest init`)
-   - 화면별 상세 정의의 컴포넌트 매핑표 기반으로 필요한 컴포넌트 추가
-8. **화면별로 구현** — 설계 문서의 화면별 상세 정의 순서대로:
-   - 라이브러리 컴포넌트를 우선 사용 (Button, Input, Card, Dialog 등)
-   - 라이브러리에 없는 컴포넌트만 커스텀 구현
-   - 상태 정의(로딩/에러/빈 상태) 반영
-   - 인터랙션 패턴과 데이터 흐름 구현
-   - 정책 정의(유효성 검증, 권한)를 화면에 반영
-   - **Interface Contract의 API 엔드포인트에 맞춰** API 호출 구현
-9. **CSS/스타일 파일 확인**:
-   - Glob으로 기존 CSS 탐색 (`**/*.css`, `**/*.scss`, `**/tailwind.config.*`)
-   - **auto 모드**: CSS 없으면 design 토큰 기반 자동 생성
-   - **수동 모드**: AskUserQuestion으로 선택
-10. 반응형, 접근성 구현
-11. 실제 코드 생성
-
-**에이전트**: frontend
+각 단계 완료 시 CTO가 확인을 요청합니다.
