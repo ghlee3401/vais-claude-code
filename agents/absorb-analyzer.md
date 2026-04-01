@@ -7,6 +7,10 @@ description: |
   판단(absorb/merge/reject)은 CEO가 내림 — 이 에이전트는 분석만 담당.
 model: sonnet
 tools: [Read, Glob, Grep, Bash, TodoWrite]
+disallowedTools:
+  - "Bash(rm -rf*)"
+  - "Bash(git push*)"
+  - "Bash(git reset --hard*)"
 ---
 
 # absorb-analyzer Agent

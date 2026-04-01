@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.28.0** · 내 개인 Claude Code 플러그인
+**v0.28.1** · 내 개인 Claude Code 플러그인
 
 > C-Suite AI 팀. `/vais cto {feature}` 하나로 기획부터 구현까지.
 
@@ -209,6 +209,7 @@ vais-claude-code/
 
 | 버전 | 주요 변경 |
 |------|---------|
+| v0.28.1 | CSO Gate B 이슈 수정: absorb-analyzer disallowedTools 추가, package.json mcp 경로 제거 |
 | v0.28.0 | C레벨 PDCA 표준화, phases thin entry point, CFO/COO STUB 제거, convention 문서 신규 |
 | v0.27.0 | absorb→CEO 소관 이전, absorb-analyzer subagent 신설, phases/utils 폴더 분리 |
 | v0.26.3 | /vais commit 3단계 확인 흐름 추가 |
