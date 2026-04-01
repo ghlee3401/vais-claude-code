@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.24.0] - 2026-04-01
+
+### Added
+
+- **CPO 에이전트 신설** (`agents/cpo.md`) — 제품 방향 + PRD 생성 + pm sub-agents 오케스트레이션
+- **CFO 에이전트 stub** (`agents/cfo.md`) — 재무/ROI 분석 역할 예약
+- **COO 에이전트 stub** (`agents/coo.md`) — 운영/CI/CD 역할 예약
+- **seo sub-agent** (`agents/seo.md`) — CMO에서 분리된 SEO 감사 전용 에이전트
+- **security sub-agent** (`agents/security.md`) — CSO Gate A 전용 OWASP 체크리스트 에이전트
+- **validate-plugin sub-agent** (`agents/validate-plugin.md`) — CSO Gate B 전용 플러그인 검증 에이전트
+- **phases/cpo.md / cfo.md / coo.md** — 각 C-Suite phase 실행 파일
+
+### Changed
+
+- **CMO v2.0** (`agents/cmo.md`) — 인라인 SEO 로직 제거, seo sub-agent 위임 패턴으로 교체
+- **CSO v2.0** (`agents/cso.md`) — 인라인 OWASP/plugin 로직 제거, security/validate-plugin sub-agent 위임으로 교체
+- **CEO** (`agents/ceo.md`) — CPO/CFO/COO 위임 테이블 추가, `ceo:cpo:cto` 체이닝 지원
+- **SKILL.md** — cpo/cfo/coo 액션 추가, `ceo:cpo:cto` 체이닝 예시 추가
+- **README** — v0.24.0 기준 전체 리뉴얼 (C-Suite 계층 다이어그램, 에이전트 표, 마이그레이션 가이드)
+- **Stop hooks** — 모든 에이전트 `${CLAUDE_PLUGIN_ROOT:-$(pwd)}` fallback 적용 (개발 환경 호환)
+
+### Removed
+
+- `skills/vais-seo/` — 독립 스킬 제거, `agents/seo.md`로 통합
+- `skills/vais-validate-plugin/` — 독립 스킬 제거, `agents/validate-plugin.md`로 통합
+- `agents/manager.md` — deprecated 에이전트 완전 삭제
+- `skills/vais/phases/manager.md` — deprecated phase 파일 삭제
+- `skills/vais/phases/auto.md` — deprecated phase 파일 삭제
+
+---
+
 ## [0.23.0] - 2026-04-01
 
 ### Added
