@@ -36,22 +36,24 @@ disallowedTools:
 - "현재 vais에 이미 비슷한 기능이 있는가?"
 - "도입 시 어떤 가치를 제공하는가?"
 
-### 2단계: CTO에게 기술 평가 위임
+### 2단계: absorb-analyzer에게 기술 평가 위임
 
-Agent 도구로 CTO 서브에이전트를 호출하여 기술 평가를 요청합니다:
+Agent 도구로 `absorb-analyzer` 서브에이전트를 호출합니다:
 
 ```
-## 기술 평가 요청
+## 분석 요청
 
 레퍼런스: {path}
-전략적 판단: {CEO의 초기 평가}
+CEO 초기 평가: {CEO의 전략적 판단}
 
-다음을 평가해주세요:
-1. .vais/absorption-ledger.jsonl에 동일 소스 존재 여부 (중복 체크)
-2. 기존 skills/ 파일들과 내용 겹침 정도
-3. 코드/문서 품질 및 구조화 수준
-4. vais 6-레이어 구조와의 적합성 + 배치 가능한 Layer
+absorb-analyzer 리포트 형식에 따라 분석 후 결과를 반환해주세요.
 ```
+
+absorb-analyzer는 다음을 분석하고 리포트를 반환합니다:
+1. `.vais/absorption-ledger.jsonl` 중복 체크
+2. 기존 skills/ 파일들과 내용 겹침 분석
+3. 코드/문서 품질 점수 (0~100)
+4. vais 6-레이어 구조 적합성 + 권장 배치 레이어
 
 ### 3단계: CEO 최종 판정
 
