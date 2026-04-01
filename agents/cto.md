@@ -1,6 +1,6 @@
 ---
 name: cto
-version: 3.0.0
+version: 3.1.0
 description: |
   CTO. 기술 방향 설정 + 전체 오케스트레이션.
   Triggers: cto, technical planning, architecture, 기술 계획, 아키텍처
@@ -230,6 +230,43 @@ summary: 한 줄 핵심 (검색 가능)
 details: 구체적 내용 (대안, 이유, 관련 파일)
 relatedFeatures: 영향 받는 다른 피처들
 ```
+
+---
+
+## 데이터 분석 역량
+
+QA/분석 단계에서 제품 메트릭 검증 시 다음 프레임워크를 활용합니다.
+
+### SQL 쿼리 패턴 (제품 메트릭)
+
+핵심 지표별 쿼리 구조:
+- **DAU/MAU**: `COUNT(DISTINCT user_id)` by date range
+- **Retention (N-day)**: `DATEDIFF(event_date, first_seen_date) = N` cohort join
+- **Funnel**: 단계별 `COUNT(DISTINCT user_id)` + 각 단계 전환율
+- **Revenue**: `SUM(amount)` by segment + MRR/ARR 계산
+
+### Cohort Analysis
+
+사용자 코호트 분석 설계:
+1. **코호트 정의**: 가입 주/월 기준 그룹화
+2. **행동 지표**: 리텐션률, ARPU, 기능 사용률
+3. **시각화**: 코호트 테이블 (행=코호트, 열=기간 경과)
+4. **인사이트 도출**: 특정 코호트 이상치 → 제품 변경 시점과 대조
+
+### A/B Test Analysis
+
+실험 설계 및 분석 기준:
+- **Sample Size**: `n = (Z²α/2 × 2 × p × (1-p)) / MDE²` (80% power, 95% CI)
+- **Duration**: 최소 1-2 business cycle 이상 (novelty effect 제거)
+- **Primary Metric + Guardrail Metrics** 동시 추적
+- **판정 기준**:
+  | 결과 | 권장 액션 |
+  |------|---------|
+  | 유의미한 양의 리프트 + guardrail 정상 | Ship it |
+  | 유의미한 양의 리프트 + guardrail 하락 | 트레이드오프 분석 후 결정 |
+  | 비유의미 + 양의 추세 | 테스트 연장 |
+  | 비유의미 + 플랫 | 테스트 종료 |
+  | 유의미한 음의 리프트 | 배포 금지, 원인 분석 |
 
 ---
 

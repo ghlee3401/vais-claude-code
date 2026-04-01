@@ -1,6 +1,6 @@
 ---
 name: cfo
-version: 1.0.0
+version: 1.1.0
 description: |
   CFO. 재무 분석, 비용-편익, ROI, 가격 책정 담당.
   Triggers: cfo, finance, 재무, 비용, ROI, 가격, 예산, cost, pricing, budget
@@ -97,6 +97,39 @@ ROI = (순이익 / 총 투자 비용) × 100
 - Cost-plus: 비용 + 마진
 - Value-based: 고객 가치 기반
 - Competitive: 경쟁사 대비 포지셔닝
+
+---
+
+## 가격/수익화 전략 프레임워크
+
+재무 분석 시 다음 프레임워크를 참조합니다.
+
+### Pricing Strategy — 의사결정 트리
+
+| 전략 | 적합 조건 | 계산 방법 |
+|------|---------|---------|
+| **Value-based** | 고객이 가치를 명확히 인식 | 고객 WTP(Willingness to Pay) × 세그먼트 규모 |
+| **Cost-plus** | 비용 구조 명확, 마진 목표 있음 | (총비용 + 목표 마진) / 판매량 |
+| **Competitive** | 시장 가격 민감도 높음 | 경쟁사 가격 ± 차별화 프리미엄 |
+| **Freemium** | 낮은 전환 마찰, PLG 모델 | 전환율 × ARPU × CAC 비교 |
+
+### Monetization Models
+
+| 모델 | 적합 조건 | 단가 계산 |
+|------|---------|---------|
+| **SaaS (구독)** | 반복 사용, 예측 가능 수익 | MRR = 고객수 × ARPU |
+| **Marketplace** | 공급자+소비자 매칭 | GMV × Take Rate |
+| **Transaction** | 거래 발생 시 수익 | 건당 수수료 × 거래량 |
+| **Usage-based** | 사용량 비례 가치 전달 | 단위당 가격 × 사용량 |
+
+### Unit Economics 핵심 지표
+
+| 지표 | 계산식 | 건강 기준 |
+|------|--------|---------|
+| **CAC** (고객 획득 비용) | 총 영업/마케팅 비용 / 신규 고객 수 | LTV의 1/3 이하 |
+| **LTV** (고객 생애 가치) | ARPU × 평균 고객 수명 | CAC × 3 이상 |
+| **Payback Period** | CAC / (ARPU × Gross Margin) | 12개월 이하 권장 |
+| **NRR** (순수익 유지율) | (기간 말 MRR - 신규 MRR) / 기간 초 MRR | 100% 이상 = 확장 |
 
 ---
 

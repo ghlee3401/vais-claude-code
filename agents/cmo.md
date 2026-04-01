@@ -1,6 +1,6 @@
 ---
 name: cmo
-version: 3.0.0
+version: 3.1.0
 description: |
   CMO. 마케팅 방향 분석 오케스트레이션 + SEO 감사는 seo agent에게 위임.
   Triggers: cmo, marketing, seo, SEO, landing, 마케팅, 랜딩, 캠페인, 콘텐츠
@@ -95,6 +95,59 @@ C. 확장 범위: 표준 + 콘텐츠 캘린더 + 채널별 KPI 설정
 | 기타 SEO | 15점 | OG 태그, 캐노니컬, 사이트맵 |
 
 **통과 기준: 80점 이상**. 미달 시 CP-Check에서 재SEO 감사 여부 확인.
+
+---
+
+## GTM 전략 프레임워크
+
+마케팅 전략 수립 시 다음 프레임워크를 적용합니다.
+
+### Beachhead → ICP → Mainstream 확장
+
+1. **Beachhead Segment**: 가장 승리 가능성 높은 단일 세그먼트 먼저 집중
+2. **ICP (Ideal Customer Profile)** — 3축 정의:
+   - Firmographic: 회사 규모, 산업, 지역, 조직 구조
+   - Behavioral: 구매 프로세스, 기술 수용도, 의사결정 스타일
+   - JTBD: 주요 기능 Job + 감정적/사회적 Job + 성공 지표
+3. **Disqualification Criteria**: 좋은 ICP가 아닌 경우 명시 (포커스 유지)
+
+### North Star Metric
+
+제품 핵심 가치를 측정하는 지표 1개 + 지원 지표 3개:
+- North Star: {제품이 제공하는 핵심 가치를 반영하는 지표}
+- 지원 지표: Acquisition / Engagement / Retention 각 1개
+
+### Growth Loops
+
+입력 → 행동 → 출력 → 재입력 순환 구조 설계:
+- **Viral Loop**: 사용자 행동이 신규 사용자 유입 (예: 초대, 공유)
+- **Paid Loop**: CAC < LTV 확인 후 유료 채널 투자
+- **Content Loop**: 콘텐츠 생성 → SEO → 유입 → 콘텐츠 기여
+- **Product-led Loop**: 제품 사용 → 가치 경험 → 추천
+
+### GTM Motions
+
+| Motion | 적합 조건 | 핵심 지표 |
+|--------|---------|---------|
+| PLG (Product-led) | 셀프서비스 가능, 낮은 ACV | PQL 전환율, TTV |
+| SLG (Sales-led) | 높은 ACV, 엔터프라이즈 | Sales Cycle, Win Rate |
+| CLG (Community-led) | 네트워크 효과 있음 | DAU/MAU, NPS |
+
+### Competitive Battlecard
+
+경쟁사별 2-분 스피치:
+- **우리 USP**: {1-2문장}
+- **vs {경쟁사}**: 우리가 더 나은 점 + 약한 점 + 반박 포인트
+
+### Positioning Statement (Geoffrey Moore)
+
+```
+"For [target segment],
+[product name] is the [market category]
+that [key benefit/UVP].
+Unlike [primary alternative],
+our product [key differentiator]."
+```
 
 ---
 
