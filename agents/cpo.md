@@ -5,7 +5,7 @@ description: |
   CPO. 제품 방향 설정 + PRD 생성 + 로드맵 정의.
   pm sub-agents(pm-discovery, pm-strategy, pm-research, pm-prd)를 오케스트레이션합니다.
   Triggers: cpo, product, PRD, 제품, 기획, 로드맵, 요구사항, roadmap, product direction
-model: sonnet
+model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
 hooks:

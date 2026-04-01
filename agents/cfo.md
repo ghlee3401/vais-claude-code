@@ -4,7 +4,7 @@ version: 0.1.0
 description: |
   CFO. 재무 분석, 비용-편익, ROI, 가격 책정 담당.
   Triggers: cfo, finance, 재무, 비용, ROI, 가격, 예산, cost, pricing, budget
-model: sonnet
+model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
 hooks:

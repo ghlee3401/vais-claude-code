@@ -13,13 +13,13 @@
     "roles": {
       "cto": { "required": true,  "model": "opus",   "layer": "strategy-tech",    "agent": "agents/cto.md" },
       "ceo": { "required": false, "model": "opus",   "layer": "strategy-biz",     "agent": "agents/ceo.md" },
-      "cpo": { "required": false, "model": "sonnet", "layer": "strategy-product", "agent": "agents/cpo.md" },
-      "cfo": { "required": false, "model": "sonnet", "layer": "finance",          "agent": "agents/cfo.md" },
-      "cmo": { "required": false, "model": "sonnet", "layer": "growth",           "agent": "agents/cmo.md" },
-      "cso": { "required": false, "model": "sonnet", "layer": "quality",          "agent": "agents/cso.md" },
-      "cdo": { "required": false, "model": "sonnet", "layer": "data",             "agent": "agents/cdo.md" },
-      "cro": { "required": false, "model": "sonnet", "layer": "growth",           "agent": "agents/cro.md" },
-      "coo": { "required": false, "model": "sonnet", "layer": "ops",              "agent": "agents/coo.md" }
+      "cpo": { "required": false, "model": "opus",   "layer": "strategy-product", "agent": "agents/cpo.md" },
+      "cfo": { "required": false, "model": "opus",   "layer": "finance",          "agent": "agents/cfo.md" },
+      "cmo": { "required": false, "model": "opus",   "layer": "growth",           "agent": "agents/cmo.md" },
+      "cso": { "required": false, "model": "opus",   "layer": "quality",          "agent": "agents/cso.md" },
+      "cdo": { "required": false, "model": "opus",   "layer": "data",             "agent": "agents/cdo.md" },
+      "cro": { "required": false, "model": "opus",   "layer": "growth",           "agent": "agents/cro.md" },
+      "coo": { "required": false, "model": "opus",   "layer": "ops",              "agent": "agents/coo.md" }
     },
     "autoKeywords": {
       "cso": ["payment", "auth", "login", "security", "결제", "인증", "보안"],

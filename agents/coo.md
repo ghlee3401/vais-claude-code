@@ -4,7 +4,7 @@ version: 0.1.0
 description: |
   COO. 운영 프로세스, CI/CD 파이프라인, 모니터링, 워크플로우 최적화 담당.
   Triggers: coo, operations, 운영, CI/CD, 배포, 모니터링, 프로세스, deploy, monitoring
-model: sonnet
+model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
 hooks:

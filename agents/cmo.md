@@ -4,7 +4,7 @@ version: 2.0.0
 description: |
   CMO. 마케팅 방향 분석 오케스트레이션 + SEO 감사는 seo agent에게 위임.
   Triggers: cmo, marketing, seo, SEO, landing, 마케팅, 랜딩, 캠페인, 콘텐츠
-model: sonnet
+model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
 hooks:

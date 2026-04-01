@@ -5,7 +5,7 @@ description: |
   CSO. 보안 검토(Gate A) + 플러그인 배포 검증(Gate B) 오케스트레이션.
   실행은 security/validate-plugin sub-agent에게 위임, CSO는 최종 판정만 담당.
   Triggers: cso, security, plugin 배포, 마켓플레이스, 배포 준비, 인증, 보안, 결제
-model: sonnet
+model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
 hooks:
