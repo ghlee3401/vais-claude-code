@@ -44,7 +44,15 @@
       "Bash(cp /home/ghlee0304-ubuntu/workspace/vais-claude-code/skills/vais/phases/qa.md /home/ghlee0304-ubuntu/.claude/plugins/marketplaces/vais-marketplace/skills/vais/phases/qa.md)",
       "Bash(cp /home/ghlee0304-ubuntu/workspace/vais-claude-code/skills/vais/phases/*.md /home/ghlee0304-ubuntu/.claude/plugins/marketplaces/vais-marketplace/skills/vais/phases/)",
       "Bash(rm -f /home/ghlee0304-ubuntu/.claude/plugins/marketplaces/vais-marketplace/skills/vais/phases/validate.md)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Skill(pdca)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(python3 -m json.tool)",
+      "Bash(grep:*)",
+      "Bash(git remote:*)",
+      "Read(//home/claude/.claude/plugins/marketplaces/**)",
+      "Read(//home/claude/.claude/plugins/marketplaces/vais-marketplace/**)",
+      "Bash(chmod +x:*)"
     ]
   }
 }

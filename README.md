@@ -78,7 +78,7 @@ vais-code 개선된 버전
 | CFO | sonnet | 재무/ROI 분석 _(stub)_ |
 | COO | sonnet | 운영/CI/CD _(stub)_ |
 
-### 구현 에이전트 (CTO가 직접 위임, 내가 직접 부르지 않음)
+### CTO 구현 에이전트 (CTO가 직접 위임, 내가 직접 부르지 않음)
 
 | 에이전트 | 역할 |
 |---------|------|
@@ -87,9 +87,14 @@ vais-code 개선된 버전
 | frontend | 프론트엔드 구현 |
 | backend | 백엔드 API |
 | qa | Gap 분석 + 코드 리뷰 + 보안 |
-| seo | SEO 감사 (CMO sub-agent) |
-| security | OWASP Top 10 (CSO sub-agent) |
-| validate-plugin | 플러그인 구조 검증 (CSO sub-agent) |
+
+### CMO / CSO Sub-agent (각 C-Suite이 위임, 내가 직접 부르지 않음)
+
+| 에이전트 | 상위 | 역할 |
+|---------|------|------|
+| seo | CMO | SEO 감사 |
+| security | CSO | OWASP Top 10 보안 검토 |
+| validate-plugin | CSO | 플러그인 구조 검증 |
 
 ---
 
@@ -110,7 +115,7 @@ vais-code 개선된 버전
 ```bash
 /vais status             # 피처 진행 현황
 /vais absorb {path}      # 외부 레퍼런스 흡수
-/vais commit             # Conventional Commits + semver 자동 판단
+/vais commit             # git 변경사항 분석 → Conventional Commits 메시지 생성 + semver 범프 제안
 /vais init {feature}     # 기존 프로젝트 → VAIS 문서 역생성
 /vais help               # 도움말
 ```

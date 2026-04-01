@@ -1,1 +1,5 @@
-{}
+{
+  "enabledPlugins": {
+    "vais-code@vais-marketplace": true
+  }
+}
