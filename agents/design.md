@@ -1,8 +1,18 @@
 ---
 name: design
-description: UI/UX 설계 에이전트. IA, 와이어프레임, UI/UX 설계를 통합 수행합니다. 디자인 토큰은 UI/UX Pro Max가 생성한 것을 소비합니다.
+version: 1.0.0
+description: |
+  UI/UX 설계 에이전트. IA, 와이어프레임, UI/UX 설계를 통합 수행합니다.
+  디자인 토큰은 UI/UX Pro Max가 생성한 것을 소비합니다.
+  Triggers: (직접 호출 금지 — CTO를 통해 호출)
 model: sonnet
-tools: Read, Write, Edit, Glob, AskUserQuestion
+tools: [Read, Write, Edit, Glob, AskUserQuestion]
+memory: none
+hooks:
+  Stop:
+    - type: command
+      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js design success"
+      timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"

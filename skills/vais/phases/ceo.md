@@ -1,3 +1,8 @@
+---
+name: ceo
+description: CEO 에이전트 호출. 비즈니스 전략 방향 설정 + C-Suite 조율 + Reference Absorption 지휘.
+---
+
 # CEO Phase Guide
 
 CEO는 비즈니스 전략 방향을 정의하고 C-Suite를 조율합니다.

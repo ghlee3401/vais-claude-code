@@ -1,3 +1,8 @@
+---
+name: cso
+description: CSO 에이전트 호출. 보안 검토(Gate A) + 플러그인 배포 검증(Gate B) 오케스트레이션.
+---
+
 # CSO Phase Guide
 
 CSO는 두 가지 게이트를 운영합니다: 보안 검토(Gate A) + 플러그인 검증(Gate B).

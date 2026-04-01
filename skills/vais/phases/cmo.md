@@ -1,3 +1,8 @@
+---
+name: cmo
+description: CMO 에이전트 호출. 마케팅 전략 수립 + SEO 감사 (seo sub-agent 위임).
+---
+
 # CMO Phase Guide
 
 CMO는 마케팅 전략을 수립하고 SEO 감사를 실행합니다.

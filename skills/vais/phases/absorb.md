@@ -1,3 +1,8 @@
+---
+name: absorb
+description: 외부 레퍼런스 평가 및 흡수. AbsorbEvaluator를 사용한 품질/적합성 판정.
+---
+
 # /vais absorb — Reference Absorption
 
 외부 레퍼런스를 평가하고 vais에 흡수합니다.

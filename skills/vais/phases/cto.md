@@ -1,3 +1,8 @@
+---
+name: cto
+description: CTO 에이전트 호출. 기술 전체 오케스트레이션 — plan 직접 실행 + design/architect/frontend/backend/qa 위임.
+---
+
 # CTO Phase Guide
 
 CTO는 Plan 단계를 직접 실행하고 전체 에이전트를 오케스트레이션합니다.

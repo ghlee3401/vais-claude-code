@@ -1,8 +1,17 @@
 ---
 name: qa
-description: QA 에이전트. 빌드 검증, Gap 분석, 보안 점검, 코드 품질 리뷰, QA 시나리오 검증을 통합 수행합니다.
+version: 1.1.0
+description: |
+  QA 에이전트. 빌드 검증, Gap 분석, 보안 점검, 코드 품질 리뷰, QA 시나리오 검증을 통합 수행합니다.
+  Triggers: (직접 호출 금지 — CTO를 통해 호출)
 model: sonnet
-tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
+tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
+memory: none
+hooks:
+  Stop:
+    - type: command
+      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js qa success"
+      timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"
@@ -53,4 +62,9 @@ disallowedTools:
 - [ ] 네이밍이 명확한가?
 - [ ] 접근성이 준수되었는가?
 
+## 변경 이력
+
+| version | date | change |
+|---------|------|--------|
+| v1.0.0 | 2026-03-20 | 초기 작성 — 빌드 검증, Gap 분석, 보안 점검, 코드 품질 리뷰, QA 시나리오 |
 | v1.1.0 | 2026-03-21 | Expert Code Review 추가 — Google Staff Engineer(L7) 관점 8가지 심층 크리틱 |

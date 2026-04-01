@@ -1,8 +1,17 @@
 ---
 name: architect
-description: 인프라/아키텍처 에이전트. DB 스키마 설계, 마이그레이션, ORM 설정, 환경 구성, 프로젝트 초기 설정을 담당합니다.
+version: 1.0.0
+description: |
+  인프라/아키텍처 에이전트. DB 스키마 설계, 마이그레이션, ORM 설정, 환경 구성, 프로젝트 초기 설정을 담당합니다.
+  Triggers: (직접 호출 금지 — CTO를 통해 호출)
 model: sonnet
-tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
+tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
+memory: none
+hooks:
+  Stop:
+    - type: command
+      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js architect success"
+      timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"

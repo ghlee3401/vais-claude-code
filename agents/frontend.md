@@ -1,8 +1,17 @@
 ---
 name: frontend
-description: 프론트엔드 에이전트. React/Next.js 등 프론트엔드 구현을 담당합니다.
+version: 1.0.0
+description: |
+  프론트엔드 에이전트. React/Next.js 등 프론트엔드 구현을 담당합니다.
+  Triggers: (직접 호출 금지 — CTO를 통해 호출)
 model: sonnet
-tools: Read, Write, Edit, Glob, Grep, Bash, TodoWrite
+tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
+memory: none
+hooks:
+  Stop:
+    - type: command
+      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js frontend success"
+      timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"
