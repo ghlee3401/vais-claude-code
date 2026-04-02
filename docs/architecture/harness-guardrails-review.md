@@ -131,6 +131,37 @@ function safePath(base, input) {
 
 ---
 
+## 5-Layer Architecture 정합성 (Agent Development Kit 기준)
+
+다이어그램 참조: CLAUDE.md + Skills + Hooks + Subagents + Plugins = The Agent Development Kit
+
+| Layer | 역할 | VAIS 구현 | 상태 |
+|-------|------|-----------|------|
+| L1. CLAUDE.md | The Memory Layer — rules, conventions | `CLAUDE.md` 7개 규칙 + `vais.config.json` 중앙 설정 | ✅ |
+| L2. Skills | The Knowledge Layer — on-demand context | `skills/vais/SKILL.md` + `phases/` + `utils/`, 11개 액션 | ✅ |
+| L3. Hooks | The Guardrail Layer — deterministic, not AI | `hooks.json` 6개 훅 (bash-guard, doc-tracker 등) | ✅ |
+| L4. Subagents | The Delegation Layer — own context/model/tools | `agents/` 20개, C-Suite(Opus)/Execution(Sonnet) 분리 | ✅ |
+| L5. Plugins | The Distribution Layer — marketplace package | `.claude-plugin/plugin.json` + `marketplace.json` | ✅ |
+
+### 아키텍처 수준 보완 사항
+
+| 문제 | 심각도 | 판정 | 근거 |
+|------|--------|------|------|
+| Skills auto-invoke 미연결 | MEDIUM | **Implement** | `vais.config.json`에 `autoKeywords` 정의는 있지만, 실제 description matching → 자동 호출까지 연결 안 됨. 다이어그램 L2의 "auto-invoked" 패턴 미충족 |
+
+현재 `autoKeywords` 설정:
+```json
+"autoKeywords": {
+  "cso": ["payment", "auth", "login", "security"],
+  "cmo": ["landing", "marketing", "launch"],
+  "ceo": ["new product", "strategy"],
+  "coo": ["deploy", "release"]
+}
+```
+→ 이 키워드가 피처명에 매칭되면 해당 C-Level을 자동 호출하는 로직 필요.
+
+---
+
 ## 종합 평가
 
 | 원칙 | 현재 수준 | 적정 목표 | 비고 |
@@ -144,13 +175,14 @@ function safePath(base, input) {
 
 ---
 
-## 구현 항목 (3개만)
+## 구현 항목 (4개)
 
 | # | 항목 | 대상 파일 | 난이도 | 효과 |
 |---|------|-----------|--------|------|
 | 1 | `pre-commit` hook — 기존 테스트 + ESLint 자동 실행 | `package.json`, `.husky/` | 낮음 | 이미 있는 자산 활용 |
 | 2 | `vais.config.json` 로드 시 required field 검증 | config 로드 로직 | 낮음 | silent failure 방지 |
 | 3 | `lib/paths.js`에 path traversal 방지 | `lib/paths.js` | 낮음 | 보안 기본 |
+| 4 | Skills auto-invoke — autoKeywords 매칭 시 C-Level 자동 호출 | skill 라우팅 로직 | 중간 | L2 아키텍처 완성 |
 
 ---
 
