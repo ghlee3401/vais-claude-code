@@ -1,5 +1,5 @@
 {
-  "version": "0.31.0",
+  "version": "0.32.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -38,6 +38,7 @@
   },
   "workflow": {
     "phases": ["plan", "design", "do", "qa", "report"],
+    "mandatoryPhases": ["plan", "do", "qa"],
     "phaseNames": {
       "plan": "기획",
       "design": "설계",
@@ -46,18 +47,11 @@
       "report": "보고서"
     },
     "docPaths": {
-      "plan": "docs/01-plan/{feature}.plan.md",
-      "design": "docs/02-design/{feature}.design.md",
-      "do": "docs/03-do/{feature}.do.md",
-      "qa": "docs/04-qa/{feature}.qa.md",
-      "report": "docs/05-report/{feature}.report.md"
-    },
-    "cSuiteDocPaths": {
-      "prd": "docs/00-prd/{feature}.prd.md",
-      "security": "docs/06-domain/{feature}.security.md",
-      "marketing": "docs/06-domain/{feature}.marketing.md",
-      "finance": "docs/06-domain/{feature}.finance.md",
-      "ops": "docs/06-domain/{feature}.ops.md"
+      "plan": "docs/01-plan/{role}_{feature}.plan.md",
+      "design": "docs/02-design/{role}_{feature}.design.md",
+      "do": "docs/03-do/{role}_{feature}.do.md",
+      "qa": "docs/04-qa/{role}_{feature}.qa.md",
+      "report": "docs/05-report/{role}_{feature}.report.md"
     }
   },
   "parallelGroups": {

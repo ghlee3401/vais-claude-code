@@ -24,11 +24,11 @@ disallowedTools:
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 마케팅 목표 + 채널 + 타깃 정의 | (없음) |
-| Design | 직접 | 마케팅 전략 설계 + SEO 키워드 계획 | (없음) |
-| Do | seo | SEO 감사 실행 | `docs/06-domain/{feature}.marketing.md` |
-| Check | 직접 | SEO 점수 ≥ 80 확인 + KPI 달성 여부 | (없음) |
-| Report | 직접 | 마케팅 분석 결과를 독립 문서에 기록 | `docs/06-domain/{feature}.marketing.md` |
+| Plan | 직접 | 마케팅 목표 + 채널 + 타깃 정의 | `docs/01-plan/cmo_{feature}.plan.md` |
+| Design | 직접 | 마케팅 전략 설계 + SEO 키워드 계획 | (선택) `docs/02-design/cmo_{feature}.design.md` |
+| Do | seo | SEO 감사 실행 | `docs/03-do/cmo_{feature}.do.md` |
+| Check | 직접 | SEO 점수 ≥ 80 확인 + KPI 달성 여부 | `docs/04-qa/cmo_{feature}.qa.md` |
+| Report | 직접 | 마케팅 분석 최종 보고 | (선택) `docs/05-report/cmo_{feature}.report.md` |
 
 ---
 
@@ -41,12 +41,16 @@ disallowedTools:
 | context | 제품 정보, 타깃 세그먼트, 기존 마케팅 자산 |
 
 ### Output
-| 산출물 | 경로 |
-|--------|------|
-| 마케팅 분석 보고서 | `docs/06-domain/{feature}.marketing.md` |
+| 산출물 | 경로 | 필수 |
+|--------|------|------|
+| 마케팅 기획 | `docs/01-plan/cmo_{feature}.plan.md` | **필수** |
+| 마케팅 분석 + SEO 결과 | `docs/03-do/cmo_{feature}.do.md` | **필수** |
+| SEO 검증 | `docs/04-qa/cmo_{feature}.qa.md` | **필수** |
+| 최종 보고서 | `docs/05-report/cmo_{feature}.report.md` | 선택 |
 
 ### State Update
-- phase: `marketing` → `completed` when 마케팅 분석 보고서 작성 완료
+- phase: `rolePhases.cmo.plan` → `completed` when 마케팅 기획 완료
+- phase: `rolePhases.cmo.do` → `completed` when 마케팅 분석 작성 완료
 
 ---
 
@@ -171,7 +175,7 @@ our product [key differentiator]."
 
 ### Marketing Report 작성
 
-`docs/06-domain/{feature}.marketing.md` 독립 문서로 작성.
+`docs/03-do/cmo_{feature}.do.md` 독립 문서로 작성.
 미실행 시 "N/A — CMO 검토 미수행" 명시.
 
 ```markdown
@@ -188,7 +192,7 @@ our product [key differentiator]."
 - ...
 ```
 
-<!-- deprecated: docs/05-report/ Marketing Impact 섹션 → docs/06-domain/{feature}.marketing.md 독립 문서로 분리됨 -->
+<!-- deprecated: docs/05-report/ Marketing Impact 섹션 → docs/03-do/cmo_{feature}.do.md 독립 문서로 분리됨 -->
 
 ### Push 규칙
 

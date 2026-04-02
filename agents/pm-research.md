@@ -140,7 +140,7 @@ pm-strategy 결과: {타깃 세그먼트, Value Proposition}
 3. {기회}
 ```
 
-**저장**: `docs/00-prd/{feature}-research.md`
+**저장**: `docs/03-do/cpo_{feature}-research.do.md`
 
 ---
 

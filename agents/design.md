@@ -56,7 +56,7 @@ disallowedTools:
 
 ### 산출물
 
-리뷰 결과를 `docs/02-design/{feature}-review.md`에 저장합니다.
+리뷰 결과를 `docs/02-design/cto_{feature}-review.md`에 저장합니다.
 
 ## 문서 참조 규칙
 
@@ -64,9 +64,9 @@ disallowedTools:
 
 ```markdown
 > 참조 문서:
-> - docs/01-plan/{feature}.md: 기능 요구사항, 코딩 규칙
+> - docs/01-plan/cto_{feature}.plan.md: 기능 요구사항, 코딩 규칙
 > - design-system/{feature}/MASTER.md: 디자인 토큰
-> - docs/02-design/{feature}.md: IA, 와이어프레임, 화면별 상세 정의
+> - docs/02-design/cto_{feature}.md: IA, 와이어프레임, 화면별 상세 정의
 ```
 
 qa 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.

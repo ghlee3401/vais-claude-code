@@ -27,21 +27,21 @@ disallowedTools:
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 요청 분석 → 담당 C레벨 + 범위 결정 | (메모리 기록) |
-| Design | 직접 | 위임 구조 설계 (어떤 C레벨에게 어떻게) | (없음) |
-| Do | 위임 | 해당 C레벨 에이전트 실행 (Agent 도구) | C레벨 산출물 |
-| Check | 직접 | C레벨 산출물 전략 정합성 확인 | (없음) |
-| Report | 직접 | 전략 결정사항 `.vais/memory.json` 기록 | `.vais/memory.json` |
+| Plan | 직접 | 요청 분석 → 담당 C레벨 + 범위 결정 | `docs/01-plan/ceo_{feature}.plan.md` |
+| Design | 직접 | 위임 구조 설계 (어떤 C레벨에게 어떻게) | (선택) |
+| Do | 위임 | 해당 C레벨 에이전트 실행 (Agent 도구) | `docs/03-do/ceo_{feature}.do.md` |
+| Check | 직접 | C레벨 산출물 전략 정합성 확인 | `docs/04-qa/ceo_{feature}.qa.md` |
+| Report | 직접 | 전략 결정사항 기록 | (선택) `docs/05-report/ceo_{feature}.report.md` |
 
 ### absorb 모드 (`/vais absorb {path}`)
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 외부 파일 스캔 + 핵심 기능 추출 + 전략 판단 | (스캔 결과 메모) |
-| Design | absorb-analyzer | 중복 분석 + C레벨별 배분 맵 생성 | 배분 맵 |
-| Do | 직접 | 배분 맵 기반 `agents/*.md` 수정 | 수정된 agents 파일 |
-| Check | 직접 | 추가된 서브에이전트 위치 검증 + 충돌 확인 | (없음) |
-| Report | 직접 | `.vais/absorption-ledger.jsonl` 기록 | `.vais/absorption-ledger.jsonl` |
+| Plan | 직접 | 외부 파일 스캔 + 핵심 기능 추출 + 전략 판단 | `docs/01-plan/ceo_{feature}.plan.md` |
+| Design | absorb-analyzer | 중복 분석 + C레벨별 배분 맵 생성 | (선택) `docs/02-design/ceo_{feature}.design.md` |
+| Do | 직접 | 배분 맵 기반 `agents/*.md` 수정 | `docs/03-do/ceo_{feature}.do.md` |
+| Check | 직접 | 추가된 서브에이전트 위치 검증 + 충돌 확인 | `docs/04-qa/ceo_{feature}.qa.md` |
+| Report | 직접 | `.vais/absorption-ledger.jsonl` + 최종 보고 | (선택) `docs/05-report/ceo_{feature}.report.md` |
 
 ---
 
@@ -54,14 +54,18 @@ disallowedTools:
 | context | 비즈니스 요청 또는 외부 레퍼런스 경로 (absorb 모드) |
 
 ### Output
-| 산출물 | 경로 |
-|--------|------|
-| 전략 결정 기록 | `.vais/memory.json` (decision 타입) |
-| absorb 원장 | `.vais/absorption-ledger.jsonl` (absorb 모드) |
+| 산출물 | 경로 | 필수 |
+|--------|------|------|
+| 전략 분석 | `docs/01-plan/ceo_{feature}.plan.md` | **필수** |
+| 실행 결과 | `docs/03-do/ceo_{feature}.do.md` | **필수** |
+| 전략 정합성 검증 | `docs/04-qa/ceo_{feature}.qa.md` | **필수** |
+| 최종 보고서 | `docs/05-report/ceo_{feature}.report.md` | 선택 |
+| 전략 결정 기록 | `.vais/memory.json` (decision 타입) | — |
+| absorb 원장 | `.vais/absorption-ledger.jsonl` (absorb 모드) | — |
 
 ### State Update
-- CEO는 워크플로우 phase를 직접 관리하지 않음 (라우터 역할)
-- 위임된 C-Level의 phase가 각각 업데이트됨
+- phase: `rolePhases.ceo.plan` → `completed` when 전략 분석 문서 작성 완료
+- 위임된 C-Level의 phase는 각각의 rolePhases에서 독립 추적
 
 ---
 

@@ -61,7 +61,7 @@ Glob: **/*.{html,tsx,jsx} (node_modules 제외)
 
 ### 3단계: 리포트 저장
 
-`docs/06-domain/{feature}.marketing.md` 의 `## SEO 감사 리포트` 섹션에 작성합니다:
+`docs/03-do/cmo_{feature}.do.md` 의 `## SEO 감사 리포트` 섹션에 작성합니다:
 
 ```markdown
 ## SEO 감사 리포트
@@ -84,7 +84,7 @@ Glob: **/*.{html,tsx,jsx} (node_modules 제외)
 
 ```
 SEO 감사 완료
-파일 저장: docs/06-domain/{feature}.marketing.md (SEO 감사 리포트 섹션)
+파일 저장: docs/03-do/cmo_{feature}.do.md (SEO 감사 리포트 섹션)
 종합 점수: {X}/100
 Critical 개선 항목: [{항목 목록}]
 ```

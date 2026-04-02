@@ -72,12 +72,19 @@ describe('loadConfig', () => {
 });
 
 describe('resolveDocPath / findDoc', () => {
-  it('피처명으로 문서 경로를 생성한다', () => {
+  it('피처명과 role로 문서 경로를 생성한다', () => {
     const paths = loadPaths();
-    // 프로젝트에 config가 없으면 플러그인 기본 config 사용
+    // role 기본값 cto
     const docPath = paths.resolveDocPath('plan', '로그인기능');
     assert.ok(docPath.includes('01-plan'));
-    assert.ok(docPath.includes('로그인기능'));
+    assert.ok(docPath.includes('cto_로그인기능'));
+  });
+
+  it('role을 명시적으로 전달할 수 있다', () => {
+    const paths = loadPaths();
+    const docPath = paths.resolveDocPath('do', 'login', 'cso');
+    assert.ok(docPath.includes('03-do'));
+    assert.ok(docPath.includes('cso_login'));
   });
 
   it('findDoc은 파일이 없으면 빈 문자열 반환', () => {
@@ -89,10 +96,20 @@ describe('resolveDocPath / findDoc', () => {
     const paths = loadPaths();
     const docDir = path.join(tmpDir, 'docs', '01-plan');
     fs.mkdirSync(docDir, { recursive: true });
-    fs.writeFileSync(path.join(docDir, '테스트.plan.md'), '# test');
+    fs.writeFileSync(path.join(docDir, 'cto_테스트.plan.md'), '# test');
 
     const found = paths.findDoc('plan', '테스트');
-    assert.ok(found.includes('테스트.plan.md'));
+    assert.ok(found.includes('cto_테스트.plan.md'));
+  });
+
+  it('findDoc에 role 전달 시 해당 role 문서를 찾는다', () => {
+    const paths = loadPaths();
+    const docDir = path.join(tmpDir, 'docs', '03-do');
+    fs.mkdirSync(docDir, { recursive: true });
+    fs.writeFileSync(path.join(docDir, 'cmo_login.do.md'), '# marketing');
+
+    const found = paths.findDoc('do', 'login', 'cmo');
+    assert.ok(found.includes('cmo_login.do.md'));
   });
 });
 

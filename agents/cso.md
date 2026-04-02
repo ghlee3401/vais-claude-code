@@ -27,21 +27,21 @@ disallowedTools:
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 위협 범위 + OWASP 체크 대상 정의 | (없음) |
-| Design | 직접 | 위협 모델 + 보안 체크리스트 작성 | (없음) |
-| Do | security | OWASP Top 10 스캔 실행 | 스캔 결과 |
-| Check | 직접 | Critical 잔존 여부 → 배포 차단/통과 판정 | (없음) |
-| Report | 직접 | 보안 검토 결과를 독립 문서에 기록 | `docs/06-domain/{feature}.security.md` |
+| Plan | 직접 | 위협 범위 + OWASP 체크 대상 정의 | `docs/01-plan/cso_{feature}.plan.md` |
+| Design | 직접 | 위협 모델 + 보안 체크리스트 작성 | (선택) `docs/02-design/cso_{feature}.design.md` |
+| Do | security | OWASP Top 10 스캔 실행 | `docs/03-do/cso_{feature}.do.md` |
+| Check | 직접 | Critical 잔존 여부 → 배포 차단/통과 판정 | `docs/04-qa/cso_{feature}.qa.md` |
+| Report | 직접 | 보안 검토 최종 보고 | (선택) `docs/05-report/cso_{feature}.report.md` |
 
 ### Gate B — 플러그인 검증
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 검증 범위 정의 | (없음) |
-| Design | 직접 | 검증 체크리스트 작성 | (없음) |
-| Do | validate-plugin | package.json/SKILL.md/agents 검증 | 검증 결과 |
-| Check | 직접 | 승인/거부 최종 판정 | (없음) |
-| Report | 직접 | 검증 결과를 독립 문서에 기록 | `docs/06-domain/{feature}.security.md` |
+| Plan | 직접 | 검증 범위 정의 | `docs/01-plan/cso_{feature}.plan.md` |
+| Design | 직접 | 검증 체크리스트 작성 | (선택) |
+| Do | validate-plugin | package.json/SKILL.md/agents 검증 | `docs/03-do/cso_{feature}.do.md` |
+| Check | 직접 | 승인/거부 최종 판정 | `docs/04-qa/cso_{feature}.qa.md` |
+| Report | 직접 | 검증 결과 최종 보고 | (선택) `docs/05-report/cso_{feature}.report.md` |
 
 ---
 
@@ -54,12 +54,16 @@ disallowedTools:
 | context | 구현 코드 또는 플러그인 구조 (Gate 유형에 따라) |
 
 ### Output
-| 산출물 | 경로 |
-|--------|------|
-| 보안 검토 보고서 | `docs/06-domain/{feature}.security.md` |
+| 산출물 | 경로 | 필수 |
+|--------|------|------|
+| 위협 분석 | `docs/01-plan/cso_{feature}.plan.md` | **필수** |
+| 보안 검토 결과 | `docs/03-do/cso_{feature}.do.md` | **필수** |
+| 보안 판정 | `docs/04-qa/cso_{feature}.qa.md` | **필수** |
+| 최종 보고서 | `docs/05-report/cso_{feature}.report.md` | 선택 |
 
 ### State Update
-- phase: `security` → `completed` when 보안 검토 보고서 작성 완료
+- phase: `rolePhases.cso.plan` → `completed` when 위협 분석 완료
+- phase: `rolePhases.cso.do` → `completed` when 보안 검토 결과 작성 완료
 
 ---
 
@@ -185,7 +189,7 @@ Gate A 보안 검토 시 법적 컴플라이언스 항목도 함께 확인합니
 
 ### Security Report 작성
 
-`docs/06-domain/{feature}.security.md` 독립 문서로 작성.
+`docs/03-do/cso_{feature}.do.md` 독립 문서로 작성.
 미실행 시 "N/A — CSO 검토 미수행" 명시.
 
 ```markdown
@@ -203,7 +207,7 @@ Gate A 보안 검토 시 법적 컴플라이언스 항목도 함께 확인합니
 - [ ] 승인 / [ ] 조건부 승인 / [ ] 차단
 ```
 
-<!-- deprecated: docs/05-report/ Security Review 섹션 → docs/06-domain/{feature}.security.md 독립 문서로 분리됨 -->
+<!-- deprecated: docs/05-report/ Security Review 섹션 → docs/03-do/cso_{feature}.do.md 독립 문서로 분리됨 -->
 
 ### Push 규칙
 

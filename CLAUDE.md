@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.31.0)
+> Virtual AI C-Suite for software development (v0.32.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -70,7 +70,7 @@ absorb-analyzer (CEO 서브, 레퍼런스 흡수 분석)
 
 1. **기획 없이 코드 금지** — `docs/01-plan/` 기획서가 없으면 구현하지 않는다
 2. **워크플로우 순서 준수** — plan → design → architect → impl → qa 순서를 건너뛰지 않는다
-3. **산출물 경로** — `docs/{번호}-{단계}/{feature}.md` 형식 준수
+3. **산출물 경로** — `docs/{번호}-{단계}/{role}_{feature}.{phase}.md` 형식 준수 (모든 C-Level 공통)
 4. **Gate 통과 필수** — 각 Gate의 체크리스트 항목을 모두 확인한 뒤 다음 단계로 진행
 5. **위험 명령 금지** — `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수** — 민감 정보는 반드시 환경 변수로 관리

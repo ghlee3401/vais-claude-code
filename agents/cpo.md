@@ -25,11 +25,11 @@ disallowedTools:
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 기회 발견 범위 + PRD 목표 정의 | (없음) |
-| Design | pm-discovery + pm-strategy + pm-research (병렬) | 기회 분석 + 전략 + 시장 조사 | 3개 분석 결과 |
-| Do | pm-prd | PRD 합성 | `docs/00-prd/{feature}.prd.md` |
-| Check | 직접 | PRD 완성도 + 섹션 누락 + 로드맵 정합성 확인 | (없음) |
-| Report | 직접 | PRD 최종화 + CTO 핸드오프 컨텍스트 출력 | `docs/00-prd/{feature}.prd.md` |
+| Plan | 직접 | 기회 발견 범위 + PRD 목표 정의 | `docs/01-plan/cpo_{feature}.plan.md` |
+| Design | pm-discovery + pm-strategy + pm-research (병렬) | 기회 분석 + 전략 + 시장 조사 | (선택) `docs/02-design/cpo_{feature}.design.md` |
+| Do | pm-prd | PRD 합성 | `docs/03-do/cpo_{feature}.do.md` |
+| Check | 직접 | PRD 완성도 + 섹션 누락 + 로드맵 정합성 확인 | `docs/04-qa/cpo_{feature}.qa.md` |
+| Report | 직접 | PRD 최종화 + CTO 핸드오프 컨텍스트 출력 | (선택) `docs/05-report/cpo_{feature}.report.md` |
 
 ### sub-agent 호출 순서
 
@@ -55,12 +55,17 @@ disallowedTools:
 | context | 사용자 요구사항 또는 CEO 위임 컨텍스트 |
 
 ### Output
-| 산출물 | 경로 |
-|--------|------|
-| PRD | `docs/00-prd/{feature}.prd.md` |
+| 산출물 | 경로 | 필수 |
+|--------|------|------|
+| 제품 기획 분석 | `docs/01-plan/cpo_{feature}.plan.md` | **필수** |
+| PRD | `docs/03-do/cpo_{feature}.do.md` | **필수** |
+| PRD 완성도 검증 | `docs/04-qa/cpo_{feature}.qa.md` | **필수** |
+| 최종 보고서 | `docs/05-report/cpo_{feature}.report.md` | 선택 |
 
 ### State Update
-- phase: `prd` → `completed` when PRD 최종화 완료
+- phase: `rolePhases.cpo.plan` → `completed` when 기획 분석 완료
+- phase: `rolePhases.cpo.do` → `completed` when PRD 작성 완료
+- phase: `rolePhases.cpo.qa` → `completed` when 완성도 검증 완료
 
 ---
 
@@ -106,7 +111,7 @@ C. 확장 범위: 표준 + 로드맵 + 피처 우선순위 매트릭스
 
 ### 체이닝 시 추가 로드
 - L4: CEO 전략 방향 (CEO→CPO 체이닝 시)
-- 기존 PRD 파일 (`docs/00-prd/{feature}.prd.md`, 업데이트 요청 시)
+- 기존 PRD 파일 (`docs/03-do/cpo_{feature}.do.md`, 업데이트 요청 시)
 
 ---
 
@@ -115,7 +120,7 @@ C. 확장 범위: 표준 + 로드맵 + 피처 우선순위 매트릭스
 Report 단계에서 출력:
 
 ```
-PRD 생성 완료: docs/00-prd/{feature}.prd.md
+PRD 생성 완료: docs/03-do/cpo_{feature}.do.md
 
 CTO 핸드오프 컨텍스트:
 - 핵심 문제: {WHY}

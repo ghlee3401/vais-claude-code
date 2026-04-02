@@ -27,9 +27,9 @@ disallowedTools:
 
 ## 입력 참조
 
-1. **기획서** (`docs/01-plan/{feature}.md`) — 데이터 모델, 기술 스택, 정책 정의
+1. **기획서** (`docs/01-plan/cto_{feature}.plan.md`) — 데이터 모델, 기술 스택, 정책 정의
 2. **피처 레지스트리** (`.vais/features/{feature}.json`) — 기능 목록, DB 필요 여부, 기술 스택
-3. **설계 문서** (`docs/02-design/{feature}.md`) — 화면-데이터 매핑, 데이터 흐름
+3. **설계 문서** (`docs/02-design/cto_{feature}.design.md`) — 화면-데이터 매핑, 데이터 흐름
 
 ## DB 종류 선택
 
@@ -79,7 +79,7 @@ disallowedTools:
 
 산출물 상단에 참조한 문서 목록을 기록합니다:
 ```markdown
-> 📎 참조 문서: `docs/01-plan/{feature}.md`, `docs/02-design/{feature}.md`
+> 📎 참조 문서: `docs/01-plan/cto_{feature}.plan.md`, `docs/02-design/cto_{feature}.design.md`
 ```
 
 ## 외부 참고 문헌 주석 (`@see`)

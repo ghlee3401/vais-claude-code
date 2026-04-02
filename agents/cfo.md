@@ -24,11 +24,11 @@ disallowedTools:
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 비용 구성 파악 + ROI 목표 설정 | (없음) |
-| Design | 직접 | 재무 모델 설계 (비용 항목, 수익 예측 구조) | (없음) |
-| Do | 직접 | ROI 계산 + 가격 책정 + 예산 계획 수립 | 분석 결과 |
-| Check | 직접 | ROI 목표 달성 여부 + 수치 완전성 확인 | (없음) |
-| Report | 직접 | 재무 분석 결과를 독립 문서에 기록 | `docs/06-domain/{feature}.finance.md` |
+| Plan | 직접 | 비용 구성 파악 + ROI 목표 설정 | `docs/01-plan/cfo_{feature}.plan.md` |
+| Design | 직접 | 재무 모델 설계 (비용 항목, 수익 예측 구조) | (선택) `docs/02-design/cfo_{feature}.design.md` |
+| Do | 직접 | ROI 계산 + 가격 책정 + 예산 계획 수립 | `docs/03-do/cfo_{feature}.do.md` |
+| Check | 직접 | ROI 목표 달성 여부 + 수치 완전성 확인 | `docs/04-qa/cfo_{feature}.qa.md` |
+| Report | 직접 | 재무 분석 최종 보고 | (선택) `docs/05-report/cfo_{feature}.report.md` |
 
 ---
 
@@ -38,15 +38,19 @@ disallowedTools:
 | 항목 | 설명 |
 |------|------|
 | feature | 피처명 |
-| context | 기획서 (`docs/01-plan/{feature}.plan.md`) 또는 PRD (`docs/00-prd/{feature}.prd.md`) |
+| context | 기획서 (`docs/01-plan/cto_{feature}.plan.md`) 또는 PRD (`docs/03-do/cpo_{feature}.do.md`) |
 
 ### Output
-| 산출물 | 경로 |
-|--------|------|
-| 재무 분석 보고서 | `docs/06-domain/{feature}.finance.md` |
+| 산출물 | 경로 | 필수 |
+|--------|------|------|
+| 재무 분석 기획 | `docs/01-plan/cfo_{feature}.plan.md` | **필수** |
+| 재무 분석 결과 | `docs/03-do/cfo_{feature}.do.md` | **필수** |
+| 수치 검증 | `docs/04-qa/cfo_{feature}.qa.md` | **필수** |
+| 최종 보고서 | `docs/05-report/cfo_{feature}.report.md` | 선택 |
 
 ### State Update
-- phase: `finance` → `completed` when 재무 분석 보고서 작성 완료
+- phase: `rolePhases.cfo.plan` → `completed` when 재무 분석 기획 완료
+- phase: `rolePhases.cfo.do` → `completed` when 재무 분석 결과 작성 완료
 
 ---
 
@@ -83,7 +87,7 @@ C. 확장 범위: 표준 + 시나리오 분석 (낙관/중립/비관)
 
 ### 체이닝 시 추가 로드
 - L4: CEO 전략 방향 (CEO→CFO 체이닝 시)
-- L4: CPO PRD (`docs/00-prd/{feature}.prd.md`, 시장 규모/가격 참고)
+- L4: CPO PRD (`docs/03-do/cpo_{feature}.do.md`, 시장 규모/가격 참고)
 
 ---
 
@@ -154,11 +158,11 @@ ROI = (순이익 / 총 투자 비용) × 100
 
 ### CFO Report 작성
 
-`docs/06-domain/{feature}.finance.md` 독립 문서로 작성.
+`docs/03-do/cfo_{feature}.do.md` 독립 문서로 작성.
 템플릿: `templates/finance.template.md` 참조.
 미실행 시 "N/A — CFO 검토 미수행" 명시.
 
-<!-- deprecated: docs/05-report/ CFO Analysis 섹션 → docs/06-domain/{feature}.finance.md 독립 문서로 분리됨 -->
+<!-- deprecated: docs/05-report/ CFO Analysis 섹션 → docs/03-do/cfo_{feature}.do.md 독립 문서로 분리됨 -->
 
 ### Push 규칙
 
