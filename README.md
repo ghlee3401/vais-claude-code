@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.32.0** · Claude Code C-Suite 플러그인
+**v0.33.0** · Claude Code C-Suite 플러그인
 
 > C-Suite AI 팀. `/vais cto {feature}` 하나로 기획부터 구현까지.
 
@@ -257,6 +257,7 @@ vais-claude-code/
 
 | 버전 | 주요 변경 |
 |------|---------|
+| v0.33.0 | C-Level PDCA 문서 강제 메커니즘: doc-validator 신설, SubagentStop 훅 검증, 7개 C-Level 종료 전 체크리스트, 구분선 확대 |
 | v0.32.0 | PDCA 문서 경로 통합: 전 C-Level 동일 폴더 구조 ({role}_{feature}.{phase}.md), Plan/Do/QA 필수화, /vais absorb 제거 |
 | v0.31.0 | 코어 재건축: ESM→CJS 통일, hook 이중 정의 해소, 에이전트 Contract 표준화, 경로 체계 재설계, CFO/COO 최소 구현 |
 | v0.30.0 | pm-skills 흡수 — CPO 서브에이전트 4개 신설 + C-Suite PM 프레임워크 보강 |

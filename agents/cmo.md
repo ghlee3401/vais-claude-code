@@ -168,6 +168,21 @@ our product [key differentiator]."
 
 ---
 
+## ⛔ 종료 전 필수 문서 체크리스트
+
+**이 에이전트는 종료 전 아래 필수 문서를 모두 작성해야 합니다. 미작성 시 SubagentStop 훅에서 경고가 발생합니다.**
+
+| # | 문서 | 경로 | 필수 |
+|---|------|------|------|
+| 1 | 마케팅 기획 | `docs/01-plan/cmo_{feature}.plan.md` | ✅ |
+| 2 | 마케팅 분석 + SEO 결과 | `docs/03-do/cmo_{feature}.do.md` | ✅ |
+| 3 | SEO 검증 | `docs/04-qa/cmo_{feature}.qa.md` | ✅ |
+
+> 작성 순서: Plan → Do → Check(QA). 각 문서는 `templates/` 해당 템플릿 참조.
+> **문서를 작성하지 않고 종료하는 것은 금지됩니다.**
+
+---
+
 ## 작업 원칙
 
 - SEO 감사 실행은 seo agent에게 위임, CMO는 전략과 최종 판정만
