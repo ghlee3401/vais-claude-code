@@ -134,15 +134,15 @@ describe('setRunRange / getRunRange / completeRunRange', () => {
   it('범위 실행을 설정하고 조회한다', () => {
     const status = loadStatus();
     status.initFeature('범위테스트');
-    const rangePhases = status.setRunRange('범위테스트', 'plan', 'be');
+    const rangePhases = status.setRunRange('범위테스트', 'plan', 'do');
     assert.ok(Array.isArray(rangePhases));
     assert.ok(rangePhases.includes('plan'));
-    assert.ok(rangePhases.includes('be'));
-    assert.ok(rangePhases.includes('fe'));
+    assert.ok(rangePhases.includes('design'));
+    assert.ok(rangePhases.includes('do'));
 
     const range = status.getRunRange('범위테스트');
     assert.equal(range.from, 'plan');
-    assert.equal(range.to, 'be');
+    assert.equal(range.to, 'do');
     assert.ok(range.startedAt);
     assert.equal(range.completedAt, null);
   });

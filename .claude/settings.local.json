@@ -52,7 +52,12 @@
       "Bash(git remote:*)",
       "Read(//home/claude/.claude/plugins/marketplaces/**)",
       "Read(//home/claude/.claude/plugins/marketplaces/vais-marketplace/**)",
-      "Bash(chmod +x:*)"
+      "Bash(chmod +x:*)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts', {}\\), indent=2\\)\\); print\\('husky:', d.get\\('husky', 'not found'\\)\\); print\\('prepare:', d.get\\('scripts', {}\\).get\\('prepare', 'not found'\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('autoKeywords', 'not found'\\), indent=2\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(list\\(d.keys\\(\\)\\)\\)\")",
+      "Bash(git config:*)",
+      "Bash(git stash:*)"
     ]
   }
 }

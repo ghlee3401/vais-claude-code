@@ -55,7 +55,7 @@ describe('ensureVaisDirs', () => {
 describe('loadConfig', () => {
   it('프로젝트에 vais.config.json이 있으면 우선 로드한다', () => {
     const paths = loadPaths();
-    const projectConfig = { version: '9.9.9', workflow: { phases: ['test'] } };
+    const projectConfig = { version: '9.9.9', workflow: { phases: ['test'] }, cSuite: {}, orchestration: {} };
     fs.writeFileSync(path.join(tmpDir, 'vais.config.json'), JSON.stringify(projectConfig));
 
     const config = paths.loadConfig();

@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.33.1** · Claude Code C-Suite 플러그인
+**v0.33.2** · Claude Code C-Suite 플러그인
 
 > C-Suite AI 팀. `/vais cto {feature}` 하나로 기획부터 구현까지.
 
@@ -257,6 +257,7 @@ vais-claude-code/
 
 | 버전 | 주요 변경 |
 |------|---------|
+| v0.33.2 | lib/paths.js safePath() path traversal 방지, config 필수 필드 검증, package.json scripts 추가 |
 | v0.33.1 | C-Level → CTO 공통 핸드오프 프로토콜: 검증/수정 분리 원칙, 7개 에이전트 표준 핸드오프 형식 |
 | v0.33.0 | C-Level PDCA 문서 강제 메커니즘: doc-validator 신설, SubagentStop 훅 검증, 7개 C-Level 종료 전 체크리스트, 구분선 확대 |
 | v0.32.0 | PDCA 문서 경로 통합: 전 C-Level 동일 폴더 구조 ({role}_{feature}.{phase}.md), Plan/Do/QA 필수화, /vais absorb 제거 |
