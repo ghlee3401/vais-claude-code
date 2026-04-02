@@ -4,11 +4,13 @@
  * Design Ref: §2.3 — thin orchestrator, 모듈 호출 + 결과 조립만 담당
  */
 const { debugLog } = require('../lib/debug');
+const { logHook } = require('../lib/hook-logger');
 const { ensureVaisDirs, loadConfig, loadOutputStyle } = require('../lib/paths');
 const { getStatus, getActiveFeature, getProgressSummary } = require('../lib/status');
 const { sendWebhook } = require('../lib/webhook');
 
 function main() {
+  logHook('SessionStart', 'ok', { cwd: process.cwd() });
   debugLog('SessionStart', 'Hook executed', { cwd: process.cwd() });
   ensureVaisDirs();
 

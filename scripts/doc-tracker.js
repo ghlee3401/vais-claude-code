@@ -6,6 +6,7 @@
 const path = require('path');
 const { readStdin, parseHookInput, outputAllow } = require('../lib/io');
 const { debugLog } = require('../lib/debug');
+const { logHook } = require('../lib/hook-logger');
 const { updatePhase, getActiveFeature } = require('../lib/status');
 const { addEntry } = require('../lib/memory');
 const { loadConfig } = require('../lib/paths');
@@ -21,7 +22,10 @@ if (!filePath) {
 }
 
 const config = loadConfig();
-const docPaths = config.workflow?.docPaths || {};
+const docPaths = {
+  ...(config.workflow?.docPaths || {}),
+  ...(config.workflow?.cSuiteDocPaths || {}),
+};
 const activeFeature = getActiveFeature();
 
 // 작성된 파일이 워크플로우 문서인지 확인
@@ -56,6 +60,7 @@ if (activeFeature) {
 
       const phaseNames = config.workflow?.phaseNames || {};
       const phaseName = phaseNames[phase] || phase;
+      logHook('PostToolUse:Write', 'ok', { feature: activeFeature, phase, file: path.basename(filePath) });
       outputAllow(`✅ "${activeFeature}" - ${phaseName} 문서 작성 완료. 워크플로우 상태가 업데이트되었습니다.`);
       process.exit(0);
     }

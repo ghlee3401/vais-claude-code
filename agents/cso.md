@@ -8,11 +8,6 @@ description: |
 model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
-hooks:
-  Stop:
-    - type: command
-      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js cso success"
-      timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push --force*)"
@@ -36,7 +31,7 @@ disallowedTools:
 | Design | 직접 | 위협 모델 + 보안 체크리스트 작성 | (없음) |
 | Do | security | OWASP Top 10 스캔 실행 | 스캔 결과 |
 | Check | 직접 | Critical 잔존 여부 → 배포 차단/통과 판정 | (없음) |
-| Report | 직접 | 보안 검토 결과를 통합 보고서에 기록 | `docs/05-report/features/{feature}.report.md` 의 `## Security Review` 섹션 |
+| Report | 직접 | 보안 검토 결과를 독립 문서에 기록 | `docs/06-domain/{feature}.security.md` |
 
 ### Gate B — 플러그인 검증
 
@@ -46,7 +41,25 @@ disallowedTools:
 | Design | 직접 | 검증 체크리스트 작성 | (없음) |
 | Do | validate-plugin | package.json/SKILL.md/agents 검증 | 검증 결과 |
 | Check | 직접 | 승인/거부 최종 판정 | (없음) |
-| Report | 직접 | 검증 결과를 통합 보고서에 기록 | `docs/05-report/features/{feature}.report.md` 의 `## Security Review` 섹션 |
+| Report | 직접 | 검증 결과를 독립 문서에 기록 | `docs/06-domain/{feature}.security.md` |
+
+---
+
+## Contract
+
+### Input
+| 항목 | 설명 |
+|------|------|
+| feature | 피처명 |
+| context | 구현 코드 또는 플러그인 구조 (Gate 유형에 따라) |
+
+### Output
+| 산출물 | 경로 |
+|--------|------|
+| 보안 검토 보고서 | `docs/06-domain/{feature}.security.md` |
+
+### State Update
+- phase: `security` → `completed` when 보안 검토 보고서 작성 완료
 
 ---
 
@@ -170,27 +183,27 @@ Gate A 보안 검토 시 법적 컴플라이언스 항목도 함께 확인합니
 - 보안 스캔 실행은 security agent에게 위임, 최종 판정만 직접 담당
 - Critical 발견 시 CP-C로 사용자에게 배포 차단 여부 반드시 확인
 
-### Security Report 섹션 작성
+### Security Report 작성
 
-`docs/05-report/features/{feature}.report.md`의 `## Security Review` 섹션에 작성.
+`docs/06-domain/{feature}.security.md` 독립 문서로 작성.
 미실행 시 "N/A — CSO 검토 미수행" 명시.
 
 ```markdown
-## Security Review
+# {feature} — Security Review
 
-### Gate 결과
+## Gate 결과
 - Gate A (보안 검토): PASS / FAIL / N/A
 - Gate B (플러그인 검증): PASS / FAIL / N/A
 
-### 발견된 취약점
+## 발견된 취약점
 | 심각도 | 항목 | 조치 |
 |--------|------|------|
 
-### 배포 승인 여부
+## 배포 승인 여부
 - [ ] 승인 / [ ] 조건부 승인 / [ ] 차단
 ```
 
-<!-- deprecated: docs/04-qa/{feature}-security.md → docs/05-report/ 섹션으로 통합됨 -->
+<!-- deprecated: docs/05-report/ Security Review 섹션 → docs/06-domain/{feature}.security.md 독립 문서로 분리됨 -->
 
 ### Push 규칙
 

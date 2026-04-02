@@ -7,11 +7,6 @@ description: |
 model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
-hooks:
-  Stop:
-    - type: command
-      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js cfo success"
-      timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push --force*)"
@@ -33,7 +28,25 @@ disallowedTools:
 | Design | 직접 | 재무 모델 설계 (비용 항목, 수익 예측 구조) | (없음) |
 | Do | 직접 | ROI 계산 + 가격 책정 + 예산 계획 수립 | 분석 결과 |
 | Check | 직접 | ROI 목표 달성 여부 + 수치 완전성 확인 | (없음) |
-| Report | 직접 | 재무 분석 결과를 통합 보고서에 기록 | `docs/05-report/features/{feature}.report.md` 의 `## CFO Analysis` 섹션 |
+| Report | 직접 | 재무 분석 결과를 독립 문서에 기록 | `docs/06-domain/{feature}.finance.md` |
+
+---
+
+## Contract
+
+### Input
+| 항목 | 설명 |
+|------|------|
+| feature | 피처명 |
+| context | 기획서 (`docs/01-plan/{feature}.plan.md`) 또는 PRD (`docs/00-prd/{feature}.prd.md`) |
+
+### Output
+| 산출물 | 경로 |
+|--------|------|
+| 재무 분석 보고서 | `docs/06-domain/{feature}.finance.md` |
+
+### State Update
+- phase: `finance` → `completed` when 재무 분석 보고서 작성 완료
 
 ---
 
@@ -70,7 +83,7 @@ C. 확장 범위: 표준 + 시나리오 분석 (낙관/중립/비관)
 
 ### 체이닝 시 추가 로드
 - L4: CEO 전략 방향 (CEO→CFO 체이닝 시)
-- L4: CPO PRD (`docs/00-pm/{feature}.prd.md`, 시장 규모/가격 참고)
+- L4: CPO PRD (`docs/00-prd/{feature}.prd.md`, 시장 규모/가격 참고)
 
 ---
 
@@ -139,28 +152,13 @@ ROI = (순이익 / 총 투자 비용) × 100
 - ROI 계산 시 비용/수익/ROI 3개 수치 모두 포함 (하나라도 없으면 Check 미통과)
 - 불확실한 수치는 범위로 표시 (예: $10K-15K)
 
-### CFO Report 섹션 작성
+### CFO Report 작성
 
-`docs/05-report/features/{feature}.report.md`가 존재하면 `## CFO Analysis` 섹션에 추가.
-파일이 없으면 생성 후 작성. 미실행 시 섹션에 "N/A — CFO 검토 미수행" 명시.
+`docs/06-domain/{feature}.finance.md` 독립 문서로 작성.
+템플릿: `templates/finance.template.md` 참조.
+미실행 시 "N/A — CFO 검토 미수행" 명시.
 
-```markdown
-## CFO Analysis
-
-### 비용-편익 요약
-| 항목 | 금액/수치 | 비고 |
-|------|-----------|------|
-
-### ROI 분석
-- 예상 투자 비용: ...
-- 예상 수익/절감: ...
-- 회수 기간: ...
-
-### 재무 리스크
-- ...
-```
-
-<!-- deprecated: docs/06-finance/ → docs/05-report/ 섹션으로 통합됨 -->
+<!-- deprecated: docs/05-report/ CFO Analysis 섹션 → docs/06-domain/{feature}.finance.md 독립 문서로 분리됨 -->
 
 ### Push 규칙
 

@@ -8,11 +8,6 @@ description: |
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none
-hooks:
-  Stop:
-    - type: command
-      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js seo success"
-      timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"
@@ -66,10 +61,10 @@ Glob: **/*.{html,tsx,jsx} (node_modules 제외)
 
 ### 3단계: 리포트 저장
 
-`docs/05-marketing/{feature}-seo.md` 파일로 저장합니다:
+`docs/06-domain/{feature}.marketing.md` 의 `## SEO 감사 리포트` 섹션에 작성합니다:
 
 ```markdown
-## SEO 감사 리포트 — {feature}
+## SEO 감사 리포트
 
 ### 점수 요약
 | 항목 | 점수 | 상태 |
@@ -89,7 +84,7 @@ Glob: **/*.{html,tsx,jsx} (node_modules 제외)
 
 ```
 SEO 감사 완료
-파일 저장: docs/05-marketing/{feature}-seo.md
+파일 저장: docs/06-domain/{feature}.marketing.md (SEO 감사 리포트 섹션)
 종합 점수: {X}/100
 Critical 개선 항목: [{항목 목록}]
 ```

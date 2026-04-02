@@ -5,6 +5,7 @@
  */
 const { readStdin, outputAllow, outputEmpty } = require('../lib/io');
 const { debugLog } = require('../lib/debug');
+const { logHook } = require('../lib/hook-logger');
 const { getActiveFeature, getProgressSummary } = require('../lib/status');
 const { loadConfig } = require('../lib/paths');
 
@@ -165,9 +166,11 @@ if (detectedPhase && activeFeature) {
     `진행 중인 피처: "${activeFeature}"\n` +
     `해당 단계의 스킬을 사용하려면: \`/vais ${detectedPhase} ${activeFeature}\``;
 
+  logHook('UserPromptSubmit', 'ok', { detected: detectedPhase, feature: activeFeature });
   debugLog('PromptHandler', 'Intent detected', { phase: detectedPhase, feature: activeFeature });
   outputAllow(msg);
 } else {
+  logHook('UserPromptSubmit', 'ok', { detected: null });
   outputEmpty();
 }
 

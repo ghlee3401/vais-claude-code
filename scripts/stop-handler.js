@@ -5,6 +5,7 @@
  */
 const { readStdin, outputAllow } = require('../lib/io');
 const { debugLog } = require('../lib/debug');
+const { logHook } = require('../lib/hook-logger');
 const { getActiveFeature, getProgressSummary } = require('../lib/status');
 const { loadConfig } = require('../lib/paths');
 const { sendWebhook } = require('../lib/webhook');
@@ -97,6 +98,7 @@ if (nextPhase) {
 lines.push('╚══════════════════════════════════════');
 
 const output = lines.join('\n');
+logHook('Stop', 'ok', { feature: activeFeature, phase: currentPhase, progress: `${completedCount}/${totalCount}` });
 debugLog('StopHandler', 'Status summary', { feature: activeFeature, currentPhase, completedCount });
 
 sendWebhook('stop', {

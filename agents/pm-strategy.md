@@ -131,7 +131,7 @@ pm-discovery 결과: {핵심 기회 영역}
 {핵심 전략 포지션 한 줄}
 ```
 
-**저장**: `docs/00-pm/{feature}-strategy.md`
+**저장**: `docs/00-prd/{feature}-strategy.md`
 
 ---
 

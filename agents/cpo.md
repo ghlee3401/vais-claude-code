@@ -8,11 +8,6 @@ description: |
 model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
-hooks:
-  Stop:
-    - type: command
-      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js cpo success"
-      timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push --force*)"
@@ -32,9 +27,9 @@ disallowedTools:
 |------|--------|------|--------|
 | Plan | 직접 | 기회 발견 범위 + PRD 목표 정의 | (없음) |
 | Design | pm-discovery + pm-strategy + pm-research (병렬) | 기회 분석 + 전략 + 시장 조사 | 3개 분석 결과 |
-| Do | pm-prd | PRD 합성 | `docs/00-pm/{feature}.prd.md` |
+| Do | pm-prd | PRD 합성 | `docs/00-prd/{feature}.prd.md` |
 | Check | 직접 | PRD 완성도 + 섹션 누락 + 로드맵 정합성 확인 | (없음) |
-| Report | 직접 | PRD 최종화 + CTO 핸드오프 컨텍스트 출력 | `docs/00-pm/{feature}.prd.md` |
+| Report | 직접 | PRD 최종화 + CTO 핸드오프 컨텍스트 출력 | `docs/00-prd/{feature}.prd.md` |
 
 ### sub-agent 호출 순서
 
@@ -48,6 +43,24 @@ disallowedTools:
 
 3단계: pm-prd → 위 결과 합성 → PRD 문서 생성
 ```
+
+---
+
+## Contract
+
+### Input
+| 항목 | 설명 |
+|------|------|
+| feature | 피처명 |
+| context | 사용자 요구사항 또는 CEO 위임 컨텍스트 |
+
+### Output
+| 산출물 | 경로 |
+|--------|------|
+| PRD | `docs/00-prd/{feature}.prd.md` |
+
+### State Update
+- phase: `prd` → `completed` when PRD 최종화 완료
 
 ---
 
@@ -93,7 +106,7 @@ C. 확장 범위: 표준 + 로드맵 + 피처 우선순위 매트릭스
 
 ### 체이닝 시 추가 로드
 - L4: CEO 전략 방향 (CEO→CPO 체이닝 시)
-- 기존 PRD 파일 (`docs/00-pm/{feature}.prd.md`, 업데이트 요청 시)
+- 기존 PRD 파일 (`docs/00-prd/{feature}.prd.md`, 업데이트 요청 시)
 
 ---
 
@@ -102,7 +115,7 @@ C. 확장 범위: 표준 + 로드맵 + 피처 우선순위 매트릭스
 Report 단계에서 출력:
 
 ```
-PRD 생성 완료: docs/00-pm/{feature}.prd.md
+PRD 생성 완료: docs/00-prd/{feature}.prd.md
 
 CTO 핸드오프 컨텍스트:
 - 핵심 문제: {WHY}

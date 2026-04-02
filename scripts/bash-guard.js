@@ -5,6 +5,7 @@
  */
 const { readStdin, parseHookInput, outputAllow, outputBlock } = require('../lib/io');
 const { debugLog } = require('../lib/debug');
+const { logHook } = require('../lib/hook-logger');
 
 const BLOCKED = [
   { pattern: /drop\s+database/i, reason: 'DB 전체 삭제 시도' },
@@ -57,17 +58,20 @@ if (require.main === module) {
   const result = checkGuard(command);
 
   if (result.decision === 'block') {
+    logHook('PreToolUse:Bash', 'blocked', { command, reason: result.reason });
     debugLog('BashGuard', 'BLOCKED', { command, reason: result.reason });
     outputBlock(result.reason);
     process.exit(0);
   }
 
   if (result.decision === 'warn') {
+    logHook('PreToolUse:Bash', 'warn', { command, reason: result.reason });
     debugLog('BashGuard', 'WARNING', { command, reason: result.reason });
     outputAllow(`⚠️ 주의: ${result.reason}\n실행하려는 명령: \`${command}\`\n사용자에게 확인을 받으세요.`);
     process.exit(0);
   }
 
+  logHook('PreToolUse:Bash', 'ok');
   outputAllow();
   process.exit(0);
 }

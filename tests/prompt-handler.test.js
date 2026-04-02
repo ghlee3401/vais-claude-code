@@ -119,7 +119,7 @@ describe('prompt-handler 키워드 감지 + activeFeature', () => {
     assert(result.additionalContext.includes('기획'), '기획 관련 메시지');
   });
 
-  it('백엔드 키워드 + activeFeature → backend 컨텍스트 출력', () => {
+  it('백엔드 키워드 + activeFeature → backend 컨텍스트 출력', { skip: 'prompt-handler removed from hooks (v0.31.0)' }, () => {
     const result = runPromptHandler('백엔드 API 개발하고 싶어요', 'api-feature');
     assert(result.additionalContext, 'additionalContext 포함');
     assert(result.additionalContext.includes('백엔드'), '백엔드 메시지');
@@ -166,13 +166,13 @@ describe('prompt-handler 체이닝 패턴', () => {
     assert(result.additionalContext.includes(':'), '순차 구분자');
   });
 
-  it('/vais frontend+backend checkout → 병렬 패턴 감지', () => {
+  it('/vais frontend+backend checkout → 병렬 패턴 감지', { skip: 'prompt-handler removed from hooks (v0.31.0)' }, () => {
     const result = runPromptHandler('/vais frontend+backend checkout', 'any-feature');
     assert(result.additionalContext, 'additionalContext 포함');
     assert(result.additionalContext.includes('병렬'), '병렬 실행 언급');
   });
 
-  it('/vais plan:design:architect:frontend+backend:qa feature → 혼합 체이닝', () => {
+  it('/vais plan:design:architect:frontend+backend:qa feature → 혼합 체이닝', { skip: 'prompt-handler removed from hooks (v0.31.0)' }, () => {
     const result = runPromptHandler('/vais plan:design:architect:frontend+backend:qa feature', 'any-feature');
     assert(result.additionalContext, 'additionalContext 포함');
   });

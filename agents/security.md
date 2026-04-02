@@ -8,11 +8,6 @@ description: |
 model: sonnet
 tools: [Read, Write, Glob, Grep, Bash, TodoWrite]
 memory: none
-hooks:
-  Stop:
-    - type: command
-      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js security success"
-      timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"

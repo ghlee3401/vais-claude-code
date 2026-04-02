@@ -7,11 +7,6 @@ description: |
 model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
-hooks:
-  Stop:
-    - type: command
-      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js ceo success"
-      timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push --force*)"
@@ -47,6 +42,26 @@ disallowedTools:
 | Do | 직접 | 배분 맵 기반 `agents/*.md` 수정 | 수정된 agents 파일 |
 | Check | 직접 | 추가된 서브에이전트 위치 검증 + 충돌 확인 | (없음) |
 | Report | 직접 | `.vais/absorption-ledger.jsonl` 기록 | `.vais/absorption-ledger.jsonl` |
+
+---
+
+## Contract
+
+### Input
+| 항목 | 설명 |
+|------|------|
+| feature | 피처명 (선택적) |
+| context | 비즈니스 요청 또는 외부 레퍼런스 경로 (absorb 모드) |
+
+### Output
+| 산출물 | 경로 |
+|--------|------|
+| 전략 결정 기록 | `.vais/memory.json` (decision 타입) |
+| absorb 원장 | `.vais/absorption-ledger.jsonl` (absorb 모드) |
+
+### State Update
+- CEO는 워크플로우 phase를 직접 관리하지 않음 (라우터 역할)
+- 위임된 C-Level의 phase가 각각 업데이트됨
 
 ---
 

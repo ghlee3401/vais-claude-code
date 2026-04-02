@@ -7,11 +7,6 @@ description: |
 model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
-hooks:
-  Stop:
-    - type: command
-      command: "node ${CLAUDE_PLUGIN_ROOT:-$(pwd)}/scripts/agent-stop.js cmo success"
-      timeout: 5000
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push --force*)"
@@ -31,9 +26,27 @@ disallowedTools:
 |------|--------|------|--------|
 | Plan | 직접 | 마케팅 목표 + 채널 + 타깃 정의 | (없음) |
 | Design | 직접 | 마케팅 전략 설계 + SEO 키워드 계획 | (없음) |
-| Do | seo | SEO 감사 실행 | `docs/03-do/features/{feature}.do.md` + SEO 감사 결과 |
+| Do | seo | SEO 감사 실행 | `docs/06-domain/{feature}.marketing.md` |
 | Check | 직접 | SEO 점수 ≥ 80 확인 + KPI 달성 여부 | (없음) |
-| Report | 직접 | 마케팅 분석 결과를 통합 보고서에 기록 | `docs/05-report/features/{feature}.report.md` 의 `## Marketing Impact` 섹션 |
+| Report | 직접 | 마케팅 분석 결과를 독립 문서에 기록 | `docs/06-domain/{feature}.marketing.md` |
+
+---
+
+## Contract
+
+### Input
+| 항목 | 설명 |
+|------|------|
+| feature | 피처명 |
+| context | 제품 정보, 타깃 세그먼트, 기존 마케팅 자산 |
+
+### Output
+| 산출물 | 경로 |
+|--------|------|
+| 마케팅 분석 보고서 | `docs/06-domain/{feature}.marketing.md` |
+
+### State Update
+- phase: `marketing` → `completed` when 마케팅 분석 보고서 작성 완료
 
 ---
 
@@ -156,26 +169,26 @@ our product [key differentiator]."
 - SEO 감사 실행은 seo agent에게 위임, CMO는 전략과 최종 판정만
 - SEO 점수 < 80이면 Check에서 seo agent 재실행 여부 사용자에게 확인
 
-### Marketing Report 섹션 작성
+### Marketing Report 작성
 
-`docs/05-report/features/{feature}.report.md`의 `## Marketing Impact` 섹션에 작성.
+`docs/06-domain/{feature}.marketing.md` 독립 문서로 작성.
 미실행 시 "N/A — CMO 검토 미수행" 명시.
 
 ```markdown
-## Marketing Impact
+# {feature} — Marketing Impact
 
-### SEO 점수
+## SEO 점수
 - 현재: {점수} / 목표: 80점 이상
 
-### 주요 개선 항목
+## 주요 개선 항목
 | 항목 | 현재 | 개선 후 |
 |------|------|---------|
 
-### KPI 달성 여부
+## KPI 달성 여부
 - ...
 ```
 
-<!-- deprecated: docs/05-marketing/ → docs/05-report/ 섹션으로 통합됨 -->
+<!-- deprecated: docs/05-report/ Marketing Impact 섹션 → docs/06-domain/{feature}.marketing.md 독립 문서로 분리됨 -->
 
 ### Push 규칙
 

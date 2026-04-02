@@ -1,5 +1,5 @@
 {
-  "version": "0.30.0",
+  "version": "0.31.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -7,9 +7,6 @@
   },
   "cSuite": {
     "orchestrator": "cto",
-    "deprecated": {
-      "manager": "cto"
-    },
     "roles": {
       "cto": { "required": true,  "model": "opus",   "layer": "strategy-tech",    "agent": "agents/cto.md" },
       "ceo": { "required": false, "model": "opus",   "layer": "strategy-biz",     "agent": "agents/ceo.md" },
@@ -17,14 +14,11 @@
       "cfo": { "required": false, "model": "opus",   "layer": "finance",          "agent": "agents/cfo.md" },
       "cmo": { "required": false, "model": "opus",   "layer": "growth",           "agent": "agents/cmo.md" },
       "cso": { "required": false, "model": "opus",   "layer": "quality",          "agent": "agents/cso.md" },
-      "cdo": { "required": false, "model": "opus",   "layer": "data",             "agent": "agents/cdo.md" },
-      "cro": { "required": false, "model": "opus",   "layer": "growth",           "agent": "agents/cro.md" },
       "coo": { "required": false, "model": "opus",   "layer": "ops",              "agent": "agents/coo.md" }
     },
     "autoKeywords": {
       "cso": ["payment", "auth", "login", "security", "결제", "인증", "보안"],
       "cmo": ["landing", "marketing", "launch", "마케팅", "랜딩", "캠페인"],
-      "cdo": ["analytics", "dashboard", "metrics", "분석", "대시보드", "지표"],
       "ceo": ["new product", "신규 서비스", "방향", "전략", "strategy"],
       "coo": ["deploy", "release", "배포", "릴리스", "운영", "infra"]
     }
@@ -43,22 +37,27 @@
     "port": 8765
   },
   "workflow": {
-    "phases": ["plan", "design", "architect", "frontend", "backend", "qa", "report"],
+    "phases": ["plan", "design", "do", "qa", "report"],
     "phaseNames": {
       "plan": "기획",
       "design": "설계",
-      "architect": "아키텍트",
-      "frontend": "프론트엔드",
-      "backend": "백엔드",
+      "do": "구현",
       "qa": "QA",
       "report": "보고서"
     },
     "docPaths": {
-      "plan": "docs/01-plan/{feature}.md",
-      "design": "docs/02-design/{feature}.md",
-      "architect": "docs/03-architect/{feature}.md",
-      "qa": "docs/04-qa/{feature}.md",
-      "report": "docs/05-report/{feature}.md"
+      "plan": "docs/01-plan/{feature}.plan.md",
+      "design": "docs/02-design/{feature}.design.md",
+      "do": "docs/03-do/{feature}.do.md",
+      "qa": "docs/04-qa/{feature}.qa.md",
+      "report": "docs/05-report/{feature}.report.md"
+    },
+    "cSuiteDocPaths": {
+      "prd": "docs/00-prd/{feature}.prd.md",
+      "security": "docs/06-domain/{feature}.security.md",
+      "marketing": "docs/06-domain/{feature}.marketing.md",
+      "finance": "docs/06-domain/{feature}.finance.md",
+      "ops": "docs/06-domain/{feature}.ops.md"
     }
   },
   "parallelGroups": {
@@ -86,57 +85,8 @@
     "autoInvoke": ["auto", "fix"],
     "entryTypes": ["decision", "change", "feedback", "dependency", "debt", "error", "milestone"]
   },
-  "team": {
-    "enabled": true,
-    "maxTeammates": 6,
-    "agentTeam": {
-      "name": "vais-dev-team",
-      "description": "VAIS 6단계 개발 워크플로우 팀",
-      "orchestrator": "manager",
-      "roles": {
-        "manager": { "model": "opus", "phases": ["*"], "delegates_to": ["design", "architect", "frontend", "backend", "qa"] },
-        "design": { "model": "sonnet", "phases": ["design"] },
-        "architect": { "model": "sonnet", "phases": ["architect"] },
-        "frontend": { "model": "sonnet", "phases": ["frontend"] },
-        "backend": { "model": "sonnet", "phases": ["backend"] },
-        "qa": { "model": "sonnet", "phases": ["qa"] }
-      },
-      "routing": {
-        "parallel": {
-          "implementation": ["frontend", "backend"]
-        }
-      }
-    }
-  },
   "orchestration": {
-    "gates": ["plan", "design", "architect", "frontend"],
-    "gateAction": "confirm",
-    "gateChecklists": {
-      "plan": [
-        "피처 레지스트리 생성 완료",
-        "데이터 모델 정의 완료",
-        "기술 스택 선정 완료",
-        "YAGNI 검증 통과"
-      ],
-      "design": [
-        "모든 화면에 컴포넌트 명세 존재",
-        "디자인 토큰 참조 명시",
-        "화면 간 네비게이션 플로우 정의",
-        "에러/로딩/빈 상태 정의",
-        "Interface Contract 생성 완료"
-      ],
-      "architect": [
-        "DB 스키마가 데이터 모델과 일치",
-        "마이그레이션 파일 생성 완료",
-        "환경 변수 템플릿 생성",
-        "프로젝트 빌드 성공"
-      ],
-      "frontend": [
-        "빌드 성공",
-        "FE/BE 모두 Interface Contract 참조",
-        "피처 레지스트리 status 업데이트 완료"
-      ]
-    }
+    "gateAction": "confirm"
   },
   "conventions": {
     "referenceComment": {
@@ -165,42 +115,10 @@
   },
   "featureNameSuggestions": {
     "_description": "자주 쓰는 피처 이름 예시 (kebab-case 권장, 강제 아님)",
-    "인증·사용자": [
-      "login",
-      "signup",
-      "oauth",
-      "user-profile",
-      "my-page",
-      "password-reset"
-    ],
-    "결제·커머스": [
-      "payment",
-      "cart",
-      "checkout",
-      "order-history",
-      "wishlist",
-      "coupon"
-    ],
-    "콘텐츠": [
-      "feed",
-      "post",
-      "comment",
-      "search",
-      "notification",
-      "bookmark"
-    ],
-    "소셜": [
-      "chat",
-      "follow",
-      "share",
-      "invite",
-      "review"
-    ],
-    "관리·운영": [
-      "dashboard",
-      "settings",
-      "admin-panel",
-      "analytics"
-    ]
+    "인증·사용자": ["login", "signup", "oauth", "user-profile", "my-page", "password-reset"],
+    "결제·커머스": ["payment", "cart", "checkout", "order-history", "wishlist", "coupon"],
+    "콘텐츠": ["feed", "post", "comment", "search", "notification", "bookmark"],
+    "소셜": ["chat", "follow", "share", "invite", "review"],
+    "관리·운영": ["dashboard", "settings", "admin-panel", "analytics"]
   }
 }

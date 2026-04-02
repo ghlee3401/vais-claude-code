@@ -89,10 +89,10 @@ describe('resolveDocPath / findDoc', () => {
     const paths = loadPaths();
     const docDir = path.join(tmpDir, 'docs', '01-plan');
     fs.mkdirSync(docDir, { recursive: true });
-    fs.writeFileSync(path.join(docDir, '테스트.md'), '# test');
+    fs.writeFileSync(path.join(docDir, '테스트.plan.md'), '# test');
 
     const found = paths.findDoc('plan', '테스트');
-    assert.ok(found.includes('테스트.md'));
+    assert.ok(found.includes('테스트.plan.md'));
   });
 });
 
