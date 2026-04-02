@@ -223,6 +223,31 @@ Plan 데이터 모델 + Design 화면-데이터 매핑을 합성하여 생성. `
 
 ---
 
+## C-Level 핸드오프 수신
+
+다른 C-Level이 분석/검증 중 수정이 필요한 이슈를 발견하면 **CTO 핸드오프 형식**으로 전달합니다. 수신 시 다음 절차를 따릅니다:
+
+1. 핸드오프 이슈 목록 확인 (요청 C-Level의 QA/Do 문서 참조)
+2. 이슈별 최적 체이닝 경로 결정 (위 "수정 유형별 체이닝" 테이블 참조)
+3. 서브에이전트 실행하여 수정
+4. 수정 완료 후 요청 C-Level에게 **재검증** 안내
+
+| 요청 C-Level | 전형적 이슈 | 재검증 명령 |
+|-------------|-----------|-----------|
+| CSO | 보안 취약점, 플러그인 구조 문제 | `/vais cso {feature}` |
+| CMO | SEO 점수 미달, 마케팅 기술 요구사항 | `/vais cmo {feature}` |
+| CFO | 비용 초과 → 아키텍처 경량화 필요 | `/vais cfo {feature}` |
+| COO | CI/CD 파이프라인 구현, 인프라 설정 | `/vais coo {feature}` |
+| CPO | PRD 요구사항 구현 | `/vais cpo {feature}` |
+| CEO | 전략 결정에 따른 기술 변경 | `/vais ceo {feature}` |
+
+### Context Load (핸드오프 수신 시)
+
+기존 L1-L3에 추가:
+- **L4**: 요청 C-Level의 산출물 (`docs/03-do/{role}_{feature}.do.md`, `docs/04-qa/{role}_{feature}.qa.md`)
+
+---
+
 ## 크로스-피처 영향 분석
 
 수정/확장 요청 시:
