@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.35.0)
+> Virtual AI C-Suite for software development (v0.36.1)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -21,6 +21,7 @@ vais-claude-code/
 ├── output-styles/   # 출력 스타일 정의
 ├── docs/            # 피처별 산출물 (01-plan ~ 05-report)
 ├── references/      # 참고 문서
+├── basic/           # 하네스 엔지니어링 최소 참조 구조 (패턴 참고용, 프로덕션 코드 아님)
 ├── vendor/          # 외부 의존 (ui-ux-pro-max)
 ├── tests/           # 테스트
 ├── vais.config.json # 플러그인 전체 설정 (워크플로우, 게이트, C-Suite 역할)
@@ -106,3 +107,4 @@ node scripts/vais-validate-plugin.js  # 플러그인 구조 검증
 - `vendor/` 내 파일을 직접 수정하지 말 것
 - 에이전트 frontmatter 형식을 임의로 변경하지 말 것
 - `vais.config.json`의 키 구조를 사전 합의 없이 변경하지 말 것
+- `basic/` 디렉토리는 패턴 참고용 — 코드 리뷰, QA, 보안 점검 대상에서 제외

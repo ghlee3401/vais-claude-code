@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.33.3** · Claude Code C-Suite 플러그인
+**v0.36.1** · Claude Code C-Suite 플러그인
 
 > C-Suite AI 팀. `/vais cto {feature}` 하나로 기획부터 구현까지.
 
@@ -256,6 +256,7 @@ vais-claude-code/
 
 | 버전 | 주요 변경 |
 |------|---------|
+| v0.36.1 | path traversal 수정, absorb-evaluator 버그 픽스, CLAUDE.md basic/ 참고용 명시, commit 버전 동기화 강화 |
 | v0.33.3 | OWASP A01/A03/A08/A10 보안 수정: bash-guard rm 패턴 강화, CLI 인자 화이트리스트, webhook SSRF 방지, PM 에이전트 disallowedTools |
 | v0.33.2 | lib/paths.js safePath() path traversal 방지, config 필수 필드 검증, package.json scripts 추가 |
 | v0.33.1 | C-Level → CTO 공통 핸드오프 프로토콜: 검증/수정 분리 원칙, 7개 에이전트 표준 핸드오프 형식 |

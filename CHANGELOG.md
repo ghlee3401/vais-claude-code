@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.36.1] - 2026-04-03
+
+### Fixed
+
+- **absorb-evaluator**: path traversal 취약점 수정 (`_assertWithinBoundary` 추가)
+- **absorb-evaluator**: 코드 블록 카운트 `Math.floor()` 적용 (홀수 fence 오류)
+- **absorb-evaluator**: ledger record 크기 제한 (10KB) 추가
+
+### Changed
+
+- **CLAUDE.md**: 버전 동기화, `basic/` 패턴 참고용 명시 및 리뷰 제외 규칙 추가
+- **commit.md**: 버전 일괄 반영 대상 5개 파일 구체적 명시, 불일치 시 커밋 중단 규칙
+
+---
+
 ## [0.36.0] - 2026-04-03
 
 ### Added

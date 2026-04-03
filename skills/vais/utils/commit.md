@@ -17,7 +17,13 @@ git 변경사항을 분석하여 Conventional Commits 형식의 커밋 메시지
 5. 변경 성격 분석 후 semver 범프 추천 (patch/minor/major + 이유)
 6. **[확인 2]** AskUserQuestion: "버전을 어떻게 올릴까요?" (추천 옵션을 첫 번째로 제시)
    - 옵션: "patch (x.x.+1)", "minor (x.+1.0)", "major (+1.0.0)", "버전 변경 없음"
-7. **버전 일괄 반영**: `package.json`, `vais.config.json`, `README.md` 상단 버전 표기 및 버전 히스토리 테이블을 새 버전으로 업데이트
+7. **버전 일괄 반영** (누락 시 커밋 금지):
+   - `package.json` → `"version"` 필드
+   - `vais.config.json` → `"version"` 필드
+   - `CLAUDE.md` → 3번째 줄 `(v{version})` 표기
+   - `CHANGELOG.md` → 새 버전 엔트리 추가
+   - `README.md` → 상단 버전 표기 및 버전 히스토리 테이블
+   - 위 5개 파일의 버전이 모두 동일한지 확인 후 진행. 하나라도 불일치하면 커밋 중단하고 사용자에게 알릴 것
 8. 변경된 버전 파일을 스테이징에 포함 후 커밋 실행
 9. **[확인 3]** AskUserQuestion: "커밋 완료. push하시겠습니까?"
    - 옵션: "push", "나중에"
