@@ -57,7 +57,11 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('autoKeywords', 'not found'\\), indent=2\\)\\)\")",
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(list\\(d.keys\\(\\)\\)\\)\")",
       "Bash(git config:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(echo \"exit code: $?\")"
     ]
+  },
+  "enabledPlugins": {
+    "vais-code@vais-marketplace": true
   }
 }

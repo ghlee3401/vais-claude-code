@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.35.0] - 2026-04-03
+
+### Added
+
+- **basic/**: 하네스 엔지니어링 최소 참조 구조 (CLAUDE.md, agents, skills, hooks, scripts, memory, templates, src)
+- **basic/.mcp.json**: MCP 서버 설정 템플릿
+
+---
+
 ## [0.33.3] - 2026-04-03
 
 ### Fixed

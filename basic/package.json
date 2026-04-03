@@ -1,0 +1,21 @@
+{
+  "name": "my-harness",
+  "version": "1.0.0",
+  "description": "Claude Code harness engineering 참조 구현",
+  "claude-plugin": {
+    "name": "my-harness",
+    "version": "1.0.0",
+    "skills": [
+      "skills/example/SKILL.md"
+    ],
+    "agents": [
+      "agents/orchestrator.md",
+      "agents/executor.md"
+    ],
+    "hooks": "hooks/hooks.json",
+    "outputStyles": "output-styles/default.md"
+  },
+  "scripts": {
+    "validate": "node scripts/validate.js"
+  }
+}
