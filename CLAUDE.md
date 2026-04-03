@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.33.4)
+> Virtual AI C-Suite for software development (v0.34.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
