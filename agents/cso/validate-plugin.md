@@ -50,7 +50,7 @@ required.forEach(k => { if (!p[k]) console.log('MISSING:', k) })
 
 ### 3단계: agents/ frontmatter 필수 필드
 
-각 `agents/*.md` 파일 검사:
+각 `agents/{c-level}/*.md` 파일 검사:
 - [ ] `name`: 에이전트 식별자 존재
 - [ ] `description`: Triggers 포함
 - [ ] `model`: opus 또는 sonnet

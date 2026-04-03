@@ -1,5 +1,5 @@
 {
-  "version": "0.37.0",
+  "version": "0.38.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -11,13 +11,13 @@
       "techOnly": "cto"
     },
     "roles": {
-      "ceo": { "required": true,  "model": "opus",   "layer": "executive",        "agent": "agents/ceo.md" },
-      "cpo": { "required": false, "model": "opus",   "layer": "strategy-product", "agent": "agents/cpo.md" },
-      "cto": { "required": true,  "model": "opus",   "layer": "strategy-tech",    "agent": "agents/cto.md" },
-      "cso": { "required": false, "model": "opus",   "layer": "quality",          "agent": "agents/cso.md" },
-      "cmo": { "required": false, "model": "opus",   "layer": "growth",           "agent": "agents/cmo.md" },
-      "coo": { "required": false, "model": "opus",   "layer": "ops",              "agent": "agents/coo.md" },
-      "cfo": { "required": false, "model": "opus",   "layer": "finance",          "agent": "agents/cfo.md" }
+      "ceo": { "required": true,  "model": "opus",   "layer": "executive",        "agent": "agents/ceo/ceo.md" },
+      "cpo": { "required": false, "model": "opus",   "layer": "strategy-product", "agent": "agents/cpo/cpo.md" },
+      "cto": { "required": true,  "model": "opus",   "layer": "strategy-tech",    "agent": "agents/cto/cto.md" },
+      "cso": { "required": false, "model": "opus",   "layer": "quality",          "agent": "agents/cso/cso.md" },
+      "cmo": { "required": false, "model": "opus",   "layer": "growth",           "agent": "agents/cmo/cmo.md" },
+      "coo": { "required": false, "model": "opus",   "layer": "ops",              "agent": "agents/coo/coo.md" },
+      "cfo": { "required": false, "model": "opus",   "layer": "finance",          "agent": "agents/cfo/cfo.md" }
     },
     "launchPipeline": {
       "order": ["cpo", "cto", "cso", "cmo", "coo", "cfo"],

@@ -1,7 +1,7 @@
 # VAIS PDCA Convention — 개발자 참고 문서
 
 > 이 문서는 **개발자용 참고 문서**입니다. 에이전트 런타임에는 로드되지 않습니다.
-> 에이전트 파일(`agents/*.md`) 작성 표준, 공통 규칙, 전체 에이전트 맵을 정의합니다.
+> 에이전트 파일(`agents/{c-level}/*.md`) 작성 표준, 공통 규칙, 전체 에이전트 맵을 정의합니다.
 
 ---
 
@@ -34,7 +34,7 @@ absorb 전용:
 
 ---
 
-## 2. agents/*.md 파일 작성 표준
+## 2. agents/{c-level}/*.md 파일 작성 표준
 
 ### 2.1 Frontmatter 필수 필드
 
@@ -102,7 +102,7 @@ AskUserQuestion으로 할 작업 목록을 나열 후 확인.
 
 ### 개별 CP (C레벨 고유)
 
-각 C레벨 agents/*.md의 `## Checkpoint` 섹션에 정의. 예:
+각 C레벨 `agents/{c-level}/*.md`의 `## Checkpoint` 섹션에 정의. 예:
 - CEO: CP-R (라우팅 확인), CP-A (absorb 배분 확인)
 - CTO: CP-D (Design 아키텍처 선택), CP-G1~G4 (각 Gate 완료 확인)
 - CSO: CP-C (Critical 발견 시 배포 차단 확인)

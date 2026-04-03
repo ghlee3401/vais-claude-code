@@ -5,7 +5,7 @@ description: CTO 에이전트 호출. 기술 도메인 전체 오케스트레이
 
 # CTO Phase
 
-`${CLAUDE_PLUGIN_ROOT}/agents/cto.md`를 읽고 그 안의 지침에 따라 실행하세요.
+`${CLAUDE_PLUGIN_ROOT}/agents/cto/cto.md`를 읽고 그 안의 지침에 따라 실행하세요.
 
 전달 인자:
 - action: `$0`

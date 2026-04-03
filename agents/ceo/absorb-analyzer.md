@@ -40,7 +40,7 @@ CEO로부터 다음 정보를 받습니다:
 
 ### 3단계: 기존 파일 겹침 분석
 
-`skills/vais/phases/`, `skills/vais/utils/`, `agents/` 파일들과 내용 겹침을 Grep으로 확인합니다.
+`skills/vais/phases/`, `skills/vais/utils/`, `agents/` 하위 디렉토리 파일들과 내용 겹침을 Grep으로 확인합니다.
 
 핵심 키워드를 추출하여 기존 파일에서 검색:
 - 겹침 파일 목록
@@ -65,7 +65,7 @@ vais 6-레이어 구조와의 적합성:
 |--------|------|
 | `phases/` (C-Suite) | CEO/CTO/CMO/CSO/CPO/CFO/COO 방법론 |
 | `utils/` | commit, status, help, init 등 유틸리티 |
-| `agents/` | C-레벨이 위임하는 전문 실행자 |
+| `agents/{c-level}/` | C-레벨 별 하위 폴더로 구성된 에이전트 |
 | `scripts/` | Node.js 자동화 스크립트 |
 | `lib/` | 재사용 가능한 라이브러리 |
 | `mcp/` | MCP Tool 서버 (외부 도구를 래핑하여 에이전트에 제공) |

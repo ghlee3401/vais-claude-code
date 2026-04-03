@@ -552,24 +552,36 @@ function validateAgents(root, result) {
 
   if (!fileExists(agentsDir)) return;
 
-  const files = fs.readdirSync(agentsDir).filter(f => f.endsWith('.md'));
+  // C-Level 하위 디렉토리 재귀 탐색
+  const subdirs = fs.readdirSync(agentsDir).filter(f => {
+    const fullPath = path.join(agentsDir, f);
+    return fs.statSync(fullPath).isDirectory();
+  });
 
-  for (const file of files) {
-    const filePath = path.join(agentsDir, file);
-    const content = fs.readFileSync(filePath, 'utf8');
+  let totalFiles = 0;
 
-    // 마크다운 agent 파일 기본 검증
-    if (content.trim().length < 20) {
-      result.warn(cat, `agents/${file}: 내용이 너무 짧습니다. 에이전트 정의를 충분히 작성하세요.`);
-    }
+  for (const subdir of subdirs) {
+    const subdirPath = path.join(agentsDir, subdir);
+    const files = fs.readdirSync(subdirPath).filter(f => f.endsWith('.md'));
 
-    // 프론트매터 체크 (선택적이지만 권장)
-    if (!content.startsWith('---')) {
-      result.note(cat, `agents/${file}: 프론트매터가 없습니다. model, tools 제한 등 설정 가능.`);
+    for (const file of files) {
+      const filePath = path.join(subdirPath, file);
+      const content = fs.readFileSync(filePath, 'utf8');
+      const relPath = `agents/${subdir}/${file}`;
+
+      if (content.trim().length < 20) {
+        result.warn(cat, `${relPath}: 내용이 너무 짧습니다. 에이전트 정의를 충분히 작성하세요.`);
+      }
+
+      if (!content.startsWith('---')) {
+        result.note(cat, `${relPath}: 프론트매터가 없습니다. model, tools 제한 등 설정 가능.`);
+      }
+
+      totalFiles++;
     }
   }
 
-  result.note(cat, `발견된 agent 정의: ${files.length}개`);
+  result.note(cat, `발견된 agent 정의: ${totalFiles}개 (${subdirs.length}개 C-Level 디렉토리)`);
 }
 
 /**
@@ -793,11 +805,15 @@ function validateSettingsJson(root, result) {
     return;
   }
 
-  // agent 필드 — agents/ 디렉토리의 파일 참조여야 함
+  // agent 필드 — agents/{role}/{role}.md 또는 agents/{parent}/{role}.md 파일 참조여야 함
   if (data.agent) {
-    const agentFile = path.join(root, 'agents', `${data.agent}.md`);
-    if (!fileExists(agentFile)) {
-      result.warn(cat, `agent '${data.agent}'에 해당하는 agents/${data.agent}.md 파일이 없습니다.`);
+    // agents/{role}/{role}.md 형태로 먼저 탐색, 없으면 agents/*/{role}.md 글로빙
+    const agentDirect = path.join(root, 'agents', data.agent, `${data.agent}.md`);
+    const agentGlob = fs.readdirSync(path.join(root, 'agents'))
+      .filter(d => fs.statSync(path.join(root, 'agents', d)).isDirectory())
+      .some(d => fileExists(path.join(root, 'agents', d, `${data.agent}.md`)));
+    if (!fileExists(agentDirect) && !agentGlob) {
+      result.warn(cat, `agent '${data.agent}'에 해당하는 agents/**/${data.agent}.md 파일이 없습니다.`);
     }
     result.note(cat, `기본 agent 설정: '${data.agent}'`);
   }

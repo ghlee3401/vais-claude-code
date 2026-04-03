@@ -5,7 +5,7 @@ description: CPO 에이전트 호출. 제품 도메인 오케스트레이션 (PR
 
 # CPO Phase
 
-`${CLAUDE_PLUGIN_ROOT}/agents/cpo.md`를 읽고 그 안의 지침에 따라 실행하세요.
+`${CLAUDE_PLUGIN_ROOT}/agents/cpo/cpo.md`를 읽고 그 안의 지침에 따라 실행하세요.
 
 전달 인자:
 - action: `$0`

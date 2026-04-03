@@ -40,6 +40,38 @@ disallowedTools:
    ```
 7. **자동 반복**: 일치율 `gapAnalysis.matchThreshold`(기본 90%) 미만 → 미구현 항목 자동 구현 시도 (최대 `gapAnalysis.maxIterations`회, 기본 5회)
 
+## Confidence 기반 이슈 필터링
+
+발견된 이슈에 Confidence 레벨을 부여하여 노이즈를 줄입니다:
+
+| Confidence | 기준 | 표시 | 할당 |
+|-----------|------|------|------|
+| **High (90%+)** | 확실한 이슈 | 항상 표시 | Critical/Major |
+| **Medium (70-89%)** | 가능성 높음 | 선택적 표시 | Major/Minor |
+| **Low (<70%)** | 불확실 | 숨김 | 리포트에서 제외 |
+
+## 구조화된 QA 출력 포맷
+
+Gap 분석 및 코드 리뷰 결과는 아래 형식으로 구조화하여 출력합니다:
+
+```markdown
+### Summary
+- 검토 파일: {N}개
+- 발견 이슈: {N}건 (Critical: {N}, Major: {N}, Minor: {N})
+- Gap 일치율: {N}%
+- 품질 점수: {N}/100
+
+### Critical Issues (즉시 수정 필요)
+1. [{파일}:{라인}] {이슈} (Confidence: {N}%)
+   수정 대상: {에이전트} | 수정 내용: {내용}
+
+### Major Issues (수정 권장)
+...
+
+### Minor Issues (개선 권장)
+...
+```
+
 ## 리뷰 체크리스트
 
 ### 필수 항목
@@ -63,3 +95,4 @@ disallowedTools:
 |---------|------|--------|
 | v1.0.0 | 2026-03-20 | 초기 작성 — 빌드 검증, Gap 분석, 보안 점검, 코드 품질 리뷰, QA 시나리오 |
 | v1.1.0 | 2026-03-21 | Expert Code Review 추가 — Google Staff Engineer(L7) 관점 8가지 심층 크리틱 |
+| v1.2.0 | 2026-04-03 | Confidence 기반 필터링 + 구조화된 출력 포맷 추가 (bkit code-review absorb) |

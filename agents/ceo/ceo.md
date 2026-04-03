@@ -152,7 +152,7 @@ absorb-analyzer 결과의 `action` 값에 따라 분기합니다:
 
 | action | Do 실행 내용 |
 |--------|-------------|
-| `absorb` | 기존 방식 — 배분 맵 기반 `agents/*.md` 또는 `skills/` 수정 |
+| `absorb` | 기존 방식 — 배분 맵 기반 `agents/{c-level}/*.md` 또는 `skills/` 수정 |
 | `absorb-mcp` | **MCP 경로** — `mcp/{name}-server.json` 생성 + `vendor/`에 소스 배치 |
 | `merge` | 기존 파일에 병합 |
 | `reject` | 흡수 거부, Ledger에 reject 기록 |
