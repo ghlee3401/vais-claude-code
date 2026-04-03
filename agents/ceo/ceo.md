@@ -116,6 +116,7 @@ CEO가 CSO 호출 → CSO가 CTO 구현물 검토
   └─ 이슈 있음 → CEO에게 이슈 보고
        → CEO가 CTO에게 수정 지시 (CSO 이슈 목록 전달)
        → CTO 수정 완료 → CEO가 CSO 재검토 요청
+       → 1회 수정 후에도 미통과 → CTO가 investigate 호출 (근본 원인 분석)
        → 최대 3회 반복 후 미해결 시 사용자에게 에스컬레이션
 ```
 
@@ -160,7 +161,7 @@ CEO가 CSO 호출 → CSO가 CTO 구현물 검토
 | Design | absorb-analyzer | 중복 분석 + C레벨별 배분 맵 생성 + **MCP 적합성 심화 분석** | (선택) `docs/02-design/ceo_{feature}.design.md` |
 | Do | 직접 | 배분 맵 기반 분기 실행 (아래 참조) | `docs/03-do/ceo_{feature}.do.md` |
 | Check | 직접 | 추가된 서브에이전트/MCP Tool 위치 검증 + 충돌 확인 | `docs/04-qa/ceo_{feature}.qa.md` |
-| Report | 직접 | `.vais/absorption-ledger.jsonl` + 최종 보고 | (선택) `docs/05-report/ceo_{feature}.report.md` |
+| Report | 직접 | `docs/absorption-ledger.jsonl` + 최종 보고 | (선택) `docs/05-report/ceo_{feature}.report.md` |
 
 #### absorb Do 분기 로직
 
@@ -202,7 +203,7 @@ absorb-analyzer 결과의 `action` 값에 따라 분기합니다:
 | 전략 정합성 검증 | `docs/04-qa/ceo_{feature}.qa.md` | **필수** |
 | 최종 보고서 | `docs/05-report/ceo_{feature}.report.md` | 선택 |
 | 전략 결정 기록 | `.vais/memory.json` (decision 타입) | — |
-| absorb 원장 | `.vais/absorption-ledger.jsonl` (absorb 모드) | — |
+| absorb 원장 | `docs/absorption-ledger.jsonl` (absorb 모드) | — |
 
 ### State Update
 - phase: `rolePhases.ceo.plan` → `completed` when 전략 분석 문서 작성 완료
@@ -301,7 +302,7 @@ C. 중단 — 전략 방향 재검토 필요
 
 ### absorb 모드 추가 로드
 - 대상 경로의 모든 파일 목록 (Glob)
-- `.vais/absorption-ledger.jsonl` — 중복 흡수 방지
+- `docs/absorption-ledger.jsonl` — 중복 흡수 방지
 
 ---
 
@@ -311,11 +312,13 @@ C. 중단 — 전략 방향 재검토 필요
 |------------------|----------|
 | 제품 방향, PRD, 로드맵, 기획 | CPO |
 | 기술 구현, 아키텍처, 코딩, API, 개발 | CTO |
+| 버그, 에러, 디버깅, "왜 안 돼", "깨졌어" | CTO (→ investigate 서브에이전트) |
 | 마케팅, SEO, 캠페인, 콘텐츠, 랜딩 | CMO |
 | 보안, 취약점, 인증, 플러그인 검증 | CSO |
 | 재무, 비용, ROI, 가격, 예산 | CFO |
 | 운영, CI/CD, 배포, 모니터링, 프로세스 | COO |
 | absorb, 외부 스킬 흡수 | CEO (absorb 모드) |
+| 회고, 학습, 리뷰, 이번 주 성과 | CEO (retro 서브에이전트) |
 | 복합 요청 | 관련 C레벨 순차 또는 체이닝 |
 
 ### C레벨 체이닝 예시

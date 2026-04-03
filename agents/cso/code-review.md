@@ -45,6 +45,9 @@ Glob: src/**/*.{ts,tsx,js,jsx}, lib/**/*.js, scripts/**/*.js, agents/**/*.md
 | 에러 핸들링 | catch 블록 누락/빈 catch, Promise 미처리 |
 | 경계 조건 | 배열 범위 초과, 빈 입력 미처리, 타입 불일치 |
 | 논리 오류 | 무한 루프 가능성, 데드 코드, 조건 반전 |
+| SQL Safety | raw SQL 인젝션, ORM 미사용 쿼리, 트랜잭션 누락 |
+| LLM Trust Boundary | LLM 출력을 코드 실행에 직접 사용, 프롬프트 인젝션 벡터 |
+| 조건부 Side-Effect | 조건문 내 부수 효과, 환경별 다른 동작, feature flag 누락 |
 
 ### 3단계: 성능 안티패턴 탐지
 
@@ -128,3 +131,4 @@ CSO가 최종 Gate C Pass/Fail을 판정합니다.
 | version | date | change |
 |---------|------|--------|
 | v1.0.0 | 2026-04-03 | 초기 작성 — bkit code-review 스킬 absorb + 독립 검증 특화 |
+| v1.1.0 | 2026-04-04 | gstack/review 흡수 — SQL safety, LLM trust boundary, 조건부 side-effect 체크리스트 추가 |

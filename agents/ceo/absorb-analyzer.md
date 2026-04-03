@@ -27,7 +27,7 @@ CEO로부터 다음 정보를 받습니다:
 
 ### 1단계: 중복 체크
 
-`.vais/absorption-ledger.jsonl` 파일이 있으면 읽어서 동일 소스가 있는지 확인합니다.
+`docs/absorption-ledger.jsonl` 파일이 있으면 읽어서 동일 소스가 있는지 확인합니다.
 
 ```
 동일 소스 존재 여부: {yes/no}

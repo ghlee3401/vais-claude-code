@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.38.3)
+> Virtual AI C-Suite for software development (v0.39.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -55,13 +55,21 @@ CEO → ① CPO → ② CTO → ③ CSO(↺CTO) → ④ CMO → ⑤ COO → ⑥ 
 ```
 
 ### Execution (실행 레이어, Sonnet)
-architect, backend, frontend, design, qa, security, seo, validate-plugin, code-review
+architect, backend, frontend, design, qa, security, seo, validate-plugin, code-review, investigate, canary, benchmark, retro
 
 ### PM (제품 기획 레이어, CPO 서브)
 pm-discovery, pm-strategy, pm-research, pm-prd
 
 ### Utility
 absorb-analyzer (CEO 서브, 레퍼런스 흡수 분석)
+
+### gstack 흡수 에이전트 (v0.39.0)
+| Agent | C-Level | 역할 | 원본 |
+|-------|---------|------|------|
+| investigate | CTO | 체계적 디버깅 (4단계: 조사→분석→가설→구현) | gstack/investigate |
+| canary | COO | 배포 후 카나리 모니터링 | gstack/canary |
+| benchmark | COO | 성능 벤치마크 + 회귀 감지 | gstack/benchmark |
+| retro | CEO | 엔지니어링 회고 + 학습 추출 | gstack/retro |
 
 ## Development Workflow
 

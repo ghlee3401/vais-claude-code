@@ -73,3 +73,53 @@ Critical 취약점: [{항목}]
 ```
 
 CSO가 최종 Pass/Fail을 판정합니다.
+
+---
+
+## 런타임 안전 가드레일
+
+> **@see** gstack/careful, guard, freeze — Safety guardrails for destructive commands
+
+### 파괴적 명령 감지
+
+코드 내 또는 CI/CD 파이프라인에서 아래 패턴 사용 여부를 검사합니다:
+
+| 패턴 | 위험도 | 검사 방법 |
+|------|--------|---------|
+| `rm -rf /` 또는 `rm -rf *` | CRITICAL | Grep: `rm\s+-rf\s+[/*]` |
+| `DROP TABLE`, `DROP DATABASE` | CRITICAL | Grep: `DROP\s+(TABLE\|DATABASE)` |
+| `git push --force` | HIGH | Grep: `push\s+--force\|push\s+-f` |
+| `git reset --hard` | HIGH | Grep: `reset\s+--hard` |
+| `kubectl delete` (no selector) | HIGH | Grep: `kubectl\s+delete` |
+| `chmod 777` | MEDIUM | Grep: `chmod\s+777` |
+
+### Secrets Archaeology
+
+> **@see** gstack/cso — Secrets archaeology
+
+코드 히스토리에 노출된 적 있는 비밀 검색:
+
+```bash
+# .env 파일이 git에 커밋된 적 있는지
+git log --all --diff-filter=A -- "*.env" ".env*" 2>/dev/null
+
+# 하드코딩된 시크릿 패턴
+Grep: (password|secret|api_key|token)\s*[:=]\s*["'][^"']{8,}
+```
+
+### CI/CD 파이프라인 보안
+
+| 항목 | 검사 내용 |
+|------|---------|
+| 시크릿 관리 | CI 환경변수로 관리, 코드에 하드코딩 없음 |
+| 의존성 무결성 | lockfile 존재, 해시 검증 |
+| 빌드 격리 | 프로덕션 빌드에 devDeps 미포함 |
+| 배포 권한 | 프로덕션 배포에 수동 승인 단계 존재 |
+
+### AI/LLM 보안
+
+| 항목 | 검사 내용 |
+|------|---------|
+| 프롬프트 인젝션 | 사용자 입력이 프롬프트에 직접 삽입되지 않음 |
+| LLM 신뢰 경계 | LLM 출력을 코드 실행에 직접 사용하지 않음 |
+| 외부 콘텐츠 격리 | 웹 크롤링/API 응답을 프롬프트에 삽입 시 마커 사용 |

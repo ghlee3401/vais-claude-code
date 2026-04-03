@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.39.0] - 2026-04-04
+
+### Added
+
+- **agents**: gstack v0.14.5에서 4개 에이전트 흡수
+  - `investigate` (CTO) — 체계적 디버깅, Iron Law: 근본 원인 없이 수정 금지
+  - `canary` (COO) — 배포 후 카나리 모니터링 (curl/API 기반)
+  - `benchmark` (COO) — 성능 벤치마크 + 회귀 감지
+  - `retro` (CEO) — 엔지니어링 회고 + 학습 추출
+- **security.md**: 런타임 안전 가드레일, Secrets Archaeology, CI/CD·AI/LLM 보안 항목 추가
+- **code-review.md**: SQL Safety, LLM Trust Boundary, 조건부 Side-Effect 패턴 추가
+- **references/gstack-ethos.md**: gstack 3원칙 참조 문서
+
+### Changed
+
+- **absorption-ledger**: `.vais/` → `docs/` 이전 (git 추적 가능)
+- **CEO**: investigate/retro 라우팅, CSO↔CTO 루프에서 investigate 에스컬레이션
+- **CTO**: investigate 자동 호출 조건 4가지 (QA 2회 실패, 빌드 실패, CSO 수정 실패, 사용자 요청)
+- **COO**: canary/benchmark 서브에이전트 위임 체계
+
+---
+
 ## [0.38.3] - 2026-04-04
 
 ### Fixed
@@ -134,7 +156,7 @@
   - `rotation.js` — 로그 로테이션 유틸
 - **lib/absorb-evaluator.js** — Reference Absorption 평가 엔진
   - checkDuplicate / checkOverlap / assessQuality / assessFit / evaluate / record
-  - `.vais/absorption-ledger.jsonl` append-only 기록
+  - `docs/absorption-ledger.jsonl` append-only 기록
 - **scripts/** — Hook 호출 CLI 래퍼
   - `agent-start.js`, `agent-stop.js`, `phase-transition.js`
 - **hooks/events.json** — 이벤트 스키마 문서 (MCP/대시보드 소비용)

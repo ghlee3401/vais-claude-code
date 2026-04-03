@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.38.3** · Claude Code C-Suite 플러그인
+**v0.39.0** · Claude Code C-Suite 플러그인
 
 > AI C-Suite 조직. CEO에게 지시하면 C-Level 팀을 고용해서 알아서 한다.
 
@@ -258,7 +258,7 @@ docs/
 /vais ceo {feature}    # "이 레퍼런스 흡수해줘 ../bkit/" 요청
 ```
 
-CEO가 absorb-analyzer sub-agent에게 분석을 위임하고, 판정(absorb/merge/reject)을 내린다. 결과는 CEO PDCA 문서(`docs/01-plan/ceo_*.plan.md`, `docs/03-do/ceo_*.do.md`)에 기록되고, 중복 방지 인덱스는 `.vais/absorption-ledger.jsonl`에 유지.
+CEO가 absorb-analyzer sub-agent에게 분석을 위임하고, 판정(absorb/merge/reject)을 내린다. 결과는 CEO PDCA 문서(`docs/01-plan/ceo_*.plan.md`, `docs/03-do/ceo_*.do.md`)에 기록되고, 중복 방지 인덱스는 `docs/absorption-ledger.jsonl`에 유지.
 
 ---
 
@@ -334,6 +334,7 @@ vais-claude-code/
 
 | 버전 | 주요 변경 |
 |------|---------|
+| v0.39.0 | gstack 흡수: investigate/canary/benchmark/retro 에이전트 신설, 보안 가드레일 강화 |
 | v0.38.3 | CSO 2차 코드 리뷰: code-review 역할 등록, atomicWriteSync 적용, agent-stop 안정성 개선 |
 | v0.38.1 | README CSO 하위 에이전트(code-review) 동기화, 조직도·프로젝트 구조 갱신 |
 | v0.38.0 | agents 디렉토리 C-Level별 하위 폴더 재구조화, CSO Gate C(독립 코드 리뷰) 신설, CTO qa Confidence 필터링 추가 |

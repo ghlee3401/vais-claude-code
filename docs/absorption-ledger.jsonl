@@ -1,0 +1,12 @@
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/investigate","action":"absorb","target":"agents/cto/investigate.md","clevel":"CTO","summary":"체계적 디버깅 4단계 프로세스"}
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/canary","action":"absorb","target":"agents/coo/canary.md","clevel":"COO","summary":"배포 후 카나리 모니터링 (curl/API 기반)"}
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/benchmark","action":"absorb","target":"agents/coo/benchmark.md","clevel":"COO","summary":"성능 벤치마크 + 회귀 감지"}
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/retro","action":"absorb","target":"agents/ceo/retro.md","clevel":"CEO","summary":"엔지니어링 회고 자동화"}
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/careful+guard+freeze","action":"merge","target":"agents/cso/security.md","clevel":"CSO","summary":"런타임 안전 가드레일 섹션 추가"}
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/review","action":"merge","target":"agents/cso/code-review.md","clevel":"CSO","summary":"SQL safety, LLM trust boundary 체크리스트 추가"}
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/cso","action":"merge","target":"agents/cso/security.md","clevel":"CSO","summary":"Secrets archaeology, CI/CD, AI/LLM 보안 감사 추���"}
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/ETHOS.md","action":"absorb","target":"references/gstack-ethos.md","clevel":"CEO","summary":"Boil the Lake, Search Before Building, User Sovereignty 참조"}
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/browse","action":"reject","target":null,"clevel":null,"summary":"Playwright/Bun 인프라 의존"}
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/design-consultation","action":"reject","target":null,"clevel":null,"summary":"GPT Image API 의존"}
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/codex","action":"reject","target":null,"clevel":null,"summary":"OpenAI Codex CLI 의존"}
+{"timestamp":"2026-04-04T00:00:00Z","source":"gstack/office-hours","action":"reject","target":null,"clevel":null,"summary":"YC 특화, CPO pm-discovery 대체"}

@@ -32,7 +32,8 @@ disallowedTools:
 
 ## 역할
 
-운영 도메인 직접 수행. CI/CD 파이프라인, 모니터링, 배포 효율화. 서브에이전트 없이 직접 수행.
+운영 도메인 오케스트레이션. CI/CD 파이프라인, 모니터링, 배포 효율화.
+canary(배포 후 모니터링), benchmark(성능 벤치마크) 서브에이전트를 위임 가능.
 
 ---
 
@@ -67,7 +68,7 @@ disallowedTools:
 | Plan | 직접 | 운영 현황 파악 + 개선 범위 정의 | `docs/01-plan/coo_{feature}.plan.md` |
 | Design | 직접 | CI/CD 파이프라인 설계 + 모니터링 아키텍처 | (선택) `docs/02-design/coo_{feature}.design.md` |
 | Do | 직접 | 파이프라인/모니터링 설정 파일 작성 + 검증 | `docs/03-do/coo_{feature}.do.md` |
-| Check | 직접 | 운영 지표 달성 여부 + 파이프라인 단계 완전성 | `docs/04-qa/coo_{feature}.qa.md` |
+| Check | 직접 / canary / benchmark | 운영 지표 + 배포 검증 + 성능 벤치마크 | `docs/04-qa/coo_{feature}.qa.md` |
 | Report | 직접 | 운영 분석 최종 보고 | (선택) `docs/05-report/coo_{feature}.report.md` |
 
 ---
