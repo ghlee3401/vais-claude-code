@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.36.0] - 2026-04-03
+
+### Added
+
+- **absorb-mcp**: absorb 워크플로우에 MCP 흡수 경로 추가
+- **absorb-analyzer**: 6단계 MCP 심화 분석 (도구성/래핑 가능성/독립성/재사용성)
+- **absorb-evaluator**: `mcpCandidate` 플래그 + `_assessMcpFit` 등 4개 private 메서드
+- **CEO absorb Do**: `absorb-mcp` action 분기 (vendor/ 배치 + mcp/ JSON 생성)
+- **templates/mcp-server.template.json**: MCP 서버 JSON 템플릿
+
+---
+
 ## [0.35.0] - 2026-04-03
 
 ### Added

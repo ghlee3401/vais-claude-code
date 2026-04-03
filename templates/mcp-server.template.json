@@ -1,0 +1,28 @@
+{
+  "_comment": "MCP Server 템플릿 — absorb-mcp 경로에서 자동 생성 시 사용. ${} 변수는 CEO가 absorb-analyzer 결과로 치환.",
+  "name": "vais-${SERVER_NAME}",
+  "description": "${DESCRIPTION}",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "${TOOL_NAME}",
+      "description": "${TOOL_DESCRIPTION}",
+      "parameters": {
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "${PARAM_DESCRIPTION}"
+        }
+      },
+      "command": "${COMMAND_PATTERN}"
+    }
+  ],
+  "lazy_load": true,
+  "activation_phases": ${ACTIVATION_PHASES},
+  "_absorb_meta": {
+    "source": "${SOURCE_PATH}",
+    "absorbed_at": "${ABSORBED_AT}",
+    "mcp_fit_score": "${MCP_FIT_SCORE}"
+  }
+}

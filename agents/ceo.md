@@ -64,10 +64,32 @@ disallowedTools:
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
 | Plan | 직접 | 외부 파일 스캔 + 핵심 기능 추출 + 전략 판단 | `docs/01-plan/ceo_{feature}.plan.md` |
-| Design | absorb-analyzer | 중복 분석 + C레벨별 배분 맵 생성 | (선택) `docs/02-design/ceo_{feature}.design.md` |
-| Do | 직접 | 배분 맵 기반 `agents/*.md` 수정 | `docs/03-do/ceo_{feature}.do.md` |
-| Check | 직접 | 추가된 서브에이전트 위치 검증 + 충돌 확인 | `docs/04-qa/ceo_{feature}.qa.md` |
+| Design | absorb-analyzer | 중복 분석 + C레벨별 배분 맵 생성 + **MCP 적합성 심화 분석** | (선택) `docs/02-design/ceo_{feature}.design.md` |
+| Do | 직접 | 배분 맵 기반 분기 실행 (아래 참조) | `docs/03-do/ceo_{feature}.do.md` |
+| Check | 직접 | 추가된 서브에이전트/MCP Tool 위치 검증 + 충돌 확인 | `docs/04-qa/ceo_{feature}.qa.md` |
 | Report | 직접 | `.vais/absorption-ledger.jsonl` + 최종 보고 | (선택) `docs/05-report/ceo_{feature}.report.md` |
+
+#### absorb Do 분기 로직
+
+absorb-analyzer 결과의 `action` 값에 따라 분기합니다:
+
+| action | Do 실행 내용 |
+|--------|-------------|
+| `absorb` | 기존 방식 — 배분 맵 기반 `agents/*.md` 또는 `skills/` 수정 |
+| `absorb-mcp` | **MCP 경로** — `mcp/{name}-server.json` 생성 + `vendor/`에 소스 배치 |
+| `merge` | 기존 파일에 병합 |
+| `reject` | 흡수 거부, Ledger에 reject 기록 |
+
+#### MCP 경로 상세 (`absorb-mcp`)
+
+1. **소스 배치**: 대상 파일을 `vendor/{name}/`에 복사
+2. **MCP JSON 생성**: `templates/mcp-server.template.json`을 기반으로 `mcp/{name}-server.json` 생성
+   - `name`: absorb-analyzer가 제안한 tool 이름 기반
+   - `tools[].command`: absorb-analyzer가 추출한 커맨드 패턴 사용
+   - `activation_phases`: absorb-analyzer가 추론한 활성화 단계
+   - `lazy_load`: true (기본)
+3. **Ledger 기록**: action을 `absorb-mcp`로 기록, mcpMeta 포함
+4. **CP-A에서 MCP 정보 표시**: 배분 맵에 MCP tool 이름, 활성화 단계 포함
 
 ---
 
@@ -135,10 +157,15 @@ absorb-analyzer 분석 완료 후:
 ```
 [CP-A] 다음 배분으로 흡수를 진행합니다:
 
-| C레벨 | 대상 섹션 | 추가 내용 요약 |
-|-------|---------|--------------|
-| {C레벨} | {agents/*.md 섹션} | {내용} |
+| 대상 | 유형 | 배치 경로 | 내용 요약 |
+|------|------|----------|----------|
+| {C레벨/MCP} | agents/skills/mcp | {경로} | {내용} |
 ...
+
+(MCP 판정 시 추가 표시)
+🔧 MCP Tool: {tool_name}
+📍 활성화 단계: {phases}
+⚡ 커맨드: {command_pattern}
 
 이 배분으로 진행할까요? (예 / 수정 / 취소)
 ```
