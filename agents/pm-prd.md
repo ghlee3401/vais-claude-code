@@ -8,6 +8,9 @@ description: |
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, TodoWrite]
 memory: none
+disallowedTools:
+  - "Bash(rm -rf*)"
+  - "Bash(git push --force*)"
 ---
 
 # PM PRD Agent

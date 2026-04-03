@@ -43,24 +43,15 @@ describe('webhook - sendWebhook', () => {
     sendWebhook('test_event', { foo: 'bar' });
   });
 
-  it('유효한 URL 설정 시 HTTP POST 전송', async () => {
-    // 테스트용 HTTP 서버
+  it('사설 IP URL은 요청을 보내지 않는다 (SSRF 방지)', async () => {
+    // 127.0.0.1은 isPrivateHost()에 의해 차단되므로 서버에 요청이 도달하지 않아야 함
     const received = [];
     const server = http.createServer((req, res) => {
-      let body = '';
-      req.on('data', chunk => { body += chunk; });
-      req.on('end', () => {
-        received.push({
-          method: req.method,
-          contentType: req.headers['content-type'],
-          body: JSON.parse(body),
-        });
-        res.writeHead(200);
-        res.end('ok');
-      });
+      received.push(req.method);
+      res.end();
     });
 
-    await new Promise(resolve => server.listen(0, resolve));
+    await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
     const port = server.address().port;
 
     process.env.VAIS_WEBHOOK_URL = `http://127.0.0.1:${port}/webhook`;
@@ -68,16 +59,10 @@ describe('webhook - sendWebhook', () => {
 
     sendWebhook('phase_complete', { feature: 'login', phase: 'plan' });
 
-    // 전송 대기
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // 충분한 대기 후에도 요청이 오지 않아야 함
+    await new Promise(resolve => setTimeout(resolve, 200));
 
-    assert.equal(received.length, 1);
-    assert.equal(received[0].method, 'POST');
-    assert.equal(received[0].contentType, 'application/json');
-    assert.equal(received[0].body.event, 'phase_complete');
-    assert.equal(received[0].body.feature, 'login');
-    assert.equal(received[0].body.phase, 'plan');
-    assert.ok(received[0].body.timestamp);
+    assert.equal(received.length, 0, '사설 IP로 요청이 전송되면 안 됨');
 
     server.close();
   });

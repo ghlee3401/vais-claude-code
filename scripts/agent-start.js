@@ -2,13 +2,40 @@
 // Design Ref: §2.2 — SubagentStart 훅에서 호출되는 얇은 CLI 래퍼. 로직은 lib/observability/에 위임
 // 사용: node scripts/agent-start.js <role> <phase> [task]
 
+const fs = require('fs');
+const path = require('path');
 const { StateWriter, EventLogger, EVENT_TYPES } = require('../lib/observability/index');
 const { logHook } = require('../lib/hook-logger');
+
+// A01/A08: CLI 인자 화이트리스트 — vais.config.json의 cSuite.roles + 실행 에이전트 목록 기준
+const VALID_ROLES = (() => {
+  try {
+    const config = JSON.parse(fs.readFileSync(path.join(__dirname, '../vais.config.json'), 'utf8'));
+    const cSuiteRoles = Object.keys(config.cSuite?.roles || {});
+    const execRoles = [
+      'architect', 'backend', 'frontend', 'design', 'qa',
+      'security', 'seo', 'validate-plugin',
+      'pm-discovery', 'pm-strategy', 'pm-research', 'pm-prd',
+      'absorb-analyzer',
+    ];
+    return new Set([...cSuiteRoles, ...execRoles]);
+  } catch {
+    return new Set();
+  }
+})();
+
+function isValidRole(val) {
+  return VALID_ROLES.size === 0 || VALID_ROLES.has(val);
+}
 
 const [role, phase, task = ''] = process.argv.slice(2);
 
 if (!role || !phase) {
   // graceful degradation: 인자 없으면 exit 0 (에이전트 실행 방해 금지)
+  process.exit(0);
+}
+
+if (!isValidRole(role)) {
   process.exit(0);
 }
 

@@ -18,6 +18,9 @@ const BLOCKED = [
   { pattern: />\s*\/dev\/sd[a-z]/, reason: '디스크 직접 쓰기 시도' },
   { pattern: /(?:sudo\s+)?dd\s+.*of=\/dev\//, reason: 'dd로 디스크 직접 쓰기 시도' },
   { pattern: /chmod\s+(-R\s+)?777\s+\//, reason: '루트 권한 변경 시도' },
+  // A03: rm 루트 삭제 — ASK 패턴(rm -r)보다 높은 우선순위로 BLOCKED 처리
+  { pattern: /rm\s+(?:-[a-zA-Z]*r[a-zA-Z]*|-[a-zA-Z]*f[a-zA-Z]*r[a-zA-Z]*)\s*\/(?:\s|$)/, reason: '루트 디렉토리 재귀 삭제 시도' },
+  { pattern: /rm\s+--recursive\b/, reason: '재귀 삭제 명령 (--recursive 장형식 우회 방지)' },
 ];
 
 const ASK = [

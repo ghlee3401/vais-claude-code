@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.33.3] - 2026-04-03
+
+### Fixed
+
+- **bash-guard**: `rm -rf /`, `rm --recursive` BLOCKED 목록 추가 — OWASP A03
+- **phase-transition**: CLI `from`/`to` 인자 화이트리스트 검증 추가 — OWASP A01/A08
+- **agent-start**: CLI `role` 인자 화이트리스트 검증 추가 — OWASP A01/A08
+- **webhook**: `isPrivateHost()` 사설 IP 차단 로직 추가 — OWASP A10 (SSRF)
+- **agents/pm-***: `disallowedTools` 필드 추가 (pm-discovery/strategy/research/prd) — Gate B
+
+---
+
 ## [0.25.0] - 2026-04-01
 
 ### Changed
