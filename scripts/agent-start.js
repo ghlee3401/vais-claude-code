@@ -14,7 +14,7 @@ const VALID_ROLES = (() => {
     const cSuiteRoles = Object.keys(config.cSuite?.roles || {});
     const execRoles = [
       'architect', 'backend', 'frontend', 'design', 'qa',
-      'security', 'seo', 'validate-plugin',
+      'security', 'seo', 'validate-plugin', 'code-review',
       'pm-discovery', 'pm-strategy', 'pm-research', 'pm-prd',
       'absorb-analyzer',
     ];

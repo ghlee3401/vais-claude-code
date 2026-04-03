@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.38.3] - 2026-04-04
+
+### Fixed
+
+- **agent-start**: VALID_ROLES에 `code-review` 에이전트 추가 (Gate C 신설 동기화 누락)
+- **agent-stop**: observability와 doc 검증 독립 분리 — exit(1) 도달 보장
+- **state-writer**: `_save()`에서 `atomicWriteSync()` 적용 (동시 접근 안전성)
+- **doc-tracker**: `main()` 내부 들여쓰기 정규화
+
+### Changed
+
+- **CSO 리뷰 문서**: 2차 전체 리뷰 (Gate A+B+C) 갱신 — PASS
+
+---
+
 ## [0.38.1] - 2026-04-03
 
 ### Fixed

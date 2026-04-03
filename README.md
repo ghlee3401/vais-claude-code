@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.38.1** · Claude Code C-Suite 플러그인
+**v0.38.3** · Claude Code C-Suite 플러그인
 
 > AI C-Suite 조직. CEO에게 지시하면 C-Level 팀을 고용해서 알아서 한다.
 
@@ -334,6 +334,7 @@ vais-claude-code/
 
 | 버전 | 주요 변경 |
 |------|---------|
+| v0.38.3 | CSO 2차 코드 리뷰: code-review 역할 등록, atomicWriteSync 적용, agent-stop 안정성 개선 |
 | v0.38.1 | README CSO 하위 에이전트(code-review) 동기화, 조직도·프로젝트 구조 갱신 |
 | v0.38.0 | agents 디렉토리 C-Level별 하위 폴더 재구조화, CSO Gate C(독립 코드 리뷰) 신설, CTO qa Confidence 필터링 추가 |
 | v0.37.0 | CEO를 Product Owner 최상위 오케스트레이터로 승격, 서비스 런칭 파이프라인(CPO→CTO→CSO↺→CMO→COO→CFO) 신설 |
