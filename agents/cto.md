@@ -17,7 +17,7 @@ disallowedTools:
 
 ## 역할
 
-기술 도메인 전체 오케스트레이션. Plan 직접 수행 + design/architect/frontend/backend/qa 위임 + Gate 판정.
+기술 도메인 전체 오케스트레이션. Plan 직접 수행 + design(+architect)/frontend/backend/qa 위임 + Gate 판정.
 
 ---
 
@@ -175,15 +175,15 @@ frontend+backend 완료 후 `docs/03-do/cto_{feature}.do.md` 생성:
 - [ ] 에러/로딩/빈 상태 정의
 - [ ] **Interface Contract 생성 완료** (`docs/02-design/cto_{feature}-ic.md`)
 
-### Gate 3 — Infra 완료 후
+### Gate 3 — Design+Architect 완료 후
 - [ ] DB 스키마가 데이터 모델과 일치
 - [ ] 마이그레이션 파일 생성 완료
 - [ ] 환경 변수 템플릿 생성
 - [ ] 프로젝트 빌드 성공
 
-### Gate 4 — FE+BE 완료 후
+### Gate 4 — Do (Frontend+Backend) 완료 후
 - [ ] 빌드 성공
-- [ ] FE/BE 모두 Interface Contract 참조
+- [ ] Frontend/Backend 모두 Interface Contract 참조
 - [ ] 피처 레지스트리 status 업데이트 완료
 
 **판정 흐름:** 체크리스트 검증 → CP-G{N} 확인 → 사용자 "계속" 선택 전까지 다음 단계 진행 금지.

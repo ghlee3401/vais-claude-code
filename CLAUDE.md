@@ -1,11 +1,11 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.33.1)
+> Virtual AI C-Suite for software development (v0.33.4)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
 
-하네스 엔지니어링 시스템. Claude Code 위에서 C-Suite 에이전트 조직을 구성하여 6단계 개발 워크플로우를 자동 실행하는 플러그인.
+하네스 엔지니어링 시스템. Claude Code 위에서 C-Suite 에이전트 조직을 구성하여 5단계 개발 워크플로우를 자동 실행하는 플러그인.
 
 ## Project Structure
 
@@ -16,7 +16,7 @@ vais-claude-code/
 ├── hooks/           # hooks.json, events.json, session-start.js
 ├── lib/             # 핵심 라이브러리 (fs-utils, io, memory, paths, status, ui)
 ├── scripts/         # bash-guard, phase-transition, auditors 등
-├── templates/       # PDCA 문서 템플릿 (plan, design, infra, qa, report)
+├── templates/       # PDCA 문서 템플릿 (plan, design, do, qa, report)
 ├── mcp/             # MCP 서버 설정
 ├── output-styles/   # 출력 스타일 정의
 ├── docs/            # 피처별 산출물 (01-plan ~ 05-report)
@@ -50,15 +50,15 @@ pm-discovery, pm-strategy, pm-research, pm-prd
 ### Utility
 absorb-analyzer (CEO 서브, 레퍼런스 흡수 분석)
 
-## Development Workflow (6 Stages)
+## Development Workflow (5 Phases)
 
 ```
-📋 plan → 🎨 design → 🔧 architect → 💻 frontend + ⚙️ backend → ✅ qa
+📋 plan → 🎨 design → 🔧 do (frontend + backend 병렬) → ✅ qa → 📊 report
 ```
 
-- frontend + backend은 병렬 실행
-- 4개 Gate 체크포인트: plan → design → architect → frontend 완료 후
-- Gate 통과 조건은 `vais.config.json > orchestration.gateChecklists` 참조
+- do 단계에서 frontend + backend은 병렬 실행
+- 각 단계 간 Gate 체크포인트에서 완료 조건 검증
+- Gate 동작은 `vais.config.json > orchestration.gateAction` 참조
 
 ## Key Configuration
 
@@ -69,7 +69,7 @@ absorb-analyzer (CEO 서브, 레퍼런스 흡수 분석)
 ## Mandatory Rules
 
 1. **기획 없이 코드 금지** — `docs/01-plan/` 기획서가 없으면 구현하지 않는다
-2. **워크플로우 순서 준수** — plan → design → architect → impl → qa 순서를 건너뛰지 않는다
+2. **워크플로우 순서 준수** — plan → design → do → qa → report 순서를 건너뛰지 않는다
 3. **산출물 경로** — `docs/{번호}-{단계}/{role}_{feature}.{phase}.md` 형식 준수 (모든 C-Level 공통)
 4. **Gate 통과 필수** — 각 Gate의 체크리스트 항목을 모두 확인한 뒤 다음 단계로 진행
 5. **위험 명령 금지** — `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
@@ -83,9 +83,6 @@ absorb-analyzer (CEO 서브, 레퍼런스 흡수 분석)
 - `package.json` (version)
 - `vais.config.json` (version)
 - `CHANGELOG.md`
-- `output-styles/` 내 버전 참조
-- `hooks/session-start.js` 내 버전 참조
-- `skills/vais/SKILL.md` 내 버전 참조
 
 커밋 시 `/vais commit` 플로우를 사용할 것.
 

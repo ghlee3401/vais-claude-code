@@ -29,7 +29,7 @@ disallowedTools:
 
 - **기획서의 코딩 규칙을 반드시 먼저 읽습니다** (`docs/01-plan/cto_{feature}.plan.md`)
 - **Interface Contract 참조** (`docs/02-design/cto_{feature}-ic.md`) — API 엔드포인트별 구현 스펙
-- **Infra 문서를 읽습니다** (`docs/03-architect/{feature}.md`) — DB 스키마, 마이그레이션, 환경 변수 확인
+- **Infra 문서를 읽습니다** (`docs/02-design/architect_{feature}.design.md`) — DB 스키마, 마이그레이션, 환경 변수 확인
 - API 문서를 코드와 함께 작성합니다
 - 환경 변수로 설정을 관리합니다
 - 미들웨어 패턴을 활용합니다

@@ -160,7 +160,6 @@ docs/
   │   ├── cso_{feature}.plan.md        CSO 위협 분석
   │   └── ...                          (CEO, CMO, CFO, COO)
   ├── 02-design/                       (선택)
-  ├── 03-architect/{feature}.md        CTO→architect (내부 sub-phase)
   ├── 03-do/
   │   ├── cto_{feature}.do.md          CTO 구현 로그
   │   ├── cpo_{feature}.do.md          CPO PRD

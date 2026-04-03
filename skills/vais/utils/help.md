@@ -56,4 +56,4 @@ AskUserQuestion:
 - 질문: "어떤 기능을 만들까요? (예: login, payment, chat)"
 - 선택지: Other (자유 입력)
 
--> 입력 후: `/vais cto {feature}` 실행 (CTO가 plan -> design -> architect -> frontend+backend -> qa 전체 진행)
+-> 입력 후: `/vais cto {feature}` 실행 (CTO가 plan -> design -> do -> qa -> report 전체 진행)

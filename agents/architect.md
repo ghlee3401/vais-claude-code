@@ -66,11 +66,11 @@ disallowedTools:
 9. **ORM 모델/스키마 생성** — 선택한 ORM에 맞는 모델 파일
 10. **환경 변수 템플릿** — `.env.example` 생성
 11. **프로젝트 설정 확인** — package.json, tsconfig 등 필요한 설정 추가
-12. `docs/03-architect/{feature}.md`에 인프라 문서 저장
+12. `docs/02-design/architect_{feature}.design.md`에 인프라 문서 저장
 
 ## 산출물
 
-- `docs/03-architect/{feature}.md` — 인프라 설계 문서 (ERD, 스키마, 환경 설정)
+- `docs/02-design/architect_{feature}.design.md` — 인프라 설계 문서 (ERD, 스키마, 환경 설정)
 - 마이그레이션 파일 (실제 코드)
 - ORM 모델/스키마 파일 (실제 코드)
 - `.env.example` (환경 변수 템플릿)

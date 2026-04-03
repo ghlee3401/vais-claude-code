@@ -15,7 +15,7 @@ function main() {
   ensureVaisDirs();
 
   const config = loadConfig();
-  const VERSION = config.version || '0.10.1';
+  const VERSION = config.version || '0.0.0';
   const activeFeature = getActiveFeature();
   const status = getStatus();
   const featureNames = Object.keys(status.features || {});
@@ -47,7 +47,7 @@ function main() {
 
   // --- 3. 헤더 + 피처 목록 ---
   ctx += `# VAIS Code v${VERSION}\n\n`;
-  ctx += `> 📋기획 → 🎨설계 → 🔧인프라 → 💻프론트 + ⚙️백엔드 → ✅QA\n\n`;
+  ctx += `> 📋기획 → 🎨설계 → 🔧구현 → ✅QA → 📊보고서\n\n`;
 
   if (featureNames.length > 0) {
     ctx += `## 진행 중인 피처\n\n`;

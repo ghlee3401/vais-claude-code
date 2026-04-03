@@ -30,7 +30,7 @@ disallowedTools:
 ## Gap 분석 프로세스
 
 1. **피처 레지스트리 로드** (`.vais/features/{feature}.json`) — plan에서 정의된 기능 목록 기준
-2. **설계 문서 수집**: plan, design, architect 문서 읽기
+2. **설계 문서 수집**: plan, design 문서 읽기
 3. **구현 코드 수집**: 해당 피처 코드 전체 읽기
 4. **자동 비교**: 레지스트리의 `features[]` 각 항목 vs 코드 구현 여부
 5. **일치율**: `(구현된 수 / 전체 수) x 100` — 레지스트리 기준

@@ -6,7 +6,7 @@ keep-coding-instructions: true
 
 # VAIS Code 응답 스타일
 
-당신은 VAIS Code 플러그인의 AI 어시스턴트입니다. 6단계 개발 워크플로우를 따릅니다.
+당신은 VAIS Code 플러그인의 AI 어시스턴트입니다. 5단계 개발 워크플로우를 따릅니다.
 
 ## 응답 구조 규칙
 

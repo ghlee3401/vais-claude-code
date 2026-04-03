@@ -4,12 +4,12 @@
 
 ## 프로젝트 구조
 
-이 프로젝트는 VAIS Code 플러그인입니다. Claude Code에서 6단계 개발 워크플로우를 제공합니다.
+이 프로젝트는 VAIS Code 플러그인입니다. Claude Code에서 5단계 개발 워크플로우를 제공합니다.
 
-## 개발 워크플로우 (6단계)
+## 개발 워크플로우 (5단계)
 
 ```
-📋기획 → 🎨설계 → 🔧아키텍트 → 💻프론트 + ⚙️백엔드 → ✅QA
+📋기획(plan) → 🎨설계(design) → 🔧구현(do) → ✅QA(qa) → 📊보고서(report)
 ```
 
 모든 기능 개발은 반드시 기획(plan)부터 시작합니다.
@@ -17,12 +17,12 @@
 
 ### 병렬 실행 구간
 
-- **구현**: frontend + backend 병렬
+- **구현(do)**: frontend + backend 병렬
 
-### Gate 체크포인트 (4개)
+### Gate 체크포인트
 
 ```
-Plan → [Gate 1] → Design → [Gate 2] → Architect → [Gate 3] → Frontend+Backend → [Gate 4] → QA
+Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → QA → Report
 ```
 
 ## 실행 방식 (체이닝 문법)
@@ -46,23 +46,41 @@ Plan → [Gate 1] → Design → [Gate 2] → Architect → [Gate 3] → Fronten
 
 ## 에이전트 역할
 
-| 에이전트 | 역할 | 모델 |
-|---------|------|------|
-| manager | Plan 실행 + 전체 오케스트레이션 + Gate 판정 | opus |
-| design | IA + 와이어프레임 + UI 설계 | sonnet |
-| architect | DB 스키마 + 환경 + 프로젝트 설정 | sonnet |
-| frontend | 프론트엔드 구현 | sonnet |
-| backend | 백엔드 API 구현 | sonnet |
-| qa | Gap 분석 + 코드 리뷰 + QA 검증 | sonnet |
+### C-Suite (전략 레이어, Opus)
+
+| 에이전트 | 역할 |
+|---------|------|
+| cto | 기술 총괄 오케스트레이터 (필수) |
+| ceo | 비즈니스 전략 + absorb 오케스트레이터 |
+| cpo | 제품 방향 + PRD + pm-* 서브에이전트 오케스트레이션 |
+| cfo | 재무 분석, ROI, 가격 책정 |
+| cmo | 마케팅 + SEO 감사 위임 |
+| cso | 보안 Gate A + 플러그인 배포 검증 Gate B |
+| coo | 운영, CI/CD, 모니터링 |
+
+### Execution (실행 레이어, Sonnet)
+
+| 에이전트 | 역할 |
+|---------|------|
+| architect | DB 스키마 + 환경 + 프로젝트 설정 |
+| design | IA + 와이어프레임 + UI 설계 |
+| frontend | 프론트엔드 구현 |
+| backend | 백엔드 API 구현 |
+| qa | Gap 분석 + 코드 리뷰 + QA 검증 |
+| security | 보안 감사 |
+| seo | SEO 감사 |
+
+실행 에이전트는 **직접 호출 금지** — 반드시 CTO를 통해 호출합니다.
 
 ## 문서 위치
 
 | 단계 | 경로 |
 |------|------|
-| 기획서 (+ 코딩 규칙) | `docs/01-plan/` |
-| 설계 (IA + 와이어프레임 + UI) | `docs/02-design/` |
-| 아키텍트 (DB + 환경) | `docs/03-architect/` |
-| QA (Gap + 리뷰) | `docs/04-qa/` |
+| 기획 (plan) | `docs/01-plan/` |
+| 설계 (design) | `docs/02-design/` |
+| 구현 (do) | `docs/03-do/` |
+| QA (qa) | `docs/04-qa/` |
+| 보고서 (report) | `docs/05-report/` |
 
 ## 피처 이름 가이드
 

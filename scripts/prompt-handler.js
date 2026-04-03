@@ -14,9 +14,9 @@ const INTENT_PATTERNS = [
   { keywords: ['init', '초기화', '적용', '기존 프로젝트', '문서 생성', '역분석', '코드 분석'], phase: 'init' },
   { keywords: ['기획', '계획', 'plan', '요구사항', 'prd', '기능 정의', '아이디어', '조사', 'research', '뭐 만들', '만들고 싶', 'mvp', '브레인스토밍'], phase: 'plan' },
   { keywords: ['ui 설계', 'ux 설계', 'ui설계', 'ux설계', '디자인 토큰', 'design token', '인터랙션 설계', '스타일 가이드', 'db 설계', 'db설계', '데이터베이스 설계', 'database design', '스키마 설계', 'schema design', 'erd 설계', 'ia', 'information architecture', '정보 구조', '사이트맵', 'sitemap', '네비게이션', '와이어프레임', 'wireframe', '목업', 'mockup', '화면 구성', '레이아웃'], phase: 'design' },
-  { keywords: ['인프라', 'infra', 'architect', '아키텍트', 'db 설정', '환경 설정', '마이그레이션', 'migration', '스키마', 'schema'], phase: 'architect' },
-  { keywords: ['프론트', 'frontend', 'react', 'next', 'vue', '컴포넌트', '화면 개발'], phase: 'frontend' },
-  { keywords: ['백엔드', 'backend', 'api', '서버', 'express', 'nest', 'fastapi'], phase: 'backend' },
+  { keywords: ['인프라', 'infra', 'architect', '아키텍트', 'db 설정', '환경 설정', '마이그레이션', 'migration', '스키마', 'schema'], phase: 'design' },
+  { keywords: ['프론트', 'frontend', 'react', 'next', 'vue', '컴포넌트', '화면 개발'], phase: 'do' },
+  { keywords: ['백엔드', 'backend', 'api', '서버', 'express', 'nest', 'fastapi'], phase: 'do' },
   { keywords: ['qa', 'QA', 'gap 분석', 'gap분석', '검토', '코드 리뷰', '빌드 검증', '빌드검증', '보안 점검', '품질'], phase: 'qa' },
   { keywords: ['/vais fix', 'vais fix'], phase: 'manager' },
 ];

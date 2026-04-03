@@ -10,8 +10,8 @@ description: 피처 진행 상태 확인. .vais/status.json에서 진행률을 �
 
 표시 형식:
 ```
-login [3/6]:
-plan -> design -> architect -> frontend -> backend -> qa
+login [3/5]:
+plan -> design -> do -> qa -> report
 ```
 
 #### 액션 바로 실행
