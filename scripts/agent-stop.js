@@ -27,14 +27,19 @@ try {
     if (feature) {
       const result = validateDocs(role, feature);
       const output = formatResult(role, feature, result);
-      if (output) {
+      if (!result.passed) {
         process.stderr.write('\n' + output + '\n');
+        process.stderr.write(`\n❌ [${role.toUpperCase()}] 필수 문서가 누락되어 종료를 차단합니다. 문서를 작성한 후 다시 시도하세요.\n`);
         el.log(EVENT_TYPES.AGENT_STOP, {
           role,
           outcome: 'doc_missing',
           missing: result.missing.map(m => m.phase),
           feature,
         });
+        process.exit(1);
+      } else if (output) {
+        // warnings만 있는 경우 (passed=true but warnings exist)
+        process.stderr.write('\n' + output + '\n');
       }
     }
   }
