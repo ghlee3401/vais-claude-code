@@ -25,21 +25,23 @@
 Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → QA → Report
 ```
 
-## 실행 방식 (체이닝 문법)
+## 실행 방식 (C-Suite 오케스트레이션)
 
 ```
-/vais plan 로그인기능                          — 단일 실행
-/vais plan:design:architect 로그인기능              — 순차 체이닝 (: = 순차)
-/vais frontend+backend 로그인기능                   — 병렬 체이닝 (+ = 병렬)
-/vais plan:design:architect:frontend+backend:qa 로그인기능     — 혼합
-/vais auto 로그인기능                           — 전체 자동
+/vais cto login              — CTO가 기술 전체 오케스트레이션 (plan→design→do→qa→report)
+/vais ceo login              — CEO가 비즈니스 전략 + C-Suite 조율
+/vais cpo login              — CPO가 제품 방향 + PRD + 로드맵
+/vais status                 — 프로젝트 상태 조회
+/vais help                   — 사용법 안내
 ```
+
+실행 에이전트(architect, frontend, backend 등)는 직접 호출하지 않습니다. C-레벨 에이전트가 필요에 따라 위임합니다.
 
 ## 필수 규칙
 
-1. **기획 없이 코드 금지**: 기획서가 없으면 먼저 `/vais plan`을 실행합니다
+1. **기획 없이 코드 금지**: 기획서가 없으면 먼저 `/vais cto {feature}`로 기획부터 시작합니다
 2. **코딩 규칙 준수**: 구현 시 반드시 기획서(`docs/01-plan/`)의 코딩 규칙 섹션을 참조합니다
-3. **QA 필수**: 구현 완료 후 반드시 `/vais qa`로 빌드 확인 + 설계 대비 일치율을 확인합니다
+3. **QA 필수**: 구현 완료 후 CTO가 QA 에이전트를 통해 빌드 확인 + 설계 대비 일치율을 검증합니다
 4. **문서 참조 투명성**: 구현 시 참조한 문서 목록을 산출물 상단에 기록합니다
 5. **위험 명령 금지**: `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수**: 민감 정보는 반드시 환경 변수로 관리합니다
