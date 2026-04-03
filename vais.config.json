@@ -1,25 +1,35 @@
 {
-  "version": "0.36.3",
+  "version": "0.37.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
     "distributionUrl": "https://github.com/ghlee3401/vais-claude-code"
   },
   "cSuite": {
-    "orchestrator": "cto",
+    "orchestrator": {
+      "fullLaunch": "ceo",
+      "techOnly": "cto"
+    },
     "roles": {
-      "cto": { "required": true,  "model": "opus",   "layer": "strategy-tech",    "agent": "agents/cto.md" },
-      "ceo": { "required": false, "model": "opus",   "layer": "strategy-biz",     "agent": "agents/ceo.md" },
+      "ceo": { "required": true,  "model": "opus",   "layer": "executive",        "agent": "agents/ceo.md" },
       "cpo": { "required": false, "model": "opus",   "layer": "strategy-product", "agent": "agents/cpo.md" },
-      "cfo": { "required": false, "model": "opus",   "layer": "finance",          "agent": "agents/cfo.md" },
-      "cmo": { "required": false, "model": "opus",   "layer": "growth",           "agent": "agents/cmo.md" },
+      "cto": { "required": true,  "model": "opus",   "layer": "strategy-tech",    "agent": "agents/cto.md" },
       "cso": { "required": false, "model": "opus",   "layer": "quality",          "agent": "agents/cso.md" },
-      "coo": { "required": false, "model": "opus",   "layer": "ops",              "agent": "agents/coo.md" }
+      "cmo": { "required": false, "model": "opus",   "layer": "growth",           "agent": "agents/cmo.md" },
+      "coo": { "required": false, "model": "opus",   "layer": "ops",              "agent": "agents/coo.md" },
+      "cfo": { "required": false, "model": "opus",   "layer": "finance",          "agent": "agents/cfo.md" }
+    },
+    "launchPipeline": {
+      "order": ["cpo", "cto", "cso", "cmo", "coo", "cfo"],
+      "reviewLoops": {
+        "cso-cto": { "maxIterations": 3, "trigger": "critical > 0" }
+      },
+      "finalReview": { "maxIterations": 2 }
     },
     "autoKeywords": {
+      "ceo": ["new product", "신규 서비스", "방향", "전략", "strategy", "launch", "런칭"],
       "cso": ["payment", "auth", "login", "security", "결제", "인증", "보안"],
-      "cmo": ["landing", "marketing", "launch", "마케팅", "랜딩", "캠페인"],
-      "ceo": ["new product", "신규 서비스", "방향", "전략", "strategy"],
+      "cmo": ["landing", "marketing", "마케팅", "랜딩", "캠페인"],
       "coo": ["deploy", "release", "배포", "릴리스", "운영", "infra"]
     }
   },

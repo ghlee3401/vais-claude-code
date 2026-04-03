@@ -1,11 +1,11 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.36.2)
+> Virtual AI C-Suite for software development (v0.37.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
 
-하네스 엔지니어링 시스템. Claude Code 위에서 C-Suite 에이전트 조직을 구성하여 5단계 개발 워크플로우를 자동 실행하는 플러그인.
+AI C-Suite 조직 시뮬레이션 플러그인. CEO가 Product Owner로서 C-Level 팀(CPO, CTO, CSO, CMO, COO, CFO)을 고용·지휘하여 서비스 런칭 전체 라이프사이클을 자동 실행한다. 개별 C-Level 직접 호출도 가능.
 
 ## Project Structure
 
@@ -34,13 +34,18 @@ vais-claude-code/
 ### C-Suite (전략 레이어, Opus)
 | Agent | Role |
 |-------|------|
-| CTO | 기술 총괄 오케스트레이터 (필수) |
-| CEO | 비즈니스 전략 + absorb 오케스트레이터 |
-| CPO | 제품 방향 + PRD + pm-* 서브에이전트 오케스트레이션 |
-| CFO | 재무 분석, ROI, 가격 책정 |
-| CMO | 마케팅 + SEO 감사 위임 |
-| CSO | 보안 Gate A + 플러그인 배포 검증 Gate B |
-| COO | 운영, CI/CD, 모니터링 |
+| CEO | **최상위 오케스트레이터** — Product Owner, C-Level 고용·지휘, 서비스 런칭 파이프라인 |
+| CPO | 제품 정의 + PRD + pm-* 서브에이전트 오케스트레이션 |
+| CTO | 기술 총괄 — Plan→Design→Do→QA 개발 워크플로우 지휘 |
+| CSO | 보안 검토 — CTO 구현물 검증, 이슈 발견 시 CEO에 보고→CTO 수정 루프 |
+| CMO | 마케팅 전략 + SEO 감사 위임 |
+| COO | 배포/운영, CI/CD, 모니터링 |
+| CFO | 비용 분석, ROI, 기능별 가격 책정 |
+
+### 서비스 런칭 파이프라인 (CEO 오케스트레이션)
+```
+CEO → ① CPO → ② CTO → ③ CSO(↺CTO) → ④ CMO → ⑤ COO → ⑥ CFO → CEO 최종 리뷰
+```
 
 ### Execution (실행 레이어, Sonnet)
 architect, backend, frontend, design, qa, security, seo, validate-plugin
@@ -51,15 +56,22 @@ pm-discovery, pm-strategy, pm-research, pm-prd
 ### Utility
 absorb-analyzer (CEO 서브, 레퍼런스 흡수 분석)
 
-## Development Workflow (5 Phases)
+## Development Workflow
 
+### CEO 서비스 런칭 (전체 라이프사이클)
+```
+CEO → CPO(제품정의) → CTO(개발) → CSO(보안검토↺CTO) → CMO(마케팅) → COO(배포) → CFO(비용/가격) → CEO 최종리뷰
+```
+
+### CTO 단독 (기술 구현, 5 Phases)
 ```
 📋 plan → 🎨 design → 🔧 do (frontend + backend 병렬) → ✅ qa → 📊 report
 ```
 
-- do 단계에서 frontend + backend은 병렬 실행
+- 두 가지 진입점: CEO (전체 런칭) / CTO (기술만) / 개별 C-Level 직접 호출
 - 각 단계 간 Gate 체크포인트에서 완료 조건 검증
 - Gate 동작은 `vais.config.json > orchestration.gateAction` 참조
+- 런칭 파이프라인 설정: `vais.config.json > cSuite.launchPipeline`
 
 ## Key Configuration
 
