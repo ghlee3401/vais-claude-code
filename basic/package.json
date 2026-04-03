@@ -15,7 +15,5 @@
     "hooks": "hooks/hooks.json",
     "outputStyles": "output-styles/default.md"
   },
-  "scripts": {
-    "validate": "node scripts/validate.js"
-  }
+  "scripts": {}
 }
