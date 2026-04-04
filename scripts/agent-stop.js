@@ -4,6 +4,7 @@
 
 const { logHook } = require('../lib/hook-logger');
 const { validateDocs, formatResult, C_LEVEL_ROLES } = require('./doc-validator');
+const { validateCheckpoints, formatCPResult } = require('./cp-guard');
 const { getActiveFeature } = require('../lib/status');
 
 const [role, outcome = 'success', outputDoc = ''] = process.argv.slice(2);
@@ -48,6 +49,24 @@ if (C_LEVEL_ROLES.includes(role)) {
     } else if (output) {
       process.stderr.write('\n' + output + '\n');
     }
+  }
+
+  // CP Guard: 체크포인트(AskUserQuestion) 호출 여부 검증
+  const cpResult = validateCheckpoints(role);
+  const cpOutput = formatCPResult(role, cpResult);
+  if (cpOutput) {
+    process.stderr.write('\n' + cpOutput + '\n');
+  }
+  if (!cpResult.passed) {
+    try {
+      const { EventLogger, EVENT_TYPES } = require('../lib/observability/index');
+      const el = new EventLogger('.vais/event-log.jsonl');
+      el.log(EVENT_TYPES.AGENT_STOP, {
+        role,
+        outcome: 'cp_missing',
+        checkpointCount: cpResult.checkpointCount,
+      });
+    } catch (_) { /* observability failure should not block exit */ }
   }
 }
 
