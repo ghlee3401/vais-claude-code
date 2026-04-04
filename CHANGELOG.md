@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.39.1] - 2026-04-04
+
+### Changed
+
+- **naming**: 피처명 생성 규칙 개선 — 단어 1개 금지, 의도 기반 2~4단어 kebab-case 패턴 도입
+  - `skills/vais/SKILL.md`: 좋은/나쁜 예시, `{대상}-{행위}` 패턴, 한→영 변환 가이드
+  - `agents/cto/cto.md`: Feature명 생성 규칙 섹션 신설 (변환 예시 5개)
+  - `agents/ceo/ceo.md`: Input 설명에 2~4단어 규칙 명시
+  - `CLAUDE.md`: File Conventions 예시를 multi-word로 교체
+
+---
+
 ## [0.39.0] - 2026-04-04
 
 ### Added

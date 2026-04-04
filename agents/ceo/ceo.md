@@ -192,7 +192,7 @@ absorb-analyzer 결과의 `action` 값에 따라 분기합니다:
 ### Input
 | 항목 | 설명 |
 |------|------|
-| feature | 피처명 (선택적) |
+| feature | 피처명 (선택적, kebab-case 2~4단어로 의도 표현. 예: `social-login-integration`) |
 | context | 비즈니스 요청 또는 외부 레퍼런스 경로 (absorb 모드) |
 
 ### Output

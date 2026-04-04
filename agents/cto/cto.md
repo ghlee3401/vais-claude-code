@@ -107,8 +107,22 @@ disallowedTools:
 ### Input
 | 항목 | 설명 |
 |------|------|
-| feature | 피처명 (kebab-case) |
+| feature | 피처명 (kebab-case, 2~4단어로 의도 표현) |
 | context | 사용자 요구사항 또는 CPO PRD (`docs/03-do/cpo_{feature}.do.md`) |
+
+### Feature명 생성 규칙
+
+사용자가 피처명을 생략하거나 한국어로 요청한 경우, 아래 규칙으로 자동 생성:
+
+1. **패턴**: `{대상}-{행위}` 또는 `{도메인}-{기능}-{세부}` (2~4단어)
+2. **의도 반영**: 단순 명사가 아닌, 무엇을 왜 하는지가 드러나야 함
+3. **변환 예시**:
+   - "로그인 기능 만들어줘" → `user-login-flow`
+   - "결제 실패 시 재시도" → `payment-retry-logic`
+   - "대시보드에 실시간 차트 추가" → `dashboard-realtime-chart`
+   - "소셜 로그인 추가" → `social-login-integration`
+   - "사용자 프로필 편집" → `user-profile-edit`
+4. **금지**: 단어 1개 (`login`, `payment`, `chart`) — 의도 파악 불가
 
 ### Output
 | 산출물 | 경로 | 필수 |
