@@ -58,7 +58,10 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(list\\(d.keys\\(\\)\\)\\)\")",
       "Bash(git config:*)",
       "Bash(git stash:*)",
-      "Bash(echo \"exit code: $?\")"
+      "Bash(echo \"exit code: $?\")",
+      "Bash(command -v gh)",
+      "Read(//usr/local/bin/**)",
+      "Bash(ls:*)"
     ]
   },
   "enabledPlugins": {

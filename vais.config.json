@@ -1,5 +1,5 @@
 {
-  "version": "0.39.1",
+  "version": "0.40.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -11,13 +11,13 @@
       "techOnly": "cto"
     },
     "roles": {
-      "ceo": { "required": true,  "model": "opus",   "layer": "executive",        "agent": "agents/ceo/ceo.md" },
-      "cpo": { "required": false, "model": "opus",   "layer": "strategy-product", "agent": "agents/cpo/cpo.md" },
-      "cto": { "required": true,  "model": "opus",   "layer": "strategy-tech",    "agent": "agents/cto/cto.md" },
-      "cso": { "required": false, "model": "opus",   "layer": "quality",          "agent": "agents/cso/cso.md" },
-      "cmo": { "required": false, "model": "opus",   "layer": "growth",           "agent": "agents/cmo/cmo.md" },
-      "coo": { "required": false, "model": "opus",   "layer": "ops",              "agent": "agents/coo/coo.md" },
-      "cfo": { "required": false, "model": "opus",   "layer": "finance",          "agent": "agents/cfo/cfo.md" }
+      "ceo": { "required": true,  "model": "opus",   "layer": "executive",        "agent": "agents/ceo/ceo.md", "subAgents": ["absorb-analyzer", "retro"] },
+      "cpo": { "required": false, "model": "opus",   "layer": "strategy-product", "agent": "agents/cpo/cpo.md", "subAgents": ["pm-discovery", "pm-strategy", "pm-research", "pm-prd", "ux-researcher", "data-analyst"] },
+      "cto": { "required": true,  "model": "opus",   "layer": "strategy-tech",    "agent": "agents/cto/cto.md", "subAgents": ["architect", "backend", "frontend", "design", "qa", "investigate", "tester", "devops", "database"] },
+      "cso": { "required": false, "model": "opus",   "layer": "quality",          "agent": "agents/cso/cso.md", "subAgents": ["security", "validate-plugin", "code-review", "compliance"] },
+      "cmo": { "required": false, "model": "opus",   "layer": "growth",           "agent": "agents/cmo/cmo.md", "subAgents": ["seo", "copywriter", "growth"] },
+      "coo": { "required": false, "model": "opus",   "layer": "ops",              "agent": "agents/coo/coo.md", "subAgents": ["canary", "benchmark", "sre", "devops", "docs-writer"] },
+      "cfo": { "required": false, "model": "opus",   "layer": "finance",          "agent": "agents/cfo/cfo.md", "subAgents": ["cost-analyst", "pricing-modeler"] }
     },
     "launchPipeline": {
       "order": ["cpo", "cto", "cso", "cmo", "coo", "cfo"],
@@ -65,7 +65,9 @@
     }
   },
   "parallelGroups": {
-    "implementation": ["frontend", "backend"]
+    "implementation": ["frontend", "backend", "tester"],
+    "cmo-do": ["seo", "copywriter"],
+    "coo-do": ["sre", "devops"]
   },
   "chaining": {
     "sequential": ":",

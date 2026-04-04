@@ -66,10 +66,10 @@ disallowedTools:
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 기회 발견 범위 + PRD 목표 정의 | `docs/01-plan/cpo_{feature}.plan.md` |
-| Design | pm-discovery + pm-strategy + pm-research (병렬) | 기회 분석 + 전략 + 시장 조사 | (선택) `docs/02-design/cpo_{feature}.design.md` |
+| Plan | 직접 + **data-analyst** | 기회 발견 + 데이터 기반 분석 | `docs/01-plan/cpo_{feature}.plan.md` |
+| Design | pm-discovery + pm-strategy + pm-research + **ux-researcher** (병렬) | 기회 분석 + 전략 + 시장 조사 + UX 리서치 | (선택) `docs/02-design/cpo_{feature}.design.md` |
 | Do | pm-prd | PRD 합성 | `docs/03-do/cpo_{feature}.do.md` |
-| Check | 직접 | PRD 완성도 + 섹션 누락 + 로드맵 정합성 확인 | `docs/04-qa/cpo_{feature}.qa.md` |
+| Check | 직접 + **data-analyst** | PRD 완성도 + 성공 지표 측정 가능성 검증 | `docs/04-qa/cpo_{feature}.qa.md` |
 | Report | 직접 | PRD 최종화 + CTO 핸드오프 컨텍스트 출력 | (선택) `docs/05-report/cpo_{feature}.report.md` |
 
 ### sub-agent 호출 순서

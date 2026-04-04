@@ -1,6 +1,6 @@
 ---
 name: cfo
-description: CFO 에이전트 호출. 재무 분석, ROI 계산, 가격 책정 전략.
+description: CFO 에이전트 호출. 재무 분석, ROI 계산, 가격 책정 전략. cost-analyst/pricing-modeler 위임 가능.
 ---
 
 # CFO Phase

@@ -17,7 +17,7 @@
 
 ### 병렬 실행 구간
 
-- **구현(do)**: frontend + backend 병렬
+- **구현(do)**: frontend + backend + tester 병렬
 
 ### Gate 체크포인트
 
@@ -55,22 +55,38 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 | cto | 기술 총괄 오케스트레이터 (필수) |
 | ceo | 비즈니스 전략 + absorb 오케스트레이터 |
 | cpo | 제품 방향 + PRD + pm-* 서브에이전트 오케스트레이션 |
-| cfo | 재무 분석, ROI, 가격 책정 |
-| cmo | 마케팅 + SEO 감사 위임 |
-| cso | 보안 Gate A + 플러그인 배포 검증 Gate B |
-| coo | 운영, CI/CD, 모니터링 |
+| cfo | 재무 분석, ROI, 가격 책정 (cost-analyst/pricing-modeler 위임) |
+| cmo | 마케팅 + SEO/copywriter/growth 위임 |
+| cso | 보안 Gate A + 플러그인 검증 Gate B + 독립 리뷰 Gate C + compliance |
+| coo | 운영, CI/CD, 모니터링 (sre/devops/docs-writer 위임) |
 
 ### Execution (실행 레이어, Sonnet)
 
-| 에이전트 | 역할 |
-|---------|------|
-| architect | DB 스키마 + 환경 + 프로젝트 설정 |
-| design | IA + 와이어프레임 + UI 설계 |
-| frontend | 프론트엔드 구현 |
-| backend | 백엔드 API 구현 |
-| qa | Gap 분석 + 코드 리뷰 + QA 검증 |
-| security | 보안 감사 |
-| seo | SEO 감사 |
+| 에이전트 | C-Level | 역할 |
+|---------|---------|------|
+| architect | CTO | DB 스키마 + 환경 + 프로젝트 설정 |
+| design | CTO | IA + 와이어프레임 + UI 설계 |
+| frontend | CTO | 프론트엔드 구현 |
+| backend | CTO | 백엔드 API 구현 |
+| qa | CTO | Gap 분석 + 코드 리뷰 + QA 검증 |
+| tester | CTO | 테스트 코드 작성 (unit/integration/e2e) |
+| devops | CTO/COO | CI/CD + Docker + 배포 자동화 |
+| database | CTO | DB 스키마 최적화 + 마이그레이션 + 쿼리 튜닝 |
+| security | CSO | 보안 감사 (OWASP Top 10) |
+| compliance | CSO/CFO | 컴플라이언스 (GDPR/라이선스) |
+| seo | CMO | SEO 감사 |
+| copywriter | CMO | 마케팅 카피 |
+| growth | CMO | 그로스 퍼널 전략 |
+| sre | COO | SRE/모니터링 + 인시던트 런북 |
+| docs-writer | COO/CTO/CPO | 기술 문서 (API docs/README) |
+| cost-analyst | CFO | 클라우드 비용 분석 |
+| pricing-modeler | CFO | 가격 모델링 + 수익 시뮬레이션 |
+| ux-researcher | CPO | UX 리서치 |
+| data-analyst | CPO/CTO/CFO | 제품 메트릭 분석 |
+| investigate | CTO | 체계적 디버깅 |
+| canary | COO | 배포 후 카나리 모니터링 |
+| benchmark | COO | 성능 벤치마크 |
+| retro | CEO | 엔지니어링 회고 |
 
 실행 에이전트는 **직접 호출 금지** — 반드시 CTO를 통해 호출합니다.
 

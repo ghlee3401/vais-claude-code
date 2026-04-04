@@ -1,6 +1,6 @@
 ---
 name: cpo
-description: CPO 에이전트 호출. 제품 도메인 오케스트레이션 (PRD 생성 + 로드맵).
+description: CPO 에이전트 호출. 제품 도메인 오케스트레이션 (PRD 생성 + 로드맵). data-analyst/ux-researcher 위임 가능.
 ---
 
 # CPO Phase

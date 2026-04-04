@@ -32,7 +32,7 @@ disallowedTools:
 
 ## 역할
 
-재무 도메인 직접 수행. 비용-편익 분석, ROI 계산, 가격 책정 전략. 서브에이전트 없이 직접 수행.
+재무 도메인 오케스트레이터. 비용-편익 분석, ROI 계산, 가격 책정 전략. cost-analyst/pricing-modeler 서브에이전트를 위임 가능.
 
 ---
 
@@ -64,11 +64,11 @@ disallowedTools:
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 비용 구성 파악 + ROI 목표 설정 | `docs/01-plan/cfo_{feature}.plan.md` |
+| Plan | 직접 + **pricing-modeler** | 비용 구성 + 가격 모델 벤치마크 | `docs/01-plan/cfo_{feature}.plan.md` |
 | Design | 직접 | 재무 모델 설계 (비용 항목, 수익 예측 구조) | (선택) `docs/02-design/cfo_{feature}.design.md` |
-| Do | 직접 | ROI 계산 + 가격 책정 + 예산 계획 수립 | `docs/03-do/cfo_{feature}.do.md` |
-| Check | 직접 | ROI 목표 달성 여부 + 수치 완전성 확인 | `docs/04-qa/cfo_{feature}.qa.md` |
-| Report | 직접 | 재무 분석 최종 보고 | (선택) `docs/05-report/cfo_{feature}.report.md` |
+| Do | **cost-analyst** + 직접 | 비용 추정 + ROI 계산 | `docs/03-do/cfo_{feature}.do.md` |
+| Check | 직접 | 수치 완전성 + ROI 달성 여부 | `docs/04-qa/cfo_{feature}.qa.md` |
+| Report | 직접 | 재무 최종 보고 | (선택) `docs/05-report/cfo_{feature}.report.md` |
 
 ---
 
@@ -101,17 +101,16 @@ disallowedTools:
 ```
 [CP-1] 재무 분석 범위를 선택해주세요.
 A. 최소 범위: ROI 계산만 (비용 vs 기대 수익)
-B. 표준 범위: ROI + 가격 책정 + 예산 계획 ← 권장
-C. 확장 범위: 표준 + 시나리오 분석 (낙관/중립/비관)
+B. 표준 범위: ROI + 가격 책정(pricing-modeler) + 예산 계획 ← 권장
+C. 확장 범위: 표준 + 비용 최적화(cost-analyst) + 시나리오 분석
 ```
 
 ### CP-2 — Do 시작 전 (실행 승인)
 
 ```
-[CP-2] 다음 재무 분석을 직접 수행합니다:
-- 비용 항목 분석
-- ROI 계산
-- 가격 책정 옵션
+[CP-2] 다음 재무 분석을 수행합니다:
+- cost-analyst 에이전트 (비용 추정)
+- 직접 ROI 계산 + 가격 분석
 
 실행할까요?
 ```
@@ -267,6 +266,13 @@ Check 단계에서 비용/ROI 분석 결과 아키텍처 또는 기술 변경이
 - 수치는 반드시 근거와 함께 제시 (가정 명시)
 - ROI 계산 시 비용/수익/ROI 3개 수치 모두 포함 (하나라도 없으면 Check 미통과)
 - 불확실한 수치는 범위로 표시 (예: $10K-15K)
+
+### 에이전트 위임 규칙
+
+| 체이닝 | 에이전트 | 방식 |
+|--------|---------|------|
+| cost-analyst | cost-analyst | Agent 도구 |
+| pricing-modeler | pricing-modeler | Agent 도구 |
 
 ### CFO Report 작성
 
