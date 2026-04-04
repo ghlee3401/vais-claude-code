@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.40.1] - 2026-04-05
+
+### Changed
+
+- **docs(guide)**: guide.html 에이전트·스킬 현행화 반영
+  - 버전 v1.0→v0.40.0, 에이전트 25→37개 테이블 갱신
+  - Phase 스킬 13개 + Utility 스킬 13개 섹션 추가
+  - 유틸리티 명령어 3→10개로 확장
+  - C-Suite 조직도 전체 서브에이전트 반영
+
+### Removed
+
+- 이전 피처 산출물 21개 파일 정리 (plan/design/do/qa/report)
+
+---
+
 ## [0.39.1] - 2026-04-04
 
 ### Changed

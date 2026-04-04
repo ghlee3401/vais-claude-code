@@ -279,7 +279,7 @@
 
 <!-- ═══════════════════════ NAV ═══════════════════════ -->
 <nav>
-  <div class="logo">VAIS Code <span>v1.0</span></div>
+  <div class="logo">VAIS Code <span>v0.40.1</span></div>
   <ul>
     <div class="section-label">Part 1 &mdash; Claude Code</div>
     <li><a href="#what-is-cc">Claude Code란?</a></li>
@@ -316,7 +316,7 @@
 <!-- ═══════════════════════ MAIN ═══════════════════════ -->
 <main>
 
-<h1>VAIS Code Guide <span class="version">v1.0</span></h1>
+<h1>VAIS Code Guide <span class="version">v0.40.1</span></h1>
 <p class="subtitle">Claude Code의 기본 개념부터 Harness Engineering, 그리고 AI C-Suite 오케스트레이션까지</p>
 
 <!-- ════════════════════════════════════════════════════ -->
@@ -530,11 +530,27 @@ disallowedTools:
 
 <p>Skill은 <code>/명령어</code>로 호출하는 재사용 가능한 작업 단위입니다. <code>SKILL.md</code>에 정의하며, 인자를 받아 동적으로 동작합니다.</p>
 
-<pre><code>/example plan login      → 기획서 작성
-/example implement login → 구현
-/example review login    → 검토 + Gap 분석</code></pre>
+<pre><code>/vais cto login          → CTO에게 기술 구현 위임
+/vais ceo my-saas        → CEO에게 전체 런칭 위임
+/vais status             → 현재 진행 상태 조회
+/vais deploy             → 배포 실행</code></pre>
 
-<p>SKILL.md 내부에서 <code>$0</code>은 액션, <code>$1</code>은 피처명으로 치환됩니다.</p>
+<p>SKILL.md 내부에서 <code>$0</code>은 액션, <code>$1</code>은 피처명으로 치환됩니다. VAIS Code의 스킬은 <strong>phases/</strong>(C-Suite 방법론 13개)와 <strong>utils/</strong>(유틸리티 13개)로 구분됩니다.</p>
+
+<h4>Phase 스킬 (C-Suite 에이전트)</h4>
+<table>
+  <tr><th>스킬</th><th>설명</th></tr>
+  <tr><td><code>ceo, cpo, cto, cso, cmo, coo, cfo</code></td><td>C-Level 에이전트 호출</td></tr>
+  <tr><td><code>plan, design, architect, frontend, backend, qa</code></td><td>CTO 워크플로우 개별 단계 실행</td></tr>
+</table>
+
+<h4>Utility 스킬</h4>
+<table>
+  <tr><th>스킬</th><th>설명</th></tr>
+  <tr><td><code>status, help, init, next, report</code></td><td>상태 조회, 도움말, 초기화, 다음 단계, 리포트</td></tr>
+  <tr><td><code>test, deploy, commit</code></td><td>테스트, 배포, 커밋</td></tr>
+  <tr><td><code>analyze-cost, write-docs, growth-audit, license-check, pricing</code></td><td>비용분석, 문서생성, 퍼널분석, 라이선스검사, 가격모델링</td></tr>
+</table>
 </section>
 
 <!-- ── MCP ──────────────────────────────────────── -->
@@ -727,7 +743,7 @@ const ASK = [
   <div class="card">
     <div class="icon">🏢</div>
     <div class="label">basic/ → VAIS</div>
-    <div class="desc">Orchestrator 1개 → C-Suite 7개. Executor 1개 → 실행 에이전트 14개. 역할 세분화</div>
+    <div class="desc">Orchestrator 1개 → C-Suite 7개. Executor 1개 → 실행 에이전트 30개. 총 37개 에이전트</div>
   </div>
   <div class="card">
     <div class="icon">🛡️</div>
@@ -746,12 +762,12 @@ const ASK = [
 <section id="vais-csuite">
 <h3>C-Suite 조직 구조</h3>
 
-<p>VAIS Code는 3개 레이어, 25개 에이전트로 구성됩니다.</p>
+<p>VAIS Code는 3개 레이어, <strong>37개 에이전트</strong>로 구성됩니다.</p>
 
 <table>
   <tr><th>레이어</th><th>모델</th><th>에이전트</th><th>역할</th></tr>
   <tr>
-    <td rowspan="7"><strong>Executive</strong><br>(전략)</td>
+    <td rowspan="7"><strong>Executive</strong><br>(전략, 7개)</td>
     <td rowspan="7"><span class="badge opus">Opus</span></td>
     <td>CEO</td><td>최상위 오케스트레이터 — 전체 런칭 파이프라인 지휘</td>
   </tr>
@@ -762,40 +778,46 @@ const ASK = [
   <tr><td>COO</td><td>배포/운영, CI/CD, 모니터링</td></tr>
   <tr><td>CFO</td><td>비용 분석, ROI, 가격 책정</td></tr>
   <tr>
-    <td rowspan="4"><strong>Execution</strong><br>(실행)</td>
-    <td rowspan="4"><span class="badge sonnet">Sonnet</span></td>
-    <td>architect, frontend, backend, design, qa</td>
-    <td>CTO 산하 — 구현 담당</td>
+    <td rowspan="7"><strong>Execution</strong><br>(실행, 26개)</td>
+    <td rowspan="7"><span class="badge sonnet">Sonnet</span></td>
+    <td>architect, design, frontend, backend, qa, tester, database, devops, investigate</td>
+    <td>CTO 산하 — 설계·구현·테스트·DB·CI/CD·디버깅</td>
   </tr>
-  <tr><td>security, validate-plugin, code-review</td><td>CSO 산하 — 보안/검증 담당</td></tr>
-  <tr><td>seo</td><td>CMO 산하 — SEO 감사 전담</td></tr>
-  <tr><td>investigate, canary, benchmark, retro</td><td>디버깅, 배포 감시, 성능, 회고</td></tr>
+  <tr><td>security, validate-plugin, code-review, compliance</td><td>CSO 산하 — 보안 감사, 플러그인 검증, 코드 리뷰, 컴플라이언스</td></tr>
+  <tr><td>seo, copywriter, growth</td><td>CMO 산하 — SEO 감사, 마케팅 카피, 그로스 전략</td></tr>
+  <tr><td>canary, benchmark, sre, docs-writer</td><td>COO 산하 — 카나리 모니터링, 벤치마크, SRE, 기술 문서</td></tr>
+  <tr><td>cost-analyst, pricing-modeler</td><td>CFO 산하 — 비용 분석, 가격 모델링</td></tr>
+  <tr><td>ux-researcher, data-analyst</td><td>CPO 산하 — UX 리서치, 데이터 분석</td></tr>
+  <tr><td>absorb-analyzer, retro</td><td>CEO 산하 — 레퍼런스 흡수 분석, 엔지니어링 회고</td></tr>
   <tr>
-    <td><strong>PM</strong><br>(기획)</td>
+    <td><strong>PM</strong><br>(기획, 4개)</td>
     <td><span class="badge sonnet">Sonnet</span></td>
     <td>pm-discovery, pm-strategy, pm-research, pm-prd</td>
-    <td>CPO 산하 — 제품 기획</td>
+    <td>CPO 산하 — 제품 기획 (발견→전략→리서치→PRD)</td>
   </tr>
 </table>
 
 <div class="diagram">
-                            ┌─────────┐
-                            │   CEO   │
-                            └────┬────┘
-          ┌──────┬──────┬───────┼───────┬──────┬──────┐
-        ┌─┴─┐  ┌─┴─┐  ┌┴──┐  ┌┴──┐  ┌─┴─┐  ┌─┴─┐  ┌┴──┐
-        │CPO│  │CTO│  │CSO│  │CMO│  │COO│  │CFO│  │ret│
-        └─┬─┘  └─┬─┘  └─┬─┘  └─┬─┘  └─┬─┘  └───┘  └───┘
-          │      │      │      │      │
-       pm-*  arch/fe  sec/   seo   canary/
-             /be/qa  code-rv       bench
-             /design /val-pl
-             /invest
+                              ┌─────────┐
+                              │   CEO   │
+                              └────┬────┘
+          ┌──────┬──────┬─────────┼─────────┬──────┬──────┐
+        ┌─┴─┐  ┌─┴─┐  ┌┴──┐   ┌──┴──┐   ┌─┴─┐  ┌─┴─┐  ┌┴──┐
+        │CPO│  │CTO│  │CSO│   │CMO  │   │COO│  │CFO│  │sub│
+        └─┬─┘  └─┬─┘  └─┬─┘   └──┬──┘   └─┬─┘  └─┬─┘  └─┬─┘
+          │      │      │        │        │      │    absorb
+       pm-*  arch    sec      seo     canary  cost   retro
+       ux-r  design  val-pl   copy    bench   price
+       data  fe/be   code-rv  growth  sre
+             qa      compl           docs-w
+             tester
+             db/devops
+             invest
 </div>
 
 <div class="hint">
   <strong>basic/ 패턴과의 대응</strong>
-  <code>basic/</code>의 <code>orchestrator.md</code>가 VAIS에서는 <code>ceo.md</code>, <code>cto.md</code>, <code>cso.md</code> 등 7개로 세분화되었습니다. <code>executor.md</code>는 <code>architect.md</code>, <code>frontend.md</code>, <code>backend.md</code> 등 14개 실행 에이전트로 확장되었습니다.
+  <code>basic/</code>의 <code>orchestrator.md</code>가 VAIS에서는 <code>ceo.md</code>, <code>cto.md</code>, <code>cso.md</code> 등 7개로 세분화되었습니다. <code>executor.md</code>는 <code>architect.md</code>, <code>frontend.md</code>, <code>backend.md</code> 등 30개 실행 에이전트로 확장되었습니다.
 </div>
 </section>
 
@@ -837,7 +859,7 @@ const ASK = [
   <div class="flow-step">📊 Report</div>
 </div>
 
-<p>Do 단계에서 <code>frontend</code>와 <code>backend</code> 에이전트가 <strong>병렬</strong>로 실행됩니다.</p>
+<p>Do 단계에서 <code>frontend</code>, <code>backend</code>, <code>tester</code> 에이전트가 <strong>병렬</strong>로 실행됩니다.</p>
 </section>
 
 <!-- ── Checkpoint ──────────────────────────────── -->
@@ -949,6 +971,13 @@ claude install ghlee3401/vais-claude-code</code></pre>
   <tr><th>명령</th><th>설명</th></tr>
   <tr><td><code>/vais status</code></td><td>현재 피처 진행 상태 조회</td></tr>
   <tr><td><code>/vais init [feature]</code></td><td>기존 프로젝트 분석 → VAIS 문서 역생성</td></tr>
+  <tr><td><code>/vais test</code></td><td>테스트 실행 + 커버리지 리포트</td></tr>
+  <tr><td><code>/vais deploy</code></td><td>배포 체크리스트 + 실행 + 헬스체크</td></tr>
+  <tr><td><code>/vais analyze-cost</code></td><td>인프라 비용 분석 + 최적화 제안</td></tr>
+  <tr><td><code>/vais write-docs</code></td><td>API docs + README 자동 생성</td></tr>
+  <tr><td><code>/vais growth-audit</code></td><td>AARRR 퍼널 분석 + 병목 식별</td></tr>
+  <tr><td><code>/vais license-check</code></td><td>의존성 라이선스 호환성 검사</td></tr>
+  <tr><td><code>/vais pricing</code></td><td>가격 모델 시뮬레이션 + BEP 계산</td></tr>
   <tr><td><code>/vais help</code></td><td>사용법 안내</td></tr>
 </table>
 </section>
@@ -1060,7 +1089,7 @@ claude install ghlee3401/vais-claude-code</code></pre>
 
 <!-- ════════════════════════════════════════════════════ -->
 <footer style="margin-top:4rem; padding-top:2rem; border-top:1px solid var(--border); color:var(--text-muted); font-size:0.85rem;">
-  <p>VAIS Code v1.0 &mdash; Virtual AI C-Suite for Software Development</p>
+  <p>VAIS Code v0.40.1 &mdash; Virtual AI C-Suite for Software Development</p>
   <p>Built with Claude Code Harness Engineering</p>
 </footer>
 

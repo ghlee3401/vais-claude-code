@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.39.1** · Claude Code C-Suite 플러그인
+**v0.40.1** · Claude Code C-Suite 플러그인
 
 > AI C-Suite 조직. CEO에게 지시하면 C-Level 팀을 고용해서 알아서 한다.
 
@@ -334,6 +334,7 @@ vais-claude-code/
 
 | 버전 | 주요 변경 |
 |------|---------|
+| v0.40.1 | guide.html 에이전트 37개·스킬 26개 현행화 반영, 이전 산출물 정리 |
 | v0.39.1 | 피처명 생성 규칙 개선: 단어 1개 → 의도 기반 2~4단어 kebab-case 패턴 |
 | v0.39.0 | gstack 흡수: investigate/canary/benchmark/retro 에이전트 신설, 보안 가드레일 강화 |
 | v0.38.3 | CSO 2차 코드 리뷰: code-review 역할 등록, atomicWriteSync 적용, agent-stop 안정성 개선 |
