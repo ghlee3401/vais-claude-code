@@ -10,3 +10,6 @@
 {"timestamp":"2026-04-04T00:00:00Z","source":"gstack/design-consultation","action":"reject","target":null,"clevel":null,"summary":"GPT Image API 의존"}
 {"timestamp":"2026-04-04T00:00:00Z","source":"gstack/codex","action":"reject","target":null,"clevel":null,"summary":"OpenAI Codex CLI 의존"}
 {"timestamp":"2026-04-04T00:00:00Z","source":"gstack/office-hours","action":"reject","target":null,"clevel":null,"summary":"YC 특화, CPO pm-discovery 대체"}
+{"timestamp":"2026-04-05T00:00:00Z","source":"claude_code_agent_skill/best_practices","action":"absorb","target":"references/skill-authoring-guide.md","clevel":"CEO","summary":"공식 스킬 작성 모범사례 → VAIS 맥락 가이드라인 문서 신규 생성"}
+{"timestamp":"2026-04-05T00:00:00Z","source":"claude_code_agent_skill/best_practices","action":"merge","target":"skills/vais/SKILL.md","clevel":"CEO","summary":"description 3인칭 영어 + what/when 형식으로 개선"}
+{"timestamp":"2026-04-05T00:00:00Z","source":"claude_code_agent_skill/best_practices","action":"reject","target":null,"clevel":null,"summary":"'과다 선택지 금지' 원칙 — 이미 feedback memory에 내재화"}

@@ -155,12 +155,30 @@ CEO가 CSO 호출 → CSO가 CTO 구현물 검토
 
 ### absorb 모드 (`/vais ceo absorb {path}`)
 
+#### Inbox 컨벤션
+
+raw 파일은 `references/_inbox/`에 배치한다. absorb 완료 후 원본은 삭제한다.
+
+```
+references/
+├── _inbox/              ← raw 파일 드롭 (임시, .gitignore 대상)
+│   └── {topic}/
+│       └── *.md
+├── skill-authoring-guide.md  ← absorb 결과 (영구)
+└── ...
+```
+
+- **입력**: `references/_inbox/{topic}/` 또는 사용자가 지정한 경로
+- **출력**: 흡수 결과는 `agents/`, `skills/`, `references/` (루트) 등 적절한 위치에 배치
+- **정리**: absorb Do 완료 후 `_inbox/` 내 원본 삭제 (CP에서 확인)
+
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
 | Plan | 직접 | 외부 파일 스캔 + 핵심 기능 추출 + 전략 판단 | `docs/01-plan/ceo_{feature}.plan.md` |
 | Design | absorb-analyzer | 중복 분석 + C레벨별 배분 맵 생성 + **MCP 적합성 심화 분석** | (선택) `docs/02-design/ceo_{feature}.design.md` |
 | Do | 직접 | 배분 맵 기반 분기 실행 (아래 참조) | `docs/03-do/ceo_{feature}.do.md` |
 | Check | 직접 | 추가된 서브에이전트/MCP Tool 위치 검증 + 충돌 확인 | `docs/04-qa/ceo_{feature}.qa.md` |
+| Cleanup | 직접 | `_inbox/` 원본 삭제 + 사용자 확인 | — |
 | Report | 직접 | `docs/absorption-ledger.jsonl` + 최종 보고 | (선택) `docs/05-report/ceo_{feature}.report.md` |
 
 #### absorb Do 분기 로직
@@ -301,8 +319,9 @@ C. 중단 — 전략 방향 재검토 필요
 - L4: 이전 C레벨 산출물 (예: CPO PRD → CTO 전달 시)
 
 ### absorb 모드 추가 로드
-- 대상 경로의 모든 파일 목록 (Glob)
+- `references/_inbox/` 또는 사용자 지정 경로의 모든 파일 목록 (Glob)
 - `docs/absorption-ledger.jsonl` — 중복 흡수 방지
+- `references/skill-authoring-guide.md` — 스킬/에이전트 작성 가이드라인 (수정 시 참조)
 
 ---
 

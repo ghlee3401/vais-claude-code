@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.41.0] - 2026-04-05
+
+### Added
+
+- **feat(absorb)**: Claude Code 공식 best practices 흡수
+  - `references/skill-authoring-guide.md` — 스킬/에이전트 작성 가이드라인 신규 생성
+  - SKILL.md description을 3인칭 영어 + "Use when:" 형식으로 개선
+  - CEO absorb 모드에 `references/_inbox/` 컨벤션 도입 (raw 파일 드롭 → 흡수 → 삭제)
+  - absorb PDCA 문서에 Cleanup 단계 추가
+  - absorption-ledger에 3건 기록
+
+---
+
 ## [0.40.1] - 2026-04-05
 
 ### Changed

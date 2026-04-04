@@ -1,12 +1,16 @@
 ---
 name: vais
 description: >
-  VAIS Code C-Suite 오케스트레이션 스킬. C-레벨 에이전트를 통해 전략 및 구현을 관리합니다.
+  Orchestrates a virtual C-Suite (CEO, CPO, CTO, CSO, CMO, COO, CFO) to manage product strategy,
+  technical implementation, security review, marketing, deployment, and cost analysis through
+  a structured PDCA workflow. Use when: product ideation, feature planning, architecture design,
+  code generation, security audit, SEO analysis, CI/CD setup, cost estimation, or full service launch
+  is needed. Also handles project initialization, status tracking, and engineering retrospectives.
   Triggers: vais, help, 도움말, 사용법, 리뷰, 검토, 상태, status, init, 초기화, 적용, 기존 프로젝트,
   아이디어, research, 조사, 뭐 만들, 만들고 싶, 시작,
   cto, ceo, cmo, cso, cpo, cfo, coo, c-suite, 기술총괄, 전략, 비즈니스, 마케팅, 보안, 재무, 운영,
   매니저, 현황, 히스토리, 부채, 의존성, 브리핑.
-  Do NOT use for: 단순 질문, 코드 없는 대화
+  Do NOT use for: simple questions without code context, casual conversation
 argument-hint: "[action] [feature]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
 ---

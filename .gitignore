@@ -4,6 +4,7 @@ node_modules/
 *.log
 .DS_Store
 bkit-claude-code/
+references/_inbox/
 
 # VAIS init 역생성 문서 (프로젝트별 산출물)
 docs/01-research/
