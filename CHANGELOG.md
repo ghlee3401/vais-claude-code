@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.43.2] - 2026-04-05
+
+### Fixed
+
+- **design phase mandatory 승격** — C-Level 간 위임 시 PDCA 단계 누락 방지
+  - `vais.config.json`: mandatoryPhases에 design 추가 (plan, do, qa → plan, design, do, qa)
+  - `agents/cto/cto.md`: design 산출물을 선택→필수로 변경
+  - `agents/ceo/ceo.md`: C-Level 위임 시 PDCA 순차 호출 규칙 신설 (전체 위임 금지)
+  - `skills/vais/phases/*.md` (7개): mandatory phase 스킵 금지 로직 + 경고 메시지 추가
+  - `CLAUDE.md`: Mandatory Rule #2에 스킵 금지 + 순차 별도 호출 규칙 추가
+
 ## [0.43.1] - 2026-04-05
 
 ### Changed

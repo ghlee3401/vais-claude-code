@@ -152,7 +152,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 | 산출물 | 경로 | 필수 |
 |--------|------|------|
 | 기획서 | `docs/01-plan/cto_{feature}.plan.md` | **필수** |
-| 설계서 | `docs/02-design/cto_{feature}.design.md` | 선택 |
+| 설계서 | `docs/02-design/cto_{feature}.design.md` | **필수** |
 | 구현 로그 | `docs/03-do/cto_{feature}.do.md` | **필수** |
 | QA 분석 | `docs/04-qa/cto_{feature}.qa.md` | **필수** |
 | 보고서 | `docs/05-report/cto_{feature}.report.md` | 선택 |
