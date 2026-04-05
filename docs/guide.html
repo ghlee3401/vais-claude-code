@@ -541,7 +541,7 @@ disallowedTools:
 <table>
   <tr><th>스킬</th><th>설명</th></tr>
   <tr><td><code>ceo, cpo, cto, cso, cmo, coo, cfo</code></td><td>C-Level 에이전트 호출</td></tr>
-  <tr><td><code>plan, design, architect, frontend, backend, qa</code></td><td>CTO 워크플로우 개별 단계 실행</td></tr>
+  <tr><td><code>plan, ui-designer, infra-architect, dev-frontend, dev-backend, qa-validator</code></td><td>CTO 워크플로우 개별 단계 실행</td></tr>
 </table>
 
 <h4>Utility 스킬</h4>
@@ -780,15 +780,15 @@ const ASK = [
   <tr>
     <td rowspan="7"><strong>Execution</strong><br>(실행, 26개)</td>
     <td rowspan="7"><span class="badge sonnet">Sonnet</span></td>
-    <td>architect, design, frontend, backend, qa, tester, database, devops, investigate</td>
+    <td>infra-architect, ui-designer, dev-frontend, dev-backend, qa-validator, test-builder, db-architect, deploy-ops, bug-investigator</td>
     <td>CTO 산하 — 설계·구현·테스트·DB·CI/CD·디버깅</td>
   </tr>
-  <tr><td>security, validate-plugin, code-review, compliance</td><td>CSO 산하 — 보안 감사, 플러그인 검증, 코드 리뷰, 컴플라이언스</td></tr>
-  <tr><td>seo, copywriter, growth</td><td>CMO 산하 — SEO 감사, 마케팅 카피, 그로스 전략</td></tr>
-  <tr><td>canary, benchmark, sre, docs-writer</td><td>COO 산하 — 카나리 모니터링, 벤치마크, SRE, 기술 문서</td></tr>
+  <tr><td>security-auditor, validate-plugin, code-review, compliance-audit</td><td>CSO 산하 — 보안 감사, 플러그인 검증, 코드 리뷰, 컴플라이언스</td></tr>
+  <tr><td>seo-analyst, copy-writer, growth-analyst</td><td>CMO 산하 — SEO 감사, 마케팅 카피, 그로스 전략</td></tr>
+  <tr><td>canary-monitor, perf-benchmark, sre-ops, docs-writer</td><td>COO 산하 — 카나리 모니터링, 벤치마크, SRE, 기술 문서</td></tr>
   <tr><td>cost-analyst, pricing-modeler</td><td>CFO 산하 — 비용 분석, 가격 모델링</td></tr>
   <tr><td>ux-researcher, data-analyst</td><td>CPO 산하 — UX 리서치, 데이터 분석</td></tr>
-  <tr><td>absorb-analyzer, retro</td><td>CEO 산하 — 레퍼런스 흡수 분석, 엔지니어링 회고</td></tr>
+  <tr><td>absorb-analyzer, retro-report</td><td>CEO 산하 — 레퍼런스 흡수 분석, 엔지니어링 회고</td></tr>
   <tr>
     <td><strong>PM</strong><br>(기획, 4개)</td>
     <td><span class="badge sonnet">Sonnet</span></td>
@@ -806,18 +806,18 @@ const ASK = [
         │CPO│  │CTO│  │CSO│   │CMO  │   │COO│  │CFO│  │sub│
         └─┬─┘  └─┬─┘  └─┬─┘   └──┬──┘   └─┬─┘  └─┬─┘  └─┬─┘
           │      │      │        │        │      │    absorb
-       pm-*  arch    sec      seo     canary  cost   retro
-       ux-r  design  val-pl   copy    bench   price
-       data  fe/be   code-rv  growth  sre
-             qa      compl           docs-w
-             tester
-             db/devops
-             invest
+       pm-*  ui-dsgn sec-aud  seo-a   canary  cost   retro
+       ux-r  infra   val-pl   copy-w  bench   price
+       data  fe/be   code-rv  grow-a  sre-ops
+             qa-v    compl-a         docs-w
+             test-b
+             db-a/depl
+             bug-inv
 </div>
 
 <div class="hint">
   <strong>basic/ 패턴과의 대응</strong>
-  <code>basic/</code>의 <code>orchestrator.md</code>가 VAIS에서는 <code>ceo.md</code>, <code>cto.md</code>, <code>cso.md</code> 등 7개로 세분화되었습니다. <code>executor.md</code>는 <code>architect.md</code>, <code>frontend.md</code>, <code>backend.md</code> 등 30개 실행 에이전트로 확장되었습니다.
+  <code>basic/</code>의 <code>orchestrator.md</code>가 VAIS에서는 <code>ceo.md</code>, <code>cto.md</code>, <code>cso.md</code> 등 7개로 세분화되었습니다. <code>executor.md</code>는 <code>infra-architect.md</code>, <code>dev-frontend.md</code>, <code>dev-backend.md</code> 등 30개 실행 에이전트로 확장되었습니다.
 </div>
 </section>
 
@@ -859,7 +859,7 @@ const ASK = [
   <div class="flow-step">📊 Report</div>
 </div>
 
-<p>Do 단계에서 <code>frontend</code>, <code>backend</code>, <code>tester</code> 에이전트가 <strong>병렬</strong>로 실행됩니다.</p>
+<p>Do 단계에서 <code>dev-frontend</code>, <code>dev-backend</code>, <code>test-builder</code> 에이전트가 <strong>병렬</strong>로 실행됩니다.</p>
 </section>
 
 <!-- ── Checkpoint ──────────────────────────────── -->
@@ -1008,10 +1008,10 @@ claude install ghlee3401/vais-claude-code</code></pre>
 # CTO가 Design 작성 → [CP-D] 아키텍처 선택
 #   → "실용적균형" 선택
 
-# [CP-2] "frontend, backend 에이전트를 실행합니다. 실행할까요?"
+# [CP-2] "dev-frontend, dev-backend 에이전트를 실행합니다. 실행할까요?"
 #   → "실행" 선택
 
-# frontend + backend 병렬 실행
+# dev-frontend + dev-backend 병렬 실행
 # → QA 에이전트 실행 → [CP-Q] QA 결과 확인
 #   → "Critical만 수정" 선택
 
@@ -1054,7 +1054,7 @@ claude install ghlee3401/vais-claude-code</code></pre>
 
 # [CP-1] Gate 선택 → "전체 (A+B+C)"
 
-# Gate A: security 에이전트 → OWASP Top 10 점검
+# Gate A: security-auditor 에이전트 → OWASP Top 10 점검
 # Gate B: validate-plugin → 플러그인 구조 검증
 # Gate C: code-review → 독립 코드 리뷰
 

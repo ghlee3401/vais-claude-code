@@ -1,5 +1,5 @@
 ---
-name: qa
+name: qa-validator
 version: 1.1.0
 description: |
   Performs integrated quality assurance including build verification, gap analysis, security checks,

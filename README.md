@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.43.0** · Claude Code C-Suite 플러그인
+**v0.43.1** · Claude Code C-Suite 플러그인
 
 > AI C-Suite 조직. CEO에게 지시하면 C-Level 팀을 고용해서 알아서 한다.
 
@@ -16,7 +16,7 @@
      CEO가 판단: CPO → CTO → CSO → CMO → COO → CFO 필요
 
      ① CPO: 제품 정의 (PRD 생성)
-     ② CTO: 기능 개발 (design → architect → frontend+backend → qa)
+     ② CTO: 기능 개발 (ui-designer → infra-architect → dev-frontend+dev-backend → qa-validator)
      ③ CSO: 보안 검토 → 이슈 발견 시 CTO에게 수정 지시 ↺
      ④ CMO: 마케팅 전략 수립
      ⑤ COO: 배포
@@ -34,7 +34,7 @@
 
 개별 C-Level 직접 호출도 가능: `/vais cso {feature}`, `/vais cmo {feature}` 등.
 
-**핵심 원칙**: 실행 에이전트(design, architect, frontend 등)는 직접 부르지 않는다. C-Level이 알아서 위임한다.
+**핵심 원칙**: 실행 에이전트(ui-designer, infra-architect, dev-frontend 등)는 직접 부르지 않는다. C-Level이 알아서 위임한다.
 
 ---
 
@@ -73,13 +73,13 @@ setup-dev.sh가 하는 일: `~/.claude/plugins/marketplaces/vais-marketplace` �
             │CPO│  │CTO│      │CSO│         │CMO│  │COO│  │CFO│
             └─┬─┘  └─┬─┘      └─┬─┘         └─┬─┘  └─┬─┘  └─┬─┘
               │      │          │             │      │      │
-           pm-*   design     security        seo   canary  cost-analyst
-           ux-r   architect  validate-plugin copy  bench   pricing-mdl
-           data   frontend   code-review     grow  sre
-                  backend    compliance            docs-w
-                  qa/tester                        devops
-                  db/devops
-                  investigate
+           pm-*   ui-desgn   sec-audit       seo-a canary  cost-analyst
+           ux-r   infra-ar   validate-plugin copy  bench   pricing-mdl
+           data   dev-fe     code-review     grow  sre-ops
+                  dev-be     compl-audit           docs-w
+                  qa-v/test                        depl-ops
+                  db-ar/depl
+                  bug-inv
 ```
 
 ### CEO — 최상위 오케스트레이터 (Product Owner)
@@ -111,15 +111,15 @@ C-Level 팀을 고용·지휘. 서비스 런칭 시 전체 파이프라인 순�
 
 | 하위 에이전트 | 역할 |
 |-------------|------|
-| design | IA + wireframes + UI design |
-| architect | DB schema + environment setup |
-| frontend | Frontend implementation |
-| backend | Backend API implementation |
-| qa | Gap analysis + code review + QA verification |
-| tester | Test code generation (unit/integration/e2e) |
-| devops | CI/CD pipeline + deployment automation |
-| database | DB schema optimization + query tuning |
-| investigate | Systematic debugging (4-phase root cause analysis) |
+| ui-designer | IA + wireframes + UI design |
+| infra-architect | DB schema + environment setup |
+| dev-frontend | Frontend implementation |
+| dev-backend | Backend API implementation |
+| qa-validator | Gap analysis + code review + QA verification |
+| test-builder | Test code generation (unit/integration/e2e) |
+| deploy-ops | CI/CD pipeline + deployment automation |
+| db-architect | DB schema optimization + query tuning |
+| bug-investigator | Systematic debugging (4-phase root cause analysis) |
 
 ### CSO — 보안 검토
 
@@ -127,10 +127,10 @@ CTO 구현물의 보안 검증. 이슈 발견 시 CEO에게 보고 → CTO 수�
 
 | 하위 에이전트 | 역할 |
 |-------------|------|
-| security | Security audit (OWASP Top 10) |
+| security-auditor | Security audit (OWASP Top 10) |
 | validate-plugin | Plugin structure validation |
 | code-review | Independent code review (Gate C) |
-| compliance | Compliance (GDPR/license) |
+| compliance-audit | Compliance (GDPR/license) |
 
 ### CMO — 마케팅 전략
 
@@ -138,9 +138,9 @@ CTO 구현물의 보안 검증. 이슈 발견 시 CEO에게 보고 → CTO 수�
 
 | 하위 에이전트 | 역할 |
 |-------------|------|
-| seo | SEO audit and optimization |
-| copywriter | Marketing copy (landing/email/app store) |
-| growth | Growth funnel strategy + viral loop |
+| seo-analyst | SEO audit and optimization |
+| copy-writer | Marketing copy (landing/email/app store) |
+| growth-analyst | Growth funnel strategy + viral loop |
 
 ### COO — 배포/운영
 
@@ -148,10 +148,10 @@ CI/CD 파이프라인, 배포 전략, 모니터링 설정.
 
 | 하위 에이전트 | 역할 |
 |-------------|------|
-| sre | SRE/monitoring + incident runbook |
-| canary | Post-deployment canary monitoring |
-| benchmark | Performance benchmarks + regression detection |
-| devops | CI/CD pipeline + deployment automation (CTO와 공유) |
+| sre-ops | SRE/monitoring + incident runbook |
+| canary-monitor | Post-deployment canary monitoring |
+| perf-benchmark | Performance benchmarks + regression detection |
+| deploy-ops | CI/CD pipeline + deployment automation (CTO와 공유) |
 | docs-writer | Technical docs (API docs/README/guides) |
 
 ### CFO — 비용/가격 분석
@@ -225,10 +225,10 @@ CI/CD 파이프라인, 배포 전략, 모니터링 설정.
     │
     ├─ Plan 직접 작성        → docs/01-plan/cto_login.plan.md
     ├─ [CP-1] 범위 확인 (A/B/C)
-    ├─ design + architect 위임 → docs/02-design/cto_login.design.md
+    ├─ ui-designer + infra-architect 위임 → docs/02-design/cto_login.design.md
     ├─ [CP-2] 실행 승인
-    ├─ frontend + backend 병렬 위임 → docs/03-do/cto_login.do.md
-    ├─ qa 위임               → docs/04-qa/cto_login.qa.md
+    ├─ dev-frontend + dev-backend 병렬 위임 → docs/03-do/cto_login.do.md
+    ├─ qa-validator 위임      → docs/04-qa/cto_login.qa.md
     └─ Report 작성           → docs/05-report/cto_login.report.md
 ```
 
@@ -291,12 +291,12 @@ CEO가 absorb-analyzer sub-agent에게 분석을 위임하고, 판정(absorb/mer
 ```
 vais-claude-code/
 ├── agents/                  # C-Level 별 하위 폴더로 구성 (37개)
-│   ├── ceo/                 #   CEO + absorb-analyzer + retro
+│   ├── ceo/                 #   CEO + absorb-analyzer + retro-report
 │   ├── cpo/                 #   CPO + pm-discovery/strategy/research/prd + ux-researcher + data-analyst
-│   ├── cto/                 #   CTO + architect/backend/frontend/design/qa + tester/devops/database + investigate
-│   ├── cso/                 #   CSO + security/validate-plugin/code-review + compliance
-│   ├── cmo/                 #   CMO + seo + copywriter + growth
-│   ├── coo/                 #   COO + canary/benchmark + sre + docs-writer
+│   ├── cto/                 #   CTO + infra-architect/dev-backend/dev-frontend/ui-designer/qa-validator + test-builder/deploy-ops/db-architect + bug-investigator
+│   ├── cso/                 #   CSO + security-auditor/validate-plugin/code-review + compliance-audit
+│   ├── cmo/                 #   CMO + seo-analyst + copy-writer + growth-analyst
+│   ├── coo/                 #   COO + canary-monitor/perf-benchmark + sre-ops + docs-writer
 │   └── cfo/                 #   CFO + cost-analyst + pricing-modeler
 ├── skills/vais/
 │   ├── SKILL.md             # /vais 스킬 진입점
@@ -358,6 +358,7 @@ vais-claude-code/
 
 | 버전 | 주요 변경 |
 |------|---------|
+| v0.43.1 | 하위 에이전트 18개 2단어 kebab-case 리네이밍 (architect→infra-architect 등) |
 | v0.42.1 | references 3파일 에이전트/유틸 흡수: gstack-ethos→Rules, mcp-builder→유틸, skill-authoring→에이전트 분배 |
 | v0.42.0 | Anthropic 공식 스킬 17개 흡수: 5건 absorb/merge (eval 루프, MCP 가이드, Playwright, 디자인 미학, 문서 워크플로우) |
 | v0.41.1 | agent description 정규화: 37개 에이전트 영어 3인칭 + Use when, 문서 동기화 |

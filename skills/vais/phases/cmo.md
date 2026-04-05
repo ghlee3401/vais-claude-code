@@ -1,6 +1,6 @@
 ---
 name: cmo
-description: CMO 에이전트 호출. 마케팅 전략 + SEO 감사 오케스트레이션. growth/copywriter 위임 가능.
+description: CMO 에이전트 호출. 마케팅 전략 + SEO 감사 오케스트레이션. growth-analyst/copy-writer 위임 가능.
 ---
 
 # CMO Phase

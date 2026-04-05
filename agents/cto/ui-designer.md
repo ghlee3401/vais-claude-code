@@ -1,5 +1,5 @@
 ---
-name: design
+name: ui-designer
 version: 1.0.0
 description: |
   Creates integrated UI/UX designs including information architecture, wireframes, and visual design.
@@ -103,7 +103,7 @@ disallowedTools:
 > - docs/02-design/cto_{feature}.md: IA, 와이어프레임, 화면별 상세 정의
 ```
 
-qa 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
+qa-validator 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
 
 ---
 
@@ -111,4 +111,3 @@ qa 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식
 |---------|------|--------|
 | v1.0.0 | 2026-04-04 | 초기 작성 — IA, 와이어프레임, UI/UX 설계 |
 | v1.1.0 | 2026-04-05 | 프론트엔드 미학 가이드라인 + 안티패턴 추가 (frontend-design absorb) |
-

@@ -1,5 +1,5 @@
 ---
-name: copywriter
+name: copy-writer
 version: 1.0.0
 description: |
   Creates marketing copy including landing page content, email templates, and app store descriptions.

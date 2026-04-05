@@ -1,5 +1,5 @@
 ---
-name: security
+name: security-auditor
 version: 1.0.0
 description: |
   Performs security audits covering OWASP Top 10, authentication/authorization,

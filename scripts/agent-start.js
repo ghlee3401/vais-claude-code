@@ -13,8 +13,8 @@ const VALID_ROLES = (() => {
     const config = JSON.parse(fs.readFileSync(path.join(__dirname, '../vais.config.json'), 'utf8'));
     const cSuiteRoles = Object.keys(config.cSuite?.roles || {});
     const execRoles = [
-      'architect', 'backend', 'frontend', 'design', 'qa',
-      'security', 'seo', 'validate-plugin', 'code-review',
+      'infra-architect', 'dev-backend', 'dev-frontend', 'ui-designer', 'qa-validator',
+      'security-auditor', 'seo-analyst', 'validate-plugin', 'code-review',
       'pm-discovery', 'pm-strategy', 'pm-research', 'pm-prd',
       'absorb-analyzer',
     ];

@@ -1,5 +1,5 @@
 ---
-name: growth
+name: growth-analyst
 version: 1.0.0
 description: |
   Designs growth strategies including funnel optimization, viral loop engineering, and retention analysis.

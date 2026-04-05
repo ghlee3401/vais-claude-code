@@ -1,5 +1,5 @@
 ---
-name: investigate
+name: bug-investigator
 version: 1.0.0
 description: |
   Performs systematic debugging through a 4-phase process: investigate → analyze → hypothesize → implement.

@@ -28,7 +28,7 @@ You are the cost analysis specialist for VAIS Code projects.
 
 1. **CFO Plan** — 비용 구성 파악, ROI 목표
 2. **CTO 구현 산출물** — 기술 스택, 인프라 구성
-3. **architect 산출물** — DB 종류, 호스팅 환경
+3. **infra-architect 산출물** — DB 종류, 호스팅 환경
 
 ## 실행 단계
 

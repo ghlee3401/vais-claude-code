@@ -1,5 +1,5 @@
 ---
-name: devops
+name: deploy-ops
 version: 1.0.0
 description: |
   Configures CI/CD pipelines and deployment automation including GitHub Actions, Docker,
@@ -26,9 +26,9 @@ disallowedTools:
 4. **빌드 자동화**: 빌드·테스트·린트 파이프라인 구성
 5. **환경 변수 관리**: 환경별 변수 분리 전략
 
-## devops vs architect 역할 분리
+## deploy-ops vs infra-architect 역할 분리
 
-| 역할 | devops | architect |
+| 역할 | deploy-ops | infra-architect |
 |------|--------|-----------|
 | 소속 | COO (CTO 크로스 호출 가능) | CTO |
 | 행위 | CI/CD·Docker·배포 **자동화 구현** | DB 스키마·인프라 **설계** |
@@ -38,7 +38,7 @@ disallowedTools:
 
 1. **설계서** (`docs/02-design/cto_{feature}.design.md`) — 기술 스택, 배포 전략
 2. **프로젝트 루트** — 기존 CI/CD 설정 (`package.json`, 기존 `.github/`)
-3. **architect 산출물** — 환경 구성, Docker 기반 정보
+3. **infra-architect 산출물** — 환경 구성, Docker 기반 정보
 
 ## 실행 단계
 

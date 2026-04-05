@@ -100,7 +100,7 @@ function checkCTOGate3(feature) {
   const checks = [];
 
   // 1. Architect 문서 존재
-  const archPath = resolveDocPath('design', feature, 'architect');
+  const archPath = resolveDocPath('design', feature, 'infra-architect');
   const archExists = archPath && fs.existsSync(archPath);
   checks.push(check('Architect 문서 존재', archExists, archPath || ''));
 

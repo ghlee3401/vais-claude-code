@@ -30,7 +30,7 @@ function validateDocs(role, feature) {
   const result = { passed: true, missing: [], warnings: [] };
 
   if (!C_LEVEL_ROLES.includes(role)) {
-    // 실행 에이전트(architect, backend 등)는 검증 대상 아님
+    // 실행 에이전트(infra-architect, dev-backend 등)는 검증 대상 아님
     return result;
   }
 

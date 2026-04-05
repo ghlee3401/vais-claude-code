@@ -1,6 +1,6 @@
 ---
 name: coo
-description: COO 에이전트 호출. 운영 프로세스, CI/CD 파이프라인, 모니터링. sre/devops/docs-writer 위임 가능.
+description: COO 에이전트 호출. 운영 프로세스, CI/CD 파이프라인, 모니터링. sre-ops/deploy-ops/docs-writer 위임 가능.
 ---
 
 # COO Phase

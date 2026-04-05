@@ -1,5 +1,5 @@
 ---
-name: seo
+name: seo-analyst
 version: 1.0.0
 description: |
   Performs comprehensive SEO audits covering title/meta tags, semantic HTML, Core Web Vitals,

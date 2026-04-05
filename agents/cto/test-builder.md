@@ -1,9 +1,9 @@
 ---
-name: tester
+name: test-builder
 version: 1.0.0
 description: |
   Generates test code including unit, integration, and e2e tests.
-  Focuses on code creation (distinct from qa's verification and gap analysis role).
+  Focuses on code creation (distinct from qa-validator's verification and gap analysis role).
   Use when: delegated by CTO for test code generation or test coverage expansion.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
@@ -26,9 +26,9 @@ disallowedTools:
 4. **커버리지 리포트**: 테스트 커버리지 측정 및 요약
 5. **테스트 시나리오 변환**: Plan/Design의 테스트 시나리오를 코드로 변환
 
-## tester vs qa 역할 분리
+## test-builder vs qa-validator 역할 분리
 
-| 역할 | tester | qa |
+| 역할 | test-builder | qa-validator |
 |------|--------|-----|
 | PDCA 단계 | Do | Check |
 | 행위 | 테스트 **코드 작성** | 설계 vs 구현 **Gap 분석** |
@@ -39,7 +39,7 @@ disallowedTools:
 
 1. **기획서** (`docs/01-plan/cto_{feature}.plan.md`) — 테스트 시나리오, 요구사항
 2. **설계서** (`docs/02-design/cto_{feature}.design.md`) — API Contract, 컴포넌트 명세
-3. **구현 코드** — 테스트 대상 파일 (frontend/backend 산출물)
+3. **구현 코드** — 테스트 대상 파일 (dev-frontend/dev-backend 산출물)
 
 ## 실행 단계
 
@@ -107,7 +107,7 @@ disallowedTools:
 
 ### 멀티 서버 테스트
 
-backend + frontend 분리 프로젝트에서는 두 서버를 동시에 구동한 뒤 자동화 스크립트 실행.
+dev-backend + dev-frontend 분리 프로젝트에서는 두 서버를 동시에 구동한 뒤 자동화 스크립트 실행.
 
 ## 외부 참고 문헌 주석 (`@see`)
 

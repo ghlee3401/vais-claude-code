@@ -1,5 +1,5 @@
 ---
-name: benchmark
+name: perf-benchmark
 version: 1.0.0
 description: |
   Tracks performance metrics including build size, dependency count, and response times.
@@ -81,7 +81,7 @@ find . -name "*.test.*" -o -name "*.spec.*" | xargs wc -l 2>/dev/null | tail -1
 | 빌드 크기 | +10% | +30% |
 | 의존성 수 | +2개 | +5개 |
 | API 응답 시간 | +50% | +100% |
-| 코드 줄 수 | 참고만 | — |
+| 코드 줄 수 | 참고만 | - |
 
 ---
 
@@ -89,29 +89,24 @@ find . -name "*.test.*" -o -name "*.spec.*" | xargs wc -l 2>/dev/null | tail -1
 
 ```
 BENCHMARK REPORT
-═══════════════════════════════════════
 프로젝트:    [이름]
 브랜치:      [현재 브랜치]
 날짜:        [YYYY-MM-DD]
 
 빌드 지표:
-──────────────────────────────────
   빌드 시간     [Xs]       (이전: Xs, 변화: +X%)
   빌드 크기     [XMB]      (이전: XMB, 변화: +X%)
   의존성        [N개]       (이전: N개, 변화: +N)
 
 런타임 지표:
-──────────────────────────────────
   API 응답      [Xms 평균]  (이전: Xms, 변화: +X%)
 
 코드 지표:
-──────────────────────────────────
   소스 LOC      [N줄]
   테스트 LOC    [N줄]       (테스트 비율: X%)
 
 회귀 감지:  [N건] (X 경고, Y 위험)
 판정:       [PASS / WARNING / REGRESSION]
-═══════════════════════════════════════
 ```
 
 ---
@@ -119,15 +114,15 @@ BENCHMARK REPORT
 ## 산출물
 
 - 벤치마크 리포트는 COO의 `docs/04-qa/`에 포함
-- WARNING 이상 시 COO에게 보고 → 필요 시 CTO 최적화 요청
+- WARNING 이상 시 COO에게 보고 -> 필요 시 CTO 최적화 요청
 
 ---
 
 ## 필수 규칙
 
-- **측정만 수행** — 코드 수정하지 않음 (최적화는 CTO 관할)
-- **상대 비교** — 절대값이 아닌 이전 대비 변화율로 판단
-- **재현 가능** — 동일 조건에서 반복 측정 가능해야 함
+- **측정만 수행** -- 코드 수정하지 않음 (최적화는 CTO 관할)
+- **상대 비교** -- 절대값이 아닌 이전 대비 변화율로 판단
+- **재현 가능** -- 동일 조건에서 반복 측정 가능해야 함
 
 ---
 

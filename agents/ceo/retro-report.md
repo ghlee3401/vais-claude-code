@@ -1,5 +1,5 @@
 ---
-name: retro
+name: retro-report
 version: 1.0.0
 description: |
   Generates engineering retrospective reports by analyzing commit history, work patterns,

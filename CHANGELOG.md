@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.43.1] - 2026-04-05
+
+### Changed
+
+- **하위 에이전��� 18개 2단어 kebab-case 리네이밍** — 단일 단어 에이전트를 `{수식어}-{역할}` 패턴으로 통일
+  - architect→infra-architect, backend→dev-backend, frontend→dev-frontend, benchmark→perf-benchmark
+  - canary→canary-monitor, compliance→compliance-audit, copywriter→copy-writer, database→db-architect
+  - design→ui-designer, devops→deploy-ops, growth→growth-analyst, investigate→bug-investigator
+  - qa→qa-validator, retro→retro-report, security→security-auditor, seo→seo-analyst, sre→sre-ops, tester→test-builder
+  - C-Level 에이전트 참조, vais.config.json, 스킬, 스크립트, 문서 일괄 수정
+
 ## [0.43.0] - 2026-04-05
 
 ### Added

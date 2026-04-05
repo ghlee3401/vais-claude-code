@@ -17,7 +17,7 @@
 
 ### 병렬 실행 구간
 
-- **구현(do)**: frontend + backend + tester 병렬
+- **구현(do)**: dev-frontend + dev-backend + test-builder 병렬
 
 ### Gate 체크포인트
 
@@ -35,7 +35,7 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 /vais help                   — 사용법 안내
 ```
 
-실행 에이전트(architect, frontend, backend 등)는 직접 호출하지 않습니다. C-레벨 에이전트가 필요에 따라 위임합니다.
+실행 에이전트(infra-architect, dev-frontend, dev-backend 등)는 직접 호출하지 않습니다. C-레벨 에이전트가 필요에 따라 위임합니다.
 
 ## 필수 규칙
 
@@ -56,37 +56,37 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 | ceo | Business strategy + absorb orchestrator |
 | cpo | Product direction + PRD + pm-* sub-agent orchestration |
 | cfo | Financial analysis, ROI, pricing (delegates to cost-analyst/pricing-modeler) |
-| cmo | Marketing + SEO/copywriter/growth delegation |
+| cmo | Marketing + seo-analyst/copy-writer/growth-analyst delegation |
 | cso | Security Gate A + plugin validation Gate B + independent review Gate C + compliance |
-| coo | Operations, CI/CD, monitoring (delegates to sre/devops/docs-writer) |
+| coo | Operations, CI/CD, monitoring (delegates to sre-ops/deploy-ops/docs-writer) |
 
 ### Execution (실행 레이어, Sonnet)
 
 | 에이전트 | C-Level | 역할 |
 |---------|---------|------|
-| architect | CTO | DB schema + environment + project setup |
-| design | CTO | IA + wireframes + UI design |
-| frontend | CTO | Frontend implementation |
-| backend | CTO | Backend API implementation |
-| qa | CTO | Gap analysis + code review + QA verification |
-| tester | CTO | Test code generation (unit/integration/e2e) |
-| devops | CTO/COO | CI/CD + Docker + deployment automation |
-| database | CTO | DB schema optimization + migration + query tuning |
-| security | CSO | Security audit (OWASP Top 10) |
-| compliance | CSO/CFO | Compliance (GDPR/license) |
-| seo | CMO | SEO audit |
-| copywriter | CMO | Marketing copy |
-| growth | CMO | Growth funnel strategy |
-| sre | COO | SRE/monitoring + incident runbook |
+| infra-architect | CTO | DB schema + environment + project setup |
+| ui-designer | CTO | IA + wireframes + UI design |
+| dev-frontend | CTO | Frontend implementation |
+| dev-backend | CTO | Backend API implementation |
+| qa-validator | CTO | Gap analysis + code review + QA verification |
+| test-builder | CTO | Test code generation (unit/integration/e2e) |
+| deploy-ops | CTO/COO | CI/CD + Docker + deployment automation |
+| db-architect | CTO | DB schema optimization + migration + query tuning |
+| security-auditor | CSO | Security audit (OWASP Top 10) |
+| compliance-audit | CSO/CFO | Compliance (GDPR/license) |
+| seo-analyst | CMO | SEO audit |
+| copy-writer | CMO | Marketing copy |
+| growth-analyst | CMO | Growth funnel strategy |
+| sre-ops | COO | SRE/monitoring + incident runbook |
 | docs-writer | COO/CTO/CPO | Technical docs (API docs/README) |
 | cost-analyst | CFO | Cloud cost analysis |
 | pricing-modeler | CFO | Pricing models + revenue simulation |
 | ux-researcher | CPO | UX research |
 | data-analyst | CPO/CTO/CFO | Product metrics analysis |
-| investigate | CTO | Systematic debugging |
-| canary | COO | Post-deployment canary monitoring |
-| benchmark | COO | Performance benchmarks |
-| retro | CEO | Engineering retrospective |
+| bug-investigator | CTO | Systematic debugging |
+| canary-monitor | COO | Post-deployment canary monitoring |
+| perf-benchmark | COO | Performance benchmarks |
+| retro-report | CEO | Engineering retrospective |
 
 실행 에이전트는 **직접 호출 금지** — 반드시 CTO를 통해 호출합니다.
 
