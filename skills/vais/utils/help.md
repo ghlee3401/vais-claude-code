@@ -18,25 +18,31 @@ AskUserQuestion:
 **-> "커맨드 목록" 선택 시**: 아래 요약을 출력하고 종료:
 
 ```
-VAIS Code v0.25.0 — 커맨드 목록
+VAIS Code v0.43.0 — 커맨드 목록
 
 C-Suite 에이전트:
-  /vais cto {feature}    — 기술 전체 오케스트레이션 (가장 많이 씀)
-  /vais ceo {feature}    — 비즈니스 전략 + C-Suite 조율
-  /vais cpo {feature}    — 제품 방향 + PRD + 로드맵
-  /vais cmo {feature}    — 마케팅 전략 + SEO
-  /vais cso {feature}    — 보안 검토 + 플러그인 검증
-  /vais cfo {feature}    — 재무/ROI (stub)
-  /vais coo {feature}    — 운영/CI/CD (stub)
+  /vais cto [phase] {feature}  — 기술 전체 오케스트레이션 (가장 많이 씀)
+  /vais ceo [phase] {feature}  — 비즈니스 전략 + C-Suite 조율
+  /vais cpo [phase] {feature}  — 제품 방향 + PRD + 로드맵
+  /vais cmo [phase] {feature}  — 마케팅 전략 + SEO
+  /vais cso [phase] {feature}  — 보안 검토 + 플러그인 검증
+  /vais cfo [phase] {feature}  — 재무/ROI 분석
+  /vais coo [phase] {feature}  — 운영/CI/CD
+
+  phase: plan / design / do / qa / report (생략 시 자동 판별 → 사용자 확인)
 
 유틸리티:
-  /vais status           — 진행 상태 확인
-  /vais absorb {path}    — 외부 레퍼런스 흡수
-  /vais commit           — git 변경사항 분석 + Conventional Commits
-  /vais init {feature}   — 기존 프로젝트 VAIS 문서 역생성
-  /vais help             — 이 도움말
+  /vais status             — 진행 상태 확인
+  /vais next               — 다음 실행할 단계 안내
+  /vais commit             — git 변경사항 분석 + Conventional Commits
+  /vais init {feature}     — 기존 프로젝트 VAIS 문서 역생성
+  /vais mcp-builder        — MCP 서버 개발 가이드
+  /vais help               — 이 도움말
 
-핵심 원칙: 구현 단계(plan, design 등)는 직접 호출하지 않습니다. CTO가 알아서 합니다.
+사용 예시:
+  /vais cto plan my-feature    → plan만 실행 후 멈춤
+  /vais cto my-feature         → 다음 phase 자동 판별 → 확인 후 실행
+  /vais ceo my-feature         → CEO가 라우팅 분석 → 적절한 C레벨 위임
 ```
 
 **-> "튜토리얼" 선택 시**: Step 2로 진행.
@@ -46,14 +52,14 @@ C-Suite 에이전트:
 AskUserQuestion:
 - 질문: "지금 어떤 상황인가요?"
 - 선택지:
-  1. "아이디어가 있는데 뭘 만들지 정리하고 싶어요" -> `/vais cpo {feature}` 실행
+  1. "아이디어가 있는데 뭘 만들지 정리하고 싶어요" -> `/vais cpo plan {feature}` 안내
   2. "만들 기능이 정해져 있어요" -> Step 3
   3. "기존 프로젝트에 기능을 추가하고 싶어요" -> Step 3
 
 ### Step 3: 기능 개발 시작
 
 AskUserQuestion:
-- 질문: "어떤 기능을 만들까요? (예: login, payment, chat)"
+- 질문: "어떤 기능을 만들까요? (예: user-login-flow, payment-retry-logic)"
 - 선택지: Other (자유 입력)
 
--> 입력 후: `/vais cto {feature}` 실행 (CTO가 plan -> design -> do -> qa -> report 전체 진행)
+-> 입력 후: `/vais cto plan {feature}` 실행 안내 (plan부터 단계별 진행)
