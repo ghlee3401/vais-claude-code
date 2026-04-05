@@ -319,7 +319,7 @@ C. 중단 — 전략 방향 재검토 필요
 ### absorb 모드 추가 로드
 - `references/_inbox/` 또는 사용자 지정 경로의 모든 파일 목록 (Glob)
 - `docs/absorption-ledger.jsonl` — 중복 흡수 방지
-- `references/skill-authoring-guide.md` — 스킬/에이전트 작성 가이드라인 (수정 시 참조)
+- `agents/ceo/absorb-analyzer.md` — Description 최적화 평가 기준 (스킬/에이전트 흡수 시 참조)
 
 ---
 

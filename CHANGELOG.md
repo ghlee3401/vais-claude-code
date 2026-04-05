@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.42.1] - 2026-04-05
+
+### Changed
+
+- **refactor(references)**: references 3파일 에이전트/유틸로 흡수 — 죽은 문서 제거
+  - `gstack-ethos.md` → CLAUDE.md Rule 9-11 (완전성/탐색우선/사용자주권)
+  - `mcp-builder-guide.md` → `skills/vais/utils/mcp-builder.md` 신규 유틸
+  - `skill-authoring-guide.md` → `validate-plugin.md` + `absorb-analyzer.md` 분배
+  - `ceo.md` absorb 모드 Context Load 참조 경로 수정
+
+---
+
 ## [0.42.0] - 2026-04-05
 
 ### Added

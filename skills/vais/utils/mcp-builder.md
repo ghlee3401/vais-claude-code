@@ -1,7 +1,12 @@
-# MCP Server Development Guide
+---
+name: mcp-builder
+description: MCP 서버 개발 가이드. 설계 원칙, 4 Phase 프로세스, 권장 스택 안내.
+---
 
-> Anthropic 공식 `mcp-builder` 스킬 기반, VAIS Code 맥락 정리
-> CTO/architect 에이전트가 MCP 서버 빌드 시 참조
+# MCP Server 개발 가이드
+
+> CTO 또는 architect가 MCP 서버를 설계/구현할 때 참조
+> 원본: Anthropic 공식 `mcp-builder` 스킬
 
 ## 1. 설계 원칙
 
@@ -46,14 +51,8 @@
 | Input Validation | Zod |
 | 테스트 | MCP Inspector |
 
-## 4. VAIS 적용
-
-- CTO `architect` 에이전트가 MCP 서버 설계 시 이 가이드 참조
-- CEO `absorb-mcp` 경로에서 MCP JSON 생성 시 Phase 2 구조 참조
-- `mcp/` 디렉토리에 서버 설정 배치
-
 ## 변경 이력
 
 | version | date | change |
 |---------|------|--------|
-| v1.0 | 2026-04-05 | 초기 작성 — Anthropic mcp-builder 스킬 absorb |
+| v1.0 | 2026-04-05 | references/mcp-builder-guide.md에서 유틸로 이동 |

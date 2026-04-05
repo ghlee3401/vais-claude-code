@@ -139,6 +139,27 @@ vais 6-레이어 구조와의 적합성:
 ─────────────────────────────
 ```
 
+## Description 최적화 평가 (흡수 대상이 스킬/에이전트인 경우)
+
+흡수 대상이 스킬 또는 에이전트인 경우, description 품질을 추가 평가합니다:
+
+### 평가 항목
+- 3인칭 서술인가 ("Processes X" ✅ / "I can" ❌)
+- what + when 모두 포함하는가
+- 최대 1024자 이내인가
+- Trigger 키워드가 자연스럽게 포함되어 있는가
+
+### Eval 방법론 (선택적 심화)
+- 20개 trigger eval 쿼리 생성 (should-trigger 10 + should-not-trigger 10)
+- should-trigger: 다양한 표현, 암시적 요구, 경쟁 스킬 대비 우위 케이스
+- should-not-trigger: near-miss 쿼리 (키워드 유사하지만 다른 도메인)
+- 60% train / 40% test 분할 → 최대 5회 반복 → test score 기준 best 선택
+
+### 스킬 구조 검증
+- SKILL.md body 500줄 이하 유지
+- 상세 내용은 별도 파일 분리 (Progressive Disclosure, 1단계 깊이만)
+- 반복 작업이 발견되면 `scripts/`에 번들 권장
+
 ## 주의사항
 
 - 판단(absorb/merge/reject)은 포함하지 않습니다 — CEO가 결정합니다

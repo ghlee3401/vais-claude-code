@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.42.0** · Claude Code C-Suite 플러그인
+**v0.42.1** · Claude Code C-Suite 플러그인
 
 > AI C-Suite 조직. CEO에게 지시하면 C-Level 팀을 고용해서 알아서 한다.
 
@@ -355,6 +355,7 @@ vais-claude-code/
 
 | 버전 | 주요 변경 |
 |------|---------|
+| v0.42.1 | references 3파일 에이전트/유틸 흡수: gstack-ethos→Rules, mcp-builder→유틸, skill-authoring→에이전트 분배 |
 | v0.42.0 | Anthropic 공식 스킬 17개 흡수: 5건 absorb/merge (eval 루프, MCP 가이드, Playwright, 디자인 미학, 문서 워크플로우) |
 | v0.41.1 | agent description 정규화: 37개 에이전트 영어 3인칭 + Use when, 문서 동기화 |
 | v0.41.0 | best practices 흡수: SKILL.md description 개선, absorb inbox 컨벤션, 스킬 작성 가이드 |

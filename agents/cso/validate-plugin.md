@@ -77,3 +77,28 @@ grep -rn "execSync" scripts/ lib/ 2>/dev/null | grep -v "# safe" && echo "WARN: 
 ```
 
 CSO가 최종 Gate B Pass/Fail을 판정합니다.
+
+## 스킬/에이전트 품질 기준
+
+### Description 작성 규칙
+- **3인칭** 서술: "Processes X and does Y" (not "I can…" / "You can…")
+- **what + when** 모두 포함: 무엇을 하는지 + 언제 사용하는지
+- 최대 1024자, 구체적 키워드 포함
+- Trigger 키워드는 description에 자연스럽게 녹여넣기
+
+### 구조 품질 체크리스트
+- [ ] SKILL.md body **500줄 이하** 유지
+- [ ] 상세 내용은 별도 파일 분리 (Progressive Disclosure)
+- [ ] 참조는 **1단계 깊이까지만** (중첩 참조 금지)
+- [ ] 100줄 초과 참조 파일은 상단 TOC 필수
+- [ ] 시간 의존 정보 없음
+- [ ] 일관된 용어 사용
+- [ ] Windows 경로(`\`) 없음 → forward slash(`/`) 사용
+- [ ] PDCA 문서 경로 명시
+- [ ] C-Level 위임 구조 명확
+- [ ] Gate 체크포인트 정의
+
+### Anti-patterns
+- ❌ 과다한 선택지 → ✅ 기본값 + escape hatch
+- ❌ 용어 혼재 → ✅ 일관된 용어
+- ❌ 중첩 참조 (A→B→C) → ✅ 1단계 참조 (SKILL→A, SKILL→B)
