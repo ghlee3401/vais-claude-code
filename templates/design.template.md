@@ -1,5 +1,6 @@
 # {feature} - 설계
 
+> ⛔ **Design 단계 범위**: 이 문서는 설계 결정만 기록합니다. 프로덕트 파일 생성·수정은 Do 단계에서 수행하세요.
 > 참조 문서: `docs/01-plan/{feature}.md`
 
 ## Context Anchor

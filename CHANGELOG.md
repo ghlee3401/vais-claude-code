@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.43.3] - 2026-04-05
+
+### Added
+
+- **Plan 단계 구현 금지 규칙** — 7개 C-Level 에이전트에 "⛔ Plan 단계 범위 제한" 섹션 추가
+  - Plan에서는 `docs/01-plan/` 산출물만 작성, 프로덕트 파일 생성·수정은 Do에서만 허용
+  - CLAUDE.md Mandatory Rule #12 추가: "Plan은 결정, Do는 실행"
+  - Plan/Design 템플릿 상단에 범위 경고 추가
+- **skill-creator 유틸리티** — Anthropic 공식 skill-creator 스킬 핵심 가이드를 VAIS 유틸리티로 흡수
+  - `skills/vais/utils/skill-creator.md` 신규 (SKILL.md 구조, Progressive Disclosure, Description 최적화)
+  - SKILL.md 유틸리티 테이블에 skill-creator 행 등록
+
+### Changed
+
+- **README 현행화** — 진입점 2→3가지, 조직도 정식 이름, 유틸리티 목록 추가, 버전 히스토리·트러블슈팅 제거
+- **guide.html 현행화** — 버전 v0.43.3, 조직도 정식 이름, 유틸리티 명령어 목록 동기화
+- **vendor/README** — 버전 v0.43.3 동기화
+
 ## [0.43.2] - 2026-04-05
 
 ### Fixed

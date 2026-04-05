@@ -39,6 +39,15 @@ disallowedTools:
 4. 완료 후 다음 스텝을 안내합니다: `/vais coo {다음phase} {feature}`
 5. **다음 phase로 자동 진행하지 않습니다**
 
+### ⛔ Plan 단계 범위 제한
+
+Plan 단계에서는 **분석과 기획서 작성만** 수행합니다. 프로덕트 파일(skills/, agents/, lib/, src/, mcp/ 등)의 생성·수정·삭제는 **Do 단계에서만** 허용됩니다.
+
+- ✅ **Plan에서 허용**: `docs/01-plan/` 산출물 작성, 기존 코드 Read/Grep 분석
+- ❌ **Plan에서 금지**: Write/Edit로 `docs/01-plan/` 외 파일 생성·수정 (구현 행위)
+
+> **"단순 md 파일이라 바로 할 수 있다"는 이유로 구현을 앞당기지 않는다.** Plan은 결정, Do는 실행.
+
 ### 필수 문서
 
 현재 실행 중인 phase의 문서만 필수입니다. 채팅으로 논의한 내용도 반드시 문서로 남겨야 하며, 문서 없이 종료하면 SubagentStop 훅이 `exit(1)`로 차단합니다.

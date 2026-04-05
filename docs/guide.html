@@ -279,7 +279,7 @@
 
 <!-- ═══════════════════════ NAV ═══════════════════════ -->
 <nav>
-  <div class="logo">VAIS Code <span>v0.42.1</span></div>
+  <div class="logo">VAIS Code <span>v0.43.3</span></div>
   <ul>
     <div class="section-label">Part 1 &mdash; Claude Code</div>
     <li><a href="#what-is-cc">Claude Code란?</a></li>
@@ -316,7 +316,7 @@
 <!-- ═══════════════════════ MAIN ═══════════════════════ -->
 <main>
 
-<h1>VAIS Code Guide <span class="version">v0.42.1</span></h1>
+<h1>VAIS Code Guide <span class="version">v0.43.3</span></h1>
 <p class="subtitle">Claude Code의 기본 개념부터 Harness Engineering, 그리고 AI C-Suite 오케스트레이션까지</p>
 
 <!-- ════════════════════════════════════════════════════ -->
@@ -535,13 +535,13 @@ disallowedTools:
 /vais status             → 현재 진행 상태 조회
 /vais commit             → Conventional Commits 메시지 생성</code></pre>
 
-<p>SKILL.md 내부에서 <code>$0</code>은 액션, <code>$1</code>은 피처명으로 치환됩니다. VAIS Code의 스킬은 <strong>phases/</strong>(C-Suite 방법론 13개)와 <strong>utils/</strong>(유틸리티 6개)로 구분됩니다.</p>
+<p>SKILL.md 내부에서 <code>$0</code>은 액션, <code>$1</code>은 피처명으로 치환됩니다. VAIS Code의 스킬은 <strong>phases/</strong>(C-Suite 방법론 13개)와 <strong>utils/</strong>(유틸리티 7개)로 구분됩니다.</p>
 
 <h4>Phase 스킬 (C-Suite 에이전트)</h4>
 <table>
   <tr><th>스킬</th><th>설명</th></tr>
-  <tr><td><code>ceo, cpo, cto, cso, cmo, coo, cfo</code></td><td>C-Level 에이전트 호출</td></tr>
-  <tr><td><code>plan, ui-designer, infra-architect, dev-frontend, dev-backend, qa-validator</code></td><td>CTO 워크플로우 개별 단계 실행</td></tr>
+  <tr><td><code>ceo, cpo, cto, cso, cmo, coo, cfo</code></td><td>C-Level 에이전트 호출 (7개)</td></tr>
+  <tr><td><code>plan, ui-designer, infra-architect, dev-frontend, dev-backend, qa-validator</code></td><td>CTO 워크플로우 개별 단계 리다이렉트 (6개)</td></tr>
 </table>
 
 <h4>Utility 스킬</h4>
@@ -549,6 +549,7 @@ disallowedTools:
   <tr><th>스킬</th><th>설명</th></tr>
   <tr><td><code>status, init, next, commit</code></td><td>상태 조회, 초기화, 다음 단계, 커밋</td></tr>
   <tr><td><code>mcp-builder</code></td><td>MCP 서버 개발 가이드</td></tr>
+  <tr><td><code>skill-creator</code></td><td>스킬 작성 가이드 (구조, 프로세스, description 최적화)</td></tr>
   <tr><td><code>help</code></td><td>사용법 안내</td></tr>
 </table>
 </section>
@@ -798,21 +799,25 @@ const ASK = [
 </table>
 
 <div class="diagram">
-                              ┌─────────┐
-                              │   CEO   │
-                              └────┬────┘
-          ┌──────┬──────┬─────────┼─────────┬──────┬──────┐
-        ┌─┴─┐  ┌─┴─┐  ┌┴──┐   ┌──┴──┐   ┌─┴─┐  ┌─┴─┐  ┌┴──┐
-        │CPO│  │CTO│  │CSO│   │CMO  │   │COO│  │CFO│  │sub│
-        └─┬─┘  └─┬─┘  └─┬─┘   └──┬──┘   └─┬─┘  └─┬─┘  └─┬─┘
-          │      │      │        │        │      │    absorb
-       pm-*  ui-dsgn sec-aud  seo-a   canary  cost   retro
-       ux-r  infra   val-pl   copy-w  bench   price
-       data  fe/be   code-rv  grow-a  sre-ops
-             qa-v    compl-a         docs-w
-             test-b
-             db-a/depl
-             bug-inv
+                                    ┌─────────┐
+                                    │   CEO   │
+                                    └────┬────┘
+          ┌──────┬──────────────────────┼──────────────────────┬──────┬──────┐
+        ┌─┴─┐  ┌─┴─┐                 ┌─┴─┐                 ┌──┴──┐ ┌─┴─┐  ┌─┴─┐
+        │CPO│  │CTO│                 │CSO│                 │CMO  │ │COO│  │CFO│
+        └─┬─┘  └─┬─┘                 └─┬─┘                 └──┬──┘ └─┬─┘  └─┬─┘
+          │      │                     │                      │      │      │
+  pm-discovery  infra-architect   security-auditor      seo-analyst  canary-monitor  cost-analyst
+  pm-strategy   ui-designer       validate-plugin       copy-writer  perf-benchmark  pricing-modeler
+  pm-research   dev-frontend      code-review           growth-analyst  sre-ops
+  pm-prd        dev-backend       compliance-audit         docs-writer
+  ux-researcher qa-validator                               deploy-ops
+  data-analyst  test-builder
+                deploy-ops
+                db-architect
+                bug-investigator
+
+  CEO 직속: absorb-analyzer, retro-report
 </div>
 
 <div class="hint">
@@ -971,13 +976,10 @@ claude install ghlee3401/vais-claude-code</code></pre>
   <tr><th>명령</th><th>설명</th></tr>
   <tr><td><code>/vais status</code></td><td>현재 피처 진행 상태 조회</td></tr>
   <tr><td><code>/vais init [feature]</code></td><td>기존 프로젝트 분석 → VAIS 문서 역생성</td></tr>
-  <tr><td><code>/vais test</code></td><td>테스트 실행 + 커버리지 리포트</td></tr>
-  <tr><td><code>/vais deploy</code></td><td>배포 체크리스트 + 실행 + 헬스체크</td></tr>
-  <tr><td><code>/vais analyze-cost</code></td><td>인프라 비용 분석 + 최적화 제안</td></tr>
-  <tr><td><code>/vais write-docs</code></td><td>API docs + README 자동 생성</td></tr>
-  <tr><td><code>/vais growth-audit</code></td><td>AARRR 퍼널 분석 + 병목 식별</td></tr>
-  <tr><td><code>/vais license-check</code></td><td>의존성 라이선스 호환성 검사</td></tr>
-  <tr><td><code>/vais pricing</code></td><td>가격 모델 시뮬레이션 + BEP 계산</td></tr>
+  <tr><td><code>/vais next</code></td><td>다음 실행할 단계 안내</td></tr>
+  <tr><td><code>/vais commit</code></td><td>git 변경사항 분석 → Conventional Commits 메시지 생성</td></tr>
+  <tr><td><code>/vais mcp-builder</code></td><td>MCP 서버 개발 가이드</td></tr>
+  <tr><td><code>/vais skill-creator</code></td><td>스킬 작성 가이드 (구조, 프로세스, description 최적화)</td></tr>
   <tr><td><code>/vais help</code></td><td>사용법 안내</td></tr>
 </table>
 </section>
@@ -1089,7 +1091,7 @@ claude install ghlee3401/vais-claude-code</code></pre>
 
 <!-- ════════════════════════════════════════════════════ -->
 <footer style="margin-top:4rem; padding-top:2rem; border-top:1px solid var(--border); color:var(--text-muted); font-size:0.85rem;">
-  <p>VAIS Code v0.42.1 &mdash; Virtual AI C-Suite for Software Development</p>
+  <p>VAIS Code v0.43.3 &mdash; Virtual AI C-Suite for Software Development</p>
   <p>Built with Claude Code Harness Engineering</p>
 </footer>
 
