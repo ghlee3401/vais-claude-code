@@ -69,7 +69,12 @@
       "Bash(wc -l agents/*/*.md)",
       "Bash(sed -n '3p' CLAUDE.md)",
       "Bash(sed -n '3p' README.md)",
-      "Bash(sed -n '3p' CHANGELOG.md)"
+      "Bash(sed -n '3p' CHANGELOG.md)",
+      "Bash(cp /home/claude/vais-claude-code/CHANGELOG.md /home/claude/.claude/plugins/marketplaces/vais-marketplace/CHANGELOG.md)",
+      "Bash(cp /home/claude/vais-claude-code/CLAUDE.md /home/claude/.claude/plugins/marketplaces/vais-marketplace/CLAUDE.md)",
+      "Bash(cp /home/claude/vais-claude-code/README.md /home/claude/.claude/plugins/marketplaces/vais-marketplace/README.md)",
+      "Bash(cp /home/claude/vais-claude-code/package.json /home/claude/.claude/plugins/marketplaces/vais-marketplace/package.json)",
+      "Bash(cp /home/claude/vais-claude-code/vais.config.json /home/claude/.claude/plugins/marketplaces/vais-marketplace/vais.config.json)"
     ]
   },
   "enabledPlugins": {
