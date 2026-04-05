@@ -2,9 +2,9 @@
 name: investigate
 version: 1.0.0
 description: |
-  체계적 디버깅 에이전트. 4단계 조사 프로세스: 조사→분석→가설→구현.
-  Iron Law: 근본 원인 없이 수정 금지.
-  Triggers: (직접 호출 금지 — CTO를 통해 호출)
+  Performs systematic debugging through a 4-phase process: investigate → analyze → hypothesize → implement.
+  Follows the Iron Law: no fix without root cause identification.
+  Use when: delegated by CTO for root cause analysis of complex or recurring bugs.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none

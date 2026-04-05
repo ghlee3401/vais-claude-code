@@ -2,8 +2,8 @@
 name: backend
 version: 1.0.0
 description: |
-  백엔드 에이전트. API 구현, 서버 로직, DB 연동을 담당합니다.
-  Triggers: (직접 호출 금지 — CTO를 통해 호출)
+  Implements backend APIs, server logic, and database integrations.
+  Use when: delegated by CTO for API implementation or server-side development.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none

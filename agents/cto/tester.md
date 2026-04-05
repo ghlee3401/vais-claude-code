@@ -2,9 +2,9 @@
 name: tester
 version: 1.0.0
 description: |
-  테스트 코드 작성 에이전트. unit/integration/e2e 테스트를 생성합니다.
-  qa(Gap 분석)와 역할 분리 — tester는 코드 작성, qa는 검증.
-  Triggers: (직접 호출 금지 — CTO를 통해 호출)
+  Generates test code including unit, integration, and e2e tests.
+  Focuses on code creation (distinct from qa's verification and gap analysis role).
+  Use when: delegated by CTO for test code generation or test coverage expansion.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none

@@ -52,41 +52,41 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 
 | 에이전트 | 역할 |
 |---------|------|
-| cto | 기술 총괄 오케스트레이터 (필수) |
-| ceo | 비즈니스 전략 + absorb 오케스트레이터 |
-| cpo | 제품 방향 + PRD + pm-* 서브에이전트 오케스트레이션 |
-| cfo | 재무 분석, ROI, 가격 책정 (cost-analyst/pricing-modeler 위임) |
-| cmo | 마케팅 + SEO/copywriter/growth 위임 |
-| cso | 보안 Gate A + 플러그인 검증 Gate B + 독립 리뷰 Gate C + compliance |
-| coo | 운영, CI/CD, 모니터링 (sre/devops/docs-writer 위임) |
+| cto | Technical lead orchestrator (required) |
+| ceo | Business strategy + absorb orchestrator |
+| cpo | Product direction + PRD + pm-* sub-agent orchestration |
+| cfo | Financial analysis, ROI, pricing (delegates to cost-analyst/pricing-modeler) |
+| cmo | Marketing + SEO/copywriter/growth delegation |
+| cso | Security Gate A + plugin validation Gate B + independent review Gate C + compliance |
+| coo | Operations, CI/CD, monitoring (delegates to sre/devops/docs-writer) |
 
 ### Execution (실행 레이어, Sonnet)
 
 | 에이전트 | C-Level | 역할 |
 |---------|---------|------|
-| architect | CTO | DB 스키마 + 환경 + 프로젝트 설정 |
-| design | CTO | IA + 와이어프레임 + UI 설계 |
-| frontend | CTO | 프론트엔드 구현 |
-| backend | CTO | 백엔드 API 구현 |
-| qa | CTO | Gap 분석 + 코드 리뷰 + QA 검증 |
-| tester | CTO | 테스트 코드 작성 (unit/integration/e2e) |
-| devops | CTO/COO | CI/CD + Docker + 배포 자동화 |
-| database | CTO | DB 스키마 최적화 + 마이그레이션 + 쿼리 튜닝 |
-| security | CSO | 보안 감사 (OWASP Top 10) |
-| compliance | CSO/CFO | 컴플라이언스 (GDPR/라이선스) |
-| seo | CMO | SEO 감사 |
-| copywriter | CMO | 마케팅 카피 |
-| growth | CMO | 그로스 퍼널 전략 |
-| sre | COO | SRE/모니터링 + 인시던트 런북 |
-| docs-writer | COO/CTO/CPO | 기술 문서 (API docs/README) |
-| cost-analyst | CFO | 클라우드 비용 분석 |
-| pricing-modeler | CFO | 가격 모델링 + 수익 시뮬레이션 |
-| ux-researcher | CPO | UX 리서치 |
-| data-analyst | CPO/CTO/CFO | 제품 메트릭 분석 |
-| investigate | CTO | 체계적 디버깅 |
-| canary | COO | 배포 후 카나리 모니터링 |
-| benchmark | COO | 성능 벤치마크 |
-| retro | CEO | 엔지니어링 회고 |
+| architect | CTO | DB schema + environment + project setup |
+| design | CTO | IA + wireframes + UI design |
+| frontend | CTO | Frontend implementation |
+| backend | CTO | Backend API implementation |
+| qa | CTO | Gap analysis + code review + QA verification |
+| tester | CTO | Test code generation (unit/integration/e2e) |
+| devops | CTO/COO | CI/CD + Docker + deployment automation |
+| database | CTO | DB schema optimization + migration + query tuning |
+| security | CSO | Security audit (OWASP Top 10) |
+| compliance | CSO/CFO | Compliance (GDPR/license) |
+| seo | CMO | SEO audit |
+| copywriter | CMO | Marketing copy |
+| growth | CMO | Growth funnel strategy |
+| sre | COO | SRE/monitoring + incident runbook |
+| docs-writer | COO/CTO/CPO | Technical docs (API docs/README) |
+| cost-analyst | CFO | Cloud cost analysis |
+| pricing-modeler | CFO | Pricing models + revenue simulation |
+| ux-researcher | CPO | UX research |
+| data-analyst | CPO/CTO/CFO | Product metrics analysis |
+| investigate | CTO | Systematic debugging |
+| canary | COO | Post-deployment canary monitoring |
+| benchmark | COO | Performance benchmarks |
+| retro | CEO | Engineering retrospective |
 
 실행 에이전트는 **직접 호출 금지** — 반드시 CTO를 통해 호출합니다.
 

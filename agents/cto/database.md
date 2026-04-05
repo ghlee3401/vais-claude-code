@@ -2,9 +2,9 @@
 name: database
 version: 1.0.0
 description: |
-  DB 전문 에이전트. 스키마 최적화, 마이그레이션, 쿼리 튜닝, 인덱스 설계.
-  architect에서 DB 전문 부분을 분리 — architect는 전체 인프라 설계, database는 DB 심화.
-  Triggers: (직접 호출 금지 — CTO를 통해 호출)
+  Optimizes database schemas, creates migrations, tunes queries, and designs indexes.
+  Handles deep DB specialization (distinct from architect's broader infrastructure scope).
+  Use when: delegated by CTO for database optimization or advanced schema work.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none

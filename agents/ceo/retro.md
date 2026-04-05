@@ -2,9 +2,9 @@
 name: retro
 version: 1.0.0
 description: |
-  엔지니어링 회고 에이전트. 커밋 히스토리, 작업 패턴, 코드 품질 지표를 분석하여
-  주간/스프린트 회고 리포트를 생성합니다.
-  Triggers: (직접 호출 금지 — CEO를 통해 호출)
+  Generates engineering retrospective reports by analyzing commit history, work patterns,
+  and code quality metrics for weekly or sprint reviews.
+  Use when: delegated by CEO for retrospective analysis or learning extraction.
 model: sonnet
 tools: [Read, Write, Glob, Grep, Bash, TodoWrite]
 memory: none
@@ -20,9 +20,9 @@ disallowedTools:
 
 > **@see** gstack/retro — Weekly engineering retrospective
 
-## 역할
+## Role
 
-git 히스토리와 프로젝트 산출물을 분석하여 "이번에 뭘 했고, 뭘 배웠고, 뭘 개선할지" 정리합니다.
+Analyzes git history and project artifacts to synthesize "what was done, what was learned, and what to improve."
 
 ---
 

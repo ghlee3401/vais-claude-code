@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.41.0)
+> Virtual AI C-Suite for software development (v0.41.1)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -41,13 +41,13 @@ vais-claude-code/
 ### C-Suite (전략 레이어, Opus)
 | Agent | Role |
 |-------|------|
-| CEO | **최상위 오케스트레이터** — Product Owner, C-Level 고용·지휘, 서비스 런칭 파이프라인 |
-| CPO | 제품 정의 + PRD + pm-* 서브에이전트 오케스트레이션 |
-| CTO | 기술 총괄 — Plan→Design→Do→QA 개발 워크플로우 지휘 |
-| CSO | 보안·품질 검토 — Gate A(보안)/B(플러그인)/C(독립 코드 리뷰), 이슈 발견 시 CEO에 보고→CTO 수정 루프 |
-| CMO | 마케팅 전략 + SEO 감사 위임 |
-| COO | 배포/운영, CI/CD, 모니터링 |
-| CFO | 비용 분석, ROI, 기능별 가격 책정 |
+| CEO | **Top-level orchestrator** — Product Owner, hires & directs C-Level teams, service launch pipeline |
+| CPO | Product definition + PRD + pm-* sub-agent orchestration |
+| CTO | Technical lead — Plan→Design→Do→QA development workflow orchestration |
+| CSO | Security & quality review — Gate A(security)/B(plugin)/C(independent code review), reports issues to CEO→CTO fix loop |
+| CMO | Marketing strategy + SEO audit delegation |
+| COO | Deployment/operations, CI/CD, monitoring |
+| CFO | Cost analysis, ROI, feature-level pricing |
 
 ### 서비스 런칭 파이프라인 (CEO 오케스트레이션)
 ```
@@ -58,31 +58,31 @@ CEO → ① CPO → ② CTO → ③ CSO(↺CTO) → ④ CMO → ⑤ COO → ⑥ 
 
 | Agent | C-Level | Role |
 |-------|---------|------|
-| architect | CTO | DB 스키마 + 환경 + 프로젝트 설정 |
-| design | CTO | IA + 와이어프레임 + UI 설계 |
-| frontend | CTO | 프론트엔드 구현 |
-| backend | CTO | 백엔드 API 구현 |
-| qa | CTO | Gap 분석 + 코드 리뷰 + QA 검증 |
-| tester | CTO | 테스트 코드 작성 (unit/integration/e2e) |
-| devops | CTO/COO | CI/CD 파이프라인 + Docker + 배포 자동화 |
-| database | CTO | DB 스키마 최적화 + 마이그레이션 + 쿼리 튜닝 |
-| security | CSO | 보안 감사 (OWASP Top 10) |
-| validate-plugin | CSO | 플러그인 배포 검증 |
-| code-review | CSO | 독립 코드 리뷰 |
-| compliance | CSO/CFO | 컴플라이언스 (GDPR/라이선스) |
-| seo | CMO | SEO 감사 |
-| copywriter | CMO | 마케팅 카피 (랜딩/이메일/앱스토어) |
-| growth | CMO | 그로스 퍼널 전략 + 바이럴 루프 |
-| sre | COO | SRE/모니터링 + 인시던트 런북 |
-| docs-writer | COO/CTO/CPO | 기술 문서 (API docs/README/가이드) |
-| cost-analyst | CFO | 클라우드 비용 분석 + 최적화 |
-| pricing-modeler | CFO | 가격 모델링 + 수익 시뮬레이션 |
-| investigate | CTO | 체계적 디버깅 (4단계: 조사→분석→가설→구현) |
-| canary | COO | 배포 후 카나리 모니터링 |
-| benchmark | COO | 성능 벤치마크 + 회귀 감지 |
-| retro | CEO | 엔지니어링 회고 + 학습 추출 |
-| ux-researcher | CPO | UX 리서치 (JTBD 인터뷰/사용성 테스트) |
-| data-analyst | CPO/CTO/CFO | 제품 메트릭 (DAU/MAU/A/B 테스트) |
+| architect | CTO | DB schema + environment + project setup |
+| design | CTO | IA + wireframes + UI design |
+| frontend | CTO | Frontend implementation |
+| backend | CTO | Backend API implementation |
+| qa | CTO | Gap analysis + code review + QA verification |
+| tester | CTO | Test code generation (unit/integration/e2e) |
+| devops | CTO/COO | CI/CD pipeline + Docker + deployment automation |
+| database | CTO | DB schema optimization + migration + query tuning |
+| security | CSO | Security audit (OWASP Top 10) |
+| validate-plugin | CSO | Plugin deployment validation |
+| code-review | CSO | Independent code review |
+| compliance | CSO/CFO | Compliance (GDPR/license) |
+| seo | CMO | SEO audit |
+| copywriter | CMO | Marketing copy (landing/email/app store) |
+| growth | CMO | Growth funnel strategy + viral loop |
+| sre | COO | SRE/monitoring + incident runbook |
+| docs-writer | COO/CTO/CPO | Technical docs (API docs/README/guides) |
+| cost-analyst | CFO | Cloud cost analysis + optimization |
+| pricing-modeler | CFO | Pricing models + revenue simulation |
+| investigate | CTO | Systematic debugging (4-phase: investigate→analyze→hypothesize→implement) |
+| canary | COO | Post-deployment canary monitoring |
+| benchmark | COO | Performance benchmarks + regression detection |
+| retro | CEO | Engineering retrospective + learning extraction |
+| ux-researcher | CPO | UX research (JTBD interviews/usability tests) |
+| data-analyst | CPO/CTO/CFO | Product metrics (DAU/MAU/A/B tests) |
 
 ### PM (제품 기획 레이어, CPO 서브)
 pm-discovery, pm-strategy, pm-research, pm-prd

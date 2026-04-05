@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.41.1] - 2026-04-05
+
+### Changed
+
+- **refactor(agents)**: 37개 에이전트 frontmatter description을 영어 3인칭 + "Use when:" 형식으로 정규화
+  - 실행 에이전트 "직접 호출 금지" Triggers 라인 제거, C-Suite Triggers 키워드 유지
+  - CEO/CTO/CSO `## 역할` → `## Role` 영어 요약 변환
+- **docs**: CLAUDE.md, AGENTS.md, README.md 에이전트 테이블 Role 열 영어 동기화
+  - README.md 누락 하위 에이전트 보충 + 에이전트 수 21→37개 갱신
+
+---
+
 ## [0.41.0] - 2026-04-05
 
 ### Added

@@ -2,9 +2,9 @@
 name: compliance
 version: 1.0.0
 description: |
-  컴플라이언스 에이전트. GDPR/개인정보보호, 라이선스 검사, 감사 로그 검증.
-  security(코드 취약점)와 역할 분리 — compliance는 규정 준수.
-  Triggers: (직접 호출 금지 — CSO를 통해 호출)
+  Verifies regulatory compliance including GDPR/privacy protection, license compatibility,
+  and audit log validation. Handles compliance (distinct from security's code vulnerability focus).
+  Use when: delegated by CSO for regulatory compliance checks or license auditing.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none

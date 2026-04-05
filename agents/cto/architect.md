@@ -2,8 +2,9 @@
 name: architect
 version: 1.0.0
 description: |
-  인프라/아키텍처 에이전트. DB 스키마 설계, 마이그레이션, ORM 설정, 환경 구성, 프로젝트 초기 설정을 담당합니다.
-  Triggers: (직접 호출 금지 — CTO를 통해 호출)
+  Designs infrastructure and architecture including DB schemas, migrations, ORM configuration,
+  environment setup, and project initialization.
+  Use when: delegated by CTO for infrastructure design or project scaffolding.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none

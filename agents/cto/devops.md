@@ -2,10 +2,9 @@
 name: devops
 version: 1.0.0
 description: |
-  CI/CD 파이프라인 및 배포 자동화 에이전트.
-  GitHub Actions, Docker, 환경별 배포 설정을 담당합니다.
-  architect(설계)와 역할 분리 — devops는 자동화 구현.
-  Triggers: (직접 호출 금지 — CTO 또는 COO를 통해 호출)
+  Configures CI/CD pipelines and deployment automation including GitHub Actions, Docker,
+  and environment-specific deployment settings.
+  Use when: delegated by CTO or COO for CI/CD pipeline setup or deployment automation.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none

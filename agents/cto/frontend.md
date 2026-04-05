@@ -2,8 +2,8 @@
 name: frontend
 version: 1.0.0
 description: |
-  프론트엔드 에이전트. React/Next.js 등 프론트엔드 구현을 담당합니다.
-  Triggers: (직접 호출 금지 — CTO를 통해 호출)
+  Implements frontend interfaces using React/Next.js and related frameworks.
+  Use when: delegated by CTO for UI component development or frontend feature implementation.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none

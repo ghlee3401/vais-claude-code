@@ -2,9 +2,9 @@
 name: validate-plugin
 version: 1.0.0
 description: |
-  플러그인 배포 검증 전담 sub-agent. CSO Gate B로부터 위임받아 실행.
-  package.json, SKILL.md, agents/ frontmatter, 코드 안전성 검사 후 결과 반환.
-  Triggers: (직접 호출 금지 — CSO를 통해 호출)
+  Validates plugin deployment readiness by checking package.json, SKILL.md, agent frontmatter,
+  and code safety. Returns validation results to CSO.
+  Use when: delegated by CSO Gate B for plugin structure and safety verification.
 model: sonnet
 tools: [Read, Glob, Grep, Bash, TodoWrite]
 memory: none

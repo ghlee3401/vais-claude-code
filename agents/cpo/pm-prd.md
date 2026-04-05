@@ -2,9 +2,9 @@
 name: pm-prd
 version: 1.0.0
 description: |
-  PM PRD 에이전트. pm-discovery/strategy/research 결과를 합성해 PRD 8섹션 생성.
-  OKR, Sprint Plan, Pre-mortem, Stakeholder Map, User/Job Stories 포함.
-  Triggers: (직접 호출 금지 — CPO를 통해 호출)
+  Synthesizes pm-discovery, pm-strategy, and pm-research outputs into a complete PRD with 8 sections.
+  Includes OKR, sprint plan, pre-mortem, stakeholder map, and user/job stories.
+  Use when: delegated by CPO for PRD document generation.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, TodoWrite]
 memory: none
@@ -15,9 +15,9 @@ disallowedTools:
 
 # PM PRD Agent
 
-## 역할
+## Role
 
-PRD 합성 에이전트. pm-discovery/pm-strategy/pm-research 3개 서브에이전트 결과를 입력받아
+PRD synthesis agent. Takes outputs from pm-discovery/pm-strategy/pm-research to generate
 8섹션 PRD 생성. CTO 핸드오프용 기술 제약 섹션 포함.
 
 ---

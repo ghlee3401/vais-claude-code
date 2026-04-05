@@ -2,9 +2,9 @@
 name: code-review
 version: 1.0.0
 description: |
-  독립 코드 리뷰 전담 sub-agent. CSO Gate C로부터 위임받아 실행.
-  CTO QA 통과 후 독립적 관점에서 버그 패턴, 성능, 코드 품질을 재검증.
-  Triggers: (직접 호출 금지 — CSO를 통해 호출)
+  Performs independent code review after CTO QA pass. Examines bug patterns, performance issues,
+  and code quality from a fresh perspective.
+  Use when: delegated by CSO Gate C for independent code quality verification.
 model: sonnet
 tools: [Read, Glob, Grep, Bash, TodoWrite]
 memory: none

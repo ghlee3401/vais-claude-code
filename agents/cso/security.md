@@ -2,9 +2,9 @@
 name: security
 version: 1.0.0
 description: |
-  보안 감사 전담 sub-agent. CSO Gate A로부터 위임받아 실행.
-  OWASP Top 10, 인증/인가, 민감 데이터 처리 검사 후 결과 반환.
-  Triggers: (직접 호출 금지 — CSO를 통해 호출)
+  Performs security audits covering OWASP Top 10, authentication/authorization,
+  and sensitive data handling. Returns findings to CSO for final judgment.
+  Use when: delegated by CSO Gate A for security vulnerability assessment.
 model: sonnet
 tools: [Read, Write, Glob, Grep, Bash, TodoWrite]
 memory: none

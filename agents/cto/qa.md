@@ -2,8 +2,9 @@
 name: qa
 version: 1.1.0
 description: |
-  QA 에이전트. 빌드 검증, Gap 분석, 보안 점검, 코드 품질 리뷰, QA 시나리오 검증을 통합 수행합니다.
-  Triggers: (직접 호출 금지 — CTO를 통해 호출)
+  Performs integrated quality assurance including build verification, gap analysis, security checks,
+  code quality review, and QA scenario validation.
+  Use when: delegated by CTO for comprehensive quality verification after implementation.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none
