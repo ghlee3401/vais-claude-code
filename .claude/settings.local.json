@@ -74,7 +74,14 @@
       "Bash(cp /home/claude/vais-claude-code/CLAUDE.md /home/claude/.claude/plugins/marketplaces/vais-marketplace/CLAUDE.md)",
       "Bash(cp /home/claude/vais-claude-code/README.md /home/claude/.claude/plugins/marketplaces/vais-marketplace/README.md)",
       "Bash(cp /home/claude/vais-claude-code/package.json /home/claude/.claude/plugins/marketplaces/vais-marketplace/package.json)",
-      "Bash(cp /home/claude/vais-claude-code/vais.config.json /home/claude/.claude/plugins/marketplaces/vais-marketplace/vais.config.json)"
+      "Bash(cp /home/claude/vais-claude-code/vais.config.json /home/claude/.claude/plugins/marketplaces/vais-marketplace/vais.config.json)",
+      "Bash(xargs -I {} bash -c 'echo \"=== {} ===\" && head -5 {}')",
+      "Bash(wc -l /home/claude/vais-claude-code/agents/cto/*.md /home/claude/vais-claude-code/agents/cpo/*.md /home/claude/vais-claude-code/agents/cso/*.md)",
+      "Bash(wc -l /home/claude/vais-claude-code/lib/*.js /home/claude/vais-claude-code/lib/**/*.js)",
+      "Bash(wc -l /home/claude/vais-claude-code/references/bkit-claude-code/lib/pdca/*.js)",
+      "Bash(wc -l /home/claude/vais-claude-code/references/bkit-claude-code/lib/control/*.js)",
+      "Bash(wc -l /home/claude/vais-claude-code/references/bkit-claude-code/lib/quality/*.js)",
+      "Bash(wc -l /home/claude/vais-claude-code/references/bkit-claude-code/lib/core/*.js)"
     ]
   },
   "enabledPlugins": {

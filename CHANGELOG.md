@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.44.0] - 2026-04-05
+
+### Added
+
+- **bkit-level 실행 제어 인프라 6-Phase 구축** — 17개 신규 모듈 (3,388 LOC)
+  - `lib/core/`: 2-Level 선언적 FSM (pipeline + phase), atomic state-store, v2→v3 마이그레이션
+  - `lib/quality/`: 7-gate pass/retry/fail 매니저, 템플릿 필수 섹션 검증
+  - `lib/control/`: L0-L4 자동화 컨트롤러, SHA-256 체크포인트, 4-rule 루프 방지, 6-rule 폭발 반경, 6-component 신뢰 엔진
+  - `lib/pdca/`: Do-lock 피처 매니저, C-Level별 필수 CP (CTO 4/CEO 4/CSO 3), Context Anchor, Decision Record
+- **status.js FSM 통합** — transitionPhase/getAvailableTransitions/ensureMigrated 추가 (기존 18개 export 하위호환)
+- **vais.config.json** — automation (L0-L4 레벨, 게이트 타임아웃) + guardrails (루프 방지, 폭발 반경) 섹션 추가
+
 ## [0.43.3] - 2026-04-05
 
 ### Added

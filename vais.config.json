@@ -1,5 +1,5 @@
 {
-  "version": "0.43.3",
+  "version": "0.44.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -90,6 +90,26 @@
     },
     "autoInvoke": ["auto", "fix"],
     "entryTypes": ["decision", "change", "feedback", "dependency", "debt", "error", "milestone"]
+  },
+  "automation": {
+    "defaultLevel": 2,
+    "emergencyFallbackLevel": 1,
+    "gateTimeoutMs": 300000,
+    "emergencyStopEnabled": true,
+    "trustScoreEnabled": true,
+    "maxConcurrentFeatures": 3
+  },
+  "guardrails": {
+    "destructiveDetection": true,
+    "loopBreaker": {
+      "maxPdcaIterations": 5,
+      "maxSameFileEdits": 10,
+      "maxAgentRecursion": 3,
+      "cooldownMs": 60000
+    },
+    "blastRadiusLimit": "high",
+    "checkpointOnPhaseTransition": true,
+    "checkpointOnDestructive": true
   },
   "orchestration": {
     "gateAction": "confirm"
