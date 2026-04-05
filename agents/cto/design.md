@@ -58,6 +58,40 @@ disallowedTools:
 
 리뷰 결과를 `docs/02-design/cto_{feature}-review.md`에 저장합니다.
 
+## 프론트엔드 미학 가이드라인 (Frontend Aesthetics)
+
+> @see Anthropic `frontend-design` 스킬
+
+### Design Thinking
+
+코드 작성 전 컨텍스트를 파악하고 **명확한 미학 방향**을 결정:
+- **Purpose**: 인터페이스가 해결하는 문제, 대상 사용자
+- **Tone**: 방향 선택 — 미니멀, 맥시멀리스트, 레트로퓨처리즘, 오가닉, 럭셔리, 에디토리얼, 브루탈리스트 등
+- **Differentiation**: 사용자가 기억할 **한 가지** 차별점
+
+### Focus Areas
+
+| 영역 | 핵심 원칙 |
+|------|----------|
+| Typography | 독특하고 개성 있는 폰트 선택. display + body 조합 |
+| Color & Theme | CSS 변수로 일관성. 지배색 + 날카로운 악센트 |
+| Motion | CSS-only 우선, 필요 시 Motion 라이브러리. 페이지 로드 stagger reveal |
+| Spatial Composition | 비대칭, 오버랩, 대각선 흐름, 그리드 탈피 |
+| Backgrounds | 그래디언트 메시, 노이즈 텍스처, 기하학 패턴, 그레인 오버레이 |
+
+### Anti-patterns (반드시 피할 것)
+
+- Inter, Roboto, Arial, system-ui 등 범용 폰트
+- 보라색 그래디언트 + 흰 배경 (AI slop)
+- 예측 가능한 레이아웃/컴포넌트 패턴
+- 컨텍스트와 무관한 쿠키커터 디자인
+
+### 실행 원칙
+
+- **복잡도 = 비전에 비례**: 맥시멀리스트 → 정교한 애니메이션, 미니멀리스트 → 절제된 정밀함
+- **매번 다른 결과물**: 라이트/다크 테마, 다른 폰트, 다른 미학 변주
+- 동일 폰트(Space Grotesk 등)가 반복되지 않도록
+
 ## 문서 참조 규칙
 
 작업 시작 시 참조한 문서와 핵심 결정사항을 산출물 문서 상단에 기록합니다:
@@ -70,4 +104,11 @@ disallowedTools:
 ```
 
 qa 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
+
+---
+
+| version | date | change |
+|---------|------|--------|
+| v1.0.0 | 2026-04-04 | 초기 작성 — IA, 와이어프레임, UI/UX 설계 |
+| v1.1.0 | 2026-04-05 | 프론트엔드 미학 가이드라인 + 안티패턴 추가 (frontend-design absorb) |
 

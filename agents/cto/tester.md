@@ -78,6 +78,37 @@ disallowedTools:
 - **엣지 케이스 포함**: 정상/에러/경계값 모두 커버
 - **모킹 최소화**: 외부 의존만 모킹, 내부 로직은 실제 실행
 
+## Playwright E2E 베스트 프랙티스
+
+> @see Anthropic `webapp-testing` 스킬
+
+### 의사결정 트리
+
+```
+대상 → 정적 HTML?
+  ├─ Yes → HTML 직접 읽어 셀렉터 식별 → Playwright 스크립트 작성
+  └─ No (동적 앱) → 서버 실행 중?
+      ├─ No → with_server.py 등 서버 관리 헬퍼 활용
+      └─ Yes → Reconnaissance-then-Action:
+          1. Navigate + wait for networkidle
+          2. 스크린샷 또는 DOM 검사
+          3. 렌더링 상태에서 셀렉터 식별
+          4. 발견된 셀렉터로 액션 실행
+```
+
+### 핵심 원칙
+
+- **networkidle 대기 필수**: 동적 앱에서 DOM 검사 전 `page.wait_for_load_state('networkidle')` 호출
+- **Reconnaissance-then-Action**: 먼저 스크린샷/DOM으로 현재 상태 파악 → 셀렉터 확인 → 액션
+- **서술적 셀렉터**: `text=`, `role=`, CSS 셀렉터, ID 활용
+- **적절한 대기**: `page.wait_for_selector()` 또는 `page.wait_for_timeout()`
+- **headless 모드**: 항상 `chromium.launch(headless=True)`
+- **리소스 정리**: 완료 시 `browser.close()` 필수
+
+### 멀티 서버 테스트
+
+backend + frontend 분리 프로젝트에서는 두 서버를 동시에 구동한 뒤 자동화 스크립트 실행.
+
 ## 외부 참고 문헌 주석 (`@see`)
 
 외부 사이트/문서를 참고하여 코드를 작성할 때, 해당 코드 블록 **바로 위에** `@see` 주석을 추가합니다.
@@ -87,3 +118,4 @@ disallowedTools:
 | version | date | change |
 |---------|------|--------|
 | v1.0.0 | 2026-04-04 | 초기 작성 — Unit/Integration/E2E 테스트 코드 생성 |
+| v1.1.0 | 2026-04-05 | Playwright E2E 베스트 프랙티스 추가 (webapp-testing absorb) |

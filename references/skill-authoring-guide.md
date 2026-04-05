@@ -105,8 +105,48 @@ VAIS의 Gap 분석(90% 일치율)이 이 패턴의 구현체.
 - [ ] Gate 체크포인트 정의
 - [ ] `vais.config.json` 연동 확인
 
+## 9. Eval Loop (skill-creator 방법론)
+
+> 원본: Anthropic `skill-creator` 스킬
+
+### 스킬 생성 프로세스
+
+1. **Intent Capture** — 스킬의 목적, 트리거 조건, 출력 형식, 테스트 필요 여부 파악
+2. **Interview & Research** — 엣지 케이스, I/O 형식, 성공 기준, 의존성 질문
+3. **SKILL.md 작성** — frontmatter (name, description) + body
+4. **Test 실행** — 2~3개 현실적 test prompt 작성 → with-skill / baseline 비교 실행
+5. **Eval & Iterate** — 사용자 피드백 + 정량 평가 → 스킬 수정 → 반복
+
+### 스킬 개선 원칙
+
+- **일반화**: 테스트 예제에 과적합하지 않고, 다양한 프롬프트에서 동작하도록
+- **간결 유지**: 토큰 비용 정당화 안 되는 문단 제거
+- **why 설명**: ALWAYS/NEVER 대신 이유를 설명하여 모델이 판단하도록
+- **반복 작업 스크립트화**: 테스트 런에서 공통 작업이 발견되면 `scripts/`에 번들
+
+### Description 최적화
+
+- 20개 trigger eval 쿼리 생성 (should-trigger 10 + should-not-trigger 10)
+- should-trigger: 다양한 표현, 암시적 요구, 경쟁 스킬 대비 우위 케이스
+- should-not-trigger: **near-miss** 쿼리 (키워드 유사하지만 다른 도메인)
+- 60% train / 40% test 분할 → 최대 5회 반복 → test score 기준 best 선택
+
+### 스킬 구조 (Anatomy)
+
+```
+skill-name/
+├── SKILL.md (필수)
+│   ├── YAML frontmatter (name, description)
+│   └── Markdown 지시사항
+└── Bundled Resources (선택)
+    ├── scripts/    — 결정적/반복 작업 실행 코드
+    ├── references/ — 필요 시 컨텍스트에 로드되는 문서
+    └── assets/     — 출력에 사용되는 파일 (템플릿, 아이콘, 폰트)
+```
+
 ## 변경 이력
 
 | version | date | change |
 |---------|------|--------|
 | v1.0 | 2026-04-05 | 초기 작성 — best_practices.md absorb |
+| v1.1 | 2026-04-05 | skill-creator eval 루프 + description 최적화 방법론 추가 |

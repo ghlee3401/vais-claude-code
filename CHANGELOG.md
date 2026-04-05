@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.42.0] - 2026-04-05
+
+### Added
+
+- **feat(absorb)**: Anthropic 공식 스킬 17개 흡수 — 5건 absorb/merge + 12건 reject
+  - `skill-creator` → `references/skill-authoring-guide.md` eval 루프 + description 최적화 방법론 추가
+  - `mcp-builder` → `references/mcp-builder-guide.md` MCP 서버 빌드 가이드 신규 생성
+  - `webapp-testing` → `agents/cto/tester.md` Playwright E2E 베스트 프랙티스 추가
+  - `frontend-design` → `agents/cto/design.md` 프론트엔드 미학 가이드라인 + 안티패턴 추가
+  - `doc-coauthoring` → `agents/coo/docs-writer.md` 3-Stage 구조화 문서 작성 워크플로우 추가
+  - 12건 reject: claude-api(기존재), Office 도구(docx/pdf/pptx/xlsx), 도메인 외(art/brand/canvas/theme/web-artifacts/slack-gif/internal-comms)
+
+---
+
 ## [0.41.1] - 2026-04-05
 
 ### Changed
