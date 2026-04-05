@@ -61,7 +61,15 @@
       "Bash(echo \"exit code: $?\")",
       "Bash(command -v gh)",
       "Read(//usr/local/bin/**)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(mkdir -p /home/claude/vais-claude-code/references/_inbox)",
+      "Bash(mv /home/claude/vais-claude-code/references/claude_code_agent_skill /home/claude/vais-claude-code/references/_inbox/)",
+      "Bash(git checkout:*)",
+      "Bash(git:*)",
+      "Bash(wc -l agents/*/*.md)",
+      "Bash(sed -n '3p' CLAUDE.md)",
+      "Bash(sed -n '3p' README.md)",
+      "Bash(sed -n '3p' CHANGELOG.md)"
     ]
   },
   "enabledPlugins": {

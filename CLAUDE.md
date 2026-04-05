@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.42.1)
+> Virtual AI C-Suite for software development (v0.43.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -11,7 +11,7 @@ AI C-Suite 조직 시뮬레이션 플러그인. CEO가 Product Owner로서 C-Lev
 
 ```
 vais-claude-code/
-├── agents/          # C-Level 별 하위 폴더로 구성된 에이전트 (33개)
+├── agents/          # C-Level 별 하위 폴더로 구성된 에이전트 (37개)
 │   ├── ceo/         #   CEO + absorb-analyzer + retro
 │   ├── cpo/         #   CPO + pm-discovery/strategy/research/prd + ux-researcher + data-analyst
 │   ├── cto/         #   CTO + architect/backend/frontend/design/qa + tester/devops/database + investigate

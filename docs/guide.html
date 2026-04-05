@@ -279,7 +279,7 @@
 
 <!-- ═══════════════════════ NAV ═══════════════════════ -->
 <nav>
-  <div class="logo">VAIS Code <span>v0.40.1</span></div>
+  <div class="logo">VAIS Code <span>v0.42.1</span></div>
   <ul>
     <div class="section-label">Part 1 &mdash; Claude Code</div>
     <li><a href="#what-is-cc">Claude Code란?</a></li>
@@ -316,7 +316,7 @@
 <!-- ═══════════════════════ MAIN ═══════════════════════ -->
 <main>
 
-<h1>VAIS Code Guide <span class="version">v0.40.1</span></h1>
+<h1>VAIS Code Guide <span class="version">v0.42.1</span></h1>
 <p class="subtitle">Claude Code의 기본 개념부터 Harness Engineering, 그리고 AI C-Suite 오케스트레이션까지</p>
 
 <!-- ════════════════════════════════════════════════════ -->
@@ -533,9 +533,9 @@ disallowedTools:
 <pre><code>/vais cto login          → CTO에게 기술 구현 위임
 /vais ceo my-saas        → CEO에게 전체 런칭 위임
 /vais status             → 현재 진행 상태 조회
-/vais deploy             → 배포 실행</code></pre>
+/vais commit             → Conventional Commits 메시지 생성</code></pre>
 
-<p>SKILL.md 내부에서 <code>$0</code>은 액션, <code>$1</code>은 피처명으로 치환됩니다. VAIS Code의 스킬은 <strong>phases/</strong>(C-Suite 방법론 13개)와 <strong>utils/</strong>(유틸리티 13개)로 구분됩니다.</p>
+<p>SKILL.md 내부에서 <code>$0</code>은 액션, <code>$1</code>은 피처명으로 치환됩니다. VAIS Code의 스킬은 <strong>phases/</strong>(C-Suite 방법론 13개)와 <strong>utils/</strong>(유틸리티 6개)로 구분됩니다.</p>
 
 <h4>Phase 스킬 (C-Suite 에이전트)</h4>
 <table>
@@ -547,9 +547,9 @@ disallowedTools:
 <h4>Utility 스킬</h4>
 <table>
   <tr><th>스킬</th><th>설명</th></tr>
-  <tr><td><code>status, help, init, next, report</code></td><td>상태 조회, 도움말, 초기화, 다음 단계, 리포트</td></tr>
-  <tr><td><code>test, deploy, commit</code></td><td>테스트, 배포, 커밋</td></tr>
-  <tr><td><code>analyze-cost, write-docs, growth-audit, license-check, pricing</code></td><td>비용분석, 문서생성, 퍼널분석, 라이선스검사, 가격모델링</td></tr>
+  <tr><td><code>status, init, next, commit</code></td><td>상태 조회, 초기화, 다음 단계, 커밋</td></tr>
+  <tr><td><code>mcp-builder</code></td><td>MCP 서버 개발 가이드</td></tr>
+  <tr><td><code>help</code></td><td>사용법 안내</td></tr>
 </table>
 </section>
 
@@ -1089,7 +1089,7 @@ claude install ghlee3401/vais-claude-code</code></pre>
 
 <!-- ════════════════════════════════════════════════════ -->
 <footer style="margin-top:4rem; padding-top:2rem; border-top:1px solid var(--border); color:var(--text-muted); font-size:0.85rem;">
-  <p>VAIS Code v0.40.1 &mdash; Virtual AI C-Suite for Software Development</p>
+  <p>VAIS Code v0.42.1 &mdash; Virtual AI C-Suite for Software Development</p>
   <p>Built with Claude Code Harness Engineering</p>
 </footer>
 

@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.43.0] - 2026-04-05
+
+### Added
+
+- **단계별 실행 모드** — 모든 C-Level 에이전트가 단일 phase만 실행 후 멈춤
+  - `/vais cto plan my-feature` → plan만 실행 → CP에서 멈추고 사용자 확인
+  - `/vais cto my-feature` → status 기반 다음 phase 판별 → 사용자에게 확인 후 실행
+  - phases/*.md 7개: `$1`에서 phase 파싱 로직 추가
+  - agents/*.md 7개: "단계별 실행 모드" 최우선 규칙 추가
+
+- **bkit 수준 CP 양식 도입** — 체크포인트에서 풍부한 피드백 제공
+  - Plan CP: Executive Summary + Context Anchor 테이블 + 3옵션(에이전트/산출물/적합 상황)
+  - Design CP: 3가지 아키텍처 비교표 (복잡도/유지보수성/파일수/리스크)
+  - Do CP: Decision Record Chain + 실행 계획 + 예상 파일수/변경량 + Success Criteria
+  - QA CP: 검증 축별 일치율 + 심각도별 이슈 + Success Criteria 평가 (Met/Partial/Not Met)
+  - 모든 CP: 응답에 직접 출력 필수 (파일에만 저장 금지)
+
+### Changed
+
+- SKILL.md: 액션 형식 `[phase] [feature]` 반영, 유틸리티 목록 현행화
+- 종료 전 필수 문서 체크리스트를 phase별로 변경 (전체 → 현재 phase만 필수)
+
+### Removed
+
+- `skills/vais/utils/` 8개 파일 삭제 (에이전트로 흡수 완료): analyze-cost, deploy, growth-audit, license-check, pricing, report, test, write-docs
+
+---
+
 ## [0.42.1] - 2026-04-05
 
 ### Changed

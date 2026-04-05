@@ -7,6 +7,40 @@ description: CPO 에이전트 호출. 제품 도메인 오케스트레이션 (PR
 
 `${CLAUDE_PLUGIN_ROOT}/agents/cpo/cpo.md`를 읽고 그 안의 지침에 따라 실행하세요.
 
-전달 인자:
+## 인자 파싱
+
+전달 인자 원본: `$1`
+
+### Phase 분리 규칙
+
+`$1`의 **첫 단어**가 아래 목록에 해당하면 phase로 분리합니다:
+
+| 키워드 | phase |
+|--------|-------|
+| `plan` | plan |
+| `design` | design |
+| `do` | do |
+| `qa` | qa |
+| `report` | report |
+
+- **Phase 명시**: `/vais cpo plan my-feature` → phase=`plan`, feature=`my-feature`
+- **Phase 생략**: `/vais cpo my-feature` → phase=미지정, feature=`my-feature`
+
+### Phase 미지정 시 동작
+
+1. `.vais/status.json`에서 해당 feature의 현재 진행 상태를 확인합니다
+2. 다음에 실행할 phase를 판별합니다 (순서: plan → design → do → qa → report)
+   - status 파일이 없거나 feature가 없으면 → `plan`부터
+   - 이전 phase가 완료되어 있으면 → 다음 phase
+3. **AskUserQuestion으로 사용자에게 확인**합니다:
+   ```
+   "{feature}"의 다음 단계는 [{phase}]입니다. 실행할까요?
+   ```
+   선택지: `실행` / `다른 단계 선택` / `중단`
+4. 사용자가 "다른 단계 선택"을 고르면 phase 목록을 보여주고 선택받습니다
+
+## 에이전트 전달
+
 - action: `$0`
-- feature: `$1`
+- phase: (위에서 결정된 phase)
+- feature: (위에서 분리된 feature)
