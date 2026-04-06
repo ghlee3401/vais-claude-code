@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.45.2] - 2026-04-06
+
+### Fixed
+
+- **session-start 버전 플레이스홀더 치환**: `output-styles/vais-default.md`의 `v{version}` 플레이스홀더가 치환되지 않아 응답 하단 리포트에 옛 버전(v0.17.0 등)이 출력되던 문제 수정. `hooks/session-start.js`에서 styleBody 주입 시 현재 버전으로 치환
+
 ## [0.45.1] - 2026-04-06
 
 ### Fixed

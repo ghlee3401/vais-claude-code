@@ -76,7 +76,8 @@ function main() {
       // frontmatter(---...---) 제거하고 규칙 본문만 주입
       const bodyMatch = styleContent.match(/^---[\s\S]*?---\s*([\s\S]*)$/);
       const styleBody = bodyMatch ? bodyMatch[1].trim() : styleContent;
-      ctx += styleBody + '\n\n';
+      // {version} 플레이스홀더를 현재 버전으로 치환 (하단 리포트 템플릿용)
+      ctx += styleBody.replace(/\{version\}/g, VERSION) + '\n\n';
     }
   } catch (e) {
     debugLog('SessionStart', 'Output Style injection failed', { error: e.message });
