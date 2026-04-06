@@ -7,6 +7,23 @@
 const path = require('path');
 const fs = require('fs');
 
+/**
+ * agent-state.json에서 현재 활성 C-Level role을 읽어옴
+ * 없으면 'cto'(기본 techOnly orchestrator)를 반환
+ */
+function getActiveRole() {
+  try {
+    const statePath = '.vais/agent-state.json';
+    if (fs.existsSync(statePath)) {
+      const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+      if (state.active_agents && state.active_agents.length > 0) {
+        return state.active_agents[state.active_agents.length - 1].role;
+      }
+    }
+  } catch (_) { /* fallback to cto */ }
+  return 'cto';
+}
+
 // paths/status 모듈 로드 (플러그인 루트 기준)
 const pluginRoot = path.resolve(__dirname, '..');
 const libPath = path.join(pluginRoot, 'lib');
@@ -66,11 +83,12 @@ try {
       const phaseNames = config.workflow?.phaseNames || {};
       const currentIdx = phases.indexOf(summary.currentPhase);
       // 현재 단계가 in-progress면 현재 단계 실행 안내, 아니면 다음 단계 안내
+      const activeRole = getActiveRole();
       const currentPhaseStatus = status.features[fname]?.phases?.[summary.currentPhase]?.status;
       if (currentPhaseStatus === 'in-progress') {
-        lines.push(`   📍 진행중: \`/vais ${summary.currentPhase} ${fname}\` (${phaseNames[summary.currentPhase] || summary.currentPhase})`);
+        lines.push(`   📍 진행중: \`/vais ${activeRole} ${summary.currentPhase} ${fname}\` (${phaseNames[summary.currentPhase] || summary.currentPhase})`);
       } else if (currentIdx >= 0) {
-        lines.push(`   💡 다음: \`/vais ${summary.currentPhase} ${fname}\` (${phaseNames[summary.currentPhase] || summary.currentPhase})`);
+        lines.push(`   💡 다음: \`/vais ${activeRole} ${summary.currentPhase} ${fname}\` (${phaseNames[summary.currentPhase] || summary.currentPhase})`);
       }
       lines.push('');
     }

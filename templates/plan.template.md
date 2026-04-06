@@ -249,7 +249,7 @@ erDiagram
 | 백엔드 | API 구현 |
 | QA | QA 보고서 |
 
-> 다음 단계: `/vais design`
+> 다음 단계: `/vais cto design {feature}`
 
 ---
 

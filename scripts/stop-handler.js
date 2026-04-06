@@ -3,12 +3,32 @@
  * VAIS Code - Stop Handler
  * 응답 완료 시 현재 진행 상태 요약 + 다음 단계 안내
  */
+const fs = require('fs');
 const { readStdin, outputAllow } = require('../lib/io');
 const { debugLog } = require('../lib/debug');
 const { logHook } = require('../lib/hook-logger');
 const { getActiveFeature, getProgressSummary } = require('../lib/status');
 const { loadConfig } = require('../lib/paths');
 const { sendWebhook } = require('../lib/webhook');
+
+/**
+ * agent-state.json에서 현재 활성 C-Level role을 읽어옴
+ * 없으면 'cto'(기본 techOnly orchestrator)를 반환
+ */
+function getActiveRole() {
+  try {
+    const statePath = '.vais/agent-state.json';
+    if (fs.existsSync(statePath)) {
+      const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+      if (state.active_agents && state.active_agents.length > 0) {
+        return state.active_agents[state.active_agents.length - 1].role;
+      }
+    }
+  } catch (e) {
+    debugLog('StopHandler', 'agent-state read failed', { error: e.message });
+  }
+  return 'cto';
+}
 
 /**
  * 텍스트 프로그레스바 생성
@@ -89,8 +109,9 @@ const lines = [
 
 if (gapLine) lines.push(`║ ${gapLine}`);
 
+const activeRole = getActiveRole();
 if (nextPhase) {
-  lines.push(`║ 💡 다음: \`/vais ${nextPhase} ${activeFeature}\` (${nextPhaseName})`);
+  lines.push(`║ 💡 다음: \`/vais ${activeRole} ${nextPhase} ${activeFeature}\` (${nextPhaseName})`);
 } else if (currentPhase === 'qa') {
   lines.push(`║ 🎉 모든 단계 완료! \`/vais status\`로 최종 확인하세요.`);
 }

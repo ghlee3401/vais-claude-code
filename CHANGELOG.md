@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.44.2] - 2026-04-06
+
+### Fixed
+
+- **stop-handler/get-context**: 다음 단계 안내에 C-Level role prefix 누락 수정 (`/vais design` → `/vais cto design`)
+- **plan.template**: 다음 단계 안내 커맨드 형식 수정 (`/vais cto design {feature}`)
+
 ## [0.44.1] - 2026-04-06
 
 ### Fixed
