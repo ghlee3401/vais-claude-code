@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.45.1] - 2026-04-06
+
+### Fixed
+
+- **SKILL.md 경로 변수 오류 수정**: `${CLAUDE_SKILL_DIR}` → `${CLAUDE_PLUGIN_ROOT}` — 존재하지 않는 변수 참조로 phase/utils 파일을 읽지 못해 에이전트 체크포인트(CP) 기반 A/B/C 선택지가 동작하지 않던 버그 수정
+
 ## [0.45.0] - 2026-04-06
 
 ### Added
