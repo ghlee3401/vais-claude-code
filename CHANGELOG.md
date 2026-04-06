@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.45.0] - 2026-04-06
+
+### Added
+
+- **CEO 동적 라우팅**: 하드코딩 파이프라인(CPO→CTO→CSO→CMO→COO→CFO) 제거, CEO가 피처 성격 + 산출물 상태 기반으로 다음 C-Level 동적 판단
+- **C-Level 완료 후 CEO 추천**: 모든 C-Level phase 완료 시 CEO가 다음 단계를 추천하는 아웃로 트리거
+- **config dependencies 맵**: `launchPipeline.dependencies`로 C-Level 간 의존성 선언 (CEO 판단 참조용)
+
+### Changed
+
+- `vais.config.json`: `launchPipeline.order` → `routing: "dynamic"` + `dependencies`
+- `agents/ceo/ceo.md`: 서비스 런칭 모드 전면 교체, CP-L2 추천 형식, Full-Auto 동적 판단
+- `skills/vais/SKILL.md`: 아웃로 템플릿에 CEO 추천 형식 적용
+- `lib/core/state-machine.js`: `getNextPipelineRole` @deprecated 표시
+
 ## [0.44.2] - 2026-04-06
 
 ### Fixed

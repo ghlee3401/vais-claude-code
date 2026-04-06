@@ -1,6 +1,6 @@
 ---
 name: ceo
-description: CEO 에이전트 호출. 비즈니스 전략 라우팅 + absorb + 서비스 런칭.
+description: CEO 에이전트 호출. 동적 라우팅 기반 서비스 런칭 + 비즈니스 전략 라우팅 + absorb.
 ---
 
 # CEO Phase

@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.44.2)
+> Virtual AI C-Suite for software development (v0.45.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -41,7 +41,7 @@ vais-claude-code/
 ### C-Suite (전략 레이어, Opus)
 | Agent | Role |
 |-------|------|
-| CEO | **Top-level orchestrator** — Product Owner, hires & directs C-Level teams, service launch pipeline |
+| CEO | **Top-level orchestrator** — Product Owner, dynamic routing (피처 성격 + 산출물 상태 기반 다음 C-Level 추천) |
 | CPO | Product definition + PRD + pm-* sub-agent orchestration |
 | CTO | Technical lead — Plan→Design→Do→QA development workflow orchestration |
 | CSO | Security & quality review — Gate A(security)/B(plugin)/C(independent code review), reports issues to CEO→CTO fix loop |
@@ -49,9 +49,12 @@ vais-claude-code/
 | COO | Deployment/operations, CI/CD, monitoring |
 | CFO | Cost analysis, ROI, feature-level pricing |
 
-### 서비스 런칭 파이프라인 (CEO 오케스트레이션)
+### 서비스 런칭 파이프라인 (CEO 동적 라우팅)
 ```
-CEO → ① CPO → ② CTO → ③ CSO(↺CTO) → ④ CMO → ⑤ COO → ⑥ CFO → CEO 최종 리뷰
+CEO가 피처 성격 + 산출물 상태를 분석하여 다음 C-Level을 동적으로 추천
+→ 사용자 승인 → 해당 C-Level PDCA 실행 → CEO 다시 판단 → 반복
+→ 모든 필요 C-Level 완료 → CEO 최종 리뷰
+의존성: CSO/COO/CFO → CTO 필요, CMO → CPO 필요 (참고용, hard constraint 아님)
 ```
 
 ### Execution (실행 레이어, Sonnet)
@@ -92,9 +95,10 @@ absorb-analyzer (CEO 서브, 레퍼런스 흡수 분석)
 
 ## Development Workflow
 
-### CEO 서비스 런칭 (전체 라이프사이클)
+### CEO 서비스 런칭 (동적 라우팅)
 ```
-CEO → CPO(제품정의) → CTO(개발) → CSO(보안검토↺CTO) → CMO(마케팅) → COO(배포) → CFO(비용/가격) → CEO 최종리뷰
+CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사용자 승인 → 실행 → 반복 → 최종 리뷰
+(의존성: CSO/COO/CFO → CTO, CMO → CPO)
 ```
 
 ### CTO 단독 (기술 구현, 5 Phases)

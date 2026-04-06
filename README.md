@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.44.2** · Claude Code C-Suite 플러그인
+**v0.45.0** · Claude Code C-Suite 플러그인
 
 > AI C-Suite 조직. CEO에게 지시하면 C-Level 팀을 고용해서 알아서 한다.
 
@@ -13,16 +13,13 @@
 ```
 나 → CEO에게 "로그인 서비스 만들어줘"
 
-     CEO가 판단: CPO → CTO → CSO → CMO → COO → CFO 필요
+     CEO가 피처 분석 → 다음 C-Level 동적 추천 → 사용자 승인
 
-     ① CPO: 제품 정의 (PRD 생성)
-     ② CTO: 기능 개발 (ui-designer → infra-architect → dev-frontend+dev-backend → qa-validator)
-     ③ CSO: 보안 검토 → 이슈 발견 시 CTO에게 수정 지시 ↺
-     ④ CMO: 마케팅 전략 수립
-     ⑤ COO: 배포
-     ⑥ CFO: 비용 분석 + 기능별 가격 책정
-
-     CEO 최종 리뷰 → 미흡 시 해당 C-Level 재지시 ↺
+     CEO: "제품 정의가 필요합니다" → CPO 추천 → 승인 → CPO 실행
+     CEO: "기술 구현이 필요합니다" → CTO 추천 → 승인 → CTO 실행
+     CEO: "보안 검토가 필요합니다" → CSO 추천 → 승인 → CSO 실행 (이슈 시 CTO ↺)
+     CEO: "내부 도구이므로 CMO 불필요, 배포로" → COO 추천 → ...
+     CEO: 모든 필요 C-Level 완료 → 최종 리뷰
 ```
 
 ### 세 가지 진입점
@@ -259,7 +256,8 @@ vais-claude-code/
 |------|--------|------|
 | `cSuite.orchestrator.fullLaunch` | `"ceo"` | 서비스 런칭 오케스트레이터 |
 | `cSuite.orchestrator.techOnly` | `"cto"` | 기술 구현 오케스트레이터 |
-| `cSuite.launchPipeline.order` | `["cpo","cto","cso","cmo","coo","cfo"]` | 런칭 파이프라인 순서 |
+| `cSuite.launchPipeline.routing` | `"dynamic"` | CEO 동적 라우팅 (피처 성격 + 산출물 상태 기반 판단) |
+| `cSuite.launchPipeline.dependencies` | `{"cso":["cto"],...}` | C-Level 간 의존성 맵 (CEO 판단 참조용) |
 | `workflow.phases` | `["plan","design","do","qa","report"]` | CTO 워크플로우 5단계 |
 | `gapAnalysis.matchThreshold` | `90%` | QA 통과 기준 |
 | `observability.enabled` | `true` | 로깅 on/off |

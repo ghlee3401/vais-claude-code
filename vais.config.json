@@ -1,5 +1,5 @@
 {
-  "version": "0.44.2",
+  "version": "0.45.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -11,26 +11,154 @@
       "techOnly": "cto"
     },
     "roles": {
-      "ceo": { "required": true,  "model": "opus",   "layer": "executive",        "agent": "agents/ceo/ceo.md", "subAgents": ["absorb-analyzer", "retro-report"] },
-      "cpo": { "required": false, "model": "opus",   "layer": "strategy-product", "agent": "agents/cpo/cpo.md", "subAgents": ["pm-discovery", "pm-strategy", "pm-research", "pm-prd", "ux-researcher", "data-analyst"] },
-      "cto": { "required": true,  "model": "opus",   "layer": "strategy-tech",    "agent": "agents/cto/cto.md", "subAgents": ["infra-architect", "dev-backend", "dev-frontend", "ui-designer", "qa-validator", "bug-investigator", "test-builder", "deploy-ops", "db-architect"] },
-      "cso": { "required": false, "model": "opus",   "layer": "quality",          "agent": "agents/cso/cso.md", "subAgents": ["security-auditor", "validate-plugin", "code-review", "compliance-audit"] },
-      "cmo": { "required": false, "model": "opus",   "layer": "growth",           "agent": "agents/cmo/cmo.md", "subAgents": ["seo-analyst", "copy-writer", "growth-analyst"] },
-      "coo": { "required": false, "model": "opus",   "layer": "ops",              "agent": "agents/coo/coo.md", "subAgents": ["canary-monitor", "perf-benchmark", "sre-ops", "deploy-ops", "docs-writer"] },
-      "cfo": { "required": false, "model": "opus",   "layer": "finance",          "agent": "agents/cfo/cfo.md", "subAgents": ["cost-analyst", "pricing-modeler"] }
+      "ceo": {
+        "required": true,
+        "model": "opus",
+        "layer": "executive",
+        "agent": "agents/ceo/ceo.md",
+        "subAgents": [
+          "absorb-analyzer",
+          "retro-report"
+        ]
+      },
+      "cpo": {
+        "required": false,
+        "model": "opus",
+        "layer": "strategy-product",
+        "agent": "agents/cpo/cpo.md",
+        "subAgents": [
+          "pm-discovery",
+          "pm-strategy",
+          "pm-research",
+          "pm-prd",
+          "ux-researcher",
+          "data-analyst"
+        ]
+      },
+      "cto": {
+        "required": true,
+        "model": "opus",
+        "layer": "strategy-tech",
+        "agent": "agents/cto/cto.md",
+        "subAgents": [
+          "infra-architect",
+          "dev-backend",
+          "dev-frontend",
+          "ui-designer",
+          "qa-validator",
+          "bug-investigator",
+          "test-builder",
+          "deploy-ops",
+          "db-architect"
+        ]
+      },
+      "cso": {
+        "required": false,
+        "model": "opus",
+        "layer": "quality",
+        "agent": "agents/cso/cso.md",
+        "subAgents": [
+          "security-auditor",
+          "validate-plugin",
+          "code-review",
+          "compliance-audit"
+        ]
+      },
+      "cmo": {
+        "required": false,
+        "model": "opus",
+        "layer": "growth",
+        "agent": "agents/cmo/cmo.md",
+        "subAgents": [
+          "seo-analyst",
+          "copy-writer",
+          "growth-analyst"
+        ]
+      },
+      "coo": {
+        "required": false,
+        "model": "opus",
+        "layer": "ops",
+        "agent": "agents/coo/coo.md",
+        "subAgents": [
+          "canary-monitor",
+          "perf-benchmark",
+          "sre-ops",
+          "deploy-ops",
+          "docs-writer"
+        ]
+      },
+      "cfo": {
+        "required": false,
+        "model": "opus",
+        "layer": "finance",
+        "agent": "agents/cfo/cfo.md",
+        "subAgents": [
+          "cost-analyst",
+          "pricing-modeler"
+        ]
+      }
     },
     "launchPipeline": {
-      "order": ["cpo", "cto", "cso", "cmo", "coo", "cfo"],
-      "reviewLoops": {
-        "cso-cto": { "maxIterations": 3, "trigger": "critical > 0" }
+      "routing": "dynamic",
+      "dependencies": {
+        "cso": [
+          "cto"
+        ],
+        "coo": [
+          "cto"
+        ],
+        "cfo": [
+          "cto"
+        ],
+        "cmo": [
+          "cpo"
+        ]
       },
-      "finalReview": { "maxIterations": 2 }
+      "reviewLoops": {
+        "cso-cto": {
+          "maxIterations": 3,
+          "trigger": "critical > 0"
+        }
+      },
+      "finalReview": {
+        "maxIterations": 2
+      }
     },
     "autoKeywords": {
-      "ceo": ["new product", "신규 서비스", "방향", "전략", "strategy", "launch", "런칭"],
-      "cso": ["payment", "auth", "login", "security", "결제", "인증", "보안"],
-      "cmo": ["landing", "marketing", "마케팅", "랜딩", "캠페인"],
-      "coo": ["deploy", "release", "배포", "릴리스", "운영", "infra"]
+      "ceo": [
+        "new product",
+        "신규 서비스",
+        "방향",
+        "전략",
+        "strategy",
+        "launch",
+        "런칭"
+      ],
+      "cso": [
+        "payment",
+        "auth",
+        "login",
+        "security",
+        "결제",
+        "인증",
+        "보안"
+      ],
+      "cmo": [
+        "landing",
+        "marketing",
+        "마케팅",
+        "랜딩",
+        "캠페인"
+      ],
+      "coo": [
+        "deploy",
+        "release",
+        "배포",
+        "릴리스",
+        "운영",
+        "infra"
+      ]
     }
   },
   "observability": {
@@ -47,8 +175,19 @@
     "port": 8765
   },
   "workflow": {
-    "phases": ["plan", "design", "do", "qa", "report"],
-    "mandatoryPhases": ["plan", "design", "do", "qa"],
+    "phases": [
+      "plan",
+      "design",
+      "do",
+      "qa",
+      "report"
+    ],
+    "mandatoryPhases": [
+      "plan",
+      "design",
+      "do",
+      "qa"
+    ],
     "phaseNames": {
       "plan": "기획",
       "design": "설계",
@@ -65,9 +204,19 @@
     }
   },
   "parallelGroups": {
-    "implementation": ["dev-frontend", "dev-backend", "test-builder"],
-    "cmo-do": ["seo-analyst", "copy-writer"],
-    "coo-do": ["sre-ops", "deploy-ops"]
+    "implementation": [
+      "dev-frontend",
+      "dev-backend",
+      "test-builder"
+    ],
+    "cmo-do": [
+      "seo-analyst",
+      "copy-writer"
+    ],
+    "coo-do": [
+      "sre-ops",
+      "deploy-ops"
+    ]
   },
   "chaining": {
     "sequential": ":",
@@ -88,8 +237,19 @@
       "path": ".vais/memory.json",
       "maxEntries": 500
     },
-    "autoInvoke": ["auto", "fix"],
-    "entryTypes": ["decision", "change", "feedback", "dependency", "debt", "error", "milestone"]
+    "autoInvoke": [
+      "auto",
+      "fix"
+    ],
+    "entryTypes": [
+      "decision",
+      "change",
+      "feedback",
+      "dependency",
+      "debt",
+      "error",
+      "milestone"
+    ]
   },
   "automation": {
     "defaultLevel": 2,
@@ -141,10 +301,42 @@
   },
   "featureNameSuggestions": {
     "_description": "자주 쓰는 피처 이름 예시 (kebab-case 권장, 강제 아님)",
-    "인증·사용자": ["login", "signup", "oauth", "user-profile", "my-page", "password-reset"],
-    "결제·커머스": ["payment", "cart", "checkout", "order-history", "wishlist", "coupon"],
-    "콘텐츠": ["feed", "post", "comment", "search", "notification", "bookmark"],
-    "소셜": ["chat", "follow", "share", "invite", "review"],
-    "관리·운영": ["dashboard", "settings", "admin-panel", "analytics"]
+    "인증·사용자": [
+      "login",
+      "signup",
+      "oauth",
+      "user-profile",
+      "my-page",
+      "password-reset"
+    ],
+    "결제·커머스": [
+      "payment",
+      "cart",
+      "checkout",
+      "order-history",
+      "wishlist",
+      "coupon"
+    ],
+    "콘텐츠": [
+      "feed",
+      "post",
+      "comment",
+      "search",
+      "notification",
+      "bookmark"
+    ],
+    "소셜": [
+      "chat",
+      "follow",
+      "share",
+      "invite",
+      "review"
+    ],
+    "관리·운영": [
+      "dashboard",
+      "settings",
+      "admin-panel",
+      "analytics"
+    ]
   }
 }
