@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.44.1] - 2026-04-06
+
+### Fixed
+
+- **checkpoint-manager**: `stableStringify`로 해시 결정성 보장 + checkpoint ID 검증으로 경로 순회 방지
+- **loop-breaker**: A→B→A 핑퐁 감지 알고리즘 교체 (tail 역순 2-step 카운팅) + feature reset 시 관련 카운터 정리
+- **state-machine**: feature/role 입력 검증 + 미등록 guard 명시적 에러 + NaN 날짜 방어
+- **state-store**: CPU 스핀 대기 → `execSync sleep` 전환 + unlock ENOENT 구분
+- **migration**: try-catch 3단계 분리 (read/parse/write) + orphan tmp 파일 정리
+- **gate-manager**: unmet 메트릭 필터 로직 버그 수정 (`evaluateCondition` 재평가)
+- **template-validator**: 섹션 매칭 워드 바운더리 적용 (오탐 방지)
+- **feature-manager/trust-engine/status**: NaN 방어 + 입력 검증 추가
+- **.gitignore**: `references/` 패턴 간소화
+
 ## [0.44.0] - 2026-04-05
 
 ### Added
