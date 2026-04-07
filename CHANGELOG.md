@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.47.0] - 2026-04-07
+
+### Added
+
+- **skill-validator 에이전트** (`agents/cso/skill-validator.md`): VAIS 스킬 디렉토리 + 에이전트 .md frontmatter conformance, description 품질(3rd-person, what+when, 1024자, 트리거 키워드), progressive disclosure 검증. 구체적 before/after 수정안 제시. CSO Gate B에서 validate-plugin과 분기 사용
+- **`scripts/skill_eval/`**: Apache 2.0 attribution 하에 Anthropic skill-creator 흡수 (`utils.py`, `quick_validate.py`)
+- **`NOTICE`**: 제3자 라이선스 attribution 파일 신설
+- **CSO Gate B 분기 표**: 플러그인 전체 → validate-plugin / 개별 skill·agent → skill-validator 판단 규칙
+
+### Changed
+
+- **C-Level "CEO 추천" 블록 → AskUserQuestion 강제** (`skills/vais/phases/{cso,cto,cpo,cmo,coo,cfo}.md` + `agents/ceo/ceo.md` CP-L2): 텍스트 A/B/C/D 코드 블록만 출력하고 멈추던 패턴을 제거. 요약 블록 출력 후 반드시 AskUserQuestion 도구를 호출하도록 옵션 명세 추가
+- **CSO 체크포인트 separator 길이 두 배**: 38자 → 76자로 가독성 개선
+
+### Fixed
+
+- C-Level phase 완료 시 사용자가 텍스트만 받고 도구 호출 없이 멈추던 UX 회귀
+
 ## [0.46.0] - 2026-04-07
 
 ### Added

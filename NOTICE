@@ -1,0 +1,60 @@
+VAIS Code
+Copyright (c) 2025 VAIS Voice
+Licensed under the MIT License (see LICENSE).
+
+================================================================================
+Third-Party Attributions
+================================================================================
+
+This product includes software developed by third parties. The following
+sections list the original sources, their licenses, and what was absorbed
+into VAIS. The canonical absorption record (file-by-file) is maintained at
+`docs/absorption-ledger.jsonl`.
+
+--------------------------------------------------------------------------------
+1. Anthropic Skills — skill-creator
+--------------------------------------------------------------------------------
+
+Source:   https://github.com/anthropics/skills
+License:  Apache License 2.0
+Copyright (c) Anthropic, PBC
+
+The following files were absorbed (with modifications) from the upstream
+`skills/skill-creator/scripts/` directory:
+
+  - scripts/skill_eval/utils.py
+      Original: scripts/utils.py
+      Changes:  parse_skill_md() generalized to parse_md_frontmatter() to
+                support both skill directories (containing SKILL.md) and
+                single agent .md files. Added PyYAML dependency check with
+                graceful degrade. Added path-name-based skill/agent inference.
+
+  - scripts/skill_eval/quick_validate.py
+      Original: scripts/quick_validate.py
+      Changes:  Added --target={auto,skill,agent} flag for dual-mode
+                validation. Added --format={text,json} output. Extended
+                AGENT_ALLOWED frontmatter keyset for VAIS-specific fields
+                (version, model, tools, memory, disallowedTools). Added
+                progressive disclosure body-length checks (warn>500,
+                fail>800). Restructured exit codes (0=pass / 1=warn /
+                2=fail / 3=input-error).
+
+The following files from the upstream skill-creator were intentionally
+NOT absorbed (out of scope — see Plan v1.2 for rationale):
+
+  - scripts/improve_description.py    (requires run_eval.py output)
+  - scripts/run_eval.py               (claude CLI subprocess loop)
+  - scripts/run_loop.py               (iteration directory management)
+  - scripts/aggregate_benchmark.py    (depends on run_eval/run_loop)
+  - scripts/generate_report.py        (eval-viewer specific)
+  - scripts/package_skill.py          (distribution tool)
+  - eval-viewer/                      (local HTML server)
+  - agents/{analyzer,comparator,grader}.md  (A/B comparison loop agents)
+  - references/schemas.md             (above infrastructure schemas)
+
+A copy of the Apache License 2.0 is available at:
+  https://www.apache.org/licenses/LICENSE-2.0
+
+================================================================================
+
+End of Notices.
