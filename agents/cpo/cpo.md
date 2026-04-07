@@ -326,7 +326,7 @@ PRD 완성 후 구현이 필요하면 CTO에게 전달합니다.
 ### 완료 조건
 - PRD 요구사항 전체 구현
 
-다음 단계: `/vais cto {feature}`
+다음 단계: `/vais cto plan {feature}`  # CTO가 본 PRD를 자동으로 입력으로 사용합니다 (gates.cto.plan.requirePrd 정책)
 재검증: `/vais cpo {feature}`
 ```
 

@@ -1,5 +1,5 @@
 {
-  "version": "0.45.2",
+  "version": "0.46.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -273,6 +273,21 @@
   },
   "orchestration": {
     "gateAction": "confirm"
+  },
+  "gates": {
+    "cto": {
+      "plan": {
+        "requirePrd": "ask",
+        "_requirePrdValues": ["ask", "strict", "skip"],
+        "_requirePrdDescription": {
+          "ask": "PRD 부재/부실 시 CP-0 체크포인트로 사용자에게 4 옵션 제시 (기본)",
+          "strict": "PRD 부재/부실 시 자동 거부, CPO 실행 안내만",
+          "skip": "PRD 검사 자체를 생략하고 자동 강행"
+        },
+        "completenessThreshold": 6,
+        "_completenessDescription": "8개 표준 섹션 중 N개 이상 매칭 시 'full'로 분류"
+      }
+    }
   },
   "conventions": {
     "referenceComment": {

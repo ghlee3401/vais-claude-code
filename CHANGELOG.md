@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.46.0] - 2026-04-07
+
+### Added
+
+- **CTO plan PRD 소비형 + CP-0 체크포인트** (`cto-plan-prd-consumption`): CTO plan을 CPO PRD(`docs/03-do/cpo_{feature}.do.md`) 입력 기반으로 재정의. PRD 부재/부실 시 CP-0 체크포인트로 4 옵션(CPO먼저/강행/직접제공/중단) 제시. 책임 경계 명확화(CPO=What, CTO=How)와 User Sovereignty 원칙 준수
+- **`vais.config.json > gates.cto.plan`**: `requirePrd` (ask/strict/skip) + `completenessThreshold` (기본 6) 신설. 기본값 `ask`로 마이그레이션 무영향
+- **`templates/plan.template.md > 0.7 PRD 입력 (CTO 전용)`** 섹션: PRD 경로/완성도/핵심 결정 추출 또는 강행 모드 사유 기록
+
+### Fixed
+
+- **CTO 체크포인트 출력 표 렌더링 (F8)**: CP-1/CP-D/CP-G/CP-2/CP-Q 5개 출력 템플릿의 마크다운 표가 ` ``` ` 펜스 코드 블록 안에 있어 monospace 텍스트로 표시되던 문제 수정. 펜스 밖으로 분리하여 정상 렌더링
+- **CTO 체크포인트 도구 호출 강제 (F9)**: CP-D 등에서 텍스트 출력만으로 사용자 응답을 갈음하던 문제 수정. `agents/cto/cto.md` 최우선 규칙에 "AskUserQuestion 도구 호출 필수, 텍스트 출력으로 갈음 금지" 명시 + 모든 CP 섹션 말미에 강제 안내
+
+### Changed
+
+- **`agents/cto/cto.md`**: CP-0 신설(라인 204+), Checkpoint 표에 CP-0 행 추가, Context Load에 L0(PRD 검사) 추가, PDCA Plan 행 본문 보강
+- **`agents/cpo/cpo.md`**: 핸드오프 안내 1줄 — `다음: /vais cto plan {feature}` (CTO PRD 자동 사용 안내)
+
 ## [0.45.2] - 2026-04-06
 
 ### Fixed
