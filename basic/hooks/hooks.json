@@ -1,4 +1,5 @@
 {
+  "_purpose": "REFERENCE STRUCTURE — harness engineering 최소 참조. basic/scripts/agent-tracker.js를 사용하며, 메인 플러그인의 hooks/hooks.json(scripts/agent-start.js + agent-stop.js 분리형)과 의도적으로 다름. basic/ 자체가 ${CLAUDE_PLUGIN_ROOT}로 사용될 때만 유효.",
   "hooks": {
     "SessionStart": [
       {

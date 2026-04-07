@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] doc-validator crashed: ${e.message}\n`); } catch (_) {} process.exit(0); });
+process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] doc-validator rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(0); });
 /**
  * VAIS Code - Document Validator
  * C-Level 에이전트 종료 시 필수 문서 존재 여부를 검증합니다.

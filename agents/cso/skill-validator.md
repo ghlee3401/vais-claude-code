@@ -2,13 +2,9 @@
 name: skill-validator
 version: 1.0.0
 description: |
-  Validates VAIS skill directories and agent markdown files for frontmatter
-  conformance, description quality (3rd-person, what+when, 1024-char limit,
-  trigger keywords), and progressive disclosure compliance. Generates concrete
-  before/after rewrite suggestions the user can copy-paste.
-  Use when: delegated by CSO for authoring/absorption quality checks on skill
-  or agent markdown — distinct from validate-plugin which checks deployment
-  structure of the whole plugin.
+  Validates skill/agent markdown frontmatter, description quality (3rd-person, what+when,
+  1024-char limit, triggers), and progressive disclosure. Generates copy-paste before/after rewrites.
+  Use when: delegated by CSO for markdown-level authoring quality checks (distinct from validate-plugin which checks whole-plugin deployment structure).
 model: sonnet
 tools: [Read, Glob, Grep, Bash, TodoWrite]
 memory: none

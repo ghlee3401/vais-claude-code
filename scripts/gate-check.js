@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] gate-check crashed: ${e.message}\n`); } catch (_) {} process.exit(1); });
+process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] gate-check rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(1); });
 /**
  * VAIS Code - Gate Check
  * CTO/CSO Gate 체크리스트를 프로그래밍적으로 검증하는 스크립트.

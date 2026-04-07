@@ -1,5 +1,5 @@
 {
-  "version": "0.47.0",
+  "version": "0.47.1",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -175,6 +175,7 @@
     "port": 8765
   },
   "workflow": {
+    "_sot": "PDCA 단계의 단일 진실 소스(SoT)는 본 키. CLAUDE.md/cto.md의 단계 표는 표시용 사본이며 본 키와 동기화 필수.",
     "phases": [
       "plan",
       "design",

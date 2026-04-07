@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] doc-tracker crashed: ${e.message}\n`); } catch (_) {} process.exit(0); });
+process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] doc-tracker rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(0); });
 /**
  * VAIS Code - Document Tracker (PostToolUse: Write|Edit)
  * 문서 작성/수정 시 워크플로우 상태 자동 업데이트
@@ -65,6 +67,8 @@ function main() {
         const expected = template
           .replace(/\{role\}/g, role)
           .replace(/\{feature\}/g, activeFeature);
+        // null/empty/미치환 가드: endsWith('')는 항상 true이므로 false positive 방지
+        if (!expected || /\{.+\}/.test(expected)) continue;
         if (filePath.endsWith(expected) || filePath.endsWith(path.normalize(expected))) {
           // Phase Order Guard: 선행 필수 phase 완료 여부 검증
           const orderCheck = checkPhaseOrder(phase, activeFeature, role, config);

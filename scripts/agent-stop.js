@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] agent-stop crashed: ${e.message}\n`); } catch (_) {} process.exit(0); });
+process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] agent-stop rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(0); });
 // Design Ref: §2.2 — SubagentStop 훅에서 호출되는 얇은 CLI 래퍼
 // 사용: node scripts/agent-stop.js <role> <outcome> [outputDoc]
 
@@ -34,7 +36,13 @@ if (C_LEVEL_ROLES.includes(role)) {
     const output = formatResult(role, feature, result);
     if (!result.passed) {
       process.stderr.write('\n' + output + '\n');
-      process.stderr.write(`\n❌ [${role.toUpperCase()}] 필수 문서가 누락되어 종료를 차단합니다. 문서를 작성한 후 다시 시도하세요.\n`);
+      // Strict 모드(VAIS_STRICT_DOCS=1)에서만 차단, 기본은 경고만 (사용자 작업 흐름 보호)
+      const strict = process.env.VAIS_STRICT_DOCS === '1';
+      if (strict) {
+        process.stderr.write(`\n❌ [${role.toUpperCase()}] 필수 문서가 누락되어 종료를 차단합니다 (VAIS_STRICT_DOCS=1). 문서를 작성한 후 다시 시도하세요.\n`);
+      } else {
+        process.stderr.write(`\n⚠️  [${role.toUpperCase()}] 필수 문서가 누락되었습니다. 진행은 허용되나 다음 단계 전에 문서를 작성하세요. (차단을 원하면 VAIS_STRICT_DOCS=1)\n`);
+      }
       try {
         const { EventLogger, EVENT_TYPES } = require('../lib/observability/index');
         const el = new EventLogger('.vais/event-log.jsonl');
@@ -43,9 +51,10 @@ if (C_LEVEL_ROLES.includes(role)) {
           outcome: 'doc_missing',
           missing: result.missing.map(m => m.phase),
           feature,
+          strict,
         });
       } catch (_) { /* observability failure should not block exit */ }
-      process.exit(1);
+      if (strict) process.exit(1);
     } else if (output) {
       process.stderr.write('\n' + output + '\n');
     }

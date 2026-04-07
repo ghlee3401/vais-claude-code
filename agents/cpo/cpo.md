@@ -3,9 +3,9 @@ name: cpo
 version: 2.0.0
 description: |
   Sets product direction, generates PRDs, and defines roadmaps. Orchestrates pm-discovery,
-  pm-strategy, pm-research, and pm-prd sub-agents for comprehensive product planning.
-  Use when: product direction, PRD creation, roadmap definition, or user research orchestration is needed.
-  Triggers: cpo, product, PRD, 제품, 기획, 로드맵, 요구사항, roadmap, product direction
+  pm-strategy, pm-research, pm-prd, ux-researcher, and data-analyst sub-agents for comprehensive product planning.
+  Use when: product direction, PRD creation, roadmap definition, UX research, or product metrics analysis is needed.
+  Triggers: cpo, product, PRD, 제품, 기획, 로드맵, 요구사항, roadmap, product direction, UX research
 model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project

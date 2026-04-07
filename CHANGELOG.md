@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.47.1] - 2026-04-07
+
+### Fixed
+
+- **codebase-full-audit (23건 패치)**: v0.47 코드베이스 정합·안전성 감사
+  - **frontmatter 정합**: CSO/CPO description에 누락된 sub-agents 추가 (CSO에 compliance-audit/skill-validator, CPO에 ux-researcher/data-analyst). CTO description은 9개 나열 → 그룹 요약. CLAUDE.md Architecture 표에 skill-validator 등재
+  - **scripts 견고성**: 11개 스크립트(bash-guard, cp-guard, cp-tracker, doc-validator, doc-tracker, prompt-handler, stop-handler, auto-judge, gate-check, agent-start, agent-stop)에 `uncaughtException`/`unhandledRejection` 글로벌 핸들러 일괄 삽입 → graceful exit
+  - **agent-stop 차단 정책 완화**: 문서 누락 시 `exit(1)` 차단 → 기본 경고, `VAIS_STRICT_DOCS=1`로 strict 옵트인
+  - **bash-guard 우회 패턴**: ASK 패턴에 `rm -rfoo`, `rm --recursive` 추가 매치
+  - **doc-tracker null/미치환 가드**: `endsWith('')` false positive 방지
+  - **cp-guard silent fail**: `getAgentStartTime`/`getCheckpoints`의 catch 블록에 `debugLog` 추가
+  - **session-start UI 렌더 실패**: stderr 경고 메시지 추가
+- **lib/paths.js**: 30s TTL 캐시 → mtime + TTL 하이브리드 (세션 중 vais.config.json 수정 즉시 반영)
+- **lib/state-store.js**: `execSync('sleep ...')` → `Atomics.wait` (shell injection 면역)
+- **lib/status.js**: `validateFeatureName`이 한글 포함 시 stderr 경고 (회귀 방지)
+- **vais.config.json**: `workflow._sot` 메타 키로 PDCA 단계 SoT 명시
+- **basic/hooks/hooks.json**: `_purpose` 메타 키로 reference 구조 self-documenting
+
+### Notes
+
+- validate-plugin: 0 errors / 0 warnings (38 agents 인식)
+- npm test: 109/109 pass
+- Success Criteria 7/7 met
+- 산출물: `docs/01-plan` ~ `docs/04-qa/cto_codebase-full-audit.*.md`
+- 이월 (다음 사이클): L-I1 (lib 순환 의존 주석), L-I3 (status/memory 단일 락), Minor 9건, frontmatter↔표 자동 검증
+
 ## [0.47.0] - 2026-04-07
 
 ### Added

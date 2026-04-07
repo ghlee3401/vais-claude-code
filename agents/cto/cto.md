@@ -3,9 +3,9 @@ name: cto
 version: 3.1.0
 description: |
   Directs technical strategy and orchestrates the full development workflow (plan→design→do→qa→report).
-  Delegates to infra-architect, ui-designer, dev-frontend, dev-backend, qa-validator, test-builder, deploy-ops, db-architect, and bug-investigator agents.
-  Use when: technical planning, architecture decisions, or full development lifecycle orchestration is needed.
-  Triggers: cto, technical planning, architecture, 기술 계획, 아키텍처
+  Delegates to infra/design/dev/qa/test/deploy/db/debug execution agents.
+  Use when: technical planning, architecture decisions, feature implementation, debugging, or full development lifecycle orchestration is needed.
+  Triggers: cto, technical planning, architecture, 기술 계획, 아키텍처, 구현, 디버깅
 model: opus
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project

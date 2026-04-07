@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] auto-judge crashed: ${e.message}\n`); } catch (_) {} process.exit(1); });
+process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] auto-judge rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(1); });
 /**
  * VAIS Code - Auto Judge
  * Full-Auto 모드(CEO --auto)에서 각 C-Level 산출물의 통과/재실행 여부를 자동 판정.

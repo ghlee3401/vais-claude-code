@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] bash-guard crashed: ${e.message}\n`); } catch (_) {} process.exit(0); });
+process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] bash-guard rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(0); });
 /**
  * VAIS Code - Bash Guard (PreToolUse)
  * 위험한 명령을 자동 차단
@@ -24,7 +26,9 @@ const BLOCKED = [
 ];
 
 const ASK = [
-  { pattern: /rm\s+-r\b/, reason: '재귀 삭제 명령 - 정말 실행할까요?' },
+  // -r, -rf, -rfoo, -fr 등 옵션 묶음 모두 매치
+  { pattern: /rm\s+-[a-zA-Z]*r[a-zA-Z]*/, reason: '재귀 삭제 명령 - 정말 실행할까요?' },
+  { pattern: /rm\s+--recursive/, reason: '재귀 삭제 명령(--recursive) - 정말 실행할까요?' },
   { pattern: /git\s+reset\s+--hard/, reason: '커밋되지 않은 변경사항이 모두 사라집니다' },
   { pattern: /delete\s+from/i, reason: 'DB 레코드 대량 삭제' },
 ];

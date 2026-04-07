@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] prompt-handler crashed: ${e.message}\n`); } catch (_) {} process.exit(0); });
+process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] prompt-handler rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(0); });
 /**
  * VAIS Code - UserPromptSubmit Handler
  * 사용자 입력에서 의도를 감지하여 워크플로우 컨텍스트 주입

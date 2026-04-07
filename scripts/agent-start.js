@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] agent-start crashed: ${e.message}\n`); } catch (_) {} process.exit(0); });
+process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] agent-start rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(0); });
 // Design Ref: §2.2 — SubagentStart 훅에서 호출되는 얇은 CLI 래퍼. 로직은 lib/observability/에 위임
 // 사용: node scripts/agent-start.js <role> <phase> [task]
 

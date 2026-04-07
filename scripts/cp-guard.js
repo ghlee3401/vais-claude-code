@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] cp-guard crashed: ${e.message}\n`); } catch (_) {} process.exit(0); });
+process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] cp-guard rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(0); });
 /**
  * VAIS Code - Checkpoint Guard
  * C-Level 에이전트 종료 시 필수 체크포인트(AskUserQuestion)가 호출되었는지 검증.
@@ -26,7 +28,9 @@ function getAgentStartTime(role) {
     const starts = el.query({ role, eventType: 'agent_start', limit: 1 });
     // 가장 최근 시작 이벤트
     if (starts.length > 0) return starts[starts.length - 1].ts;
-  } catch (_) { /* ignore */ }
+  } catch (e) {
+    try { require('../lib/debug').debugLog('cp-guard', 'getAgentStartTime failed', { role, error: e.message }); } catch (_) {}
+  }
   return null;
 }
 
@@ -40,7 +44,8 @@ function getCheckpoints(role, since) {
     const opts = { role, eventType: 'checkpoint' };
     if (since) opts.since = since;
     return el.query(opts);
-  } catch (_) {
+  } catch (e) {
+    try { require('../lib/debug').debugLog('cp-guard', 'getCheckpoints failed', { role, error: e.message }); } catch (_) {}
     return [];
   }
 }

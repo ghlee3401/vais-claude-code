@@ -33,6 +33,7 @@ function main() {
       if (bar) ctx += bar + '\n\n';
     } catch (e) {
       debugLog('SessionStart', 'Progress Bar failed', { error: e.message });
+      try { process.stderr.write(`[VAIS] ⚠️  session-start: progress bar 렌더 실패 — ${e.message}\n`); } catch (_) {}
     }
 
     // --- 2. Workflow Map ---
@@ -42,6 +43,7 @@ function main() {
       if (map) ctx += map + '\n\n';
     } catch (e) {
       debugLog('SessionStart', 'Workflow Map failed', { error: e.message });
+      try { process.stderr.write(`[VAIS] ⚠️  session-start: workflow map 렌더 실패 — ${e.message}\n`); } catch (_) {}
     }
   }
 

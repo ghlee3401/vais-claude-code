@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.47.0)
+> Virtual AI C-Suite for software development (v0.47.1)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -15,7 +15,7 @@ vais-claude-code/
 │   ├── ceo/         #   CEO + absorb-analyzer + retro-report
 │   ├── cpo/         #   CPO + pm-discovery/strategy/research/prd + ux-researcher + data-analyst
 │   ├── cto/         #   CTO + infra-architect/dev-backend/dev-frontend/ui-designer/qa-validator + test-builder/deploy-ops/db-architect + bug-investigator
-│   ├── cso/         #   CSO + security-auditor/validate-plugin/code-review + compliance-audit
+│   ├── cso/         #   CSO + security-auditor/validate-plugin/code-review + compliance-audit + skill-validator
 │   ├── cmo/         #   CMO + seo-analyst + copy-writer + growth-analyst
 │   ├── coo/         #   COO + canary-monitor/perf-benchmark + sre-ops + deploy-ops(공유) + docs-writer
 │   └── cfo/         #   CFO + cost-analyst + pricing-modeler
@@ -24,10 +24,10 @@ vais-claude-code/
 ├── lib/             # 핵심 라이브러리 (fs-utils, io, memory, paths, status, ui)
 ├── scripts/         # bash-guard, phase-transition, auditors 등
 ├── templates/       # PDCA 문서 템플릿 (plan, design, do, qa, report)
-├── mcp/             # MCP 서버 설정
-├── output-styles/   # 출력 스타일 정의
+├── mcp/             # MCP 서버 설정 (현재 비활성, v0.48+ 활용 예정)
+├── output-styles/   # 출력 스타일 정의 (session-start hook이 로드)
 ├── docs/            # 피처별 산출물 (01-plan ~ 05-report)
-├── references/      # 흡수 대기 inbox (_inbox/만 유지, 흡수 완료 문서는 에이전트로 이동)
+├── references/      # 흡수 대기 inbox (gitignored, _inbox/만 유지 — 내부 공유 문서 저장 금지)
 ├── basic/           # 하네스 엔지니어링 최소 참조 구조 (패턴 참고용, 프로덕션 코드 아님)
 ├── vendor/          # 외부 의존 (ui-ux-pro-max)
 ├── tests/           # 테스트
@@ -73,6 +73,7 @@ CEO가 피처 성격 + 산출물 상태를 분석하여 다음 C-Level을 동적
 | validate-plugin | CSO | Plugin deployment validation |
 | code-review | CSO | Independent code review |
 | compliance-audit | CSO/CFO | Compliance (GDPR/license) |
+| skill-validator | CSO | Skill/agent markdown frontmatter validation (vs validate-plugin: 단일 markdown 단위) |
 | seo-analyst | CMO | SEO audit |
 | copy-writer | CMO | Marketing copy (landing/email/app store) |
 | growth-analyst | CMO | Growth funnel strategy + viral loop |
