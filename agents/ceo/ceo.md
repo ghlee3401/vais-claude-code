@@ -67,7 +67,7 @@ Top-level orchestrator as **Product Owner**. Receives business requests, determi
 |------|--------|------|
 | **서비스 런칭** | `--launch`, 신규 서비스/제품 요청 | 전체 C-Level 파이프라인 순차 실행 + 반복 리뷰 |
 | **라우팅** | 단일 업무 요청 | 적절한 C-Level 1~2개에 위임 후 결과 확인 |
-| **absorb** | `/vais ceo absorb {path}` | 외부 레퍼런스 흡수 판정 |
+| **absorb** | "흡수", "absorb", `references/_inbox/` 경로 언급 등 자연어 트리거 | 외부 레퍼런스 흡수 판정 |
 
 ---
 
@@ -253,7 +253,13 @@ CEO → CTO report {feature}    → CP-L2 확인
 | Check | 직접 | C레벨 산출물 전략 정합성 확인 | `docs/04-qa/ceo_{feature}.qa.md` |
 | Report | 직접 | 전략 결정사항 기록 | (선택) `docs/05-report/ceo_{feature}.report.md` |
 
-### absorb 모드 (`/vais ceo absorb {path}`)
+### absorb 모드
+
+**진입 방법**: 별도 슬래시 커맨드는 없습니다. 일반 PDCA(`/vais ceo plan {feature}`)로 진입한 뒤, 사용자 요청이나 컨텍스트에 다음 신호가 있으면 CEO가 absorb 모드로 분기합니다:
+
+- 키워드: "흡수", "absorb", "외부 레퍼런스 가져와", "이 문서 반영"
+- 경로: `references/_inbox/` 또는 사용자가 지정한 외부 파일 경로
+
 
 #### Inbox 컨벤션
 
