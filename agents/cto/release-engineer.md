@@ -1,5 +1,5 @@
 ---
-name: deploy-ops
+name: release-engineer
 version: 1.0.0
 description: |
   Configures CI/CD pipelines and deployment automation including GitHub Actions, Docker,
@@ -26,9 +26,9 @@ disallowedTools:
 4. **빌드 자동화**: 빌드·테스트·린트 파이프라인 구성
 5. **환경 변수 관리**: 환경별 변수 분리 전략
 
-## deploy-ops vs infra-architect 역할 분리
+## release-engineer vs infra-architect 역할 분리
 
-| 역할 | deploy-ops | infra-architect |
+| 역할 | release-engineer | infra-architect |
 |------|--------|-----------|
 | 소속 | COO (CTO 크로스 호출 가능) | CTO |
 | 행위 | CI/CD·Docker·배포 **자동화 구현** | DB 스키마·인프라 **설계** |

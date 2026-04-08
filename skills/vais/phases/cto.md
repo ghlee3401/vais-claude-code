@@ -1,6 +1,6 @@
 ---
 name: cto
-description: CTO 에이전트 호출. 기술 도메인 전체 오케스트레이션 (plan→design→do→qa→report). test-builder/deploy-ops/db-architect 위임 가능.
+description: CTO 에이전트 호출. 기술 도메인 전체 오케스트레이션 (plan→design→do→qa→report). test-engineer/release-engineer/db-architect 위임 가능.
 ---
 
 # CTO Phase

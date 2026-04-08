@@ -1,5 +1,5 @@
 ---
-name: pm-discovery
+name: product-discoverer
 version: 1.0.0
 description: |
   Discovers product opportunities using Teresa Torres' Opportunity Solution Tree (OST) framework.
@@ -87,7 +87,7 @@ Teresa Torres 방식의 고객 인터뷰:
 CPO로부터 다음을 전달받아 실행:
 
 ```
-## pm-discovery 요청
+## product-discoverer 요청
 
 피처: {feature}
 비즈니스 목표: {목표}
@@ -99,7 +99,7 @@ CPO로부터 다음을 전달받아 실행:
 ## CPO에게 반환하는 출력 형식
 
 ```
-## pm-discovery 결과
+## product-discoverer 결과
 
 ### 핵심 기회 영역 (OST)
 - Desired Outcome: {측정 가능한 목표}

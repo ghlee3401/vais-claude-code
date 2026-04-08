@@ -20,8 +20,8 @@ const PHASE_META = [
   { key: 'plan',   icon: '📋', num: '01', name: '기획',       color: '#2563eb' },
   { key: 'design', icon: '🎨', num: '02', name: '설계',       color: '#059669' },
   { key: 'infra-architect', icon: '🔧', num: '03', name: '아키텍트',   color: '#7c3aed' },
-  { key: 'dev-frontend', icon: '💻', num: '04', name: '프론트엔드', color: '#d97706' },
-  { key: 'dev-backend',  icon: '⚙️', num: '05', name: '백엔드',     color: '#dc2626' },
+  { key: 'frontend-engineer', icon: '💻', num: '04', name: '프론트엔드', color: '#d97706' },
+  { key: 'backend-engineer',  icon: '⚙️', num: '05', name: '백엔드',     color: '#dc2626' },
   { key: 'qa',       icon: '✅', num: '06', name: 'QA',         color: '#0d9488' },
 ];
 

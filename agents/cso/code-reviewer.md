@@ -1,5 +1,5 @@
 ---
-name: code-review
+name: code-reviewer
 version: 1.0.0
 description: |
   Performs independent code review after CTO QA pass. Examines bug patterns, performance issues,
@@ -116,7 +116,7 @@ CSO가 최종 Gate C Pass/Fail을 판정합니다.
 
 ## CTO QA와의 역할 구분
 
-| | CTO > qa (내부 QA) | CSO > code-review (독립 검증) |
+| | CTO > qa (내부 QA) | CSO > code-reviewer (독립 검증) |
 |---|---|---|
 | 관점 | 계획 대비 구현 일치 | 구현 자체의 품질 |
 | Gap 분석 | O (핵심 역할) | X (수행 안 함) |
@@ -130,5 +130,5 @@ CSO가 최종 Gate C Pass/Fail을 판정합니다.
 
 | version | date | change |
 |---------|------|--------|
-| v1.0.0 | 2026-04-03 | 초기 작성 — bkit code-review 스킬 absorb + 독립 검증 특화 |
+| v1.0.0 | 2026-04-03 | 초기 작성 — bkit code-reviewer 스킬 absorb + 독립 검증 특화 |
 | v1.1.0 | 2026-04-04 | gstack/review 흡수 — SQL safety, LLM trust boundary, 조건부 side-effect 체크리스트 추가 |

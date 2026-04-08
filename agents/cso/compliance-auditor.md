@@ -1,5 +1,5 @@
 ---
-name: compliance-audit
+name: compliance-auditor
 version: 1.0.0
 description: |
   Verifies regulatory compliance including GDPR/privacy protection, license compatibility,
@@ -25,9 +25,9 @@ disallowedTools:
 4. **법적 문서 초안**: 개인정보 처리방침, 이용약관 초안
 5. **SOC2/ISO27001 체크**: 보안 인증 항목 확인
 
-## compliance-audit vs security-auditor 역할 분리
+## compliance-auditor vs security-auditor 역할 분리
 
-| 역할 | compliance-audit | security-auditor |
+| 역할 | compliance-auditor | security-auditor |
 |------|-----------|----------|
 | 범위 | **규정** 준수 (법적/인증) | **코드** 취약점 (OWASP) |
 | 체크 대상 | 라이선스, 개인정보, 감사 로그 | SQL Injection, XSS, CSRF 등 |

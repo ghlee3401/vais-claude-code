@@ -21,9 +21,9 @@ keep-coding-instructions: true
 - 📋 기획 (plan)
 - 🎨 설계 (ui-designer)
 - 🔧 아키텍트 (infra-architect)
-- 💻 프론트엔드 (dev-frontend)
-- ⚙️ 백엔드 (dev-backend)
-- ✅ QA (qa-validator)
+- 💻 프론트엔드 (frontend-engineer)
+- ⚙️ 백엔드 (backend-engineer)
+- ✅ QA (qa-engineer)
 
 ## 하단 리포트
 
@@ -53,14 +53,14 @@ keep-coding-instructions: true
 
 ## 병렬 실행 결과 표시
 
-`dev-frontend+dev-backend` 등 병렬 실행 시, 각 에이전트의 결과를 순서대로 표시합니다:
+`frontend-engineer+backend-engineer` 등 병렬 실행 시, 각 에이전트의 결과를 순서대로 표시합니다:
 
 ```
 ## 💻 프론트엔드 결과
-[dev-frontend 작업 결과]
+[frontend-engineer 작업 결과]
 
 ## ⚙️ 백엔드 결과
-[dev-backend 작업 결과]
+[backend-engineer 작업 결과]
 ```
 
 ## 에러 상태 표시

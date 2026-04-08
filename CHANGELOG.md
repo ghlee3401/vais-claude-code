@@ -1,5 +1,57 @@
 # Changelog
 
+## [0.48.0] - 2026-04-08
+
+### ⚠️ BREAKING CHANGES — Sub-Agent Industry Naming (agent-rename-v2)
+
+20개 sub-agent를 업계 표준 직무명으로 rename. 외부 사용자가 직접 호출하던 에이전트명이 변경됨.
+
+#### 매핑 표
+
+| 이전 (v0.47.x) | 신규 (v0.48.0) | C-Level |
+|---------------|---------------|---------|
+| `dev-backend` | `backend-engineer` | CTO |
+| `dev-frontend` | `frontend-engineer` | CTO |
+| `test-builder` | `test-engineer` | CTO |
+| `bug-investigator` | `incident-responder` | CTO |
+| `deploy-ops` | `release-engineer` | CTO/COO |
+| `qa-validator` | `qa-engineer` | CTO |
+| `validate-plugin` | `plugin-validator` | CSO |
+| `compliance-audit` | `compliance-auditor` | CSO/CFO |
+| `code-review` | `code-reviewer` | CSO |
+| `perf-benchmark` | `performance-engineer` | COO |
+| `sre-ops` | `sre-engineer` | COO |
+| `canary-monitor` | `release-monitor` | COO |
+| `docs-writer` | `technical-writer` | COO/CTO/CPO |
+| `pricing-modeler` | `pricing-analyst` | CFO |
+| `cost-analyst` | `finops-analyst` | CFO |
+| `retro-report` | `retrospective-writer` | CEO |
+| `pm-discovery` | `product-discoverer` | CPO |
+| `pm-strategy` | `product-strategist` | CPO |
+| `pm-research` | `product-researcher` | CPO |
+| `pm-prd` | `prd-writer` | CPO |
+
+#### 마이그레이션 가이드
+
+- 기존 워크플로우에서 sub-agent를 직접 참조한 부분이 있다면 위 매핑 표에 따라 갱신
+- `.vais/agent-state.json`에 옛 이름이 캐시되어 있을 수 있음 → 백업 후 초기화 또는 마이그레이션
+- C-Level 에이전트(ceo/cpo/cto/cso/cmo/coo/cfo)는 변경 없음
+- CTO 워크플로우 호출 방식 변경 없음 — 내부적으로 신규 sub-agent 이름 사용
+
+#### 변경 이유
+
+- v0.47.x의 `sub-agent-rename` 작업은 단어 수만 통일했고 직무 표준화는 다루지 못함
+- 마켓플레이스 검색성·외부 사용자 인지도 개선
+- Cursor/Copilot 등 호환 도구의 직무 매칭 개선
+- 일관된 `{도메인}-{직무 접미사}` 패턴: `-engineer`, `-architect`, `-analyst`, `-auditor`, `-designer`, `-writer`, `-researcher`
+
+#### 영향 범위
+
+- 23 파일 rename (agents/ 20개 + skills/vais/phases/ 3개)
+- 52개 파일 내부 참조 일괄 갱신
+- `vais.config.json` subAgents/parallelGroups 갱신
+- CLAUDE.md / AGENTS.md / README.md 테이블 갱신
+
 ## [0.47.1] - 2026-04-07
 
 ### Fixed

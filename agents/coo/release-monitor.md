@@ -1,10 +1,10 @@
 ---
-name: canary-monitor
+name: release-monitor
 version: 1.0.0
 description: |
   Monitors service health immediately after deployment using curl/API/log-based lightweight checks.
   Detects errors and performance regressions in the canary window.
-  Use when: delegated by COO for short-term post-deployment health verification (distinct from sre-ops which handles ongoing/long-term monitoring infrastructure).
+  Use when: delegated by COO for short-term post-deployment health verification (distinct from sre-engineer which handles ongoing/long-term monitoring infrastructure).
 model: sonnet
 tools: [Read, Write, Glob, Grep, Bash, TodoWrite]
 memory: none

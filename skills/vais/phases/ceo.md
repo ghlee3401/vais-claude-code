@@ -49,3 +49,34 @@ description: CEO 에이전트 호출. 동적 라우팅 기반 서비스 런칭 +
 - action: `$0`
 - phase: (위에서 결정된 phase)
 - feature: (위에서 분리된 feature)
+
+## 완료 후 CEO 추천
+
+에이전트가 phase를 완료한 뒤, SKILL.md 아웃로의 **"다음 스텝"** 섹션에서 CEO 추천을 수행합니다:
+
+1. `docs/` 폴더를 Glob으로 스캔하여 `*_{feature}.*.md` 파일 존재 여부로 완료된 C-Level 파악
+2. 현재 피처의 성격 분석 (피처명 + 사용자 컨텍스트)
+3. `vais.config.json`의 `launchPipeline.dependencies`에서 의존성 확인
+4. 아직 실행되지 않은 C-Level 중 다음으로 적합한 것을 추천
+5. **추천 요약을 응답에 직접 출력**한 뒤, **반드시 AskUserQuestion 도구로 사용자 응답을 받습니다** (텍스트 선택지로만 표시 금지).
+
+### 출력 형식 (요약 블록)
+
+```
+📍 **CEO 추천 — 다음 단계**
+📊 완료: {완료된 C-Level 목록} | 미실행: {미실행 C-Level 목록}
+💡 추천: **{추천 C-Level}** — {이유 1문장}
+```
+
+### AskUserQuestion 호출 (필수)
+
+요약 출력 직후 아래 형식으로 AskUserQuestion을 호출합니다:
+
+- **question**: `다음 단계를 선택해주세요. (추천: {추천 C-Level})`
+- **options**:
+  - `{추천 C-Level} 진행` — `/vais {추천c레벨} {feature}`
+  - `다른 C-Level 선택` — 사용자가 직접 C-Level 지정
+  - `현재 C-Level 다음 phase` — `/vais ceo {다음phase} {feature}`
+  - `종료` — 작업 종료
+
+> ⛔ **금지**: A/B/C/D 텍스트 선택지만 출력하고 사용자 응답을 기다리는 행위. 반드시 AskUserQuestion 도구를 호출해야 합니다.

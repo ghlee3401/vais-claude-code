@@ -1,5 +1,5 @@
 ---
-name: docs-writer
+name: technical-writer
 version: 1.0.0
 description: |
   Generates technical documentation including API docs, README files, user guides, and onboarding materials.

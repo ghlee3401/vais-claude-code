@@ -1,5 +1,5 @@
 ---
-name: perf-benchmark
+name: performance-engineer
 version: 1.0.0
 description: |
   Tracks performance metrics including build size, dependency count, and response times.

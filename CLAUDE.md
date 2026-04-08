@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.47.1)
+> Virtual AI C-Suite for software development (v0.48.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -12,13 +12,13 @@ AI C-Suite 조직 시뮬레이션 플러그인. CEO가 Product Owner로서 C-Lev
 ```
 vais-claude-code/
 ├── agents/          # C-Level 별 하위 폴더로 구성된 에이전트 (37개)
-│   ├── ceo/         #   CEO + absorb-analyzer + retro-report
-│   ├── cpo/         #   CPO + pm-discovery/strategy/research/prd + ux-researcher + data-analyst
-│   ├── cto/         #   CTO + infra-architect/dev-backend/dev-frontend/ui-designer/qa-validator + test-builder/deploy-ops/db-architect + bug-investigator
-│   ├── cso/         #   CSO + security-auditor/validate-plugin/code-review + compliance-audit + skill-validator
+│   ├── ceo/         #   CEO + absorb-analyzer + retrospective-writer
+│   ├── cpo/         #   CPO + product-discoverer/strategy/research/prd + ux-researcher + data-analyst
+│   ├── cto/         #   CTO + infra-architect/backend-engineer/frontend-engineer/ui-designer/qa-engineer + test-engineer/release-engineer/db-architect + incident-responder
+│   ├── cso/         #   CSO + security-auditor/plugin-validator/code-reviewer + compliance-auditor + skill-validator
 │   ├── cmo/         #   CMO + seo-analyst + copy-writer + growth-analyst
-│   ├── coo/         #   COO + canary-monitor/perf-benchmark + sre-ops + deploy-ops(공유) + docs-writer
-│   └── cfo/         #   CFO + cost-analyst + pricing-modeler
+│   ├── coo/         #   COO + release-monitor/performance-engineer + sre-engineer + release-engineer(공유) + technical-writer
+│   └── cfo/         #   CFO + finops-analyst + pricing-analyst
 ├── skills/vais/     # SKILL.md + phases/ + utils/
 ├── hooks/           # hooks.json, events.json, session-start.js
 ├── lib/             # 핵심 라이브러리 (fs-utils, io, memory, paths, status, ui)
@@ -63,33 +63,33 @@ CEO가 피처 성격 + 산출물 상태를 분석하여 다음 C-Level을 동적
 |-------|---------|------|
 | infra-architect | CTO | DB schema + environment + project setup |
 | ui-designer | CTO | IA + wireframes + UI design |
-| dev-frontend | CTO | Frontend implementation |
-| dev-backend | CTO | Backend API implementation |
-| qa-validator | CTO | Gap analysis + code review + QA verification |
-| test-builder | CTO | Test code generation (unit/integration/e2e) |
-| deploy-ops | CTO/COO | CI/CD pipeline + Docker + deployment automation |
+| frontend-engineer | CTO | Frontend implementation |
+| backend-engineer | CTO | Backend API implementation |
+| qa-engineer | CTO | Gap analysis + code review + QA verification |
+| test-engineer | CTO | Test code generation (unit/integration/e2e) |
+| release-engineer | CTO/COO | CI/CD pipeline + Docker + deployment automation |
 | db-architect | CTO | DB schema optimization + migration + query tuning |
 | security-auditor | CSO | Security audit (OWASP Top 10) |
-| validate-plugin | CSO | Plugin deployment validation |
-| code-review | CSO | Independent code review |
-| compliance-audit | CSO/CFO | Compliance (GDPR/license) |
-| skill-validator | CSO | Skill/agent markdown frontmatter validation (vs validate-plugin: 단일 markdown 단위) |
+| plugin-validator | CSO | Plugin deployment validation |
+| code-reviewer | CSO | Independent code review |
+| compliance-auditor | CSO/CFO | Compliance (GDPR/license) |
+| skill-validator | CSO | Skill/agent markdown frontmatter validation (vs plugin-validator: 단일 markdown 단위) |
 | seo-analyst | CMO | SEO audit |
 | copy-writer | CMO | Marketing copy (landing/email/app store) |
 | growth-analyst | CMO | Growth funnel strategy + viral loop |
-| sre-ops | COO | SRE/monitoring + incident runbook |
-| docs-writer | COO/CTO/CPO | Technical docs (API docs/README/guides) |
-| cost-analyst | CFO | Cloud cost analysis + optimization |
-| pricing-modeler | CFO | Pricing models + revenue simulation |
-| bug-investigator | CTO | Systematic debugging (4-phase: investigate→analyze→hypothesize→implement) |
-| canary-monitor | COO | Post-deployment canary monitoring |
-| perf-benchmark | COO | Performance benchmarks + regression detection |
-| retro-report | CEO | Engineering retrospective + learning extraction |
+| sre-engineer | COO | SRE/monitoring + incident runbook |
+| technical-writer | COO/CTO/CPO | Technical docs (API docs/README/guides) |
+| finops-analyst | CFO | Cloud cost analysis + optimization |
+| pricing-analyst | CFO | Pricing models + revenue simulation |
+| incident-responder | CTO | Systematic debugging (4-phase: investigate→analyze→hypothesize→implement) |
+| release-monitor | COO | Post-deployment canary monitoring |
+| performance-engineer | COO | Performance benchmarks + regression detection |
+| retrospective-writer | CEO | Engineering retrospective + learning extraction |
 | ux-researcher | CPO | UX research (JTBD interviews/usability tests) |
 | data-analyst | CPO/CTO/CFO | Product metrics (DAU/MAU/A/B tests) |
 
 ### PM (제품 기획 레이어, CPO 서브)
-pm-discovery, pm-strategy, pm-research, pm-prd
+product-discoverer, product-strategist, product-researcher, prd-writer
 
 ### Utility
 absorb-analyzer (CEO 서브, 레퍼런스 흡수 분석)
@@ -104,7 +104,7 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 
 ### CTO 단독 (기술 구현, 5 Phases)
 ```
-📋 plan → 🎨 design → 🔧 do (dev-frontend + dev-backend + test-builder 병렬) → ✅ qa → 📊 report
+📋 plan → 🎨 design → 🔧 do (frontend-engineer + backend-engineer + test-engineer 병렬) → ✅ qa → 📊 report
 ```
 
 - 두 가지 진입점: CEO (전체 런칭) / CTO (기술만) / 개별 C-Level 직접 호출
@@ -127,7 +127,7 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 5. **위험 명령 금지** — `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수** — 민감 정보는 반드시 환경 변수로 관리
 7. **참조 투명성** — 외부 문서 참고 시 `// @see {URL}` 주석 추가
-8. **C-Suite 호출 규칙** — 실행 에이전트(infra-architect, dev-backend, dev-frontend 등)는 직접 호출 금지, 반드시 CTO를 통해 호출
+8. **C-Suite 호출 규칙** — 실행 에이전트(infra-architect, backend-engineer, frontend-engineer 등)는 직접 호출 금지, 반드시 CTO를 통해 호출
 9. **완전성 원칙 (Boil the Lake)** — 각 C-Level은 담당 범위를 완전하게 수행. "나중에" 미룸 금지. Lake(끓일 수 있는 범위)는 끓이고, Ocean(전체 재작성 등)은 범위 밖으로 표시
 10. **탐색 우선 (Search Before Building)** — 빌드 전 기존 솔루션 탐색. 검증된 패턴 → 현재 베스트 프랙티스 → First Principles 순서
 11. **사용자 주권 (User Sovereignty)** — AI는 추천, 사용자가 결정. CEO 체크포인트에서 반드시 사용자 확인

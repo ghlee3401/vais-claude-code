@@ -1,8 +1,8 @@
 ---
-name: pm-prd
+name: prd-writer
 version: 1.0.0
 description: |
-  Synthesizes pm-discovery, pm-strategy, and pm-research outputs into a complete PRD with 8 sections.
+  Synthesizes product-discoverer, product-strategist, and product-researcher outputs into a complete PRD with 8 sections.
   Includes OKR, sprint plan, pre-mortem, stakeholder map, and user/job stories.
   Use when: delegated by CPO for PRD document generation.
 model: sonnet
@@ -17,7 +17,7 @@ disallowedTools:
 
 ## Role
 
-PRD synthesis agent. Takes outputs from pm-discovery/pm-strategy/pm-research to generate
+PRD synthesis agent. Takes outputs from product-discoverer/product-strategist/product-researcher to generate
 8섹션 PRD 생성. CTO 핸드오프용 기술 제약 섹션 포함.
 
 ---
@@ -125,12 +125,12 @@ When {상황}, I want to {동기}, So I can {기대 결과}.
 ## CPO 입력 형식
 
 ```
-## pm-prd 요청
+## prd-writer 요청
 
 피처: {feature}
-pm-discovery 결과: {핵심 기회, 최우선 가정}
-pm-strategy 결과: {Value Proposition, Lean Canvas 핵심}
-pm-research 결과: {Personas, Market Sizing, Competitor 요약}
+product-discoverer 결과: {핵심 기회, 최우선 가정}
+product-strategist 결과: {Value Proposition, Lean Canvas 핵심}
+product-researcher 결과: {Personas, Market Sizing, Competitor 요약}
 포함할 부록: [OKR | Sprint | Pre-mortem | Stakeholder | Stories | 전체]
 ```
 

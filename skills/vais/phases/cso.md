@@ -1,6 +1,6 @@
 ---
 name: cso
-description: CSO 에이전트 호출. 보안 검토(Gate A) + 플러그인 검증(Gate B) + 독립 코드 리뷰(Gate C). compliance-audit 위임 가능.
+description: CSO 에이전트 호출. 보안 검토(Gate A) + 플러그인 검증(Gate B) + 독립 코드 리뷰(Gate C). compliance-auditor 위임 가능.
 ---
 
 # CSO Phase

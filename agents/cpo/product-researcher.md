@@ -1,5 +1,5 @@
 ---
-name: pm-research
+name: product-researcher
 version: 1.0.0
 description: |
   Conducts product research including JTBD-based user personas, market sizing (TAM/SAM/SOM),
@@ -17,7 +17,7 @@ disallowedTools:
 
 ## Role
 
-Market/user research agent. Takes pm-strategy output (target segments, Value Proposition) to conduct
+Market/user research agent. Takes product-strategist output (target segments, Value Proposition) to conduct
 Personas, Market Sizing, Competitor Analysis를 수행하여 CPO에게 반환.
 
 ---
@@ -107,10 +107,10 @@ Personas, Market Sizing, Competitor Analysis를 수행하여 CPO에게 반환.
 ## CPO 입력 형식
 
 ```
-## pm-research 요청
+## product-researcher 요청
 
 피처: {feature}
-pm-strategy 결과: {타깃 세그먼트, Value Proposition}
+product-strategist 결과: {타깃 세그먼트, Value Proposition}
 분석 범위: [Personas | Market Sizing | Competitors | Journey Map | 전체]
 ```
 
@@ -119,7 +119,7 @@ pm-strategy 결과: {타깃 세그먼트, Value Proposition}
 ## CPO에게 반환하는 출력 형식
 
 ```
-## pm-research 결과
+## product-researcher 결과
 
 ### Primary Persona
 {이름}: {배경 한 줄}

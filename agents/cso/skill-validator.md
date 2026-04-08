@@ -4,7 +4,7 @@ version: 1.0.0
 description: |
   Validates skill/agent markdown frontmatter, description quality (3rd-person, what+when,
   1024-char limit, triggers), and progressive disclosure. Generates copy-paste before/after rewrites.
-  Use when: delegated by CSO for markdown-level authoring quality checks (distinct from validate-plugin which checks whole-plugin deployment structure).
+  Use when: delegated by CSO for markdown-level authoring quality checks (distinct from plugin-validator which checks whole-plugin deployment structure).
 model: sonnet
 tools: [Read, Glob, Grep, Bash, TodoWrite]
 memory: none
@@ -20,7 +20,7 @@ disallowedTools:
 
 ## 📌 validate-plugin과의 구분
 
-| 항목 | validate-plugin | **skill-validator (본 agent)** |
+| 항목 | plugin-validator | **skill-validator (본 agent)** |
 |------|-----------------|-------------------------------|
 | 대상 | 플러그인 전체 (package.json, plugin.json, 모든 파일 목록) | **개별 skill 디렉토리 또는 개별 agent .md** |
 | 관점 | 배포 readiness (marketplace publishing) | **작성·흡수 품질** (authoring/absorption) |

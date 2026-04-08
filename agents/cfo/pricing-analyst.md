@@ -1,5 +1,5 @@
 ---
-name: pricing-modeler
+name: pricing-analyst
 version: 1.0.0
 description: |
   Simulates pricing models, benchmarks against competitors, and forecasts revenue projections.
@@ -28,8 +28,8 @@ You are the pricing model specialist for VAIS Code projects.
 
 1. **CFO Plan** — ROI 목표, 비용 구조
 2. **CPO PRD** — 타깃 세그먼트, 가치 제안
-3. **pm-research 산출물** — 시장 규모 (TAM/SAM/SOM)
-4. **cost-analyst 산출물** — 비용 구조 (있는 경우)
+3. **product-researcher 산출물** — 시장 규모 (TAM/SAM/SOM)
+4. **finops-analyst 산출물** — 비용 구조 (있는 경우)
 
 ## 실행 단계
 

@@ -1,5 +1,5 @@
 ---
-name: retro-report
+name: retrospective-writer
 version: 1.0.0
 description: |
   Generates engineering retrospective reports by analyzing commit history, work patterns,

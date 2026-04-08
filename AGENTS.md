@@ -17,7 +17,7 @@
 
 ### 병렬 실행 구간
 
-- **구현(do)**: dev-frontend + dev-backend + test-builder 병렬
+- **구현(do)**: frontend-engineer + backend-engineer + test-engineer 병렬
 
 ### Gate 체크포인트
 
@@ -35,7 +35,7 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 /vais help                   — 사용법 안내
 ```
 
-실행 에이전트(infra-architect, dev-frontend, dev-backend 등)는 직접 호출하지 않습니다. C-레벨 에이전트가 필요에 따라 위임합니다.
+실행 에이전트(infra-architect, frontend-engineer, backend-engineer 등)는 직접 호출하지 않습니다. C-레벨 에이전트가 필요에 따라 위임합니다.
 
 ## 필수 규칙
 
@@ -55,10 +55,10 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 | cto | Technical lead orchestrator (required) |
 | ceo | Business strategy + absorb orchestrator |
 | cpo | Product direction + PRD + pm-* sub-agent orchestration |
-| cfo | Financial analysis, ROI, pricing (delegates to cost-analyst/pricing-modeler) |
+| cfo | Financial analysis, ROI, pricing (delegates to finops-analyst/pricing-analyst) |
 | cmo | Marketing + seo-analyst/copy-writer/growth-analyst delegation |
 | cso | Security Gate A + plugin validation Gate B + independent review Gate C + compliance |
-| coo | Operations, CI/CD, monitoring (delegates to sre-ops/deploy-ops/docs-writer) |
+| coo | Operations, CI/CD, monitoring (delegates to sre-engineer/release-engineer/technical-writer) |
 
 ### Execution (실행 레이어, Sonnet)
 
@@ -66,27 +66,27 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 |---------|---------|------|
 | infra-architect | CTO | DB schema + environment + project setup |
 | ui-designer | CTO | IA + wireframes + UI design |
-| dev-frontend | CTO | Frontend implementation |
-| dev-backend | CTO | Backend API implementation |
-| qa-validator | CTO | Gap analysis + code review + QA verification |
-| test-builder | CTO | Test code generation (unit/integration/e2e) |
-| deploy-ops | CTO/COO | CI/CD + Docker + deployment automation |
+| frontend-engineer | CTO | Frontend implementation |
+| backend-engineer | CTO | Backend API implementation |
+| qa-engineer | CTO | Gap analysis + code review + QA verification |
+| test-engineer | CTO | Test code generation (unit/integration/e2e) |
+| release-engineer | CTO/COO | CI/CD + Docker + deployment automation |
 | db-architect | CTO | DB schema optimization + migration + query tuning |
 | security-auditor | CSO | Security audit (OWASP Top 10) |
-| compliance-audit | CSO/CFO | Compliance (GDPR/license) |
+| compliance-auditor | CSO/CFO | Compliance (GDPR/license) |
 | seo-analyst | CMO | SEO audit |
 | copy-writer | CMO | Marketing copy |
 | growth-analyst | CMO | Growth funnel strategy |
-| sre-ops | COO | SRE/monitoring + incident runbook |
-| docs-writer | COO/CTO/CPO | Technical docs (API docs/README) |
-| cost-analyst | CFO | Cloud cost analysis |
-| pricing-modeler | CFO | Pricing models + revenue simulation |
+| sre-engineer | COO | SRE/monitoring + incident runbook |
+| technical-writer | COO/CTO/CPO | Technical docs (API docs/README) |
+| finops-analyst | CFO | Cloud cost analysis |
+| pricing-analyst | CFO | Pricing models + revenue simulation |
 | ux-researcher | CPO | UX research |
 | data-analyst | CPO/CTO/CFO | Product metrics analysis |
-| bug-investigator | CTO | Systematic debugging |
-| canary-monitor | COO | Post-deployment canary monitoring |
-| perf-benchmark | COO | Performance benchmarks |
-| retro-report | CEO | Engineering retrospective |
+| incident-responder | CTO | Systematic debugging |
+| release-monitor | COO | Post-deployment canary monitoring |
+| performance-engineer | COO | Performance benchmarks |
+| retrospective-writer | CEO | Engineering retrospective |
 
 실행 에이전트는 **직접 호출 금지** — 반드시 CTO를 통해 호출합니다.
 

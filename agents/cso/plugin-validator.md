@@ -1,5 +1,5 @@
 ---
-name: validate-plugin
+name: plugin-validator
 version: 1.0.0
 description: |
   Validates plugin deployment readiness by checking package.json, SKILL.md, agent frontmatter,

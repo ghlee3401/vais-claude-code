@@ -1,5 +1,5 @@
 {
-  "version": "0.47.1",
+  "version": "0.48.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -18,7 +18,7 @@
         "agent": "agents/ceo/ceo.md",
         "subAgents": [
           "absorb-analyzer",
-          "retro-report"
+          "retrospective-writer"
         ]
       },
       "cpo": {
@@ -27,10 +27,10 @@
         "layer": "strategy-product",
         "agent": "agents/cpo/cpo.md",
         "subAgents": [
-          "pm-discovery",
-          "pm-strategy",
-          "pm-research",
-          "pm-prd",
+          "product-discoverer",
+          "product-strategist",
+          "product-researcher",
+          "prd-writer",
           "ux-researcher",
           "data-analyst"
         ]
@@ -42,13 +42,13 @@
         "agent": "agents/cto/cto.md",
         "subAgents": [
           "infra-architect",
-          "dev-backend",
-          "dev-frontend",
+          "backend-engineer",
+          "frontend-engineer",
           "ui-designer",
-          "qa-validator",
-          "bug-investigator",
-          "test-builder",
-          "deploy-ops",
+          "qa-engineer",
+          "incident-responder",
+          "test-engineer",
+          "release-engineer",
           "db-architect"
         ]
       },
@@ -59,9 +59,9 @@
         "agent": "agents/cso/cso.md",
         "subAgents": [
           "security-auditor",
-          "validate-plugin",
-          "code-review",
-          "compliance-audit"
+          "plugin-validator",
+          "code-reviewer",
+          "compliance-auditor"
         ]
       },
       "cmo": {
@@ -81,11 +81,11 @@
         "layer": "ops",
         "agent": "agents/coo/coo.md",
         "subAgents": [
-          "canary-monitor",
-          "perf-benchmark",
-          "sre-ops",
-          "deploy-ops",
-          "docs-writer"
+          "release-monitor",
+          "performance-engineer",
+          "sre-engineer",
+          "release-engineer",
+          "technical-writer"
         ]
       },
       "cfo": {
@@ -94,8 +94,8 @@
         "layer": "finance",
         "agent": "agents/cfo/cfo.md",
         "subAgents": [
-          "cost-analyst",
-          "pricing-modeler"
+          "finops-analyst",
+          "pricing-analyst"
         ]
       }
     },
@@ -206,17 +206,17 @@
   },
   "parallelGroups": {
     "implementation": [
-      "dev-frontend",
-      "dev-backend",
-      "test-builder"
+      "frontend-engineer",
+      "backend-engineer",
+      "test-engineer"
     ],
     "cmo-do": [
       "seo-analyst",
       "copy-writer"
     ],
     "coo-do": [
-      "sre-ops",
-      "deploy-ops"
+      "sre-engineer",
+      "release-engineer"
     ]
   },
   "chaining": {

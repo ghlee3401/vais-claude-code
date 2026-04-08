@@ -15,9 +15,9 @@ const VALID_ROLES = (() => {
     const config = JSON.parse(fs.readFileSync(path.join(__dirname, '../vais.config.json'), 'utf8'));
     const cSuiteRoles = Object.keys(config.cSuite?.roles || {});
     const execRoles = [
-      'infra-architect', 'dev-backend', 'dev-frontend', 'ui-designer', 'qa-validator',
-      'security-auditor', 'seo-analyst', 'validate-plugin', 'code-review',
-      'pm-discovery', 'pm-strategy', 'pm-research', 'pm-prd',
+      'infra-architect', 'backend-engineer', 'frontend-engineer', 'ui-designer', 'qa-engineer',
+      'security-auditor', 'seo-analyst', 'plugin-validator', 'code-reviewer',
+      'product-discoverer', 'product-strategist', 'product-researcher', 'prd-writer',
       'absorb-analyzer',
     ];
     return new Set([...cSuiteRoles, ...execRoles]);

@@ -103,7 +103,7 @@ disallowedTools:
 > - docs/02-design/cto_{feature}.md: IA, 와이어프레임, 화면별 상세 정의
 ```
 
-qa-validator 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
+qa-engineer 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
 
 ---
 

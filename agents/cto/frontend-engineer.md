@@ -1,5 +1,5 @@
 ---
-name: dev-frontend
+name: frontend-engineer
 version: 1.0.0
 description: |
   Implements frontend interfaces using React/Next.js and related frameworks.

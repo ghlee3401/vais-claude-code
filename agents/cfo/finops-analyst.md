@@ -1,5 +1,5 @@
 ---
-name: cost-analyst
+name: finops-analyst
 version: 1.0.0
 description: |
   Estimates cloud infrastructure costs, optimizes resource allocation, and calculates API call expenses.

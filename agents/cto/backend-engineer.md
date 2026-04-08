@@ -1,5 +1,5 @@
 ---
-name: dev-backend
+name: backend-engineer
 version: 1.0.0
 description: |
   Implements backend APIs, server logic, and database integrations.

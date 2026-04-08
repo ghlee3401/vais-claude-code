@@ -87,7 +87,5 @@
       "Bash(echo \"vais.config.json: $\\(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('vais.config.json','utf8'\\)\\).version\\)\"\\)\")"
     ]
   },
-  "enabledPlugins": {
-    "vais-code@vais-marketplace": true
-  }
+  "enabledPlugins": {}
 }
