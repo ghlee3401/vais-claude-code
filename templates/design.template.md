@@ -19,27 +19,13 @@
 
 ## Architecture Options
 
-### Option A — Minimal Changes
-{최소 변경. 기존 코드 최대 재사용. 빠르지만 결합도 높을 수 있음}
+| Option | 설명 | 복잡도 | 유지보수 | 구현 속도 | 리스크 | 선택 |
+|--------|------|:------:|:--------:|:---------:|:------:|:----:|
+| A. Minimal | 기존 코드 최대 재사용. 빠르나 결합도 ↑ | 낮음 | 낮음 | 빠름 | 중 | |
+| B. Clean | 관심사 분리 최적. 파일 多 + 리팩토링 多 | 높음 | 높음 | 느림 | 낮음 | |
+| C. Pragmatic | 적절한 경계, 과도한 설계 회피 (기본 추천) | 중 | 중 | 중 | 낮음 | ✓ |
 
-### Option B — Clean Architecture
-{관심사 분리 최적. 유지보수 최고. 파일 많고 리팩토링 필요}
-
-### Option C — Pragmatic Balance
-{적절한 경계. 과도한 설계 없이 좋은 구조. 기본 추천}
-
-### Comparison
-
-| 기준 | A: Minimal | B: Clean | C: Pragmatic |
-|------|:----------:|:--------:|:------------:|
-| 복잡도 | 낮음 | 높음 | 중간 |
-| 유지보수 | 낮음 | 높음 | 중간 |
-| 구현 속도 | 빠름 | 느림 | 중간 |
-| 리스크 | 중간 | 낮음 | 낮음 |
-
-### Selected: Option {X}
-
-**Rationale**: {선택 근거}
+**Rationale**: {선택 근거 1줄}
 
 ---
 
@@ -55,15 +41,12 @@ graph TD
 
 | 유형 | 구성 요소 | 설명 |
 |------|----------|------|
-| GNB | | |
-| LNB | | |
+| GNB/LNB | | 사이트맵(§1.1)과 함께 읽을 것 |
 
 ### 1.3 태스크 기반 유저플로우
 
 #### T1: {태스크명}
-- **사용자 목표**:
-- **시작점**:
-- **종료 조건**:
+- **사용자 목표**: / **시작점**: / **종료 조건**:
 
 ```mermaid
 flowchart TD
@@ -73,13 +56,7 @@ flowchart TD
 | 태스크 A | 관계 | 태스크 B | 공유 상태 |
 |---------|------|---------|----------|
 
-### 1.4 화면 흐름도
-
-```mermaid
-graph TD
-```
-
-### 1.5 화면 목록
+### 1.4 화면 목록
 
 | # | 화면명 | URL | 설명 | 관련 태스크 |
 |---|-------|-----|------|-----------|
@@ -239,8 +216,6 @@ graph TD
 
 (위와 동일한 구조 반복)
 
----
-
 ### 3.5 반응형 브레이크포인트
 
 | 이름 | 범위 | 레이아웃 변화 |
@@ -256,6 +231,44 @@ graph TD
 - [ ] 충분한 색상 대비 (4.5:1 이상)
 - [ ] 포커스 표시 명확
 - [ ] alt 텍스트 제공
+
+---
+
+> ⛔ **다음 Part 4/5는 CTO 전용입니다.**
+> CTO 외 C-Level(CPO/CSO/CMO/COO/CFO)이 design.template를 사용할 때는 Part 4/5 두 섹션을 통째로 생략하거나 각 섹션을 `(N/A — CTO 전용)` 한 줄로 대체하세요.
+
+## Part 4: Tech Stack Lock (CTO 전용)
+
+> **빈 양식 원칙**: 셀은 `{placeholder}`로 비워두고 feature마다 채웁니다. 해당 없으면 빈 셀 허용. 미결정은 do 단계 진입 전 채워야 합니다.
+
+| 영역 | Lang/Framework | 핵심 라이브러리 | 데이터/스토리지 | 금지 |
+|------|----------------|----------------|----------------|------|
+| Backend | {Lang/Framework} | {ORM/DI/Validator} | {DB/Cache/Queue} | {도입 금지 기술} |
+| Frontend | {Lang/Framework} | {State/Router/UI Lib} | {Local Storage/IndexedDB} | {도입 금지 기술} |
+| Auth/Infra | {Auth Method} | {SDK/Provider} | {Session/Token Store} | {도입 금지 기술} |
+
+---
+
+## Part 5: Implementation Contract (CTO 전용)
+
+> **부분 채움 허용**: 확정된 항목만 채우고 do 단계에서 보강 가능.
+
+### 5.1 Layer Responsibility
+
+| Layer | 책임 | 의존 방향 | 금지 사항 |
+|-------|------|----------|----------|
+| Router/Controller | {요청 수신, 입력 검증, 응답 직렬화} | → Service | {비즈니스 로직 작성 금지} |
+| Service/UseCase | {비즈니스 규칙, 트랜잭션 경계} | → Repository | {HTTP/DB 직접 접근 금지} |
+| Repository/Adapter | {영속성, 외부 API 어댑터} | → Storage/External | {도메인 규칙 작성 금지} |
+
+### 5.2 API Contract
+
+| Method | Path | Request | Response | Auth | Errors |
+|--------|------|---------|----------|------|--------|
+| {GET/POST/...} | {/api/...} | {body/query 스키마 요약} | {200 응답 스키마 요약} | {Y/N + 권한} | {4xx/5xx 코드} |
+
+### 5.3 State Machine (선택)
+> 도메인에 명시적 상태 전이가 있을 때만 `From | Event | To | Guard | Side Effect` 표 작성. 없으면 "(N/A)".
 
 ---
 
@@ -282,5 +295,6 @@ graph TD
 | version | date | change |
 |---------|------|--------|
 | v1.0 | | 초기 작성 |
+| v1.1 | 2026-04-08 | Part 4/5 (Tech Stack Lock + Implementation Contract) 추가, Architecture Options 표 압축, 네비/사이트맵 통합 |
 
 <!-- template version: v0.18.0 -->

@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.48.2] - 2026-04-08
+
+### Added
+
+- **`templates/design.template.md` — Part 4 (Tech Stack Lock)**: 백엔드/프론트엔드/인증·인프라 레이어별 기술 결정 + 도입 금지 기술을 명시하는 빈 placeholder 표. CTO design 단계에서 매 feature마다 채움. **특정 기술 스택을 default로 강요하지 않음** — vais-code 범용성 유지.
+- **`templates/design.template.md` — Part 5 (Implementation Contract)**: Router/Service/Repository 레이어 책임 표 + API Contract 표(endpoint/method/req/res/auth/error). do 단계 직전 모호성 제거.
+- CTO 외 C-Level용 "(N/A — CTO 전용)" 시각 격리 박스 (`plan.template.md` §0.7 패턴 재사용).
+
+### Changed
+
+- **`templates/design.template.md` 다이어트**: Architecture Options 산문 → 비교 표 1개로 압축, 1.4 화면 흐름도 → 1.3 정보구조도에 통합. 286줄 → 300줄 (순증 +14, ≤15줄 가드 준수).
+
+### Fixed
+
+- **CEO/CTO/SKILL — 완료 아웃로 텍스트 선택지 패턴 자체 금지**: "A. 진행 / B. 다른 / C. 종료" 같은 outro 다음 단계 선택지를 응답 본문에 텍스트로 출력하는 행위를 명시적으로 금지. 자가 점검 패턴에 정규식(`(?m)^[A-D]\.\s`) 추가. plugin marketplace cache의 옛 outro template과 충돌 시 본 규칙이 우선함을 명시.
+- `agents/cto/cto.md`에 v0.48.1 패치 누락분(AskUserQuestion 강제 사용 절대 규칙) 동기화 추가.
+
 ## [0.48.1] - 2026-04-08
 
 ### Fixed
