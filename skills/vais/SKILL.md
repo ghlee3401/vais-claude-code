@@ -23,6 +23,14 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQue
 
 Read 도구로 `.vais/status.json`을 읽어 현재 피처 진행 상태를 파악하세요. 파일이 없으면 새 프로젝트입니다.
 
+## 🚨 최우선 공통 규칙: AskUserQuestion 강제
+
+**사용자에게 선택지를 제시하는 모든 상황에서 반드시 `AskUserQuestion` 도구를 호출해야 합니다.**
+
+- ⛔ **절대 금지**: A/B/C/D 텍스트 선택지만 출력하고 사용자 응답을 기다리는 행위
+- ✅ **필수**: 요약을 텍스트로 출력 → `AskUserQuestion` 도구 호출 (체크포인트, 완료 후, 중간 결정 포인트 등 모든 경우)
+- **자가 점검**: "선택해주세요", "결정해주세요", "진행할까요" 등의 문구가 응답에 있다면 → AskUserQuestion 호출 필수
+
 ## 공통 규칙
 
 - 모든 문서(`docs/`)는 **한국어**로 작성 (기술 용어는 원어)

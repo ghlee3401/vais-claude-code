@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.48.1] - 2026-04-08
+
+### Fixed
+
+- **CEO/SKILL — AskUserQuestion 강제 사용 규칙 명시**: 선택지가 존재하는 모든 순간에 텍스트 A/B/C/D 나열만 하고 응답을 기다리는 패턴을 금지하고, 반드시 `AskUserQuestion` 도구를 호출하도록 최우선 규칙으로 명시. `agents/ceo/ceo.md`의 absorb CP-1 예시도 동적 선택지 생성 방식으로 수정.
+
 ## [0.48.0] - 2026-04-08
 
 ### ⚠️ BREAKING CHANGES — Sub-Agent Industry Naming (agent-rename-v2)
