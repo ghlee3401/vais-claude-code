@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.49.1] - 2026-04-08
+
+### Fixed
+
+- **[CSO 2차 검토 post-push]** — code-reviewer + security-auditor 병렬 2차 위임 결과:
+  - `scripts/refactor-audit.js:23` — `execSync` dead import 제거. `execFileSync` 교체 후 미사용 상태로 남아있던 import 정리.
+  - `docs/04-qa/cto_refactor-clevel-agents.qa.md` SC-03 — "keywords 8/8 ≥ baseline" → "7/7 ≥ baseline" 수치 정정. v0.49.0에서 `절대금지` dead keyword 제거로 whitelist가 8 → 7개가 되었으나 QA 문서가 이전 수치로 남아있던 문서 불일치 해소.
+- **[검증]** 2차 검토에서 v0.49.0의 6건 수정(절대금지 제거/arg 검증/execFileSync/try-catch/CP regex/HEAD 참조) 모두 정확히 반영되었음을 독립 확인. Critical 0건, Gate C 품질 83→88/100, Gate A OWASP 10/10.
+
 ## [0.49.0] - 2026-04-08
 
 ### Changed

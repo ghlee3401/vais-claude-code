@@ -49,8 +49,46 @@ CTO QA는 자동 감사(refactor-audit.js)에 의존하여 13/13 PASS 판정. CS
 - refactor-audit.js 수정본 + 7개 리팩터된 agent md + 4개 feature docs (plan×2, design×2, do×2, qa×2) + 이 cso.qa.md 전체를 커밋 가능
 - 권장: `/vais commit` 플로우로 원자적 커밋
 
+## 2차 검토 (Post-Push, commit 6fb9cd7)
+
+사용자 요청으로 push 후 동일 변경분에 대해 code-reviewer + security-auditor 병렬 2차 위임.
+
+### 이전 6건 수정 전부 반영 확인 (6/6 PASS)
+
+| # | 수정 항목 | 위치 | 상태 |
+|---|---------|------|:----:|
+| 1 | `절대금지` dead keyword 제거 | refactor-audit.js WHITELIST | ✅ PASS |
+| 2 | `--file`/`--baseline` arg 검증 | L98-117 | ✅ PASS |
+| 3 | `execSync` → `execFileSync` 배열 형식 | L177, L217 | ✅ PASS |
+| 4 | `collectMetrics` fromHead=false 경로 try/catch | L186-191 | ✅ PASS |
+| 5 | `extractCpIds` regex `(?![a-z])` | L158 | ✅ PASS |
+| 6 | `writeBaseline` HEAD 참조 | L230 | ✅ PASS |
+
+### 2차 검토 신규 발견
+
+| 심각도 | 이슈 | 조치 |
+|--------|------|------|
+| Major | `scripts/refactor-audit.js:23` — `execSync` dead import 잔존 (execFileSync 교체 후 미사용) | ✅ 수정 — import 목록에서 제거 |
+| Minor | `docs/04-qa/cto_refactor-clevel-agents.qa.md` SC-03 "keywords 8/8" 수치 불일치 (실제 7개) | ✅ 수정 — "7/7" + 주석 추가 |
+| Minor | `baseline.json` git_sha=`508ac58` (pre-fix 커밋) | ⏸ Accept — 설계 동작. pre-refactor 상태가 baseline이라는 의미, 정상 |
+| Info | dead `execSync` import 가 stale | ✅ 위에서 수정 |
+| Info | `--file` 경로 정규화 미적용 (path traversal) | ⏸ Accept — 로컬 CLI 전용, 실질 위험 낮음 |
+
+### 2차 판정
+
+- **Gate C 품질**: 83 → **88/100** (↑5)
+- **Gate A OWASP**: 10/10 (A03 PASS 재확인)
+- **Critical**: 0
+- **Major**: 1 → ✅ 수정 완료
+- **Minor**: 2 → ✅ 1건 수정, 1건 Accept
+
+### 최종 2차 판정: ✅ **PASS**
+
+커밋 6fb9cd7의 `scripts/refactor-audit.js` 는 이전 A03 인젝션 리스크를 완전히 제거했고, `shell: true` 옵션 미사용, `execFileSync` 배열 형식으로 쉘 우회 완료. 이전 감사 지적사항 6건 전부 정확히 반영되었으며, 2차에서 발견된 dead import 1건 및 문서 수치 불일치 1건도 즉시 수정. 배포 차단 사유 없음.
+
 ## 변경 이력
 
 | version | date | change |
 |---------|------|--------|
 | v1.0 | 2026-04-08 | CSO 최종 판정 — PASS (Important/Major 수정 후) |
+| v1.1 | 2026-04-08 | 2차 검토 (post-push 6fb9cd7) — 이전 6건 수정 확인 + 신규 Major 1건(dead import) 수정 |

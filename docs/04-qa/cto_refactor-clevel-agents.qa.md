@@ -12,7 +12,7 @@
 |----|-----------|:----:|------|
 | **SC-01** | 7개 파일 본문 ≤ target AND ≤ 500 | ✅ Met | ceo 396/480, cto 395/490, cso 307/400, cmo 247/360, cfo 232/320, cpo 224/300, coo 230/295 — 전부 target 이하 + 500 미만 |
 | **SC-02** | skill_eval WARN/FAIL 0건 | ✅ Met | `python3 -m scripts.skill_eval.quick_validate` 7/7 `✅ PASS`, WARN 0, FAIL 0 |
-| **SC-03** | keyword whitelist ≥ baseline | ✅ Met | `refactor-audit.js --all` → keywords 8/8 ≥ baseline (모든 파일) |
+| **SC-03** | keyword whitelist ≥ baseline | ✅ Met | `refactor-audit.js --all` → keywords 7/7 ≥ baseline (모든 파일) *※ CSO 2차 검토 시 `절대금지` dead keyword 제거하여 whitelist 8 → 7* |
 | **SC-04** | CP IDs 전부 보존 | ✅ Met | ceo 8/8(CP-1/2/A/L1/L2/L3/Q/R), cpo 4/4(CP-1/2/P/Q), cto 7/7(CP-0/1/2/D/G/G1/Q), cso 4/4(CP-1/2/C/Q), cmo 5/5(CP-1/2/C/Q/S), coo 3/3(CP-1/2/Q), cfo 3/3(CP-1/2/Q) |
 | **SC-05** | frontmatter sha256 불변 | ✅ Met | 7/7 `frontmatter sha256 unchanged` |
 | **SC-06** | smoke 회귀 3건 정상 | ✅ Met | phase 파일 → agent 참조 경로 7/7 OK, frontmatter name 필드 7/7 OK. 구조적 검증 통과 (실제 /vais 실행은 필요 시 수동 검증 가능) |

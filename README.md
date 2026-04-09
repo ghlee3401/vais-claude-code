@@ -1,6 +1,6 @@
 # VAIS Code
 
-**v0.49.0** · Claude Code C-Suite 플러그인
+**v0.49.1** · Claude Code C-Suite 플러그인
 
 > AI C-Suite 조직. CEO에게 지시하면 C-Level 팀을 고용해서 알아서 한다.
 
