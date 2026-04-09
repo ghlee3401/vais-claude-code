@@ -80,3 +80,12 @@ description: CTO 에이전트 호출. 기술 도메인 전체 오케스트레이
   - `종료` — 작업 종료
 
 > ⛔ **금지**: A/B/C/D 텍스트 선택지만 출력하고 사용자 응답을 기다리는 행위. 반드시 AskUserQuestion 도구를 호출해야 합니다.
+
+### 사용자 응답 후 자동 실행 (필수)
+
+사용자가 AskUserQuestion에 응답하면 **즉시 해당 단계를 자동 실행**합니다. 명령어 재입력 요구 금지 — 사용자 선택 = 실행 승인.
+
+- `{추천 C-Level} 진행` → `skills/vais/phases/{추천c레벨}.md` Read → 동일 피처로 실행
+- `현재 C-Level 다음 phase` → `skills/vais/phases/cto.md` Read → `{다음phase}` 로 실행
+- `다른 C-Level 선택` → 추가 AskUserQuestion → 자동 실행
+- `종료` → 중단

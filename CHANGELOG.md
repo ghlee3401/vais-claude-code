@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.48.3] - 2026-04-08
+
+### Fixed
+
+- **AskUserQuestion 응답 후 자동 실행 규칙 추가** — 사용자가 완료 아웃로의 AskUserQuestion에서 "{추천 C-Level} 진행" 등을 선택해도 에이전트가 "다음 명령어를 입력해주세요" 안내만 출력하고 자동 실행하지 않던 UX 버그 수정. 사용자 선택은 명령어 입력과 동등한 명시적 승인으로 간주.
+  - `skills/vais/SKILL.md` 완료 아웃로에 **"3단계: 사용자 응답에 따른 자동 실행 (필수)"** 섹션 신설. 선택별 자동 동작 표(`{추천 C-Level} 진행` → `phases/{c}.md` Read → 즉시 실행 등), 금지 안내 문구("명령어를 입력해주세요" 등), **자동 실행 ≠ phase 자동 연쇄** 구분 명시.
+  - `skills/vais/phases/*.md` 7개 파일에 "사용자 응답 후 자동 실행 (필수)" 섹션 append — 각 phase 파일에서 AskUserQuestion 응답 후 자체 참조 경로 제공.
+  - `agents/*/c*.md` 7개 파일의 동작 규칙 4·5번 재작성:
+    - 기존 `4. 완료 후 다음 스텝을 안내합니다: /vais {c} {다음phase} {feature}` → **"다음 스텝(AskUserQuestion)을 제시하고 사용자 응답 시 즉시 자동 실행. '명령어를 입력해주세요' 안내 금지 — 사용자 선택 = 실행 승인"**
+    - 기존 `5. 다음 phase로 자동 진행하지 않습니다` → **"다음 phase로 자동 '연쇄' 진행하지 않음. AskUserQuestion 승인 없는 체이닝만 금지. 사용자의 명시적 선택만 실행 트리거"**
+- **영향 범위**: `/vais {c} {phase} {feature}` 실행 후 outro 단계의 UX 흐름. 기존 Plan 범위 제한·CP 멈춤 규칙·SubagentStop 훅·phase 연쇄 금지 등 다른 안전 장치는 전부 보존. frontmatter·파일 경로·CP ID 불변.
+- **수정 파일 수**: 15개 (SKILL.md + 7 phases/*.md + 7 agents/*/c*.md)
+
 ## [0.48.2] - 2026-04-08
 
 ### Added
