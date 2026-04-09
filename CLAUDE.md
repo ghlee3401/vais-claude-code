@@ -138,6 +138,8 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 버전은 다음 파일에서 동기화 필요:
 - `package.json` (version)
 - `vais.config.json` (version)
+- `.claude-plugin/plugin.json` (version)
+- `.claude-plugin/marketplace.json` (metadata.version + plugins[0].version)
 - `CHANGELOG.md`
 
 커밋 시 `/vais commit` 플로우를 사용할 것.
