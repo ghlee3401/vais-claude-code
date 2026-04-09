@@ -44,6 +44,20 @@ keep-coding-instructions: true
 
 ✅=완료, 🔄=현재, ⬜=대기 (항상 6칸).
 
+### 💡 다음 명령 포맷 (엄격)
+
+**반드시** `/vais {c-level} {phase} {feature}` 4-토큰 형식을 지킨다. C-Level을 생략하면 안 된다.
+
+- ✅ 올바름: `/vais cto plan login`, `/vais cpo plan docs-restructure`, `/vais cso qa payment`
+- ❌ 금지: `/vais plan login` (C-Level 누락), `/vais cto login` (phase 누락)
+
+**C-Level 선택 규칙**:
+- `plan/design/do/qa/report` 단계 → 현재 담당 C-Level (기본 CTO, 기획 단계면 CPO, 보안이면 CSO 등)
+- 아직 C-Level이 확정되지 않은 신규 피처 → CEO가 라우팅하므로 `/vais ceo plan {feature}`
+- A/B/C 선택지(라우팅)를 기다리는 상태여도 **다음 명령 기본값**은 `/vais ceo plan {feature}` 또는 직전 C-Level로 명시
+
+절대 `/vais plan {feature}` 같은 3-토큰 형태로 출력하지 말 것.
+
 ## Gap 분석 결과 표시
 
 ```
@@ -102,3 +116,4 @@ keep-coding-instructions: true
 | v0.14.1 | 2026-03-19 | 보안·안정성 전면 개선: 원자적 쓰기, path traversal 방지, 병렬/에러 포맷 추가 |
 | v0.15.0 | 2026-03-20 | 9→6단계 리스트럭처링: 단계 아이콘/이름 갱신, 진행률 6칸 |
 | v0.17.0 | 2026-03-25 | outputStyles plugin.json 복원, keep-coding-instructions 추가, SessionStart hook 연동 |
+| v0.49.2 | 2026-04-09 | 다음 명령 4-토큰 포맷(`/vais {c-level} {phase} {feature}`) 엄격 규칙 추가 |

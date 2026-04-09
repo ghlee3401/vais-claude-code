@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.49.2] - 2026-04-09
+
+### Changed
+
+- **[output-style]** `output-styles/vais-default.md` — `💡 다음` 라인에 `/vais {c-level} {phase} {feature}` 4-토큰 포맷 강제 규칙 추가. C-Level 누락(`/vais plan login`) 및 phase 누락 금지 예시 명시. 라우팅 대기 상태의 기본값을 `/vais ceo plan {feature}`로 안내. 스크린샷 제보 기반 개선.
+
 ## [0.49.1] - 2026-04-08
 
 ### Fixed
