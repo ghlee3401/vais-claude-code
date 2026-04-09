@@ -1,5 +1,67 @@
 # Changelog
 
+## [0.49.0] - 2026-04-08
+
+### Changed
+
+- **7개 C-Level 에이전트 본문 인라인 압축 (−38%, −1,311 lines)** — 공통 보일러플레이트 중복 제거, CP 템플릿 펜스 축약, 도메인 프레임워크 표 형식화. 문장 rewording 금지 원칙으로 의미 손실 0건.
+  - `agents/ceo/ceo.md`: 696 → 412 (−284)
+  - `agents/cto/cto.md`: 702 → 411 (−291)
+  - `agents/cso/cso.md`: 485 → 323 (−162)
+  - `agents/cmo/cmo.md`: 441 → 262 (−179)
+  - `agents/cfo/cfo.md`: 399 → 247 (−152)
+  - `agents/cpo/cpo.md`: 366 → 239 (−127)
+  - `agents/coo/coo.md`: 361 → 245 (−116)
+  - **합계**: 3,450 → 2,139 (−38%)
+- **skill_eval BODY_WARN (>500 lines) 해소** — CEO/CTO가 WARN 상태였으나 전부 PASS로 전환. 7/7 파일 모두 body 500줄 이하.
+- **HTML 주석 마커 도입** — `<!-- @refactor:begin/end {id} -->` 7종 (common-rules, checkpoint-rules, contract, context-load, doc-checklist, handoff, work-rules)으로 공통 블록 식별. 향후 자동 추출 앵커 역할.
+
+### Added
+
+- **`scripts/refactor-audit.js`** — C-Level 에이전트 리팩터링 keyword/CP ID/section/phrase/frontmatter 보존 자동 검증 도구. 7개 파일 baseline snapshot(`docs/03-do/ceo_refactor-clevel-agents.baseline.json`) 기반 비교. 명령: `--init`, `--all`, `--file`, `--baseline`, `--targets`.
+- **CSO Gate C 독립 코드 리뷰 실행** — code-reviewer + security-auditor 서브에이전트 병렬 위임으로 CTO 자체 감사와 별도의 독립 검증 수행. Critical 0건, 발견된 Major 3건 및 Important 1건 중 4건 즉시 수정, 3건 deferred(설계 의도).
+
+### Fixed
+
+- **[Security] `scripts/refactor-audit.js` execSync → execFileSync** — OWASP A03 Command Injection 잠재 패턴 제거. `execSync(\`git show HEAD:${rel}\`)` 템플릿 리터럴 → `execFileSync('git', ['show', \`HEAD:${rel}\`])` shell-safe 형식으로 변경. 현재 경로상 exploit 불가였으나 구조적 취약 지점 제거.
+- **[Audit Tool] dead keyword 제거** — WHITELIST의 `절대금지` (띄어쓰기 없음) 항목이 baseline 0으로 항상 통과하던 문제. 실제 문서는 `절대 금지` (띄어쓰기 있음) 사용. WHITELIST 정리 + 설명 주석.
+- **[Audit Tool] CLI 인자 검증 강화** — `--file`, `--baseline` 옵션의 값 미제공 또는 다음 플래그가 값으로 흡수되는 파싱 결함 수정. 다음 인자가 `--`로 시작하거나 없으면 error + exit(2).
+- **[Audit Tool] 에러 처리 일관성** — `collectMetrics` fromHead=false 경로에도 try/catch + exit(2) 추가. fromHead=true 경로와 대칭.
+- **[Audit Tool] CP ID 추출 정규식 개선** — `/CP-[A-Z0-9]+/g` → `/CP-[A-Z0-9]+(?![a-z])/g`. "CP-Check" 같은 문자열에서 "CP-C" phantom 매칭하던 문제 해결.
+- **[Audit Tool] baseline HEAD 참조** — `writeBaseline`이 working tree가 아닌 git HEAD 커밋 기준으로 파일 읽도록 수정. Do 단계 중간에 baseline 재생성해도 pre-refactor 상태 유지.
+
+### Preservation (Verified)
+
+v0.48.2 → v0.49.0 리팩터링 과정에서 다음이 전부 보존됨 (refactor-audit.js + skill_eval + vais-validate-plugin 3단계 감사):
+
+- **CP IDs** (7 파일 × baseline 전부 보존): ceo 8/8, cto 7/7, cso 4/4, cmo 5/5, cpo 4/4, cfo 3/3, coo 3/3
+- **Keyword counts** (≥ baseline): AskUserQuestion / 반드시 / 절대 금지 / Plan 단계 범위 / 필수 문서 / 체크포인트 / SubagentStop
+- **Mandatory sections** (11/11 × 7 = 77/77): 최우선 규칙 / 단계별 실행 모드 / Plan 단계 범위 제한 / 필수 문서 / Role / 체크포인트 기반 멈춤 규칙 / Contract / Checkpoint / Context Load / 종료 전 필수 문서 체크리스트 / 작업 원칙
+- **Mandatory phrases** (4/4): AskUserQuestion 도구를 호출 / 즉시 자동 실행 / 사용자 선택 = 실행 승인 / 자동 연쇄 진행하지 않
+- **Frontmatter sha256**: 7/7 불변 (name/version/description/model/tools 변경 0)
+- **CSO `## 배포 승인 여부` 헤더**: 문자열 불변 (gate-check.js:179 `/배포\s*승인\s*여부/i` 정규식 호환)
+- **파일 경로**: 7/7 불변 (`agents/{c}/{c}.md`)
+
+### Documentation
+
+- `docs/01-plan/ceo_refactor-clevel-agents.plan.md` (CEO 전략 기획)
+- `docs/01-plan/cto_refactor-clevel-agents.plan.md` (CTO 기술 기획, baseline 측정)
+- `docs/01-plan/cso_refactor-clevel-agents.plan.md` (CSO Gate C+A 기획)
+- `docs/02-design/cto_refactor-clevel-agents.design.md` (파일별 섹션 압축 맵, refactor-audit.js 아키텍처)
+- `docs/02-design/cso_refactor-clevel-agents.design.md` (Gate C+A 서브에이전트 병렬 위임 계획)
+- `docs/03-do/cto_refactor-clevel-agents.do.md` (Do 실행 로그, 기술 부채 기록)
+- `docs/03-do/cso_refactor-clevel-agents.do.md` (CSO 리뷰 결과 + 즉시 수정 내역)
+- `docs/04-qa/cto_refactor-clevel-agents.qa.md` (SC-01~SC-13 전부 PASS)
+- `docs/04-qa/cso_refactor-clevel-agents.qa.md` (OWASP 10/10 + 품질 92+/100)
+- `docs/03-do/ceo_refactor-clevel-agents.baseline.json` (감사 baseline snapshot)
+
+### Technical Debt (Deferred)
+
+- `shared/common-rules.md` 외부 파일 추출 (2차 작업)
+- CSO 법적 컴플라이언스 체크리스트 / CMO GTM / CFO 가격책정 프레임워크 외부 추출 (2차 작업)
+- refactor-audit.js T1~T6 smoke test 자동화
+- `file-specific` 체크를 body 전체 검색으로 개선 (현재 section_headers 기반, 실영향 없음)
+
 ## [0.48.3] - 2026-04-08
 
 ### Fixed
