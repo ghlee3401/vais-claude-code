@@ -84,7 +84,10 @@
       "Bash(wc -l /home/claude/vais-claude-code/references/bkit-claude-code/lib/core/*.js)",
       "Skill(vais)",
       "Bash(echo \"package.json: $\\(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('package.json','utf8'\\)\\).version\\)\"\\)\")",
-      "Bash(echo \"vais.config.json: $\\(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('vais.config.json','utf8'\\)\\).version\\)\"\\)\")"
+      "Bash(echo \"vais.config.json: $\\(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('vais.config.json','utf8'\\)\\).version\\)\"\\)\")",
+      "Bash(wc *)",
+      "Bash(mkdir -p /tmp/v050-extract)",
+      "Bash(python3 -c ' *)"
     ]
   },
   "enabledPlugins": {}
