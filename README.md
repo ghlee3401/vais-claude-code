@@ -1,263 +1,482 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/version-0.50.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
+  <img src="https://img.shields.io/badge/C--Suite-6_Executives-orange?style=flat-square" alt="C-Suite" />
+  <img src="https://img.shields.io/badge/Sub--agents-38-green?style=flat-square" alt="Sub-agents" />
+  <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
+</p>
+
 # VAIS Code
 
-**v0.50.0** · Claude Code C-Suite 플러그인
+**Virtual AI C-Suite for Software Development**
 
-> AI C-Suite 조직. CEO에게 지시하면 C-Level 팀을 고용해서 알아서 한다.
-
----
-
-## 작동 방식
-
-사용자는 **CEO** (또는 개별 C-Level)에게 업무를 지시한다. CEO는 Product Owner로서 필요한 C-Level을 판단하고, 순서대로 업무를 위임하며, 결과를 종합 검토한다.
-
-```
-나 → CEO에게 "로그인 서비스 만들어줘"
-
-     CEO가 피처 분석 → 다음 C-Level 동적 추천 → 사용자 승인
-
-     CEO: "제품 정의가 필요합니다" → CPO 추천 → 승인 → CPO 실행
-     CEO: "기술 구현이 필요합니다" → CTO 추천 → 승인 → CTO 실행
-     CEO: "보안 검토가 필요합니다" → CSO 추천 → 승인 → CSO 실행 (이슈 시 CTO ↺)
-     CEO: "내부 도구이므로 CBO 불필요, 배포로" → COO 추천 → ...
-     CEO: 모든 필요 C-Level 완료 → 최종 리뷰
-```
-
-### 세 가지 진입점
-
-| 진입점 | 언제 쓰나 |
-|--------|----------|
-| `/vais ceo {feature}` | 새 서비스 런칭, 전체 C-Level 파이프라인�� 필요할 때 |
-| `/vais cto {feature}` | 기획/PRD가 이미 있고, 기술 구현만 필요할 때 |
-| `/vais {c-level} {feature}` | 특정 C-Level에 직접 업무 지시 (cpo, cso, cbo, coo) |
-
-**핵심 원칙**: 실행 에이전트(infra-architect, frontend-engineer, backend-engineer 등)는 직접 부르지 않는다. C-Level이 알아서 위임한다.
+> CEO에게 지시하면 6명의 C-Level 팀이 제품 기획부터 개발, 보안 검토, 마케팅, 배포까지 자율 실행합니다.
 
 ---
 
-## 새 PC 세팅
+## Overview
+
+VAIS Code는 Claude Code 위에서 동작하는 **AI C-Suite 조직 시뮬레이션 플러그인**입니다. CEO가 Product Owner로서 피처의 성격과 산출물 상태를 분석하여 적합한 C-Level에 업무를 위임하고, 각 C-Level은 전문 sub-agent 팀을 지휘하여 PDCA 워크플로우를 실행합니다.
+
+### Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **6 C-Level Virtual Team** | CEO, CPO, CTO, CSO, CBO, COO — 각자 전문 도메인을 담당하는 Opus 에이전트 |
+| **38 Specialized Sub-agents** | Sonnet 기반 실행 에이전트. 코드 작성, SEO 감사, 재무 모델링, 보안 스캔 등 |
+| **Optional Ideation Phase** | 아이디어가 모호할 때 산출물 없이 자유 대화 → 요약 후 plan 자동 참조 |
+| **Advisor Tool (M-24)** | 모든 Sonnet sub-agent에 Opus reviewer 내장. 작업 중 전략 조언 자동 수신 |
+| **4-Step Harness Gate** | Document → Checkpoint → Gate Judgment → Transition 자동 검증 파이프라인 |
+| **10+1 Scenario Mapping** | S-0 Ideation ~ S-10 Operations. CEO가 상황을 인식하여 최적 흐름 추천 |
+| **Migration Engine** | v0.49 상태 파일을 v0.50으로 자동 변환 (backup 포함) |
+
+---
+
+## Architecture
+
+### C-Suite Organization
+
+```mermaid
+graph TB
+    User([User]) --> CEO
+
+    subgraph Executive["Executive Layer (Opus)"]
+        CEO["CEO<br/>Orchestrator & Router"]
+    end
+
+    subgraph Strategic["Strategic Layer (Opus)"]
+        CPO["CPO<br/>Product"]
+        CTO["CTO<br/>Technology"]
+        CSO["CSO<br/>Security"]
+        CBO["CBO<br/>Business"]
+        COO["COO<br/>Operations"]
+    end
+
+    CEO --> CPO
+    CEO --> CTO
+    CEO --> CSO
+    CEO --> CBO
+    CEO --> COO
+
+    subgraph CPO_Agents["CPO Sub-agents (Sonnet)"]
+        direction LR
+        pd[product-discoverer]
+        ps[product-strategist]
+        pr[product-researcher]
+        pw[prd-writer]
+        bm[backlog-manager]
+        ux[ux-researcher]
+        da[data-analyst]
+    end
+
+    subgraph CTO_Agents["CTO Sub-agents (Sonnet)"]
+        direction LR
+        ia[infra-architect]
+        be[backend-engineer]
+        fe[frontend-engineer]
+        ud[ui-designer]
+        db[db-architect]
+        qa[qa-engineer]
+        te[test-engineer]
+        ir[incident-responder]
+    end
+
+    subgraph CSO_Agents["CSO Sub-agents (Sonnet)"]
+        direction LR
+        sa[security-auditor]
+        cr[code-reviewer]
+        ss[secret-scanner]
+        dpa[dependency-analyzer]
+        pv[plugin-validator]
+        sv[skill-validator]
+        ca[compliance-auditor]
+    end
+
+    subgraph CBO_Agents["CBO Sub-agents (Sonnet)"]
+        direction LR
+        mr[market-researcher]
+        csa[customer-segmentation]
+        seo[seo-analyst]
+        cw[copy-writer]
+        ga[growth-analyst]
+        pa[pricing-analyst]
+        fm[financial-modeler]
+        ue[unit-economics]
+        fo[finops-analyst]
+        ma[marketing-analytics]
+    end
+
+    subgraph COO_Agents["COO Sub-agents (Sonnet)"]
+        direction LR
+        re[release-engineer]
+        sre[sre-engineer]
+        rm[release-monitor]
+        pe[performance-engineer]
+    end
+
+    CPO --> CPO_Agents
+    CTO --> CTO_Agents
+    CSO --> CSO_Agents
+    CBO --> CBO_Agents
+    COO --> COO_Agents
+
+    style Executive fill:#4F46E5,color:#fff
+    style Strategic fill:#7C3AED,color:#fff
+    style CPO_Agents fill:#F3F4F6,color:#000
+    style CTO_Agents fill:#F3F4F6,color:#000
+    style CSO_Agents fill:#F3F4F6,color:#000
+    style CBO_Agents fill:#F3F4F6,color:#000
+    style COO_Agents fill:#F3F4F6,color:#000
+```
+
+### C-Level Roles
+
+| C-Level | Role | Sub-agents | Domain |
+|---------|------|------------|--------|
+| **CEO** | Top-level orchestrator, dynamic routing, 10+1 scenario mapping | absorb-analyzer, skill-creator | Strategy |
+| **CPO** | Product definition, PRD, roadmap, backlog | product-discoverer, product-strategist, product-researcher, prd-writer, backlog-manager, ux-researcher, data-analyst | Product |
+| **CTO** | Technical architecture, full dev lifecycle orchestration | infra-architect, backend-engineer, frontend-engineer, ui-designer, db-architect, qa-engineer, test-engineer, incident-responder | Technology |
+| **CSO** | Security audit, code review, secret scan, dependency analysis | security-auditor, code-reviewer, secret-scanner, dependency-analyzer, plugin-validator, skill-validator, compliance-auditor | Security |
+| **CBO** | Market research, GTM, pricing, financial modeling, unit economics | market-researcher, customer-segmentation-analyst, seo-analyst, copy-writer, growth-analyst, pricing-analyst, financial-modeler, unit-economics-analyst, finops-analyst, marketing-analytics-analyst | Business |
+| **COO** | CI/CD, deployment, monitoring, performance benchmarks | release-engineer, sre-engineer, release-monitor, performance-engineer | Operations |
+
+### Dependencies
+
+```mermaid
+graph LR
+    CBO --> |"no deps"| CEO
+    CPO --> |"no deps"| CEO
+    CTO --> |"requires"| CPO
+    CSO --> |"requires"| CTO
+    COO --> |"requires"| CTO
+
+    style CBO fill:#F59E0B,color:#000
+    style CPO fill:#10B981,color:#000
+    style CTO fill:#3B82F6,color:#fff
+    style CSO fill:#EF4444,color:#fff
+    style COO fill:#8B5CF6,color:#fff
+```
+
+---
+
+## Workflow
+
+### PDCA Phases
+
+```mermaid
+graph LR
+    I["💡 Ideation<br/><i>optional</i>"]:::optional --> P["📋 Plan"]:::mandatory
+    P --> D["🎨 Design"]:::mandatory
+    D --> Do["🔧 Do"]:::mandatory
+    Do --> Q["✅ QA"]:::mandatory
+    Q --> |"pass"| R["📊 Report"]
+    Q --> |"fail / iterate"| Do
+
+    classDef optional fill:#FEF3C7,stroke:#F59E0B,color:#000
+    classDef mandatory fill:#DBEAFE,stroke:#3B82F6,color:#000
+```
+
+| Phase | Required | Description |
+|-------|----------|-------------|
+| **Ideation** | Optional | 자유 대화 모드. 산출물 강제 없이 아이디어 숙성. 종료 시 요약 저장 → plan 자동 참조 |
+| **Plan** | Mandatory | 요구사항 정의, 범위 설정, 타임라인 |
+| **Design** | Mandatory | 아키텍처 설계, 기술 스택 선택 |
+| **Do** | Mandatory | 구현. Sub-agent 병렬 실행 (frontend + backend + test) |
+| **QA** | Mandatory | Gap 분석, 코드 리뷰, 보안 검증. Match rate ≥ 90% 통과 |
+| **Report** | Optional | 최종 리포트, 회고, KPI 정리 |
+
+### CEO Dynamic Routing (Service Launch)
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant CEO
+    participant CBO as CBO (Business)
+    participant CPO as CPO (Product)
+    participant CTO as CTO (Tech)
+    participant CSO as CSO (Security)
+    participant COO as COO (Ops)
+
+    User->>CEO: /vais ceo plan new-saas
+    CEO->>CEO: Analyze feature + Scenario mapping (S-1)
+
+    CEO->>CBO: ① Market analysis + Financial model
+    CBO-->>CEO: Market report + Revenue projection
+
+    CEO->>CPO: ② PRD + Backlog
+    CPO-->>CEO: PRD + User stories + Sprint plan
+
+    CEO->>CTO: ③ Architecture + Implementation
+    CTO-->>CEO: Code + Tests + API docs
+
+    CEO->>CSO: ④ Security audit
+    CSO-->>CEO: Security report
+    Note over CSO,CTO: Issues → CTO fix → CSO re-review (max 3)
+
+    CEO->>CBO: ⑤ GTM + Marketing
+    CBO-->>CEO: SEO + Copy + Growth strategy
+
+    CEO->>COO: ⑥ Deployment
+    COO-->>CEO: CI/CD + Monitoring + Runbook
+
+    CEO->>CEO: Final review
+    CEO-->>User: Comprehensive report
+```
+
+### 10+1 Scenarios
+
+| ID | Trigger | Flow |
+|----|---------|------|
+| **S-0** | Vague idea, exploration needed | CEO ideation → Recommended C-Level |
+| **S-1** | New service, full development | CBO(market) → CPO → CTO → CSO → CBO(GTM) → COO |
+| **S-2** | Add feature to existing service | CPO → CTO → CSO → COO |
+| **S-3** | Bug fix / UX improvement / Refactor | CTO (branch by type) |
+| **S-4** | Production incident | CTO(incident-responder) → CSO → COO |
+| **S-5** | Performance / Cost optimization | CTO(perf) or CBO(finops) |
+| **S-6** | Security audit / Compliance | CSO ↔ CTO loop (max 3 iterations) |
+| **S-7** | Marketing campaign / GTM | CPO → CBO → (CTO) |
+| **S-8** | Market analysis / Business report | CBO → (CPO) |
+| **S-9** | Internal skill/agent creation | CEO(skill-creator) → CSO |
+| **S-10** | Regular ops / Tech debt | CTO or COO |
+
+---
+
+## Quick Start
+
+### Installation
 
 ```bash
-# 1. 레포 클론
+# Clone the repository
 git clone https://github.com/ghlee3401/vais-claude-code.git
 cd vais-claude-code
 
-# 2. 개발 환경 세팅 (symlink: marketplace → 이 레포)
+# Set up development environment (symlink to Claude Code plugins)
 bash scripts/setup-dev.sh
 
-# 3. Claude Code 열고
+# Reload plugins in Claude Code
 /reload-plugins
 
-# 4. 확인
+# Verify installation
 /vais help
 ```
 
-setup-dev.sh가 하는 일: `~/.claude/plugins/marketplaces/vais-marketplace` → 이 레포를 심링크로 연결. 이후 코드 수정 → `/reload-plugins` 만으로 즉시 반영된다.
-
-**Windows (WSL2)**: WSL 터미널에서 동일하게 실행.
-
----
-
-## C-Suite 조직 (6 C-Level + 38 서브에이전트)
-
-| C-Level | 역할 | 하위 에이전트 |
-|---------|------|-------------|
-| **CEO** | 최상위 오케스트레이터 (Product Owner). 런칭 파이프라인 지휘, 라우팅, absorb | absorb-analyzer, skill-creator |
-| **CPO** | 제품 정의. PM 프레임워크 기반 PRD 생성 | product-discoverer, product-strategist, product-researcher, prd-writer, backlog-manager, ux-researcher, data-analyst |
-| **CTO** | 기술 총괄. Plan→Design→Do→QA 개발 워크플로우 지휘 | infra-architect, ui-designer, frontend-engineer, backend-engineer, qa-engineer, test-engineer, db-architect, incident-responder |
-| **CSO** | 보안 검토. Gate A(보안)/B(플러그인)/C(코드리뷰). 이슈 시 CTO 수정 루프 | security-auditor, plugin-validator, code-reviewer, secret-scanner, dependency-analyzer, skill-validator, compliance-auditor |
-| **CBO** | 비즈니스 레이어. GTM, 마케팅, 재무, 가격, unit economics | market-researcher, customer-segmentation-analyst, seo-analyst, copy-writer, growth-analyst, pricing-analyst, financial-modeler, unit-economics-analyst, finops-analyst, marketing-analytics-analyst |
-| **COO** | 배포/운영. CI/CD, 모니터링 | release-engineer, sre-engineer, release-monitor, performance-engineer |
-
----
-
-## 커맨드
-
-### 주력
+### Usage
 
 ```bash
-/vais ceo {feature}      # 서비스 런칭 — 전체 C-Level 파이프라인 오케스트레이션
-/vais cto {feature}      # 기술 구현만 — 기획이 이미 있을 때
-/vais cpo {feature}      # PRD 생성
-/vais cso {feature}      # 보안 검토
-/vais cbo {feature}      # 비즈니스 (마케팅+재무)
-/vais coo {feature}      # 배포/운영 계획
+# Start with an idea (optional ideation phase)
+/vais ceo ideation pricing-strategy
+
+# Jump straight to planning (ideation auto-referenced if exists)
+/vais cpo plan pricing-strategy
+
+# Technical implementation only
+/vais cto do payment-integration
+
+# Full service launch (CEO orchestrates all C-Levels)
+/vais ceo plan online-bookstore
+
+# Security audit
+/vais cso plan my-feature
+
+# Business analysis
+/vais cbo plan market-entry
+
+# Check status
+/vais status
+
+# Next step recommendation
+/vais next
 ```
 
-### 유틸리티
+### Three Entry Points
 
-```bash
-/vais status             # 피처 진행 현황
-/vais next               # 다음 실행할 단계 안내
-/vais commit             # git 변경사항 분석 → Conventional Commits 메시지 생성 + semver 범프 제안
-/vais init {feature}     # 기존 프로젝트 → VAIS 문서 역생성
-/vais mcp-builder        # MCP 서버 개발 가이드
-/vais skill-creator      # 스킬 작성 가이드 (구조, 프로세스, description 최적화)
-/vais help               # 도움말
-```
+| Entry Point | When to Use |
+|-------------|-------------|
+| `/vais ceo {feature}` | New service launch — full C-Level pipeline |
+| `/vais cto {feature}` | Technical implementation only — plan/PRD already exists |
+| `/vais {c-level} {feature}` | Direct delegation to specific C-Level |
 
 ---
 
-## 워크플로우
+## Harness System
 
-### CEO 서비스 런칭 플로우
+### 4-Step Gate Pipeline
 
-```
-/vais ceo login
-    │
-    ├─ Plan: 런칭 범위 결정 (MVP / 표준 / 확장)
-    ├─ [CP-L1] 범위 확인
-    │
-    ├─ ① CPO 호출: PRD 생성
-    ├─ [CP-L2] CPO 결과 확인
-    │
-    ├─ ② CTO 호출: 기능 개발 (plan → design → do → qa)
-    ├─ [CP-L2] CTO 결과 확인
-    │
-    ├─ ③ CSO 호출: 보안 검토
-    │   └─ 이슈 발견 시 → CTO 수정 → CSO 재검토 (최대 3회)
-    ├─ [CP-L2] CSO 결과 확인
-    │
-    ├─ ④ CBO 호출: 비즈니스 분석 (마케팅+재무)
-    ├─ ⑤ COO 호출: 배포
-    │
-    ├─ [CP-L3] CEO 최종 리뷰 → 미흡 시 재지시
-    └─ Report 작성 → docs/05-report/ceo_login.report.md
+Every sub-agent execution is validated through a 4-step pipeline at `SubagentStop`:
+
+```mermaid
+graph LR
+    A["1. Document<br/>Validation"] --> B["2. Checkpoint<br/>Validation"]
+    B --> C["3. Gate<br/>Judgment"]
+    C --> |Pass| D["4a. Auto<br/>Transition"]
+    C --> |Fail| E["4b. Retry<br/>Guidance"]
+
+    style A fill:#DBEAFE,stroke:#3B82F6
+    style B fill:#DBEAFE,stroke:#3B82F6
+    style C fill:#FEF3C7,stroke:#F59E0B
+    style D fill:#D1FAE5,stroke:#10B981
+    style E fill:#FEE2E2,stroke:#EF4444
 ```
 
-### CTO 단독 플로우 (기술 구현만)
+| Step | Check | On Failure |
+|------|-------|------------|
+| **Document** | Required output files exist (≥ 500B) | List missing files |
+| **Checkpoint** | AskUserQuestion checkpoints recorded | Flag missing approvals |
+| **Gate** | Documents ✅ + Checkpoints ✅ + Tool calls > 0 | Aggregate failure reasons |
+| **Transition** | Auto-advance to next phase (or ask user) | Provide retry guidance with debug tips |
 
-```
-/vais cto login
-    │
-    ├─ Plan 직접 작성        → docs/01-plan/cto_login.plan.md
-    ├─ [CP-1] 범위 확인 (A/B/C)
-    ├─ ui-designer + infra-architect 위임 → docs/02-design/cto_login.design.md
-    ├─ [CP-2] 실행 승인
-    ├─ frontend-engineer + backend-engineer 병렬 위임 → docs/03-do/cto_login.do.md
-    ├─ qa-engineer 위임      → docs/04-qa/cto_login.qa.md
-    └─ Report 작성           → docs/05-report/cto_login.report.md
-```
+### Advisor Tool (M-24)
 
-### 에이전트 계약 (Contract)
+All Sonnet sub-agents have a built-in Opus advisor for mid-generation strategic guidance:
 
-모든 C-Level 에이전트는 표준 계약을 따른다:
+- **When**: Early plan (1x) → Stuck (1x) → Final review (1x) = max 3 calls per request
+- **Cost control**: Monthly budget cap → auto-degrade to Sonnet-only (no interruption)
+- **Caching**: Ephemeral 5-minute TTL for cost efficiency
 
-```markdown
-## Contract
-### Input   — feature명 + 컨텍스트
-### Output  — 산출물 경로 (명시적)
-### State   — status.json 업데이트 조건
-```
+### Hooks
+
+| Hook | Script | Role |
+|------|--------|------|
+| SessionStart | `session-start.js` | Session init + dashboard render + advisor support check |
+| PreToolUse:Bash | `bash-guard.js` | Block destructive commands (DROP TABLE, git push --force) |
+| PostToolUse:Write\|Edit | `doc-tracker.js` | Track document writes → auto-update workflow state |
+| Stop | `stop-handler.js` | Progress summary + next step guidance |
+| SubagentStart | `agent-start.js` | Agent observability (role/phase whitelist validation) |
+| SubagentStop | `agent-stop.js` | **4-step gate pipeline** |
 
 ---
 
-## 문서 경로 체계
-
-모든 C-Level이 동일한 PDCA 폴더를 사용. 파일명: `{role}_{feature}.{phase}.md`
+## Document Structure
 
 ```
 docs/
-  ├── 01-plan/
-  │   ├── cto_{feature}.plan.md        CTO 기획
-  │   ├── cpo_{feature}.plan.md        CPO 제품 기획
-  │   ├── cso_{feature}.plan.md        CSO 위협 분석
-  │   └── ...                          (CEO, CBO, COO)
-  ├── 02-design/                       (선택)
-  ├── 03-do/
-  │   ├── cto_{feature}.do.md          CTO 구현 로그
-  │   ├── cpo_{feature}.do.md          CPO PRD
-  │   ├── cso_{feature}.do.md          CSO 보안 검토 결과
-  │   ├── cbo_{feature}.do.md          CBO 비즈니스 분석
-  │   └── coo_{feature}.do.md          COO 운영 계획
-  ├── 04-qa/
-  │   ├── cto_{feature}.qa.md          CTO QA
-  │   └── cso_{feature}.qa.md          CSO 보안 판정
-  └── 05-report/                       (선택)
+├── 00-ideation/                    # (optional) Ideation summaries
+│   └── {role}_{topic}.md
+├── 01-plan/
+│   └── {role}_{feature}.plan.md    # Requirements, scope, timeline
+├── 02-design/
+│   └── {role}_{feature}.design.md  # Architecture, tech stack
+├── 03-do/
+│   └── {role}_{feature}.do.md      # Implementation log
+├── 04-qa/
+│   └── {role}_{feature}.qa.md      # QA report, gap analysis
+└── 05-report/
+    └── {role}_{feature}.report.md  # Final report, retrospective
 ```
-
-**필수 단계**: Plan, Do, QA — **선택 단계**: Design, Report
 
 ---
 
-## Reference Absorption
-
-외부 레퍼런스(다른 플러그인, 문서, 레포)를 평가해서 흡수한다. CEO 에이전트의 absorb 모드로 실행.
-
-```bash
-/vais ceo {feature}    # "이 레퍼런스 흡수해줘 ../bkit/" 요청
-```
-
-CEO가 absorb-analyzer sub-agent에게 분석을 위임하고, 판정(absorb/merge/reject)을 내린다. 결과는 CEO PDCA 문서(`docs/01-plan/ceo_*.plan.md`, `docs/03-do/ceo_*.do.md`)에 기록되고, 중복 방지 인덱스는 `docs/absorption-ledger.jsonl`에 유지.
-
----
-
-## 프로젝트 구조
+## Project Structure
 
 ```
 vais-claude-code/
-├── agents/                  # C-Level 별 하위 폴더로 구성 (6 C-Level + 38 sub-agent)
+├── agents/                  # 6 C-Level directories + _shared guards
 │   ├── ceo/                 #   CEO + absorb-analyzer + skill-creator
-│   ├── cpo/                 #   CPO + product-discoverer/strategy/research/prd + backlog-manager + ux-researcher + data-analyst
-│   ├── cto/                 #   CTO + infra-architect/backend-engineer/frontend-engineer/ui-designer/db-architect/qa-engineer/test-engineer/incident-responder
-│   ├── cso/                 #   CSO + security-auditor/code-reviewer/secret-scanner/dependency-analyzer/plugin-validator/skill-validator/compliance-auditor
-│   ├── cbo/                 #   CBO + market-researcher/customer-segmentation-analyst/seo-analyst/copy-writer/growth-analyst/pricing-analyst/financial-modeler/unit-economics-analyst/finops-analyst/marketing-analytics-analyst
-│   ├── coo/                 #   COO + release-engineer/sre-engineer/release-monitor/performance-engineer
-│   └── _shared/             #   공유 가드 (advisor-guard, ideation-guard)
-├── skills/vais/
-│   ├── SKILL.md             # /vais 스킬 진입점
-│   ├── phases/              # C-Suite 위임 + 리다이렉트 스텁
-│   └── utils/               # status, commit, init, help
-├── hooks/                   # 6개: SessionStart, PreToolUse, PostToolUse, Stop, SubagentStart/Stop
-├── lib/                     # status, memory, paths, observability, hook-logger
-├── scripts/                 # bash-guard, doc-tracker, agent-start/stop
-├── templates/               # plan, design, infra, qa, report, finance, ops
-├── docs/strategy/           # 전략 문서
-├── package.json
-└── vais.config.json         # 워크플로우, C-Suite 역할, 경로 체계
+│   ├── cpo/                 #   CPO + 7 sub-agents (product/backlog/UX/data)
+│   ├── cto/                 #   CTO + 8 sub-agents (infra/dev/qa/debug)
+│   ├── cso/                 #   CSO + 7 sub-agents (security/review/compliance)
+│   ├── cbo/                 #   CBO + 10 sub-agents (market/growth/finance)
+│   ├── coo/                 #   COO + 4 sub-agents (release/SRE/perf)
+│   └── _shared/             #   advisor-guard.md, ideation-guard.md
+├── skills/vais/             # /vais skill entry + phase routers + utilities
+├── hooks/                   # 6 hooks (session/bash-guard/doc-tracker/stop/agent)
+├── lib/                     # Core libraries
+│   ├── advisor/             #   Opus advisor wrapper + prompt builder
+│   ├── control/             #   Cost monitor, automation controller
+│   ├── core/                #   State machine, migration engine
+│   ├── observability/       #   Event logger, schema, rotation
+│   ├── quality/             #   Gate manager, template validator
+│   ├── registry/            #   Agent registry (includes merge)
+│   └── validation/          #   Document validator, checkpoint guard
+├── scripts/                 # CLI tools (bash-guard, agent-start/stop, validators)
+├── templates/               # PDCA document templates (plan/design/do/qa/report/ideation)
+├── docs/                    # Feature outputs (01-plan ~ 05-report + 00-ideation)
+├── vais.config.json         # Plugin configuration (workflow, C-Suite, gates, advisor)
+└── package.json             # Plugin manifest
 ```
 
 ---
 
-## Hooks (6개)
+## Configuration
 
-| Hook | 스크립트 | 역할 |
-|------|---------|------|
-| SessionStart | `session-start.js` | 세션 초기화 + 상태 렌더링 |
-| PreToolUse:Bash | `bash-guard.js` | 위험 명령 차단 (DROP TABLE, git push --force 등) |
-| PostToolUse:Write\|Edit | `doc-tracker.js` | 문서 작성 → 워크플로우 상태 자동 업데이트 |
-| Stop | `stop-handler.js` | 진행률 요약 + 다음 단계 안내 |
-| SubagentStart | `agent-start.js` | 에이전트 시작 관측 |
-| SubagentStop | `agent-stop.js` | 에이전트 종료 관측 |
+Key settings in `vais.config.json`:
 
-모든 hook 실행은 `.vais/hook-log.jsonl`에 기록된다.
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `workflow.phases` | `[ideation, plan, design, do, qa, report]` | PDCA phases (ideation is optional) |
+| `workflow.mandatoryPhases` | `[plan, design, do, qa]` | Phases that cannot be skipped |
+| `dependencies` | `{cto:[cpo], cso:[cto], ...}` | C-Level dependency map |
+| `gapThreshold` | `0.90` | QA pass threshold (90%) |
+| `advisor.enabled` | `true` | Opus advisor for all Sonnet sub-agents |
+| `advisor.max_uses_per_request` | `3` | Max advisor calls per sub-agent request |
+| `advisor.monthly_budget_usd` | `200` | Monthly advisor cost cap (auto-degrade on exceed) |
+| `automation.level` | `L2` | Automation level (L0 manual ~ L4 full-auto) |
 
 ---
 
 ## Observability
 
-에이전트 실행 상태와 이벤트가 자동으로 기록된다.
+All agent activity is automatically logged:
 
-- `.vais/agent-state.json` — 현재 활성 에이전트, 파이프라인 상태
-- `.vais/event-log.jsonl` — 모든 이벤트 (session_start, agent_start/stop, gate_check, decision 등)
-- `.vais/hook-log.jsonl` — hook 실행 로그 (동작 확인용)
-- 10MB 초과 또는 30일 경과 시 `.vais/archive/`로 자동 로테이션
+| File | Content |
+|------|---------|
+| `.vais/agent-state.json` | Current active agents, pipeline state |
+| `.vais/event-log.jsonl` | All events (18 types: session, agent, phase, gate, ideation, advisor, ...) |
+| `.vais/advisor-spend.json` | Advisor cost tracking (session + monthly) |
+| `.vais/hook-log.jsonl` | Hook execution log |
 
----
-
-## 설정 (`vais.config.json`)
-
-자주 바꾸는 것들:
-
-| 설정 | 기본값 | 설명 |
-|------|--------|------|
-| `cSuite.orchestrator.fullLaunch` | `"ceo"` | 서비스 런칭 오케스트레이터 |
-| `cSuite.orchestrator.techOnly` | `"cto"` | 기술 구현 오케스트레이터 |
-| `cSuite.launchPipeline.routing` | `"dynamic"` | CEO 동적 라우팅 (피처 성격 + 산출물 상태 기반 판단) |
-| `cSuite.launchPipeline.dependencies` | `{"cso":["cto"],...}` | C-Level 간 의존성 맵 (CEO 판단 참조용) |
-| `workflow.phases` | `["plan","design","do","qa","report"]` | CTO 워크플로우 5단계 |
-| `gapAnalysis.matchThreshold` | `90%` | QA 통과 기준 |
-| `observability.enabled` | `true` | 로깅 on/off |
+Auto-rotation: 10MB or 30 days → `.vais/archive/`
 
 ---
 
-전체 이력: [CHANGELOG.md](./CHANGELOG.md)
+## Migration from v0.49
+
+If you have existing `.vais/status.json` from v0.49:
+
+1. First run auto-detects v0.49 state
+2. `migration-engine.js` converts `cmo_*` / `cfo_*` features → `cbo_*`
+3. Removes `retrospective-writer` / `technical-writer` records
+4. Backup created at `.vais/_backup/v049-{timestamp}.tar.gz`
+5. Dry-run first, then user approval before actual migration
+
+**Breaking changes**:
+- `/vais cmo` → use `/vais cbo` instead
+- `/vais cfo` → use `/vais cbo` instead
+
+---
+
+## Testing
+
+```bash
+npm test          # Run all tests (174 pass)
+```
+
+Test coverage:
+- State machine transitions (ideation + 5 mandatory phases)
+- Migration engine (cmo/cfo → cbo conversion + backup)
+- Agent registry (includes merge + circular prevention)
+- Gate manager (5-case decision table + ideation skip)
+- Advisor integration (prompt builder + cost monitor + degrade)
+- Scenario verification (S-0, S-1, S-2, S-9 structural validation)
+
+---
+
+## References
+
+- [C-Suite Roles v2](./guide/csuite-roles-v2.md) — Detailed role definitions, boundaries, handoff rules
+- [Scenarios v2](./guide/csuite-scenarios-v2.md) — 10+1 scenario step-by-step flows
+- [Agent Mapping v2](./guide/agent-mapping-v2.md) — Per-phase agent participation matrix
+- [Harness Plan v2](./guide/harness-plan-v2.md) — Hook system, FSM, gate pipeline design
+- [CHANGELOG](./CHANGELOG.md) — Full version history
+
+---
+
+## License
+
+MIT
+
+---
+
+<p align="center">
+  <sub>Built with <a href="https://claude.ai/claude-code">Claude Code</a> · Powered by Claude Opus 4.6 + Sonnet 4.6</sub>
+</p>
