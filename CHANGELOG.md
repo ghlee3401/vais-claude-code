@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.51.1] - 2026-04-16
+
+### Maintenance
+
+- skills/vais/phases/ 내 레거시 리다이렉트 stub 6개 삭제 (backend-engineer, frontend-engineer, infra-architect, qa-engineer, ui-designer, plan)
+
 ## [0.51.0] - 2026-04-16
 
 ### Added
