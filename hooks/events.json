@@ -55,7 +55,7 @@
     "advisor_call": {
       "description": "Advisor 도구 호출 (v0.50 M-24)",
       "payload": ["timestamp", "session_id", "sub_agent", "c_level", "trigger", "tokens_in", "tokens_out", "cached_tokens", "cost", "status"],
-      "required": ["timestamp", "session_id", "sub_agent", "cost", "status"]
+      "required": ["timestamp", "session_id", "sub_agent", "c_level", "trigger", "tokens_in", "tokens_out", "cached_tokens", "cost", "status"]
     },
     "advisor_degraded": {
       "description": "Advisor 비용 캡 초과 비활성화 (v0.50)",

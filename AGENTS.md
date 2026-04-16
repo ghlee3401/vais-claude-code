@@ -55,10 +55,9 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 | cto | Technical lead orchestrator (required) |
 | ceo | Business strategy + absorb orchestrator |
 | cpo | Product direction + PRD + pm-* sub-agent orchestration |
-| cfo | Financial analysis, ROI, pricing (delegates to finops-analyst/pricing-analyst) |
-| cmo | Marketing + seo-analyst/copy-writer/growth-analyst delegation |
 | cso | Security Gate A + plugin validation Gate B + independent review Gate C + compliance |
-| coo | Operations, CI/CD, monitoring (delegates to sre-engineer/release-engineer/technical-writer) |
+| cbo | Business layer — GTM, marketing, finance, pricing, unit economics (CMO+CFO 통합) |
+| coo | Operations, CI/CD, monitoring (delegates to release-engineer/sre-engineer) |
 
 ### Execution (실행 레이어, Sonnet)
 
@@ -73,20 +72,28 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 | release-engineer | CTO/COO | CI/CD + Docker + deployment automation |
 | db-architect | CTO | DB schema optimization + migration + query tuning |
 | security-auditor | CSO | Security audit (OWASP Top 10) |
-| compliance-auditor | CSO/CFO | Compliance (GDPR/license) |
-| seo-analyst | CMO | SEO audit |
-| copy-writer | CMO | Marketing copy |
-| growth-analyst | CMO | Growth funnel strategy |
+| secret-scanner | CSO | Source code secret detection |
+| dependency-analyzer | CSO | CVE/license/supply chain risk analysis |
+| skill-validator | CSO | Skill/agent markdown frontmatter validation |
+| compliance-auditor | CSO | Compliance (GDPR/license) |
+| market-researcher | CBO | Market/competitor analysis |
+| customer-segmentation-analyst | CBO | Customer segmentation + personas |
+| seo-analyst | CBO | SEO audit |
+| copy-writer | CBO | Marketing copy |
+| growth-analyst | CBO | Growth funnel strategy |
+| pricing-analyst | CBO | Pricing models + revenue simulation |
+| financial-modeler | CBO | 3-Statement model + DCF + scenario analysis |
+| unit-economics-analyst | CBO | CAC/LTV/cohort/SaaS metrics |
+| finops-analyst | CBO | Cloud cost analysis |
+| marketing-analytics-analyst | CBO | Multi-touch attribution + channel ROI |
 | sre-engineer | COO | SRE/monitoring + incident runbook |
-| technical-writer | COO/CTO/CPO | Technical docs (API docs/README) |
-| finops-analyst | CFO | Cloud cost analysis |
-| pricing-analyst | CFO | Pricing models + revenue simulation |
 | ux-researcher | CPO | UX research |
-| data-analyst | CPO/CTO/CFO | Product metrics analysis |
+| backlog-manager | CPO | PRD → user story + sprint plan conversion |
+| data-analyst | CPO/CTO/CBO | Product metrics analysis |
 | incident-responder | CTO | Systematic debugging |
+| skill-creator | CEO | Auto skill/agent markdown generation |
 | release-monitor | COO | Post-deployment canary monitoring |
 | performance-engineer | COO | Performance benchmarks |
-| retrospective-writer | CEO | Engineering retrospective |
 
 실행 에이전트는 **직접 호출 금지** — 반드시 CTO를 통해 호출합니다.
 
