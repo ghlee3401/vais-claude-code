@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/session-start.js",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/hooks/session-start.js",
             "timeout": 5000
           }
         ]
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/bash-guard.js",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/scripts/bash-guard.js",
             "timeout": 3000
           }
         ]
@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/doc-tracker.js",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/scripts/doc-tracker.js",
             "timeout": 5000
           }
         ]
@@ -39,7 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/cp-tracker.js",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/scripts/cp-tracker.js",
             "timeout": 3000
           }
         ]
@@ -50,7 +50,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/stop-handler.js",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/scripts/stop-handler.js",
             "timeout": 5000
           }
         ]
@@ -61,7 +61,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/agent-start.js ${AGENT_NAME:-unknown} ${PHASE:-unknown}",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/scripts/agent-start.js ${AGENT_NAME:-unknown} ${PHASE:-unknown}",
             "timeout": 5000
           }
         ]
@@ -72,7 +72,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/agent-stop.js ${AGENT_NAME:-unknown} ${OUTCOME:-success}",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/scripts/agent-stop.js ${AGENT_NAME:-unknown} ${OUTCOME:-success}",
             "timeout": 5000
           }
         ]

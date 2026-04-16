@@ -98,7 +98,8 @@
       "Bash(npm --version)",
       "Bash(export PATH=\"/opt/homebrew/bin:$PATH\")",
       "Bash(find *)",
-      "Bash(/opt/homebrew/bin/node *)"
+      "Bash(/opt/homebrew/bin/node *)",
+      "Bash(/Users/ghlee/workspace/vais-claude-code/hooks/run-node.sh *)"
     ]
   },
   "enabledPlugins": {}

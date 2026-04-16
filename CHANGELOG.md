@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.50.1] - 2026-04-16
+
+### Fixed
+
+- **Hook node resolution**: hooks가 `/bin/sh` 환경에서 `node`를 찾지 못하는 문제 수정. `run-node.sh` portable resolver 추가하여 homebrew, nvm, volta, fnm, nodenv, asdf, system 경로를 순차 탐색.
+
 ## [0.50.0] - 2026-04-16
 
 ### Major Changes
