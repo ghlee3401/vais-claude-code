@@ -1,6 +1,6 @@
 # {feature} — 완료 보고서
 
-> 참조 문서: `docs/01-plan/{feature}.md`, `docs/02-design/{feature}.md`, `docs/04-qa/{feature}.md`
+> 참조 문서: `docs/{feature}/plan/main.md`, `docs/{feature}/design/main.md`, `docs/{feature}/qa/main.md`
 
 ## Executive Summary
 
@@ -38,12 +38,10 @@
 
 | Phase | Status | Key Output |
 |-------|--------|------------|
-| Plan | ✅/⬜ | `docs/01-plan/{feature}.md` |
-| Design | ✅/⬜ | `docs/02-design/{feature}.md` |
-| Infra | ✅/⬜ | `docs/03-infra/{feature}.md` |
-| FE | ✅/⬜ | 화면 구현 |
-| BE | ✅/⬜ | API 구현 |
-| QA | ✅/⬜ | `docs/04-qa/{feature}.md` |
+| Plan | ✅/⬜ | `docs/{feature}/plan/main.md` |
+| Design | ✅/⬜ | `docs/{feature}/design/main.md` |
+| Do | ✅/⬜ | `docs/{feature}/do/main.md` |
+| QA | ✅/⬜ | `docs/{feature}/qa/main.md` |
 
 ---
 

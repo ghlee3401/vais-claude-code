@@ -121,7 +121,7 @@ CANARY REPORT -- [엔드포인트]
 
 ## 산출물
 
-- 모니터링 리포트는 COO의 `docs/03-do/` 또는 `docs/04-qa/`에 포함
+- 모니터링 리포트는 COO의 `docs/{feature}/do/` 또는 `docs/{feature}/qa/`에 포함
 - CRITICAL 이슈 발견 시 COO에게 즉시 보고 -> COO가 CEO에게 에스컬레이션
 
 ---

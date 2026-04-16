@@ -35,11 +35,11 @@ disallowedTools:
 
 | phase 값 | 실행 범위 | 필수 산출물 |
 |-----------|----------|------------|
-| `plan` | Plan 단계만 실행 → CP-1에서 멈춤 | `docs/01-plan/coo_{feature}.plan.md` |
-| `design` | Design 단계만 실행 (운영 설계) | (선택) `docs/02-design/coo_{feature}.design.md` |
-| `do` | Do 단계만 실행 → CP-2 확인 후 release-engineer/sre-engineer/release-monitor/performance-engineer 위임 | `docs/03-do/coo_{feature}.do.md` |
-| `qa` | Check 단계만 실행 → CP-Q에서 멈춤 | `docs/04-qa/coo_{feature}.qa.md` |
-| `report` | Report 단계만 실행 | `docs/05-report/coo_{feature}.report.md` |
+| `plan` | Plan 단계만 실행 → CP-1에서 멈춤 | `docs/{feature}/plan/main.md` |
+| `design` | Design 단계만 실행 (운영 설계) | (선택) `docs/{feature}/design/main.md` |
+| `do` | Do 단계만 실행 → CP-2 확인 후 release-engineer/sre-engineer/release-monitor/performance-engineer 위임 | `docs/{feature}/do/main.md` |
+| `qa` | Check 단계만 실행 → CP-Q에서 멈춤 | `docs/{feature}/qa/main.md` |
+| `report` | Report 단계만 실행 | `docs/{feature}/report/main.md` |
 
 **동작 규칙:**
 1. phases/*.md에서 전달받은 `phase` 값에 해당하는 단계**만** 실행
@@ -52,8 +52,8 @@ disallowedTools:
 
 Plan 단계에서는 **분석과 기획서 작성만** 수행합니다. 프로덕트 파일(skills/, agents/, lib/, src/, mcp/ 등)의 생성·수정·삭제는 **Do 단계에서만** 허용됩니다.
 
-- ✅ **Plan 허용**: `docs/01-plan/` 산출물 작성, 기존 코드 Read/Grep 분석
-- ❌ **Plan 금지**: Write/Edit로 `docs/01-plan/` 외 파일 생성·수정 (구현 행위)
+- ✅ **Plan 허용**: `docs/{feature}/plan/` 산출물 작성, 기존 코드 Read/Grep 분석
+- ❌ **Plan 금지**: Write/Edit로 `docs/{feature}/plan/` 외 파일 생성·수정 (구현 행위)
 
 > **Plan은 결정, Do는 실행.** "단순 md 파일이라 바로 할 수 있다"는 이유로 구현을 앞당기지 않는다.
 
@@ -93,11 +93,11 @@ Delegates to release-engineer (CI/CD), sre-engineer (monitoring/runbook), releas
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 운영 현황 파악 + 개선 범위 정의 | `docs/01-plan/coo_{feature}.plan.md` |
-| Design | 직접 + **release-engineer** | CI/CD 파이프라인 설계 + 모니터링 아키텍처 | (선택) `docs/02-design/coo_{feature}.design.md` |
-| Do | **sre-engineer** + **release-engineer** (병렬) | 모니터링 + 배포 자동화 | `docs/03-do/coo_{feature}.do.md` |
-| Check | release-monitor + performance-engineer | 배포 검증 + 성능 벤치마크 | `docs/04-qa/coo_{feature}.qa.md` |
-| Report | 직접 | 운영 보고서 (배포 체크리스트, 롤백 기준, 런북) | (선택) `docs/05-report/coo_{feature}.report.md` |
+| Plan | 직접 | 운영 현황 파악 + 개선 범위 정의 | `docs/{feature}/plan/main.md` |
+| Design | 직접 + **release-engineer** | CI/CD 파이프라인 설계 + 모니터링 아키텍처 | (선택) `docs/{feature}/design/main.md` |
+| Do | **sre-engineer** + **release-engineer** (병렬) | 모니터링 + 배포 자동화 | `docs/{feature}/do/main.md` |
+| Check | release-monitor + performance-engineer | 배포 검증 + 성능 벤치마크 | `docs/{feature}/qa/main.md` |
+| Report | 직접 | 운영 보고서 (배포 체크리스트, 롤백 기준, 런북) | (선택) `docs/{feature}/report/main.md` |
 
 ---
 
@@ -108,10 +108,10 @@ Delegates to release-engineer (CI/CD), sre-engineer (monitoring/runbook), releas
 |------|------|-----|
 | **Input** | feature | 피처명 |
 | | context | 구현 코드, 기술 스택 정보, 배포 대상 환경 |
-| **Output** (필수) | 운영 분석 기획 | `docs/01-plan/coo_{feature}.plan.md` |
-| | 운영 계획서 | `docs/03-do/coo_{feature}.do.md` |
-| | 운영 검증 | `docs/04-qa/coo_{feature}.qa.md` |
-| **Output** (선택) | 최종 보고서 | `docs/05-report/coo_{feature}.report.md` |
+| **Output** (필수) | 운영 분석 기획 | `docs/{feature}/plan/main.md` |
+| | 운영 계획서 | `docs/{feature}/do/main.md` |
+| | 운영 검증 | `docs/{feature}/qa/main.md` |
+| **Output** (선택) | 최종 보고서 | `docs/{feature}/report/main.md` |
 | **State** | phase.plan | `completed` when 운영 분석 기획 완료 |
 | | phase.do | `completed` when 운영 계획서 작성 완료 |
 <!-- @refactor:end contract -->
@@ -213,11 +213,11 @@ C. 확장 범위
 
 | phase | 문서 | 경로 |
 |-------|------|------|
-| plan | 운영 분석 기획 | `docs/01-plan/coo_{feature}.plan.md` |
-| design | 운영 설계 | `docs/02-design/coo_{feature}.design.md` |
-| do | 운영 계획서 | `docs/03-do/coo_{feature}.do.md` |
-| qa | 운영 검증 | `docs/04-qa/coo_{feature}.qa.md` |
-| report | 운영 보고서 | `docs/05-report/coo_{feature}.report.md` |
+| plan | 운영 분석 기획 | `docs/{feature}/plan/main.md` |
+| design | 운영 설계 | `docs/{feature}/design/main.md` |
+| do | 운영 계획서 | `docs/{feature}/do/main.md` |
+| qa | 운영 검증 | `docs/{feature}/qa/main.md` |
+| report | 운영 보고서 | `docs/{feature}/report/main.md` |
 
 > 각 문서는 `templates/` 해당 템플릿 참조. **문서를 작성하지 않고 종료하는 것은 금지됩니다.**
 <!-- @refactor:end doc-checklist -->
@@ -231,7 +231,7 @@ Check 단계에서 CI/CD 파이프라인이나 인프라 설정의 코드 수정
 
 **트리거**: CI/CD 설정 파일 구현 필요 (GitHub Actions, Dockerfile) / 인프라 코드 수정 (Terraform, K8s) / 모니터링·로깅 코드 통합.
 
-**형식**: 요청 C-Level=COO / 피처 / 요청 유형=구현 요청 / 긴급도(🔴🟡🟢) / 이슈 목록 표(# / 이슈 / 대상 파일 / 수정 내용 / 긴급도) / 근거 문서=`docs/03-do/coo_{feature}.do.md` / 핵심 요약 1줄 / 완료 조건 / 다음 단계=`/vais cto {feature}` / 재검증=`/vais coo {feature}`.
+**형식**: 요청 C-Level=COO / 피처 / 요청 유형=구현 요청 / 긴급도(🔴🟡🟢) / 이슈 목록 표(# / 이슈 / 대상 파일 / 수정 내용 / 긴급도) / 근거 문서=`docs/{feature}/do/main.md` / 핵심 요약 1줄 / 완료 조건 / 다음 단계=`/vais cto {feature}` / 재검증=`/vais coo {feature}`.
 
 **사용자 확인**: 핸드오프 전 반드시 AskUserQuestion: "CTO에게 수정을 요청할까요?"
 <!-- @refactor:end handoff -->
@@ -247,7 +247,7 @@ Check 단계에서 CI/CD 파이프라인이나 인프라 설정의 코드 수정
 
 **에이전트 위임**: release-engineer / sre-engineer / release-monitor / performance-engineer 는 Agent 도구 호출. sre-engineer + release-engineer 병렬 호출 가능.
 
-**Operations Report 작성**: `docs/03-do/coo_{feature}.do.md` 독립 문서, 템플릿 `templates/ops.template.md` 참조. 미실행 시 "N/A — COO 검토 미수행" 명시.
+**Operations Report 작성**: `docs/{feature}/do/main.md` 독립 문서, 템플릿 `templates/ops.template.md` 참조. 미실행 시 "N/A — COO 검토 미수행" 명시.
 
 **Push 규칙**: `git push`는 `/vais commit`을 통해서만 수행. 작업 완료 후 `git add` 후 사용자에게 `/vais commit` 안내.
 <!-- @refactor:end work-rules -->

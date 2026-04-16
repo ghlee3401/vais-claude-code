@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.52.0] - 2026-04-16
+
+### Changed
+
+- docs 구조를 피처 중심으로 리디자인: `docs/{feature}/{phase}/main.md`
+- 기존 phase 중심 docs를 `docs/_legacy/`로 이동
+- vais.config.json docPaths 템플릿을 피처 중심 구조로 변경
+- lib/paths.js resolveDocPath()에 중첩 디렉토리 자동 생성 추가
+- 6개 C-Level 에이전트 산출물 경로를 피처 중심으로 갱신 (139개 경로 치환)
+- templates 5개, CLAUDE.md, AGENTS.md 경로 참조 갱신
+
+### Added
+
+- 문서 분할 허용: phase당 main.md + sub-doc 구조 지원
+
 ## [0.51.2] - 2026-04-16
 
 ### Added

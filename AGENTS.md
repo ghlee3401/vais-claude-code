@@ -40,7 +40,7 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 ## 필수 규칙
 
 1. **기획 없이 코드 금지**: 기획서가 없으면 먼저 `/vais cto {feature}`로 기획부터 시작합니다
-2. **코딩 규칙 준수**: 구현 시 반드시 기획서(`docs/01-plan/`)의 코딩 규칙 섹션을 참조합니다
+2. **코딩 규칙 준수**: 구현 시 반드시 기획서(`docs/{feature}/plan/`)의 코딩 규칙 섹션을 참조합니다
 3. **QA 필수**: 구현 완료 후 CTO가 QA 에이전트를 통해 빌드 확인 + 설계 대비 일치율을 검증합니다
 4. **문서 참조 투명성**: 구현 시 참조한 문서 목록을 산출물 상단에 기록합니다
 5. **위험 명령 금지**: `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
@@ -101,11 +101,11 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 
 | 단계 | 경로 |
 |------|------|
-| 기획 (plan) | `docs/01-plan/` |
-| 설계 (design) | `docs/02-design/` |
-| 구현 (do) | `docs/03-do/` |
-| QA (qa) | `docs/04-qa/` |
-| 보고서 (report) | `docs/05-report/` |
+| 기획 (plan) | `docs/{feature}/plan/` |
+| 설계 (design) | `docs/{feature}/design/` |
+| 구현 (do) | `docs/{feature}/do/` |
+| QA (qa) | `docs/{feature}/qa/` |
+| 보고서 (report) | `docs/{feature}/report/` |
 
 ## 피처 이름 가이드
 
@@ -123,5 +123,5 @@ kebab-case 영문 소문자를 권장합니다. 아래는 서비스에서 자주
 
 ## 기술 스택 참고
 
-프로젝트별로 다르므로 `docs/01-plan/` 기획서의 기술 스택 섹션을 참조합니다.
+프로젝트별로 다르므로 `docs/{feature}/plan/` 기획서의 기술 스택 섹션을 참조합니다.
 

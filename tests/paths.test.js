@@ -72,19 +72,16 @@ describe('loadConfig', () => {
 });
 
 describe('resolveDocPath / findDoc', () => {
-  it('피처명과 role로 문서 경로를 생성한다', () => {
+  it('피처명으로 문서 경로를 생성한다 (피처 중심 구조)', () => {
     const paths = loadPaths();
-    // role 기본값 cto
-    const docPath = paths.resolveDocPath('plan', '로그인기능');
-    assert.ok(docPath.includes('01-plan'));
-    assert.ok(docPath.includes('cto_로그인기능'));
+    const docPath = paths.resolveDocPath('plan', 'login-feature');
+    assert.ok(docPath.includes('login-feature/plan/main.md'));
   });
 
-  it('role을 명시적으로 전달할 수 있다', () => {
+  it('role을 전달해도 피처 중심 경로를 반환한다', () => {
     const paths = loadPaths();
     const docPath = paths.resolveDocPath('do', 'login', 'cso');
-    assert.ok(docPath.includes('03-do'));
-    assert.ok(docPath.includes('cso_login'));
+    assert.ok(docPath.includes('login/do/main.md'));
   });
 
   it('findDoc은 파일이 없으면 빈 문자열 반환', () => {

@@ -38,11 +38,11 @@ disallowedTools:
 
 | phase 값 | 실행 범위 | 필수 산출물 |
 |-----------|----------|------------|
-| `plan` | Plan 단계만 실행 → CP-1에서 멈춤 | `docs/01-plan/cpo_{feature}.plan.md` |
-| `design` | Design 단계만 실행 (제품 설계) | (선택) `docs/02-design/cpo_{feature}.design.md` |
-| `do` | Do 단계만 실행 → CP-2 확인 후 pm-* sub-agents 위임 | `docs/03-do/cpo_{feature}.do.md` |
-| `qa` | Check 단계만 실행 → CP-Q에서 멈춤 | `docs/04-qa/cpo_{feature}.qa.md` |
-| `report` | Report 단계만 실행 | `docs/05-report/cpo_{feature}.report.md` |
+| `plan` | Plan 단계만 실행 → CP-1에서 멈춤 | `docs/{feature}/plan/main.md` |
+| `design` | Design 단계만 실행 (제품 설계) | (선택) `docs/{feature}/design/main.md` |
+| `do` | Do 단계만 실행 → CP-2 확인 후 pm-* sub-agents 위임 | `docs/{feature}/do/main.md` |
+| `qa` | Check 단계만 실행 → CP-Q에서 멈춤 | `docs/{feature}/qa/main.md` |
+| `report` | Report 단계만 실행 | `docs/{feature}/report/main.md` |
 
 **동작 규칙:**
 1. phases/*.md에서 전달받은 `phase` 값에 해당하는 단계**만** 실행
@@ -55,8 +55,8 @@ disallowedTools:
 
 Plan 단계에서는 **분석과 기획서 작성만** 수행합니다. 프로덕트 파일(skills/, agents/, lib/, src/, mcp/ 등)의 생성·수정·삭제는 **Do 단계에서만** 허용됩니다.
 
-- ✅ **Plan 허용**: `docs/01-plan/` 산출물 작성, 기존 코드 Read/Grep 분석
-- ❌ **Plan 금지**: Write/Edit로 `docs/01-plan/` 외 파일 생성·수정 (구현 행위)
+- ✅ **Plan 허용**: `docs/{feature}/plan/` 산출물 작성, 기존 코드 Read/Grep 분석
+- ❌ **Plan 금지**: Write/Edit로 `docs/{feature}/plan/` 외 파일 생성·수정 (구현 행위)
 
 > **Plan은 결정, Do는 실행.** "단순 md 파일이라 바로 할 수 있다"는 이유로 구현을 앞당기지 않는다.
 
@@ -96,11 +96,11 @@ Product domain orchestrator. Defines "what to build." Calls pm sub-agents in seq
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 + **data-analyst** | 기회 발견 + 데이터 기반 분석 | `docs/01-plan/cpo_{feature}.plan.md` |
-| Design | product-discoverer + product-strategist + product-researcher + **ux-researcher** (병렬) | 기회 분석 + 전략 + 시장 조사 + UX 리서치 | (선택) `docs/02-design/cpo_{feature}.design.md` |
-| Do | prd-writer | PRD 합성 | `docs/03-do/cpo_{feature}.do.md` |
-| Check | 직접 + **data-analyst** | PRD 완성도 + 성공 지표 측정 가능성 검증 | `docs/04-qa/cpo_{feature}.qa.md` |
-| Report | 직접 | PRD 최종화 + CTO 핸드오프 컨텍스트 출력 | (선택) `docs/05-report/cpo_{feature}.report.md` |
+| Plan | 직접 + **data-analyst** | 기회 발견 + 데이터 기반 분석 | `docs/{feature}/plan/main.md` |
+| Design | product-discoverer + product-strategist + product-researcher + **ux-researcher** (병렬) | 기회 분석 + 전략 + 시장 조사 + UX 리서치 | (선택) `docs/{feature}/design/main.md` |
+| Do | prd-writer | PRD 합성 | `docs/{feature}/do/main.md` |
+| Check | 직접 + **data-analyst** | PRD 완성도 + 성공 지표 측정 가능성 검증 | `docs/{feature}/qa/main.md` |
+| Report | 직접 | PRD 최종화 + CTO 핸드오프 컨텍스트 출력 | (선택) `docs/{feature}/report/main.md` |
 
 **sub-agent 호출 순서**: (1) product-discoverer → Opportunity Solution Tree(Teresa Torres) → 핵심 기회 영역·사용자 니즈, (2) product-strategist + product-researcher **병렬** → Value Proposition(JTBD 6-Part) + Lean Canvas / 3 Personas + 5 Competitors + TAM/SAM/SOM, (3) prd-writer → 합성 → PRD 문서.
 
@@ -113,10 +113,10 @@ Product domain orchestrator. Defines "what to build." Calls pm sub-agents in seq
 |------|------|-----|
 | **Input** | feature | 피처명 |
 | | context | 사용자 요구사항 또는 CEO 위임 컨텍스트 |
-| **Output** (필수) | 제품 기획 분석 | `docs/01-plan/cpo_{feature}.plan.md` |
-| | PRD | `docs/03-do/cpo_{feature}.do.md` |
-| | PRD 완성도 검증 | `docs/04-qa/cpo_{feature}.qa.md` |
-| **Output** (선택) | 최종 보고서 | `docs/05-report/cpo_{feature}.report.md` |
+| **Output** (필수) | 제품 기획 분석 | `docs/{feature}/plan/main.md` |
+| | PRD | `docs/{feature}/do/main.md` |
+| | PRD 완성도 검증 | `docs/{feature}/qa/main.md` |
+| **Output** (선택) | 최종 보고서 | `docs/{feature}/report/main.md` |
 | **State** | phase.plan | `completed` when 기획 분석 완료 |
 | | phase.do | `completed` when PRD 작성 완료 |
 | | phase.qa | `completed` when 완성도 검증 완료 |
@@ -180,7 +180,7 @@ C. 확장 범위
 
 ### CP-2 — Do 시작 전 (실행 승인)
 
-**출력**: Context Anchor(WHY/WHO) + 실행 에이전트((1) product-discoverer 순차, (2) product-strategist + product-researcher 병렬, (3) prd-writer 순차) + 전달 컨텍스트(Plan 문서 경로, 핵심 방향 1줄) + 예상 산출물(PRD `docs/03-do/cpo_{feature}.do.md`, TAM/SAM/SOM + 경쟁사 5, 페르소나 N).
+**출력**: Context Anchor(WHY/WHO) + 실행 에이전트((1) product-discoverer 순차, (2) product-strategist + product-researcher 병렬, (3) prd-writer 순차) + 전달 컨텍스트(Plan 문서 경로, 핵심 방향 1줄) + 예상 산출물(PRD `docs/{feature}/do/main.md`, TAM/SAM/SOM + 경쟁사 5, 페르소나 N).
 
 **[CP-2]** 이 구성으로 실행할까요? → AskUserQuestion 도구를 호출
 - A. 실행 / B. 수정 / C. 중단
@@ -202,7 +202,7 @@ C. 확장 범위
 - **L1** (항상): `vais.config.json`
 - **L2** (항상): `.vais/memory.json` — 제품 방향 관련 엔트리 필터
 - **L3** (항상): `.vais/status.json`
-- **L4** (체이닝): CEO 전략 방향 (CEO→CPO) / 기존 PRD 파일 (`docs/03-do/cpo_{feature}.do.md`, 업데이트 시)
+- **L4** (체이닝): CEO 전략 방향 (CEO→CPO) / 기존 PRD 파일 (`docs/{feature}/do/main.md`, 업데이트 시)
 <!-- @refactor:end context-load -->
 
 ---
@@ -214,7 +214,7 @@ PRD 완성 후 구현이 필요하면 CTO에게 전달합니다.
 
 **트리거**: PRD 완성 → 신규 기능 구현 필요 / PRD 업데이트 → 기존 기능 수정 필요.
 
-**형식**: 요청 C-Level=CPO / 피처 / 요청 유형=구현 요청 / 긴급도(🔴🟡🟢) / 이슈 목록 표(# / 이슈 / 대상 파일 / 수정 내용 / 긴급도) / 근거 문서=`docs/03-do/cpo_{feature}.do.md` / 핵심 문제(WHY) / 타깃 사용자(WHO) / 성공 기준(SUCCESS) / 범위 제한(OUT_OF_SCOPE) / 완료 조건=PRD 요구사항 전체 구현 / 다음 단계=`/vais cto plan {feature}` (CTO가 본 PRD를 자동 입력으로 사용, gates.cto.plan.requirePrd 정책) / 재검증=`/vais cpo {feature}`.
+**형식**: 요청 C-Level=CPO / 피처 / 요청 유형=구현 요청 / 긴급도(🔴🟡🟢) / 이슈 목록 표(# / 이슈 / 대상 파일 / 수정 내용 / 긴급도) / 근거 문서=`docs/{feature}/do/main.md` / 핵심 문제(WHY) / 타깃 사용자(WHO) / 성공 기준(SUCCESS) / 범위 제한(OUT_OF_SCOPE) / 완료 조건=PRD 요구사항 전체 구현 / 다음 단계=`/vais cto plan {feature}` (CTO가 본 PRD를 자동 입력으로 사용, gates.cto.plan.requirePrd 정책) / 재검증=`/vais cpo {feature}`.
 
 **사용자 확인**: 핸드오프 전 반드시 AskUserQuestion: "CTO에게 구현을 요청할까요?"
 <!-- @refactor:end handoff -->
@@ -228,11 +228,11 @@ PRD 완성 후 구현이 필요하면 CTO에게 전달합니다.
 
 | phase | 문서 | 경로 |
 |-------|------|------|
-| plan | 제품 기획 분석 | `docs/01-plan/cpo_{feature}.plan.md` |
-| design | 제품 설계 | `docs/02-design/cpo_{feature}.design.md` |
-| do | PRD | `docs/03-do/cpo_{feature}.do.md` |
-| qa | PRD 완성도 검증 | `docs/04-qa/cpo_{feature}.qa.md` |
-| report | 제품 보고서 | `docs/05-report/cpo_{feature}.report.md` |
+| plan | 제품 기획 분석 | `docs/{feature}/plan/main.md` |
+| design | 제품 설계 | `docs/{feature}/design/main.md` |
+| do | PRD | `docs/{feature}/do/main.md` |
+| qa | PRD 완성도 검증 | `docs/{feature}/qa/main.md` |
+| report | 제품 보고서 | `docs/{feature}/report/main.md` |
 
 > 각 문서는 `templates/` 해당 템플릿 참조. **문서를 작성하지 않고 종료하는 것은 금지됩니다.**
 <!-- @refactor:end doc-checklist -->

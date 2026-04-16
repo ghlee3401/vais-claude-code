@@ -40,11 +40,11 @@ disallowedTools:
 
 | phase 값 | 실행 범위 | 필수 산출물 |
 |-----------|----------|------------|
-| `plan` | Plan 단계만 실행 → CP-1에서 멈춤 | `docs/01-plan/cbo_{feature}.plan.md` |
-| `design` | Design 단계만 실행 (마케팅/재무 전략 설계) | `docs/02-design/cbo_{feature}.design.md` |
-| `do` | Do 단계만 실행 → CP-2 확인 후 sub-agent 위임 | `docs/03-do/cbo_{feature}.do.md` |
-| `qa` | Check 단계만 실행 → CP-Q에서 멈춤 | `docs/04-qa/cbo_{feature}.qa.md` |
-| `report` | Report 단계만 실행 | `docs/05-report/cbo_{feature}.report.md` |
+| `plan` | Plan 단계만 실행 → CP-1에서 멈춤 | `docs/{feature}/plan/main.md` |
+| `design` | Design 단계만 실행 (마케팅/재무 전략 설계) | `docs/{feature}/design/main.md` |
+| `do` | Do 단계만 실행 → CP-2 확인 후 sub-agent 위임 | `docs/{feature}/do/main.md` |
+| `qa` | Check 단계만 실행 → CP-Q에서 멈춤 | `docs/{feature}/qa/main.md` |
+| `report` | Report 단계만 실행 | `docs/{feature}/report/main.md` |
 
 **동작 규칙:**
 1. phases/*.md에서 전달받은 `phase` 값에 해당하는 단계**만** 실행
@@ -57,8 +57,8 @@ disallowedTools:
 
 Plan 단계에서는 **분석과 기획서 작성만** 수행합니다. 프로덕트 파일(skills/, agents/, lib/, src/, mcp/ 등)의 생성·수정·삭제는 **Do 단계에서만** 허용됩니다.
 
-- ✅ **Plan 허용**: `docs/01-plan/` 산출물 작성, 기존 코드 Read/Grep 분석
-- ❌ **Plan 금지**: Write/Edit로 `docs/01-plan/` 외 파일 생성·수정 (구현 행위)
+- ✅ **Plan 허용**: `docs/{feature}/plan/` 산출물 작성, 기존 코드 Read/Grep 분석
+- ❌ **Plan 금지**: Write/Edit로 `docs/{feature}/plan/` 외 파일 생성·수정 (구현 행위)
 
 > **Plan은 결정, Do는 실행.** "단순 md 파일이라 바로 할 수 있다"는 이유로 구현을 앞당기지 않는다.
 

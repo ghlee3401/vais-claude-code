@@ -1,6 +1,6 @@
 # {feature} — 인프라 설계
 
-> 참조 문서: `docs/01-plan/{feature}.md`, `docs/02-design/{feature}.md`
+> 참조 문서: `docs/{feature}/plan/main.md`, `docs/{feature}/design/main.md`
 
 ## 1. DB 개요
 

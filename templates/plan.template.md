@@ -69,13 +69,13 @@
 
 ## 0.7 PRD 입력 (CTO 전용)
 
-> CTO plan은 CPO PRD(`docs/03-do/cpo_{feature}.do.md`)를 입력으로 동작합니다.
+> CTO plan은 CPO PRD(`docs/{feature}/do/main.md`)를 입력으로 동작합니다.
 > CPO 선행이 없거나 PRD가 부실한 경우 "강행 모드"로 표시됩니다.
 > CTO 외 C-Level이 plan.template를 사용할 때는 본 섹션에 "(N/A — CTO 전용)" 한 줄로 채우거나 섹션 자체를 생략하세요.
 
 | Key | Value |
 |-----|-------|
-| PRD 경로 | `docs/03-do/cpo_{feature}.do.md` 또는 "없음 (강행 모드)" |
+| PRD 경로 | `docs/{feature}/do/main.md` 또는 "없음 (강행 모드)" |
 | 완성도 | full / partial(N/8) / missing |
 | 검사 시각 | YYYY-MM-DD |
 
