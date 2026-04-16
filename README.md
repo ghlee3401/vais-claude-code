@@ -1,377 +1,302 @@
 <p align="center">
   <img src="https://img.shields.io/badge/version-0.50.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
-  <img src="https://img.shields.io/badge/C--Suite-6_Executives-orange?style=flat-square" alt="C-Suite" />
-  <img src="https://img.shields.io/badge/Sub--agents-38-green?style=flat-square" alt="Sub-agents" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
 
-# VAIS Code
-
-**Virtual AI C-Suite for Software Development**
-
-> CEO에게 지시하면 6명의 C-Level 팀이 제품 기획부터 개발, 보안 검토, 마케팅, 배포까지 자율 실행합니다.
-
----
-
-## How It Works
-
-사용자가 `/vais ceo plan online-bookstore` 를 입력하면 CEO가 피처를 분석하고, 필요한 C-Level을 순서대로 호출합니다.
-
-```mermaid
-flowchart TD
-    User["🧑‍💻 User<br/>/vais ceo plan online-bookstore"] --> CEO
-
-    CEO["🎯 CEO<br/>피처 분석 → S-1 시나리오 판별<br/>CBO → CPO → CTO → CSO → CBO → COO 결정"]
-
-    CEO -->|"① 시장 분석"| CBO1
-    CBO1 -->|"✅ 시장 보고서 + 재무 모델"| CEO2["🎯 CEO<br/>시장 분석 완료. 제품 기획으로"]
-
-    CEO2 -->|"② 제품 기획"| CPO
-    CPO -->|"✅ PRD + 백로그 + Sprint Plan"| CEO3["🎯 CEO<br/>PRD 완성. 기술 구현으로"]
-
-    CEO3 -->|"③ 기술 구현"| CTO
-    CTO -->|"✅ 코드 + 테스트 + API 문서"| CEO4["🎯 CEO<br/>구현 완료. 보안 검토"]
-
-    CEO4 -->|"④ 보안 검토"| CSO
-    CSO -->|"✅ 보안 승인"| CEO5["🎯 CEO<br/>보안 통과. GTM 준비"]
-
-    CEO5 -->|"⑤ GTM + 마케팅"| CBO2
-    CBO2 -->|"✅ GTM Plan + 카피 + SEO"| CEO6["🎯 CEO<br/>GTM 완료. 배포"]
-
-    CEO6 -->|"⑥ 배포"| COO
-    COO -->|"✅ CI/CD + 모니터링 + Runbook"| CEO7["🎯 CEO<br/>Final Review → 📊 종합 리포트"]
-
-    CEO7 --> Done["✅ 완료<br/>docs/05-report/ceo_online-bookstore.report.md"]
-
-    subgraph CBO1["💼 CBO ① — Business Analysis"]
-        CBO1_mr["market-researcher<br/>TAM, PEST, Porter 5F"]
-        CBO1_cs["customer-segmentation<br/>페르소나, RFM"]
-        CBO1_pa["pricing-analyst<br/>가격 전략, tier 설계"]
-        CBO1_fm["financial-modeler<br/>3-Statement, DCF"]
-    end
-
-    subgraph CPO["📦 CPO — Product"]
-        CPO_pd["product-discoverer<br/>기회 발굴"]
-        CPO_ps["product-strategist<br/>전략 수립"]
-        CPO_pw["prd-writer<br/>PRD 작성"]
-        CPO_bm["backlog-manager<br/>User Story + Sprint"]
-    end
-
-    subgraph CTO["⚙️ CTO — Technology"]
-        CTO_ia["infra-architect<br/>DB + 환경"]
-        CTO_fe["frontend-engineer<br/>UI 구현"]
-        CTO_be["backend-engineer<br/>API + 로직"]
-        CTO_te["test-engineer<br/>테스트 코드"]
-        CTO_qa["qa-engineer<br/>Gap 분석 ≥90%"]
-    end
-
-    subgraph CSO["🔒 CSO — Security"]
-        CSO_sa["security-auditor<br/>OWASP Top 10"]
-        CSO_cr["code-reviewer<br/>독립 리뷰"]
-        CSO_ss["secret-scanner<br/>키/토큰 탐지"]
-        CSO_da["dependency-analyzer<br/>CVE + 라이선스"]
-    end
-
-    subgraph CBO2["📢 CBO ② — GTM & Marketing"]
-        CBO2_seo["seo-analyst<br/>SEO 감사"]
-        CBO2_cw["copy-writer<br/>랜딩/이메일 카피"]
-        CBO2_ga["growth-analyst<br/>GTM + growth loop"]
-        CBO2_ma["marketing-analytics<br/>채널 ROI"]
-    end
-
-    subgraph COO["🚀 COO — Operations"]
-        COO_re["release-engineer<br/>CI/CD + Docker"]
-        COO_sre["sre-engineer<br/>모니터링 + 알림"]
-        COO_pe["performance-engineer<br/>벤치마크"]
-    end
-
-    style User fill:#1F2937,color:#fff,stroke:#6B7280
-    style CEO fill:#4F46E5,color:#fff
-    style CEO2 fill:#4F46E5,color:#fff
-    style CEO3 fill:#4F46E5,color:#fff
-    style CEO4 fill:#4F46E5,color:#fff
-    style CEO5 fill:#4F46E5,color:#fff
-    style CEO6 fill:#4F46E5,color:#fff
-    style CEO7 fill:#4F46E5,color:#fff
-    style Done fill:#059669,color:#fff
-    style CBO1 fill:#FEF3C7,stroke:#F59E0B
-    style CPO fill:#D1FAE5,stroke:#10B981
-    style CTO fill:#DBEAFE,stroke:#3B82F6
-    style CSO fill:#FEE2E2,stroke:#EF4444
-    style CBO2 fill:#FEF3C7,stroke:#F59E0B
-    style COO fill:#EDE9FE,stroke:#8B5CF6
-```
-
----
-
-## C-Suite Organization
-
-```mermaid
-graph TB
-    CEO["🎯 CEO<br/>Orchestrator & Router<br/><i>Opus</i>"]
-
-    CEO --- CPO["📦 CPO<br/>Product<br/><i>Opus</i>"]
-    CEO --- CTO["⚙️ CTO<br/>Technology<br/><i>Opus</i>"]
-    CEO --- CSO["🔒 CSO<br/>Security<br/><i>Opus</i>"]
-    CEO --- CBO["💼 CBO<br/>Business<br/><i>Opus</i>"]
-    CEO --- COO["🚀 COO<br/>Operations<br/><i>Opus</i>"]
-
-    CPO --- CPO_sub["<b>7 Sonnet Agents</b><br/>product-discoverer · product-strategist<br/>product-researcher · prd-writer<br/>backlog-manager · ux-researcher<br/>data-analyst"]
-
-    CTO --- CTO_sub["<b>8 Sonnet Agents</b><br/>infra-architect · backend-engineer<br/>frontend-engineer · ui-designer<br/>db-architect · qa-engineer<br/>test-engineer · incident-responder"]
-
-    CSO --- CSO_sub["<b>7 Sonnet Agents</b><br/>security-auditor · code-reviewer<br/>secret-scanner · dependency-analyzer<br/>plugin-validator · skill-validator<br/>compliance-auditor"]
-
-    CBO --- CBO_sub["<b>10 Sonnet Agents</b><br/>market-researcher · customer-segmentation<br/>seo-analyst · copy-writer · growth-analyst<br/>pricing-analyst · financial-modeler<br/>unit-economics · finops · marketing-analytics"]
-
-    COO --- COO_sub["<b>4 Sonnet Agents</b><br/>release-engineer · sre-engineer<br/>release-monitor · performance-engineer"]
-
-    CEO --- CEO_sub["<b>2 Sonnet Agents</b><br/>absorb-analyzer · skill-creator"]
-
-    style CEO fill:#4F46E5,color:#fff,stroke:#312E81
-    style CPO fill:#059669,color:#fff
-    style CTO fill:#2563EB,color:#fff
-    style CSO fill:#DC2626,color:#fff
-    style CBO fill:#D97706,color:#fff
-    style COO fill:#7C3AED,color:#fff
-    style CPO_sub fill:#D1FAE5,stroke:#059669,color:#000
-    style CTO_sub fill:#DBEAFE,stroke:#2563EB,color:#000
-    style CSO_sub fill:#FEE2E2,stroke:#DC2626,color:#000
-    style CBO_sub fill:#FEF3C7,stroke:#D97706,color:#000
-    style COO_sub fill:#EDE9FE,stroke:#7C3AED,color:#000
-    style CEO_sub fill:#E0E7FF,stroke:#4F46E5,color:#000
-```
-
-### Dependencies
-
-```mermaid
-graph LR
-    CBO["💼 CBO"] -.->|"no deps"| START((" "))
-    CPO["📦 CPO"] -.->|"no deps"| START
-    CTO["⚙️ CTO"] -->|"requires"| CPO
-    CSO["🔒 CSO"] -->|"requires"| CTO
-    COO["🚀 COO"] -->|"requires"| CTO
-
-    style CBO fill:#D97706,color:#fff
-    style CPO fill:#059669,color:#fff
-    style CTO fill:#2563EB,color:#fff
-    style CSO fill:#DC2626,color:#fff
-    style COO fill:#7C3AED,color:#fff
-    style START fill:none,stroke:none
-```
-
----
-
-## Workflow Phases
-
-```mermaid
-graph LR
-    I["💡 Ideation<br/><i>optional</i>"]:::opt --> P["📋 Plan"]:::req
-    P --> D["🎨 Design"]:::req
-    D --> Do["🔧 Do"]:::req
-    Do --> Q["✅ QA"]:::req
-    Q -->|"≥ 90% match"| R["📊 Report"]:::opt
-    Q -->|"fail"| Do
-
-    classDef opt fill:#FEF3C7,stroke:#F59E0B,color:#000
-    classDef req fill:#DBEAFE,stroke:#3B82F6,color:#000
-```
-
-| Phase | Required | Description | Output |
-|-------|----------|-------------|--------|
-| **Ideation** | Optional | 자유 대화. 산출물 강제 없음. "정리해줘"로 종료 | `docs/00-ideation/{role}_{topic}.md` |
-| **Plan** | **Mandatory** | 요구사항 정의, 범위 설정, 타임라인 | `docs/01-plan/{role}_{feature}.plan.md` |
-| **Design** | **Mandatory** | 아키텍처 설계, 기술 스택, DB 스키마 | `docs/02-design/{role}_{feature}.design.md` |
-| **Do** | **Mandatory** | 구현. Sub-agent 병렬 실행 | `docs/03-do/{role}_{feature}.do.md` |
-| **QA** | **Mandatory** | Gap 분석, 보안 검증. ≥ 90% 통과 | `docs/04-qa/{role}_{feature}.qa.md` |
-| **Report** | Optional | 최종 리포트, 회고, KPI | `docs/05-report/{role}_{feature}.report.md` |
-
----
-
-## Ideation Flow (Phase 0)
-
-```mermaid
-flowchart TD
-    Start["🧑‍💻 /vais ceo ideation pricing-strategy"] --> Mode["💡 CEO Ideation Mode<br/><br/>● 산출물 강제 없음<br/>● PRD 템플릿 자동 채움 금지<br/>● 사용자 주도 자유 대화"]
-
-    Mode --> Chat["💬 자유 대화<br/><br/>You: 구독형 가격 생각 중...<br/>CEO: 어떤 고객층 타겟?<br/>You: B2B SaaS 중소기업<br/>CEO: 티어링은?<br/>You: free / pro / enterprise"]
-
-    Chat --> Trigger["🛑 종료 키워드 감지<br/>'정리해줘' / 'plan 가자' / '요약'"]
-
-    Trigger --> Summary["📝 자동 요약 생성<br/><br/>■ Key Points: 3-tier, B2B SaaS...<br/>■ Decisions: free tier 포함<br/>■ Open Questions: enterprise 가격 미정<br/>■ Next Step: CBO pricing 추천"]
-
-    Summary --> Save["💾 docs/00-ideation/ceo_pricing-strategy.md"]
-
-    Save --> Ask["❓ CEO 추천<br/>'CBO pricing-analyst로 진행할까요?'"]
-
-    Ask -->|"승인"| Next["➡️ /vais cbo plan pricing-strategy<br/><i>ideation 요약이 plan 컨텍스트로 자동 주입</i>"]
-    Ask -->|"다른 선택"| Other["사용자가 직접 C-Level 지정"]
-
-    style Start fill:#1F2937,color:#fff
-    style Mode fill:#FEF3C7,stroke:#F59E0B
-    style Chat fill:#F3F4F6,stroke:#9CA3AF
-    style Trigger fill:#FEE2E2,stroke:#EF4444
-    style Summary fill:#DBEAFE,stroke:#3B82F6
-    style Save fill:#D1FAE5,stroke:#10B981
-    style Ask fill:#EDE9FE,stroke:#7C3AED
-    style Next fill:#059669,color:#fff
-    style Other fill:#6B7280,color:#fff
-```
-
----
-
-## CTO Standalone Flow
-
-```mermaid
-flowchart LR
-    Start["🧑‍💻 /vais cto plan login"] --> Plan["📋 Plan<br/>CTO 직접 기획"]
-
-    Plan --> Design["🎨 Design<br/>ui-designer +<br/>infra-architect"]
-
-    Design --> Do["🔧 Do"]
-
-    subgraph Do["🔧 Do (병렬 실행)"]
-        FE["frontend-engineer"]
-        BE["backend-engineer"]
-        TE["test-engineer"]
-    end
-
-    Do --> QA["✅ QA<br/>qa-engineer<br/>Gap ≥ 90%?"]
-
-    QA -->|"PASS"| Report["📊 Report"]
-    QA -->|"FAIL"| Do
-
-    style Start fill:#1F2937,color:#fff
-    style Plan fill:#DBEAFE,stroke:#3B82F6
-    style Design fill:#DBEAFE,stroke:#3B82F6
-    style Do fill:#FEF3C7,stroke:#F59E0B
-    style QA fill:#FEE2E2,stroke:#EF4444
-    style Report fill:#D1FAE5,stroke:#10B981
-```
-
----
-
-## 10+1 Scenarios
-
-| ID | Trigger | Who Gets Called |
-|----|---------|----------------|
-| **S-0** | 아이디어가 모호할 때 | `CEO ideation` → 추천 C-Level |
-| **S-1** | 신규 서비스 풀 개발 | `CBO①` → `CPO` → `CTO` → `CSO` → `CBO②` → `COO` |
-| **S-2** | 기존 서비스에 기능 추가 | `CPO` → `CTO` → `CSO` → `COO` |
-| **S-3** | 버그 수정 / UX 개선 | `CTO` (branch by type) |
-| **S-4** | 프로덕션 장애 | `CTO`(incident-responder) → `CSO` → `COO` |
-| **S-5** | 성능 / 비용 최적화 | `CTO`(perf) or `CBO`(finops) |
-| **S-6** | 보안 감사 / 컴플라이언스 | `CSO` ↔ `CTO` loop (max 3) |
-| **S-7** | 마케팅 캠페인 / GTM | `CPO` → `CBO` → (`CTO`) |
-| **S-8** | 시장 분석 / 사업 분석 | `CBO` → (`CPO`) |
-| **S-9** | 스킬 / 에이전트 생성 | `CEO`(skill-creator) → `CSO` |
-| **S-10** | 정기 운영 / 기술부채 | `CTO` or `COO` |
-
----
-
-## 4-Step Harness Gate
-
-```mermaid
-flowchart LR
-    A["📄 1. Document<br/>Validation<br/><br/>필수 산출물 존재<br/>파일 ≥ 500B"] --> B["☑️ 2. Checkpoint<br/>Validation<br/><br/>AskUserQuestion<br/>기록 확인"]
-
-    B --> C["⚖️ 3. Gate<br/>Judgment<br/><br/>종합 판정"]
-
-    C -->|"✅ Pass"| D["➡️ 4a. Transition<br/><br/>다음 phase<br/>자동 전이"]
-    C -->|"❌ Fail"| E["🔄 4b. Retry<br/><br/>재시도 가이드<br/>+ 디버그 팁"]
-
-    style A fill:#DBEAFE,stroke:#3B82F6
-    style B fill:#DBEAFE,stroke:#3B82F6
-    style C fill:#FEF3C7,stroke:#F59E0B
-    style D fill:#D1FAE5,stroke:#10B981
-    style E fill:#FEE2E2,stroke:#EF4444
-```
-
----
-
-## Advisor Tool (M-24)
-
-모든 Sonnet sub-agent에 Opus reviewer가 내장되어, 작업 중 자동으로 전략 조언을 수신합니다.
-
-```mermaid
-flowchart LR
-    S["🤖 Sub-agent<br/>(Sonnet)"] --> E["1️⃣ Early Plan<br/>'접근 방향 맞나?'"]
-    E --> W["... 작업 진행 ..."]
-    W --> ST["2️⃣ Stuck<br/>'막혔는데 다른 방법?'"]
-    ST --> W2["... 작업 계속 ..."]
-    W2 --> F["3️⃣ Final Review<br/>'빠뜨린 거 없나?'"]
-    F --> Done["✅ 완료"]
-
-    E -.->|"advisor call"| Opus["🧠 Opus Advisor"]
-    ST -.->|"advisor call"| Opus
-    F -.->|"advisor call"| Opus
-
-    style S fill:#DBEAFE,stroke:#3B82F6
-    style Opus fill:#4F46E5,color:#fff
-    style Done fill:#D1FAE5,stroke:#10B981
-    style E fill:#FEF3C7,stroke:#F59E0B
-    style ST fill:#FEE2E2,stroke:#EF4444
-    style F fill:#EDE9FE,stroke:#7C3AED
-```
-
-> max 3회 호출. 월 예산($200) 초과 시 자동 비활성화 — Sonnet 단독으로 정상 계속.
+<h1 align="center">VAIS Code</h1>
+
+<p align="center">
+  <strong>Virtual AI C-Suite for Software Development</strong><br/>
+  6 C-Level Executives · 38 Specialized Agents · PDCA Workflow Engine
+</p>
+
+<p align="center">
+  CEO에게 지시하면 제품 기획, 개발, 보안, 마케팅, 배포를 자율 실행하는 Claude Code 플러그인
+</p>
 
 ---
 
 ## Quick Start
 
 ```bash
-# 1. Clone
+# Install
 git clone https://github.com/ghlee3401/vais-claude-code.git
-cd vais-claude-code
+cd vais-claude-code && bash scripts/setup-dev.sh
 
-# 2. Setup (symlink to Claude Code plugins)
-bash scripts/setup-dev.sh
-
-# 3. Reload in Claude Code
+# In Claude Code
 /reload-plugins
-
-# 4. Try it
 /vais help
 ```
 
-### Usage
+**3가지 사용법:**
 
 ```bash
-/vais ceo ideation pricing-strategy     # 아이디어 숙성 (자유 대화)
-/vais cpo plan pricing-strategy         # 제품 기획 (ideation 자동 참조)
-/vais cto do payment-integration        # 기술 구현
-/vais ceo plan online-bookstore         # 풀 서비스 런칭
-/vais cso plan my-feature               # 보안 감사
-/vais cbo plan market-entry             # 시장 분석 + 재무 모델
-/vais status                            # 진행 현황
-/vais next                              # 다음 단계 추천
+# 1) 서비스 런칭 — CEO가 전체 파이프라인 지휘
+/vais ceo plan online-bookstore
+
+# 2) 기술 구현만 — PRD/기획이 이미 있을 때
+/vais cto plan login
+
+# 3) 특정 C-Level 직접 — 원하는 전문가만 호출
+/vais cbo plan market-entry          # 비즈니스 분석
+/vais cso plan payment-integration   # 보안 검토
+/vais cpo plan user-dashboard        # 제품 기획
 ```
 
-### Three Entry Points
+**Phase 지정:**
 
-| Entry Point | When to Use |
-|-------------|-------------|
-| `/vais ceo {feature}` | 새 서비스 런칭 — 전체 C-Level 파이프라인 |
-| `/vais cto {feature}` | 기술 구현만 — plan/PRD 이미 있을 때 |
-| `/vais {c-level} {feature}` | 특정 C-Level 직접 호출 |
+```bash
+/vais ceo ideation my-idea     # (선택) 아이디어 자유 대화
+/vais cpo plan my-feature      # 기획
+/vais cto design my-feature    # 설계
+/vais cto do my-feature        # 구현
+/vais cto qa my-feature        # QA
+/vais cto report my-feature    # 리포트
+```
 
 ---
 
-## Project Structure
+## What Happens When You Run `/vais ceo plan`
+
+사용자가 "온라인 서점 SaaS 만들어줘"라고 입력하면, CEO가 이를 **S-1 (신규 서비스 풀 개발)** 시나리오로 판별하고 다음 순서로 C-Level을 호출합니다:
+
+| Step | C-Level | What They Do | Key Agents |
+|------|---------|-------------|------------|
+| **①** | **CBO** | 시장 기회 분석 + 재무 모델 | market-researcher, financial-modeler, pricing-analyst |
+| **②** | **CPO** | PRD 작성 + 백로그 분해 | prd-writer, backlog-manager, ux-researcher |
+| **③** | **CTO** | 아키텍처 설계 + 코드 구현 + 테스트 | infra-architect, backend/frontend-engineer, test-engineer |
+| **④** | **CSO** | 보안 감사 + 코드 리뷰 + 시크릿 스캔 | security-auditor, secret-scanner, dependency-analyzer |
+| **⑤** | **CBO** | GTM 전략 + SEO + 마케팅 카피 | growth-analyst, seo-analyst, copy-writer |
+| **⑥** | **COO** | CI/CD 파이프라인 + 모니터링 | release-engineer, sre-engineer |
+| **Final** | **CEO** | 전체 산출물 종합 리뷰 → 리포트 | — |
+
+각 단계 완료 시 CEO가 결과를 검토하고, 사용자 승인을 받은 뒤 다음 C-Level로 넘어갑니다. CSO 보안 검토에서 이슈가 발견되면 CTO에게 수정을 요청하고 재검토하는 루프가 최대 3회 돌아갑니다.
+
+---
+
+## C-Suite Team
+
+### Executive (Opus)
+
+| C-Level | Domain | One-liner |
+|---------|--------|-----------|
+| **CEO** | Strategy | 전체 오케스트레이터. 피처 분석 → 시나리오 판별 → C-Level 동적 라우팅 |
+| **CPO** | Product | 무엇을 만들지 결정. PRD, 사용자 리서치, 백로그 관리 |
+| **CTO** | Technology | 어떻게 만들지 실행. 아키텍처, 개발, 테스트, 디버깅 |
+| **CSO** | Security | 안전한지 확인. OWASP 감사, 시크릿 스캔, 의존성 분석, 독립 코드 리뷰 |
+| **CBO** | Business | 사업성 검증. 시장 분석, GTM, 가격 전략, 재무 모델, unit economics |
+| **COO** | Operations | 배포/운영 준비. CI/CD, 모니터링, 성능 벤치마크, Runbook |
+
+### Sub-agents (Sonnet) — 38 Specialists
+
+<details>
+<summary><strong>CEO</strong> — 2 agents</summary>
+
+| Agent | Role |
+|-------|------|
+| absorb-analyzer | 외부 스킬/레퍼런스 흡수 분석 |
+| skill-creator | 신규 스킬/에이전트 마크다운 자동 생성 |
+
+</details>
+
+<details>
+<summary><strong>CPO</strong> — 7 agents</summary>
+
+| Agent | Role |
+|-------|------|
+| product-discoverer | 시장 기회 발굴, 고객 니즈 분석 |
+| product-strategist | 제품 전략 수립, 우선순위 결정 |
+| product-researcher | 경쟁사 벤치마킹, 사용 패턴 분석 |
+| prd-writer | PRD 작성 (기능/비기능 요구사항, 인수 기준) |
+| backlog-manager | PRD → User Story + Sprint Plan 변환 (INVEST/MoSCoW/RICE) |
+| ux-researcher | JTBD 인터뷰, 사용성 테스트, 정보 구조 설계 |
+| data-analyst | 제품 메트릭 분석 (DAU/MAU, A/B 테스트, 퍼널) |
+
+</details>
+
+<details>
+<summary><strong>CTO</strong> — 8 agents</summary>
+
+| Agent | Role |
+|-------|------|
+| infra-architect | DB 스키마, 환경 설정, 프로젝트 셋업 |
+| backend-engineer | API, 비즈니스 로직, 데이터 검증 |
+| frontend-engineer | UI 컴포넌트, 상태 관리, 클라이언트 최적화 |
+| ui-designer | IA, 와이어프레임, UI 디자인 |
+| db-architect | DB 스키마 최적화, 마이그레이션, 쿼리 튜닝 |
+| qa-engineer | Gap 분석, 코드 리뷰, QA 검증 (≥90% match) |
+| test-engineer | 단위/통합/E2E 테스트 코드 생성 |
+| incident-responder | 체계적 디버깅 (investigate → analyze → hypothesize → implement) |
+
+</details>
+
+<details>
+<summary><strong>CSO</strong> — 7 agents</summary>
+
+| Agent | Role |
+|-------|------|
+| security-auditor | OWASP Top 10 보안 감사 |
+| code-reviewer | 독립 코드 리뷰 (CTO 피어 리뷰와 별개) |
+| secret-scanner | API 키/토큰/비밀번호 탐지 (regex + entropy + heuristics) |
+| dependency-analyzer | CVE 취약점, 라이선스, 공급망 리스크 분석 |
+| plugin-validator | 플러그인 배포 전 구조 검증 |
+| skill-validator | 스킬/에이전트 마크다운 frontmatter 검증 |
+| compliance-auditor | GDPR, 라이선스 준수 확인 |
+
+</details>
+
+<details>
+<summary><strong>CBO</strong> — 10 agents</summary>
+
+| Agent | Role |
+|-------|------|
+| market-researcher | 시장/경쟁 분석 (PEST, SWOT, Porter 5F, TAM/SAM/SOM) |
+| customer-segmentation-analyst | 고객 세분화, 페르소나 (RFM, JTBD, AARRR+R) |
+| seo-analyst | SEO 감사, 콘텐츠 캘린더, Core Web Vitals |
+| copy-writer | 브랜드 포지셔닝, 마케팅 카피 (PAS/AIDA/BAB) |
+| growth-analyst | GTM 전략, growth loop, 퍼널 최적화, North Star Metric |
+| pricing-analyst | 가격 전략 (Cost-plus, Value-based, GBB tiering) |
+| financial-modeler | 3-Statement 모델, DCF, 시나리오 분석 (Bear/Base/Bull) |
+| unit-economics-analyst | CAC/LTV/Payback, cohort 분석, SaaS metrics |
+| finops-analyst | 클라우드 비용 분석, right-sizing, waste detection |
+| marketing-analytics-analyst | 멀티터치 어트리뷰션, 채널 ROI, incrementality |
+
+</details>
+
+<details>
+<summary><strong>COO</strong> — 4 agents</summary>
+
+| Agent | Role |
+|-------|------|
+| release-engineer | CI/CD 파이프라인, Docker, 배포 자동화 |
+| sre-engineer | 모니터링/알림 설정, incident runbook |
+| release-monitor | 배포 후 canary 모니터링 |
+| performance-engineer | 성능 벤치마크, 회귀 탐지 |
+
+</details>
+
+---
+
+## Scenarios
+
+CEO는 사용자 요청을 분석하여 10+1 시나리오 중 가장 적합한 흐름을 선택합니다.
+
+| ID | 상황 | 호출 순서 |
+|----|------|-----------|
+| S-0 | 아이디어가 모호할 때 | CEO ideation → 추천 C-Level |
+| S-1 | 신규 서비스 풀 개발 | CBO → CPO → CTO → CSO → CBO → COO |
+| S-2 | 기존 서비스에 기능 추가 | CPO → CTO → CSO → COO |
+| S-3 | 버그 수정 / UX 개선 / 리팩터 | CTO (유형별 분기) |
+| S-4 | 프로덕션 장애 | CTO(incident-responder) → CSO → COO |
+| S-5 | 성능 / 비용 최적화 | CTO(perf) 또는 CBO(finops) |
+| S-6 | 보안 감사 / 컴플라이언스 | CSO ↔ CTO (최대 3회) |
+| S-7 | 마케팅 캠페인 / GTM | CPO → CBO → (CTO) |
+| S-8 | 시장 분석 / IR 보고 | CBO → (CPO) |
+| S-9 | 스킬/에이전트 생성 | CEO(skill-creator) → CSO |
+| S-10 | 정기 운영 / 기술부채 | CTO 또는 COO |
+
+---
+
+## Workflow
+
+모든 C-Level은 동일한 PDCA 워크플로우를 따릅니다:
+
+| Phase | Required | Description |
+|-------|----------|-------------|
+| **Ideation** | Optional | 자유 대화 모드. 산출물 없이 아이디어 숙성. "정리해줘"로 종료 → plan 자동 참조 |
+| **Plan** | **Mandatory** | 요구사항 정의, 범위 설정, 타임라인 |
+| **Design** | **Mandatory** | 아키텍처 설계, 기술 스택, DB 스키마 |
+| **Do** | **Mandatory** | 구현. Sub-agent 병렬 실행 |
+| **QA** | **Mandatory** | Gap 분석, 보안 검증. Match rate ≥ 90% 통과. 미달 시 Do 재실행 (최대 5회) |
+| **Report** | Optional | 최종 리포트, 회고, KPI |
+
+**C-Level 간 의존성:**
+
+| C-Level | 선행 조건 |
+|---------|-----------|
+| CBO | 없음 (CEO 직접 위임) |
+| CPO | 없음 |
+| CTO | CPO 완료 필요 |
+| CSO | CTO 완료 필요 |
+| COO | CTO 완료 필요 |
+
+---
+
+## Ideation (Phase 0)
+
+아이디어가 아직 모호할 때 사용합니다. 산출물 강제 없이 자유 대화로 아이디어를 숙성시킵니다.
+
+```bash
+/vais ceo ideation pricing-strategy
+```
+
+**동작:**
+1. CEO가 ideation 모드로 진입 — PRD 템플릿 강제 없음, "plan 갈까요?" 반복 질문 금지
+2. 사용자 주도로 자유 대화 (5~10 turn)
+3. 종료 키워드 입력 시 ("정리해줘", "plan 가자", "요약") 자동 요약 생성
+4. `docs/00-ideation/ceo_pricing-strategy.md` 저장 (Key Points / Decisions / Open Questions / Next Step)
+5. 다음 C-Level 추천 → 승인 시 자동 전환
+
+**Ideation 없이 plan 직행도 가능:** `/vais cpo plan my-feature` — 기존과 동일하게 동작합니다.
+
+---
+
+## Quality Gates
+
+### 4-Step Harness Gate
+
+Sub-agent 종료 시 자동 실행되는 검증 파이프라인:
+
+| Step | Check | On Failure |
+|------|-------|------------|
+| **1. Document** | 필수 산출물 존재 (≥ 500B) | 누락 파일 목록 |
+| **2. Checkpoint** | AskUserQuestion 기록 존재 | 미승인 항목 표시 |
+| **3. Gate** | 1+2 종합 판정 | 실패 사유 집계 |
+| **4. Transition** | 통과 → 다음 phase 자동 전이 / 실패 → 재시도 가이드 | 디버그 팁 제공 |
+
+### Advisor Tool (M-24)
+
+모든 Sonnet sub-agent에 Opus reviewer가 내장되어, 작업 중 자동으로 전략 조언을 수신합니다:
+
+- **Early plan** (1회) — 접근 방향 검증
+- **Stuck** (1회) — 막혔을 때 대안 제시
+- **Final review** (1회) — 완료 전 누락 확인
+- Max 3회/요청. 월 $200 예산 캡 초과 시 자동 비활성화 (Sonnet 단독 계속)
+
+### CSO Final Gate
+
+코드가 수정되는 **모든** 시나리오에서 CSO가 최종 보안 검증을 수행합니다. CSO 승인 없이는 배포 단계로 넘어갈 수 없습니다.
+
+---
+
+## Document Structure
+
+```
+docs/
+├── 00-ideation/                       (optional) 아이디어 요약
+├── 01-plan/{role}_{feature}.plan.md   요구사항, 범위, 타임라인
+├── 02-design/{role}_{feature}.design.md   아키텍처, 기술 스택
+├── 03-do/{role}_{feature}.do.md       구현 로그
+├── 04-qa/{role}_{feature}.qa.md       QA 리포트, gap 분석
+└── 05-report/{role}_{feature}.report.md   최종 리포트
+```
+
+---
+
+## Project Layout
 
 ```
 vais-claude-code/
-├── agents/                  # 6 C-Level + _shared guards (38 sub-agents)
-├── skills/vais/             # /vais 스킬 진입점 + phase routers + utilities
-├── hooks/                   # 6 hooks (session/bash-guard/doc-tracker/stop/agent)
-├── lib/                     # advisor, core, quality, observability, registry, validation
-├── scripts/                 # CLI tools (bash-guard, agent-start/stop, validators)
-├── templates/               # PDCA document templates (plan/design/do/qa/report/ideation)
-├── docs/                    # Feature outputs (00-ideation ~ 05-report)
-├── vais.config.json         # Plugin configuration
-└── package.json             # Plugin manifest
+├── agents/          6 C-Level 디렉토리 + _shared 가드 (38 sub-agents)
+├── skills/vais/     /vais 스킬 진입점 + phase routers + utilities
+├── hooks/           6 hooks (session, bash-guard, doc-tracker, stop, agent-start/stop)
+├── lib/             advisor, core, quality, observability, registry, validation
+├── scripts/         CLI 도구 (bash-guard, validators, migration)
+├── templates/       PDCA 문서 템플릿 (plan/design/do/qa/report/ideation)
+├── guide/           v2 설계 문서 (roles, scenarios, agent-mapping, harness)
+├── vais.config.json 플러그인 설정
+└── package.json     매니페스트
 ```
 
 ---
@@ -380,12 +305,12 @@ vais-claude-code/
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `workflow.phases` | ideation, plan, design, do, qa, report | PDCA phases (ideation optional) |
-| `dependencies` | `{cto:[cpo], cso:[cto], coo:[cto], cbo:[]}` | C-Level 의존성 |
-| `gapThreshold` | `0.90` | QA 통과 기준 (90%) |
-| `advisor.enabled` | `true` | Opus advisor 활성화 |
-| `advisor.monthly_budget_usd` | `200` | 월 예산 캡 (초과 시 자동 비활성화) |
-| `automation.level` | `L2` | L0(수동) ~ L4(전자동) |
+| `workflow.phases` | ideation ~ report | PDCA phases (ideation optional) |
+| `dependencies` | cto→cpo, cso→cto, coo→cto, cbo→none | C-Level 의존성 |
+| `gapThreshold` | 0.90 | QA 통과 기준 (90%) |
+| `advisor.enabled` | true | Opus advisor 활성화 |
+| `advisor.monthly_budget_usd` | 200 | 월 advisor 비용 캡 |
+| `automation.level` | L2 | L0 수동 ~ L4 전자동 |
 
 ---
 
@@ -393,13 +318,12 @@ vais-claude-code/
 
 | v0.49 | v0.50 |
 |-------|-------|
-| 7 C-Level (CMO + CFO 별도) | 6 C-Level (CBO로 통합) |
+| 7 C-Level (CMO + CFO 별도) | 6 C-Level (**CBO**로 통합) |
 | 5 phases | 6 phases (+ideation) |
-| `/vais cmo ...` | `/vais cbo ...` |
-| `/vais cfo ...` | `/vais cbo ...` |
+| `/vais cmo` | → `/vais cbo` |
+| `/vais cfo` | → `/vais cbo` |
 
-기존 `.vais/status.json`의 `cmo_*` / `cfo_*` 항목은 첫 실행 시 자동 변환됩니다.
-백업: `.vais/_backup/v049-{timestamp}.tar.gz`
+기존 `.vais/status.json`의 `cmo_*`/`cfo_*` 항목은 첫 실행 시 자동 변환. 백업: `.vais/_backup/v049-{ts}.tar.gz`
 
 ---
 
@@ -411,18 +335,20 @@ npm test    # 174 pass, 0 fail
 
 ---
 
-## References
+## Design Documents
 
-- [C-Suite Roles v2](./guide/csuite-roles-v2.md) — 역할 정의, 경계, 핸드오프 규칙
-- [Scenarios v2](./guide/csuite-scenarios-v2.md) — 10+1 시나리오 단계별 명세
-- [Agent Mapping v2](./guide/agent-mapping-v2.md) — Phase별 에이전트 참여 매트릭스
-- [Harness Plan v2](./guide/harness-plan-v2.md) — Hook 시스템, FSM, 게이트 파이프라인
-- [CHANGELOG](./CHANGELOG.md)
+- **[C-Suite Roles v2](./guide/csuite-roles-v2.md)** — 6 C-Level 역할 정의, 업무 범위, 경계 케이스, 핸드오프 규칙
+- **[Scenarios v2](./guide/csuite-scenarios-v2.md)** — 10+1 시나리오 단계별 명세 (진입/완료 조건, CEO 판단 기준)
+- **[Agent Mapping v2](./guide/agent-mapping-v2.md)** — Phase별 에이전트 참여 매트릭스, 모델 선택 기준
+- **[Harness Plan v2](./guide/harness-plan-v2.md)** — Hook 시스템, FSM, 4-Step Gate, Advisor 통합
+- **[CHANGELOG](./CHANGELOG.md)** — 전체 버전 이력
+
+---
 
 ## License
 
 MIT
 
 <p align="center">
-  <sub>Built with <a href="https://claude.ai/claude-code">Claude Code</a> · Powered by Claude Opus 4.6 + Sonnet 4.6</sub>
+  <sub>Built with <a href="https://claude.ai/claude-code">Claude Code</a></sub>
 </p>
