@@ -11,6 +11,13 @@ memory: none
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"
+advisor:
+  enabled: true
+  model: claude-opus-4-6
+  max_uses: 3
+  caching: { type: ephemeral, ttl: 5m }
+includes:
+  - _shared/advisor-guard.md
 ---
 
 # Compliance Agent
@@ -75,7 +82,7 @@ disallowedTools:
 
 | 요청 C-Level | 시나리오 |
 |-------------|---------|
-| CFO (Check) | 비용 관련 규정 준수 (SOC2 등) |
+| CBO (Check) | 비용 관련 규정 준수 (SOC2 등) |
 
 ---
 

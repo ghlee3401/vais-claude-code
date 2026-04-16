@@ -1,5 +1,50 @@
 # Changelog
 
+## [0.50.0] - 2026-04-16
+
+### Major Changes
+
+- **Role Consolidation**: CMO + CFO → **CBO (Chief Business Officer)**. 6 C-Level 구조로 단순화.
+- **CBO Sub-agents (10 new/merged)**: market-researcher, customer-segmentation-analyst, seo-analyst, copy-writer, growth-analyst, pricing-analyst, financial-modeler, unit-economics-analyst, finops-analyst, marketing-analytics-analyst.
+- **Ideation Phase (Optional Phase 0)**: 아이디어 숙성용 자유 대화 모드. `docs/00-ideation/` 자동 저장 + plan 단계 자동 참조. Rule #2 mandatory 목록에 포함하지 않음.
+- **Advisor Tool (M-24)**: 모든 Sonnet sub-agent에 Anthropic Advisor Tool (`advisor_20260301`) 기본 활성화. Opus 4.6 advisor가 mid-generation 전술 판단 보조. `max_uses=3`, ephemeral caching 5m.
+- **4-Step Harness Gate**: SubagentStop hook이 Document → Checkpoint → Gate Judgment → Transition 파이프라인 실행.
+- **10+1 Scenarios**: S-1 신규 서비스 풀 개발 ~ S-10 정기 운영 + S-0 Ideation.
+
+### Added
+
+- `agents/cbo/` (본체 + 10 sub-agent)
+- `agents/ceo/skill-creator.md`, `agents/cpo/backlog-manager.md`
+- `agents/cso/secret-scanner.md`, `agents/cso/dependency-analyzer.md`
+- `agents/_shared/advisor-guard.md`, `agents/_shared/ideation-guard.md`
+- `skills/vais/phases/ideation.md`, `skills/vais/phases/cbo.md`
+- `templates/ideation.template.md`, `docs/00-ideation/` 경로
+- `lib/advisor/{wrapper,prompt-builder}.js`, `lib/control/cost-monitor.js`
+- `lib/core/{state-machine-v050,migration-engine}.js`
+- `lib/registry/agent-registry.js`, `lib/validation/{doc-validator,cp-guard}.js`
+- `scripts/check-cc-advisor-support.js`, `scripts/patch-advisor-frontmatter.js`
+
+### Changed
+
+- `agents/coo/release-engineer.md` (CTO → COO), `agents/coo/performance-engineer.md` (CTO → COO)
+- `vais.config.json` 전면 갱신 (cSuite.roles 6개, advisor 섹션, workflow.phases ideation 포함)
+- `lib/quality/gate-manager.js` `judgePhaseCompletion` 추가
+- `lib/observability/schema.js` 이벤트 9종 추가
+- `hooks/events.json` v3.0.0 (9개 신규 이벤트 타입)
+- 모든 Sonnet sub-agent frontmatter에 `advisor:` + `includes:` 필드 추가
+
+### Removed
+
+- `agents/cmo/`, `agents/cfo/` (전 디렉토리)
+- `agents/ceo/retrospective-writer.md`, `agents/coo/technical-writer.md`
+- `agents/cto/release-engineer.md`, `agents/cto/performance-engineer.md`
+- `skills/vais/phases/cmo.md`, `skills/vais/phases/cfo.md`
+
+### Migration
+
+- 기존 `.vais/status.json`의 `cmo_*`, `cfo_*` 항목은 첫 실행 시 `migration-engine.js`가 자동으로 `cbo_*`로 변환 (backup: `.vais/_backup/v049-{timestamp}.tar.gz`).
+- 사용자 설정의 cmo/cfo 참조는 수동 업데이트 필요.
+
 ## [0.49.2] - 2026-04-09
 
 ### Changed

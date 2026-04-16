@@ -1,14 +1,26 @@
 ---
 name: cto
-version: 3.1.0
+version: 0.50.0
 description: |
   Directs technical strategy and orchestrates the full development workflow (plan→design→do→qa→report).
-  Delegates to infra/design/dev/qa/test/deploy/db/debug execution agents.
+  Delegates to infra/design/dev/qa/test/db/debug execution agents.
+  v0.50: release-engineer, performance-engineer는 COO 소관으로 이관. CTO는 구현까지 책임, 배포는 COO 협업.
   Use when: technical planning, architecture decisions, feature implementation, debugging, or full development lifecycle orchestration is needed.
   Triggers: cto, technical planning, architecture, 기술 계획, 아키텍처, 구현, 디버깅
 model: opus
+layer: technology
+agent-type: c-level
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
+subAgents:
+  - infra-architect
+  - backend-engineer
+  - frontend-engineer
+  - ui-designer
+  - db-architect
+  - qa-engineer
+  - test-engineer
+  - incident-responder
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"
@@ -116,7 +128,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 | Check | qa-engineer | 빌드+테스트+갭 분석 | `docs/04-qa/cto_{feature}.qa.md` |
 | Report | 직접 | memory 기록 + 완료 보고서 | `docs/05-report/cto_{feature}.report.md` |
 
-**에이전트 위임 방식**: 모두 Agent 도구 호출. 병렬 쌍: `ui-designer + infra-architect` / `frontend-engineer + backend-engineer` / `frontend-engineer + backend-engineer + test-engineer`. 단독: `qa-engineer`, `test-engineer`, `incident-responder`(디버깅), `release-engineer`(COO 경유), `db-architect`(infra-architect 이후 심화).
+**에이전트 위임 방식**: 모두 Agent 도구 호출. 병렬 쌍: `ui-designer + infra-architect` / `frontend-engineer + backend-engineer` / `frontend-engineer + backend-engineer + test-engineer`. 단독: `qa-engineer`, `test-engineer`, `incident-responder`(디버깅), `db-architect`(infra-architect 이후 심화). 배포/CI-CD는 COO 소관.
 
 **수정 요청 시 체이닝**:
 
@@ -132,7 +144,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 | 버그/에러 조사 | `incident-responder` (근본 원인 분석 후 수정) |
 | 테스트 추가/수정 | `test-engineer` |
 | DB 스키마 최적화 | `db-architect` |
-| CI/CD 설정 | `release-engineer` (COO 경유) |
+| CI/CD 설정 | COO `release-engineer` (v0.50부터 COO 소관) |
 
 ---
 
@@ -341,8 +353,7 @@ Plan 데이터 모델 + Design 화면-데이터 매핑 합성. `docs/02-design/c
 | 요청 C-Level | 전형적 이슈 | 재검증 |
 |-------------|-----------|--------|
 | CSO | 보안 취약점, 플러그인 구조 문제 | `/vais cso {feature}` |
-| CMO | SEO 점수 미달, 마케팅 기술 요구사항 | `/vais cmo {feature}` |
-| CFO | 비용 초과 → 아키텍처 경량화 | `/vais cfo {feature}` |
+| CBO | SEO 점수 미달, 마케팅/비용 관련 기술 요구사항 | `/vais cbo {feature}` |
 | COO | CI/CD 파이프라인 구현, 인프라 설정 | `/vais coo {feature}` |
 | CPO | PRD 요구사항 구현 | `/vais cpo {feature}` |
 | CEO | 전략 결정에 따른 기술 변경 | `/vais ceo {feature}` |

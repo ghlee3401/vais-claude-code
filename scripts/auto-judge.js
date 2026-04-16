@@ -145,30 +145,35 @@ function judgeCSO(feature) {
 }
 
 /**
- * CMO 판정: SEO 점수 ≥ 80
+ * CBO 판정: SEO ≥ 80 + unit economics + 비용/수익/ROI
  */
-function judgeCMO(feature) {
-  const details = { seoScore: -1, issues: [] };
+function judgeCBO(feature) {
+  const details = { seoScore: -1, found: [], missing: [], issues: [] };
 
-  const doPath = resolveDocPath('do', feature, 'cmo');
+  const doPath = resolveDocPath('do', feature, 'cbo');
   if (!doPath || !fs.existsSync(doPath)) {
-    return { passed: false, verdict: 'retry', details: { ...details, issues: ['CMO Do 문서 미존재'] } };
+    return { passed: false, verdict: 'retry', details: { ...details, issues: ['CBO Do 문서 미존재'] } };
   }
 
   const content = fs.readFileSync(doPath, 'utf8');
 
-  // SEO 총점 추출
   const seoMatch = content.match(/(?:총점|Total|SEO\s*(?:점수|Score))[:\s]*(\d+)\s*(?:\/\s*100|점|pts)?/i);
   if (seoMatch) {
     details.seoScore = parseInt(seoMatch[1], 10);
-    if (details.seoScore < 80) {
-      details.issues.push(`SEO 점수 ${details.seoScore}/100 (기준: 80)`);
-    }
-  } else {
-    details.issues.push('SEO 점수 미확인');
+    if (details.seoScore < 80) details.issues.push(`SEO 점수 ${details.seoScore}/100 (기준: 80)`);
   }
 
-  const passed = details.seoScore >= 80;
+  const REQUIRED_METRICS = [
+    { name: '비용', pattern: /비용|cost/i },
+    { name: '수익', pattern: /수익|revenue|매출/i },
+    { name: 'ROI', pattern: /ROI|투자\s*수익률|ROAS/i },
+  ];
+  for (const m of REQUIRED_METRICS) {
+    if (m.pattern.test(content)) details.found.push(m.name);
+    else { details.missing.push(m.name); details.issues.push(`${m.name} 미확인`); }
+  }
+
+  const passed = details.issues.length === 0;
   return { passed, verdict: passed ? 'pass' : 'retry', details };
 }
 
@@ -199,45 +204,6 @@ function judgeCOO(feature) {
 }
 
 /**
- * CFO 판정: 비용/수익/ROI 수치 모두 존재
- */
-function judgeCFO(feature) {
-  const details = { found: [], missing: [], issues: [] };
-  const REQUIRED_METRICS = [
-    { name: '비용', pattern: /비용|cost|개발\s*비용|운영\s*비용/i },
-    { name: '수익', pattern: /수익|revenue|매출/i },
-    { name: 'ROI', pattern: /ROI|투자\s*수익률/i },
-  ];
-
-  const doPath = resolveDocPath('do', feature, 'cfo');
-  if (!doPath || !fs.existsSync(doPath)) {
-    return { passed: false, verdict: 'retry', details: { ...details, issues: ['CFO Do 문서 미존재'] } };
-  }
-
-  const content = fs.readFileSync(doPath, 'utf8');
-
-  for (const metric of REQUIRED_METRICS) {
-    if (metric.pattern.test(content)) {
-      // 수치가 실제로 포함되어 있는지 (해당 섹션에 숫자 존재)
-      const sectionMatch = content.match(new RegExp(metric.pattern.source + '[\\s\\S]*?(?=##|$)', 'i'));
-      const hasNumbers = sectionMatch && /\d+/.test(sectionMatch[0]);
-      if (hasNumbers) {
-        details.found.push(metric.name);
-      } else {
-        details.missing.push(metric.name);
-        details.issues.push(`${metric.name}: 섹션 존재하나 수치 없음`);
-      }
-    } else {
-      details.missing.push(metric.name);
-      details.issues.push(`${metric.name}: 미발견`);
-    }
-  }
-
-  const passed = details.missing.length === 0;
-  return { passed, verdict: passed ? 'pass' : 'retry', details };
-}
-
-/**
  * Auto Judge 실행
  */
 function judge(role, feature) {
@@ -245,9 +211,8 @@ function judge(role, feature) {
     cpo: judgeCPO,
     cto: judgeCTO,
     cso: judgeCSO,
-    cmo: judgeCMO,
+    cbo: judgeCBO,
     coo: judgeCOO,
-    cfo: judgeCFO,
   };
 
   const handler = judges[role];
@@ -276,7 +241,7 @@ function judge(role, feature) {
  * 전체 C-Level 일괄 판정 (CEO Final Review용)
  */
 function judgeAll(feature) {
-  const roles = ['cpo', 'cto', 'cso', 'cmo', 'coo', 'cfo'];
+  const roles = ['cpo', 'cto', 'cso', 'cbo', 'coo'];
   const results = {};
   let allPassed = true;
 

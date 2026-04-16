@@ -1,17 +1,27 @@
 ---
 name: performance-engineer
-version: 1.0.0
+version: 0.50.0
 description: |
   Tracks performance metrics including build size, dependency count, and response times.
   Detects performance regressions by comparing against baseline measurements.
   Use when: delegated by COO for performance benchmarking or regression detection.
 model: sonnet
+layer: operations
+agent-type: subagent
+parent: coo
 tools: [Read, Write, Glob, Grep, Bash, TodoWrite]
 memory: none
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"
   - "Bash(git reset --hard*)"
+advisor:
+  enabled: true
+  model: claude-opus-4-6
+  max_uses: 3
+  caching: { type: ephemeral, ttl: 5m }
+includes:
+  - _shared/advisor-guard.md
 ---
 
 # Benchmark Agent

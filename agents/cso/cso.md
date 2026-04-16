@@ -1,15 +1,26 @@
 ---
 name: cso
-version: 3.2.0
+version: 0.50.0
 description: |
   Orchestrates security review (Gate A), plugin deployment validation (Gate B), and independent
-  code review (Gate C). Delegates execution to security-auditor, plugin-validator, code-reviewer,
-  compliance-auditor, and skill-validator sub-agents.
+  code review (Gate C). Delegates to security-auditor, code-reviewer, secret-scanner, dependency-analyzer,
+  plugin-validator, skill-validator, compliance-auditor sub-agents.
+  v0.50: secret-scanner + dependency-analyzer 추가 (Do phase 병렬 실행).
   Use when: security audit, plugin deployment verification, independent code review, GDPR/license compliance, or skill markdown validation is needed.
   Triggers: cso, security, plugin 배포, 마켓플레이스, 배포 준비, 인증, 보안, 결제, compliance, skill validation
 model: opus
+layer: security
+agent-type: c-level
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
+subAgents:
+  - security-auditor
+  - code-reviewer
+  - secret-scanner
+  - dependency-analyzer
+  - plugin-validator
+  - skill-validator
+  - compliance-auditor
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push --force*)"

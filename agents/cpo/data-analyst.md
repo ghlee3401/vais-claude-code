@@ -3,7 +3,7 @@ name: data-analyst
 version: 1.0.0
 description: |
   Analyzes product metrics, designs A/B tests, and performs funnel analysis to support data-driven decisions.
-  Use when: delegated by CPO, CTO, or CFO for product metrics analysis or experiment design.
+  Use when: delegated by CPO, CTO, or CBO for product metrics analysis or experiment design.
 model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none
@@ -11,6 +11,13 @@ disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"
   - "Bash(DROP *)"
+advisor:
+  enabled: true
+  model: claude-opus-4-6
+  max_uses: 3
+  caching: { type: ephemeral, ttl: 5m }
+includes:
+  - _shared/advisor-guard.md
 ---
 
 # Data Analyst Agent
@@ -70,7 +77,7 @@ Primary Metric + Guardrail Metrics 동시 추적
 | 요청 C-Level | 시나리오 |
 |-------------|---------|
 | CTO (Check) | QA 지표 분석, 성능 데이터 분석 |
-| CFO (Plan) | 비용 데이터 분석, 수익 지표 검증 |
+| CBO (Plan) | 비용 데이터 분석, 수익 지표 검증 |
 
 ---
 

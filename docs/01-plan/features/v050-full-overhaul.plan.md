@@ -192,17 +192,17 @@
 
 아래 체크박스는 각 sub-plan 완료 시 이 파일에서 체크한다.
 
-- [ ] **00** Migration Foundation (`vais.config.json` v0.50 반영 + migration 단위 테스트 통과)
-- [ ] **01** CBO Agents (11개 파일 존재 + `scripts/vais-validate-plugin.js` 통과)
-- [ ] **02** Existing C-Level Updates (신규 sub-agent 4종 파일 존재 + CTO에서 release-engineer 제거)
-- [ ] **03** Shared Guards & Registry (`_shared/*.md` 2종 + AgentRegistry includes 단위 테스트)
-- [ ] **04** Advisor Integration (M-24) (32 sub-agent frontmatter advisor 필드 + SC-14~20)
-- [ ] **05** Ideation Phase (`/vais cpo ideation` 수동 테스트 통과)
-- [ ] **06** Phase Routers (CEO 동적 라우팅 + `skills/vais/phases/cbo.md` + SKILL.md 진입점)
-- [ ] **07** Harness Gates (agent-stop 4-step + `tests/gate-manager.test.js`)
-- [ ] **08** Cleanup & Removal (grep 0건 + `npm test` 통과)
-- [ ] **09** Docs & Tests (CLAUDE.md/AGENTS.md/README/CHANGELOG + 테스트 6종)
-- [ ] **10** Scenario Verification (S-1/S-2/S-9/S-0 수동 walkthrough)
+- [x] **00** Migration Foundation (`vais.config.json` v0.50 반영 + migration 단위 테스트 통과)
+- [x] **01** CBO Agents (11개 파일 존재 + `scripts/vais-validate-plugin.js` 통과)
+- [x] **02** Existing C-Level Updates (신규 sub-agent 4종 파일 존재 + CTO에서 release-engineer 제거)
+- [x] **03** Shared Guards & Registry (`_shared/*.md` 2종 + AgentRegistry includes 단위 테스트)
+- [x] **04** Advisor Integration (M-24) (38 sub-agent frontmatter advisor 필드)
+- [x] **05** Ideation Phase (phases/ideation.md + template + docs/00-ideation/ + schema 이벤트)
+- [x] **06** Phase Routers (CEO 동적 라우팅 + `skills/vais/phases/cbo.md` + SKILL.md 진입점)
+- [x] **07** Harness Gates (gate-manager judgePhaseCompletion + `tests/gate-manager.test.js` 11 pass)
+- [x] **08** Cleanup & Removal (agents/cmo,cfo 삭제 + grep 정리 + `npm test` 154 pass)
+- [x] **09** Docs & Tests (CLAUDE.md Rule#2 ideation optional + CHANGELOG 완성 + 154 pass)
+- [x] **10** Scenario Verification (S-0/S-1/S-2/S-9 구조적 검증 20/20 pass + scenario-verification.test.js)
 
 ---
 

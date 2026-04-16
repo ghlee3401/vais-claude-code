@@ -17,7 +17,7 @@ const { loadConfig, resolveDocPath } = require('../lib/paths');
 const { getActiveFeature } = require('../lib/status');
 
 // C-Level 역할 목록
-const C_LEVEL_ROLES = ['cto', 'ceo', 'cpo', 'cfo', 'cmo', 'cso', 'coo'];
+const C_LEVEL_ROLES = ['ceo', 'cpo', 'cto', 'cso', 'cbo', 'coo'];
 
 // 역할별 필수 phase (모든 C-Level 공통: plan, do, qa)
 const MANDATORY_PHASES = ['plan', 'do', 'qa'];

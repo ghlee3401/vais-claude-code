@@ -22,14 +22,14 @@ VAIS Code v0.43.0 — 커맨드 목록
 
 C-Suite 에이전트:
   /vais cto [phase] {feature}  — 기술 전체 오케스트레이션 (가장 많이 씀)
-  /vais ceo [phase] {feature}  — 비즈니스 전략 + C-Suite 조율
-  /vais cpo [phase] {feature}  — 제품 방향 + PRD + 로드맵
-  /vais cmo [phase] {feature}  — 마케팅 전략 + SEO
-  /vais cso [phase] {feature}  — 보안 검토 + 플러그인 검증
-  /vais cfo [phase] {feature}  — 재무/ROI 분석
-  /vais coo [phase] {feature}  — 운영/CI/CD
+  /vais ceo [phase] {feature}  — 비즈니스 전략 + C-Suite 동적 라우팅
+  /vais cpo [phase] {feature}  — 제품 방향 + PRD + 로드맵 + 백로그
+  /vais cso [phase] {feature}  — 보안 검토 + 시크릿 스캔 + 의존성 분석
+  /vais cbo [phase] {feature}  — 마케팅/GTM + 재무/가격 + unit economics
+  /vais coo [phase] {feature}  — 운영/CI/CD + 성능 벤치마크
 
-  phase: plan / design / do / qa / report (생략 시 자동 판별 → 사용자 확인)
+  phase: ideation (optional) / plan / design / do / qa / report
+  ideation: /vais {c-level} ideation [topic] — 자유 대화 모드
 
 유틸리티:
   /vais status             — 진행 상태 확인

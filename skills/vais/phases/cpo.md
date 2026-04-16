@@ -1,6 +1,7 @@
 ---
 name: cpo
-description: CPO 에이전트 호출. 제품 도메인 오케스트레이션 (PRD 생성 + 로드맵). data-analyst/ux-researcher 위임 가능.
+version: 0.50.0
+description: CPO 에이전트 호출. 제품 도메인 오케스트레이션 (PRD + 로드맵 + 백로그). v0.50 backlog-manager 추가.
 ---
 
 # CPO Phase
@@ -17,6 +18,7 @@ description: CPO 에이전트 호출. 제품 도메인 오케스트레이션 (PR
 
 | 키워드 | phase |
 |--------|-------|
+| `ideation` | ideation |
 | `plan` | plan |
 | `design` | design |
 | `do` | do |
@@ -25,6 +27,8 @@ description: CPO 에이전트 호출. 제품 도메인 오케스트레이션 (PR
 
 - **Phase 명시**: `/vais cpo plan my-feature` → phase=`plan`, feature=`my-feature`
 - **Phase 생략**: `/vais cpo my-feature` → phase=미지정, feature=`my-feature`
+- **Ideation**: `/vais cpo ideation my-idea` → ideation 라우터(`phases/ideation.md`)로 위임
+- **Design**: prd-writer 완료 후 `backlog-manager`가 PRD → user stories + sprint plan 변환
 
 ### Phase 미지정 시 동작
 

@@ -1,6 +1,7 @@
 ---
 name: coo
-description: COO 에이전트 호출. 운영 프로세스, CI/CD 파이프라인, 모니터링. sre-engineer/release-engineer/technical-writer 위임 가능.
+version: 0.50.0
+description: COO 에이전트 호출. 운영 프로세스, CI/CD 파이프라인, 모니터링. v0.50 release-engineer/performance-engineer CTO에서 이관, technical-writer 제거.
 ---
 
 # COO Phase

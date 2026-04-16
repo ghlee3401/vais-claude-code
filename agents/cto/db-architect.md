@@ -13,6 +13,13 @@ disallowedTools:
   - "Bash(git push*)"
   - "Bash(git reset --hard*)"
   - "Bash(DROP *)"
+advisor:
+  enabled: true
+  model: claude-opus-4-6
+  max_uses: 3
+  caching: { type: ephemeral, ttl: 5m }
+includes:
+  - _shared/advisor-guard.md
 ---
 
 # Database Agent

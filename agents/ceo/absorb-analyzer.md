@@ -11,6 +11,13 @@ disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"
   - "Bash(git reset --hard*)"
+advisor:
+  enabled: true
+  model: claude-opus-4-6
+  max_uses: 3
+  caching: { type: ephemeral, ttl: 5m }
+includes:
+  - _shared/advisor-guard.md
 ---
 
 # absorb-analyzer Agent
@@ -63,7 +70,7 @@ vais 6-레이어 구조와의 적합성:
 
 | 레이어 | 설명 |
 |--------|------|
-| `phases/` (C-Suite) | CEO/CTO/CMO/CSO/CPO/CFO/COO 방법론 |
+| `phases/` (C-Suite) | CEO/CPO/CTO/CSO/CBO/COO + ideation 방법론 |
 | `utils/` | commit, status, help, init 등 유틸리티 |
 | `agents/{c-level}/` | C-레벨 별 하위 폴더로 구성된 에이전트 |
 | `scripts/` | Node.js 자동화 스크립트 |

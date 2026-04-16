@@ -1,6 +1,7 @@
 ---
 name: ceo
-description: CEO 에이전트 호출. 동적 라우팅 기반 서비스 런칭 + 비즈니스 전략 라우팅 + absorb.
+version: 0.50.0
+description: CEO 에이전트 호출. 동적 라우팅 + ideation 분기 + 10+1 시나리오 매핑 + absorb.
 ---
 
 # CEO Phase
@@ -17,6 +18,7 @@ description: CEO 에이전트 호출. 동적 라우팅 기반 서비스 런칭 +
 
 | 키워드 | phase |
 |--------|-------|
+| `ideation` | ideation |
 | `plan` | plan |
 | `design` | design |
 | `do` | do |
@@ -44,6 +46,31 @@ description: CEO 에이전트 호출. 동적 라우팅 기반 서비스 런칭 +
    ⚠️ [{스킵하려는 phase}]는 필수 단계입니다. 이전 단계를 먼저 완료해주세요.
    ```
 
+### Ideation 분기
+
+Phase가 `ideation`인 경우:
+1. `${CLAUDE_PLUGIN_ROOT}/skills/vais/phases/ideation.md`를 Read하고 그 지침에 따라 실행
+2. CEO 페르소나로 ideation 대화 진행
+3. 종료 시 다음 C-Level 추천 생성 → AskUserQuestion 승인 → 자동 전환
+
+### 시나리오 매핑 (v0.50 S-0 ~ S-10)
+
+CEO는 사용자 입력을 분석하여 아래 시나리오 중 가장 적합한 것을 식별하고, 해당 흐름에 따라 C-Level을 순차 추천합니다.
+
+| ID | 트리거 | 권장 흐름 |
+|----|--------|-----------|
+| S-0 | 아이디어 모호, 탐색 필요 | CEO ideation → 추천 C-Level |
+| S-1 | 신규 서비스 풀 개발 | CBO(market)→CPO→CTO→CSO→CBO(GTM)→COO |
+| S-2 | 기능 추가, 기존 서비스 확장 | CPO→CTO→CSO→COO |
+| S-3 | 버그/UX 개선/리팩터 | branch별 (CTO or CPO) |
+| S-4 | 프로덕션 장애 | CTO(incident-responder)→CSO→COO |
+| S-5 | 성능 최적화 / 비용 절감 | CTO(perf) or CBO(finops) |
+| S-6 | 보안 감사 / 컴플라이언스 | CSO↔CTO loop (max 3) |
+| S-7 | 마케팅 캠페인 / GTM | CPO→CBO→(CTO) |
+| S-8 | 시장 분석 / 사업 분석 | CBO→(CPO) |
+| S-9 | skill/agent 생성 / 흡수 | CEO(skill-creator)→CSO |
+| S-10 | 정기 운영 / 기술부채 | CTO or COO |
+
 ## 에이전트 전달
 
 - action: `$0`
@@ -56,7 +83,7 @@ description: CEO 에이전트 호출. 동적 라우팅 기반 서비스 런칭 +
 
 1. `docs/` 폴더를 Glob으로 스캔하여 `*_{feature}.*.md` 파일 존재 여부로 완료된 C-Level 파악
 2. 현재 피처의 성격 분석 (피처명 + 사용자 컨텍스트)
-3. `vais.config.json`의 `launchPipeline.dependencies`에서 의존성 확인
+3. `vais.config.json`의 `dependencies`에서 의존성 확인
 4. 아직 실행되지 않은 C-Level 중 다음으로 적합한 것을 추천
 5. **추천 요약을 응답에 직접 출력**한 뒤, **반드시 AskUserQuestion 도구로 사용자 응답을 받습니다** (텍스트 선택지로만 표시 금지).
 

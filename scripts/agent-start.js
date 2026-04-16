@@ -15,10 +15,23 @@ const VALID_ROLES = (() => {
     const config = JSON.parse(fs.readFileSync(path.join(__dirname, '../vais.config.json'), 'utf8'));
     const cSuiteRoles = Object.keys(config.cSuite?.roles || {});
     const execRoles = [
-      'infra-architect', 'backend-engineer', 'frontend-engineer', 'ui-designer', 'qa-engineer',
-      'security-auditor', 'seo-analyst', 'plugin-validator', 'code-reviewer',
+      // CEO
+      'absorb-analyzer', 'skill-creator',
+      // CPO
       'product-discoverer', 'product-strategist', 'product-researcher', 'prd-writer',
-      'absorb-analyzer',
+      'backlog-manager', 'ux-researcher', 'data-analyst',
+      // CTO
+      'infra-architect', 'backend-engineer', 'frontend-engineer', 'ui-designer',
+      'db-architect', 'qa-engineer', 'test-engineer', 'incident-responder',
+      // CSO
+      'security-auditor', 'code-reviewer', 'secret-scanner', 'dependency-analyzer',
+      'plugin-validator', 'skill-validator', 'compliance-auditor',
+      // CBO
+      'market-researcher', 'customer-segmentation-analyst', 'seo-analyst', 'copy-writer',
+      'growth-analyst', 'pricing-analyst', 'financial-modeler', 'unit-economics-analyst',
+      'finops-analyst', 'marketing-analytics-analyst',
+      // COO
+      'release-engineer', 'sre-engineer', 'release-monitor', 'performance-engineer',
     ];
     return new Set([...cSuiteRoles, ...execRoles]);
   } catch {

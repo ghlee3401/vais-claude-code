@@ -1,24 +1,24 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.49.2)
+> Virtual AI C-Suite for software development (v0.50.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
 
-AI C-Suite 조직 시뮬레이션 플러그인. CEO가 Product Owner로서 C-Level 팀(CPO, CTO, CSO, CMO, COO, CFO)을 고용·지휘하여 서비스 런칭 전체 라이프사이클을 자동 실행한다. 개별 C-Level 직접 호출도 가능.
+AI C-Suite 조직 시뮬레이션 플러그인. CEO가 Product Owner로서 6 C-Level 팀(CPO, CTO, CSO, CBO, COO)을 고용·지휘하여 서비스 런칭 전체 라이프사이클을 자동 실행한다. 개별 C-Level 직접 호출도 가능. v0.50에서 CMO+CFO→CBO 통합, optional ideation phase 신설, Advisor Tool 기본 활성화.
 
 ## Project Structure
 
 ```
 vais-claude-code/
-├── agents/          # C-Level 별 하위 폴더로 구성된 에이전트 (37개)
-│   ├── ceo/         #   CEO + absorb-analyzer + retrospective-writer
-│   ├── cpo/         #   CPO + product-discoverer/strategy/research/prd + ux-researcher + data-analyst
-│   ├── cto/         #   CTO + infra-architect/backend-engineer/frontend-engineer/ui-designer/qa-engineer + test-engineer/release-engineer/db-architect + incident-responder
-│   ├── cso/         #   CSO + security-auditor/plugin-validator/code-reviewer + compliance-auditor + skill-validator
-│   ├── cmo/         #   CMO + seo-analyst + copy-writer + growth-analyst
-│   ├── coo/         #   COO + release-monitor/performance-engineer + sre-engineer + release-engineer(공유) + technical-writer
-│   └── cfo/         #   CFO + finops-analyst + pricing-analyst
+├── agents/          # C-Level 별 하위 폴더로 구성된 에이전트 (6 C-Level + 38 sub-agent)
+│   ├── ceo/         #   CEO + absorb-analyzer + skill-creator
+│   ├── cpo/         #   CPO + product-discoverer/strategy/research/prd + backlog-manager + ux-researcher + data-analyst
+│   ├── cto/         #   CTO + infra-architect/backend-engineer/frontend-engineer/ui-designer/db-architect/qa-engineer/test-engineer/incident-responder
+│   ├── cso/         #   CSO + security-auditor/code-reviewer/secret-scanner/dependency-analyzer/plugin-validator/skill-validator/compliance-auditor
+│   ├── cbo/         #   CBO + market-researcher/customer-segmentation-analyst/seo-analyst/copy-writer/growth-analyst/pricing-analyst/financial-modeler/unit-economics-analyst/finops-analyst/marketing-analytics-analyst
+│   ├── coo/         #   COO + release-engineer/sre-engineer/release-monitor/performance-engineer
+│   └── _shared/     #   공유 가드 (advisor-guard, ideation-guard)
 ├── skills/vais/     # SKILL.md + phases/ + utils/
 ├── hooks/           # hooks.json, events.json, session-start.js
 ├── lib/             # 핵심 라이브러리 (fs-utils, io, memory, paths, status, ui)
@@ -41,20 +41,19 @@ vais-claude-code/
 ### C-Suite (전략 레이어, Opus)
 | Agent | Role |
 |-------|------|
-| CEO | **Top-level orchestrator** — Product Owner, dynamic routing (피처 성격 + 산출물 상태 기반 다음 C-Level 추천) |
-| CPO | Product definition + PRD + pm-* sub-agent orchestration |
+| CEO | **Top-level orchestrator** — Product Owner, dynamic routing (10+1 시나리오), ideation 라우팅 |
+| CPO | Product definition + PRD + backlog + pm-* sub-agent orchestration |
 | CTO | Technical lead — Plan→Design→Do→QA development workflow orchestration |
-| CSO | Security & quality review — Gate A(security)/B(plugin)/C(independent code review), reports issues to CEO→CTO fix loop |
-| CMO | Marketing strategy + SEO audit delegation |
-| COO | Deployment/operations, CI/CD, monitoring |
-| CFO | Cost analysis, ROI, feature-level pricing |
+| CSO | Security & quality review — Gate A(security)/B(plugin)/C(code review) + secret scan + dependency analysis |
+| CBO | **Business layer** — GTM, marketing, finance, pricing, unit economics (CMO+CFO 통합) |
+| COO | Deployment/operations, CI/CD, monitoring, performance benchmarks |
 
 ### 서비스 런칭 파이프라인 (CEO 동적 라우팅)
 ```
 CEO가 피처 성격 + 산출물 상태를 분석하여 다음 C-Level을 동적으로 추천
 → 사용자 승인 → 해당 C-Level PDCA 실행 → CEO 다시 판단 → 반복
 → 모든 필요 C-Level 완료 → CEO 최종 리뷰
-의존성: CSO/COO/CFO → CTO 필요, CMO → CPO 필요 (참고용, hard constraint 아님)
+의존성: CTO→CPO, CSO/COO→CTO, CBO 의존 없음 (참고용, hard constraint 아님)
 ```
 
 ### Execution (실행 레이어, Sonnet)
@@ -67,26 +66,34 @@ CEO가 피처 성격 + 산출물 상태를 분석하여 다음 C-Level을 동적
 | backend-engineer | CTO | Backend API implementation |
 | qa-engineer | CTO | Gap analysis + code review + QA verification |
 | test-engineer | CTO | Test code generation (unit/integration/e2e) |
-| release-engineer | CTO/COO | CI/CD pipeline + Docker + deployment automation |
 | db-architect | CTO | DB schema optimization + migration + query tuning |
-| security-auditor | CSO | Security audit (OWASP Top 10) |
-| plugin-validator | CSO | Plugin deployment validation |
-| code-reviewer | CSO | Independent code review |
-| compliance-auditor | CSO/CFO | Compliance (GDPR/license) |
-| skill-validator | CSO | Skill/agent markdown frontmatter validation (vs plugin-validator: 단일 markdown 단위) |
-| seo-analyst | CMO | SEO audit |
-| copy-writer | CMO | Marketing copy (landing/email/app store) |
-| growth-analyst | CMO | Growth funnel strategy + viral loop |
-| sre-engineer | COO | SRE/monitoring + incident runbook |
-| technical-writer | COO/CTO/CPO | Technical docs (API docs/README/guides) |
-| finops-analyst | CFO | Cloud cost analysis + optimization |
-| pricing-analyst | CFO | Pricing models + revenue simulation |
 | incident-responder | CTO | Systematic debugging (4-phase: investigate→analyze→hypothesize→implement) |
+| security-auditor | CSO | Security audit (OWASP Top 10) |
+| code-reviewer | CSO | Independent code review |
+| secret-scanner | CSO | Source code secret detection (regex + entropy) |
+| dependency-analyzer | CSO | CVE/license/supply chain risk analysis |
+| plugin-validator | CSO | Plugin deployment validation |
+| skill-validator | CSO | Skill/agent markdown frontmatter validation |
+| compliance-auditor | CSO | Compliance (GDPR/license) |
+| market-researcher | CBO | Market/competitor analysis (PEST/SWOT/Porter/TAM) |
+| customer-segmentation-analyst | CBO | Customer segmentation + personas (RFM/JTBD) |
+| seo-analyst | CBO | SEO audit + content strategy |
+| copy-writer | CBO | Marketing copy + brand positioning |
+| growth-analyst | CBO | GTM strategy + growth loops + funnel optimization |
+| pricing-analyst | CBO | Pricing strategy + tier design |
+| financial-modeler | CBO | 3-Statement model + DCF + scenario analysis |
+| unit-economics-analyst | CBO | CAC/LTV/cohort/SaaS metrics |
+| finops-analyst | CBO | Cloud cost analysis + optimization |
+| marketing-analytics-analyst | CBO | Multi-touch attribution + channel ROI |
+| release-engineer | COO | CI/CD pipeline + Docker + deployment automation |
+| sre-engineer | COO | SRE/monitoring + incident runbook |
 | release-monitor | COO | Post-deployment canary monitoring |
 | performance-engineer | COO | Performance benchmarks + regression detection |
-| retrospective-writer | CEO | Engineering retrospective + learning extraction |
+| absorb-analyzer | CEO | External skill/reference absorption analysis |
+| skill-creator | CEO | Auto skill/agent markdown generation |
+| backlog-manager | CPO | PRD → user story + sprint plan conversion |
 | ux-researcher | CPO | UX research (JTBD interviews/usability tests) |
-| data-analyst | CPO/CTO/CFO | Product metrics (DAU/MAU/A/B tests) |
+| data-analyst | CPO/CTO/CBO | Product metrics (DAU/MAU/A/B tests) |
 
 ### PM (제품 기획 레이어, CPO 서브)
 product-discoverer, product-strategist, product-researcher, prd-writer
@@ -102,9 +109,9 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 (의존성: CSO/COO/CFO → CTO, CMO → CPO)
 ```
 
-### CTO 단독 (기술 구현, 5 Phases)
+### CTO 단독 (기술 구현, 6 Phases)
 ```
-📋 plan → 🎨 design → 🔧 do (frontend-engineer + backend-engineer + test-engineer 병렬) → ✅ qa → 📊 report
+(💡 ideation, optional) → 📋 plan → 🎨 design → 🔧 do (frontend-engineer + backend-engineer + test-engineer 병렬) → ✅ qa → 📊 report
 ```
 
 - 두 가지 진입점: CEO (전체 런칭) / CTO (기술만) / 개별 C-Level 직접 호출
@@ -121,7 +128,7 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 ## Mandatory Rules
 
 1. **기획 없이 코드 금지** — `docs/01-plan/` 기획서가 없으면 구현하지 않는다
-2. **워크플로우 순서 준수** — plan → design → do → qa → report 순서를 건너뛰지 않는다. plan, design, do, qa는 mandatory phase로 스킵 금지. C-Level 간 위임 시에도 각 phase를 순차 별도 호출해야 한다
+2. **워크플로우 순서 준수** — (optional) ideation → plan → design → do → qa → report 순서를 건너뛰지 않는다. plan, design, do, qa는 mandatory phase로 스킵 금지. **ideation은 optional이며 mandatory 목록에 포함하지 않는다** (SC-13). C-Level 간 위임 시에도 각 phase를 순차 별도 호출해야 한다
 3. **산출물 경로** — `docs/{번호}-{단계}/{role}_{feature}.{phase}.md` 형식 준수 (모든 C-Level 공통)
 4. **Gate 통과 필수** — 각 Gate의 체크리스트 항목을 모두 확인한 뒤 다음 단계로 진행
 5. **위험 명령 금지** — `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지

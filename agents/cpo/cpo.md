@@ -1,14 +1,25 @@
 ---
 name: cpo
-version: 2.0.0
+version: 0.50.0
 description: |
   Sets product direction, generates PRDs, and defines roadmaps. Orchestrates product-discoverer,
-  product-strategist, product-researcher, prd-writer, ux-researcher, and data-analyst sub-agents for comprehensive product planning.
+  product-strategist, product-researcher, prd-writer, backlog-manager, ux-researcher, and data-analyst sub-agents.
+  v0.50: backlog-manager 추가 (PRD → user story + sprint plan 변환).
   Use when: product direction, PRD creation, roadmap definition, UX research, or product metrics analysis is needed.
   Triggers: cpo, product, PRD, 제품, 기획, 로드맵, 요구사항, roadmap, product direction, UX research
 model: opus
+layer: product
+agent-type: c-level
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
+subAgents:
+  - product-discoverer
+  - product-strategist
+  - product-researcher
+  - prd-writer
+  - backlog-manager
+  - ux-researcher
+  - data-analyst
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push --force*)"

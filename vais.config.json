@@ -1,15 +1,11 @@
 {
-  "version": "0.49.2",
+  "version": "0.50.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
     "distributionUrl": "https://github.com/ghlee3401/vais-claude-code"
   },
   "cSuite": {
-    "orchestrator": {
-      "fullLaunch": "ceo",
-      "techOnly": "cto"
-    },
     "roles": {
       "ceo": {
         "required": true,
@@ -18,113 +14,87 @@
         "agent": "agents/ceo/ceo.md",
         "subAgents": [
           "absorb-analyzer",
-          "retrospective-writer"
+          "skill-creator"
         ]
       },
       "cpo": {
         "required": false,
         "model": "opus",
-        "layer": "strategy-product",
+        "layer": "product",
         "agent": "agents/cpo/cpo.md",
         "subAgents": [
           "product-discoverer",
           "product-strategist",
           "product-researcher",
           "prd-writer",
+          "backlog-manager",
           "ux-researcher",
           "data-analyst"
         ]
       },
       "cto": {
-        "required": true,
+        "required": false,
         "model": "opus",
-        "layer": "strategy-tech",
+        "layer": "technology",
         "agent": "agents/cto/cto.md",
         "subAgents": [
           "infra-architect",
           "backend-engineer",
           "frontend-engineer",
           "ui-designer",
+          "db-architect",
           "qa-engineer",
-          "incident-responder",
           "test-engineer",
-          "release-engineer",
-          "db-architect"
+          "incident-responder"
         ]
       },
       "cso": {
         "required": false,
         "model": "opus",
-        "layer": "quality",
+        "layer": "security",
         "agent": "agents/cso/cso.md",
         "subAgents": [
           "security-auditor",
-          "plugin-validator",
           "code-reviewer",
+          "secret-scanner",
+          "dependency-analyzer",
+          "plugin-validator",
+          "skill-validator",
           "compliance-auditor"
         ]
       },
-      "cmo": {
+      "cbo": {
         "required": false,
         "model": "opus",
-        "layer": "growth",
-        "agent": "agents/cmo/cmo.md",
+        "layer": "business",
+        "agent": "agents/cbo/cbo.md",
         "subAgents": [
+          "market-researcher",
+          "customer-segmentation-analyst",
           "seo-analyst",
           "copy-writer",
-          "growth-analyst"
+          "growth-analyst",
+          "pricing-analyst",
+          "financial-modeler",
+          "unit-economics-analyst",
+          "finops-analyst",
+          "marketing-analytics-analyst"
         ]
       },
       "coo": {
         "required": false,
         "model": "opus",
-        "layer": "ops",
+        "layer": "operations",
         "agent": "agents/coo/coo.md",
         "subAgents": [
-          "release-monitor",
-          "performance-engineer",
-          "sre-engineer",
           "release-engineer",
-          "technical-writer"
-        ]
-      },
-      "cfo": {
-        "required": false,
-        "model": "opus",
-        "layer": "finance",
-        "agent": "agents/cfo/cfo.md",
-        "subAgents": [
-          "finops-analyst",
-          "pricing-analyst"
+          "sre-engineer",
+          "release-monitor",
+          "performance-engineer"
         ]
       }
     },
-    "launchPipeline": {
-      "routing": "dynamic",
-      "dependencies": {
-        "cso": [
-          "cto"
-        ],
-        "coo": [
-          "cto"
-        ],
-        "cfo": [
-          "cto"
-        ],
-        "cmo": [
-          "cpo"
-        ]
-      },
-      "reviewLoops": {
-        "cso-cto": {
-          "maxIterations": 3,
-          "trigger": "critical > 0"
-        }
-      },
-      "finalReview": {
-        "maxIterations": 2
-      }
-    },
+    "rolesList": ["ceo", "cpo", "cto", "cso", "cbo", "coo"],
     "autoKeywords": {
       "ceo": [
         "new product",
@@ -144,12 +114,17 @@
         "인증",
         "보안"
       ],
-      "cmo": [
+      "cbo": [
         "landing",
         "marketing",
         "마케팅",
         "랜딩",
-        "캠페인"
+        "캠페인",
+        "pricing",
+        "가격",
+        "cost",
+        "비용",
+        "roi"
       ],
       "coo": [
         "deploy",
@@ -159,6 +134,26 @@
         "운영",
         "infra"
       ]
+    }
+  },
+  "dependencies": {
+    "cto": ["cpo"],
+    "cso": ["cto"],
+    "coo": ["cto"],
+    "cbo": []
+  },
+  "pipeline": {
+    "launchDefault": ["cbo", "cpo", "cto", "cso", "cbo", "coo"],
+    "pipelineRoles": ["cbo", "cpo", "cto", "cso", "coo"],
+    "routing": "dynamic",
+    "reviewLoops": {
+      "cso-cto": {
+        "maxIterations": 3,
+        "trigger": "critical > 0"
+      }
+    },
+    "finalReview": {
+      "maxIterations": 2
     }
   },
   "observability": {
@@ -177,6 +172,7 @@
   "workflow": {
     "_sot": "PDCA 단계의 단일 진실 소스(SoT)는 본 키. CLAUDE.md/cto.md의 단계 표는 표시용 사본이며 본 키와 동기화 필수.",
     "phases": [
+      "ideation",
       "plan",
       "design",
       "do",
@@ -189,14 +185,27 @@
       "do",
       "qa"
     ],
+    "optionalPhases": [
+      "ideation"
+    ],
     "phaseNames": {
+      "ideation": "아이디에이션",
       "plan": "기획",
       "design": "설계",
       "do": "구현",
       "qa": "QA",
       "report": "보고서"
     },
+    "phaseMeta": {
+      "ideation": { "optional": true,  "description": "자유 대화, 산출물 비강제" },
+      "plan":     { "optional": false, "description": "요구사항/범위 문서" },
+      "design":   { "optional": false, "description": "설계 문서" },
+      "do":       { "optional": false, "description": "구현" },
+      "qa":       { "optional": false, "description": "검증" },
+      "report":   { "optional": false, "description": "최종 리포트" }
+    },
     "docPaths": {
+      "ideation": "docs/00-ideation/{role}_{feature}.md",
       "plan": "docs/01-plan/{role}_{feature}.plan.md",
       "design": "docs/02-design/{role}_{feature}.design.md",
       "do": "docs/03-do/{role}_{feature}.do.md",
@@ -204,15 +213,17 @@
       "report": "docs/05-report/{role}_{feature}.report.md"
     }
   },
+  "gapThreshold": 0.90,
   "parallelGroups": {
     "implementation": [
       "frontend-engineer",
       "backend-engineer",
       "test-engineer"
     ],
-    "cmo-do": [
+    "cbo-do": [
       "seo-analyst",
-      "copy-writer"
+      "copy-writer",
+      "growth-analyst"
     ],
     "coo-do": [
       "sre-engineer",
@@ -253,6 +264,8 @@
     ]
   },
   "automation": {
+    "level": "L2",
+    "levels": ["L0", "L1", "L2", "L3", "L4"],
     "defaultLevel": 2,
     "emergencyFallbackLevel": 1,
     "gateTimeoutMs": 300000,
@@ -288,6 +301,27 @@
         "completenessThreshold": 6,
         "_completenessDescription": "8개 표준 섹션 중 N개 이상 매칭 시 'full'로 분류"
       }
+    }
+  },
+  "advisor": {
+    "enabled": true,
+    "executor": { "model": "claude-sonnet-4-6" },
+    "advisor": { "model": "claude-opus-4-6" },
+    "max_uses_per_request": 3,
+    "caching": { "type": "ephemeral", "ttl": "5m" },
+    "max_calls_per_session": 15,
+    "monthly_budget_usd": 200,
+    "beta_header": "advisor-tool-2026-03-01",
+    "spend_file": ".vais/advisor-spend.json",
+    "pricing": {
+      "input": 15,
+      "output": 75,
+      "cache_read": 1.5,
+      "cache_write": 18.75
+    },
+    "fallback": {
+      "strategy": "degrade_gracefully",
+      "notify_once_per_session": true
     }
   },
   "conventions": {
