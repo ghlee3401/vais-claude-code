@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.51.0] - 2026-04-16
+
+### Added
+
+- `/vais commit` 한국어 한 줄 커밋 메시지 지원 (Conventional Commits prefix 유지)
+- 커밋 메시지 특수기호 sanitize 자동 적용 (CI/CD 호환성)
+- 버전 반영 시 프로젝트 전체 grep 탐색 (하드코딩 5개 파일 → 전체 탐색)
+- CHANGELOG.md 자동 생성 및 type별 섹션 분류
+
+### Changed
+
+- 커밋 메시지에서 multi-line body 제거 (상세 내용은 CHANGELOG에만 기록)
+
 ## [0.50.1] - 2026-04-16
 
 ### Fixed
