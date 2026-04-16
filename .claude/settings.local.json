@@ -87,7 +87,18 @@
       "Bash(echo \"vais.config.json: $\\(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('vais.config.json','utf8'\\)\\).version\\)\"\\)\")",
       "Bash(wc *)",
       "Bash(mkdir -p /tmp/v050-extract)",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Read(//opt/homebrew/**)",
+      "Bash(command -v nodejs)",
+      "Read(//Users/ghlee/.nvm/versions/**)",
+      "Read(//Users/ghlee/**)",
+      "Read(//Applications/**)",
+      "Bash(env)",
+      "Bash(python3 *)",
+      "Bash(npm --version)",
+      "Bash(export PATH=\"/opt/homebrew/bin:$PATH\")",
+      "Bash(find *)",
+      "Bash(/opt/homebrew/bin/node *)"
     ]
   },
   "enabledPlugins": {}
