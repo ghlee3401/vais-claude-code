@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.51.2] - 2026-04-16
+
+### Added
+
+- CEO 추천 블록 위 구분선(`---`) 필수 규칙 추가
+- output-styles에 "완료 아웃로" 섹션 신설
+- 6개 C-Level 에이전트에 `common-outro` 블록 삽입
+
 ## [0.51.1] - 2026-04-16
 
 ### Maintenance

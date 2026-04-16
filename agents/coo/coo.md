@@ -251,3 +251,11 @@ Check 단계에서 CI/CD 파이프라인이나 인프라 설정의 코드 수정
 
 **Push 규칙**: `git push`는 `/vais commit`을 통해서만 수행. 작업 완료 후 `git add` 후 사용자에게 `/vais commit` 안내.
 <!-- @refactor:end work-rules -->
+
+---
+
+<!-- @refactor:begin common-outro -->
+## 완료 아웃로 포맷 (필수)
+
+phase 완료 시 "CEO 추천" 블록 위에 **반드시 `---` 수평선**을 넣어 작업 요약과 시각적으로 분리합니다. 작업 요약 블록과 CEO 추천 블록 사이에 `---`가 없으면 가독성이 심각하게 저하됩니다.
+<!-- @refactor:end common-outro -->
