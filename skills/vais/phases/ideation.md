@@ -33,8 +33,8 @@ entrypoints:
 ## 진입 처리
 
 1. **이벤트 발행**: `ideation_started` 기록 `{timestamp, feature: topic, initiator: 'user', role, topic}`
-2. **기존 ideation 확인**: `ls docs/00-ideation/` → 동일 topic 파일 존재하면 "기존 ideation이 있습니다. 참고할까요?" 안내
-3. **기존 plan 확인**: `docs/01-plan/` 에 동일 topic plan 파일 존재하면 "이미 plan이 있습니다. 재기획이시면 진행, 참고만 하실거면 plan을 열어보시는 편이 나을 수 있어요" 안내
+2. **기존 ideation 확인**: `ls docs/{topic}/ideation/main.md` → 파일 존재하면 "기존 ideation이 있습니다. 참고할까요?" 안내
+3. **기존 plan 확인**: `docs/{topic}/plan/main.md` 존재하면 "이미 plan이 있습니다. 재기획이시면 진행, 참고만 하실거면 plan을 열어보시는 편이 나을 수 있어요" 안내
 4. **ideation-guard 활성화**: 산출물 강제 금지, 사용자 주도 대화
 
 ## 대화 루프
@@ -60,7 +60,7 @@ entrypoints:
    - `open_questions` (미해결)
    - `next_step` (추천 C-Level + phase)
 2. `templates/ideation.template.md` 구조로 채움
-3. `docs/00-ideation/{role}_{topic}.md` 저장
+3. `docs/{topic}/ideation/main.md` 저장
 4. `ideation_ended` 이벤트 기록
 5. 후속 제안:
    - CEO 라우팅: AskUserQuestion으로 다음 C-Level 추천

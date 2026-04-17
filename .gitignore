@@ -1,6 +1,8 @@
 node_modules/
 .vais/
 .bkit/
+.claude/settings.local.json
+.claude/settings.json
 *.log
 .DS_Store
 references/

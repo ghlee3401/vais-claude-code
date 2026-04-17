@@ -89,24 +89,34 @@ describe('resolveDocPath / findDoc', () => {
     assert.equal(paths.findDoc('plan', '없는피처'), '');
   });
 
-  it('findDoc은 파일이 있으면 경로 반환', () => {
+  it('findDoc은 파일이 있으면 경로 반환 (피처 중심 구조)', () => {
     const paths = loadPaths();
-    const docDir = path.join(tmpDir, 'docs', '01-plan');
+    const docDir = path.join(tmpDir, 'docs', '테스트', 'plan');
     fs.mkdirSync(docDir, { recursive: true });
-    fs.writeFileSync(path.join(docDir, 'cto_테스트.plan.md'), '# test');
+    fs.writeFileSync(path.join(docDir, 'main.md'), '# test');
 
     const found = paths.findDoc('plan', '테스트');
-    assert.ok(found.includes('cto_테스트.plan.md'));
+    assert.ok(found.includes(path.join('테스트', 'plan', 'main.md')));
   });
 
-  it('findDoc에 role 전달 시 해당 role 문서를 찾는다', () => {
+  it('findDoc은 role과 무관하게 피처 중심 경로를 찾는다', () => {
     const paths = loadPaths();
-    const docDir = path.join(tmpDir, 'docs', '03-do');
+    const docDir = path.join(tmpDir, 'docs', 'login', 'do');
     fs.mkdirSync(docDir, { recursive: true });
-    fs.writeFileSync(path.join(docDir, 'cmo_login.do.md'), '# marketing');
+    fs.writeFileSync(path.join(docDir, 'main.md'), '# login do');
 
-    const found = paths.findDoc('do', 'login', 'cmo');
-    assert.ok(found.includes('cmo_login.do.md'));
+    const found = paths.findDoc('do', 'login', 'cpo');
+    assert.ok(found.includes(path.join('login', 'do', 'main.md')));
+  });
+
+  it('레거시 경로(docs/01-plan/...)는 더 이상 findDoc에서 매치되지 않는다 (회귀 가드)', () => {
+    const paths = loadPaths();
+    const legacyDir = path.join(tmpDir, 'docs', '01-plan');
+    fs.mkdirSync(legacyDir, { recursive: true });
+    fs.writeFileSync(path.join(legacyDir, 'cto_old-feature.plan.md'), '# legacy');
+
+    const found = paths.findDoc('plan', 'old-feature');
+    assert.strictEqual(found, '', '새 구조 경로에 파일이 없으면 빈 문자열 반환해야 함');
   });
 });
 

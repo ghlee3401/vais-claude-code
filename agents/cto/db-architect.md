@@ -44,7 +44,7 @@ includes:
 
 ## 입력 참조
 
-1. **기획서** (`docs/01-plan/cto_{feature}.plan.md`) — 데이터 모델
+1. **기획서** (`docs/{feature}/plan/main.md`) — 데이터 모델
 2. **infra-architect 산출물** — ERD, 기본 스키마, ORM 설정
 3. **구현 코드** — 쿼리 패턴, ORM 사용 현황
 

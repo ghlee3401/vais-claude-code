@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.52.1] - 2026-04-17
+
+### Fixed
+
+- docs 구조 리디자인(v0.52.0) 잔여 정합성 완결: 30개 파일 레거시 경로 참조 전수 제거
+- `tests/paths.test.js` baseline 2 fail 해소 (옛 구조 테스트를 피처 중심으로 리라이트)
+- `lib/quality/template-validator.js` phase 추출 로직을 sep 경계 기반으로 수정 (새 구조 `docs/{feature}/{phase}/main.md` 지원)
+- `tests/scenario-verification.test.js` S-0 테스트를 피처 중심 구조에 맞게 재정의
+
+### Removed
+
+- `lib/paths.js` `ideationPath()` 함수 및 export 제거 (외부 호출자 0개 확인, 피처 중심 구조로 대체)
+
+### Changed
+
+- 10개 lib/agents/skills/scripts 파일의 `@see` 주석을 `docs/_legacy/` prefix로 갱신 (참조 유효성 유지)
+- 6개 에이전트 문서의 sub-doc 규칙 구체화 (infra/interface-contract/review 등)
+- README.md Document Structure 블록, CLAUDE.md:29 구조 주석 피처 중심으로 rewrite
+
+### Added
+
+- `tests/paths.test.js` 레거시 경로 사용 금지 회귀 가드 테스트
+- `docs/docs-structure-redesign/` dogfooding 산출물 5종 (plan/design/design-sub/do/qa/report)
+
 ## [0.52.0] - 2026-04-16
 
 ### Changed

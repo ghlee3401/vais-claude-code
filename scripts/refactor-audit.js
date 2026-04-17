@@ -2,8 +2,8 @@
 /**
  * refactor-audit.js — C-Level agent refactor keyword preservation audit
  *
- * @see docs/01-plan/cto_refactor-clevel-agents.plan.md §4.3
- * @see docs/02-design/cto_refactor-clevel-agents.design.md §2
+ * @see docs/_legacy/01-plan/cto_refactor-clevel-agents.plan.md §4.3
+ * @see docs/_legacy/02-design/cto_refactor-clevel-agents.design.md §2
  *
  * Verifies that refactoring agents/{c}/{c}.md files does not lose any
  * mandatory rule keywords, CP IDs, section headers, or phrases.
@@ -25,7 +25,7 @@ const { execFileSync } = require('child_process');
 const REPO_ROOT = path.resolve(__dirname, '..');
 const DEFAULT_BASELINE = path.join(
   REPO_ROOT,
-  'docs/03-do/ceo_refactor-clevel-agents.baseline.json'
+  'docs/_legacy/03-do/ceo_refactor-clevel-agents.baseline.json'
 );
 
 const TARGET_FILES = [

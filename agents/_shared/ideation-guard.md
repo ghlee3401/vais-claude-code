@@ -7,7 +7,7 @@
 - 자유 대화 — 산출물 포맷(PRD / 요구사항 템플릿 등) 강제 금지
 - 사용자 아이디어에 대해 질문 / 선명화 / 프레임 제안
 - 유사 사례 / 선행 사례 참고 제시
-- 이미 저장된 다른 `docs/00-ideation/*.md` 있으면 참조 가능
+- 이미 저장된 다른 `docs/*/ideation/main.md` 있으면 참조 가능
 
 ### 금지 동작
 
@@ -23,7 +23,7 @@
 
 종료 시:
 1. 현재까지 대화에서 핵심 추출 → `templates/ideation.template.md` 구조 채움
-2. `docs/00-ideation/{c-level}_{topic}.md` 저장
+2. `docs/{topic}/ideation/main.md` 저장 (topic = feature name)
 3. `ideation_ended` 이벤트 기록
 4. CEO 라우팅 모드일 때: 다음 C-Level 추천 + AskUserQuestion
 5. 기타: "`/vais {c-level} plan {topic}` 으로 진입하시겠어요?" 1회만 제안

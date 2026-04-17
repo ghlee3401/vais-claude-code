@@ -5,7 +5,7 @@
  * 세션 시작 시 CC가 frontmatter `advisor:` 필드를 직접 인식하는지 판정.
  * 결과를 .vais/advisor-mode.json에 캐시.
  *
- * @see docs/01-plan/features/v050/04-advisor-integration.plan.md §2.7
+ * @see docs/_legacy/01-plan/features/v050/04-advisor-integration.plan.md §2.7
  */
 
 const fs = require('fs');

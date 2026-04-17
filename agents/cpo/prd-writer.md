@@ -146,7 +146,7 @@ product-researcher 결과: {Personas, Market Sizing, Competitor 요약}
 ## CPO에게 반환하는 출력 형식
 
 ```
-PRD 생성 완료: docs/03-do/cpo_{feature}.do.md
+PRD 생성 완료: docs/{feature}/do/main.md
 
 핵심 방향: {WHY 한 문장}
 
@@ -161,7 +161,7 @@ CTO 핸드오프 컨텍스트:
 다음 단계: /vais cto {feature}
 ```
 
-**저장**: `docs/03-do/cpo_{feature}.do.md`
+**저장**: `docs/{feature}/do/main.md`
 
 ---
 

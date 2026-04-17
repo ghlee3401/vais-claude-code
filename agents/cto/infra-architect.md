@@ -35,9 +35,9 @@ includes:
 
 ## 입력 참조
 
-1. **기획서** (`docs/01-plan/cto_{feature}.plan.md`) — 데이터 모델, 기술 스택, 정책 정의
+1. **기획서** (`docs/{feature}/plan/main.md`) — 데이터 모델, 기술 스택, 정책 정의
 2. **피처 레지스트리** (`.vais/features/{feature}.json`) — 기능 목록, DB 필요 여부, 기술 스택
-3. **설계 문서** (`docs/02-design/cto_{feature}.design.md`) — 화면-데이터 매핑, 데이터 흐름
+3. **설계 문서** (`docs/{feature}/design/main.md`) — 화면-데이터 매핑, 데이터 흐름
 
 ## DB 종류 선택
 
@@ -74,11 +74,11 @@ includes:
 9. **ORM 모델/스키마 생성** — 선택한 ORM에 맞는 모델 파일
 10. **환경 변수 템플릿** — `.env.example` 생성
 11. **프로젝트 설정 확인** — package.json, tsconfig 등 필요한 설정 추가
-12. `docs/02-design/infra-architect_{feature}.design.md`에 인프라 문서 저장
+12. `docs/{feature}/design/infra.md`에 인프라 문서 저장 (design 폴더의 sub-doc)
 
 ## 산출물
 
-- `docs/02-design/infra-architect_{feature}.design.md` — 인프라 설계 문서 (ERD, 스키마, 환경 설정)
+- `docs/{feature}/design/infra.md` — 인프라 설계 문서 (ERD, 스키마, 환경 설정). design/main.md와 동급 sub-doc.
 - 마이그레이션 파일 (실제 코드)
 - ORM 모델/스키마 파일 (실제 코드)
 - `.env.example` (환경 변수 템플릿)
@@ -87,7 +87,7 @@ includes:
 
 산출물 상단에 참조한 문서 목록을 기록합니다:
 ```markdown
-> 참조 문서: `docs/01-plan/cto_{feature}.plan.md`, `docs/02-design/cto_{feature}.design.md`
+> 참조 문서: `docs/{feature}/plan/main.md`, `docs/{feature}/design/main.md`
 ```
 
 ## 외부 참고 문헌 주석 (`@see`)

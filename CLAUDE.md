@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.52.0)
+> Virtual AI C-Suite for software development (v0.52.1)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -26,7 +26,7 @@ vais-claude-code/
 ├── templates/       # PDCA 문서 템플릿 (plan, design, do, qa, report)
 ├── mcp/             # MCP 서버 설정 (현재 비활성, v0.48+ 활용 예정)
 ├── output-styles/   # 출력 스타일 정의 (session-start hook이 로드)
-├── docs/            # 피처별 산출물 (01-plan ~ 05-report)
+├── docs/            # 피처별 산출물 (docs/{feature}/{phase}/main.md, v0.52+ 피처 중심 구조)
 ├── references/      # 흡수 대기 inbox (gitignored, _inbox/만 유지 — 내부 공유 문서 저장 금지)
 ├── basic/           # 하네스 엔지니어링 최소 참조 구조 (패턴 참고용, 프로덕션 코드 아님)
 ├── vendor/          # 외부 의존 (ui-ux-pro-max)

@@ -59,11 +59,11 @@ includes:
 - JSX/TSX 컴포넌트 파일 (React, Next.js 등)
 - CSS/SCSS/Tailwind 스타일 파일
 - HTML 파일
-- 디자인 설계 문서(`docs/02-design/`)와 실제 구현의 괴리 분석
+- 디자인 설계 문서(`docs/{feature}/design/`)와 실제 구현의 괴리 분석
 
 ### 산출물
 
-리뷰 결과를 `docs/02-design/cto_{feature}-review.md`에 저장합니다.
+리뷰 결과를 `docs/{feature}/design/review.md`에 저장합니다 (design sub-doc).
 
 ## 프론트엔드 미학 가이드라인 (Frontend Aesthetics)
 
@@ -105,9 +105,9 @@ includes:
 
 ```markdown
 > 참조 문서:
-> - docs/01-plan/cto_{feature}.plan.md: 기능 요구사항, 코딩 규칙
+> - docs/{feature}/plan/main.md: 기능 요구사항, 코딩 규칙
 > - design-system/{feature}/MASTER.md: 디자인 토큰
-> - docs/02-design/cto_{feature}.md: IA, 와이어프레임, 화면별 상세 정의
+> - docs/{feature}/design/main.md: IA, 와이어프레임, 화면별 상세 정의
 ```
 
 qa-engineer 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.

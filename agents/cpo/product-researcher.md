@@ -150,7 +150,7 @@ product-strategist 결과: {타깃 세그먼트, Value Proposition}
 3. {기회}
 ```
 
-**저장**: `docs/03-do/cpo_{feature}-research.do.md`
+**저장**: `docs/{feature}/do/research.md` (do sub-doc)
 
 ---
 
