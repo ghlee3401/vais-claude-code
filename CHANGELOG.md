@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.52.2] - 2026-04-17
+
+### Added
+
+- `legacy-path-guard`: pre-commit hook이 `docs/NN-` 레거시 경로 패턴 커밋을 자동 차단 (기존 `.hooks/pre-commit` 확장)
+- CLAUDE.md Rule #13: "레거시 경로 금지" — LLM·사람 공통 가이드라인 명시
+- README "Developer Setup" 섹션: `npm run prepare-hooks` 활성화 방법 + 비활성화 + `--no-verify` 금지 안내
+- `docs/legacy-path-guard/` dogfooding 산출물 6종 (plan/design/do/qa/report + qa/cso-review sub-doc)
+
+### Changed
+
+- `.hooks/pre-commit`: legacy-path-guard 섹션을 ESLint/tests 앞에 추가하여 fail-fast 제공
+
+### Fixed
+
+- CSO 리뷰에서 발견된 self-blocking deadlock 해결: hook 예외 목록에 `CLAUDE.md` 추가하여 Rule #13 설명 문구가 차기 커밋에서 자기 자신을 차단하지 않도록 함
+
 ## [0.52.1] - 2026-04-17
 
 ### Fixed

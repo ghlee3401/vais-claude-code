@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.52.1-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-0.52.2-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -334,8 +334,32 @@ vais-claude-code/
 ## Testing
 
 ```bash
-npm test    # 174 pass, 0 fail
+npm test    # 175 pass, 0 fail (v0.52.2)
 ```
+
+---
+
+## Developer Setup
+
+Git hooks 활성화 (1회 실행):
+
+```bash
+npm run prepare-hooks
+```
+
+활성화되는 검사:
+
+- **legacy-path-guard** — `docs/NN-` 레거시 경로 패턴 커밋 차단 (예외: `docs/_legacy/`, `CHANGELOG.md`, 회귀 가드)
+- ESLint (`scripts/`, `lib/`, `hooks/` — max-warnings 0)
+- Unit tests (`node --test tests/*.test.js`)
+
+비활성화:
+
+```bash
+git config --unset core.hooksPath
+```
+
+> `git commit --no-verify`로 hook을 우회하지 마세요. 규칙 위반은 LLM 재발 위험 + 수십 파일 재치환을 유발합니다. 자세한 정책은 `docs/legacy-path-guard/` 참조.
 
 ---
 
