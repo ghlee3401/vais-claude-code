@@ -43,14 +43,29 @@ test('judgePhaseCompletion: ideation always pass (gate skipped)', () => {
   assert.ok(r.reason.includes('ideation'));
 });
 
-test('checkGate: plan pass', () => {
-  const r = checkGate('plan', { metrics: { designCompleteness: 60 } });
+test('checkGate: plan pass (config defaults applied: designCompleteness>=80)', () => {
+  // v0.56 sub-plan 07: config.gates.defaults.designCompleteness=80 이 plan phase 에도 적용
+  const r = checkGate('plan', { metrics: { designCompleteness: 85 } });
   assert.strictEqual(r.verdict, 'pass');
+});
+
+test('checkGate: plan retry when under config default (60 < 80)', () => {
+  const r = checkGate('plan', { metrics: { designCompleteness: 60 } });
+  assert.strictEqual(r.verdict, 'retry');
 });
 
 test('checkGate: qa fail on critical', () => {
   const r = checkGate('qa', { metrics: { matchRate: 95, codeQualityScore: 80, criticalIssueCount: 2 } });
   assert.strictEqual(r.verdict, 'fail');
+});
+
+test('checkGate: cso roleOverride 적용 (matchRate 95 요구)', () => {
+  // config roleOverrides.cso.matchRate = 95 → qa.pass 의 matchRate condition 95 로 덮어씀
+  const r1 = checkGate('qa', { role: 'cso', metrics: { matchRate: 92, codeQualityScore: 85, criticalIssueCount: 0 } });
+  assert.notStrictEqual(r1.verdict, 'pass', 'cso 는 matchRate 95 필요, 92 는 미충족');
+
+  const r2 = checkGate('qa', { role: 'cso', metrics: { matchRate: 95, codeQualityScore: 85, criticalIssueCount: 0 } });
+  assert.strictEqual(r2.verdict, 'pass');
 });
 
 test('resolveAction: L2 pass → auto_proceed', () => {
