@@ -67,7 +67,7 @@ test('S-0: ideation 이벤트 스키마 등록', () => {
   assert.ok(schema.EVENT_SCHEMAS.ideation_ended.required.includes('output_path'));
 });
 
-test('S-0: ideation 템플릿 존재 (피처 중심 구조에선 산출물이 docs/{feature}/ideation/main.md에 동적 생성)', () => {
+test('S-0: ideation 템플릿 존재 (피처 중심 구조에선 산출물이 docs/{feature}/00-ideation/main.md에 동적 생성)', () => {
   assert.ok(fileExists('templates/ideation.template.md'), 'ideation 템플릿이 있어야 S-0 시나리오 실행 가능');
   assert.ok(fileExists('docs'), 'docs 루트 디렉토리는 존재해야 함');
 });

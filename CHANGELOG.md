@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.54.0] - 2026-04-17
+
+### Changed
+
+- docs phase 폴더에 NN- 숫자 접두사 도입: `plan/` → `01-plan/`, `design/` → `02-design/`, `do/` → `03-do/`, `qa/` → `04-qa/`, `report/` → `05-report/` (+`00-ideation/`). 파일 탐색기 알파벳 정렬 == 실행 순서 일치
+- 3 피처 × 5 phase = 15 폴더 `git mv` rename
+- agents/templates/docs/tests 48개 파일 경로 참조 일괄 업데이트 (255 → 0)
+- CLAUDE.md Rule #3 매핑 테이블 추가, Rule #13 각주로 sub-folder 예외 명시
+- `vais.config.json`에 `workflow.docPaths` 매핑 테이블 single-source-of-truth 추가
+- `tests/paths.test.js` assertion 4개를 새 경로 반영해 업데이트
+
+### Note
+
+- 커맨드 UX는 불변: `/vais cto plan login` 등 phase 이름(`plan`)을 그대로 사용. 내부에서 `01-plan` 폴더로 매핑
+- `docs/_legacy/`는 변경 없음 (과거 top-level `docs/NN-` 스냅샷 그대로 보존)
+- `scripts/check-legacy-paths.sh` regex(`docs/[0-9][0-9]-`)는 top-level만 검사하므로 수정 불필요 — feature 하위 NN- 접두사는 차단 대상 아님
+
 ## [0.53.0] - 2026-04-17
 
 ### Added

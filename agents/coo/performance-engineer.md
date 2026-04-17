@@ -123,7 +123,7 @@ BENCHMARK REPORT
 
 ## 산출물
 
-- 벤치마크 리포트는 COO의 `docs/{feature}/qa/main.md`에 포함 (또는 `docs/{feature}/qa/performance.md` sub-doc)
+- 벤치마크 리포트는 COO의 `docs/{feature}/04-qa/main.md`에 포함 (또는 `docs/{feature}/04-qa/performance.md` sub-doc)
 - WARNING 이상 시 COO에게 보고 -> 필요 시 CTO 최적화 요청
 
 ---

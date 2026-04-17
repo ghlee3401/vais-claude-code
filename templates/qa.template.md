@@ -1,6 +1,6 @@
 # {feature} — QA
 
-> 참조 문서: `docs/{feature}/plan/main.md`, `docs/{feature}/design/main.md`
+> 참조 문서: `docs/{feature}/01-plan/main.md`, `docs/{feature}/02-design/main.md`
 
 ## 0. 빌드/실행 검증
 

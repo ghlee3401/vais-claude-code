@@ -34,10 +34,10 @@ includes:
 
 ## 구현 원칙
 
-- **기획서를 반드시 먼저 읽습니다** (`docs/{feature}/plan/main.md`) — 코딩 규칙 + UI 컴포넌트 라이브러리 확인
-- **설계 문서를 반드시 먼저 읽습니다** (`docs/{feature}/design/main.md`) — IA, 와이어프레임, 컴포넌트 명세, 상태 관리
-- **Interface Contract 참조** (`docs/{feature}/design/interface-contract.md`) — API 엔드포인트, 요청/응답 스키마, 에러 코드 확인 (design sub-doc)
-- **Infra 문서 참조** (`docs/{feature}/design/infra.md`) — DB 스키마, 환경 변수 확인 (design sub-doc)
+- **기획서를 반드시 먼저 읽습니다** (`docs/{feature}/01-plan/main.md`) — 코딩 규칙 + UI 컴포넌트 라이브러리 확인
+- **설계 문서를 반드시 먼저 읽습니다** (`docs/{feature}/02-design/main.md`) — IA, 와이어프레임, 컴포넌트 명세, 상태 관리
+- **Interface Contract 참조** (`docs/{feature}/02-design/interface-contract.md`) — API 엔드포인트, 요청/응답 스키마, 에러 코드 확인 (design sub-doc)
+- **Infra 문서 참조** (`docs/{feature}/02-design/infra.md`) — DB 스키마, 환경 변수 확인 (design sub-doc)
 - **선택된 UI 컴포넌트 라이브러리를 적극 활용합니다** — 직접 구현보다 라이브러리 컴포넌트 우선
 - 설계 문서의 **컴포넌트 어노테이션**(`data-component`, `data-props`)을 기반으로 컴포넌트를 매핑합니다
 - 재사용 가능한 컴포넌트로 분리합니다

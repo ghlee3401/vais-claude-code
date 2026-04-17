@@ -75,13 +75,13 @@ describe('resolveDocPath / findDoc', () => {
   it('피처명으로 문서 경로를 생성한다 (피처 중심 구조)', () => {
     const paths = loadPaths();
     const docPath = paths.resolveDocPath('plan', 'login-feature');
-    assert.ok(docPath.includes('login-feature/plan/main.md'));
+    assert.ok(docPath.includes('login-feature/01-plan/main.md'));
   });
 
   it('role을 전달해도 피처 중심 경로를 반환한다', () => {
     const paths = loadPaths();
     const docPath = paths.resolveDocPath('do', 'login', 'cso');
-    assert.ok(docPath.includes('login/do/main.md'));
+    assert.ok(docPath.includes('login/03-do/main.md'));
   });
 
   it('findDoc은 파일이 없으면 빈 문자열 반환', () => {
@@ -91,22 +91,22 @@ describe('resolveDocPath / findDoc', () => {
 
   it('findDoc은 파일이 있으면 경로 반환 (피처 중심 구조)', () => {
     const paths = loadPaths();
-    const docDir = path.join(tmpDir, 'docs', '테스트', 'plan');
+    const docDir = path.join(tmpDir, 'docs', '테스트', '01-plan');
     fs.mkdirSync(docDir, { recursive: true });
     fs.writeFileSync(path.join(docDir, 'main.md'), '# test');
 
     const found = paths.findDoc('plan', '테스트');
-    assert.ok(found.includes(path.join('테스트', 'plan', 'main.md')));
+    assert.ok(found.includes(path.join('테스트', '01-plan', 'main.md')));
   });
 
   it('findDoc은 role과 무관하게 피처 중심 경로를 찾는다', () => {
     const paths = loadPaths();
-    const docDir = path.join(tmpDir, 'docs', 'login', 'do');
+    const docDir = path.join(tmpDir, 'docs', 'login', '03-do');
     fs.mkdirSync(docDir, { recursive: true });
     fs.writeFileSync(path.join(docDir, 'main.md'), '# login do');
 
     const found = paths.findDoc('do', 'login', 'cpo');
-    assert.ok(found.includes(path.join('login', 'do', 'main.md')));
+    assert.ok(found.includes(path.join('login', '03-do', 'main.md')));
   });
 
   it('레거시 경로(docs/01-plan/...)는 더 이상 findDoc에서 매치되지 않는다 (회귀 가드)', () => {

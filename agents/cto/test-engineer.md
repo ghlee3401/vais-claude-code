@@ -44,8 +44,8 @@ includes:
 
 ## 입력 참조
 
-1. **기획서** (`docs/{feature}/plan/main.md`) — 테스트 시나리오, 요구사항
-2. **설계서** (`docs/{feature}/design/main.md`) — API Contract, 컴포넌트 명세
+1. **기획서** (`docs/{feature}/01-plan/main.md`) — 테스트 시나리오, 요구사항
+2. **설계서** (`docs/{feature}/02-design/main.md`) — API Contract, 컴포넌트 명세
 3. **구현 코드** — 테스트 대상 파일 (frontend-engineer/backend-engineer 산출물)
 
 ## 실행 단계

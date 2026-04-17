@@ -2,7 +2,7 @@
   <a href="https://github.com/ghlee3401/vais-claude-code/actions/workflows/ci.yml">
     <img src="https://github.com/ghlee3401/vais-claude-code/actions/workflows/ci.yml/badge.svg" alt="CI" />
   </a>
-  <img src="https://img.shields.io/badge/version-0.53.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-0.54.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -337,7 +337,7 @@ vais-claude-code/
 ## Testing
 
 ```bash
-npm test    # 175 pass, 0 fail (v0.53.0)
+npm test    # 175 pass, 0 fail (v0.54.0)
 ```
 
 ---
@@ -379,7 +379,7 @@ PR merge를 CI 통과 후에만 허용하려면 저장소 owner가 branch protec
 7. (선택) ✅ **Require pull request reviews before merging**
 
 > 자동화 범위 밖 — GitHub REST API로 설정 가능하나 owner PAT 필요. 수동 설정 유지.
-> 관련 설계: `docs/ci-bootstrap/design/main.md §5`
+> 관련 설계: `docs/ci-bootstrap/02-design/main.md §5`
 
 ---
 

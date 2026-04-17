@@ -141,7 +141,7 @@ product-discoverer 결과: {핵심 기회 영역}
 {핵심 전략 포지션 한 줄}
 ```
 
-**저장**: `docs/{feature}/do/strategy.md` (do sub-doc)
+**저장**: `docs/{feature}/03-do/strategy.md` (do sub-doc)
 
 ---
 

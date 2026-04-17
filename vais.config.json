@@ -1,5 +1,5 @@
 {
-  "version": "0.53.0",
+  "version": "0.54.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -205,12 +205,12 @@
       "report":   { "optional": false, "description": "최종 리포트" }
     },
     "docPaths": {
-      "ideation": "docs/{feature}/ideation/main.md",
-      "plan": "docs/{feature}/plan/main.md",
-      "design": "docs/{feature}/design/main.md",
-      "do": "docs/{feature}/do/main.md",
-      "qa": "docs/{feature}/qa/main.md",
-      "report": "docs/{feature}/report/main.md"
+      "ideation": "docs/{feature}/00-ideation/main.md",
+      "plan": "docs/{feature}/01-plan/main.md",
+      "design": "docs/{feature}/02-design/main.md",
+      "do": "docs/{feature}/03-do/main.md",
+      "qa": "docs/{feature}/04-qa/main.md",
+      "report": "docs/{feature}/05-report/main.md"
     }
   },
   "gapThreshold": 0.90,

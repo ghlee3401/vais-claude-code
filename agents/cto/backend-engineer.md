@@ -34,9 +34,9 @@ includes:
 
 ## 구현 원칙
 
-- **기획서의 코딩 규칙을 반드시 먼저 읽습니다** (`docs/{feature}/plan/main.md`)
-- **Interface Contract 참조** (`docs/{feature}/design/interface-contract.md`) — API 엔드포인트별 구현 스펙 (design sub-doc)
-- **Infra 문서를 읽습니다** (`docs/{feature}/design/infra.md`) — DB 스키마, 마이그레이션, 환경 변수 확인 (design sub-doc)
+- **기획서의 코딩 규칙을 반드시 먼저 읽습니다** (`docs/{feature}/01-plan/main.md`)
+- **Interface Contract 참조** (`docs/{feature}/02-design/interface-contract.md`) — API 엔드포인트별 구현 스펙 (design sub-doc)
+- **Infra 문서를 읽습니다** (`docs/{feature}/02-design/infra.md`) — DB 스키마, 마이그레이션, 환경 변수 확인 (design sub-doc)
 - API 문서를 코드와 함께 작성합니다
 - 환경 변수로 설정을 관리합니다
 - 미들웨어 패턴을 활용합니다
