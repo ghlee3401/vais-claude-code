@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.54.1] - 2026-04-17
+
+### Changed
+
+- `agents/_shared/ideation-guard.md`: ideation 허용 동작에 **Scope 판단 (첫 turn 필수)** 명시. 30분 내 직접 편집 가능한 요청은 AI가 먼저 "이건 `/vais` 규모 아닙니다. 바로 실행?" 제안
+- 종료 트리거를 두 분기로 확장:
+  - **A. 요약 + plan** (기존: "plan 가자" / "정리해줘" / "요약") → `docs/{topic}/00-ideation/main.md` 저장
+  - **B. 직접 실행** (신규: "그냥 해줘" / "바로 실행" / "skip vais" / "끝") → 문서 없이 종료, PDCA rail 이탈
+- `skills/vais/phases/ideation.md`: 진입 처리에 scope probe 단계 추가, 종료 루틴을 A/B로 분리, 경로를 NN- 규약(`00-ideation`)으로 동기화
+- `README.md` Ideation 섹션: scope probe + 두 종료 분기 반영
+
+### Removed
+
+- `docs/_legacy/` 전체 (과거 top-level NN- 스냅샷, 보존 가치 소진)
+- `docs/ci-bootstrap/`, `docs/legacy-path-guard/`, `docs/docs-structure-redesign/` 문서 — 피처 산출물 자체는 git 이력으로 보존. 과한 PDCA 문서가 검색/참조 노이즈로 작용
+- `scripts/check-legacy-paths.sh` EXCEPTIONS에서 위 3개 피처 glob 제거 (더 이상 존재 않음)
+
+### Fixed
+
+- ideation 저장 경로가 오늘 앞선 NN- 마이그레이션(v0.54.0)에서 누락되어 있던 버그 수정
+
+### Note
+
+- 본 릴리즈는 이번 세션의 자기 회고에서 도출. ci-bootstrap + docs-phase-numbering 과정에서 드러난 "AI가 사소한 변경에도 PDCA 풀 사이클을 도는" 패턴 차단 목적
+
 ## [0.54.0] - 2026-04-17
 
 ### Changed

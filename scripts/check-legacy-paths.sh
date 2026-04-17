@@ -25,9 +25,6 @@ EXCEPTIONS=(
   "tests/paths.test.js"
   "README.md"
   "CLAUDE.md"
-  "docs/legacy-path-guard/*"
-  "docs/docs-structure-redesign/*"
-  "docs/ci-bootstrap/*"
   ".hooks/pre-commit"
   "scripts/check-legacy-paths.sh"
 )
