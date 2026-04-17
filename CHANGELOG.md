@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.56.0] - 2026-04-17 — Activation
+
+v0.55 Simplification 으로 정리한 토대 위에 파일만 있고 런타임에 연결되지 않았던 3대 기능(advisor/gate/tools)을 실제 호출 경로로 묶어 동작시킨 릴리즈. sub-plan 06/07/08 전부 포함.
+
+### Added — Advisor 런타임 활성화 (sub-plan 06)
+
+- `scripts/advisor-call.js` (140 LOC): agent markdown 에서 Bash 로 호출하는 fallback CLI 진입점. 4 모드 지원 (disabled/native/wrapper/missing args), stdout=advice / stderr=status.
+- `lib/advisor/wrapper.js`: `cost-monitor.checkBudget/recordCall` + `observability.EventLogger` 연결. 각 status (ok/budget_block/unavailable/timeout) 별 이벤트 발행.
+- `hooks/session-start.js`: 시작 시 `scripts/check-cc-advisor-support.js` 를 spawnSync 로 실행 → `.vais/advisor-mode.json` 작성 (graceful, 3s timeout).
+- `agents/_shared/advisor-guard.md`: Fallback 모드 CLI 호출 가이드 섹션 추가.
+- `package.json` → `optionalDependencies`: `@anthropic-ai/sdk ^0.30.0` (미설치 환경에서도 npm install 성공).
+- `tests/advisor-integration.test.js` + `tests/advisor-call-cli.test.js`: wrapper 경로 2 + CLI 4 모드 + 단위 1 = 총 7개 테스트 추가.
+
+### Added — Gate 활성화 (sub-plan 07)
+
+- `vais.config.json > gates`: `defaults` (8 메트릭 threshold) + `roleOverrides` (cso: matchRate=95, codeQualityScore=80). 기존 `gates.cto.plan` 유지.
+- `scripts/auto-judge.js`: 5 개 judge 함수가 gate-manager 표준 메트릭 반환 (judgeCPO→designCompleteness, judgeCTO→matchRate+criticalIssueCount, judgeCSO→criticalIssueCount+owaspScore, judgeCBO→marketingScore, judgeCOO→opsReadiness).
+- `lib/quality/gate-manager.js`: `loadGateConfig()` + `getEffectiveThresholds()` 가 config defaults/roleOverrides 를 GATE_DEFINITIONS 위에 병합.
+- `scripts/agent-stop.js`: 4-step pipeline — (1) doc-validator → (2) cp-guard → (3) auto-judge × gate-manager.checkGate → (4) guidance (verdict icon + score + recommendation).
+- `VAIS_GATE_MODE` env var (off/warn/strict) 지원: strict + fail 시 exit 1.
+- observability: gate event 에 `role/phase/verdict/score/metrics/completion` payload.
+- `tests/gate-manager.test.js` 확장 3 + `tests/gate-activation.test.js` 신규 5 = 총 8개 테스트 추가.
+
+### Added — Tools Cleanup (sub-plan 08)
+
+- `/vais dashboard` 커맨드 신설: `skills/vais/utils/dashboard.md` + `skills/vais/SKILL.md` 유틸리티 목록 등록. 출력 경로 `docs/dashboard.html` → `.vais/dashboard.html` 로 변경.
+- `agents/cbo/seo-analyst.md`: SEO 감사 CLI (`scripts/seo-audit.js`) 호출 가이드 섹션 추가 (A~O 카테고리, 점수 해석, 워크플로우).
+
+### Removed (sub-plan 08)
+
+- `scripts/refactor-audit.js` (458 LOC): v0.48→v0.49 리팩터 일회성 도구. 런타임 참조 0.
+
+### Changed
+
+- `agents/_shared/advisor-guard.md`: 기존 "native 전제" 가이드에 wrapper 모드 fallback 안내 추가.
+
+### Migration notes
+
+- `VAIS_GATE_MODE`: 기본 `warn` (gate 판정을 stderr 로 출력만, 사용자 흐름 차단 없음). 프로덕션 차단을 원하면 `strict`. 완전 비활성 원하면 `off`.
+- `ANTHROPIC_API_KEY` 환경변수 + `@anthropic-ai/sdk` 설치 상태에 따라 `scripts/check-cc-advisor-support.js` 가 자동으로 `wrapper` 또는 `disabled` 모드 판정.
+- Chunk D (guidance 모듈 분리, gate-check.js 갱신, agent markdown 의 "gate 통과 조건" 섹션) 는 v0.57+ 로 이연.
+
+### Test stats
+
+162 pass / 0 fail / 3 skipped (v0.55.0 의 148 pass 대비 +14).
+
 ## [0.55.0] - 2026-04-17 — Simplification
 
 v0.50 full overhaul 이후 "파일은 만들어졌으나 런타임에 연결되지 않은 모듈"을 전수조사하여 제거. 기능 축소가 아닌 **설계와 실제 사용의 정합성 회복**. 남긴 파일(`lib/advisor/`, `lib/registry/`, `lib/quality/gate-manager.js`, `lib/control/cost-monitor.js`)은 v0.56 "Activation" 릴리즈에서 런타임에 연결 예정.
