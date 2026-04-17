@@ -223,6 +223,21 @@ CEO → CTO report  → CP-L2 확인
 
 ---
 
+## Gate 통과 조건 (v0.56+)
+
+CEO 는 **동적 라우팅 주체**이므로 자체 메트릭 gate 없음. 역할:
+
+1. 각 C-Level (CPO/CTO/CSO/CBO/COO) 의 `phase` 완료 후 agent-stop hook 이 gate 판정 → CEO 는 verdict 리포트를 수집.
+2. Final Review 에서 `scripts/auto-judge.js all {feature}` 또는 개별 judge 결과 종합:
+   - 모든 C-Level verdict = `pass` 면 최종 승인.
+   - 하나라도 `fail` 이면 해당 C-Level 재실행 요청.
+   - `retry` 는 사용자 체크포인트 후 결정.
+3. `agent-stop.js` 의 4-step pipeline 은 CEO 호출 시 `phase` 인자가 없으면 gate step 스킵 (CEO 는 단계가 아닌 오케스트레이터).
+
+**threshold**: 없음. 단 C-Level 결과 집계로 의사결정.
+
+---
+
 <!-- @refactor:begin contract -->
 ## Contract
 

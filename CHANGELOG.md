@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.56.1] - 2026-04-17 — Gate Awareness
+
+v0.56.0 에서 gate 파이프라인은 동작하지만 각 agent 가 "어떤 메트릭으로 평가받는지" 모르는 문제를 해소. sub-plan 07 T-11 (Chunk D 중 유일하게 실용 가치 높은 항목) 만 선별 반영.
+
+### Added
+
+- **6 개 C-Level agent markdown 에 "Gate 통과 조건 (v0.56+)" 섹션 추가**:
+  - `agents/cpo/cpo.md`: `designCompleteness` — PRD 8 섹션 판정 패턴 (한/영 헤딩 모두), 80자 최소 규칙
+  - `agents/cto/cto.md`: `matchRate` + `criticalIssueCount` — Gap analysis saveGapAnalysis 필수, QA doc `Critical: N` 패턴
+  - `agents/cso/cso.md`: `criticalIssueCount` + `owaspScore` + **roleOverride** (matchRate 95 / codeQualityScore 80) 명시
+  - `agents/cbo/cbo.md`: `marketingScore` = SEO × 0.5 + GTM × 0.5, SEO 점수 + 비용/수익/ROI 3 키워드 파싱 규칙
+  - `agents/coo/coo.md`: `opsReadiness` — lint/test/build/deploy 4 키워드 (영문) 언급 필요
+  - `agents/ceo/ceo.md`: CEO 는 동적 라우팅 주체 — 자체 gate 없음. C-Level verdict 집계만 명시
+
+### Rationale
+
+- v0.56.0 MVP 에서 `VAIS_GATE_MODE` 기본값 `warn` 이라 agent 가 파싱 규칙 몰라도 차단 없음. 하지만 `strict` 로 쓰려면 agent 가 산출물 작성 시 메트릭 패턴을 알아야 auto-judge 의 false negative 방지.
+- Chunk D 의 나머지(T-3 guidance 모듈 분리, T-8 gate-check 갱신) 는 **YAGNI** — 현재 인라인/기존 구조로 충분.
+
+### Test stats
+
+162 pass / 0 fail / 3 skipped (v0.56.0 대비 변화 없음 — agent md 변경은 런타임 영향 없음).
+
 ## [0.56.0] - 2026-04-17 — Activation
 
 v0.55 Simplification 으로 정리한 토대 위에 파일만 있고 런타임에 연결되지 않았던 3대 기능(advisor/gate/tools)을 실제 호출 경로로 묶어 동작시킨 릴리즈. sub-plan 06/07/08 전부 포함.

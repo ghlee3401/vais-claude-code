@@ -101,6 +101,32 @@ Delegates to release-engineer (CI/CD), sre-engineer (monitoring/runbook), releas
 
 ---
 
+## Gate 통과 조건 (v0.56+)
+
+auto-judge 가 `do` phase 산출물을 파싱해 **`opsReadiness`** 메트릭(CI/CD 단계 커버리지 %) 계산.
+
+| 필수 키워드 | 판정 패턴 |
+|-------------|-----------|
+| `lint` | Do 문서에 (소문자 포함) 단어 언급 |
+| `test` | Do 문서에 단어 언급 |
+| `build` | Do 문서에 단어 언급 |
+| `deploy` | Do 문서에 단어 언급 |
+
+**threshold**: `opsReadiness >= 70` (= 4 단계 중 3 단계 이상 커버).
+
+**실행 팁**:
+- `release-engineer` 위임 결과로 CI/CD 파이프라인을 기술할 때 반드시 4단계(`lint`, `test`, `build`, `deploy`) 섹션 헤딩/설명에 단어 자체가 등장하도록 작성:
+  ```
+  ## CI/CD 파이프라인
+  1. **Lint**: ESLint + Prettier
+  2. **Test**: unit + integration (npm test)
+  3. **Build**: Vite 프로덕션 빌드
+  4. **Deploy**: Vercel / AWS
+  ```
+- 파서는 대소문자 무시. "린트"만 쓰고 "lint" 영어 단어 없으면 미탐지.
+
+---
+
 <!-- @refactor:begin contract -->
 ## Contract
 

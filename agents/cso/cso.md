@@ -127,6 +127,28 @@ Security and quality domain orchestrator. Manages Gate A (security review), Gate
 
 ---
 
+## Gate 통과 조건 (v0.56+)
+
+auto-judge 가 `do` phase 산출물을 파싱해 **`criticalIssueCount`** + **`owaspScore`** 판정. **CSO 는 `roleOverrides` 로 `matchRate >= 95` / `codeQualityScore >= 80` 요구** (일반 role 보다 엄격).
+
+| 메트릭 | 소스 | threshold | 패턴 |
+|--------|------|-----------|------|
+| `criticalIssueCount` | `docs/{feature}/03-do/main.md` | === 0 | `Critical: N` 형식 숫자 명시 필수 |
+| `owaspScore` | `docs/{feature}/03-do/main.md` | ≥ 8 | `OWASP: N/10` 또는 `OWASP Score: N/10` |
+| `matchRate` | gap analysis | ≥ 95 (override) | CSO 는 CTO 보다 5p 높은 기준 |
+| `codeQualityScore` | 수동 평가 | ≥ 80 (override) | — |
+
+**실행 팁**:
+- CSO Do 문서 상단에 "요약 수치" 블록을 둬서 auto-judge 파싱 용이하게:
+  ```
+  ## 보안 감사 요약
+  - Critical: 0
+  - OWASP: 9/10
+  ```
+- Critical 이 하나라도 있으면 gate verdict = `fail` (strict 모드에서 차단).
+
+---
+
 <!-- @refactor:begin contract -->
 ## Contract
 

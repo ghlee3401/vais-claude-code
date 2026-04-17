@@ -106,6 +106,27 @@ Product domain orchestrator. Defines "what to build." Calls pm sub-agents in seq
 
 ---
 
+## Gate 통과 조건 (v0.56+)
+
+auto-judge 가 `do` phase 산출물(PRD)을 파싱해 **`designCompleteness`** 메트릭을 계산한다. `vais.config.json > gates.defaults.designCompleteness = 80` 기준.
+
+**PRD 8개 섹션 필수** (각 헤딩 + 내용 80자 이상):
+
+| # | 섹션 헤딩 (한/영 둘 다 허용) | 판정 패턴 |
+|---|-------------------------|-----------|
+| 1 | `## 1. Summary` / `## 요약` | 개요 80자 이상 |
+| 2 | `## 2. Contacts` / `## 담당` / `## 연락처` | 담당자·이해관계자 |
+| 3 | `## 3. Background` / `## 배경` | 문제 정의·왜 |
+| 4 | `## 4. Objective` / `## 목표` | SMART 목표 |
+| 5 | `## 5. Market Segment` / `## 대상` | 타겟 페르소나·TAM/SAM/SOM |
+| 6 | `## 6. Value Proposition` / `## 가치 제안` | JTBD + 차별점 |
+| 7 | `## 7. Solution` / `## 기능` | 기능 리스트·MVP 범위 |
+| 8 | `## 8. Release` / `## 출시` | 로드맵·Go/No-Go |
+
+**threshold**: `designCompleteness >= 80` (= 유효 섹션 6.4/8 이상). 내용이 짧으면 "빈 섹션"으로 감점되므로 각 섹션 최소 1~2 단락 작성 필수.
+
+---
+
 <!-- @refactor:begin contract -->
 ## Contract
 

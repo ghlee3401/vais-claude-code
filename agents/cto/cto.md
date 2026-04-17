@@ -148,6 +148,22 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 ---
 
+## Gate 통과 조건 (v0.56+)
+
+auto-judge 가 **`matchRate`** + **`criticalIssueCount`** 두 메트릭으로 판정.
+
+| 메트릭 | 소스 | threshold | 패턴 |
+|--------|------|-----------|------|
+| `matchRate` | `.vais/status.json` gap analysis | ≥ 90 | `qa-engineer` 가 Gap 분석을 저장해야 함 |
+| `criticalIssueCount` | `docs/{feature}/04-qa/main.md` | === 0 | QA 문서 내 `Critical: N` 형식 숫자 |
+
+**실행 팁**:
+- QA phase 에서 `qa-engineer` 가 Gap 계산 후 `lib/status.saveGapAnalysis` 호출 필수 — 현재 scripts/auto-judge.js 가 `getGapAnalysis(feature).matchRate` 를 직접 읽음.
+- QA 문서에 이슈 요약 테이블 작성 시 `Critical: 0` / `Critical: 2` 같이 **명시적 숫자 표기**. auto-judge 가 `/Critical[:\s]*(\d+)/i` 로 파싱.
+- `matchRate < 90` 이면 gate verdict = `retry` → qa-engineer 재실행 권장.
+
+---
+
 <!-- @refactor:begin contract -->
 ## Contract
 
