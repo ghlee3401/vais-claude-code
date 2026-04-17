@@ -5,7 +5,9 @@
  *
  * Usage:
  *   node scripts/generate-dashboard.js [project-dir]
- *   # → docs/dashboard.html 생성
+ *   # → .vais/dashboard.html 생성
+ *
+ * 호출 시점: skills/vais/utils/dashboard.md 진입점 (/vais dashboard)
  */
 
 const fs = require('fs');
@@ -14,7 +16,7 @@ const path = require('path');
 // ── 설정 ──────────────────────────────────────────
 const PROJECT_DIR = process.argv[2] || process.cwd();
 const PLUGIN_DIR = path.resolve(__dirname, '..');
-const OUTPUT_FILE = path.join(PROJECT_DIR, 'docs', 'dashboard.html');
+const OUTPUT_FILE = path.join(PROJECT_DIR, '.vais', 'dashboard.html');
 
 const PHASE_META = [
   { key: 'plan',   icon: '📋', num: '01', name: '기획',       color: '#2563eb' },
@@ -534,9 +536,9 @@ function main() {
   const data = collectData();
   const html = generateHtml(data);
 
-  // docs 디렉토리 보장
-  const docsDir = path.join(PROJECT_DIR, 'docs');
-  if (!fs.existsSync(docsDir)) fs.mkdirSync(docsDir, { recursive: true });
+  // 출력 디렉토리 보장
+  const outDir = path.dirname(OUTPUT_FILE);
+  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
   fs.writeFileSync(OUTPUT_FILE, html, 'utf8');
   console.log(`✅ Dashboard generated: ${OUTPUT_FILE}`);

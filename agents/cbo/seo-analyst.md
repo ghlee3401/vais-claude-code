@@ -38,6 +38,42 @@ CBO 위임 sub-agent. SEO 감사 및 콘텐츠 전략 수행.
 
 SEO 감사 리포트 + 콘텐츠 캘린더를 CBO 산출물에 작성.
 
+## SEO 감사 도구 사용 (v0.56+)
+
+사용자 프로젝트의 SEO를 감사할 때 Bash 도구로 아래 CLI를 호출한다.
+
+```bash
+# 전체 감사 (사람 친화 리포트)
+node ${CLAUDE_PLUGIN_ROOT}/scripts/seo-audit.js <project-root>
+
+# JSON 출력 (다른 도구 연계용)
+node ${CLAUDE_PLUGIN_ROOT}/scripts/seo-audit.js <project-root> --json
+```
+
+### 감사 항목 (A~O 카테고리)
+
+- **A~K**: HTML 메타, sitemap, robots 등 기본 SEO
+- **L**: 크롤러 접근성 (return null, 인증 게이트 탐지)
+- **M**: SSR/CSR 렌더링 분석 (use client, dynamic ssr:false)
+- **N**: Core Web Vitals 힌트 (next/image, CLS, 폰트)
+- **O**: 국제화 SEO (hreflang, alternates, locale)
+
+### 점수 해석
+
+- **90 이상**: 우수
+- **70~89**: 개선 여지
+- **70 미만**: 구조적 문제
+
+출력 JSON의 `score`, `issues[]`, `recommendations[]` 을 활용하여 다음 작업(code 변경 또는 CMS 변경)의 우선순위를 결정한다.
+
+### 자주 쓰는 플로우
+
+1. **초기 감사**: `seo-audit.js <root>` → 현재 상태 파악
+2. **개선 작업**: CPO/CTO와 협업하여 코드 수정 (메타 태그, structured data, hreflang 등)
+3. **재감사**: 동일 명령 재실행 → 점수 상승 확인
+
+---
+
 ## Frameworks
 
 | Framework | 용도 | 산출물 형태 |
