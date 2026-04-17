@@ -35,7 +35,7 @@
 | `guardrails.checkpointOnPhaseTransition` | `lib/control/checkpoint-manager.js` (삭제됨) | **삭제** |
 | `guardrails.checkpointOnDestructive` | 〃 | **삭제** |
 | `orchestration.gateAction` | agent markdown 참조 + `scripts/doc-validator.js`? | 유지 (문서에서 참조) |
-| `gates.cto.plan.*` | agent markdown(CTO)에서 "strict/ask/skip" 참조 | 유지 (CTO plan phase 동작 규격) |
+| `gates.cto.plan.*` | agent markdown(CTO)에서 "strict/ask/skip" 참조 | 유지 (CTO plan phase 동작 규격). sub-plan 07에서 **확장** (역할별 threshold 섹션 추가) |
 | `advisor.*` | `lib/advisor/*` + `lib/control/cost-monitor.js` (sub-plan 06에서 활성화) | **유지** |
 | `conventions.referenceComment` | 에이전트 markdown 참조 (규칙 Rule #7) | 유지 |
 | `featureNameValidation` | `lib/status.js validateFeatureName` — 현재 하드코딩. config 키는 참고용 | **키 삭제** (소비자 없음) — 또는 status.js가 config 읽도록 수정 (추가 작업 크므로 키 삭제 권장) |
@@ -117,5 +117,16 @@ grep -rn "parallelGroups" agents/ skills/ scripts/ hooks/ lib/ templates/
 
 **sub-plan 05**:
 - `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`의 version 동기화
-- CLAUDE.md "Key Configuration" 섹션 갱신 (automation/guardrails/advisor 섹션 설명 제거)
+- CLAUDE.md "Key Configuration" 섹션 갱신 (automation/guardrails 섹션 설명 제거, advisor/gates 섹션 설명 강화)
 - CHANGELOG에 config cleanup 내역 기록
+
+**sub-plan 07**:
+- `gates` 섹션에 다음 threshold 추가 (v050 plan 07의 스펙 반영):
+  - `gates.designCompleteness` (default 80)
+  - `gates.codeQualityScore` (default 60)
+  - `gates.criticalIssueCount` (default 0)
+  - `gates.matchRate` (default 90)
+  - `gates.owaspScore` (default 8, CSO 전용)
+  - `gates.conventionCompliance` (default 70)
+- role별 override (예: `gates.cso.matchRate: 95`)
+- 07의 agent-stop.js 4-step pipeline이 이 설정을 소비
