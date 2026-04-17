@@ -1,8 +1,9 @@
 # Sub-plan 06 — Advisor Activation
 
-> 선행: 03 (다른 중복 모듈 정리 완료)
-> 후행: 04 (`vais.config.json > advisor` 유지 결정), 05 (CHANGELOG/CLAUDE.md 갱신)
-> 담당 SC: SC-6 (advisor 테스트 통과), 신설 SC-A1~A5
+> 릴리즈: **v0.56.0** (CP-9 릴리즈 분리 결정)
+> 선행: v0.55 전체 완료 (03에서 `lib/advisor/*` + `lib/control/cost-monitor.js` 유지됨)
+> 후행: v0.56용 docs/tests 마무리
+> 담당 SC: 신설 SC-A1~A5
 
 ---
 

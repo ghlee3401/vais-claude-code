@@ -1,22 +1,23 @@
 # Sub-plan 07 — Gate Activation
 
-> 선행: 04 (vais.config.json > gates 섹션 확장)
-> 후행: 05
+> 릴리즈: **v0.56.0** (CP-9 릴리즈 분리 결정)
+> 선행: v0.55 전체 완료 + 04 carry-forward의 `gates` 스키마 확장
+> 후행: v0.56용 docs/tests 마무리
 > 담당 SC: SC-12, 신설 SC-G1~G6
-> 갱신: 2026-04-17 CP-6 (C-full) 결정에 따라 신설
+> 갱신: 2026-04-17 CP-9에 따라 v0.56 릴리즈로 이동. 2026-04-17 실제 코드 재검증으로 CMO/CFO 전제 무효화 반영.
 
 ---
 
 ## 0. 목적
 
-v0.50 plan 07의 의도를 **완성**한다. 현재 상태:
+v0.50 plan 07의 의도를 **완성**한다. 현재 상태 (2026-04-17 재확인):
 
 - ✅ `lib/quality/gate-manager.js` (386 LOC): GATE_DEFINITIONS + checkGate + resolveAction + judgePhaseCompletion 완비
-- ✅ `scripts/auto-judge.js` (300 LOC): C-Level별 판정 로직 구현
+- ✅ `scripts/auto-judge.js` (300 LOC): C-Level별 판정 로직 구현. **`judgeCPO/CTO/CSO/CBO/COO` 5개 존재, CMO/CFO 함수는 이미 삭제되어 CBO로 통합된 상태**
 - ✅ `scripts/gate-check.js` (333 LOC): gate 상태 조회
 - ❌ **gate-manager와 auto-judge 미연결** — auto-judge가 gate-manager의 checkGate를 호출하지 않음
-- ❌ **agent-stop.js의 4-step pipeline 미구현** — 현재 2-step(doc-validator + cp-guard)
-- ❌ **auto-judge가 구버전 CMO/CFO 참조** — v050 plan에서 CBO로 통합됐지만 auto-judge는 안 고쳐짐
+- ❌ **agent-stop.js의 4-step pipeline 미구현** — 현재 2-step(doc-validator + cp-guard, 82 LOC)
+- ❌ **메트릭 이름 매핑** — auto-judge 결과 키가 gate-manager의 메트릭 이름과 일치하지 않음
 - ❌ **guidance 모듈 부재** — gate fail 시 다음 액션 자동 제안하는 로직 없음
 
 본 sub-plan은 **4개 빈 부분을 채워서 메트릭 기반 게이팅을 실제 동작시킨다**.
@@ -61,12 +62,16 @@ scripts/agent-stop.js (4-step pipeline)
 | 공통 | convention 준수율 | `conventionCompliance` |
 | 공통 | 코드 품질 점수 | `codeQualityScore` |
 
-### 1.3 CBO/CFO 통합 (auto-judge 리팩터)
+### 1.3 CBO 판정 로직 검증 (리팩터 아닌 검증)
 
-현재 `auto-judge.js`는 `judgeCMO`, `judgeCFO` 함수 포함. v0.50에서 CBO로 통합됐으므로:
-- `judgeCMO` + `judgeCFO` → **`judgeCBO`** 하나로 통합
-- SEO 점수, 비용/수익, 가격 전략을 모두 `judgeCBO`가 판정
-- 기존 함수 삭제
+**⚠️ 원 플랜 전제 무효화**: 2026-04-17 실제 코드 재확인 결과 `judgeCMO`/`judgeCFO` 함수는 이미 삭제되어 있고 `judgeCBO` 하나로 통합된 상태. 따라서 "통합 리팩터"는 **불필요**.
+
+대신 v0.56 착수 시 아래만 검증:
+- 현재 `judgeCBO`가 SEO 점수, 비용/수익, 가격 전략을 모두 커버하는지
+- 누락된 판정 차원이 있다면 `judgeCBO`에 추가 (새 함수 생성 X)
+- `marketingScore` 신규 메트릭(§4.2)의 소스 데이터가 `judgeCBO`에서 생성되는지
+
+이 변경은 T-1의 **범위 축소**로 이어진다 — 기존 ~150 LOC 수정이 아니라 메트릭 이름 매핑 + marketingScore 산출 로직 추가 정도.
 
 ### 1.4 `vais.config.json > gates` 확장 (04에서 예고된 스키마)
 
@@ -118,7 +123,7 @@ function generateGuidance({ role, phase, gateResult, metrics }) {
 
 | # | 태스크 | 파일 |
 |---|--------|------|
-| T-1 | `scripts/auto-judge.js` 리팩터 — CMO+CFO → CBO 통합, 메트릭 이름을 gate-manager 표준으로 통일 | EDIT (~150 LOC 수정) |
+| T-1 | `scripts/auto-judge.js` — 메트릭 이름을 gate-manager 표준으로 통일 + `marketingScore` 산출 로직 추가. **CMO/CFO → CBO 통합은 이미 완료되어 skip** | EDIT (~50 LOC 수정, 원 플랜 ~150 LOC에서 축소) |
 | T-2 | `lib/quality/gate-manager.js` 수정 — `GATE_DEFINITIONS`, `ROLE_THRESHOLD_OVERRIDES`를 config에서 읽도록 | EDIT (~50 LOC) |
 | T-3 | `lib/quality/guidance.js` 신규 — gate 결과 → 사용자 메시지 생성 | NEW (~100 LOC) |
 | T-4 | `scripts/agent-stop.js` 수정 — 4-step pipeline 구현 | EDIT (~80 LOC 추가) |
@@ -136,7 +141,7 @@ function generateGuidance({ role, phase, gateResult, metrics }) {
 
 | # | Criteria | 검증 |
 |---|----------|------|
-| SC-G1 | `auto-judge.js`에서 `judgeCMO`, `judgeCFO` 함수 부재, `judgeCBO` 존재 | `grep "function judge" scripts/auto-judge.js` |
+| SC-G1 | `auto-judge.js`에서 `judgeCPO/CTO/CSO/CBO/COO` 5개만 존재 (CMO/CFO 부재 — v0.56 착수 시점에 이미 참) + 각 judge 결과 키가 gate-manager 표준 메트릭 이름과 일치 | `grep "function judge" scripts/auto-judge.js` + 통합 smoke test |
 | SC-G2 | `node scripts/gate-check.js {feature} do` 실행 시 auto-judge → gate-manager → verdict 반환 | integration smoke test |
 | SC-G3 | agent-stop.js가 SubagentStop 훅에서 실행될 때 4-step 전부 수행 (각 step 이벤트 발행) | `tests/gate-activation.test.js` |
 | SC-G4 | `gate_judgment` 이벤트에 `score`, `threshold`, `verdict` 포함 | `lib/observability/schema.js` 스키마 |
