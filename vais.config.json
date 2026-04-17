@@ -247,6 +247,21 @@
     "gateAction": "confirm"
   },
   "gates": {
+    "_description": "v0.56 sub-plan 07: 메트릭 기반 게이팅. gate-manager가 defaults + roleOverrides를 읽어 GATE_DEFINITIONS 덮어쓰기.",
+    "defaults": {
+      "designCompleteness": 80,
+      "codeQualityScore": 60,
+      "criticalIssueCount": 0,
+      "matchRate": 90,
+      "owaspScore": 8,
+      "conventionCompliance": 70,
+      "marketingScore": 70,
+      "opsReadiness": 70
+    },
+    "roleOverrides": {
+      "cso": { "matchRate": 95, "codeQualityScore": 80 },
+      "cto": {}
+    },
     "cto": {
       "plan": {
         "requirePrd": "ask",

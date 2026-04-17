@@ -26,12 +26,17 @@ const { EventLogger, EVENT_TYPES } = require('../lib/observability/index');
 
 /**
  * CPO 판정: PRD 8개 섹션 완성도
+ * 표준 메트릭: designCompleteness (0~100)
  */
 function judgeCPO(feature) {
   const details = { sections: 0, empty: 0, issues: [] };
   const doPath = resolveDocPath('do', feature, 'cpo');
   if (!doPath || !fs.existsSync(doPath)) {
-    return { passed: false, verdict: 'retry', details: { ...details, issues: ['PRD 문서(do) 미존재'] } };
+    return {
+      passed: false, verdict: 'retry',
+      details: { ...details, issues: ['PRD 문서(do) 미존재'] },
+      metrics: { designCompleteness: 0 },
+    };
   }
 
   const content = fs.readFileSync(doPath, 'utf8');
@@ -62,19 +67,25 @@ function judgeCPO(feature) {
     }
   }
 
+  // designCompleteness = (유효 섹션 수 / 8) × 100
+  const validSections = Math.max(0, details.sections - details.empty);
+  const designCompleteness = Math.round((validSections / PRD_SECTIONS.length) * 100);
   const passed = details.sections >= 8 && details.empty === 0;
   return {
     passed,
     verdict: passed ? 'pass' : 'retry',
     details,
+    metrics: { designCompleteness },
   };
 }
 
 /**
  * CTO 판정: Gap Analysis ≥ 90%
+ * 표준 메트릭: matchRate, criticalIssueCount
  */
 function judgeCTO(feature) {
   const details = { matchRate: 0, issues: [] };
+  let criticalIssueCount = 0;
 
   // 1. Gap Analysis 결과 확인
   const gap = getGapAnalysis(feature);
@@ -95,8 +106,11 @@ function judgeCTO(feature) {
     const content = fs.readFileSync(qaPath, 'utf8');
     // Critical 이슈 확인
     const critMatch = content.match(/Critical[:\s]*(\d+)/i);
-    if (critMatch && parseInt(critMatch[1], 10) > 0) {
-      details.issues.push(`Critical 이슈 ${critMatch[1]}건 잔존`);
+    if (critMatch) {
+      criticalIssueCount = parseInt(critMatch[1], 10);
+      if (criticalIssueCount > 0) {
+        details.issues.push(`Critical 이슈 ${criticalIssueCount}건 잔존`);
+      }
     }
   }
 
@@ -107,18 +121,26 @@ function judgeCTO(feature) {
   }
 
   const passed = details.issues.length === 0 && details.matchRate >= 90;
-  return { passed, verdict: passed ? 'pass' : 'retry', details };
+  return {
+    passed, verdict: passed ? 'pass' : 'retry', details,
+    metrics: { matchRate: details.matchRate, criticalIssueCount },
+  };
 }
 
 /**
  * CSO 판정: Critical 취약점 0건
+ * 표준 메트릭: criticalIssueCount, owaspScore
  */
 function judgeCSO(feature) {
   const details = { criticalCount: -1, owaspScore: -1, issues: [] };
 
   const doPath = resolveDocPath('do', feature, 'cso');
   if (!doPath || !fs.existsSync(doPath)) {
-    return { passed: false, verdict: 'retry', details: { ...details, issues: ['CSO Do 문서 미존재'] } };
+    return {
+      passed: false, verdict: 'retry',
+      details: { ...details, issues: ['CSO Do 문서 미존재'] },
+      metrics: { criticalIssueCount: 999, owaspScore: 0 },
+    };
   }
 
   const content = fs.readFileSync(doPath, 'utf8');
@@ -141,18 +163,34 @@ function judgeCSO(feature) {
   }
 
   const passed = details.criticalCount === 0;
-  return { passed, verdict: passed ? 'pass' : 'retry', details };
+  return {
+    passed, verdict: passed ? 'pass' : 'retry', details,
+    metrics: {
+      criticalIssueCount: details.criticalCount >= 0 ? details.criticalCount : 999,
+      owaspScore: details.owaspScore >= 0 ? details.owaspScore : 0,
+    },
+  };
 }
 
 /**
  * CBO 판정: SEO ≥ 80 + unit economics + 비용/수익/ROI
+ * 표준 메트릭: marketingScore (SEO 점수 × 0.5 + GTM 완성도 × 0.5)
  */
 function judgeCBO(feature) {
   const details = { seoScore: -1, found: [], missing: [], issues: [] };
+  const REQUIRED_METRICS = [
+    { name: '비용', pattern: /비용|cost/i },
+    { name: '수익', pattern: /수익|revenue|매출/i },
+    { name: 'ROI', pattern: /ROI|투자\s*수익률|ROAS/i },
+  ];
 
   const doPath = resolveDocPath('do', feature, 'cbo');
   if (!doPath || !fs.existsSync(doPath)) {
-    return { passed: false, verdict: 'retry', details: { ...details, issues: ['CBO Do 문서 미존재'] } };
+    return {
+      passed: false, verdict: 'retry',
+      details: { ...details, issues: ['CBO Do 문서 미존재'] },
+      metrics: { marketingScore: 0 },
+    };
   }
 
   const content = fs.readFileSync(doPath, 'utf8');
@@ -163,22 +201,27 @@ function judgeCBO(feature) {
     if (details.seoScore < 80) details.issues.push(`SEO 점수 ${details.seoScore}/100 (기준: 80)`);
   }
 
-  const REQUIRED_METRICS = [
-    { name: '비용', pattern: /비용|cost/i },
-    { name: '수익', pattern: /수익|revenue|매출/i },
-    { name: 'ROI', pattern: /ROI|투자\s*수익률|ROAS/i },
-  ];
   for (const m of REQUIRED_METRICS) {
     if (m.pattern.test(content)) details.found.push(m.name);
     else { details.missing.push(m.name); details.issues.push(`${m.name} 미확인`); }
   }
 
+  // marketingScore = SEO(0~100) × 0.5 + GTM 완성도(0~100) × 0.5
+  //   GTM 완성도 = 발견된 필수 메트릭 비율 × 100
+  const seoComponent = details.seoScore >= 0 ? details.seoScore : 0;
+  const gtmCompleteness = Math.round((details.found.length / REQUIRED_METRICS.length) * 100);
+  const marketingScore = Math.round(seoComponent * 0.5 + gtmCompleteness * 0.5);
+
   const passed = details.issues.length === 0;
-  return { passed, verdict: passed ? 'pass' : 'retry', details };
+  return {
+    passed, verdict: passed ? 'pass' : 'retry', details,
+    metrics: { marketingScore },
+  };
 }
 
 /**
  * COO 판정: CI/CD 모든 단계 정의
+ * 표준 메트릭: opsReadiness (정의된 단계 비율 × 100)
  */
 function judgeCOO(feature) {
   const details = { stages: [], issues: [] };
@@ -186,7 +229,11 @@ function judgeCOO(feature) {
 
   const doPath = resolveDocPath('do', feature, 'coo');
   if (!doPath || !fs.existsSync(doPath)) {
-    return { passed: false, verdict: 'retry', details: { ...details, issues: ['COO Do 문서 미존재'] } };
+    return {
+      passed: false, verdict: 'retry',
+      details: { ...details, issues: ['COO Do 문서 미존재'] },
+      metrics: { opsReadiness: 0 },
+    };
   }
 
   const content = fs.readFileSync(doPath, 'utf8').toLowerCase();
@@ -199,8 +246,12 @@ function judgeCOO(feature) {
     }
   }
 
+  const opsReadiness = Math.round((details.stages.length / REQUIRED_STAGES.length) * 100);
   const passed = details.issues.length === 0;
-  return { passed, verdict: passed ? 'pass' : 'retry', details };
+  return {
+    passed, verdict: passed ? 'pass' : 'retry', details,
+    metrics: { opsReadiness },
+  };
 }
 
 /**
