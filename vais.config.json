@@ -214,26 +214,6 @@
     }
   },
   "gapThreshold": 0.90,
-  "parallelGroups": {
-    "implementation": [
-      "frontend-engineer",
-      "backend-engineer",
-      "test-engineer"
-    ],
-    "cbo-do": [
-      "seo-analyst",
-      "copy-writer",
-      "growth-analyst"
-    ],
-    "coo-do": [
-      "sre-engineer",
-      "release-engineer"
-    ]
-  },
-  "chaining": {
-    "sequential": ":",
-    "parallel": "+"
-  },
   "gapAnalysis": {
     "matchThreshold": 90,
     "maxIterations": 5,
@@ -262,28 +242,6 @@
       "error",
       "milestone"
     ]
-  },
-  "automation": {
-    "level": "L2",
-    "levels": ["L0", "L1", "L2", "L3", "L4"],
-    "defaultLevel": 2,
-    "emergencyFallbackLevel": 1,
-    "gateTimeoutMs": 300000,
-    "emergencyStopEnabled": true,
-    "trustScoreEnabled": true,
-    "maxConcurrentFeatures": 3
-  },
-  "guardrails": {
-    "destructiveDetection": true,
-    "loopBreaker": {
-      "maxPdcaIterations": 5,
-      "maxSameFileEdits": 10,
-      "maxAgentRecursion": 3,
-      "cooldownMs": 60000
-    },
-    "blastRadiusLimit": "high",
-    "checkpointOnPhaseTransition": true,
-    "checkpointOnDestructive": true
   },
   "orchestration": {
     "gateAction": "confirm"
@@ -343,50 +301,5 @@
         "자명한 표준 라이브러리 사용은 @see 생략 가능"
       ]
     }
-  },
-  "featureNameValidation": {
-    "pattern": "^[a-zA-Z0-9가-힣_-]+$",
-    "maxLength": 100,
-    "description": "허용: 한글, 영문, 숫자, -, _ (공백, 특수문자, 경로 문자 불가)"
-  },
-  "featureNameSuggestions": {
-    "_description": "자주 쓰는 피처 이름 예시 (kebab-case 권장, 강제 아님)",
-    "인증·사용자": [
-      "login",
-      "signup",
-      "oauth",
-      "user-profile",
-      "my-page",
-      "password-reset"
-    ],
-    "결제·커머스": [
-      "payment",
-      "cart",
-      "checkout",
-      "order-history",
-      "wishlist",
-      "coupon"
-    ],
-    "콘텐츠": [
-      "feed",
-      "post",
-      "comment",
-      "search",
-      "notification",
-      "bookmark"
-    ],
-    "소셜": [
-      "chat",
-      "follow",
-      "share",
-      "invite",
-      "review"
-    ],
-    "관리·운영": [
-      "dashboard",
-      "settings",
-      "admin-panel",
-      "analytics"
-    ]
   }
 }
