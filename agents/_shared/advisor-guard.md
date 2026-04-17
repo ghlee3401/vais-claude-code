@@ -30,3 +30,28 @@
 - `.vais/advisor-spend.json` 에 기록된 누적 비용이 캡 초과 시 advisor는 자동으로
   disable된다. 이때는 Sonnet 단독으로 정상 작업을 계속하라. advisor 없다고
   사용자에게 묻지 말 것.
+
+### Fallback 모드 CLI 호출 (v0.56+)
+
+session-start hook이 `.vais/advisor-mode.json` 을 작성한다. `mode` 가:
+
+- `native` — Claude Code가 frontmatter `advisor:` 를 직접 처리. 본 섹션 **불필요**.
+- `wrapper` — Bash 도구로 아래 CLI 를 직접 호출.
+- `disabled` — ANTHROPIC_API_KEY 부재 등. advisor 전체 스킵.
+
+wrapper 모드에서 advisor 의견이 필요하면:
+
+```bash
+node <plugin-root>/scripts/advisor-call.js \
+  --sub-agent=<your-agent-name> \
+  --c-level=<cto|cpo|cso|cbo|coo|ceo> \
+  --trigger=<early|stuck|final|reconcile> \
+  --summary="간결한 현재 상황 요약"
+```
+
+응답:
+- stdout → advice 본문 (그대로 읽어 판단에 반영).
+- exit 0 + stdout 비어있음 → native/disabled 모드 (스킵).
+- exit 1 + stderr → budget_block / unavailable / timeout. degrade 규칙 적용.
+
+CLI 한 번 호출 = advisor 한 번 호출로 카운트. `max_calls_per_session` 캡 안에서 절제.

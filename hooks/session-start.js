@@ -3,16 +3,37 @@
  * VAIS Code - SessionStart Hook
  * Design Ref: §2.3 — thin orchestrator, 모듈 호출 + 결과 조립만 담당
  */
+const path = require('path');
+const { spawnSync } = require('child_process');
 const { debugLog } = require('../lib/debug');
 const { logHook } = require('../lib/hook-logger');
 const { ensureVaisDirs, loadConfig, loadOutputStyle } = require('../lib/paths');
 const { getStatus, getActiveFeature, getProgressSummary } = require('../lib/status');
 const { sendWebhook } = require('../lib/webhook');
 
+/**
+ * Advisor 모드 판정 (session 1회).
+ * .vais/advisor-mode.json 작성 — wrapper/advisor-call CLI가 읽어서 분기.
+ * 실패해도 session-start 전체를 막지 않음 (graceful).
+ */
+function detectAdvisorMode() {
+  try {
+    const script = path.join(__dirname, '..', 'scripts', 'check-cc-advisor-support.js');
+    spawnSync('node', [script], {
+      stdio: 'ignore',
+      env: process.env,
+      timeout: 3000,
+    });
+  } catch (e) {
+    debugLog('SessionStart', 'advisor mode detection failed', { error: e.message });
+  }
+}
+
 function main() {
   logHook('SessionStart', 'ok', { cwd: process.cwd() });
   debugLog('SessionStart', 'Hook executed', { cwd: process.cwd() });
   ensureVaisDirs();
+  detectAdvisorMode();
 
   const config = loadConfig();
   const VERSION = config.version || '0.0.0';
