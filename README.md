@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.52.2-blue?style=flat-square" alt="version" />
+  <a href="https://github.com/ghlee3401/vais-claude-code/actions/workflows/ci.yml">
+    <img src="https://github.com/ghlee3401/vais-claude-code/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  </a>
+  <img src="https://img.shields.io/badge/version-0.53.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -334,7 +337,7 @@ vais-claude-code/
 ## Testing
 
 ```bash
-npm test    # 175 pass, 0 fail (v0.52.2)
+npm test    # 175 pass, 0 fail (v0.53.0)
 ```
 
 ---
@@ -360,6 +363,23 @@ git config --unset core.hooksPath
 ```
 
 > `git commit --no-verify`로 hook을 우회하지 마세요. 규칙 위반은 LLM 재발 위험 + 수십 파일 재치환을 유발합니다. 자세한 정책은 `docs/legacy-path-guard/` 참조.
+
+---
+
+## CI Status Check 강제 (owner 수동 설정)
+
+PR merge를 CI 통과 후에만 허용하려면 저장소 owner가 branch protection rule을 수동으로 설정해야 합니다:
+
+1. GitHub 저장소 → **Settings** → **Branches**
+2. **Branch protection rules** → **Add rule**
+3. Branch name pattern: `main`
+4. ✅ **Require status checks to pass before merging**
+5. Status check 검색창에서 `CI / build-and-test` 선택 (workflow job name)
+6. ✅ **Require branches to be up to date before merging**
+7. (선택) ✅ **Require pull request reviews before merging**
+
+> 자동화 범위 밖 — GitHub REST API로 설정 가능하나 owner PAT 필요. 수동 설정 유지.
+> 관련 설계: `docs/ci-bootstrap/design/main.md §5`
 
 ---
 

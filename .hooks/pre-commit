@@ -6,34 +6,8 @@ set -e
 echo "[VAIS] Running pre-commit checks..."
 
 # ── legacy-path-guard ──────────────────────────────────────────────
-# @see docs/legacy-path-guard/design/main.md §5.1
-# 레거시 경로 docs/NN- 패턴 (예: docs/01-plan/) 커밋 차단
-LEGACY_PATTERN='docs/[0-9][0-9]-'
-violations=""
-for file in $(git diff --cached --name-only --diff-filter=ACM); do
-  [ -z "$file" ] && continue
-  case "$file" in
-    docs/_legacy/*|CHANGELOG.md|tests/paths.test.js|README.md|CLAUDE.md) continue ;;
-    docs/legacy-path-guard/*|docs/docs-structure-redesign/*) continue ;;
-    .hooks/pre-commit) continue ;;
-  esac
-  matches=$(git show ":$file" 2>/dev/null | grep -nE "$LEGACY_PATTERN" || true)
-  if [ -n "$matches" ]; then
-    violations="${violations}
-[$file]
-$matches
-"
-  fi
-done
-
-if [ -n "$violations" ]; then
-  printf '\n❌ legacy-path-guard: 레거시 경로 docs/NN- 패턴 감지\n' >&2
-  printf '%s\n' "$violations" >&2
-  printf '💡 새 구조로 치환: docs/{feature}/{phase}/main.md\n' >&2
-  printf '   예외가 필요하면 .hooks/pre-commit 의 case 문에 추가\n' >&2
-  exit 1
-fi
-echo "[VAIS] legacy-path-guard passed."
+# @see scripts/check-legacy-paths.sh (single source of exception list)
+bash scripts/check-legacy-paths.sh --mode=staged
 
 # ── ESLint ─────────────────────────────────────────────────────────
 if command -v npx > /dev/null 2>&1; then

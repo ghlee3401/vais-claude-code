@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.53.0] - 2026-04-17
+
+### Added
+
+- `ci-bootstrap`: GitHub Actions CI 워크플로우 신규 도입 (`.github/workflows/ci.yml`) — PR + main push 시 legacy-path-guard + ESLint + Tests 3종 자동 실행
+- `scripts/check-legacy-paths.sh`: hook과 CI가 공유하는 legacy-path 검사 스크립트 (`--mode=staged|tree`). 예외 리스트 단일 소스 관리
+- `package-lock.json`: ESLint 9.x 의존성 트리 고정 (85 packages) — `npm ci` 기반 결정적 빌드
+- README: CI status 뱃지 + branch protection 수동 설정 가이드 섹션
+- `docs/ci-bootstrap/` 산출물 3종 (plan/design/do)
+
+### Changed
+
+- `.hooks/pre-commit`: inline legacy-path 블록(28줄)을 공용 스크립트 호출 1줄로 리팩터 — hook/CI drift 방지
+- `package.json`: `devDependencies.eslint: ^9.0.0` 명시 (기존 `npx` 온-디맨드 → 고정 버전)
+
 ## [0.52.2] - 2026-04-17
 
 ### Added
