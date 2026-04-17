@@ -1,5 +1,42 @@
 # Changelog
 
+## [0.55.0] - 2026-04-17 — Simplification
+
+v0.50 full overhaul 이후 "파일은 만들어졌으나 런타임에 연결되지 않은 모듈"을 전수조사하여 제거. 기능 축소가 아닌 **설계와 실제 사용의 정합성 회복**. 남긴 파일(`lib/advisor/`, `lib/registry/`, `lib/quality/gate-manager.js`, `lib/control/cost-monitor.js`)은 v0.56 "Activation" 릴리즈에서 런타임에 연결 예정.
+
+### Removed
+
+- **CI**: `.github/workflows/ci.yml` 삭제. 플러그인 자체 CI는 Claude Code 마켓플레이스 유통에 필수 아님. 로컬 `npm test`, `npm run lint`, `.hooks/pre-commit`으로 검증. 코드 품질 도구(ESLint/pre-commit/legacy-path-guard)는 전부 유지 (CP-1).
+- **Dead code `lib/control/`** (~1,128 LOC): trust-engine, loop-breaker, blast-radius, checkpoint-manager, automation-controller, index — 런타임 호출 0회. (`cost-monitor`는 v0.56 advisor 활성화에 사용되므로 유지)
+- **Dead code `lib/pdca/`** (~805 LOC): feature-manager, session-guide, decision-record, automation, index — `lib/status.js`가 이미 동등 기능 제공.
+- **중복 모듈**: `lib/validation/*` (scripts/와 중복), `lib/quality/template-validator.js` (소비자 0), `lib/core/migration-engine.js` (런타임은 `lib/core/migration.js` 사용).
+- **State-machine 이중화 정리** (CP-4 D): 구 `lib/core/state-machine.js`(601 LOC) 삭제 + `lib/status.js`의 dead 함수 `transitionPhase`/`getAvailableTransitions`(~90 LOC) + `_stateMachine` 헬퍼 삭제 + `state-machine-v050.js` → `state-machine.js` rename.
+- **테스트**: `tests/migration-engine.test.js`, `tests/scenario-verification.test.js` 삭제. `tests/state-machine-v050.test.js` → `tests/state-machine.test.js` rename.
+- **`vais.config.json` 키 6개**: `automation`, `guardrails`, `parallelGroups`, `chaining`, `featureNameValidation`, `featureNameSuggestions` — 소비자 부재 또는 dead branch만 존재.
+- **README.md**: GitHub Actions CI 배지 제거.
+
+### Changed
+
+- `lib/core/state-machine.js`: v050 6-phase(ideation optional) 스펙으로 교체. require 경로는 동일.
+- 버전 4 파일 동기화: `package.json`, `vais.config.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` → `0.55.0`.
+
+### Kept (v0.56 활성화 예정)
+
+- `lib/advisor/` + `lib/control/cost-monitor.js` + `vais.config.json > advisor` — v0.56 sub-plan 06 (CP-3 B)
+- `lib/registry/agent-registry.js` — v0.56 sub-plan 06 착수 시 필요성 재판단 (CP-5 B)
+- `lib/quality/gate-manager.js` + `tests/gate-manager.test.js` — v0.56 sub-plan 07 (CP-6 C-full)
+- `scripts/refactor-audit.js`, `scripts/generate-dashboard.js`, `scripts/seo-audit.js` — v0.56 sub-plan 08
+- ESLint, `.hooks/pre-commit`, `scripts/check-legacy-paths.sh` — CI와 별개 (CP-1/2)
+- `scripts/skill_eval/*.py` — `cso/skill-validator.md` 명시 호출
+
+### Migration notes
+
+v0.54.x 사용자의 `.vais/` 상태 파일과 완전 호환. `vais.config.json`에서 삭제된 키는 자동 무시됨.
+
+### Next
+
+v0.56.0 "Activation" 릴리즈에서 advisor 런타임, gate 메트릭 파이프라인, `/vais dashboard` 커맨드, SEO 감사 CLI를 차례로 활성화. 세부: `guide/v054/README.md §2.2`.
+
 ## [0.54.1] - 2026-04-17
 
 ### Changed
