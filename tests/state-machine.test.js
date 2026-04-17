@@ -1,11 +1,10 @@
 /**
- * Unit tests for lib/core/state-machine-v050.js
- * sub-plan 00 §4 검증 항목 대응
+ * Unit tests for lib/core/state-machine.js
  */
 
 const { test } = require('node:test');
 const assert = require('node:assert');
-const sm = require('../lib/core/state-machine-v050');
+const sm = require('../lib/core/state-machine');
 
 test('PIPELINE_ROLES는 CBO 포함, CMO/CFO/CEO 제외', () => {
   assert.deepStrictEqual(sm.PIPELINE_ROLES, ['cbo', 'cpo', 'cto', 'cso', 'coo']);
