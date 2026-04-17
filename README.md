@@ -1,7 +1,4 @@
 <p align="center">
-  <a href="https://github.com/ghlee3401/vais-claude-code/actions/workflows/ci.yml">
-    <img src="https://github.com/ghlee3401/vais-claude-code/actions/workflows/ci.yml/badge.svg" alt="CI" />
-  </a>
   <img src="https://img.shields.io/badge/version-0.54.1-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
