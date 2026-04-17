@@ -21,29 +21,35 @@ checkpoint-manager, automation-controller) 6개를 함께 이식했다.
 | `lib/control/blast-radius.js` | 254 | **0** | 0 |
 | `lib/control/checkpoint-manager.js` | 263 | **0** | 0 |
 | `lib/control/automation-controller.js` | 253 | **0** | 0 |
-| `lib/control/cost-monitor.js` | 152 | **0** | 1 (`tests/advisor-degrade.test.js`) |
-| `lib/control/index.js` | 11 | **0** | 0 |
+| ~~`lib/control/cost-monitor.js`~~ | ~~152~~ | ~~0~~ | sub-plan 06에서 advisor 진입점이 require하므로 **유지** |
+| `lib/control/index.js` | 11 | **0** | 0 — re-export만 하던 모듈, 06에서도 미사용. **삭제** |
 
 **결론**:
-- trust-engine, loop-breaker, blast-radius, checkpoint-manager, automation-controller는 `@see bkit-claude-code` 주석만 남기고 플러그인에서는 한 번도 호출된 적이 없다.
-- `cost-monitor`는 자기 테스트에서만 재require. advisor wrapper/prompt-builder와 함께 실제 호출 경로 부재.
-- `vais.config.json`의 `automation` (L0~L4), `guardrails.loopBreaker`, `guardrails.blastRadiusLimit`, `guardrails.checkpoint*`은 전부 소비자 없음.
+- trust-engine, loop-breaker, blast-radius, checkpoint-manager, automation-controller는 `@see bkit-claude-code` 주석만 남기고 플러그인에서는 한 번도 호출된 적이 없다 → **삭제**.
+- `cost-monitor`는 advisor 활성화(sub-plan 06)에 사용 → **유지**.
+- `vais.config.json`의 `automation` (L0~L4), `guardrails.loopBreaker`, `guardrails.blastRadiusLimit`, `guardrails.checkpoint*`은 전부 소비자 없음 → 삭제 (sub-plan 04).
 
 ---
 
 ## 1. 조치
 
-### 1.1 `lib/control/` 전체 삭제
+### 1.1 `lib/control/` 선택적 삭제 (cost-monitor 유지)
 
 ```
-rm -rf lib/control/
+rm lib/control/trust-engine.js
+rm lib/control/loop-breaker.js
+rm lib/control/blast-radius.js
+rm lib/control/checkpoint-manager.js
+rm lib/control/automation-controller.js
+rm lib/control/index.js
+# cost-monitor.js는 유지 (sub-plan 06이 require)
 ```
 
-**검증**: `ls lib/control` → fail
+**검증**: `ls lib/control/` → `cost-monitor.js`만 남음
 
-### 1.2 관련 테스트 삭제/수정
+### 1.2 관련 테스트
 
-- `tests/advisor-degrade.test.js` — cost-monitor 테스트. 04 (Advisor wrapper)도 삭제한다면 이 테스트도 함께 삭제. 03 sub-plan에서 advisor 처리 결정 반영.
+- `tests/advisor-degrade.test.js` — cost-monitor 테스트, **유지** (sub-plan 06에서 활용).
 
 ### 1.3 `vais.config.json` 키 제거 (sub-plan 04에서 실제 수정, 여기선 목록만 정의)
 
@@ -79,10 +85,10 @@ grep -rn "lib/control\|trust-engine\|loop-breaker\|blast-radius\|checkpoint-mana
 
 | # | 검증 | 방법 |
 |---|------|------|
-| V-1 | `lib/control/` 부재 | `ls lib/control` fail |
-| V-2 | 런타임 코드에 `lib/control` 참조 0 | `grep -rn "lib/control" scripts/ hooks/ lib/` → 0 |
+| V-1 | `lib/control/cost-monitor.js`만 존재, 나머지 5 파일 + index.js 부재 | `ls lib/control/` |
+| V-2 | 런타임 코드에 trust-engine/loop-breaker/blast-radius/checkpoint-manager/automation-controller 참조 0 | grep → 0 |
 | V-3 | 에이전트/스킬 문서에 TrustEngine/LoopBreaker 등 언급 0 (CHANGELOG/guide 예외) | grep |
-| V-4 | `npm test` 통과 (advisor-degrade.test.js 삭제 또는 03에서 처리) | `node --test tests/*.test.js` |
+| V-4 | `npm test` 통과 (cost-monitor 테스트 유지됨) | `node --test tests/*.test.js` |
 
 ---
 

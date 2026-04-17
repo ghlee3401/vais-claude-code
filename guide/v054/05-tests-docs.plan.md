@@ -17,7 +17,7 @@
 
 ## 1. 테스트 정리
 
-### 1.1 유지할 테스트 (기존 16 → 10)
+### 1.1 유지할 테스트 (기존 16 → 11)
 
 | 테스트 | 대상 | 비고 |
 |--------|------|------|
@@ -30,13 +30,13 @@
 | `tests/webhook.test.js` | lib/webhook.js | 유지 |
 | `tests/bash-guard.test.js` | scripts/bash-guard.js | 유지 |
 | `tests/prompt-handler.test.js` | scripts/prompt-handler.js | 유지 |
+| `tests/advisor-integration.test.js` | lib/advisor/* | 유지 (sub-plan 06 활성화) |
+| `tests/advisor-degrade.test.js` | lib/control/cost-monitor.js | 유지 (sub-plan 06) |
 
-### 1.2 삭제할 테스트 (6)
+### 1.2 삭제할 테스트 (5)
 
 | 파일 | 이유 |
 |------|------|
-| `tests/advisor-integration.test.js` | lib/advisor/* 삭제됨 (CP-3) |
-| `tests/advisor-degrade.test.js` | lib/control/cost-monitor.js 삭제됨 (sub-plan 01) |
 | `tests/agent-registry.test.js` | lib/registry/* 삭제됨 (CP-5) |
 | `tests/gate-manager.test.js` | lib/quality/gate-manager.js 삭제됨 (CP-6) |
 | `tests/migration-engine.test.js` | lib/core/migration-engine.js 삭제됨 (sub-plan 03) |
@@ -93,10 +93,13 @@ CLAUDE.md와 이중화되는 핵심 규칙 동일하게 갱신.
 
 ### Removed
 - **CI**: GitHub Actions workflow (`.github/workflows/ci.yml`), ESLint 설정, pre-commit hook(`scripts/check-legacy-paths.sh`, `npm run prepare-hooks`). 플러그인 자체 검증은 로컬 `npm test`로 수행.
-- **Dead code `lib/control/`** (~1,280 LOC): trust-engine, loop-breaker, blast-radius, checkpoint-manager, automation-controller, cost-monitor — 런타임에서 한 번도 호출되지 않아 제거.
+- **Dead code `lib/control/`** (~1,128 LOC): trust-engine, loop-breaker, blast-radius, checkpoint-manager, automation-controller, index — 런타임 호출 0회. (cost-monitor는 advisor 활성화에 사용되어 유지)
 - **Dead code `lib/pdca/`** (~805 LOC): feature-manager, session-guide, decision-record, automation — `lib/status.js`가 이미 동등 기능 제공.
-- **중복 모듈**: `lib/advisor/`, `lib/quality/`, `lib/registry/`, `lib/validation/` 전체 + `lib/core/migration-engine.js`, `lib/core/state-machine-v050.js` — 테스트에서만 참조되고 런타임 연결 부재.
-- **`vais.config.json` 키**: `automation`, `guardrails`, `advisor`, `parallelGroups`, `chaining`, `featureNameValidation`, `featureNameSuggestions` — 소비자 부재.
+- **중복 모듈**: `lib/quality/`, `lib/registry/`, `lib/validation/` 전체 + `lib/core/migration-engine.js`, `lib/core/state-machine-v050.js` — 테스트에서만 참조.
+- **`vais.config.json` 키**: `automation`, `guardrails`, `parallelGroups`, `chaining`, `featureNameValidation`, `featureNameSuggestions` — 소비자 부재.
+
+### Added
+- **Advisor 활성화** (sub-plan 06): `scripts/advisor-call.js` CLI 진입점, session-start hook의 모드 판정(`scripts/check-cc-advisor-support.js`), cost-monitor를 wrapper에서 직접 require, agent markdown 호출 가이드 (`agents/_shared/advisor-guard.md`).
 
 ### Changed
 - `lib/core/state-machine.js`를 v050 6-phase(`ideation` optional 포함) 스펙으로 교체. 런타임 경로는 동일.
@@ -104,7 +107,8 @@ CLAUDE.md와 이중화되는 핵심 규칙 동일하게 갱신.
 
 ### Kept (사용자 확인 후)
 - `agents/coo/release-engineer.md` — 사용자 프로젝트 CI/CD 셋업용 에이전트 (플러그인 기능)
-- 에이전트 frontmatter의 `advisor.enabled: true` — Claude Code 내부에서 해석
+- 에이전트 frontmatter의 `advisor.enabled: true` — native 모드에서 Claude Code 내부 해석
+- `lib/advisor/`, `lib/control/cost-monitor.js`, `vais.config.json > advisor` — sub-plan 06에서 활성화
 - `scripts/generate-dashboard.js`, `scripts/seo-audit.js`, `scripts/refactor-audit.js` 등 에이전트 내부 도구
 
 ### Migration notes
@@ -135,11 +139,11 @@ SC-1 ~ SC-10 (README.md §3) 전부 확인. 특히:
 | SC | 방법 |
 |----|------|
 | SC-1 | `ls .github` fail |
-| SC-3 | `ls lib/control lib/pdca` fail |
-| SC-4 | `ls lib/validation lib/quality lib/registry lib/advisor` fail + `ls lib/core/migration-engine.js lib/core/state-machine-v050.js` fail |
-| SC-6 | `node --test tests/*.test.js` 전부 pass |
-| SC-7 | `grep -rn "lib/control\|lib/pdca\|lib/advisor\|lib/quality\|lib/registry\|lib/validation\|state-machine-v050\|migration-engine" scripts/ hooks/ lib/` → 0 |
-| SC-8 | `grep -rn "lib/control\|lib/pdca" agents/ skills/ templates/` → 0 |
+| SC-3 | `ls lib/pdca` fail. `ls lib/control/` → cost-monitor.js만 존재 |
+| SC-4 | `ls lib/validation lib/quality lib/registry` fail + `lib/core/migration-engine.js`, `lib/core/state-machine-v050.js` fail. `lib/advisor/` 존재 (06에서 활성화) |
+| SC-6 | `node --test tests/*.test.js` 전부 pass (advisor 테스트 2종 포함) |
+| SC-7 | `grep -rn "lib/pdca\|lib/quality\|lib/registry\|lib/validation\|state-machine-v050\|migration-engine\|trust-engine\|loop-breaker\|blast-radius\|automation-controller\|checkpoint-manager" scripts/ hooks/ lib/` → 0 |
+| SC-8 | `grep -rn "lib/pdca\|trust-engine\|loop-breaker" agents/ skills/ templates/` → 0 |
 | SC-9 | CHANGELOG에 `## [0.55.0]` 존재 |
 | SC-10 | 4 파일 모두 `"version": "0.55.0"` |
 

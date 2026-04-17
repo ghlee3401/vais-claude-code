@@ -41,6 +41,7 @@ v0.50 full overhaul 이후 v0.54.1까지의 플러그인을 **전체 리뷰**한
 ### 1.2 Dead code 스캐너 결과 (require 그래프 기준)
 
 다음 모듈은 **런타임(hooks/ + scripts/에서 호출하는 실행 경로)에서 전혀 require되지 않는다**.
+(advisor 관련은 sub-plan 06에서 진입점 추가하여 활성화 — 삭제 대상 아님)
 
 | 모듈 | LOC | 참조처 |
 |------|-----|--------|
@@ -49,7 +50,7 @@ v0.50 full overhaul 이후 v0.54.1까지의 플러그인을 **전체 리뷰**한
 | `lib/control/blast-radius.js` | 254 | 아무 데도 require하지 않음 |
 | `lib/control/checkpoint-manager.js` | 263 | 아무 데도 require하지 않음 (실제 CP 가드는 `scripts/cp-guard.js`) |
 | `lib/control/automation-controller.js` | 253 | 아무 데도 require하지 않음 |
-| `lib/control/cost-monitor.js` | 152 | `tests/advisor-degrade.test.js`에서만 |
+| ~~`lib/control/cost-monitor.js`~~ | ~~152~~ | sub-plan 06에서 advisor 진입점에 연결하므로 **유지** |
 | `lib/control/index.js` | 11 | 위 전체 re-export, 외부 소비자 0 |
 | `lib/pdca/automation.js` | 218 | 아무 데도 require하지 않음 |
 | `lib/pdca/decision-record.js` | 162 | 아무 데도 require하지 않음 |
@@ -63,10 +64,10 @@ v0.50 full overhaul 이후 v0.54.1까지의 플러그인을 **전체 리뷰**한
 | `lib/registry/agent-registry.js` | 153 | `tests/` 2곳에서만 |
 | `lib/core/state-machine-v050.js` | 268 | `tests/` 2곳에서만 (런타임은 `state-machine.js`) |
 | `lib/core/migration-engine.js` | 287 | `tests/migration-engine.test.js`에서만 |
-| `lib/advisor/wrapper.js` | 113 | 테스트에서만 |
-| `lib/advisor/prompt-builder.js` | 60 | 테스트에서만 |
+| ~~`lib/advisor/wrapper.js`~~ | ~~113~~ | sub-plan 06에서 fallback 모드 진입점 연결하여 **유지** |
+| ~~`lib/advisor/prompt-builder.js`~~ | ~~60~~ | wrapper와 함께 **유지** |
 
-**합계: 약 3,840 LOC**가 런타임 실행 경로 바깥의 dead code / test-only code.
+**합계: 약 3,840 LOC** 중 advisor 관련 4 파일(약 325 LOC)을 제외한 **약 3,515 LOC** 삭제 대상. advisor는 sub-plan 06에서 활성화.
 
 ### 1.3 설정 파일 소비자 없음 (`vais.config.json`)
 
@@ -109,20 +110,21 @@ v0.50 full overhaul 이후 v0.54.1까지의 플러그인을 **전체 리뷰**한
 | # | Sub-plan | 파일 | 선행 | 핵심 변경 |
 |---|----------|------|------|-----------|
 | 00 | CI Removal | `v054/00-ci-removal.plan.md` | — | `.github/workflows/`, ESLint, pre-commit, legacy-path-guard 제거 |
-| 01 | Dead Code — `lib/control/` | `v054/01-lib-control-removal.plan.md` | — | 6 파일 (~1,280 LOC) 제거 + config `automation`/`guardrails` 정리 |
+| 01 | Dead Code — `lib/control/` (cost-monitor 제외) | `v054/01-lib-control-removal.plan.md` | — | 6 파일 (~1,280 LOC) 제거. `cost-monitor.js`는 advisor 활성화에 사용되므로 **유지** + config `automation`/`guardrails` 정리 |
 | 02 | Dead Code — `lib/pdca/` | `v054/02-lib-pdca-removal.plan.md` | — | 5 파일 (~805 LOC) 제거 |
-| 03 | Duplicate Consolidation | `v054/03-duplicate-modules.plan.md` | — | `lib/validation/*`, `lib/quality/*`, `lib/registry/*`, `lib/advisor/*`, `state-machine-v050.js`, `migration-engine.js` 처리 (삭제 or runtime 연결) |
-| 04 | Config Cleanup | `v054/04-config-cleanup.plan.md` | 01, 02, 03 | `vais.config.json`에서 소비자 없는 키 삭제 |
+| 03 | Duplicate Consolidation | `v054/03-duplicate-modules.plan.md` | — | `lib/validation/*`, `lib/quality/*`, `lib/registry/*`, `state-machine-v050.js`, `migration-engine.js` 처리. **`lib/advisor/*`는 06에서 별도 처리 (유지)** |
+| 04 | Config Cleanup | `v054/04-config-cleanup.plan.md` | 01, 02, 03, 06 | `vais.config.json`에서 소비자 없는 키 삭제. `advisor` 섹션은 **유지** |
 | 05 | Tests & Docs Update | `v054/05-tests-docs.plan.md` | 전체 | 삭제 모듈 관련 테스트 제거, CLAUDE/AGENTS/README/CHANGELOG 갱신, 버전 0.54.1 → 0.55.0 |
+| 06 | Advisor Activation | `v054/06-advisor-activation.plan.md` | 03 | advisor 진입점(CLI + session-start mode 판정 + cost-monitor 연결) 완성. native/fallback 자동 분기 |
 
 **의존성 그래프**
 ```
 00 CI Removal  ─┐
-01 control/    ─┼─→ 04 Config Cleanup ─→ 05 Docs/Tests
+01 control/    ─┼──────────────────→ 04 Config Cleanup ─→ 05 Docs/Tests
 02 pdca/       ─┤
-03 Duplicates  ─┘
+03 Duplicates  ─┴─→ 06 Advisor Activation ─┘
 ```
-00~03은 서로 독립이므로 **병렬 가능**. 04는 01~03 완료 후. 05는 최종.
+00~03은 서로 독립이므로 **병렬 가능**. 06은 03 후 (advisor 외 중복 정리 끝나야 진입점 추가가 깔끔). 04는 01~03+06 완료 후. 05는 최종.
 
 ---
 
@@ -151,7 +153,7 @@ v0.50 full overhaul 이후 v0.54.1까지의 플러그인을 **전체 리뷰**한
 |---|----------|---------|
 | CP-1 | `.hooks/pre-commit` 삭제 여부 | **삭제** (사용자가 로컬에서 검증 원할 시 수동 재도입) |
 | CP-2 | `eslint.config.js` + ESLint 완전 제거 여부 | **제거** (CI 함께 제거) |
-| CP-3 | `lib/advisor/` 처리 방침: (A) 전부 삭제 (B) 런타임 연결 (C) 유지하되 "외부 프롬프트 규격 참고용" 선언 | **(A) 삭제**. advisor beta는 Claude Code에서 frontmatter로 직접 제어하므로 plugin 런타임 코드가 불필요 |
+| CP-3 | `lib/advisor/` 처리 방침: (A) 전부 삭제 (B) 런타임 연결 (C) 유지하되 "외부 프롬프트 규격 참고용" 선언 | **(B) 런타임 연결** (사용자 결정 2026-04-17). sub-plan 06에서 native/fallback 자동 분기 + CLI 진입점 추가 |
 | CP-4 | `lib/core/state-machine-v050.js` 처리: (A) 삭제 (B) 구버전 교체 | **(B) 교체**. 다만 Migration 비용이 크면 (A)로 선회 |
 | CP-5 | `lib/registry/agent-registry.js` 처리: (A) 삭제 (B) 런타임 연결 | **(A) 삭제**. includes 병합은 Claude Code 쪽에서 처리, plugin에서 파싱할 필요 없음 |
 | CP-6 | `lib/quality/gate-manager.js` 처리: (A) 삭제 (B) `scripts/agent-stop.js`에 연결해 4-step pipeline 구현 | **(A) 삭제**. 현재 scripts/doc-validator + cp-guard 조합이 이미 동작 중이므로 재설계 비용 불필요 |

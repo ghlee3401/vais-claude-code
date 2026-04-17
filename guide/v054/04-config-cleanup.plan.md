@@ -36,7 +36,7 @@
 | `guardrails.checkpointOnDestructive` | 〃 | **삭제** |
 | `orchestration.gateAction` | agent markdown 참조 + `scripts/doc-validator.js`? | 유지 (문서에서 참조) |
 | `gates.cto.plan.*` | agent markdown(CTO)에서 "strict/ask/skip" 참조 | 유지 (CTO plan phase 동작 규격) |
-| `advisor.*` | `lib/advisor/*` (03에서 삭제) + `lib/control/cost-monitor.js` (01에서 삭제) | **삭제** |
+| `advisor.*` | `lib/advisor/*` + `lib/control/cost-monitor.js` (sub-plan 06에서 활성화) | **유지** |
 | `conventions.referenceComment` | 에이전트 markdown 참조 (규칙 Rule #7) | 유지 |
 | `featureNameValidation` | `lib/status.js validateFeatureName` — 현재 하드코딩. config 키는 참고용 | **키 삭제** (소비자 없음) — 또는 status.js가 config 읽도록 수정 (추가 작업 크므로 키 삭제 권장) |
 | `featureNameSuggestions` | 사용자 힌트(CLI 표시 없음) | **삭제** (소비자 없음) |
@@ -47,7 +47,8 @@
 
 ### 1.1 `vais.config.json` 수정
 
-**삭제할 최상위 키**: `automation`, `guardrails`, `advisor`
+**삭제할 최상위 키**: `automation`, `guardrails`
+**유지**: `advisor` (sub-plan 06이 wrapper/cost-monitor에서 소비)
 
 **삭제할 하위 키**:
 - `parallelGroups` (내용은 skills/phases/{cto,cbo,coo}.md에 인라인 이동)
@@ -72,6 +73,7 @@
   "manager": {...},
   "orchestration": {"gateAction": "confirm"},
   "gates": {...},
+  "advisor": {...},
   "conventions": {...}
 }
 ```
@@ -94,7 +96,7 @@ grep -rn "parallelGroups" agents/ skills/ scripts/ hooks/ lib/ templates/
 
 | # | 검증 | 방법 |
 |---|------|------|
-| V-1 | `vais.config.json`에 `automation`, `guardrails`, `advisor` 키 부재 | `jq '.automation' vais.config.json` → null |
+| V-1 | `vais.config.json`에 `automation`, `guardrails` 키 부재. `advisor` 키 유지 | `jq '.automation, .guardrails' vais.config.json` → null, `jq '.advisor' vais.config.json` → object |
 | V-2 | `vais.config.json` 유효 JSON | `node -e "require('./vais.config.json')"` |
 | V-3 | 런타임에서 config 로드 정상 | `npm test` (paths.test.js, status.test.js 등) |
 | V-4 | version 키가 0.55.0 | grep |
