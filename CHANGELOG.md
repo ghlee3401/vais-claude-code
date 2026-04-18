@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.56.2] - 2026-04-18 — Argument Hint 포맷 정렬
+
+### Fixed
+
+- `skills/vais/SKILL.md` argument-hint 를 구 3-토큰 `[action] [feature]` 에서 4-토큰 `[c-level] [phase] [feature]` 로 수정 (output-style 엄격 규칙 일치)
+- SKILL.md 인트로 예시 `/vais cto {feature}` → `/vais cto plan {feature}` 로 일관성 확보
+
 ## [0.56.1] - 2026-04-17 — Gate Awareness
 
 v0.56.0 에서 gate 파이프라인은 동작하지만 각 agent 가 "어떤 메트릭으로 평가받는지" 모르는 문제를 해소. sub-plan 07 T-11 (Chunk D 중 유일하게 실용 가치 높은 항목) 만 선별 반영.

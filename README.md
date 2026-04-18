@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.56.1-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-0.56.2-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -335,7 +335,7 @@ vais-claude-code/
 ## Testing
 
 ```bash
-npm test    # 162 pass, 0 fail, 3 skipped (v0.56.1)
+npm test    # 162 pass, 0 fail, 3 skipped (v0.56.2)
 ```
 
 ---

@@ -12,13 +12,13 @@ description: >
   cto, ceo, cbo, cso, cpo, coo, c-suite, 기술총괄, 전략, 비즈니스, 마케팅, 보안, 재무, 운영,
   매니저, 현황, 히스토리, 부채, 의존성, 브리핑.
   Do NOT use for: simple questions without code context, casual conversation
-argument-hint: "[action] [feature]"
+argument-hint: "[c-level] [phase] [feature]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
 ---
 
 # VAIS Code — $0 $1
 
-> 🎯 C-Suite 오케스트레이션 | 구현은 `/vais cto {feature}`로 시작하세요
+> 🎯 C-Suite 오케스트레이션 | 구현은 `/vais cto plan {feature}`로 시작하세요
 
 ## 현재 상태
 
