@@ -81,6 +81,17 @@
 
 - [ ]
 
+<!-- v0.57 subdoc-section begin -->
+
+---
+
+## Topic Documents (v0.57+)
+
+> Report 는 **main.md 단독** 정책 (`vais.config.json > workflow.subDocPolicy.reportPhase = "single"`). Topic Documents / Scratchpads 섹션은 선택 사항.
+
+<!-- v0.57 subdoc-section end -->
+
+
 ---
 
 ## 변경 이력
@@ -89,4 +100,4 @@
 |---------|------|--------|
 | v1.0 | {date} | 초기 작성 |
 
-<!-- template version: v0.18.0 -->
+<!-- template version: v0.57.0 -->

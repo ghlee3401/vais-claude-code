@@ -1,5 +1,67 @@
 # Changelog
 
+## [0.57.0] - 2026-04-19 — Sub-doc Preservation
+
+C-Level `main.md` 에 축약되어 사라지던 sub-agent 원본 분석을 `_tmp/{agent-slug}.md` scratchpad 로 **영구 보존**하고, C-Level 이 이를 **큐레이션**하여 topic 별 `{topic}.md` 문서로 합성하는 2-layer 문서 모델 도입. 사용자 원문: *"sub agent의 문서를 모두 남기기에는 커지고 비효율적. sub agent 문서를 읽고 c-level이 topic에 맞게 정리"*.
+
+### Added
+
+- **컨벤션 (Batch A)**:
+  - `vais.config.json > workflow.docPaths` 확장: `topic`, `scratchpad`, `scratchpadQualified`, `systemArtifacts`
+  - `vais.config.json > workflow.topicPresets`: 6 phase × 기본 topic 프리셋 (C-Level 확장 가능)
+  - `vais.config.json > workflow.subDocPolicy`: `enforcement` (warn|retry|fail, 기본 warn) + `scratchpadPreserve` + `scratchpadMinBytes` + `requireCurationRecord` + `reportPhase`
+  - `agents/_shared/subdoc-guard.md` 신규 (canonical source — 작성 규칙, qualifier, 금지 사항, Handoff 스펙)
+  - `templates/subdoc.template.md` 공통 sub-doc 템플릿 (Context / Body / Decisions / Artifacts / Handoff 6섹션)
+
+- **35 sub-agent 일괄 패치 (Batch B)**:
+  - `scripts/patch-subdoc-block.js` — idempotent 패치 스크립트 (마커 기반, dry-run / verbose / 버전 교체 지원)
+  - 36 sub-agent `.md` 본문에 subdoc-guard 블록 직접 삽입 (C-Level 6 + CEO 2 meta 제외)
+  - **중요 발견**: `includes:` frontmatter 는 Claude Code sub-agent 런타임에 미통합 (smoke test 로 검증). Option A (블록 직접 복붙) 로 pivot — `_shared/subdoc-guard.md` 는 source of truth 역할 전환.
+
+- **라이브러리/스크립트/테스트 (Batch C)**:
+  - `lib/status.js`: `registerSubDoc / listSubDocs / unregisterSubDoc` 3 함수 + `status.json features.{f}.docs.subDocs[]` 스키마
+  - `scripts/doc-validator.js`: `validateSubDocs()` + 6 경고 코드 (`W-SCP-01~03` / `W-TPC-01` / `W-IDX-01` / `W-MAIN-01`)
+  - `scripts/auto-judge.js`: `judgeCTO` 에서 `main.md` → `_tmp/qa-engineer.md` fallback 파싱 (Critical 메트릭)
+  - 테스트 31 건 신규: `status-subdoc` (13) + `doc-validator-subdoc` (12) + `auto-judge-fallback` (6)
+  - 픽스처 3 건: `tests/fixtures/subdoc-{index,engineer,auditor}.sample.md`
+
+- **Release (Batch D)**:
+  - 6 C-Level agent md 에 "Sub-doc 인덱스 포맷" 섹션 추가 (`scripts/patch-clevel-subdoc-section.js`)
+  - 6 phase 템플릿에 "Topic Documents" + "Scratchpads" 섹션 (template version v0.57.0)
+  - `CLAUDE.md` Rule #3 확장 + **Rule #14 신설** (Sub-doc 보존 원칙)
+  - `AGENTS.md` 필수 규칙 #7 추가 (동기화)
+  - `README.md` Document Structure — 2-layer 모델 + `_tmp/` 도식
+
+### Changed
+
+- `docs/{feature}/{NN-phase}/main.md` 역할 재정의: 의사결정 인덱스 + Topic Documents + Scratchpads (축약 손실 해결)
+- Sub-agent 산출물 저장 규칙: ad-hoc (`infra.md`, `review.md`, `strategy.md`, `performance.md`) → `_tmp/{agent-slug}.md` + qualifier
+- `lib/registry/agent-registry.js` 의 `loadAgent()` / `mergedBody` 는 **advisor 프롬프트 빌더 전용** 임을 Do 문서 v1.1 에 명시 (runtime agent invocation 에는 미사용)
+
+### Rationale
+
+- v0.56 기준 35+ sub-agent 중 ~5개만 자기 문서 남김. qa-engineer 의 60+ Critical/Important 이슈가 CTO main.md 요약 5줄로 압축되어 **원본 추적 불가**
+- 병렬 Do 단계에서 3 agent 가 같은 main.md 에 Write → race condition
+- 해결: sub-agent = `_tmp/*.md` 전담, C-Level = 큐레이션 + topic 합성 전담 — race 제거 + 원본 보존 + topic 중심 독서
+
+### Migration
+
+- **기존 v0.56 이전 피처 문서는 무변경** (main.md 단독 허용 유지, `_tmp/` 부재는 경고 대상 아님)
+- 신규 피처부터 2-layer 모델 적용 권장
+- 기존 ad-hoc sub-doc 5건 은 신규 피처부터 `_tmp/{slug}.md` 또는 `{slug}.{qualifier}.md` 로 이전. `interface-contract.md` 는 시스템 산출물 예외
+
+### Test stats
+
+- 162 pass → **193 pass** (+31) / 0 fail / 3 skipped / 0 회귀
+- plugin-validator: 0 오류 / 0 경고
+
+### Known Limitations
+
+- `includes:` frontmatter 는 Claude Code sub-agent runtime 에 **미통합** 확인됨 (이 릴리즈 의 block-direct-inject 가 유일하게 동작하는 방식)
+- `loadAgent()` 의 advisor 프롬프트 이외 용도는 별도 감사 필요 (TD-2, TD-3 — 후속 스프린트)
+- `guide/v057/*` 재작성은 Batch E 로 이관 (7 파일 대량 편집 — 본 릴리즈 범위 외)
+- 특화 템플릿 5종 (engineer/analyst/auditor/designer/researcher) 은 **v0.57.1** 로 이연
+
 ## [0.56.2] - 2026-04-18 — Argument Hint 포맷 정렬
 
 ### Fixed

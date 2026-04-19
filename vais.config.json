@@ -1,5 +1,5 @@
 {
-  "version": "0.56.2",
+  "version": "0.57.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -210,7 +210,32 @@
       "design": "docs/{feature}/02-design/main.md",
       "do": "docs/{feature}/03-do/main.md",
       "qa": "docs/{feature}/04-qa/main.md",
-      "report": "docs/{feature}/05-report/main.md"
+      "report": "docs/{feature}/05-report/main.md",
+      "_subdocSince": "v0.57.0 — sub-doc preservation",
+      "topic": "docs/{feature}/{phase}/{topic}.md",
+      "scratchpad": "docs/{feature}/{phase}/_tmp/{slug}.md",
+      "scratchpadQualified": "docs/{feature}/{phase}/_tmp/{slug}.{qualifier}.md",
+      "systemArtifacts": [
+        "docs/{feature}/02-design/interface-contract.md"
+      ]
+    },
+    "topicPresets": {
+      "_description": "Phase별 권장 topic 문서 프리셋. C-Level이 확장 가능 (강제 아님).",
+      "00-ideation": ["problem", "hypotheses", "exit-criteria"],
+      "01-plan": ["requirements", "impact-analysis", "policy"],
+      "02-design": ["architecture", "data-model", "api-contract", "ui-flow", "security"],
+      "03-do": ["implementation", "changes", "tests"],
+      "04-qa": ["findings", "metrics", "issues"],
+      "05-report": []
+    },
+    "subDocPolicy": {
+      "_description": "v0.57.0 sub-doc preservation 정책. sub-agent는 _tmp/에 scratchpad, C-Level은 topic 문서로 큐레이션.",
+      "enforcement": "warn",
+      "_enforcementValues": ["warn", "retry", "fail"],
+      "scratchpadPreserve": true,
+      "scratchpadMinBytes": 500,
+      "requireCurationRecord": true,
+      "reportPhase": "single"
     }
   },
   "gapThreshold": 0.90,

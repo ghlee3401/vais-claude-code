@@ -38,3 +38,33 @@
 ## Raw Context (optional)
 
 (원 대화에서 중요했던 인용. LLM이 plan에서 참조)
+
+<!-- v0.57 subdoc-section begin -->
+
+---
+
+## Topic Documents (v0.57+)
+
+> Ideation 단계의 topic 합성은 선택 사항. `problem` / `hypotheses` / `exit-criteria` 프리셋 참조 (`vais.config.json > workflow.topicPresets.00-ideation`).
+
+| Topic | 파일 | 한 줄 요약 | 참조 scratchpad |
+|-------|------|-----------|----------------|
+| | `{topic}.md` | | |
+
+## Scratchpads (v0.57+)
+
+| Agent | 경로 | 크기 | 갱신 |
+|-------|------|:----:|-----|
+| | `_tmp/{agent-slug}.md` | | |
+
+<!-- v0.57 subdoc-section end -->
+
+---
+
+## 변경 이력
+
+| version | date | change |
+|---------|------|--------|
+| v1.0 | | 초기 작성 |
+
+<!-- template version: v0.57.0 -->

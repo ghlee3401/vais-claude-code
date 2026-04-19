@@ -271,21 +271,30 @@ Sub-agent 종료 시 자동 실행되는 검증 파이프라인:
 
 ---
 
-## Document Structure
+## Document Structure (v0.57+)
 
 ```
 docs/
 └── {feature}/                    # 피처 중심 구조 (v0.52+)
-    ├── ideation/main.md          (optional) 아이디어 요약
-    ├── plan/main.md              요구사항, 범위, 타임라인
-    ├── design/main.md            아키텍처, 기술 스택
-    │   └── (infra.md, interface-contract.md 등 sub-doc 허용)
-    ├── do/main.md                구현 로그
-    ├── qa/main.md                QA 리포트, gap 분석
-    └── report/main.md            최종 리포트
+    └── {NN-phase}/               # 00-ideation / 01-plan / 02-design / 03-do / 04-qa / 05-report
+        ├── main.md               C-Level 의사결정 인덱스 (필수)
+        ├── {topic}.md            C-Level 이 합성한 topic 별 문서 (v0.57+, 선택)
+        │                         예: architecture.md / data-model.md / security.md
+        │                         권장 프리셋: vais.config.json > workflow.topicPresets
+        │                         각 문서에 ## 큐레이션 기록 섹션 필수
+        ├── interface-contract.md (02-design 만, 시스템 산출물)
+        └── _tmp/                 sub-agent scratchpad (v0.57+, 영구 보존 + git 커밋)
+            └── {agent-slug}.md   각 sub-agent 가 자기 분야 원본 분석 기록
+                                  (예: _tmp/backend-engineer.md, _tmp/qa-engineer.md)
 ```
 
-> v0.52 이전의 phase 중심 구조(`docs/00-ideation/`, `docs/01-plan/` 등)는 `docs/_legacy/`로 이관되었습니다. 각 phase 폴더 내에 `main.md`가 인덱스 역할을 하며, 대형 피처는 `{sub}.md` 형식의 sub-doc 분리를 허용합니다.
+**v0.57 Sub-doc Preservation 모델** (2-layer):
+- **Layer 1 (scratchpad)**: sub-agent 가 `_tmp/{slug}.md` 에 축약 없이 기록 — 원본 분석 + 메타 헤더 3줄(Author/Phase/Refs)
+- **Layer 2 (큐레이션)**: C-Level 이 `_tmp/*.md` 전체를 읽고 **필요성/누락/충돌 판단** 후 topic 별 `{topic}.md` 문서로 재구성. `main.md` 는 의사결정 요약 + Topic Documents 인덱스 + Scratchpads 인벤토리
+
+추적성: 사용자가 "이 결정의 근거?" 질문 시 main.md Decision Record → `_tmp/{slug}.md` 원본까지 추적 가능. `scripts/doc-validator.js` 가 W-SCP/W-TPC/W-IDX 6 경고 코드로 품질 체크 (warn only).
+
+> 호환성: v0.56 이전 피처 문서(main.md 단독)는 그대로 동작. 신규 피처부터 2-layer 모델 적용 권장.
 
 ---
 

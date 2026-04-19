@@ -45,6 +45,7 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 4. **문서 참조 투명성**: 구현 시 참조한 문서 목록을 산출물 상단에 기록합니다
 5. **위험 명령 금지**: `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수**: 민감 정보는 반드시 환경 변수로 관리합니다
+7. **Sub-doc 보존 (v0.57+)**: sub-agent 는 `docs/{feature}/{NN-phase}/_tmp/{agent-slug}.md` scratchpad 에 축약 없이 기록. C-Level 은 `_tmp/*.md` 를 읽고 topic 별 `{topic}.md` + `main.md` 인덱스로 큐레이션. `_tmp/` 는 영구 보존 + git 커밋. 각 topic 문서에 `## 큐레이션 기록` 섹션 필수. 상세: CLAUDE.md Rule #14
 
 ## 에이전트 역할
 

@@ -179,6 +179,40 @@ auto-judge 가 `do` phase 산출물을 파싱해 **`marketingScore`** 계산 (= 
 
 ---
 
+<!-- @refactor:begin subdoc-index -->
+## Sub-doc 인덱스 포맷 (v0.57+)
+
+**main.md 는 인덱스 + 의사결정만.** sub-agent 상세 분석은 `_tmp/{agent-slug}.md` scratchpad 에서 읽고, topic 별 합성은 `{topic}.md` 로 분리.
+
+### main.md 필수 섹션 순서
+
+1. Executive Summary / 2. Context Anchor / 3. Decision Record (근거 링크) / 4. Topic Documents 인덱스 / 5. Scratchpads 인벤토리 / 6. Gate Metrics / 7. Next·변경 이력
+
+### 축약 금지 영역 → topic 또는 `_tmp/` 로 이관
+
+- analyst 상세 분석 본문 → `_tmp/{analyst-slug}.md`
+- 수치 테이블 대량 나열 → topic 문서 또는 `_tmp/`
+- 경쟁사 분석 원본 → `_tmp/market-researcher.md`
+
+### 병렬 쓰기 금지
+
+sub-agent 는 `_tmp/{slug}.md` 만 Write. main.md / topic 문서는 CBO 가 수집 후 단독 편집.
+
+### 큐레이션 기록 (topic 문서 필수)
+
+각 `{topic}.md` 하단에 `## 큐레이션 기록` 섹션 (채택/거절/병합/추가 + C-Level 판단 요약). `scripts/doc-validator.js` 가 `W-TPC-01` 경고 (v0.57 warn only).
+
+### CBO 특화 topic 프리셋
+
+Plan: `market-analysis`, `pricing`, `financial-model`. Do: `gtm-plan`, `copy`. QA: `seo`, `unit-economics`, `marketing-attribution`. `vais.config.json > workflow.topicPresets` 기준 + CBO 확장.
+
+### 재실행
+
+기존 topic + 새 `_tmp/*.md` diff-merge (증분 통합). 백업은 git.
+<!-- @refactor:end subdoc-index -->
+
+---
+
 <!-- @refactor:begin common-outro -->
 ## 완료 아웃로 포맷 (필수)
 

@@ -129,7 +129,7 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 
 1. **기획 없이 코드 금지** — `docs/{feature}/01-plan/` 기획서가 없으면 구현하지 않는다
 2. **워크플로우 순서 준수** — (optional) ideation → plan → design → do → qa → report 순서를 건너뛰지 않는다. plan, design, do, qa는 mandatory phase로 스킵 금지. **ideation은 optional이며 mandatory 목록에 포함하지 않는다** (SC-13). C-Level 간 위임 시에도 각 phase를 순차 별도 호출해야 한다
-3. **산출물 경로** — `docs/{feature}/{NN-phase}/main.md` 형식 준수. Phase↔Folder 매핑: `ideation`→`00-ideation`, `plan`→`01-plan`, `design`→`02-design`, `do`→`03-do`, `qa`→`04-qa`, `report`→`05-report`. 커맨드는 phase 이름(`plan`) 그대로 사용. 대형 피처는 sub-doc 분리 가능 (main.md가 인덱스). Single source of truth: `vais.config.json > workflow.docPaths`
+3. **산출물 경로** — `docs/{feature}/{NN-phase}/main.md` 형식 준수. Phase↔Folder 매핑: `ideation`→`00-ideation`, `plan`→`01-plan`, `design`→`02-design`, `do`→`03-do`, `qa`→`04-qa`, `report`→`05-report`. 커맨드는 phase 이름(`plan`) 그대로 사용. 대형 피처는 sub-doc 분리 가능 (main.md가 인덱스). Single source of truth: `vais.config.json > workflow.docPaths`. **v0.57+ Sub-doc 표준**: sub-agent 는 `docs/{feature}/{NN-phase}/_tmp/{agent-slug}.md` scratchpad 에 작성, C-Level 은 topic 별 `{topic}.md` 로 합성 (프리셋: `workflow.topicPresets`). `_tmp/` 는 영구 보존 + git 커밋.
 4. **Gate 통과 필수** — 각 Gate의 체크리스트 항목을 모두 확인한 뒤 다음 단계로 진행
 5. **위험 명령 금지** — `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수** — 민감 정보는 반드시 환경 변수로 관리
@@ -140,6 +140,7 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 11. **사용자 주권 (User Sovereignty)** — AI는 추천, 사용자가 결정. CEO 체크포인트에서 반드시 사용자 확인
 12. **Plan은 결정, Do는 실행** — Plan 단계에서는 `docs/{feature}/01-plan/` 산출물만 작성. 프로덕트 파일(skills/, agents/, lib/, src/ 등) 생성·수정은 Do 단계에서만 허용
 13. **레거시 경로 금지** — 문서·코드 모두 **top-level** `docs/NN-` (예: `docs/01-plan/`, `docs/02-design/`) 패턴 사용 금지. 새 구조 `docs/{feature}/{NN-phase}/main.md`만 사용 (feature-grouped, phase subfolder에 NN- 접두사). 예외: `docs/_legacy/`, `CHANGELOG.md`(릴리즈 이력), `tests/paths.test.js` 회귀 가드 문자열, 본 피처 문서 자체. `.hooks/pre-commit`이 자동 차단(top-level만 검사 — feature 하위 `docs/{feature}/NN-phase/`는 Rule #3에 의해 허용)하며, 설치는 `npm run prepare-hooks` 1회 실행. `--no-verify` 사용은 금지.
+14. **Sub-doc 보존 원칙 (v0.57+)** — sub-agent 는 자기 분석/설계/구현 결과를 **축약 없이** `docs/{feature}/{NN-phase}/_tmp/{agent-slug}.md` scratchpad 에 기록. C-Level 은 `_tmp/*.md` 전체를 **읽고 큐레이션**(필요성/누락/충돌 판단)하여 **topic 별 `{topic}.md` 문서 여러 개** + `main.md` 인덱스로 재구성. 각 topic 문서는 `## 큐레이션 기록` 섹션(채택/거절/병합/추가) 필수. **`_tmp/` 는 삭제하지 않고 영구 보존 + git 커밋** (추적성). 병렬 sub-agent 가 `main.md`/`{topic}.md` 직접 편집 금지 — race 방지. 검증: `scripts/doc-validator.js` 의 W-SCP/W-TPC/W-IDX 경고 (`workflow.subDocPolicy.enforcement=warn` 기본).
 
 ## Version Management
 

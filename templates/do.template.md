@@ -83,6 +83,31 @@ src/
 - 캐싱 전략
 - 쿼리 최적화 가이드
 
+<!-- v0.57 subdoc-section begin -->
+
+---
+
+## Topic Documents (v0.57+)
+
+> C-Level 이 `_tmp/*.md` scratchpad 를 읽고 주제별로 합성한 topic 문서 인덱스. 피처 크기에 따라 선택.
+
+| Topic | 파일 | 한 줄 요약 | 참조 scratchpad |
+|-------|------|-----------|----------------|
+| | `{topic}.md` | | |
+
+<!-- Phase 별 권장 topic 프리셋: vais.config.json > workflow.topicPresets.03-do -->
+
+## Scratchpads (v0.57+)
+
+> sub-agent 가 작성한 `_tmp/*.md` 인벤토리. `scripts/doc-validator.js` 가 Author/Phase 헤더 + size 검증.
+
+| Agent | 경로 | 크기 | 갱신 |
+|-------|------|:----:|-----|
+| | `_tmp/{agent-slug}.md` | | |
+
+<!-- v0.57 subdoc-section end -->
+
+
 ---
 
 ## 변경 이력
@@ -91,4 +116,4 @@ src/
 |---------|------|--------|
 | v1.0 | {date} | 초기 작성 |
 
-<!-- template version: v0.18.0 -->
+<!-- template version: v0.57.0 -->

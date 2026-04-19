@@ -260,6 +260,54 @@ PRD 완성 후 구현이 필요하면 CTO에게 전달합니다.
 
 ---
 
+<!-- @refactor:begin subdoc-index -->
+## Sub-doc 인덱스 포맷 (v0.57+)
+
+**main.md 는 인덱스 + 의사결정만.** sub-agent 상세 분석은 `_tmp/{agent-slug}.md` scratchpad 에서 읽고, topic 별 합성은 `{topic}.md` 로 분리.
+
+### main.md 필수 섹션 순서
+
+1. Executive Summary (Problem/Solution/Effect/Core Value 표)
+2. Context Anchor (WHY/WHO/RISK/SUCCESS/SCOPE)
+3. Decision Record — 근거 sub-doc/topic 링크 포함
+4. **Topic Documents** — C-Level 합성 topic 파일 인덱스 표
+5. **Scratchpads** — `_tmp/*.md` 인벤토리 표
+6. Gate Metrics (해당 phase 만)
+7. Next / 변경 이력
+
+### 축약 금지 영역 → topic 또는 `_tmp/` 로 이관
+
+- sub-agent 전문 분석 본문 → `_tmp/{slug}.md`
+- 파일별 diff / code snippet 나열 → `_tmp/{slug}.md` 또는 topic 문서
+- 화면별 ASCII 와이어프레임 → `_tmp/ui-designer.md` 또는 `ui-flow.md`
+- 60+ 이슈 나열 → `_tmp/qa-engineer.md` (main.md 는 `Critical: N` / `Important: M` 합계만)
+
+### 병렬 쓰기 금지
+
+sub-agent 는 `_tmp/{slug}.md` 만 Write. main.md / topic 문서는 C-Level 이 수집 후 단독 편집 (race 방지).
+
+### 큐레이션 기록 (topic 문서 필수)
+
+각 `{topic}.md` 하단에 `## 큐레이션 기록` 섹션:
+
+| Source (`_tmp/...`) | 채택 | 거절 | 병합 | 추가 | 이유 |
+|---------------------|:----:|:----:|:----:|:----:|------|
+
+- 필요성 / 누락 / 충돌 C-Level 판단 요약
+- `scripts/doc-validator.js` 가 `W-TPC-01` 경고로 누락 감지 (v0.57 은 warn only)
+
+### topic 프리셋
+
+`vais.config.json > workflow.topicPresets` 참조. C-Level 이 필요 시 확장 가능.
+
+### 재실행 (동일 phase 재호출)
+
+기존 topic 문서 + 새 `_tmp/*.md` 를 모두 읽고 **diff-merge** (증분 통합). 백업은 git.
+<!-- @refactor:end subdoc-index -->
+
+
+---
+
 <!-- @refactor:begin work-rules -->
 ## 작업 원칙
 
