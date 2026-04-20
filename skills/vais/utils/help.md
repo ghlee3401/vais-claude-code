@@ -18,7 +18,7 @@ AskUserQuestion:
 **-> "커맨드 목록" 선택 시**: 아래 요약을 출력하고 종료:
 
 ```
-VAIS Code v0.43.0 — 커맨드 목록
+VAIS Code v0.58.0 — 커맨드 목록
 
 C-Suite 에이전트:
   /vais cto [phase] {feature}  — 기술 전체 오케스트레이션 (가장 많이 씀)
