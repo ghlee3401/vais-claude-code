@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.58.1] - 2026-04-20 — session-start hook 크래시 핫픽스
+
+타 프로젝트(vais-management 등)에서 구 스키마 `.vais/status.json`(v0.49.x 시절 `rolePhases` 만 있고 `phases` 필드 누락) 이 로드될 때 `lib/status.js:328` 에서 `TypeError: Cannot read properties of undefined` 로 SessionStart hook 전체가 실패하던 문제 수정.
+
+### Fixed
+
+- `lib/status.js` — `getProgressSummary` 와 `updatePhase` 가 `feature.phases` 누락 시 빈 객체로 방어 (TypeError 방지).
+- `lib/core/migration.js` — v2→v3 마이그레이션에 `phases` 6단계 백필 추가 (구 스키마 자동 승격).
+- `hooks/session-start.js` — 피처별 `getProgressSummary` 호출을 try/catch 로 감싸 한 피처의 스키마 손상이 hook 전체를 죽이지 않도록 방어. 훅 진입 시 `ensureMigrated()` 자동 호출로 구 스키마 자동 승격.
+- `.claude-plugin/marketplace.json > metadata.version` — v0.58.0 릴리즈에서 0.57.0 으로 남아있던 stale 값 0.58.1 로 동기화.
+
 ## [0.58.0] - 2026-04-20 — C-Level Coexistence
 
 v0.57 `_tmp/` 모델이 sub-agent 경합만 해결하던 공백을 보완. **같은 `{phase}/main.md` 에 여러 C-Level 이 공존**하도록 append-only 멀티-오너 규약 + `## [{C-LEVEL}]` H2 헤딩 섹션 + Multi-owner Decision Record + topic frontmatter `owner` 필수. 사용자 원문: *"여러 c-level이 참여를 해서 문서를 작성하게 되면 기존의 pdca의 main.md에 덮어쓰려는 현상"*.

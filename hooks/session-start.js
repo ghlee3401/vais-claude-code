@@ -8,7 +8,7 @@ const { spawnSync } = require('child_process');
 const { debugLog } = require('../lib/debug');
 const { logHook } = require('../lib/hook-logger');
 const { ensureVaisDirs, loadConfig, loadOutputStyle } = require('../lib/paths');
-const { getStatus, getActiveFeature, getProgressSummary } = require('../lib/status');
+const { getStatus, getActiveFeature, getProgressSummary, ensureMigrated } = require('../lib/status');
 const { sendWebhook } = require('../lib/webhook');
 
 /**
@@ -33,6 +33,10 @@ function main() {
   logHook('SessionStart', 'ok', { cwd: process.cwd() });
   debugLog('SessionStart', 'Hook executed', { cwd: process.cwd() });
   ensureVaisDirs();
+  // 구 스키마 status.json 승격 (phases 누락 등 복구). 실패해도 hook 은 생존.
+  try { ensureMigrated(); } catch (e) {
+    debugLog('SessionStart', 'ensureMigrated failed', { error: e.message });
+  }
   detectAdvisorMode();
 
   const config = loadConfig();
@@ -45,7 +49,13 @@ function main() {
 
   // Plan SC: SC-01, SC-02 — Progress Bar + Workflow Map (피처 있을 때만)
   if (activeFeature) {
-    const summary = getProgressSummary(activeFeature);
+    let summary = null;
+    try {
+      summary = getProgressSummary(activeFeature);
+    } catch (e) {
+      debugLog('SessionStart', 'active feature summary failed', { feature: activeFeature, error: e.message });
+      try { process.stderr.write(`[VAIS] ⚠️  session-start: active feature "${activeFeature}" status 스키마 손상 — progress/map 렌더 건너뜀\n`); } catch (_) {}
+    }
 
     // --- 1. Progress Bar ---
     try {
@@ -75,10 +85,16 @@ function main() {
   if (featureNames.length > 0) {
     ctx += `## 진행 중인 피처\n\n`;
     for (const fname of featureNames) {
-      const summary = getProgressSummary(fname);
-      if (!summary) continue;
-      const marker = fname === activeFeature ? '👉 ' : '   ';
-      ctx += `${marker}**${fname}** — ${summary.currentPhaseName} ${summary.progressCompact}\n`;
+      try {
+        const summary = getProgressSummary(fname);
+        if (!summary) continue;
+        const marker = fname === activeFeature ? '👉 ' : '   ';
+        ctx += `${marker}**${fname}** — ${summary.currentPhaseName} ${summary.progressCompact}\n`;
+      } catch (e) {
+        debugLog('SessionStart', 'feature summary failed', { feature: fname, error: e.message });
+        const marker = fname === activeFeature ? '👉 ' : '   ';
+        ctx += `${marker}**${fname}** — ⚠️ status 스키마 손상 (복구 필요)\n`;
+      }
     }
     ctx += `\n`;
   }
