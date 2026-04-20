@@ -2,6 +2,16 @@
 
 > ⛔ **Design 단계 범위**: 이 문서는 설계 결정만 기록합니다. 프로덕트 파일 생성·수정은 Do 단계에서 수행하세요.
 > 참조 문서: `docs/{feature}/01-plan/main.md`
+> <!-- size budget: main.md ≤ 200 lines 권장 (workflow.cLevelCoexistencePolicy.mainMdMaxLines). 초과 시 topic 문서로 분리. -->
+
+## Decision Record (multi-owner)
+
+<!-- 각 C-Level 이 자기 결정 행을 append. 이전 행 수정·삭제 금지. Owner 컬럼 필수.
+     C-Level 별 H2 섹션 플레이스홀더: ## [CBO]/[CPO]/[CTO]/[CSO]/[COO] {도메인 요약} -->
+
+| # | Decision | Owner | Rationale | Source topic |
+|---|----------|:-----:|-----------|--------------|
+| 1 | {설계 결정} | cto | {근거} | `{topic}.md` |
 
 ## Context Anchor
 
@@ -322,4 +332,4 @@ flowchart TD
 | v1.0 | | 초기 작성 |
 | v1.1 | 2026-04-08 | Part 4/5 (Tech Stack Lock + Implementation Contract) 추가, Architecture Options 표 압축, 네비/사이트맵 통합 |
 
-<!-- template version: v0.57.0 -->
+<!-- template version: v0.58.0 (v0.57+ subdoc / v0.58+ clevel-coexistence 포함) -->

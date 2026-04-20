@@ -1,6 +1,7 @@
 # {feature} — 완료 보고서
 
 > 참조 문서: `docs/{feature}/01-plan/main.md`, `docs/{feature}/02-design/main.md`, `docs/{feature}/04-qa/main.md`
+> <!-- size budget: main.md ≤ 200 lines 권장. Report phase 는 `reportPhase: "single"` 정책으로 멀티-오너 허용하나 경고 없음. -->
 
 ## Executive Summary
 
@@ -100,4 +101,4 @@
 |---------|------|--------|
 | v1.0 | {date} | 초기 작성 |
 
-<!-- template version: v0.57.0 -->
+<!-- template version: v0.58.0 (v0.57+ subdoc / v0.58+ clevel-coexistence 포함) -->

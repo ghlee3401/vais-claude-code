@@ -19,6 +19,13 @@ process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] 
  *   W-TPC-01: {topic}.md "## 큐레이션 기록" 섹션 누락
  *   W-IDX-01: main.md 에 topic 문서 링크 누락
  *   W-MAIN-01: main.md 누락 (기존 missing 과 동일, 코드 부여)
+ *
+ * v0.58 경고 코드 (clevel-doc-coexistence):
+ *   W-OWN-01: topic.md frontmatter 에 owner 누락
+ *   W-OWN-02: topic.md frontmatter owner 값이 C-Level enum 외
+ *   W-MRG-02: main.md Decision Record 표에 Owner 컬럼 누락
+ *   W-MRG-03: topic ≥ 2 이지만 main.md 에 ## [{C-LEVEL}] 섹션 0개
+ *   W-MAIN-SIZE: main.md 라인 수 > mainMdMaxLines AND topic 0 AND _tmp/ 0 (F14)
  */
 const fs = require('fs');
 const path = require('path');
@@ -43,6 +50,9 @@ const PHASE_FOLDERS = {
 
 // v0.57: 시스템 산출물 (topic 아님, curation 검증 제외)
 const SYSTEM_ARTIFACT_NAMES = new Set(['main.md', 'interface-contract.md']);
+
+// v0.58: C-Level 소유권 enum
+const C_LEVEL_OWNERS = new Set(['ceo', 'cpo', 'cto', 'cso', 'cbo', 'coo']);
 
 /**
  * 역할+피처에 대해 필수 문서 존재 여부 검증 (기존 동작 유지)
@@ -144,7 +154,8 @@ function validateSubDocs(feature, options = {}) {
 
         let content;
         try { content = fs.readFileSync(p, 'utf8'); } catch (_) { continue; }
-        if (!/^##\s+큐레이션 기록/m.test(content)) {
+        // v0.58 TD-4: "## N. 큐레이션 기록" 같은 번호 접두도 허용
+        if (!/^##\s+(?:[\d.]+\s+)?큐레이션\s*기록/m.test(content)) {
           out.push({ code: 'W-TPC-01', path: p, message: '"## 큐레이션 기록" 섹션 누락' });
         }
       }
@@ -172,6 +183,118 @@ function validateSubDocs(feature, options = {}) {
           out.push({ code: 'W-IDX-01', path: mainPath, message: `${f} 링크 누락 (Topic Documents 섹션에 추가 권장)` });
         }
       }
+    }
+  }
+
+  return out;
+}
+
+/**
+ * v0.58 C-Level coexistence 검증 — topic frontmatter owner + main.md 멀티-오너 구조 + size budget.
+ * enforcement=warn 기본이라 exit 에 영향 주지 않음.
+ *
+ * @param {string} feature
+ * @param {Object} [options] - { phases?: string[] }
+ * @returns {Array<{ code, path, message }>}
+ */
+function validateCoexistence(feature, options = {}) {
+  const out = [];
+  if (!feature) return out;
+
+  const cfg = loadConfig();
+  const policy = cfg.workflow?.cLevelCoexistencePolicy ?? {};
+  const ownerRequired = policy.ownerRequired !== false;
+  const maxLines = typeof policy.mainMdMaxLines === 'number' ? policy.mainMdMaxLines : 200;
+
+  const phases = options.phases ?? Object.values(PHASE_FOLDERS);
+  const docsRoot = path.join(process.cwd(), 'docs', feature);
+  if (!fs.existsSync(docsRoot)) return out;
+
+  for (const phaseFolder of phases) {
+    const phaseDir = path.join(docsRoot, phaseFolder);
+    if (!fs.existsSync(phaseDir)) continue;
+
+    // 파일 목록 수집
+    let files;
+    try { files = fs.readdirSync(phaseDir); }
+    catch (_) { files = []; }
+
+    const topicFiles = files.filter(f =>
+      f.endsWith('.md') && !SYSTEM_ARTIFACT_NAMES.has(f)
+    );
+
+    // 1. Topic 문서 frontmatter owner 검사 (W-OWN-01/02)
+    for (const f of topicFiles) {
+      const p = path.join(phaseDir, f);
+      let stat;
+      try { stat = fs.statSync(p); } catch (_) { continue; }
+      if (!stat.isFile()) continue;
+
+      let content;
+      try { content = fs.readFileSync(p, 'utf8'); } catch (_) { continue; }
+
+      // frontmatter 추출 (--- ... ---)
+      const fmMatch = content.match(/^---\n([\s\S]*?)\n---/);
+      if (!fmMatch) {
+        if (ownerRequired) {
+          out.push({ code: 'W-OWN-01', path: p, message: 'frontmatter missing (owner required)' });
+        }
+        continue;
+      }
+
+      const fm = fmMatch[1];
+      const ownerMatch = fm.match(/^owner:\s*(\S+)/m);
+      if (!ownerMatch) {
+        if (ownerRequired) {
+          out.push({ code: 'W-OWN-01', path: p, message: 'owner frontmatter missing' });
+        }
+      } else {
+        const owner = ownerMatch[1].toLowerCase();
+        if (!C_LEVEL_OWNERS.has(owner)) {
+          out.push({ code: 'W-OWN-02', path: p, message: `invalid owner "${ownerMatch[1]}" (allowed: ceo|cpo|cto|cso|cbo|coo)` });
+        }
+      }
+    }
+
+    // 2. main.md 멀티-오너 구조 + size budget 검사
+    const mainPath = path.join(phaseDir, 'main.md');
+    if (!fs.existsSync(mainPath)) continue;
+
+    let mainContent;
+    try { mainContent = fs.readFileSync(mainPath, 'utf8'); }
+    catch (_) { continue; }
+
+    // 2a. Decision Record Owner 컬럼 (W-MRG-02)
+    //     "## Decision Record" 섹션 다음에 나오는 첫 표 헤더 라인에 "Owner" 포함 여부
+    const drHeaderIdx = mainContent.search(/^##\s+Decision Record/m);
+    if (drHeaderIdx >= 0) {
+      // DR section: 현재 `## Decision Record` 부터 다음 `## ` 전까지
+      const tail = mainContent.slice(drHeaderIdx);
+      const nextH2 = tail.slice(3).search(/\n##\s+/);
+      const drSection = nextH2 >= 0 ? tail.slice(0, nextH2 + 3) : tail;
+      // 첫 표 헤더 라인 (`|` 로 시작하는 라인)
+      const headerLine = (drSection.match(/^\s*\|[^\n]+\|/m) || [''])[0];
+      if (headerLine && !/\|\s*Owner\s*\|/i.test(headerLine)) {
+        out.push({ code: 'W-MRG-02', path: mainPath, message: 'Decision Record missing Owner column' });
+      }
+    }
+
+    // 2b. C-Level 섹션 카운트 vs topic 파일 개수 (W-MRG-03)
+    const ownerSections = (mainContent.match(/^##\s+\[(CBO|CPO|CTO|CSO|COO|CEO)\]\s/gm) || []).length;
+    if (topicFiles.length >= 2 && ownerSections === 0) {
+      out.push({ code: 'W-MRG-03', path: mainPath, message: `multi-owner topics present (${topicFiles.length}) but no H2 owner section found (## [CBO|CPO|CTO|CSO|COO|CEO])` });
+    }
+
+    // 2c. Size budget (W-MAIN-SIZE, F14) — main.md 가 threshold 초과 AND topic 0 AND _tmp/ 0
+    const tmpDir = path.join(phaseDir, '_tmp');
+    const hasTmp = fs.existsSync(tmpDir) && fs.readdirSync(tmpDir).some(f => f.endsWith('.md'));
+    const lines = mainContent.split(/\n/).length;
+    if (lines > maxLines && topicFiles.length === 0 && !hasTmp) {
+      out.push({
+        code: 'W-MAIN-SIZE',
+        path: mainPath,
+        message: `main.md ${lines} lines exceeds mainMdMaxLines (${maxLines}); consider topic split (v0.57 _tmp/ + v0.58 topic)`
+      });
     }
   }
 
@@ -216,6 +339,19 @@ function formatSubDocWarnings(warnings) {
   return lines.join('\n');
 }
 
+/**
+ * v0.58 coexistence 경고를 사람이 읽을 수 있는 형식으로 출력
+ */
+function formatCoexistenceWarnings(warnings) {
+  if (!Array.isArray(warnings) || warnings.length === 0) return '';
+  const lines = [`ℹ️  [clevel-coexistence v0.58] ${warnings.length}건 경고:`];
+  for (const w of warnings) {
+    const rel = path.relative(process.cwd(), w.path);
+    lines.push(`   ⚠️  [${w.code}] ${rel}: ${w.message}`);
+  }
+  return lines.join('\n');
+}
+
 // CLI 직접 실행
 if (require.main === module) {
   const [role, featureArg] = process.argv.slice(2);
@@ -227,22 +363,28 @@ if (require.main === module) {
 
   const result = validateDocs(role, feature);
   const subDocWarnings = feature ? validateSubDocs(feature) : [];
+  const coexistenceWarnings = feature ? validateCoexistence(feature) : [];
   result.subDocWarnings = subDocWarnings;
+  result.coexistenceWarnings = coexistenceWarnings;
 
   const output = formatResult(role, feature, result);
   const subDocOutput = formatSubDocWarnings(subDocWarnings);
+  const coexistenceOutput = formatCoexistenceWarnings(coexistenceWarnings);
 
   if (output) process.stderr.write(output + '\n');
   if (subDocOutput) process.stderr.write(subDocOutput + '\n');
+  if (coexistenceOutput) process.stderr.write(coexistenceOutput + '\n');
 
   process.stdout.write(JSON.stringify(result));
 
   // enforcement 정책
   const cfg = loadConfig();
-  const enforcement = cfg.workflow?.subDocPolicy?.enforcement ?? 'warn';
+  const subDocEnforcement = cfg.workflow?.subDocPolicy?.enforcement ?? 'warn';
+  const coexEnforcement = cfg.workflow?.cLevelCoexistencePolicy?.enforcement ?? 'warn';
   if (!result.passed) process.exit(1);
-  if (enforcement === 'fail' && subDocWarnings.length > 0) process.exit(1);
+  if (subDocEnforcement === 'fail' && subDocWarnings.length > 0) process.exit(1);
+  if (coexEnforcement === 'fail' && coexistenceWarnings.length > 0) process.exit(1);
   process.exit(0);
 }
 
-module.exports = { validateDocs, validateSubDocs, formatResult, formatSubDocWarnings, MANDATORY_PHASES, C_LEVEL_ROLES, PHASE_FOLDERS };
+module.exports = { validateDocs, validateSubDocs, validateCoexistence, formatResult, formatSubDocWarnings, formatCoexistenceWarnings, MANDATORY_PHASES, C_LEVEL_ROLES, C_LEVEL_OWNERS, PHASE_FOLDERS };

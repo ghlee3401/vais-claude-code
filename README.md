@@ -271,16 +271,18 @@ Sub-agent 종료 시 자동 실행되는 검증 파이프라인:
 
 ---
 
-## Document Structure (v0.57+)
+## Document Structure (v0.57+ / v0.58+)
 
 ```
 docs/
 └── {feature}/                    # 피처 중심 구조 (v0.52+)
     └── {NN-phase}/               # 00-ideation / 01-plan / 02-design / 03-do / 04-qa / 05-report
-        ├── main.md               C-Level 의사결정 인덱스 (필수)
+        ├── main.md               C-Level 의사결정 인덱스 (필수) — v0.58: multi-owner 지원
+        │                         (## [CBO] / ## [CPO] / ## [CTO] ... H2 섹션 append-only)
         ├── {topic}.md            C-Level 이 합성한 topic 별 문서 (v0.57+, 선택)
         │                         예: architecture.md / data-model.md / security.md
         │                         권장 프리셋: vais.config.json > workflow.topicPresets
+        │                         (v0.58: phase×c-level 계층 지원 + frontmatter owner 필수)
         │                         각 문서에 ## 큐레이션 기록 섹션 필수
         ├── interface-contract.md (02-design 만, 시스템 산출물)
         └── _tmp/                 sub-agent scratchpad (v0.57+, 영구 보존 + git 커밋)
@@ -288,13 +290,19 @@ docs/
                                   (예: _tmp/backend-engineer.md, _tmp/qa-engineer.md)
 ```
 
-**v0.57 Sub-doc Preservation 모델** (2-layer):
+**v0.57 Sub-doc Preservation** (2-layer, sub-agent → C-Level):
 - **Layer 1 (scratchpad)**: sub-agent 가 `_tmp/{slug}.md` 에 축약 없이 기록 — 원본 분석 + 메타 헤더 3줄(Author/Phase/Refs)
-- **Layer 2 (큐레이션)**: C-Level 이 `_tmp/*.md` 전체를 읽고 **필요성/누락/충돌 판단** 후 topic 별 `{topic}.md` 문서로 재구성. `main.md` 는 의사결정 요약 + Topic Documents 인덱스 + Scratchpads 인벤토리
+- **Layer 2 (큐레이션)**: C-Level 이 `_tmp/*.md` 전체를 읽고 topic 별 `{topic}.md` 문서로 재구성. `main.md` 는 의사결정 요약 + Topic Documents 인덱스
 
-추적성: 사용자가 "이 결정의 근거?" 질문 시 main.md Decision Record → `_tmp/{slug}.md` 원본까지 추적 가능. `scripts/doc-validator.js` 가 W-SCP/W-TPC/W-IDX 6 경고 코드로 품질 체크 (warn only).
+**v0.58 C-Level Coexistence** (multi-owner main.md, CEO 동적 라우팅):
+- 여러 C-Level 이 같은 `{phase}/main.md` 에 순차 기여 시 덮어쓰기 방지 — 각자 `## [{C-LEVEL}] ...` H2 섹션 append, 다른 C-Level 섹션 수정 금지
+- Topic 문서 frontmatter `owner: {c-level}` 필수 (파일명은 topic-first)
+- Multi-owner Decision Record — `Owner` 컬럼으로 각 결정의 귀속 C-Level 추적
+- **(F14)** main.md 가 `mainMdMaxLines`(기본 200) 초과 AND topic 0 AND `_tmp/` 0 → `W-MAIN-SIZE` 경고. C-Level 직접 작성 phase(UI 없는 메타 피처 등) 에서도 main.md 비대화 방지
 
-> 호환성: v0.56 이전 피처 문서(main.md 단독)는 그대로 동작. 신규 피처부터 2-layer 모델 적용 권장.
+추적성: 사용자가 "이 결정의 근거?" 질문 시 main.md Decision Record → topic 문서 → `_tmp/{slug}.md` 원본까지 추적 가능. `scripts/doc-validator.js` 가 W-SCP/W-TPC/W-IDX (v0.57) + W-OWN/W-MRG/W-MAIN-SIZE (v0.58) 총 11 경고 코드로 품질 체크 (warn only).
+
+> 호환성: v0.56 이전 피처 문서(main.md 단독)는 그대로 동작. 신규 피처부터 2-layer + multi-owner 모델 적용 권장.
 
 ---
 

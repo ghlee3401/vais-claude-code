@@ -1,15 +1,16 @@
 # {feature} - 기획서
 
 > ⛔ **Plan 단계 범위**: 이 문서는 분석과 결정만 기록합니다. 프로덕트 파일 생성·수정은 Do 단계에서 수행하세요.
+> <!-- size budget: main.md ≤ 200 lines 권장 (vais.config.json > workflow.cLevelCoexistencePolicy.mainMdMaxLines). 초과 시 topic 문서로 분리. -->
 
 ## Executive Summary
 
-| Perspective | Content |
-|-------------|---------|
-| **Problem** | {해결하려는 문제 1~2문장} |
-| **Solution** | {제안하는 해결책 1~2문장} |
-| **Function/UX Effect** | {사용자가 체감하는 변화} |
-| **Core Value** | {비즈니스/기술적 핵심 가치} |
+| Perspective | Content | Contributing C-Levels |
+|-------------|---------|-----------------------|
+| **Problem** | {해결하려는 문제 1~2문장} | {예: cbo, cpo} |
+| **Solution** | {제안하는 해결책 1~2문장} | {예: cto} |
+| **Function/UX Effect** | {사용자가 체감하는 변화} | {예: cpo} |
+| **Core Value** | {비즈니스/기술적 핵심 가치} | {예: ceo, cbo} |
 
 ---
 
@@ -22,6 +23,24 @@
 | **RISK** | {주요 위험 요소} |
 | **SUCCESS** | {성공 기준 요약} |
 | **SCOPE** | {범위 한 줄 요약} |
+
+---
+
+## Decision Record (multi-owner)
+
+<!-- 각 C-Level 이 자기 결정 행을 append. 이전 행 수정·삭제 금지. Owner 컬럼 필수. -->
+
+| # | Decision | Owner | Rationale | Source topic |
+|---|----------|:-----:|-----------|--------------|
+| 1 | {결정 한 줄} | cto | {근거} | `{topic}.md` |
+
+<!-- 각 C-Level 이 기여하는 경우 아래 H2 섹션을 순서대로 append:
+     ## [CBO] 시장 분석 / GTM
+     ## [CPO] 제품 정의
+     ## [CTO] 기술 스케치
+     ## [CSO] 보안 요구사항
+     ## [COO] 운영 준비
+     (비대문자/다른 owner prefix 금지. 이전 C-Level 섹션 수정·삭제 금지.) -->
 
 ---
 
@@ -284,13 +303,13 @@ erDiagram
 
 ## Topic Documents (v0.57+)
 
-> C-Level 이 `_tmp/*.md` scratchpad 를 읽고 주제별로 합성한 문서 인덱스. 선택 (피처 크기에 따라 생략 가능).
+> C-Level 이 `_tmp/*.md` scratchpad 를 읽고 주제별로 합성한 문서 인덱스. v0.58+ 에서는 `owner` 컬럼 필수 (frontmatter `owner` 와 일치).
 
-| Topic | 파일 | 한 줄 요약 | 참조 scratchpad |
-|-------|------|-----------|----------------|
-| | `{topic}.md` | | |
+| Topic | 파일 | Owner | 한 줄 요약 | 참조 scratchpad |
+|-------|------|:-----:|-----------|----------------|
+| | `{topic}.md` | cto | | |
 
-<!-- Phase 별 권장 topic 프리셋: vais.config.json > workflow.topicPresets.01-plan -->
+<!-- Phase 별 권장 topic 프리셋: vais.config.json > workflow.topicPresets.01-plan.{c-level} (v0.58 phase×c-level 계층) -->
 
 ## Scratchpads (v0.57+)
 
@@ -307,5 +326,6 @@ erDiagram
 | version | date | change |
 |---------|------|--------|
 | v1.0 | | 초기 작성 |
+| v1.1 | YYYY-MM-DD | {ROLE} 재진입: {요약} |
 
-<!-- template version: v0.57.0 -->
+<!-- template version: v0.58.0 (v0.57+ subdoc / v0.58+ clevel-coexistence 포함) -->

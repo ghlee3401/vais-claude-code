@@ -13,7 +13,7 @@
       "name": "vais-code",
       "source": "./",
       "description": "6-phase development workflow plugin (ideation optional) with 6 C-Suite (CEO/CPO/CTO/CSO/CBO/COO) autonomous delegation, Gate system, and QA return path.",
-      "version": "0.57.0",
+      "version": "0.58.0",
       "author": {
         "name": "VAIS Voice",
         "email": "ghlee0304@ncsoft.com"

@@ -46,6 +46,7 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 5. **위험 명령 금지**: `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수**: 민감 정보는 반드시 환경 변수로 관리합니다
 7. **Sub-doc 보존 (v0.57+)**: sub-agent 는 `docs/{feature}/{NN-phase}/_tmp/{agent-slug}.md` scratchpad 에 축약 없이 기록. C-Level 은 `_tmp/*.md` 를 읽고 topic 별 `{topic}.md` + `main.md` 인덱스로 큐레이션. `_tmp/` 는 영구 보존 + git 커밋. 각 topic 문서에 `## 큐레이션 기록` 섹션 필수. 상세: CLAUDE.md Rule #14
+8. **C-Level 공존 (v0.58+)**: 같은 `{phase}/main.md` 에 여러 C-Level 이 기여. 각 C-Level 은 `## [{C-LEVEL}] ...` H2 섹션 append, 다른 C-Level 섹션·Decision Record 행·Topic 인덱스 수정·삭제 금지. Topic frontmatter `owner: {c-level}` 필수(파일명은 topic-first). main.md 가 `mainMdMaxLines`(기본 200) 초과 시 topic 분리 필수(F14, C-Level 직접 작성 phase 도 동일). 상세: CLAUDE.md Rule #15
 
 ## 에이전트 역할
 

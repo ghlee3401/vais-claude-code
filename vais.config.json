@@ -1,5 +1,5 @@
 {
-  "version": "0.57.0",
+  "version": "0.58.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -220,13 +220,35 @@
       ]
     },
     "topicPresets": {
-      "_description": "Phase별 권장 topic 문서 프리셋. C-Level이 확장 가능 (강제 아님).",
-      "00-ideation": ["problem", "hypotheses", "exit-criteria"],
-      "01-plan": ["requirements", "impact-analysis", "policy"],
-      "02-design": ["architecture", "data-model", "api-contract", "ui-flow", "security"],
-      "03-do": ["implementation", "changes", "tests"],
-      "04-qa": ["findings", "metrics", "issues"],
-      "05-report": []
+      "_description": "Phase별 권장 topic 프리셋. v0.58+ phase×c-level 계층 지원 (string[] 배열 형식도 backward-compat). C-Level이 확장 가능 (강제 아님).",
+      "_schemaVersion": 2,
+      "00-ideation": {
+        "_default": ["problem", "hypotheses", "exit-criteria"]
+      },
+      "01-plan": {
+        "_default": ["requirements", "impact-analysis", "policy"],
+        "cbo": ["market-analysis", "gtm-plan", "unit-economics"],
+        "cpo": ["requirements", "user-stories", "acceptance-criteria"],
+        "cto": ["architecture-plan", "impact-analysis", "tech-risks"],
+        "cso": ["security-requirements", "compliance-checklist"],
+        "coo": ["deployment-plan", "monitoring-spec"]
+      },
+      "02-design": {
+        "_default": ["architecture", "data-model", "api-contract", "ui-flow", "security"],
+        "cbo": ["gtm-funnel", "pricing-tier", "financial-model"],
+        "cto": ["architecture", "data-model", "api-contract"],
+        "cso": ["threat-model", "security", "compliance"],
+        "coo": ["deployment-architecture", "monitoring-design"]
+      },
+      "03-do": {
+        "_default": ["implementation", "changes", "tests"]
+      },
+      "04-qa": {
+        "_default": ["findings", "metrics", "issues"]
+      },
+      "05-report": {
+        "_default": []
+      }
     },
     "subDocPolicy": {
       "_description": "v0.57.0 sub-doc preservation 정책. sub-agent는 _tmp/에 scratchpad, C-Level은 topic 문서로 큐레이션.",
@@ -236,6 +258,21 @@
       "scratchpadMinBytes": 500,
       "requireCurationRecord": true,
       "reportPhase": "single"
+    },
+    "cLevelCoexistencePolicy": {
+      "_description": "v0.58.0 multi-C-Level main.md append-merge 정책. 같은 {phase}/main.md 에 여러 C-Level 이 기여할 때 덮어쓰기 방지 + C-Level 직접 작성 phase 비대화 방지(F14).",
+      "enforcement": "warn",
+      "_enforcementValues": ["warn", "retry", "fail"],
+      "mainMergeRule": "append-only",
+      "_mainMergeRuleValues": ["append-only", "diff-merge"],
+      "sectionMarkerStyle": "heading",
+      "_sectionMarkerStyleValues": ["heading", "html-comment"],
+      "ownerRequired": true,
+      "reentrySectionReplace": true,
+      "reentryChangelogRequired": true,
+      "mainMdMaxLines": 200,
+      "mainMdMaxLinesAction": "warn",
+      "_mainMdMaxLinesActionValues": ["warn", "refuse"]
     }
   },
   "gapThreshold": 0.90,

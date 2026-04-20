@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.56.2)
+> Virtual AI C-Suite for software development (v0.58.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -141,6 +141,7 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 12. **Plan은 결정, Do는 실행** — Plan 단계에서는 `docs/{feature}/01-plan/` 산출물만 작성. 프로덕트 파일(skills/, agents/, lib/, src/ 등) 생성·수정은 Do 단계에서만 허용
 13. **레거시 경로 금지** — 문서·코드 모두 **top-level** `docs/NN-` (예: `docs/01-plan/`, `docs/02-design/`) 패턴 사용 금지. 새 구조 `docs/{feature}/{NN-phase}/main.md`만 사용 (feature-grouped, phase subfolder에 NN- 접두사). 예외: `docs/_legacy/`, `CHANGELOG.md`(릴리즈 이력), `tests/paths.test.js` 회귀 가드 문자열, 본 피처 문서 자체. `.hooks/pre-commit`이 자동 차단(top-level만 검사 — feature 하위 `docs/{feature}/NN-phase/`는 Rule #3에 의해 허용)하며, 설치는 `npm run prepare-hooks` 1회 실행. `--no-verify` 사용은 금지.
 14. **Sub-doc 보존 원칙 (v0.57+)** — sub-agent 는 자기 분석/설계/구현 결과를 **축약 없이** `docs/{feature}/{NN-phase}/_tmp/{agent-slug}.md` scratchpad 에 기록. C-Level 은 `_tmp/*.md` 전체를 **읽고 큐레이션**(필요성/누락/충돌 판단)하여 **topic 별 `{topic}.md` 문서 여러 개** + `main.md` 인덱스로 재구성. 각 topic 문서는 `## 큐레이션 기록` 섹션(채택/거절/병합/추가) 필수. **`_tmp/` 는 삭제하지 않고 영구 보존 + git 커밋** (추적성). 병렬 sub-agent 가 `main.md`/`{topic}.md` 직접 편집 금지 — race 방지. 검증: `scripts/doc-validator.js` 의 W-SCP/W-TPC/W-IDX 경고 (`workflow.subDocPolicy.enforcement=warn` 기본).
+15. **C-Level 공존 원칙 (v0.58+)** — 같은 `docs/{feature}/{NN-phase}/main.md` 에 여러 C-Level 이 기여할 수 있다. 각 C-Level 은 **자기 진입 시 기존 main.md 를 Read 필수**, `## [{C-LEVEL}] ...` H2 섹션(대문자: `[CBO]`/`[CPO]`/`[CTO]`/`[CSO]`/`[COO]`/`[CEO]`)을 append, **다른 C-Level 의 H2 섹션·Decision Record 행·Topic 인덱스 엔트리 수정·삭제 금지**. topic 문서는 frontmatter `owner: {c-level}` 필수(enum: `ceo\|cpo\|cto\|cso\|cbo\|coo`), 파일명은 topic-first(`requirements.md` O, `cpo-requirements.md` X). 동일 C-Level 재진입 시 자기 섹션 교체 허용하되 `## 변경 이력` entry 필수. **(F14) main.md 가 `workflow.cLevelCoexistencePolicy.mainMdMaxLines`(기본 200) 초과 시 topic 분리 필수 — sub-agent 미위임하는 C-Level 직접 작성 phase(UI 없는 메타 피처 등) 도 동일 적용**. 검증: `scripts/doc-validator.js` 의 `W-OWN-01/02` / `W-MRG-02/03` / `W-MAIN-SIZE` 경고 (`workflow.cLevelCoexistencePolicy.enforcement=warn` 기본). 6 C-Level agent md 에 `agents/_shared/clevel-main-guard.md` 블록 자동 주입 (`scripts/patch-clevel-guard.js`).
 
 ## Version Management
 

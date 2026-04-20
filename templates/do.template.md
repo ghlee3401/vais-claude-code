@@ -1,6 +1,16 @@
 # {feature} — 인프라 설계
 
 > 참조 문서: `docs/{feature}/01-plan/main.md`, `docs/{feature}/02-design/main.md`
+> <!-- size budget: main.md ≤ 200 lines 권장 (workflow.cLevelCoexistencePolicy.mainMdMaxLines). 초과 시 topic 문서로 분리. -->
+
+## Decision Record (multi-owner)
+
+<!-- 각 C-Level 이 자기 결정 행을 append. Owner 컬럼 필수.
+     C-Level 별 H2 섹션: ## [CTO] 구현 결정 / ## [CSO] 보안 이슈 / ... -->
+
+| # | Decision | Owner | Rationale | Source topic |
+|---|----------|:-----:|-----------|--------------|
+| 1 | {구현 결정} | cto | {근거} | `{topic}.md` |
 
 ## 1. DB 개요
 
@@ -116,4 +126,4 @@ src/
 |---------|------|--------|
 | v1.0 | {date} | 초기 작성 |
 
-<!-- template version: v0.57.0 -->
+<!-- template version: v0.58.0 (v0.57+ subdoc / v0.58+ clevel-coexistence 포함) -->

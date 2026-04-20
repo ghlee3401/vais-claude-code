@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.58.0] - 2026-04-20 — C-Level Coexistence
+
+v0.57 `_tmp/` 모델이 sub-agent 경합만 해결하던 공백을 보완. **같은 `{phase}/main.md` 에 여러 C-Level 이 공존**하도록 append-only 멀티-오너 규약 + `## [{C-LEVEL}]` H2 헤딩 섹션 + Multi-owner Decision Record + topic frontmatter `owner` 필수. 사용자 원문: *"여러 c-level이 참여를 해서 문서를 작성하게 되면 기존의 pdca의 main.md에 덮어쓰려는 현상"*.
+
+**F14 (자가 발견 편입)**: v0.57 `_tmp/→topic` 루프가 sub-agent 호출을 전제해서 CTO 직접 작성 phase(UI 없는 메타 피처 등) 에서 main.md 비대화가 재발하는 현상을 진행 중 발견. `mainMdMaxLines` 정책 + `W-MAIN-SIZE` 경고로 해결. 본 피처 문서 자체가 리팩토링되어 규칙을 시연.
+
+### Added
+
+- `vais.config.json > workflow.topicPresets` **v2 스키마** — phase×c-level 계층(`_schemaVersion: 2`). v1 배열 형식 backward-compat 유지.
+- `vais.config.json > workflow.cLevelCoexistencePolicy` — `enforcement` / `mainMergeRule`(`append-only` 기본) / `sectionMarkerStyle`(`heading` 기본) / `ownerRequired` / `reentrySectionReplace` / `reentryChangelogRequired` / **`mainMdMaxLines: 200` (F14)** / **`mainMdMaxLinesAction` (F14)**.
+- `agents/_shared/clevel-main-guard.md` — canonical guard (11 섹션, v0.58.0 마커). Progressive disclosure 패턴 그대로.
+- `scripts/patch-clevel-guard.js` — idempotent 6 C-Level agent md 패치. v0.57 `patch-subdoc-block.js` 선례 재사용.
+- `lib/status.js` — 신규 함수 7개: `getTopicPreset`, `registerTopic`, `listFeatureTopics`, `getFeatureTopics`(D-Q6 인터페이스), `listScratchpadAuthors`(D-Q3 헬퍼), `getOwnerSectionPresence`, **`getMainDocSize`(F14)**. status.json `features.{name}.docs.topics[]` 신규 인벤토리.
+- `scripts/doc-validator.js` — `validateCoexistence()` + `coexistenceWarnings[]` JSON 필드 + `formatCoexistenceWarnings()`. 경고 코드 5종: **W-OWN-01** (topic frontmatter owner 누락), **W-OWN-02** (owner ∉ C-Level enum), **W-MRG-02** (Decision Record Owner 컬럼 누락), **W-MRG-03** (topic ≥ 2 / owner 섹션 0개), **W-MAIN-SIZE** (F14, main.md > `mainMdMaxLines` AND topic 0 AND `_tmp/` 0).
+- 6 C-Level agent md (`agents/{ceo,cpo,cto,cso,cbo,coo}/*.md`) 본문에 clevel-main-guard 블록 주입 (advisor → subdoc → clevel-main 순서).
+- `CLAUDE.md` **Rule #15** 신설 — C-Level 공존 원칙. `AGENTS.md` / `README.md` 동기화.
+- `templates/{plan,design,do,qa,report}.template.md` — Executive Summary `Contributing C-Levels` 컬럼(plan), Decision Record(multi-owner) Owner 컬럼, `## [{C-LEVEL}]` 플레이스홀더 주석, **size budget 주석 (F14)**, `template version: v0.58.0`.
+- `tests/clevel-coexistence.test.js` — T1~T10 케이스(topicPresets v1/v2 lookup, registerTopic/listFeatureTopics 왕복, W-OWN-01/02, W-MRG-02/03, **W-MAIN-SIZE (T9/T10)**, 재진입 규칙).
+- **(QA CP-Q B 선택, TD-5)** `lib/patch-block.js` — body-block 주입 공통 헬퍼 (`applyBlockPatch` / `loadBlock` / `patchFile` / `parseCliFlags`). `patch-subdoc-block.js` + `patch-clevel-guard.js` 2종이 thin wrapper 로 전환 (각 ~50 라인).
+
+### Changed
+
+- `vais.config.json > version`: 0.57.0 → 0.58.0.
+- `package.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` — 0.58.0.
+- **(QA CP-Q B 선택, TD-4)** `scripts/doc-validator.js` W-TPC-01 정규식 완화 — `^##\s+큐레이션 기록` → `^##\s+(?:[\d.]+\s+)?큐레이션\s*기록` (번호 접두 허용). 본 피처 자체 문서 오탐 6건 → 0건.
+- **(QA CP-Q B 선택, TD-5)** `scripts/patch-subdoc-block.js` + `scripts/patch-clevel-guard.js` 공통 로직을 `lib/patch-block.js` 로 추출. 기능 동일, idempotent 유지 (2회차 6/6 + 36/36 skip-same-version 확인). `patch-advisor-frontmatter.js` 는 frontmatter 변경이라 범위 밖 유지.
+
+### Compat
+
+- v0.57 `_tmp/` / `subDocs[]` / `subdoc-guard.md` / `subdoc.template.md` / `W-SCP-*` / `W-TPC-01` / `W-IDX-01` / `W-MAIN-01` **전부 무변경**. 기존 v0.56/v0.57 피처 재마이그레이션 없음 (호환성 원칙).
+- `topicPresets` v1 배열 형식 (`"01-plan": ["a","b"]`) 도 계속 지원 (`getTopicPreset()` duck-typing).
+- `doc-validator.js` exit code 영향 없음 (enforcement=warn 기본).
+
+### Deferred
+
+- `W-MRG-01` (git 이력 기반 이전 섹션 삭제 감지) — v0.58.1.
+- F10 CEO 라우팅 컨텍스트 자동 전파 구현(`getFeatureTopics` 인터페이스만 준비) — v0.58.1.
+- `enforcement=fail` 강제화 — v0.59+.
+
+### Self-dog-food
+
+- 본 피처 `docs/clevel-doc-coexistence/01-plan/main.md` (81 lines) + `02-design/main.md` (94 lines) — F14 size budget 자가 통과. 3 plan topic + 3 design topic + interface-contract.md 로 분리.
+
 ## [0.57.0] - 2026-04-19 — Sub-doc Preservation
 
 C-Level `main.md` 에 축약되어 사라지던 sub-agent 원본 분석을 `_tmp/{agent-slug}.md` scratchpad 로 **영구 보존**하고, C-Level 이 이를 **큐레이션**하여 topic 별 `{topic}.md` 문서로 합성하는 2-layer 문서 모델 도입. 사용자 원문: *"sub agent의 문서를 모두 남기기에는 커지고 비효율적. sub agent 문서를 읽고 c-level이 topic에 맞게 정리"*.
