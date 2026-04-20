@@ -54,7 +54,7 @@ function main() {
       summary = getProgressSummary(activeFeature);
     } catch (e) {
       debugLog('SessionStart', 'active feature summary failed', { feature: activeFeature, error: e.message });
-      try { process.stderr.write(`[VAIS] ⚠️  session-start: active feature "${activeFeature}" status 스키마 손상 — progress/map 렌더 건너뜀\n`); } catch (_) {}
+      try { process.stderr.write(`[VAIS] ⚠️  session-start: "${activeFeature}" status 스키마 손상 — 복구: .vais/status.json 삭제 후 세션 재시작 (진행 상태 초기화됨)\n`); } catch (_) {}
     }
 
     // --- 1. Progress Bar ---
@@ -93,7 +93,7 @@ function main() {
       } catch (e) {
         debugLog('SessionStart', 'feature summary failed', { feature: fname, error: e.message });
         const marker = fname === activeFeature ? '👉 ' : '   ';
-        ctx += `${marker}**${fname}** — ⚠️ status 스키마 손상 (복구 필요)\n`;
+        ctx += `${marker}**${fname}** — ⚠️ status 스키마 손상 — .vais/status.json 삭제 후 세션 재시작\n`;
       }
     }
     ctx += `\n`;

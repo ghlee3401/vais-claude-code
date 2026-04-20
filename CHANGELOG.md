@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.58.2] - 2026-04-20 — status 스키마 손상 경고 메시지 개선
+
+v0.58.1 에서 추가된 방어 가드/try-catch 가 발동할 때 사용자에게 **복구 방법이 명시되지 않던** 문제 수정. 업데이트 후 hook 경고만 보고 원인/해결을 모르는 상황 방지.
+
+### Changed
+
+- `hooks/session-start.js` — status 스키마 손상 경고 메시지에 **복구 명령 포함**: "`.vais/status.json` 삭제 후 세션 재시작 (진행 상태 초기화됨)". stderr + ctx(피처 목록) 양쪽 동일.
+
 ## [0.58.1] - 2026-04-20 — session-start hook 크래시 핫픽스
 
 타 프로젝트(vais-management 등)에서 구 스키마 `.vais/status.json`(v0.49.x 시절 `rolePhases` 만 있고 `phases` 필드 누락) 이 로드될 때 `lib/status.js:328` 에서 `TypeError: Cannot read properties of undefined` 로 SessionStart hook 전체가 실패하던 문제 수정.
