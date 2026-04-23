@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.58.4] - 2026-04-23 — harness prose 압축 + enforcement 승격 + plan-minimal 템플릿
+
+v0.58.3 scope contract 의 후속. 사용자 토론 결과 반영 — "drift 를 구조적 중복으로 봉쇄" 철학(중복은 유지)을 지키면서 **규칙당 prose 압축 + warn→fail 승격 + minimal 템플릿 신설**으로 토큰 절감과 스콥 축소를 동시 달성.
+
+### Changed — Prose 압축 (규칙 수·배치 불변)
+
+- `agents/_shared/subdoc-guard.md` **70→39줄** (-44%): canonical 축약 → 36 sub-agent 에 re-patch, 총 **~1,116줄 제거**
+- `agents/_shared/clevel-main-guard.md` **110→71줄** (-35%): 6 C-Level agent 에 re-patch, 총 **~234줄 제거**
+- `agents/{ceo,cto,cpo,cso,coo,cbo}/*.md` common-rules 블록 내부 prose 축약 (AskUserQuestion 자가 점검을 체크리스트 형태로 압축). 6 agent 합 **~82줄 제거**. 규칙 수·배치는 **전부 보존** (AskUserQuestion 5곳 중복 유지).
+- 총 agent md 절감: 약 **1,430줄**
+
+### Changed — Enforcement 승격
+
+- `vais.config.json > workflow.scopeContractPolicy.enforcement`: `warn` → `fail` — plan/main.md 에 요청 원문/In-scope/Out-of-scope 3섹션 중 하나라도 누락 시 doc-validator `exit(1)` 차단 (v0.58.3 은 warn only 였음).
+- `vais.config.json > workflow.cLevelCoexistencePolicy.mainMdMaxLinesAction`: `warn` → `refuse` — main.md 가 200줄 초과 AND topic 0 AND `_tmp/` 0 조건 충족 시 (W-MAIN-SIZE) doc-validator `exit(1)` 차단.
+- `scripts/doc-validator.js` — `mainMdMaxLinesAction: "refuse"` 를 `cLevelCoexistencePolicy.enforcement` 와 독립적으로 처리 (coex enforcement 가 여전히 warn 이어도 size 초과는 차단). W-MAIN-SIZE 만 필터링하여 exit(1).
+- `agents/cto/cto.md` "Plan Scope Default" 섹션 — enforcement 승격 명시.
+
+### Added — plan-minimal 템플릿
+
+- `templates/plan-minimal.template.md` **63줄** 신설 — Scope Contract 3섹션 + Context Anchor + Decision Record + 변경 대상 + Success Criteria + 관찰 섹션. 경쟁 분석 / MVP 매트릭스 / 유저 시나리오 / 기술 스택 nice-to-have 섹션 제거. 표준 템플릿 `plan.template.md` (348줄) 대비 **82% 축소**.
+- `agents/cto/cto.md` CP-1 분기 — "A. 최소" 선택 시 `plan-minimal.template.md` 로드, "B. 표준"/"C. 확장" 은 기존 `plan.template.md` 유지. **기존 경로 무변경 (역호환 100%)**.
+
+### Why (설계 철학)
+
+- 중복은 drift 봉쇄 수단이므로 **제거 대상이 아니라 압축 대상**. 같은 규칙을 같은 횟수만큼 반복하되 문장만 줄임.
+- enforcement 승격의 효과는 **"하네스 작동 실패 → 재작업 루프"를 제거**하는 것 — net 토큰 절감은 첫 통과율 상승에서 나옴.
+- plan-minimal 은 v0.58.3 Minimum Viable Plan default 의 structural backstop — 계약이 지켜져도 템플릿이 부풀어 오르는 압력을 그릇 크기로 선제 차단.
+
+### Dog-fooding
+
+- 본 피처 자체는 VAIS plugin 내부 개선 (meta-feature) 이므로 별도 feature 문서 없이 CHANGELOG 로 기록 (Rule #9: Lake 는 사용자가 지정).
+- 기존 4개 피처 중 `plan-scope-contract` 만 3섹션 충족. 나머지 3개는 v0.58.3 이전 작성물로 건드리지 않으면 안전 (active feature 만 doc-validator 대상).
+
+### Testing
+
+- `npm test` — tests 는 validate 함수 직접 호출만 하므로 enforcement 승격 영향 없음 (exit code 는 main() 에서만 결정).
+
+### Deferred
+
+- `retry` 시맨틱 doc-validator 구현 (스키마만 있고 미구현) — gate-manager 와 연동하여 phase 재실행 트리거로 확장 예정 (v0.59+).
+- 타 C-Level (CPO prd-writer, CBO market-researcher 등) 에 plan-minimal 적용 확산 — CTO 시범 후 효과 관찰.
+
 ## [0.58.3] - 2026-04-23 — plan scope contract 3섹션 의무화 + W-SCOPE validator
 
 GA 이벤트 scope creep 사례 (사용자가 요청한 2개 이벤트 대비 agent 가 전체 스캔+수정까지 plan 에 포함) 를 계기로 **plan phase 의 scope 계약을 구조적으로 강제**. CLAUDE.md Rule #9 (Boil the Lake) 를 "Lake 는 사용자가 지정한다" 로 명문화하고, plan/main.md 상단에 `요청 원문 / In-scope / Out-of-scope` 3섹션을 의무화하여 사용자가 1초 내 scope 이탈을 감지할 수 있도록 함. 재작업 사이클이 "작은 수정에 큰 비용" 체감의 본질이라는 진단 이행.

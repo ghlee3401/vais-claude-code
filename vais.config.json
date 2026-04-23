@@ -1,5 +1,5 @@
 {
-  "version": "0.58.3",
+  "version": "0.58.4",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -260,7 +260,7 @@
       "reportPhase": "single"
     },
     "cLevelCoexistencePolicy": {
-      "_description": "v0.58.0 multi-C-Level main.md append-merge 정책. 같은 {phase}/main.md 에 여러 C-Level 이 기여할 때 덮어쓰기 방지 + C-Level 직접 작성 phase 비대화 방지(F14).",
+      "_description": "v0.58.0 multi-C-Level main.md append-merge 정책. v0.58.4: mainMdMaxLinesAction 을 'refuse' 로 승격 — size budget 초과 시 doc-validator 가 exit(1) 차단.",
       "enforcement": "warn",
       "_enforcementValues": ["warn", "retry", "fail"],
       "mainMergeRule": "append-only",
@@ -271,12 +271,12 @@
       "reentrySectionReplace": true,
       "reentryChangelogRequired": true,
       "mainMdMaxLines": 200,
-      "mainMdMaxLinesAction": "warn",
+      "mainMdMaxLinesAction": "refuse",
       "_mainMdMaxLinesActionValues": ["warn", "refuse"]
     },
     "scopeContractPolicy": {
-      "_description": "v0.58.3 plan-scope-contract 정책. plan/main.md 에 '## 요청 원문' / '## In-scope' / '## Out-of-scope' H2 3섹션 강제. CLAUDE.md Rule #9 (Boil the Lake) dog-fooding.",
-      "enforcement": "warn",
+      "_description": "v0.58.3 plan-scope-contract 정책. plan/main.md 에 '## 요청 원문' / '## In-scope' / '## Out-of-scope' H2 3섹션 강제. CLAUDE.md Rule #9 (Boil the Lake) dog-fooding. v0.58.4: warn → fail 승격 — 3섹션 누락 시 doc-validator 가 exit(1) 차단.",
+      "enforcement": "fail",
       "_enforcementValues": ["warn", "retry", "fail", "off"],
       "targetPhase": "01-plan",
       "requiredSections": ["요청 원문", "In-scope", "Out-of-scope"]

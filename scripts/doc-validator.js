@@ -439,10 +439,13 @@ if (require.main === module) {
   const subDocEnforcement = cfg.workflow?.subDocPolicy?.enforcement ?? 'warn';
   const coexEnforcement = cfg.workflow?.cLevelCoexistencePolicy?.enforcement ?? 'warn';
   const scopeEnforcement = cfg.workflow?.scopeContractPolicy?.enforcement ?? 'warn';
+  // v0.58.4: mainMdMaxLinesAction 은 coexistence enforcement 와 독립적으로 W-MAIN-SIZE 만 차단
+  const mainSizeAction = cfg.workflow?.cLevelCoexistencePolicy?.mainMdMaxLinesAction ?? 'warn';
   if (!result.passed) process.exit(1);
   if (subDocEnforcement === 'fail' && subDocWarnings.length > 0) process.exit(1);
   if (coexEnforcement === 'fail' && coexistenceWarnings.length > 0) process.exit(1);
   if (scopeEnforcement === 'fail' && scopeWarnings.length > 0) process.exit(1);
+  if (mainSizeAction === 'refuse' && coexistenceWarnings.some(w => w.code === 'W-MAIN-SIZE')) process.exit(1);
   process.exit(0);
 }
 
