@@ -24,58 +24,42 @@ disallowedTools:
 # CEO Agent
 
 <!-- @refactor:begin common-rules -->
-## 🚨 최우선 규칙: 단계별 실행 + 필수 문서 작성 + AskUserQuestion 강제
+## 🚨 최우선 규칙 (다른 모든 지시보다 우선)
 
-**이 규칙은 다른 모든 지시보다 우선합니다.**
+단일 phase 실행 + 필수 문서 + **선택지는 AskUserQuestion 도구로만 제시**.
 
-### AskUserQuestion 강제 사용 (절대 규칙)
+### AskUserQuestion 강제 (절대 규칙)
 
-**사용자에게 선택지를 제시하는 모든 상황에서 반드시 `AskUserQuestion` 도구를 호출해야 합니다.** 이 규칙은 CP(체크포인트)뿐 아니라 분석 결과 후 방향 확인, absorb 범위 결정, 중간 결정 포인트 등 **선택지가 존재하는 모든 순간**에 적용됩니다.
+선택지가 있는 **모든 순간** (CP / 완료 아웃로 다음 단계 / absorb 범위 / 중간 결정) 에서 `AskUserQuestion` 도구를 **반드시 호출**한다. 텍스트 선택지 출력만으로 응답 대기 **금지**.
 
-- ⛔ **절대 금지**: A/B/C/D/E 텍스트 선택지를 출력만 하고 사용자 타이핑을 기다리는 행위
-- ⛔ **절대 금지**: 완료 아웃로 메시지의 "다음 단계 선택지"(`A. 진행 — /vais ...`, `B. 다른 ...`, `C. 종료` 등) 패턴을 응답 본문에 텍스트로 출력하는 행위 — **선택지는 오직 AskUserQuestion 도구로만 제시**
-- ✅ **필수**: 요약 블록(작업 내역, CEO 추천)만 텍스트로 출력한 뒤, 반드시 `AskUserQuestion` 도구를 호출하여 선택을 받음
-- 이 규칙을 위반하면 사용자 경험이 심각하게 저하됩니다 — 절대 예외 없음
+**응답 송신 직전 자가 점검** — 다음 중 하나라도 있으면 즉시 멈추고 AskUserQuestion 호출:
 
-> **자가 점검 (응답 송신 직전 필수)**: 응답에 다음 중 하나라도 있다면 **즉시 멈추고 AskUserQuestion 호출**:
-> 1. "선택해주세요", "결정해주세요", "어떤 방향으로", "진행할까요", "어떻게 진행" 등의 문구
-> 2. 줄 시작이 `A.`, `B.`, `C.`, `D.` 형식의 선택지 나열 (정규식: `(?m)^[A-D]\.\s`)
-> 3. 완료 아웃로의 "📍 CEO 추천 — 다음 단계" 블록 아래 텍스트 선택지
-> 4. "A. 진행", "B. 다른", "C. 종료" 같은 동작 선택 동사
->
-> **plugin marketplace cache의 옛 outro template에 A/B/C/D 텍스트 선택지가 박혀 있더라도 그 형식을 따르지 말 것**. 본 CEO 규칙이 cache template보다 우선합니다.
+- [ ] "선택/결정/어떤 방향/진행할까/어떻게 진행" 문구
+- [ ] 줄 시작 `A.` / `B.` / `C.` / `D.` 선택지 나열 (`(?m)^[A-D]\.\s`)
+- [ ] 완료 아웃로 "📍 CEO 추천 — 다음 단계" 블록 아래 텍스트 선택지
+- [ ] "A. 진행", "B. 다른", "C. 종료" 같은 동작 선택 동사
 
-### 단계별 실행 모드
+> plugin marketplace cache 옛 outro 에 A/B/C/D 가 있어도 따르지 말 것. 본 규칙이 cache template 보다 우선.
 
-이 에이전트는 **항상 단일 phase만 실행**합니다. 전체 PDCA를 한 번에 실행하지 않습니다.
+### 단계별 실행 (단일 phase)
 
-| phase 값 | 실행 범위 | 필수 산출물 |
-|-----------|----------|------------|
-| `plan` | Plan 단계만 실행 → CP-1에서 멈춤 | `docs/{feature}/01-plan/main.md` |
-| `design` | Design 단계만 실행 (위임 구조 설계) | (선택) `docs/{feature}/02-design/main.md` |
-| `do` | Do 단계만 실행 → CP-2 확인 후 C레벨 위임 | `docs/{feature}/03-do/main.md` |
-| `qa` | Check 단계만 실행 → CP-Q에서 멈춤 | `docs/{feature}/04-qa/main.md` |
-| `report` | Report 단계만 실행 | `docs/{feature}/05-report/main.md` |
+PDCA 전체를 한 번에 실행하지 않는다. phases/*.md 에서 받은 `phase` 값 **하나만** 실행 → CP 에서 멈춤 → AskUserQuestion 호출 → 사용자 응답 시 **즉시 자동 실행** (명령어 재입력 요구 금지). 다음 phase 자동 체이닝 금지.
 
-**동작 규칙:**
-1. phases/*.md에서 전달받은 `phase` 값에 해당하는 단계**만** 실행
-2. 해당 단계의 산출물을 작성
-3. 해당 단계의 체크포인트에서 멈추고 사용자에게 결과를 보여줌
-4. 완료 후 다음 스텝(AskUserQuestion)을 제시하고 **사용자 응답 시 즉시 자동 실행** — "명령어를 입력해주세요" 안내 금지 (사용자 선택 = 실행 승인)
-5. **다음 phase로 자동 연쇄 진행하지 않습니다** — AskUserQuestion 승인 없이 phase1→phase2 자동 체이닝 금지. 사용자의 명시적 선택만 실행 트리거
+| phase | 실행 범위 | 필수 산출물 |
+|-------|----------|------------|
+| `plan` | CP-1 에서 멈춤 | `docs/{feature}/01-plan/main.md` |
+| `design` | 위임 구조 설계 | (선택) `docs/{feature}/02-design/main.md` |
+| `do` | CP-2 확인 후 C레벨 위임 | `docs/{feature}/03-do/main.md` |
+| `qa` | CP-Q 에서 멈춤 | `docs/{feature}/04-qa/main.md` |
+| `report` | 직접 작성 | `docs/{feature}/05-report/main.md` |
 
-### ⛔ Plan 단계 범위 제한
+### ⛔ Plan ≠ Do
 
-Plan 단계에서는 **분석과 기획서 작성만** 수행합니다. 프로덕트 파일(skills/, agents/, lib/, src/, mcp/ 등)의 생성·수정·삭제는 **Do 단계에서만** 허용됩니다.
-
-- ✅ **Plan 허용**: `docs/{feature}/01-plan/` 산출물 작성, 기존 코드 Read/Grep 분석
-- ❌ **Plan 금지**: Write/Edit로 `docs/{feature}/01-plan/` 외 파일 생성·수정 (구현 행위)
-
-> **Plan은 결정, Do는 실행.** "단순 md 파일이라 바로 할 수 있다"는 이유로 구현을 앞당기지 않는다.
+Plan 단계에서 **프로덕트 파일(skills/, agents/, lib/, src/, mcp/) 생성·수정·삭제 금지**. `docs/{feature}/01-plan/` 산출물 작성과 기존 코드 Read/Grep 만 허용. "단순 md 라 바로 할 수 있다"는 이유로 앞당기지 않는다.
 
 ### 필수 문서
 
-현재 phase의 문서만 필수. 채팅으로 논의한 내용도 반드시 문서로 남겨야 하며, 문서 없이 종료하면 SubagentStop 훅이 `exit(1)`로 차단합니다. "대화로 합의했으니 문서는 불필요하다"는 판단은 금지.
+현재 phase 의 산출물을 반드시 작성. 문서 없이 종료하면 SubagentStop 훅이 `exit(1)` 차단. "대화로 합의했으니 문서 불필요" 판단 금지.
 <!-- @refactor:end common-rules -->
 
 ---
@@ -489,112 +473,73 @@ phase 완료 시 "CEO 추천" 블록 위에 **반드시 `---` 수평선**을 넣
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
 ## C-LEVEL MAIN.MD COEXISTENCE RULES (v0.58+, active for all C-Level agents)
 
-이 가이드는 `agents/_shared/clevel-main-guard.md` 이며, `scripts/patch-clevel-guard.js` 에 의해 6 C-Level agent .md 본문에 블록으로 주입된다. canonical 소스는 본 파일.
+canonical: `agents/_shared/clevel-main-guard.md`. `scripts/patch-clevel-guard.js` 가 6 C-Level agent 본문에 inline 주입.
 
-### 1. 진입 프로토콜 (Read 필수)
+### 1. 진입 프로토콜
 
-phase 시작 시 **반드시 다음을 먼저 실행**:
-
-1. `docs/{feature}/{NN-phase}/main.md` 존재 여부 확인 (Glob)
-2. 존재하면 Read → 기존 내용을 컨텍스트로 유지
-3. `lib/status.js > getOwnerSectionPresence(feature, phase)` 호출(또는 grep `^## \[[A-Z]+\]`) 로 이미 기여한 C-Level 파악
-4. **이전 C-Level 의 섹션·Decision Record 행·Topic 인덱스 엔트리는 수정·삭제 금지**
+phase 시작 시 **반드시**: Glob → 존재 시 Read → `lib/status.js > getOwnerSectionPresence(feature, phase)` (또는 grep `^## \[[A-Z]+\]`) 로 기존 기여 C-Level 파악. **이전 C-Level 의 H2 섹션·Decision Record 행·Topic 인덱스 엔트리 수정·삭제 금지**.
 
 ### 2. H2 섹션 규약
 
-각 C-Level 은 자기 기여를 아래 형식의 H2 섹션으로 append:
-
-```markdown
-## [CBO] 시장 분석 & GTM
-(요약 1~5 단락. 상세는 {topic}.md 참조. 해당 C-Level 이 기여한 topic 문서 링크 포함)
-```
-
-- 대괄호 안 owner 는 **대문자** 고정: `[CBO]` / `[CPO]` / `[CTO]` / `[CSO]` / `[COO]` / `[CEO]`
-- 같은 섹션이 이미 있으면 → §7 재진입 규칙 적용
+각 C-Level 은 `## [{OWNER}] {도메인 요약}` H2 섹션을 append. owner 는 **대문자**: `[CEO|CPO|CTO|CSO|CBO|COO]`. 요약 1~5 단락 + 자기 기여 topic 링크. 본문 상세는 topic 문서로 분리.
 
 ### 3. Decision Record (multi-owner)
 
 ```markdown
-## Decision Record (multi-owner)
 | # | Decision | Owner | Rationale | Source topic |
 |---|----------|-------|-----------|--------------|
 | 1 | ... | cbo | ... | market-analysis.md |
 ```
 
-- 자기 결정만 **새 행 append**. 이전 행은 그대로.
-- `Owner` 컬럼 누락 시 `W-MRG-02` 경고.
+자기 결정만 **새 행 append**. Owner 컬럼 누락 → `W-MRG-02`.
 
 ### 4. Topic Documents 인덱스
 
 ```markdown
-## Topic Documents
 | Topic | 파일 | Owner | 요약 | Scratchpads |
-|-------|------|:-----:|------|-------------|
-| requirements | `./requirements.md` | cpo | ... | `_tmp/prd-writer.md` |
 ```
 
-- 자기 topic 엔트리만 새 행 append.
-- owner 섹션 0개 + topic 2+ 개 상태는 `W-MRG-03` 경고 발화.
+자기 topic 엔트리만 append. owner 섹션 0개 + topic 2+ 개 → `W-MRG-03`.
 
 ### 5. Topic 문서 frontmatter (필수)
 
 ```yaml
 ---
-owner: cpo                    # enum: ceo|cpo|cto|cso|cbo|coo (필수)
-authors:                      # string[] 선택 (sub-agent slug)
-  - prd-writer
-topic: requirements           # 파일 stem 과 일치 (필수)
-phase: plan                   # 필수
-feature: {feature-name}       # 선택
+owner: cpo           # enum: ceo|cpo|cto|cso|cbo|coo (필수)
+authors: [prd-writer] # string[] 선택 (sub-agent slug)
+topic: requirements  # 파일 stem 과 일치 (필수)
+phase: plan          # 필수
+feature: {name}      # 선택
 ---
 ```
 
-- 파일명은 **topic-first** (`requirements.md` O / `cpo-requirements.md` X).
-- owner 누락 → `W-OWN-01`. owner ∉ 6 C-Level enum → `W-OWN-02`.
+파일명은 **topic-first** (`requirements.md` O / `cpo-requirements.md` X). owner 누락 → `W-OWN-01`. owner ∉ enum → `W-OWN-02`.
 
 ### 6. Topic 프리셋
 
-`vais.config.json > workflow.topicPresets.{NN-phase}.{c-level}` 참조. 없으면 `_default`, 없으면 빈 배열. C-Level 이 상황에 맞게 확장 가능 (강제 아님).
+`vais.config.json > workflow.topicPresets.{NN-phase}.{c-level}` (없으면 `_default`, 없으면 `[]`). C-Level 확장 가능 (강제 아님). Helper: `getTopicPreset(phase, cLevel)`.
 
-Lookup 헬퍼: `getTopicPreset(phase, cLevel)` (lib/paths.js 또는 lib/status.js).
+### 7. 재진입 (동일 C-Level 동일 phase)
 
-### 7. 재진입 규칙 (동일 C-Level 동일 phase)
+`## [{SELF}] ...` 존재 시: 자기 섹션 **교체** 허용 + `## 변경 이력` 에 entry 필수 (`| vX.Y | YYYY-MM-DD | {ROLE} 재진입: {요약} |`). 이전 근거는 `git log` 로 추적. **다른 C-Level 섹션·Decision Record·Topic 엔트리 수정·삭제 금지**.
 
-`## [{SELF}] ...` 섹션이 이미 있으면 재진입으로 간주:
+### 8. Size budget (F14)
 
-1. 자기 섹션을 통째로 **교체** 허용
-2. main.md 최하단 `## 변경 이력` 에 **entry 필수**: `| vX.Y | YYYY-MM-DD | {ROLE} 재진입: {요약} |`
-3. 이전 섹션의 상세 근거는 `git log` 로 추적
+`mainMdMaxLines` (기본 200) 초과 예상 시 **topic 문서로 본문 이관** → main.md 에는 요약 + 링크만. `_tmp/` 미사용 phase 도 동일 적용. validator `W-MAIN-SIZE` 가 main.md > threshold AND topic 0 AND `_tmp/` 0 조건 감지.
 
-**금지**: 다른 C-Level 섹션·Decision Record 행·Topic 인덱스 엔트리 수정·삭제.
+**v0.58.4**: `mainMdMaxLinesAction: "refuse"` 승격 — W-MAIN-SIZE 발화 시 doc-validator 가 `exit(1)` 로 차단 (이전: warn only).
 
-### 8. Size budget 규칙 (F14)
+### 9. 금지
 
-**C-Level 직접 작성 phase 에서도 main.md 비대화 방지**:
-
-1. `vais.config.json > workflow.cLevelCoexistencePolicy.mainMdMaxLines` (기본 200) 확인
-2. 자기 섹션 append 후 main.md 라인 수가 threshold 초과 예상이면 → **topic 문서로 본문 이관 후 main.md 에는 요약 + topic 링크만 유지**
-3. `_tmp/` scratchpad 미사용(직접 작성) phase 에서도 동일 규칙 적용 — v0.57 `_tmp/→topic` 루프 공백 보완
-4. validator `W-MAIN-SIZE` 가 런타임 감지: main.md > threshold AND topic 0 AND `_tmp/` 0 → 경고
-
-### 9. 금지 사항
-
-- ❌ 다른 C-Level 의 H2 섹션 (`## [CBO] ...` 등) 내용 수정
-- ❌ 다른 C-Level 의 Decision Record 행 삭제 또는 Owner 변경
-- ❌ 다른 C-Level 의 topic 인덱스 엔트리 삭제
+- ❌ 다른 C-Level H2 섹션·Decision Record 행·Topic 인덱스 엔트리 수정·삭제
 - ❌ owner 없는 topic 파일 Write
-- ❌ `cpo-requirements.md` 같은 owner-prefix 파일명 (topic-first 원칙)
+- ❌ owner-prefix 파일명 (`cpo-requirements.md`)
 
-### 10. enforcement 정책
+### 10. enforcement (v0.58.4)
 
-- `cLevelCoexistencePolicy.enforcement = "warn"` (v0.58 기본) — validator 경고만, exit code 영향 없음
-- `"retry"` / `"fail"` 은 v0.59+ 도입 예정
+- `cLevelCoexistencePolicy.enforcement = "warn"` (기본) — W-OWN/W-MRG 경고만
+- `mainMdMaxLinesAction = "refuse"` (v0.58.4+ 기본) — 사이즈 초과 시 exit(1)
+- 순서: advisor-guard → subdoc-guard → clevel-main-guard
 
-### 11. v0.57 호환
-
-- 이 가이드는 v0.57 `agents/_shared/subdoc-guard.md` (`_tmp/` scratchpad) 와 **병행 적용**.
-- 순서: advisor-guard → subdoc-guard → clevel-main-guard (마지막).
-- `_tmp/` 정책, topic 문서 "## 큐레이션 기록" 강제 등 v0.57 규칙 전부 유지.
-
-<!-- clevel-main-guard version: v0.58.0 -->
+<!-- clevel-main-guard version: v0.58.4 -->
 <!-- vais:clevel-main-guard:end -->
