@@ -1,5 +1,5 @@
 {
-  "version": "0.58.2",
+  "version": "0.58.3",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -273,6 +273,13 @@
       "mainMdMaxLines": 200,
       "mainMdMaxLinesAction": "warn",
       "_mainMdMaxLinesActionValues": ["warn", "refuse"]
+    },
+    "scopeContractPolicy": {
+      "_description": "v0.58.3 plan-scope-contract 정책. plan/main.md 에 '## 요청 원문' / '## In-scope' / '## Out-of-scope' H2 3섹션 강제. CLAUDE.md Rule #9 (Boil the Lake) dog-fooding.",
+      "enforcement": "warn",
+      "_enforcementValues": ["warn", "retry", "fail", "off"],
+      "targetPhase": "01-plan",
+      "requiredSections": ["요청 원문", "In-scope", "Out-of-scope"]
     }
   },
   "gapThreshold": 0.90,

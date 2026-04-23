@@ -3,6 +3,23 @@
 > ⛔ **Plan 단계 범위**: 이 문서는 분석과 결정만 기록합니다. 프로덕트 파일 생성·수정은 Do 단계에서 수행하세요.
 > <!-- size budget: main.md ≤ 200 lines 권장 (vais.config.json > workflow.cLevelCoexistencePolicy.mainMdMaxLines). 초과 시 topic 문서로 분리. -->
 
+## 요청 원문
+
+> {사용자 요청을 축약 없이 인용. 여러 개면 번호. CEO 위임 컨텍스트면 출처 표기.}
+
+## In-scope
+
+- {요청 원문에 명시된 항목}
+- {기술적 전제조건 (필요한 인프라·의존성)만}
+
+## Out-of-scope
+
+- {의도적으로 제외한 항목 + 이유 1줄}
+- {별도 피처 후보로 분기할 항목}
+- (자발 감지한 확장 후보는 `## 관찰 (후속 과제)` 로 — CLAUDE.md Rule #9)
+
+---
+
 ## Executive Summary
 
 | Perspective | Content | Contributing C-Levels |

@@ -26,6 +26,11 @@ process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] 
  *   W-MRG-02: main.md Decision Record 표에 Owner 컬럼 누락
  *   W-MRG-03: topic ≥ 2 이지만 main.md 에 ## [{C-LEVEL}] 섹션 0개
  *   W-MAIN-SIZE: main.md 라인 수 > mainMdMaxLines AND topic 0 AND _tmp/ 0 (F14)
+ *
+ * v0.58.3 경고 코드 (plan-scope-contract):
+ *   W-SCOPE-01: plan/main.md 에 "## 요청 원문" 섹션 누락 (CLAUDE.md Rule #9)
+ *   W-SCOPE-02: plan/main.md 에 "## In-scope" 섹션 누락
+ *   W-SCOPE-03: plan/main.md 에 "## Out-of-scope" 섹션 누락
  */
 const fs = require('fs');
 const path = require('path');
@@ -302,6 +307,41 @@ function validateCoexistence(feature, options = {}) {
 }
 
 /**
+ * v0.58.3 plan scope contract 검증 — plan/main.md 에 "## 요청 원문" / "## In-scope" / "## Out-of-scope" 섹션 존재 여부.
+ * enforcement=warn 기본이라 exit 에 영향 주지 않음.
+ *
+ * @param {string} feature
+ * @returns {Array<{ code, path, message }>}
+ */
+function validateScopeContract(feature) {
+  const out = [];
+  if (!feature) return out;
+
+  const cfg = loadConfig();
+  const policy = cfg.workflow?.scopeContractPolicy ?? {};
+  const enforcement = policy.enforcement ?? 'warn';
+  if (enforcement === 'off') return out;
+
+  const planMain = path.join(process.cwd(), 'docs', feature, '01-plan', 'main.md');
+  if (!fs.existsSync(planMain)) return out;
+
+  let content;
+  try { content = fs.readFileSync(planMain, 'utf8'); } catch (_) { return out; }
+
+  if (!/^## 요청 원문\s*$/m.test(content)) {
+    out.push({ code: 'W-SCOPE-01', path: planMain, message: '"## 요청 원문" 섹션 누락 (Rule #9 — 사용자 요청 축약 없이 인용)' });
+  }
+  if (!/^## In-scope\s*$/m.test(content)) {
+    out.push({ code: 'W-SCOPE-02', path: planMain, message: '"## In-scope" 섹션 누락' });
+  }
+  if (!/^## Out-of-scope\s*$/m.test(content)) {
+    out.push({ code: 'W-SCOPE-03', path: planMain, message: '"## Out-of-scope" 섹션 누락 (명시 없으면 "(없음)" 한 줄)' });
+  }
+
+  return out;
+}
+
+/**
  * 검증 결과를 사람이 읽을 수 있는 형식으로 출력 (main.md 중심 — 기존 호환)
  */
 function formatResult(role, feature, result) {
@@ -352,6 +392,19 @@ function formatCoexistenceWarnings(warnings) {
   return lines.join('\n');
 }
 
+/**
+ * v0.58.3 scope-contract 경고를 사람이 읽을 수 있는 형식으로 출력
+ */
+function formatScopeContractWarnings(warnings) {
+  if (!Array.isArray(warnings) || warnings.length === 0) return '';
+  const lines = [`ℹ️  [scope-contract v0.58.3] ${warnings.length}건 경고:`];
+  for (const w of warnings) {
+    const rel = path.relative(process.cwd(), w.path);
+    lines.push(`   ⚠️  [${w.code}] ${rel}: ${w.message}`);
+  }
+  return lines.join('\n');
+}
+
 // CLI 직접 실행
 if (require.main === module) {
   const [role, featureArg] = process.argv.slice(2);
@@ -364,16 +417,20 @@ if (require.main === module) {
   const result = validateDocs(role, feature);
   const subDocWarnings = feature ? validateSubDocs(feature) : [];
   const coexistenceWarnings = feature ? validateCoexistence(feature) : [];
+  const scopeWarnings = feature ? validateScopeContract(feature) : [];
   result.subDocWarnings = subDocWarnings;
   result.coexistenceWarnings = coexistenceWarnings;
+  result.scopeWarnings = scopeWarnings;
 
   const output = formatResult(role, feature, result);
   const subDocOutput = formatSubDocWarnings(subDocWarnings);
   const coexistenceOutput = formatCoexistenceWarnings(coexistenceWarnings);
+  const scopeOutput = formatScopeContractWarnings(scopeWarnings);
 
   if (output) process.stderr.write(output + '\n');
   if (subDocOutput) process.stderr.write(subDocOutput + '\n');
   if (coexistenceOutput) process.stderr.write(coexistenceOutput + '\n');
+  if (scopeOutput) process.stderr.write(scopeOutput + '\n');
 
   process.stdout.write(JSON.stringify(result));
 
@@ -381,10 +438,12 @@ if (require.main === module) {
   const cfg = loadConfig();
   const subDocEnforcement = cfg.workflow?.subDocPolicy?.enforcement ?? 'warn';
   const coexEnforcement = cfg.workflow?.cLevelCoexistencePolicy?.enforcement ?? 'warn';
+  const scopeEnforcement = cfg.workflow?.scopeContractPolicy?.enforcement ?? 'warn';
   if (!result.passed) process.exit(1);
   if (subDocEnforcement === 'fail' && subDocWarnings.length > 0) process.exit(1);
   if (coexEnforcement === 'fail' && coexistenceWarnings.length > 0) process.exit(1);
+  if (scopeEnforcement === 'fail' && scopeWarnings.length > 0) process.exit(1);
   process.exit(0);
 }
 
-module.exports = { validateDocs, validateSubDocs, validateCoexistence, formatResult, formatSubDocWarnings, formatCoexistenceWarnings, MANDATORY_PHASES, C_LEVEL_ROLES, C_LEVEL_OWNERS, PHASE_FOLDERS };
+module.exports = { validateDocs, validateSubDocs, validateCoexistence, validateScopeContract, formatResult, formatSubDocWarnings, formatCoexistenceWarnings, formatScopeContractWarnings, MANDATORY_PHASES, C_LEVEL_ROLES, C_LEVEL_OWNERS, PHASE_FOLDERS };

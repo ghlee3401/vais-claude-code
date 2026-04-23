@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.58.3] - 2026-04-23 — plan scope contract 3섹션 의무화 + W-SCOPE validator
+
+GA 이벤트 scope creep 사례 (사용자가 요청한 2개 이벤트 대비 agent 가 전체 스캔+수정까지 plan 에 포함) 를 계기로 **plan phase 의 scope 계약을 구조적으로 강제**. CLAUDE.md Rule #9 (Boil the Lake) 를 "Lake 는 사용자가 지정한다" 로 명문화하고, plan/main.md 상단에 `요청 원문 / In-scope / Out-of-scope` 3섹션을 의무화하여 사용자가 1초 내 scope 이탈을 감지할 수 있도록 함. 재작업 사이클이 "작은 수정에 큰 비용" 체감의 본질이라는 진단 이행.
+
+### Added
+
+- **plan-scope-contract 규약**: `templates/plan.template.md` 최상단에 `## 요청 원문` / `## In-scope` / `## Out-of-scope` H2 3섹션 의무화
+- `scripts/doc-validator.js`: `validateScopeContract()` 함수 + `W-SCOPE-01/02/03` 경고 (severity=warn, 기존 피처 역호환 유지)
+- `agents/cto/cto.md`: `## Plan Scope Default (v0.58.3+)` 섹션 추가 — "사용자 요청 원문 축약 금지 + In-scope 에 자발 확장 금지 + 품질 리스크는 관찰 섹션에 기록만"
+- `lib/observability/schema.js`: `plan_completed` / `plan_rewrite_requested` 이벤트 스키마 (SC-01 측정용, 자동 발화 훅은 별도 피처로 분기)
+- `vais.config.json`: `workflow.scopeContractPolicy` 정책 키 (subDocPolicy/cLevelCoexistencePolicy 와 동일 구조)
+- `tests/doc-validator-scope.test.js`: W-SCOPE 규칙 단위 테스트 7 assertion
+
+### Changed
+
+- `CLAUDE.md` Rule #9 (Boil the Lake) 부연 1줄 추가: "Lake 는 사용자가 지정한다. AI 는 Lake 를 자의로 확장하지 않는다. 자발 감지한 확장 후보는 `## 관찰 (후속 과제)` 섹션에 기록만 하고, 사용자 명시 승인 전까지는 In-scope 에 포함하지 않는다."
+
+### Dog-fooding
+
+- 이 피처의 plan/main.md 자체가 새 규약을 준수 (H3→H2 self-correction 1건). validator 실행 시 scope/subdoc/coexistence 경고 0건.
+- Out-of-scope 에 후속 피처 3개 (event-log 자동 발화, F4 공통 헤더, CEO triage gate) 를 명시하여 Rule #9 를 실천.
+
+### Testing
+
+- `npm test` — 220 pass / 0 fail / 3 skipped (이전 210 → +10 신규 W-SCOPE assertion)
+- matchRate 100, Critical 0 (auto-judge 통과)
+
+### Deferred (후속 피처 후보)
+
+- `plan-scope-observability` — event-log 자동 발화 훅 + reason 키워드 휴리스틱 + SC-01 대시보드
+- `template-include-mechanism` — F4 공통 헤더 승격을 위한 `templates/_shared/` include 시스템
+- `ceo-scope-triage` — trivial/small/feature/launch 4단계 라벨링 gate (1+2+a 효과 관찰 후)
+
 ## [0.58.2] - 2026-04-20 — status 스키마 손상 경고 메시지 개선
 
 v0.58.1 에서 추가된 방어 가드/try-catch 가 발동할 때 사용자에게 **복구 방법이 명시되지 않던** 문제 수정. 업데이트 후 hook 경고만 보고 원인/해결을 모르는 상황 방지.

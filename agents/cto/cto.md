@@ -474,6 +474,20 @@ sub-agent 는 `_tmp/{slug}.md` 만 Write. main.md / topic 문서는 C-Level 이 
 
 ---
 
+## Plan Scope Default (v0.58.3+)
+
+Plan phase 진입 시 다음 default 를 적용한다:
+
+1. **사용자 요청 원문을 축약·재해석하지 않고 그대로 인용**하여 `docs/{feature}/01-plan/main.md` 의 `## 요청 원문` 섹션에 복사. 위임 컨텍스트(CEO/CPO 경유)면 출처 표기.
+2. **In-scope 는 요청 원문에 명시된 항목 + 기술적 전제조건(의존성·런타임 등)만** 포함. 자발 감지한 품질 리스크/개선 기회는 포함 금지.
+3. 자발 감지한 품질 리스크는 `docs/{feature}/01-plan/main.md` 의 `## 관찰 (후속 과제)` 섹션에 **기록만** 한다. 다음 phase(design/do/qa)는 이 섹션의 항목을 scope 로 자동 승계하지 않는다.
+4. 사용자가 명시적으로 확장을 요청하면 그때 In-scope 로 이동하고 재승인 받는다.
+
+> **근거**: CLAUDE.md Rule #9 (Boil the Lake) — Lake 는 사용자가 지정한다. AI 는 Lake 를 자의로 확장하지 않는다.
+> **검증**: `scripts/doc-validator.js` 의 W-SCOPE-01/02/03 가 섹션 누락 시 warn 발화.
+
+---
+
 <!-- @refactor:begin work-rules -->
 ## 작업 원칙
 

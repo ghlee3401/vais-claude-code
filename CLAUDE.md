@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.58.2)
+> Virtual AI C-Suite for software development (v0.58.3)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -136,6 +136,7 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 7. **참조 투명성** — 외부 문서 참고 시 `// @see {URL}` 주석 추가
 8. **C-Suite 호출 규칙** — 실행 에이전트(infra-architect, backend-engineer, frontend-engineer 등)는 직접 호출 금지, 반드시 CTO를 통해 호출
 9. **완전성 원칙 (Boil the Lake)** — 각 C-Level은 담당 범위를 완전하게 수행. "나중에" 미룸 금지. Lake(끓일 수 있는 범위)는 끓이고, Ocean(전체 재작성 등)은 범위 밖으로 표시
+    - **Lake 는 사용자가 지정한다.** AI 는 Lake 를 자의로 확장하지 않는다. 자발 감지한 확장 후보는 plan/main.md 의 `## 관찰 (후속 과제)` 섹션에 기록만 하고, 사용자 명시 승인 전까지는 In-scope 에 포함하지 않는다.
 10. **탐색 우선 (Search Before Building)** — 빌드 전 기존 솔루션 탐색. 검증된 패턴 → 현재 베스트 프랙티스 → First Principles 순서
 11. **사용자 주권 (User Sovereignty)** — AI는 추천, 사용자가 결정. CEO 체크포인트에서 반드시 사용자 확인
 12. **Plan은 결정, Do는 실행** — Plan 단계에서는 `docs/{feature}/01-plan/` 산출물만 작성. 프로덕트 파일(skills/, agents/, lib/, src/ 등) 생성·수정은 Do 단계에서만 허용
