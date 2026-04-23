@@ -1,6 +1,7 @@
-# {feature} - 기획서
+# {feature} - 기획서 (Extended)
 
 > ⛔ **Plan 단계 범위**: 이 문서는 분석과 결정만 기록합니다. 프로덕트 파일 생성·수정은 Do 단계에서 수행하세요.
+> 📝 **Extended 템플릿** (v0.58.5+) — CP-1 "C. 확장" 선택 시 또는 PRD 부재 CTO 강행 all-in-one 에 사용. 일반 피처는 `plan-standard.template.md` (~180줄), 간단 수정은 `plan-minimal.template.md` (~60줄).
 > <!-- size budget: main.md ≤ 200 lines 권장 (vais.config.json > workflow.cLevelCoexistencePolicy.mainMdMaxLines). 초과 시 topic 문서로 분리. -->
 
 ## 요청 원문
@@ -345,4 +346,4 @@ erDiagram
 | v1.0 | | 초기 작성 |
 | v1.1 | YYYY-MM-DD | {ROLE} 재진입: {요약} |
 
-<!-- template version: v0.58.0 (v0.57+ subdoc / v0.58+ clevel-coexistence 포함) -->
+<!-- template version: plan-extended v0.58.5 (v0.57+ subdoc / v0.58+ clevel-coexistence 포함) -->

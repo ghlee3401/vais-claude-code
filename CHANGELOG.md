@@ -1,5 +1,55 @@
 # Changelog
 
+## [0.58.5] - 2026-04-23 — plan 템플릿 3-tier 재정의 (Minimal/Standard/Extended)
+
+v0.58.4 의 plan-minimal 에 이은 후속 — **현행 plan.template.md (348줄) 가 실질적으로 Extended (CTO 단독 강행 all-in-one) 용이었음을 재인식**하고, 일반 피처용 진짜 Standard 템플릿을 신설. CPO PRD ↔ CTO plan 중복(사용자 스토리·기능 상세·정책 등) 제거 + design phase 영역(화면·ER·API) 제거.
+
+### Added — `plan-standard.template.md` (~180줄)
+
+- `templates/plan-standard.template.md` 신설 — Scope Contract + Context Anchor + Decision Record + 아이디어 요약(1표) + §0.7 PRD 강행 체크 + §2 Plan-Plus + §4 기능 요약 + §5 비즈니스 규칙 + §6 비기능 + Success Criteria + Impact Analysis + §7 기술 스택 + Topic/Scratchpad.
+- **제거된 섹션** (→ Extended 또는 CPO PRD / design phase 로 이관):
+  - §0.5 MVP 매트릭스 → CPO PRD 영역
+  - §0.6 경쟁 분석 → CBO market-researcher 영역
+  - §1 개요 → §0 아이디어 요약과 중복
+  - §3 사용자 스토리 → §0 시나리오로 흡수
+  - §4.2 기능 상세 (트리거/정상/예외 흐름) → Do 단계 구현 시 기록
+  - §5.2 권한 매트릭스 / §5.3 유효성 검증 → Extended 또는 design
+  - §7.1 UI 컴포넌트 라이브러리 선정 표 → design phase
+  - §8 화면 목록 → design phase
+  - 데이터 모델 ER / API 엔드포인트 상세 → design 또는 db-architect/backend-engineer
+  - §9 일정 → CPO backlog-manager 영역
+
+### Changed — 템플릿 리네임
+
+- `templates/plan.template.md` → `templates/plan-extended.template.md` (내용 무변경, 제목/상단 주석/하단 버전 태그만 갱신). PRD 부재 CTO 단독 신규 피처 + all-in-one 용도로 위상 명시.
+- `agents/cto/cto.md` CP-1 분기표 업데이트 — A. Minimal → `plan-minimal.template.md` (~60줄) / B. Standard → `plan-standard.template.md` (~180줄, 권장) / C. Extended → `plan-extended.template.md` (~350줄).
+- `agents/cto/cto.md` 템플릿 철학 설명 확장 — 3-tier 각자의 역할과 제거된 섹션의 이전 경로 명시.
+- `agents/cbo/cbo.md` Template References — `plan.template.md` → `plan-standard.template.md (기본) / plan-minimal / plan-extended` 3개 병기.
+- `skills/vais/utils/init.md` — 코드 역생성은 all-in-one 필요하므로 `plan-extended.template.md` 로 변경.
+
+### Why (설계 철학)
+
+- CPO PRD 존재 시 CTO plan 에서 사용자 스토리/기능 상세/정책 재수집 = **phase 간 중복** = drift 유발. 반면 같은 규칙을 같은 phase 안에서 5번 반복하는 것(예: AskUserQuestion)은 하네스 효과 → **"하네스 중복은 유지, phase 중복은 제거"** 가 이번 기준.
+- CTO 단독 강행 현실(PRD 없는 피처가 다수) 은 §0.7 강행 모드 섹션을 **Standard 에도 포함**해 대응. Extended 는 "PRD 없이 all-in-one 을 한 문서에 전부" 쓸 때만 필요.
+- 3-tier 독립 파일은 harness 구조적 중복 — 각 tier 가 자기 파일을 갖기 때문에 drift 경계가 파일 단위로 봉쇄됨.
+
+### Dog-fooding
+
+- 본 meta-feature 이므로 별도 feature 문서 없이 CHANGELOG 기록 (Rule #9).
+- 기존 피처 문서들 (plan-scope-contract 등) 은 소급 영향 없음 — 이미 작성된 main.md 는 그대로 유지.
+
+### Testing
+
+- `npm test` — 템플릿은 런타임 코드가 참조하지 않으므로 테스트 영향 없음.
+- `node scripts/vais-validate-plugin.js` — 템플릿 디렉토리 구조 검증 통과 확인.
+
+### Migration
+
+- 기존 `plan.template.md` 경로 참조는 **없음** (모든 활성 참조는 본 커밋에서 업데이트). legacy docs/guide 내 historical 참조는 기록용으로 유지.
+- 신규 피처는 CP-1 에서 **B. Standard 가 권장**. CTO 단독 + PRD 부재 + 다수 섹션 필요 시 C. Extended 선택.
+
+---
+
 ## [0.58.4] - 2026-04-23 — harness prose 압축 + enforcement 승격 + plan-minimal 템플릿
 
 v0.58.3 scope contract 의 후속. 사용자 토론 결과 반영 — "drift 를 구조적 중복으로 봉쇄" 철학(중복은 유지)을 지키면서 **규칙당 prose 압축 + warn→fail 승격 + minimal 템플릿 신설**으로 토큰 절감과 스콥 축소를 동시 달성.

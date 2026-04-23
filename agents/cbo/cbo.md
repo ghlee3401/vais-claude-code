@@ -159,7 +159,7 @@ auto-judge 가 `do` phase 산출물을 파싱해 **`marketingScore`** 계산 (= 
 
 ## Template References
 
-- `templates/plan.template.md`
+- `templates/plan-standard.template.md` (기본) / `plan-minimal.template.md` / `plan-extended.template.md`
 - `templates/design.template.md`
 - `templates/do.template.md`
 - `templates/qa.template.md`
