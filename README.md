@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.58.3-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-0.58.5-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -300,7 +300,7 @@ docs/
 - Multi-owner Decision Record — `Owner` 컬럼으로 각 결정의 귀속 C-Level 추적
 - **(F14)** main.md 가 `mainMdMaxLines`(기본 200) 초과 AND topic 0 AND `_tmp/` 0 → `W-MAIN-SIZE` 경고. C-Level 직접 작성 phase(UI 없는 메타 피처 등) 에서도 main.md 비대화 방지
 
-추적성: 사용자가 "이 결정의 근거?" 질문 시 main.md Decision Record → topic 문서 → `_tmp/{slug}.md` 원본까지 추적 가능. `scripts/doc-validator.js` 가 W-SCP/W-TPC/W-IDX (v0.57) + W-OWN/W-MRG/W-MAIN-SIZE (v0.58) 총 11 경고 코드로 품질 체크 (warn only).
+추적성: 사용자가 "이 결정의 근거?" 질문 시 main.md Decision Record → topic 문서 → `_tmp/{slug}.md` 원본까지 추적 가능. `scripts/doc-validator.js` 가 W-SCP/W-TPC/W-IDX (v0.57) + W-OWN/W-MRG/W-MAIN-SIZE (v0.58) + W-SCOPE (v0.58.3) 경고 코드로 품질 체크. **Enforcement (v0.58.4+)**: W-SCOPE-01/02/03 (plan/main.md 필수 3섹션 누락) = **fail** (exit 1), W-MAIN-SIZE (main.md > 200 AND topic 0 AND `_tmp/` 0) = **refuse** (exit 1). 나머지는 warn.
 
 > 호환성: v0.56 이전 피처 문서(main.md 단독)는 그대로 동작. 신규 피처부터 2-layer + multi-owner 모델 적용 권장.
 
@@ -315,7 +315,7 @@ vais-claude-code/
 ├── hooks/           6 hooks (session, bash-guard, doc-tracker, stop, agent-start/stop)
 ├── lib/             advisor, core, quality, observability, registry, validation
 ├── scripts/         CLI 도구 (bash-guard, validators, migration)
-├── templates/       PDCA 문서 템플릿 (plan/design/do/qa/report/ideation)
+├── templates/       PDCA 문서 템플릿 (plan-minimal/standard/extended 3-tier + design/do/qa/report/ideation)
 ├── guide/           v2 설계 문서 (roles, scenarios, agent-mapping, harness)
 ├── vais.config.json 플러그인 설정
 └── package.json     매니페스트
@@ -352,7 +352,7 @@ vais-claude-code/
 ## Testing
 
 ```bash
-npm test    # 220 pass, 0 fail, 3 skipped (v0.58.3)
+npm test    # 220 pass, 0 fail, 3 skipped (v0.58.5)
 ```
 
 ---
