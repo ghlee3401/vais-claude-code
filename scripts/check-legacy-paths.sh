@@ -21,6 +21,7 @@ LEGACY_PATTERN='docs/[0-9][0-9]-'
 # (e.g. they document or test the pattern itself).
 EXCEPTIONS=(
   "docs/_legacy/*"
+  "docs/harness-engineering-guide.html"
   "CHANGELOG.md"
   "tests/paths.test.js"
   "README.md"

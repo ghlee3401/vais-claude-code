@@ -8,3 +8,5 @@ node_modules/
 references/
 __pycache__/
 *.pyc
+
+docs/training/
