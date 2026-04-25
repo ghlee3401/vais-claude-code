@@ -1,5 +1,5 @@
 {
-  "version": "0.58.5",
+  "version": "0.59.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -313,7 +313,9 @@
     ]
   },
   "orchestration": {
-    "gateAction": "confirm"
+    "gateAction": "confirm",
+    "profileGateEnabled": false,
+    "_profileGateEnabled_description": "F1 Project Profile 게이트 활성화 여부. false = OFF (기본, Sprint 1~3 안전 배포). true = 활성화."
   },
   "gates": {
     "_description": "v0.56 sub-plan 07: 메트릭 기반 게이팅. gate-manager가 defaults + roleOverrides를 읽어 GATE_DEFINITIONS 덮어쓰기.",

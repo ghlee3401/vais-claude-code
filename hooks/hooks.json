@@ -31,6 +31,11 @@
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/scripts/doc-tracker.js",
             "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/hooks/ideation-guard.js",
+            "timeout": 3000
           }
         ]
       },

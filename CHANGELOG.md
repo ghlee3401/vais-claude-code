@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.59.0] - 2026-04-25 - Project Profile + Template metadata 게이트 도입
+
+VAIS sub-agent의 default-execute anti-pattern 해소를 목표로 한 메타-VAIS 리팩터링 피처 `subagent-architecture-rethink` Sprint 1~3 완료. F1 Project Profile schema + F2 Template metadata schema + 산출물 카탈로그 인프라 도입. feature flag OFF로 backwards compat 보장.
+
+### Added
+
+- F1 Project Profile schema v1 (12 변수) - `lib/project-profile.js` 신규 (590 LOC, 8 함수: loadProfile/validateProfile/evaluateScopeConditions/buildContextBlock/isProfileGateEnabled 등)
+- F2 Template metadata 검증 - `scripts/template-validator.js` 신규 (CLI + --depth-check, exit 0/1/2)
+- 산출물 카탈로그 빌더 - `scripts/build-catalog.js` 신규 (gray-matter scan -> catalog.json, by_phase/by_policy/by_intent 인덱스)
+- ideation-guard PostToolUse 훅 - `hooks/ideation-guard.js` 신규 (Profile 합의 prompt + extractProfileDraft 키워드 스캔 30+개)
+- 통합 테스트 - `tests/integration/profile-gate.test.js` (T-01~T-07) + `template-validator.test.js` (TV-01~TV-08)
+- 신규 의존성 - js-yaml ^4.1.0, gray-matter ^4.0.3
+- 보안 G-1: path traversal 차단 + secret 패턴 차단 + FAILSAFE_SCHEMA
+
+### Documentation
+
+- `subagent-architecture-rethink` 메타-VAIS 리팩터링 피처 - 25+ 문서 / ~7500 lines (ideation 8턴 + plan + design + do PRD + qa Gap 분석)
+- 4단계 메타-프레임 (제품의 탄생 Core/Why/What/How) 채택
+- 메타-원칙 합의: 산출물(검증된 프레임워크)이 sub-agent의 정의/경계/계약을 결정한다
+- 50+ 산출물 카탈로그 + 정전 cross-reference 17개 (Rumelt/Cagan/Torres/SRE Book/DORA 등)
+- 실행 정책 4분류 (Always/Scope/User-select/Triggered) + Project Profile 12 변수
+- C-Suite 공존(clevel-coexistence) 적용 - 같은 main.md에 CPO/CTO H2 섹션 append
+- Decision Record 29건 (D-1~D-8 + D-D1~D-D13 + D-T1~D-T5 + D-IA-01~D-IA-08 + D-IM-01~D-IM-04)
+
+### Changed
+
+- `vais.config.json` - `orchestration.profileGateEnabled: false` (feature flag, 안전 배포)
+- `hooks/hooks.json` - ideation-guard PostToolUse 훅 등록
+- `output-styles/vais-default.md` - 변경 이력 표 정리
+
 ## [0.58.5] - 2026-04-23 — plan 템플릿 3-tier 재정의 (Minimal/Standard/Extended)
 
 v0.58.4 의 plan-minimal 에 이은 후속 — **현행 plan.template.md (348줄) 가 실질적으로 Extended (CTO 단독 강행 all-in-one) 용이었음을 재인식**하고, 일반 피처용 진짜 Standard 템플릿을 신설. CPO PRD ↔ CTO plan 중복(사용자 스토리·기능 상세·정책 등) 제거 + design phase 영역(화면·ER·API) 제거.
@@ -125,6 +155,7 @@ GA 이벤트 scope creep 사례 (사용자가 요청한 2개 이벤트 대비 ag
 - `plan-scope-observability` — event-log 자동 발화 훅 + reason 키워드 휴리스틱 + SC-01 대시보드
 - `template-include-mechanism` — F4 공통 헤더 승격을 위한 `templates/_shared/` include 시스템
 - `ceo-scope-triage` — trivial/small/feature/launch 4단계 라벨링 gate (1+2+a 효과 관찰 후)
+
 
 ## [0.58.2] - 2026-04-20 — status 스키마 손상 경고 메시지 개선
 

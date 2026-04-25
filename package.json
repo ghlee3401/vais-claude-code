@@ -1,6 +1,6 @@
 {
   "name": "vais-code",
-  "version": "0.58.5",
+  "version": "0.59.0",
   "description": "Virtual AI C-Suite for software development — Claude Code Plugin",
   "author": "ghlee3401",
   "license": "MIT",
@@ -17,9 +17,14 @@
     "outputStyles": "output-styles/vais-default.md"
   },
   "scripts": {
-    "test": "node --test tests/*.test.js",
+    "test": "node --test tests/*.test.js tests/integration/*.test.js",
+    "test:integration": "node --test tests/integration/*.test.js",
     "lint": "eslint scripts/ lib/ hooks/ --max-warnings=0",
     "prepare-hooks": "git config core.hooksPath .hooks"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "eslint": "^9.0.0"

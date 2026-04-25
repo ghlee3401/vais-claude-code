@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.58.5-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-0.59.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -352,7 +352,7 @@ vais-claude-code/
 ## Testing
 
 ```bash
-npm test    # 220 pass, 0 fail, 3 skipped (v0.58.5)
+npm test    # 220+ pass, 3 skipped (v0.59.0 — profile-gate / template-validator integration tests 추가)
 ```
 
 ---
