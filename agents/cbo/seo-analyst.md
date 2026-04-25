@@ -19,6 +19,22 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - seo-audit
+  - content-calendar
+  - keyword-research
+execution:
+  policy: scope
+  intent: seo-optimization
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: web_facing
+      operator: ==
+      value: true
+  review_recommended: false
+canon_source: "Google Search Quality Evaluator Guidelines (2024) + Core Web Vitals (web.dev) + Moz 'The Beginner's Guide to SEO' + Backlinko SEO best practices (Brian Dean)"
 includes:
   - _shared/advisor-guard.md
 ---

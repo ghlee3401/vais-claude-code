@@ -17,6 +17,19 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - unit-test
+  - integration-test
+  - e2e-test
+execution:
+  policy: always
+  intent: test-code-generation
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Kent Beck 'Test-Driven Development' (2002), Addison-Wesley + Gerard Meszaros 'xUnit Test Patterns' (2007) + Martin Fowler test pyramid + Cypress/Playwright e2e best practices"
 includes:
   - _shared/advisor-guard.md
 ---

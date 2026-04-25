@@ -16,6 +16,20 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - market-research
+  - competitor-analysis
+  - customer-journey-map
+  - tam-sam-som
+execution:
+  policy: always
+  intent: market-research
+  prereq: []
+  required_after: [strategy-kernel, prd]
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Cagan 'Inspired' (2017), Wiley + Christensen 'Innovator's Dilemma' (1997) JTBD + Steve Blank 'Four Steps to the Epiphany' (2005) — Customer Discovery"
 includes:
   - _shared/advisor-guard.md
 ---

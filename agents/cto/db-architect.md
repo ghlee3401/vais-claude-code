@@ -18,6 +18,23 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - db-schema
+  - migration
+  - index-strategy
+  - query-optimization-report
+execution:
+  policy: scope
+  intent: database-architecture
+  prereq: [architecture-design]
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: persistent_storage_required
+      operator: ==
+      value: true
+  review_recommended: true
+canon_source: "Kleppmann 'Designing Data-Intensive Applications' (2017), O'Reilly + Date 'An Introduction to Database Systems' (2003, 8th ed.) + Karwin 'SQL Antipatterns' (2010)"
 includes:
   - _shared/advisor-guard.md
 ---

@@ -16,6 +16,20 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - opportunity-solution-tree
+  - hypothesis
+  - experiment-design
+  - interview-script
+execution:
+  policy: always
+  intent: opportunity-discovery
+  prereq: []
+  required_after: [persona, prd]
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Teresa Torres 'Continuous Discovery Habits' (2021), Product Talk + Cagan 'Inspired' (2017) — Opportunity Solution Tree framework"
 includes:
   - _shared/advisor-guard.md
 ---

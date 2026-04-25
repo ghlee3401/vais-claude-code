@@ -16,6 +16,21 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - ui-implementation
+  - component-library
+execution:
+  policy: scope
+  intent: frontend-implementation
+  prereq: [architecture-design]
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: ui_required
+      operator: ==
+      value: true
+  review_recommended: false
+canon_source: "Cagan 'Inspired' (2017) + Krug 'Don't Make Me Think' (2014) + React/Next.js official docs (Vercel, Meta) + Web Vitals (web.dev)"
 includes:
   - _shared/advisor-guard.md
 ---

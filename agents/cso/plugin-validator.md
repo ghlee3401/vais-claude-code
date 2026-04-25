@@ -16,6 +16,17 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - plugin-validation-report
+execution:
+  policy: triggered
+  intent: plugin-deployment-validation
+  prereq: []
+  required_after: []
+  trigger_events: ["plugin-deploy", "marketplace-publish"]
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Anthropic Claude Code Plugin Specification (docs.anthropic.com/claude-code/plugins) + Anthropic Marketplace Submission Guidelines"
 includes:
   - _shared/advisor-guard.md
 ---

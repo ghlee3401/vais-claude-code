@@ -20,6 +20,18 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - skill-markdown
+  - agent-markdown
+execution:
+  policy: triggered
+  intent: skill-agent-generation
+  prereq: []
+  required_after: []
+  trigger_events: ["skill-create-requested", "agent-create-requested", "absorb-conversion"]
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Anthropic Claude Skill Specification (docs.anthropic.com/skills) + Anthropic Plugin Specification (docs.anthropic.com/claude-code/plugins) — utility agent (메타-도구)"
 includes:
   - _shared/advisor-guard.md
 ---

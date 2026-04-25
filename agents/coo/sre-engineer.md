@@ -17,6 +17,23 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - monitoring-config
+  - alert-rules
+  - incident-runbook
+  - slo-sli-definitions
+execution:
+  policy: scope
+  intent: sre-monitoring
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: deployment.sla_required
+      operator: ==
+      value: true
+  review_recommended: false
+canon_source: "Beyer, Jones, Petoff, Murphy 'Site Reliability Engineering' (Google, 2016), O'Reilly + Beyer et al. 'The Site Reliability Workbook' (2018) + Allspaw 'Web Operations' (2010)"
 includes:
   - _shared/advisor-guard.md
 ---

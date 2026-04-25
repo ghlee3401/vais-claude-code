@@ -20,6 +20,22 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - attribution-report
+  - channel-roi-analysis
+  - marketing-mix-model
+execution:
+  policy: scope
+  intent: marketing-attribution
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: marketing_channels_active
+      operator: ==
+      value: true
+  review_recommended: false
+canon_source: "Multi-Touch Attribution Framework + Google Analytics 4 spec (developers.google.com/analytics) + 'Marketing Mix Modeling' (Don Schultz et al.) + Avinash Kaushik 'Web Analytics 2.0' (2009)"
 includes:
   - _shared/advisor-guard.md
 ---

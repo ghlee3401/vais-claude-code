@@ -16,6 +16,22 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - usability-test-plan
+  - interview-script
+  - persona-deepening
+execution:
+  policy: scope
+  intent: ux-research
+  prereq: []
+  required_after: [persona, prd]
+  trigger_events: []
+  scope_conditions:
+    - field: ui_required
+      operator: ==
+      value: true
+  review_recommended: false
+canon_source: "Jakob Nielsen 'Usability Engineering' (1993), Morgan Kaufmann + Krug 'Don't Make Me Think' (2014, 3rd ed.) + Steve Portigal 'Interviewing Users' (2013)"
 includes:
   - _shared/advisor-guard.md
 ---

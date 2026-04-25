@@ -20,6 +20,22 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - pricing-strategy
+  - tier-design
+  - revenue-simulation
+execution:
+  policy: scope
+  intent: pricing-strategy
+  prereq: [persona]
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: revenue_model
+      operator: NOT_IN
+      value: [none, free-only]
+  review_recommended: true
+canon_source: "Nagle, Hogan & Zale 'The Strategy and Tactics of Pricing' (2017, 6th ed.), Routledge + Madhavan 'Monetizing Innovation' (2016) + Van Westendorp Price Sensitivity Meter (1976)"
 includes:
   - _shared/advisor-guard.md
 ---

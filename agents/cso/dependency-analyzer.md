@@ -20,6 +20,19 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - dependency-vulnerability-report
+  - license-audit
+  - supply-chain-risk-assessment
+execution:
+  policy: always
+  intent: dependency-security
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "CWE-1104 (Use of Unmaintained Third Party Components) + SLSA Framework (slsa.dev, Google) + SPDX License List (spdx.org) + NVD CVE Database"
 includes:
   - _shared/advisor-guard.md
 ---

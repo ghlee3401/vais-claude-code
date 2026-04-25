@@ -17,6 +17,20 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - qa-report
+  - gap-analysis
+  - build-verification
+  - qa-scenario-validation
+execution:
+  policy: always
+  intent: quality-assurance
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "ISTQB Foundation Level Syllabus (2018) + Cem Kaner 'Lessons Learned in Software Testing' (2002) + Beizer 'Software Testing Techniques' (1990)"
 includes:
   - _shared/advisor-guard.md
 ---

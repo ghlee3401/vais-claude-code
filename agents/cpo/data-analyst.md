@@ -16,6 +16,23 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - ab-test-design
+  - funnel-analysis
+  - metric-dashboard
+  - cohort-analysis
+execution:
+  policy: scope
+  intent: product-analytics
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: data_driven
+      operator: ==
+      value: true
+  review_recommended: false
+canon_source: "Croll & Yoskovitz 'Lean Analytics' (2013), O'Reilly + Dave McClure AARRR Pirate Metrics + Kohavi 'Trustworthy Online Controlled Experiments' (2020)"
 includes:
   - _shared/advisor-guard.md
 ---

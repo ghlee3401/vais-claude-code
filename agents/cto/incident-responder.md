@@ -17,6 +17,19 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - post-mortem
+  - root-cause-analysis
+  - hotfix-plan
+execution:
+  policy: triggered
+  intent: incident-response
+  prereq: []
+  required_after: []
+  trigger_events: ["incident-detected", "regression-found", "hotfix-required"]
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Beyer et al. 'Site Reliability Engineering' (Google, 2016), O'Reilly Ch.13~14 + John Allspaw 'Blameless PostMortems' (Etsy, 2012) + Beth Adele Long 'Debugging Teams'"
 includes:
   - _shared/advisor-guard.md
 ---

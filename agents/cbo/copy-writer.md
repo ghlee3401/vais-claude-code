@@ -19,6 +19,22 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - marketing-copy
+  - brand-positioning
+  - tone-voice-guide
+execution:
+  policy: scope
+  intent: marketing-copy
+  prereq: [persona]
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: marketing_required
+      operator: ==
+      value: true
+  review_recommended: false
+canon_source: "Sugarman 'The Adweek Copywriting Handbook' (2007), Wiley + Robert Bly 'The Copywriter's Handbook' (2020, 4th ed.) + PAS/AIDA/BAB classic frameworks + Geoffrey Moore 'Crossing the Chasm' (1991) Positioning"
 includes:
   - _shared/advisor-guard.md
 ---

@@ -20,6 +20,23 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - unit-economics-analysis
+  - cac-ltv-payback
+  - cohort-analysis
+  - saas-metrics-dashboard
+execution:
+  policy: scope
+  intent: unit-economics
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: revenue_model
+      operator: IN
+      value: [saas, subscription, marketplace, b2b-saas, b2c-saas]
+  review_recommended: false
+canon_source: "David Skok 'SaaS Metrics 2.0' (forEntrepreneurs.com) + 'Lean Analytics' (Croll & Yoskovitz, 2013) + Bessemer Cloud Index + Klipfolio CAC/LTV best practices"
 includes:
   - _shared/advisor-guard.md
 ---

@@ -16,6 +16,17 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - prd
+execution:
+  policy: always
+  intent: product-requirement-document
+  prereq: [vision-statement, persona]
+  required_after: [backlog]
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Cagan 'Inspired' (2017), Wiley + Lenny Rachitsky PRD Template (lennysnewsletter.com) + Wagenaar PRD Best Practices"
 includes:
   - _shared/advisor-guard.md
 ---

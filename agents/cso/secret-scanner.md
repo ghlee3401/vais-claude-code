@@ -20,6 +20,17 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - secret-scan-report
+execution:
+  policy: always
+  intent: secret-detection
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "CWE-798 (Use of Hard-coded Credentials) + CWE-200 (Sensitive Information Exposure) + Shannon Entropy Detection (gitleaks/truffleHog rule sets)"
 includes:
   - _shared/advisor-guard.md
 ---

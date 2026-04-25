@@ -272,6 +272,7 @@ backend-engineer 위임으로 **F1(Profile) + F2(Template metadata) + 테스트 
 | **Sprint 6 진행** | `sprint-6-progress.md` | cto | F8 VPC 재매핑 — Osterwalder VPC template + copy-writer/product-strategist 책임 이관 + SC-06 충족 |
 | **Sprint 7 진행** | `sprint-7-progress.md` | cto | CEO 4 + CPO 1 + COO 5 신설 + release-engineer deprecate + vais.config 업데이트 (G-4) — SC-05 충족 + owner_agent 실존화 + 6/6 MUST |
 | **Sprint 8 진행** | `sprint-8-progress.md` | cto | 48 sub-agent audit 자동화 스크립트 + 4 hotfix + audit 매트릭스 + Sprint 9 마이그레이션 로드맵 (SC-09 7/48) |
+| **Sprint 9 진행** | `sprint-9-progress.md` | cto | 34 sub-agent Q-A/Q-B 일괄 마이그레이션 (CPO 6 + CTO 8 + CSO 7 + CBO 8 + COO 3 + CEO 2) — Q-A/Q-B 14/48 → 48/48 (100%) + 정전 출처 ~30종 누적 |
 
 ## Scratchpads (v0.57+)
 
@@ -295,3 +296,4 @@ backend-engineer 위임으로 **F1(Profile) + F2(Template metadata) + 테스트 
 | v1.6 | 2026-04-26 | Sprint 6 F8 VPC 재매핑 종결: Osterwalder VPC template 신규 (catalog 11 artifacts) + copy-writer (CBO) → product-strategist (CPO) ownership 이관 + plugin-validate 통과 + 회귀 263 pass + SC-06 충족 |
 | v1.7 | 2026-04-26 | Sprint 7 종결: 10 신규 sub-agent (CEO 4 + CPO 1 + COO 5 release 5분해) + release-engineer deprecate alias + vais.config.json cSuite 3 영역 업데이트 (G-4 충족) + 11 owner_agent ↔ template 1:1 매칭 검증 + plugin-validate 58 agents 인식 + 회귀 263 pass + SC-05 충족 (6/6 MUST) |
 | v1.8 | 2026-04-26 | Sprint 8 종결: scripts/sub-agent-audit.js 자동화 (235 LOC) + 4 hotfix (customer-segmentation/market-researcher/product-strategist/roadmap-author artifacts+canon_source) + audit 매트릭스 04-qa 추가 + 7/48 전 4기준 통과 + Sprint 9 33 sub-agent Q-A/Q-B 마이그레이션 로드맵 |
+| v1.9 | 2026-04-26 | Sprint 9 종결: 34 sub-agent Q-A/Q-B 일괄 마이그레이션 (CPO 6 + CTO 8 + CSO 7 + CBO 8 + COO 3 + CEO 2) — Q-A canon_source / Q-B execution.policy 14/48 → 48/48 (100% 달성). 정전 출처 ~30종 누적. 회귀 263 pass + plugin-validate 0 errors |

@@ -17,6 +17,19 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - architecture-design
+  - infra-plan
+  - environment-setup
+execution:
+  policy: always
+  intent: infrastructure-design
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Fowler 'Patterns of Enterprise Application Architecture' (2003), Addison-Wesley + Sam Newman 'Building Microservices' (2021, 2nd ed.) + Evans 'Domain-Driven Design' (2003)"
 includes:
   - _shared/advisor-guard.md
 ---

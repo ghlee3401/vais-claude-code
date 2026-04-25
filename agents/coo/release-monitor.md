@@ -17,6 +17,18 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - post-deploy-health-report
+  - canary-monitoring-result
+execution:
+  policy: triggered
+  intent: post-deployment-monitoring
+  prereq: []
+  required_after: []
+  trigger_events: ["deployment-completed", "canary-window-active"]
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Forsgren, Humble, Kim 'Accelerate' (2018), IT Revolution Press — DORA Four Key Metrics + Sato 'Continuous Delivery 2.0' + Canary Deployment patterns (Martin Fowler)"
 includes:
   - _shared/advisor-guard.md
 ---

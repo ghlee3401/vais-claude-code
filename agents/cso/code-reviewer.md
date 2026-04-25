@@ -18,6 +18,17 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - code-review-report
+execution:
+  policy: always
+  intent: code-quality-review
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Robert Martin 'Clean Code' (2008), Prentice Hall + Fowler 'Refactoring' (2018, 2nd ed.) + Beck 'Implementation Patterns' (2007) + Google Code Review Guidelines"
 includes:
   - _shared/advisor-guard.md
 ---

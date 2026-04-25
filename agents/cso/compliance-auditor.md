@@ -16,6 +16,22 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - compliance-report
+  - license-audit
+  - audit-log-validation
+execution:
+  policy: scope
+  intent: compliance-verification
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: regulated_industry
+      operator: ==
+      value: true
+  review_recommended: true
+canon_source: "GDPR (Regulation EU 2016/679) + ISO/IEC 27001:2022 + SOC 2 Trust Service Criteria + SPDX License List (spdx.org)"
 includes:
   - _shared/advisor-guard.md
 ---

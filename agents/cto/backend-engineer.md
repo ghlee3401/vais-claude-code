@@ -16,6 +16,19 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - api-implementation
+  - server-logic
+  - database-integration
+execution:
+  policy: always
+  intent: backend-implementation
+  prereq: [architecture-design]
+  required_after: []
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Kleppmann 'Designing Data-Intensive Applications' (2017), O'Reilly + Fowler 'PoEAA' (2003) + Roy Fielding REST dissertation (2000)"
 includes:
   - _shared/advisor-guard.md
 ---

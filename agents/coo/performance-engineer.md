@@ -20,6 +20,22 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - performance-baseline
+  - regression-detection-report
+  - load-test-result
+execution:
+  policy: scope
+  intent: performance-benchmarking
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: latency_critical
+      operator: ==
+      value: true
+  review_recommended: false
+canon_source: "OpenTelemetry Specification (opentelemetry.io) + Web Vitals (web.dev, Google) + Forsgren DORA Four Key Metrics + Brendan Gregg 'Systems Performance' (2020, 2nd ed.)"
 includes:
   - _shared/advisor-guard.md
 ---

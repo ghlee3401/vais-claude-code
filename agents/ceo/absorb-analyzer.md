@@ -16,6 +16,17 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - absorption-feasibility-report
+execution:
+  policy: triggered
+  intent: external-reference-analysis
+  prereq: []
+  required_after: []
+  trigger_events: ["absorb-mode-activated", "external-reference-detected"]
+  scope_conditions: []
+  review_recommended: false
+canon_source: "VAIS Code Absorption Protocol (S-9 시나리오) + Anthropic Skill Specification — utility agent (메타-도구)"
 includes:
   - _shared/advisor-guard.md
 ---

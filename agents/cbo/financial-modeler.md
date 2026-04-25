@@ -21,6 +21,23 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - financial-model
+  - dcf-valuation
+  - investor-pitch-kpi
+  - scenario-analysis
+execution:
+  policy: scope
+  intent: financial-modeling
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: revenue_model
+      operator: NOT_IN
+      value: [none]
+  review_recommended: true
+canon_source: "Damodaran 'Investment Valuation' (2012, 3rd ed.), Wiley + Pignataro 'Financial Modeling and Valuation' (2013) + 3-Statement Model best practices (Wall Street Prep) + Mauboussin 'Expectations Investing'"
 includes:
   - _shared/advisor-guard.md
 ---

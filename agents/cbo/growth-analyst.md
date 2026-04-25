@@ -20,6 +20,20 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - gtm-strategy
+  - growth-loop
+  - north-star-metric
+  - funnel-design
+execution:
+  policy: always
+  intent: growth-strategy
+  prereq: [persona]
+  required_after: []
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Sean Ellis & Morgan Brown 'Hacking Growth' (2017), Crown Business + Dave McClure AARRR Pirate Metrics + Reichheld NPS (Net Promoter Score) + Brian Balfour 'Growth Loops' framework"
 includes:
   - _shared/advisor-guard.md
 ---

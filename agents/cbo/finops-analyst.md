@@ -19,6 +19,22 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - cost-optimization-report
+  - finops-recommendations
+  - waste-detection-report
+execution:
+  policy: scope
+  intent: cloud-cost-optimization
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions:
+    - field: deployment.target
+      operator: IN
+      value: [cloud, hybrid]
+  review_recommended: false
+canon_source: "FinOps Foundation Framework (finops.org) + 'Cloud FinOps' (Storment & Fuller, 2023, 2nd ed.) + AWS Well-Architected Cost Pillar + Google Cloud Cost Management best practices"
 includes:
   - _shared/advisor-guard.md
 ---

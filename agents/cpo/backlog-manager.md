@@ -19,6 +19,19 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - backlog
+  - sprint-plan
+  - user-stories
+execution:
+  policy: always
+  intent: backlog-conversion
+  prereq: [prd]
+  required_after: []
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Mike Cohn 'Agile Estimating and Planning' (2005), Prentice Hall + Bill Wake INVEST criteria + RICE Framework (Intercom) + MoSCoW prioritization"
 includes:
   - _shared/advisor-guard.md
 ---

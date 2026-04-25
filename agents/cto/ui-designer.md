@@ -17,6 +17,22 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - wireframe
+  - ia-design
+  - visual-design-spec
+execution:
+  policy: scope
+  intent: ui-design
+  prereq: [persona]
+  required_after: [ui-implementation]
+  trigger_events: []
+  scope_conditions:
+    - field: ui_required
+      operator: ==
+      value: true
+  review_recommended: false
+canon_source: "Don Norman 'The Design of Everyday Things' (2013, Revised), Basic Books + Jakob Nielsen 10 Usability Heuristics (1994) + Krug 'Don't Make Me Think' (2014)"
 includes:
   - _shared/advisor-guard.md
 ---

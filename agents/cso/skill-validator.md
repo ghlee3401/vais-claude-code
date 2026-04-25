@@ -17,6 +17,17 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - skill-validation-report
+execution:
+  policy: always
+  intent: skill-markdown-validation
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Anthropic Claude Skill Specification (docs.anthropic.com/skills) + Description Quality Guidelines (3rd-person, what+when, 1024-char limit, triggers)"
 includes:
   - _shared/advisor-guard.md
 ---

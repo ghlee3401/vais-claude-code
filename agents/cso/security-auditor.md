@@ -16,6 +16,18 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+artifacts:
+  - security-audit-report
+  - threat-model
+execution:
+  policy: always
+  intent: security-audit
+  prereq: []
+  required_after: []
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "OWASP Top 10 (2021) + CWE/SANS Top 25 Most Dangerous Software Errors + STRIDE Threat Modeling (Microsoft) + NIST SP 800-53"
 includes:
   - _shared/advisor-guard.md
 ---
