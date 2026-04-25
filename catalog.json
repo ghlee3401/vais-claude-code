@@ -1,10 +1,10 @@
 {
   "version": "1.0",
-  "generated_at": "2026-04-25T22:23:20.970Z",
-  "total_artifacts": 29,
+  "generated_at": "2026-04-25T22:34:31.585Z",
+  "total_artifacts": 38,
   "policy_distribution": {
-    "always": 19,
-    "scope": 9,
+    "always": 23,
+    "scope": 14,
     "user-select": 0,
     "triggered": 1
   },
@@ -792,6 +792,270 @@
       "template_path": "templates/how/migration-plan.md",
       "project_context_reason": "How 단계 — DB schema 변경 시 절차 + 위험 평가 + 롤백 스크립트. review_recommended=true: data loss 위험.",
       "review_recommended": true
+    },
+    {
+      "id": "gtm-strategy",
+      "phase": "biz",
+      "owner_agent": "growth-analyst",
+      "canon_source": "Sean Ellis & Morgan Brown 'Hacking Growth' (2017), Crown Business + Brian Balfour 'Four Fits' framework (brianbalfour.com) + Dave McClure AARRR Pirate Metrics + Reichheld NPS",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "gtm-strategy",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "persona",
+          "strategy-kernel",
+          "prd"
+        ],
+        "required_after": [
+          "pricing-strategy"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/biz/gtm-strategy.md",
+      "project_context_reason": "Biz 단계 — 모든 product 이 GTM (Go-To-Market) 전략 필요. North Star Metric + Growth Loop + 채널 + 메시징.",
+      "review_recommended": false
+    },
+    {
+      "id": "attribution-report",
+      "phase": "biz",
+      "owner_agent": "marketing-analytics-analyst",
+      "canon_source": "Multi-Touch Attribution Framework + Google Analytics 4 spec (developers.google.com/analytics) + Don Schultz 'Marketing Mix Modeling' + Avinash Kaushik 'Web Analytics 2.0' (2009)",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "marketing_channels_active",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "marketing-attribution",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "gtm-strategy"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/biz/attribution-report.md",
+      "project_context_reason": "Biz 단계 — 다채널 마케팅 환경에서 conversion 기여도 분석. last-click 만으로는 부정확 → Multi-Touch Attribution + MMM.",
+      "review_recommended": false
+    },
+    {
+      "id": "financial-model",
+      "phase": "biz",
+      "owner_agent": "financial-modeler",
+      "canon_source": "Aswath Damodaran 'Investment Valuation' (2012, 3rd ed.), Wiley + Paul Pignataro 'Financial Modeling and Valuation' (2013), Wiley + Wall Street Prep 3-Statement Model best practices",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "revenue_model",
+            "operator": "NOT_IN",
+            "value": [
+              "none"
+            ]
+          }
+        ],
+        "intent": "financial-modeling",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "strategy-kernel",
+          "prd"
+        ],
+        "required_after": [
+          "pricing-strategy"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/biz/financial-model.md",
+      "project_context_reason": "Biz 단계 — 3-Statement (P&L / Balance Sheet / Cash Flow) + DCF + 시나리오 분석. 투자유치/M&A/예산 결정 시 필수. review_recommended=true: 가정 (assumption) 의 자기기만 위험.",
+      "review_recommended": true
+    },
+    {
+      "id": "pricing-strategy",
+      "phase": "biz",
+      "owner_agent": "pricing-analyst",
+      "canon_source": "Thomas Nagle, John Hogan, Joseph Zale 'The Strategy and Tactics of Pricing' (2017, 6th ed.), Routledge + Madhavan Ramanujam 'Monetizing Innovation' (2016), Wiley + Van Westendorp Price Sensitivity Meter (1976)",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "revenue_model",
+            "operator": "NOT_IN",
+            "value": [
+              "none",
+              "free-only"
+            ]
+          }
+        ],
+        "intent": "pricing-strategy",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "persona",
+          "jobs-to-be-done",
+          "financial-model"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/biz/pricing-strategy.md",
+      "project_context_reason": "Biz 단계 — value-based pricing + tier 설계 + 매출 시뮬레이션. revenue model 결정 후 작성. review_recommended=true: 잘못된 가격은 PMF 후 반전 비용 폭증.",
+      "review_recommended": true
+    },
+    {
+      "id": "unit-economics-analysis",
+      "phase": "biz",
+      "owner_agent": "unit-economics-analyst",
+      "canon_source": "David Skok 'SaaS Metrics 2.0' (forEntrepreneurs.com) + Croll & Yoskovitz 'Lean Analytics' (2013), O'Reilly + Bessemer Cloud Index + Klipfolio CAC/LTV best practices",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "revenue_model",
+            "operator": "IN",
+            "value": [
+              "saas",
+              "subscription",
+              "marketplace",
+              "b2b-saas",
+              "b2c-saas"
+            ]
+          }
+        ],
+        "intent": "unit-economics",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "pricing-strategy"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/biz/unit-economics-analysis.md",
+      "project_context_reason": "Biz 단계 — per-customer 수익성 평가. SaaS / subscription / marketplace 에서만 의미. CAC / LTV / Payback / NRR / GRR 표준.",
+      "review_recommended": false
+    },
+    {
+      "id": "alignment-core-why",
+      "phase": "alignment",
+      "owner_agent": "strategy-kernel-author",
+      "canon_source": "Cagan 'Empowered' (2020) — Strategy Alignment + Marty Cagan 'Inspired' (2017) Ch.6 Vision Coherence + Christensen JTBD Theory",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "alignment-core-why",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement",
+          "strategy-kernel",
+          "jobs-to-be-done",
+          "persona"
+        ],
+        "required_after": [
+          "alignment-why-what"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/alignment/alignment-core-why.md",
+      "project_context_reason": "Alignment 단계 — Core (Vision/Strategy) ↔ Why (PEST/Five Forces/SWOT/JTBD/Persona/VPC) 정합성 매트릭스. 두 phase 의 결정이 일치하는지 체크. review_recommended=true: alignment 부재 시 후행 PRD/Roadmap 표류.",
+      "review_recommended": true
+    },
+    {
+      "id": "alignment-what-how",
+      "phase": "alignment",
+      "owner_agent": "infra-architect",
+      "canon_source": "Cagan 'Inspired' Ch.13~16 — Engineering Spec + 'Empowered' product engineering alignment + Fowler 'Patterns of Enterprise Application Architecture' (2003) + Forsgren DORA",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "alignment-what-how",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "prd",
+          "roadmap",
+          "architecture-design",
+          "api-implementation",
+          "db-schema"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/alignment/alignment-what-how.md",
+      "project_context_reason": "Alignment 단계 — What (PRD/Roadmap) ↔ How (Architecture/Implementation/Test/Operations) 정합성 매트릭스. 구현이 PRD 에 정확히 대응하는지 + 비기능 요구사항 (NFR) 충족하는지 검증.",
+      "review_recommended": true
+    },
+    {
+      "id": "alignment-why-what",
+      "phase": "alignment",
+      "owner_agent": "prd-writer",
+      "canon_source": "Cagan 'Inspired' (2017) — outcome-based product spec + Torres OST + 'Empowered' product alignment + Marty Cagan four pillars (vision/objectives/teams/discovery)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "alignment-why-what",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "jobs-to-be-done",
+          "persona",
+          "prd",
+          "roadmap",
+          "opportunity-solution-tree"
+        ],
+        "required_after": [
+          "alignment-what-how"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/alignment/alignment-why-what.md",
+      "project_context_reason": "Alignment 단계 — Why (JTBD/Persona/VPC) ↔ What (PRD/Roadmap/OST) 정합성 매트릭스. PRD 가 Persona Pain/Gain 해소에 정확히 매핑되는지 검증.",
+      "review_recommended": true
+    },
+    {
+      "id": "interview-guide",
+      "phase": "alignment",
+      "owner_agent": "ux-researcher",
+      "canon_source": "Steve Portigal 'Interviewing Users' (2013), Rosenfeld Media + Teresa Torres 'Continuous Discovery Habits' (2021) Ch.5 Interview Method + Erika Hall 'Just Enough Research' (2019, 2nd ed.)",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "external_validation_required",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "external-user-interview",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "persona",
+          "jobs-to-be-done"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/alignment/interview-guide.md",
+      "project_context_reason": "Alignment 단계 — RA-1 (User Value 검증) 100% 충족 위한 외부 인터뷰 5~7명 가이드. AI/internal 검증의 한계를 외부 user voice 로 보완.",
+      "review_recommended": false
     }
   ],
   "by_phase": {
@@ -831,6 +1095,19 @@
       "monitoring-config",
       "runbook",
       "migration-plan"
+    ],
+    "biz": [
+      "gtm-strategy",
+      "attribution-report",
+      "financial-model",
+      "pricing-strategy",
+      "unit-economics-analysis"
+    ],
+    "alignment": [
+      "alignment-core-why",
+      "alignment-what-how",
+      "alignment-why-what",
+      "interview-guide"
     ]
   },
   "by_policy": {
@@ -853,7 +1130,11 @@
       "architecture-design",
       "code-review-report",
       "security-audit-report",
-      "unit-test"
+      "unit-test",
+      "gtm-strategy",
+      "alignment-core-why",
+      "alignment-what-how",
+      "alignment-why-what"
     ],
     "scope": [
       "five-forces-analysis",
@@ -864,7 +1145,12 @@
       "db-schema",
       "dockerfile",
       "monitoring-config",
-      "runbook"
+      "runbook",
+      "attribution-report",
+      "financial-model",
+      "pricing-strategy",
+      "unit-economics-analysis",
+      "interview-guide"
     ],
     "user-select": [],
     "triggered": [
@@ -958,6 +1244,33 @@
     ],
     "schema-migration": [
       "migration-plan"
+    ],
+    "gtm-strategy": [
+      "gtm-strategy"
+    ],
+    "marketing-attribution": [
+      "attribution-report"
+    ],
+    "financial-modeling": [
+      "financial-model"
+    ],
+    "pricing-strategy": [
+      "pricing-strategy"
+    ],
+    "unit-economics": [
+      "unit-economics-analysis"
+    ],
+    "alignment-core-why": [
+      "alignment-core-why"
+    ],
+    "alignment-what-how": [
+      "alignment-what-how"
+    ],
+    "alignment-why-what": [
+      "alignment-why-what"
+    ],
+    "external-user-interview": [
+      "interview-guide"
     ]
   }
 }

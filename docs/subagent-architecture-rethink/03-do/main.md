@@ -275,6 +275,7 @@ backend-engineer 위임으로 **F1(Profile) + F2(Template metadata) + 테스트 
 | **Sprint 9 진행** | `sprint-9-progress.md` | cto | 34 sub-agent Q-A/Q-B 일괄 마이그레이션 (CPO 6 + CTO 8 + CSO 7 + CBO 8 + COO 3 + CEO 2) — Q-A/Q-B 14/48 → 48/48 (100%) + 정전 출처 ~30종 누적 |
 | **Sprint 10+11 진행** | `sprint-10-11-progress.md` | cto | audit Q-D 3-state + utility 면제 (Sprint 10) + What 7 templates 작성 (Sprint 11) — SC-09 충족 (전 4기준 48/48 100%) + SC-04 18/25 (72%) |
 | **Sprint 12 진행** | `sprint-12-progress.md` | cto | How 11 templates 작성 (architecture/api/db-schema/migration/runbook/dockerfile/ci-cd/monitoring/security-audit/code-review/unit-test) — **SC-04 18→29/25 (임계 초과 달성)** + 정전 ~38종 누적 |
+| **Sprint 13+14 진행** | `sprint-13-14-progress.md` | cto | Biz 5 (financial-model/pricing/gtm/unit-economics/attribution) + Alignment 3 (core-why/why-what/what-how) + interview-guide — **GA [14/14] 도달**, catalog 38, SC-04 152%, SC-08 76%, SC-10 β 충족 |
 
 ## Scratchpads (v0.57+)
 
@@ -301,3 +302,4 @@ backend-engineer 위임으로 **F1(Profile) + F2(Template metadata) + 테스트 
 | v1.9 | 2026-04-26 | Sprint 9 종결: 34 sub-agent Q-A/Q-B 일괄 마이그레이션 (CPO 6 + CTO 8 + CSO 7 + CBO 8 + COO 3 + CEO 2) — Q-A canon_source / Q-B execution.policy 14/48 → 48/48 (100% 달성). 정전 출처 ~30종 누적. 회귀 263 pass + plugin-validate 0 errors |
 | v1.10 | 2026-04-26 | Sprint 10+11 종결: audit script Q-D 3-state (pass/warn/fail) + utility=true 면제 (Sprint 10) + What 7 templates 작성 (Sprint 11: PRD/Lean Canvas/Product Strategy Canvas/Roadmap/OST/Experiment Design/Hypothesis) — **SC-09 충족 (전 4기준 48/48 100%)** + SC-04 11→18/25 (72%) + catalog 18 artifacts |
 | v1.11 | 2026-04-26 | Sprint 12 종결: How 11 templates 작성 (architecture-design/api-implementation/db-schema/migration-plan/runbook/dockerfile/ci-cd-pipeline/monitoring-config/security-audit-report/code-review-report/unit-test) — **SC-04 18→29/25 (임계 초과)** + SC-08 18→29/50 (58%) + audit strict-pass 14→15 + 정전 ~38종 누적 + 회귀 263 pass |
+| v1.12 | 2026-04-26 | **GA [14/14] 도달**: Sprint 13 (Biz 5) + Sprint 14 (Alignment 3 + interview-guide) — catalog 29→38 (core 5/why 6/what 7/how 11/biz 5/alignment 4). SC-04 152% + SC-08 76% + SC-09 48/48 + SC-10 β 충족. 정전 ~45종 cross-reference. Beta-3 (외부 OSS) 배포 가능 단계. |
