@@ -352,7 +352,7 @@ vais-claude-code/
 ## Testing
 
 ```bash
-npm test    # 220+ pass, 3 skipped (v0.59.0 — profile-gate / template-validator integration tests 추가)
+npm test    # 263 pass, 0 fail, 3 skipped (v0.59.0 — profile-gate / template-validator integration tests 추가)
 ```
 
 ---
