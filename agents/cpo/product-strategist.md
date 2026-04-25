@@ -8,6 +8,19 @@ description: |
 model: sonnet
 tools: [Read, Write, Glob, Grep, TodoWrite]
 memory: none
+artifacts:
+  - value-proposition-canvas
+  - lean-canvas
+  - product-strategy-canvas
+execution:
+  policy: always
+  intent: product-strategy
+  prereq: [vision-statement]
+  required_after: [prd, roadmap]
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Osterwalder 'Value Proposition Design' (2014) + Maurya 'Running Lean' (2012) Lean Canvas + Cagan 'Inspired' (2017) + Moore 'Crossing the Chasm' (1991) Positioning"
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push --force*)"

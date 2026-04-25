@@ -2,8 +2,8 @@
 name: customer-segmentation-analyst
 version: 0.50.0
 description: |
-  고객 세분화·페르소나·라이프사이클 분석 전문. RFM/AARRR+R/JTBD 프레임워크 기반.
-  Use when: CBO가 Plan phase에서 고객 세그먼트 정의를 위임할 때.
+  고객 세분화·페르소나·라이프사이클 분석 전문. RFM/AARRR+R/JTBD/Cooper Goal-Directed Persona 프레임워크 기반.
+  Use when: CBO가 Plan phase에서 고객 세그먼트 정의를 위임할 때. Policy: Always (A) — 모든 프로젝트가 1차 페르소나 명시.
 model: sonnet
 layer: business
 agent-type: subagent
@@ -11,6 +11,18 @@ parent: cbo
 triggers: [segmentation, 세그먼트, 페르소나, persona, RFM, cohort, JTBD]
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none
+artifacts:
+  - jobs-to-be-done
+  - persona
+execution:
+  policy: always
+  intent: customer-segmentation
+  prereq: []
+  required_after: [strategy-kernel, prd]
+  trigger_events: []
+  scope_conditions: []
+  review_recommended: false
+canon_source: "Christensen 'Innovator's Solution' (2003) + 'Competing Against Luck' (2016) + Cooper 'About Face' (1995/2014) + 'Inmates' (1999) Goal-Directed Design + Cagan 'Inspired'"
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"
@@ -21,6 +33,7 @@ advisor:
   caching: { type: ephemeral, ttl: 5m }
 includes:
   - _shared/advisor-guard.md
+  - _shared/subdoc-guard.md
 ---
 
 # Customer Segmentation Analyst

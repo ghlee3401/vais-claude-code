@@ -13,6 +13,7 @@ tools: [Read, Write, Edit, Glob, Grep, TodoWrite]
 memory: project
 artifacts:
   - roadmap
+  - 3-horizon
 execution:
   policy: always
   intent: roadmap-planning

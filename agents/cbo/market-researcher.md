@@ -2,8 +2,8 @@
 name: market-researcher
 version: 0.50.0
 description: |
-  시장·경쟁 분석 전문. PEST/SWOT/Porter 5F/TAM-SAM-SOM 프레임워크 기반 시장 기회 평가.
-  Use when: CBO가 Plan phase에서 시장 기회 분석을 위임할 때.
+  시장·경쟁 분석 전문. PEST/SWOT (+TOWS)/Porter 5F/TAM-SAM-SOM 프레임워크 기반 시장 기회 평가.
+  Use when: CBO가 Plan phase에서 시장 기회 분석을 위임할 때. SWOT은 always, PEST/Five Forces는 scope (글로벌·다국가·규제·신규시장 진입 시).
 model: sonnet
 layer: business
 agent-type: subagent
@@ -11,6 +11,22 @@ parent: cbo
 triggers: [market research, 시장 분석, PEST, SWOT, Porter, TAM, 경쟁 분석]
 tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
 memory: none
+artifacts:
+  - pest-analysis
+  - five-forces-analysis
+  - swot-analysis
+execution:
+  policy: scope
+  intent: market-environment-scan
+  prereq: []
+  required_after: [strategy-kernel]
+  trigger_events: []
+  scope_conditions:
+    - field: market_position
+      operator: IN
+      value: [new-entry, expansion, competitive-pressure, global-launch]
+  review_recommended: false
+canon_source: "Aguilar 'Scanning the Business Environment' (1967) + Porter HBR (1979) / 'Competitive Strategy' (1980) + Humphrey SRI 1960s + Weihrich 'TOWS Matrix' (1982)"
 disallowedTools:
   - "Bash(rm -rf*)"
   - "Bash(git push*)"
@@ -21,6 +37,7 @@ advisor:
   caching: { type: ephemeral, ttl: 5m }
 includes:
   - _shared/advisor-guard.md
+  - _shared/subdoc-guard.md
 ---
 
 # Market Researcher
