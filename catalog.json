@@ -1,0 +1,173 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-04-25T14:53:06.346Z",
+  "total_artifacts": 5,
+  "policy_distribution": {
+    "always": 5,
+    "scope": 0,
+    "user-select": 0,
+    "triggered": 0
+  },
+  "artifacts": [
+    {
+      "id": "3-horizon",
+      "phase": "core",
+      "owner_agent": "roadmap-author",
+      "canon_source": "Baghai, Coley, White 'The Alchemy of Growth' (1999), Perseus + McKinsey 'Three Horizons of Growth' framework",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "portfolio-balance",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "strategy-kernel"
+        ],
+        "required_after": [
+          "okr",
+          "roadmap"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/core/3-horizon.md",
+      "project_context_reason": "Core 단계 다섯 번째 산출물 — 단일 OKR/Roadmap 으로는 단기 (H1) 만 다뤄 장기 성장 (H2/H3) 이 invisible. 3-Horizon 은 portfolio 차원 자원 배분 (70:20:10) 을 명시화.",
+      "review_recommended": false
+    },
+    {
+      "id": "okr",
+      "phase": "core",
+      "owner_agent": "okr-author",
+      "canon_source": "Grove 'High Output Management' (1983), Random House + Doerr 'Measure What Matters' (2018), Portfolio",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "goal-setting",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "strategy-kernel"
+        ],
+        "required_after": [
+          "roadmap"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/core/okr.md",
+      "project_context_reason": "Core 단계 세 번째 산출물 — 전략을 분기·반기 단위 측정 가능한 목표로 변환. Strategy Kernel 의 Guiding Policy 가 OKR 의 Objective 로, Coherent Actions 가 Key Results 로 흘러야 함.",
+      "review_recommended": false
+    },
+    {
+      "id": "pr-faq",
+      "phase": "core",
+      "owner_agent": "pr-faq-author",
+      "canon_source": "Amazon Working Backwards methodology — Bryar & Carr 'Working Backwards' (2021), St. Martin's Press",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "launch-narrative",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement"
+        ],
+        "required_after": [
+          "strategy-kernel",
+          "okr"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/core/pr-faq.md",
+      "project_context_reason": "Core 단계 네 번째 산출물 — 출시 1 일차 고객 입장에서 역산 (Working Backwards). 명확한 customer benefit 이 없으면 PR 작성 자체가 막힘 → product-market fit 결여 조기 발견. review_recommended=true: 1 인 작성 시 자기 만족적 PR 위험.",
+      "review_recommended": true
+    },
+    {
+      "id": "strategy-kernel",
+      "phase": "core",
+      "owner_agent": "strategy-kernel-author",
+      "canon_source": "Rumelt 'Good Strategy / Bad Strategy' (2011), Crown Business",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "strategy-definition",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement"
+        ],
+        "required_after": [
+          "okr",
+          "roadmap"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/core/strategy-kernel.md",
+      "project_context_reason": "Core 단계 두 번째 산출물 — Vision 을 실행 가능한 전략으로 변환. review_recommended=true: 진단(Diagnosis)이 자기기만적이거나 Guiding Policy 가 trade-off 를 회피하면 전체 OKR/Roadmap 이 무너짐.",
+      "review_recommended": true
+    },
+    {
+      "id": "vision-statement",
+      "phase": "core",
+      "owner_agent": "vision-author",
+      "canon_source": "Collins & Porras 'Built to Last' (1994), HarperBusiness",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "vision-definition",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "strategy-kernel",
+          "okr"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/core/vision-statement.md",
+      "project_context_reason": "Core 단계 첫 번째 산출물 — 모든 전략·결정의 북극성. 부재 시 Strategy Kernel/OKR/Roadmap이 표류.",
+      "review_recommended": false
+    }
+  ],
+  "by_phase": {
+    "core": [
+      "3-horizon",
+      "okr",
+      "pr-faq",
+      "strategy-kernel",
+      "vision-statement"
+    ]
+  },
+  "by_policy": {
+    "always": [
+      "3-horizon",
+      "okr",
+      "pr-faq",
+      "strategy-kernel",
+      "vision-statement"
+    ],
+    "scope": [],
+    "user-select": [],
+    "triggered": []
+  },
+  "by_intent": {
+    "portfolio-balance": [
+      "3-horizon"
+    ],
+    "goal-setting": [
+      "okr"
+    ],
+    "launch-narrative": [
+      "pr-faq"
+    ],
+    "strategy-definition": [
+      "strategy-kernel"
+    ],
+    "vision-definition": [
+      "vision-statement"
+    ]
+  }
+}

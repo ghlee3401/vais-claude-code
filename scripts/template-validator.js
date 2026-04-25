@@ -253,7 +253,11 @@ function validateTemplateFile(filePath, opts) {
 // ── 디렉토리 재귀 스캔 ────────────────────────────────────────
 
 /**
- * 디렉토리에서 .md 파일 목록 재귀 수집.
+ * 디렉토리에서 catalog artifact .md 파일 목록 재귀 수집.
+ *
+ * 제외 대상:
+ *   - `*.template.md` — PDCA workflow templates (plan/design/do/qa/report)
+ *     로 catalog artifact schema 와 별개 도메인. 명명 규칙으로 구분.
  *
  * @param {string} dir  - 절대 경로
  * @returns {string[]}  - 절대 경로 목록
@@ -266,6 +270,8 @@ function collectMdFiles(dir) {
     if (entry.isDirectory()) {
       results.push(...collectMdFiles(fullPath));
     } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      // PDCA workflow templates 제외 — *.template.md 패턴
+      if (entry.name.endsWith('.template.md')) continue;
       results.push(fullPath);
     }
   }

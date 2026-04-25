@@ -267,6 +267,7 @@ backend-engineer 위임으로 **F1(Profile) + F2(Template metadata) + 테스트 
 | Release Roadmap | `release-roadmap.md` | cpo | Sprint 1~14 분할 + Go/No-Go Gates + H2/H3 |
 | Decisions & Risks | `decision-and-risks.md` | cpo | D-1~D-D13 통합 + R1~R7 + Top 3 RA + OOS |
 | **CTO 구현 진행** | `cto-implementation-progress.md` | cto | Sprint 1~3 작업 보고 + LOC + 테스트 결과 + Sprint 4+ 권장 |
+| **Sprint 4 진행** | `sprint-4-progress.md` | cto | Day 1 Vision Statement 완료 + RA-3 1차 측정 + Day 2 handoff |
 
 ## Scratchpads (v0.57+)
 
@@ -284,3 +285,5 @@ backend-engineer 위임으로 **F1(Profile) + F2(Template metadata) + 테스트 
 | v1.0 | 2026-04-25 | 초기 작성 — CPO Do phase, prd-writer 위임 + 큐레이션, PRD 8섹션 (designCompleteness ≥ 80 목표) |
 | v1.1 | 2026-04-25 | CPO 재진입(qa CP-Q): G-3 API N/A 명시 한 줄 + Data Model 한 줄 추가 (섹션 7 Solution) |
 | v1.2 | 2026-04-25 | CTO Do 진입: `## [CTO] Sprint 1~3 구현 결과` H2 섹션 append + D-IM-01~D-IM-04 + 9 신규/수정 파일 (~2526 LOC) + cto-implementation-progress.md topic + backend-engineer _tmp 추가 |
+| v1.3 | 2026-04-25 | Sprint 4 Day 1: `templates/core/vision-statement.md` 신규 + `sprint-4-progress.md` topic 추가 + catalog.json 1 artifact 등록 + 회귀 263 pass 유지 |
+| v1.4 | 2026-04-25 | Sprint 4 5/5 종결: Strategy Kernel/OKR/PR-FAQ/3-Horizon 4 templates 추가 (catalog 5 artifacts) + `template-validator.js` `*.template.md` 제외 fix + RA-3 1차 측정 ~9분/5 templates + 회귀 263 pass 유지 |
