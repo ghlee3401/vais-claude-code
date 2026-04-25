@@ -1,10 +1,10 @@
 {
   "version": "1.0",
-  "generated_at": "2026-04-25T14:53:06.346Z",
-  "total_artifacts": 5,
+  "generated_at": "2026-04-25T15:21:53.995Z",
+  "total_artifacts": 11,
   "policy_distribution": {
-    "always": 5,
-    "scope": 0,
+    "always": 9,
+    "scope": 2,
     "user-select": 0,
     "triggered": 0
   },
@@ -130,6 +130,179 @@
       "template_path": "templates/core/vision-statement.md",
       "project_context_reason": "Core 단계 첫 번째 산출물 — 모든 전략·결정의 북극성. 부재 시 Strategy Kernel/OKR/Roadmap이 표류.",
       "review_recommended": false
+    },
+    {
+      "id": "jobs-to-be-done",
+      "phase": "why",
+      "owner_agent": "customer-segmentation-analyst",
+      "canon_source": "Clayton Christensen 'The Innovator's Solution' (2003), Harvard Business School Press + Christensen et al. 'Competing Against Luck' (2016), HarperBusiness — Anthony Ulwick 'Outcome-Driven Innovation' (1990s)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "customer-job-mapping",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "persona",
+          "strategy-kernel",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/jtbd.md",
+      "project_context_reason": "Why 단계 — 고객이 **무엇을 사는지** 보다 **어떤 일을 시키려고 사는지** (Job) 에 초점. Always 정책: 모든 프로젝트가 작성 (B2B/B2C/사내 도구 무관). Persona 보다 선행 — 'Job 이 정의되어야 그 Job 을 의뢰하는 Persona 가 정의됨'.",
+      "review_recommended": false
+    },
+    {
+      "id": "persona",
+      "phase": "why",
+      "owner_agent": "customer-segmentation-analyst",
+      "canon_source": "Alan Cooper 'The Inmates Are Running the Asylum' (1999), Sams + Cooper 'About Face' (1995/2014) — Goal-Directed Design + Cagan 'Inspired' (2008/2017) modern persona spec",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "user-archetype",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "jobs-to-be-done"
+        ],
+        "required_after": [
+          "strategy-kernel",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/persona.md",
+      "project_context_reason": "Why 단계 — JTBD 가 'Job (해결할 일)' 정의 후, Persona 는 'Job 을 의뢰하는 인물 archetype' 정의. JTBD 의 Functional/Emotional/Social Job 이 Persona 의 Goals 로 구체화. Always 정책: 모든 프로젝트가 1 차 페르소나 명시.",
+      "review_recommended": false
+    },
+    {
+      "id": "swot-analysis",
+      "phase": "why",
+      "owner_agent": "market-researcher",
+      "canon_source": "Albert Humphrey, Stanford Research Institute (SRI), 1960s 'TAM' (Team Action Model) → SWOT 명명 (Heinz Weihrich 1982 'TOWS Matrix' 확장)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "position-assessment",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "strategy-kernel"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/swot.md",
+      "project_context_reason": "Why 단계 — 회사·제품의 내부 (S/W) + 외부 (O/T) 통합 평가. Always 정책: 모든 프로젝트가 작성. review_recommended=true: 자기기만 (내부 약점 회피 / 외부 위협 부정) 위험.",
+      "review_recommended": true
+    },
+    {
+      "id": "value-proposition-canvas",
+      "phase": "why",
+      "owner_agent": "product-strategist",
+      "canon_source": "Osterwalder, Pigneur, Bernarda, Smith, Papadakos 'Value Proposition Design' (2014), Wiley + Osterwalder & Pigneur 'Business Model Generation' (2010), Wiley",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "product-market-fit",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "jobs-to-be-done",
+          "persona"
+        ],
+        "required_after": [
+          "strategy-kernel",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/value-proposition-canvas.md",
+      "project_context_reason": "Why 단계 — Customer Profile (JTBD/Persona 기반) 과 Value Map (제품·서비스) 의 명시적 fit 검증. 본 템플릿이 곧 product-market fit 의 Osterwalder 형태. F8 재매핑: 기존 copy-writer (CBO) 에 위치했으나 PMF 분석은 product 영역 → product-strategist (CPO) 가 owner.",
+      "review_recommended": true
+    },
+    {
+      "id": "five-forces-analysis",
+      "phase": "why",
+      "owner_agent": "market-researcher",
+      "canon_source": "Michael Porter 'How Competitive Forces Shape Strategy' Harvard Business Review (1979) + Porter 'Competitive Strategy' (1980), Free Press",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "market_position",
+            "operator": "IN",
+            "value": [
+              "new-entry",
+              "expansion",
+              "competitive-pressure"
+            ]
+          },
+          {
+            "field": "target_market",
+            "operator": "NOT_IN",
+            "value": [
+              "internal-tool-only"
+            ]
+          }
+        ],
+        "intent": "industry-attractiveness",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "strategy-kernel"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/five-forces.md",
+      "project_context_reason": "Why 단계 — 진입 산업의 구조적 매력도 평가. scope: 신규 시장 진입 / 확장 / 경쟁 심화 상황에서만. 사내 도구는 skip. 1 회 분석 후 산업 변화 시 재작성.",
+      "review_recommended": false
+    },
+    {
+      "id": "pest-analysis",
+      "phase": "why",
+      "owner_agent": "market-researcher",
+      "canon_source": "Francis Aguilar 'Scanning the Business Environment' (1967), Macmillan — 원래 ETPS, 후일 PEST/PESTLE 로 확장",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "target_market",
+            "operator": "IN",
+            "value": [
+              "global",
+              "multi-country",
+              "regulated-industry"
+            ]
+          },
+          {
+            "field": "timeline",
+            "operator": ">=",
+            "value": "12-months"
+          }
+        ],
+        "intent": "macro-environment-scan",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "strategy-kernel"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/pest.md",
+      "project_context_reason": "Why 단계 — 거시환경 변화 (정치·경제·사회·기술) 가 사업 가설에 영향. scope: 글로벌·다국가·규제 산업·12개월+ 장기 기획에서만 의미. 1인 OSS 플러그인은 skip.",
+      "review_recommended": false
     }
   ],
   "by_phase": {
@@ -139,6 +312,14 @@
       "pr-faq",
       "strategy-kernel",
       "vision-statement"
+    ],
+    "why": [
+      "jobs-to-be-done",
+      "persona",
+      "swot-analysis",
+      "value-proposition-canvas",
+      "five-forces-analysis",
+      "pest-analysis"
     ]
   },
   "by_policy": {
@@ -147,9 +328,16 @@
       "okr",
       "pr-faq",
       "strategy-kernel",
-      "vision-statement"
+      "vision-statement",
+      "jobs-to-be-done",
+      "persona",
+      "swot-analysis",
+      "value-proposition-canvas"
     ],
-    "scope": [],
+    "scope": [
+      "five-forces-analysis",
+      "pest-analysis"
+    ],
     "user-select": [],
     "triggered": []
   },
@@ -168,6 +356,24 @@
     ],
     "vision-definition": [
       "vision-statement"
+    ],
+    "customer-job-mapping": [
+      "jobs-to-be-done"
+    ],
+    "user-archetype": [
+      "persona"
+    ],
+    "position-assessment": [
+      "swot-analysis"
+    ],
+    "product-market-fit": [
+      "value-proposition-canvas"
+    ],
+    "industry-attractiveness": [
+      "five-forces-analysis"
+    ],
+    "macro-environment-scan": [
+      "pest-analysis"
     ]
   }
 }

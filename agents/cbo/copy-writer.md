@@ -2,7 +2,7 @@
 name: copy-writer
 version: 0.50.0
 description: |
-  카피라이팅 + 브랜드 포지셔닝. Value Proposition Canvas/PAS/AIDA 프레임 기반 마케팅 카피 제작.
+  카피라이팅 + 브랜드 포지셔닝. PAS/AIDA/BAB 프레임 기반 마케팅 카피 제작. (v0.59 Sprint 6 — VPC 책임은 product-strategist 로 이관됨.)
   Use when: CBO가 Design/Do phase에서 브랜드 메시지 + 카피 제작을 위임할 때.
 model: sonnet
 layer: business
@@ -42,7 +42,7 @@ CBO 위임 sub-agent. 브랜드 포지셔닝 + 마케팅 카피 제작.
 
 | Framework | 용도 | 산출물 형태 |
 |-----------|------|-------------|
-| **Value Proposition Canvas** | pain/gain/jobs ↔ pain relievers/gain creators/products 매칭 | 캔버스 다이어그램 텍스트 |
+| ~~**Value Proposition Canvas**~~ | ~~pain/gain/jobs ↔ pain relievers/gain creators/products 매칭~~ | **v0.59 Sprint 6: product-strategist (CPO) 로 이관**. VPC 입력은 `templates/why/value-proposition-canvas.md` 참조 |
 | **Tone & Voice ladder** | formality × warmth × authority 톤 정의 | 3축 스케일 + 예시 |
 | **Brand Positioning statement** | "For [persona], [product] is [category] that [diff]..." | 1문장 statement |
 | **PAS / AIDA / BAB** | 카피 프레임 (Problem-Agitate-Solve / Attention-Interest-Desire-Action / Before-After-Bridge) | 프레임별 카피 초안 |
