@@ -1,12 +1,12 @@
 {
   "version": "1.0",
-  "generated_at": "2026-04-25T22:05:54.683Z",
-  "total_artifacts": 18,
+  "generated_at": "2026-04-25T22:23:20.970Z",
+  "total_artifacts": 29,
   "policy_distribution": {
-    "always": 14,
-    "scope": 4,
+    "always": 19,
+    "scope": 9,
     "user-select": 0,
-    "triggered": 0
+    "triggered": 1
   },
   "artifacts": [
     {
@@ -494,6 +494,304 @@
       "template_path": "templates/what/lean-canvas.md",
       "project_context_reason": "What 단계 — pre-PMF 단계의 가설 정렬. 기존 사업이거나 PMF 검증 완료 시 Strategy Kernel + PRD 가 더 적합. 1 페이지 9 블록 형태로 빠른 가설 visualization.",
       "review_recommended": false
+    },
+    {
+      "id": "api-implementation",
+      "phase": "how",
+      "owner_agent": "backend-engineer",
+      "canon_source": "Roy Fielding 'Architectural Styles and the Design of Network-based Software Architectures' (2000) PhD dissertation — REST + Kleppmann 'Designing Data-Intensive Applications' (2017) + OpenAPI Specification 3.1 (openapis.org)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "api-implementation",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/api-implementation.md",
+      "project_context_reason": "How 단계 — Architecture Design 입력 후 API 표면 정의. REST / GraphQL / gRPC 선택 + endpoint spec + error handling + idempotency.",
+      "review_recommended": false
+    },
+    {
+      "id": "architecture-design",
+      "phase": "how",
+      "owner_agent": "infra-architect",
+      "canon_source": "Martin Fowler 'Patterns of Enterprise Application Architecture' (2003), Addison-Wesley + Sam Newman 'Building Microservices' (2021, 2nd ed.) + Eric Evans 'Domain-Driven Design' (2003)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "architecture-design",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "prd",
+          "strategy-kernel"
+        ],
+        "required_after": [
+          "api-implementation",
+          "db-schema"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/architecture-design.md",
+      "project_context_reason": "How 단계 — PRD 의 요구사항을 기술 아키텍처로 변환. 시스템 구조·계층·통합 결정. review_recommended=true: 잘못된 아키텍처는 후행 비용 100x.",
+      "review_recommended": true
+    },
+    {
+      "id": "code-review-report",
+      "phase": "how",
+      "owner_agent": "code-reviewer",
+      "canon_source": "Robert Martin 'Clean Code' (2008), Prentice Hall + Martin Fowler 'Refactoring' (2018, 2nd ed.), Addison-Wesley + Google Engineering Practices: Code Review (google.github.io/eng-practices/review)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "code-quality-review",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "api-implementation"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/code-review-report.md",
+      "project_context_reason": "How 단계 — CTO QA 통과 후 독립 code review. 시각 fresh 한 reviewer 가 readability + maintainability + 잠재 버그 평가. CSO Gate C 의 핵심 산출물.",
+      "review_recommended": false
+    },
+    {
+      "id": "security-audit-report",
+      "phase": "how",
+      "owner_agent": "security-auditor",
+      "canon_source": "OWASP Top 10 (2021), owasp.org + CWE/SANS Top 25 Most Dangerous Software Errors + STRIDE Threat Modeling (Microsoft) + NIST SP 800-53 Security Controls",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "security-audit",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design",
+          "api-implementation"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/security-audit-report.md",
+      "project_context_reason": "How 단계 — 모든 프로젝트 보안 감사. OWASP Top 10 (2021) 기준 + STRIDE threat model + 발견 + 우선순위 + remediation.",
+      "review_recommended": false
+    },
+    {
+      "id": "unit-test",
+      "phase": "how",
+      "owner_agent": "test-engineer",
+      "canon_source": "Kent Beck 'Test-Driven Development: By Example' (2002), Addison-Wesley + Gerard Meszaros 'xUnit Test Patterns' (2007), Addison-Wesley + Martin Fowler 'Test Pyramid' (2012, martinfowler.com)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "unit-test-implementation",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "api-implementation"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/unit-test.md",
+      "project_context_reason": "How 단계 — 모든 production 코드는 unit test cover. Beck TDD 의 Red-Green-Refactor 루프. 가장 많은 tests + 가장 빠름 (Test Pyramid 의 base).",
+      "review_recommended": false
+    },
+    {
+      "id": "ci-cd-pipeline",
+      "phase": "how",
+      "owner_agent": "ci-cd-configurator",
+      "canon_source": "Forsgren, Humble, Kim 'Accelerate' (2018), IT Revolution Press — DORA Four Key Metrics + Humble & Farley 'Continuous Delivery' (2010), Addison-Wesley + GitHub Actions Documentation (docs.github.com/actions)",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "deployment.target",
+            "operator": "IN",
+            "value": [
+              "cloud",
+              "hybrid"
+            ]
+          },
+          {
+            "field": "users.target_scale",
+            "operator": ">=",
+            "value": "pilot"
+          }
+        ],
+        "intent": "ci-cd-automation",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/ci-cd-pipeline.md",
+      "project_context_reason": "How 단계 — cloud/hybrid 배포 + scale ≥ pilot 일 때만. 1 인 OSS plugin / pre-PMF 는 skip (default-execute anti-pattern 회피).",
+      "review_recommended": false
+    },
+    {
+      "id": "db-schema",
+      "phase": "how",
+      "owner_agent": "db-architect",
+      "canon_source": "Martin Kleppmann 'Designing Data-Intensive Applications' (2017), O'Reilly + C.J. Date 'An Introduction to Database Systems' (2003, 8th ed.) + Bill Karwin 'SQL Antipatterns' (2010), Pragmatic Bookshelf",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "persistent_storage_required",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "db-schema-design",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [
+          "migration-plan"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/db-schema.md",
+      "project_context_reason": "How 단계 — Architecture 결정 후 데이터 모델링. Normalization / Index 전략 / Concurrency 결정. review_recommended=true: schema 변경 비용 후행 100x.",
+      "review_recommended": true
+    },
+    {
+      "id": "dockerfile",
+      "phase": "how",
+      "owner_agent": "container-config-author",
+      "canon_source": "Docker Documentation 'Dockerfile Best Practices' (docs.docker.com/develop/dev-best-practices) + 'Docker in Action' (Nickoloff & Kuenzli, 2019, 2nd ed.) + Distroless / Wolfi minimal base image patterns",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "deployment.target",
+            "operator": "IN",
+            "value": [
+              "cloud",
+              "hybrid",
+              "on-prem"
+            ]
+          }
+        ],
+        "intent": "containerization",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/dockerfile.md",
+      "project_context_reason": "How 단계 — Architecture 결정 후 컨테이너화. multi-stage build + 보안 (non-root + minimal base) + reproducibility (pinned versions).",
+      "review_recommended": false
+    },
+    {
+      "id": "monitoring-config",
+      "phase": "how",
+      "owner_agent": "sre-engineer",
+      "canon_source": "Beyer et al. 'Site Reliability Engineering' (Google, 2016) Ch.6 'Monitoring' + 'SRE Workbook' (2018) Ch.5 'Alerting on SLOs' + OpenTelemetry Specification (opentelemetry.io) + Brendan Gregg 'Systems Performance' (2020)",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "deployment.sla_required",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "observability",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [
+          "alert-rules"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/monitoring-config.md",
+      "project_context_reason": "How 단계 — SLA 가 필요한 시스템의 observability 인프라. Metrics + Logs + Traces 3 pillars + SLO/SLI 정의.",
+      "review_recommended": false
+    },
+    {
+      "id": "runbook",
+      "phase": "how",
+      "owner_agent": "runbook-author",
+      "canon_source": "Beyer, Jones, Petoff, Murphy 'Site Reliability Engineering' (Google, 2016), O'Reilly + 'The Site Reliability Workbook' (2018) Ch.3 'Risk' + Ch.9 'Implementing SLOs'",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "deployment.sla_required",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "operational-runbook",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/runbook.md",
+      "project_context_reason": "How 단계 — 배포 절차 + 인시던트 대응 절차의 living document. SLA 가 필요한 시스템에서만 작성 (1인 OSS plugin skip).",
+      "review_recommended": false
+    },
+    {
+      "id": "migration-plan",
+      "phase": "how",
+      "owner_agent": "migration-planner",
+      "canon_source": "Pramod Sadalage & Scott Ambler 'Refactoring Databases' (2006), Addison-Wesley + Flyway / Liquibase migration best practices + Martin Fowler 'Evolutionary Database Design' (2006)",
+      "execution": {
+        "policy": "triggered",
+        "scope_conditions": [],
+        "intent": "schema-migration",
+        "alternates": [],
+        "trigger_events": [
+          "db-schema-change",
+          "migration-requested"
+        ],
+        "prereq": [
+          "db-schema"
+        ],
+        "required_after": [
+          "rollback-script"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/migration-plan.md",
+      "project_context_reason": "How 단계 — DB schema 변경 시 절차 + 위험 평가 + 롤백 스크립트. review_recommended=true: data loss 위험.",
+      "review_recommended": true
     }
   ],
   "by_phase": {
@@ -520,6 +818,19 @@
       "roadmap",
       "experiment-design",
       "lean-canvas"
+    ],
+    "how": [
+      "api-implementation",
+      "architecture-design",
+      "code-review-report",
+      "security-audit-report",
+      "unit-test",
+      "ci-cd-pipeline",
+      "db-schema",
+      "dockerfile",
+      "monitoring-config",
+      "runbook",
+      "migration-plan"
     ]
   },
   "by_policy": {
@@ -537,16 +848,28 @@
       "opportunity-solution-tree",
       "prd",
       "product-strategy-canvas",
-      "roadmap"
+      "roadmap",
+      "api-implementation",
+      "architecture-design",
+      "code-review-report",
+      "security-audit-report",
+      "unit-test"
     ],
     "scope": [
       "five-forces-analysis",
       "pest-analysis",
       "experiment-design",
-      "lean-canvas"
+      "lean-canvas",
+      "ci-cd-pipeline",
+      "db-schema",
+      "dockerfile",
+      "monitoring-config",
+      "runbook"
     ],
     "user-select": [],
-    "triggered": []
+    "triggered": [
+      "migration-plan"
+    ]
   },
   "by_intent": {
     "portfolio-balance": [
@@ -602,6 +925,39 @@
     ],
     "business-model-validation": [
       "lean-canvas"
+    ],
+    "api-implementation": [
+      "api-implementation"
+    ],
+    "architecture-design": [
+      "architecture-design"
+    ],
+    "code-quality-review": [
+      "code-review-report"
+    ],
+    "security-audit": [
+      "security-audit-report"
+    ],
+    "unit-test-implementation": [
+      "unit-test"
+    ],
+    "ci-cd-automation": [
+      "ci-cd-pipeline"
+    ],
+    "db-schema-design": [
+      "db-schema"
+    ],
+    "containerization": [
+      "dockerfile"
+    ],
+    "observability": [
+      "monitoring-config"
+    ],
+    "operational-runbook": [
+      "runbook"
+    ],
+    "schema-migration": [
+      "migration-plan"
     ]
   }
 }
