@@ -14,7 +14,11 @@
         "agent": "agents/ceo/ceo.md",
         "subAgents": [
           "absorb-analyzer",
-          "skill-creator"
+          "skill-creator",
+          "vision-author",
+          "strategy-kernel-author",
+          "okr-author",
+          "pr-faq-author"
         ]
       },
       "cpo": {
@@ -28,6 +32,7 @@
           "product-researcher",
           "prd-writer",
           "backlog-manager",
+          "roadmap-author",
           "ux-researcher",
           "data-analyst"
         ]
@@ -88,6 +93,11 @@
         "agent": "agents/coo/coo.md",
         "subAgents": [
           "release-engineer",
+          "release-notes-writer",
+          "ci-cd-configurator",
+          "container-config-author",
+          "migration-planner",
+          "runbook-author",
           "sre-engineer",
           "release-monitor",
           "performance-engineer"

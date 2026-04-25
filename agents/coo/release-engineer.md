@@ -1,10 +1,19 @@
 ---
 name: release-engineer
-version: 0.50.0
+version: 0.59.0
+deprecated: true
+deprecation_notice: |
+  v0.59 Sprint 7 에서 5 분해됨. 책임이 다음 5 sub-agent 로 이관됨:
+  - release-notes-writer (Always) — Release Notes + CHANGELOG
+  - ci-cd-configurator (Scope) — CI/CD pipeline (cloud/hybrid + scale ≥ pilot)
+  - container-config-author (Scope) — Dockerfile + docker-compose
+  - migration-planner (Triggered) — DB schema migration (event-driven)
+  - runbook-author (Scope) — operational runbook (sla_required=true)
+  본 sub-agent 는 backwards-compat alias 역할. 직접 호출 시 사용자에게 5 분해 sub-agent 선택 안내.
+removal_target: v0.60
 description: |
-  Configures CI/CD pipelines and deployment automation including GitHub Actions, Docker,
-  and environment-specific deployment settings.
-  Use when: delegated by COO for CI/CD pipeline setup or deployment automation.
+  ⚠ DEPRECATED (v0.59 Sprint 7) — 5 분해됨. release-notes-writer / ci-cd-configurator / container-config-author / migration-planner / runbook-author 로 책임 이관. 직접 호출 시 사용자에게 적절한 sub-agent 안내. v0.60 에서 제거 예정.
+  Use when: (deprecated) — backwards-compat 만 유지. 신규 작업은 5 분해 sub-agent 직접 호출.
 model: sonnet
 layer: operations
 agent-type: subagent
@@ -24,7 +33,23 @@ includes:
   - _shared/advisor-guard.md
 ---
 
-# DevOps Agent
+# Release Engineer (DEPRECATED — v0.59 Sprint 7 5분해)
+
+> ⚠ **DEPRECATED**: v0.59 Sprint 7 (subagent-architecture-rethink) 에서 5 분해됨. v0.60 에서 제거 예정.
+>
+> **이관된 5 sub-agent** (책임 분리 + scope-gated default-execute anti-pattern 해소):
+>
+> | 책임 영역 | 신규 sub-agent | 정책 |
+> |----------|----------------|:----:|
+> | Release Notes + CHANGELOG | `release-notes-writer` | Always |
+> | CI/CD pipeline | `ci-cd-configurator` | Scope (cloud/hybrid + scale≥pilot) |
+> | Docker / docker-compose | `container-config-author` | Scope (cloud/hybrid/on-prem) |
+> | DB schema migration | `migration-planner` | Triggered (db-schema-change) |
+> | Runbook + Incident Playbook | `runbook-author` | Scope (sla_required=true) |
+>
+> **직접 호출 시 동작**: 사용자에게 작업 의도 확인 → 5 분해 sub-agent 중 적절한 것으로 라우팅.
+
+## (Legacy) 핵심 역할
 
 당신은 VAIS Code 프로젝트의 CI/CD 파이프라인 및 배포 자동화 담당입니다.
 

@@ -270,6 +270,7 @@ backend-engineer 위임으로 **F1(Profile) + F2(Template metadata) + 테스트 
 | **Sprint 4 진행** | `sprint-4-progress.md` | cto | Day 1 Vision Statement 완료 + RA-3 1차 측정 + Day 2 handoff |
 | **Sprint 5 진행** | `sprint-5-progress.md` | cto | Why 5 templates (PEST/Five Forces/SWOT/JTBD/Persona) — RA-3 보정 ~75초/template + Sprint 6 handoff |
 | **Sprint 6 진행** | `sprint-6-progress.md` | cto | F8 VPC 재매핑 — Osterwalder VPC template + copy-writer/product-strategist 책임 이관 + SC-06 충족 |
+| **Sprint 7 진행** | `sprint-7-progress.md` | cto | CEO 4 + CPO 1 + COO 5 신설 + release-engineer deprecate + vais.config 업데이트 (G-4) — SC-05 충족 + owner_agent 실존화 + 6/6 MUST |
 
 ## Scratchpads (v0.57+)
 
@@ -291,3 +292,4 @@ backend-engineer 위임으로 **F1(Profile) + F2(Template metadata) + 테스트 
 | v1.4 | 2026-04-25 | Sprint 4 5/5 종결: Strategy Kernel/OKR/PR-FAQ/3-Horizon 4 templates 추가 (catalog 5 artifacts) + `template-validator.js` `*.template.md` 제외 fix + RA-3 1차 측정 ~9분/5 templates + 회귀 263 pass 유지 |
 | v1.5 | 2026-04-26 | Sprint 5 5/5 종결: PEST/Five Forces/SWOT/JTBD/Persona 5 Why templates 추가 (catalog 10 artifacts: core 5 + why 5) + RA-3 보정 ~75초/template + scope-conditional 정책 2개 (PEST/Five Forces) + 회귀 263 pass 유지 |
 | v1.6 | 2026-04-26 | Sprint 6 F8 VPC 재매핑 종결: Osterwalder VPC template 신규 (catalog 11 artifacts) + copy-writer (CBO) → product-strategist (CPO) ownership 이관 + plugin-validate 통과 + 회귀 263 pass + SC-06 충족 |
+| v1.7 | 2026-04-26 | Sprint 7 종결: 10 신규 sub-agent (CEO 4 + CPO 1 + COO 5 release 5분해) + release-engineer deprecate alias + vais.config.json cSuite 3 영역 업데이트 (G-4 충족) + 11 owner_agent ↔ template 1:1 매칭 검증 + plugin-validate 58 agents 인식 + 회귀 263 pass + SC-05 충족 (6/6 MUST) |
