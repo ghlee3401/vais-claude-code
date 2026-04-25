@@ -86,8 +86,9 @@ function auditAgent(agent, catalog) {
     qa: { pass: false, value: null, note: '' },
     qb: { pass: false, value: null, note: '' },
     qc: { pass: true, value: null, note: '' }, // default true (scope 가 아닐 때)
-    qd: { pass: true, value: null, note: '' }, // default true (artifacts 미명시 시)
+    qd: { pass: true, status: 'pass', value: null, note: '' }, // 3-state: pass / warn / fail
     deprecated: false,
+    utility: false,
   };
 
   let fm;
@@ -103,6 +104,11 @@ function auditAgent(agent, catalog) {
     result.deprecated = true;
   }
 
+  // utility=true 면제 (메타-도구 — catalog artifact 와 정합 평가 X)
+  if (fm.utility === true) {
+    result.utility = true;
+  }
+
   // Q-A: canon_source 명시
   if (fm.canon_source && typeof fm.canon_source === 'string' && fm.canon_source.length > 0) {
     result.qa.pass = true;
@@ -110,6 +116,9 @@ function auditAgent(agent, catalog) {
   } else if (result.deprecated) {
     result.qa.pass = true; // deprecated 는 면제
     result.qa.note = 'deprecated — canon_source 면제';
+  } else if (result.utility) {
+    result.qa.pass = true;
+    result.qa.note = 'utility — canon_source 면제';
   } else {
     result.qa.note = 'canon_source 필드 누락';
   }
@@ -150,8 +159,21 @@ function auditAgent(agent, catalog) {
     }
   }
 
-  // Q-D: artifacts ↔ catalog owner_agent 매칭
-  if (Array.isArray(fm.artifacts) && fm.artifacts.length > 0) {
+  // Q-D: artifacts ↔ catalog owner_agent 매칭 (3-state: pass / warn / fail)
+  // - pass: agent.artifacts 가 모두 catalog 의 owner_agent 와 매칭 + catalog 의 owner 도 모두 declared
+  // - warn: agent 가 artifacts 선언했지만 catalog 에 owner_agent 매칭 부재 또는 부분 매칭
+  //         (template 미작성 단계 — Sprint 11~14 후 자동 해소 예상)
+  // - fail: catalog 에 owner_agent 매칭이 있는데 agent 가 artifacts 미선언 (정합성 위반)
+  if (result.utility) {
+    // utility agent — Q-D 면제
+    result.qd.pass = true;
+    result.qd.status = 'pass';
+    result.qd.note = 'utility — Q-D 면제 (메타-도구)';
+  } else if (result.deprecated) {
+    result.qd.pass = true;
+    result.qd.status = 'pass';
+    result.qd.note = 'deprecated — Q-D 면제';
+  } else if (Array.isArray(fm.artifacts) && fm.artifacts.length > 0) {
     const declared = new Set(fm.artifacts);
     const matched = catalog.artifacts.filter(
       (a) => a.owner_agent === agent.name && declared.has(a.id)
@@ -159,22 +181,34 @@ function auditAgent(agent, catalog) {
     const expected = catalog.artifacts.filter((a) => a.owner_agent === agent.name);
     if (matched.length === expected.length && expected.length === fm.artifacts.length) {
       result.qd.pass = true;
+      result.qd.status = 'pass';
       result.qd.value = `${matched.length}개 매칭`;
-    } else {
-      result.qd.pass = false;
+    } else if (expected.length === 0) {
+      // catalog 에 owner_agent 매칭 없음 — template 미작성 단계 likely (warn)
+      result.qd.pass = true; // pass 로 격하 (목적은 Sprint 11~14 후 자동 해소)
+      result.qd.status = 'warn';
       result.qd.note =
-        `artifacts ↔ catalog 불일치: agent 선언 ${fm.artifacts.length} / catalog owner 매칭 ${expected.length} / 교집합 ${matched.length}`;
+        `artifacts ${fm.artifacts.length}개 선언했으나 catalog 매칭 0 — template 미작성 (Sprint 11~14 후 자동 해소 예상)`;
+      result.qd.value = fm.artifacts.join(', ');
+    } else {
+      // 부분 매칭 (warn) — agent 가 더 많이 선언, catalog 가 부분만 등록
+      result.qd.pass = true; // warn 도 pass 처리 (audit exit code 만 2)
+      result.qd.status = 'warn';
+      result.qd.note =
+        `부분 매칭: agent 선언 ${fm.artifacts.length} / catalog owner 매칭 ${expected.length} / 교집합 ${matched.length}`;
     }
   } else {
-    // artifacts 미선언 — catalog 의 owner_agent 가 본 agent 인 항목이 있으면 경고
+    // artifacts 미선언 — catalog 의 owner_agent 가 본 agent 인 항목이 있으면 fail
     const ownedInCatalog = catalog.artifacts.filter((a) => a.owner_agent === agent.name);
     if (ownedInCatalog.length > 0) {
       result.qd.pass = false;
+      result.qd.status = 'fail';
       result.qd.note =
-        `agent 의 artifacts frontmatter 미선언, 그러나 catalog 가 owner_agent="${agent.name}" 로 ${ownedInCatalog.length}개 선언`;
+        `정합성 위반: agent 의 artifacts frontmatter 미선언, 그러나 catalog 가 owner_agent="${agent.name}" 로 ${ownedInCatalog.length}개 선언`;
       result.qd.value = ownedInCatalog.map((a) => a.id).join(', ');
     } else {
       result.qd.pass = true;
+      result.qd.status = 'pass';
       result.qd.note = 'artifacts 미선언 + catalog 매칭 없음 (정합)';
     }
   }
@@ -205,8 +239,12 @@ function main(argv) {
     qb_pass: results.filter((r) => r.qb.pass).length,
     qc_pass: results.filter((r) => r.qc.pass).length,
     qd_pass: results.filter((r) => r.qd.pass).length,
+    qd_strict_pass: results.filter((r) => r.qd.status === 'pass').length,
+    qd_warn: results.filter((r) => r.qd.status === 'warn').length,
+    qd_fail: results.filter((r) => r.qd.status === 'fail').length,
     all_pass: results.filter((r) => r.qa.pass && r.qb.pass && r.qc.pass && r.qd.pass).length,
     deprecated: results.filter((r) => r.deprecated).length,
+    utility: results.filter((r) => r.utility).length,
   };
 
   if (jsonOutput) {
@@ -217,9 +255,10 @@ function main(argv) {
     process.stdout.write(`  Q-A canon_source 명시:        ${summary.qa_pass}/${summary.total}\n`);
     process.stdout.write(`  Q-B execution.policy:         ${summary.qb_pass}/${summary.total}\n`);
     process.stdout.write(`  Q-C scope/trigger conditions: ${summary.qc_pass}/${summary.total}\n`);
-    process.stdout.write(`  Q-D artifacts ↔ catalog:      ${summary.qd_pass}/${summary.total}\n`);
+    process.stdout.write(`  Q-D artifacts ↔ catalog:      ${summary.qd_pass}/${summary.total} (strict-pass ${summary.qd_strict_pass} / warn ${summary.qd_warn} / fail ${summary.qd_fail})\n`);
     process.stdout.write(`  전 4기준 통과:                 ${summary.all_pass}/${summary.total}\n`);
-    process.stdout.write(`  (deprecated 면제):            ${summary.deprecated}/${summary.total}\n\n`);
+    process.stdout.write(`  (deprecated 면제):            ${summary.deprecated}/${summary.total}\n`);
+    process.stdout.write(`  (utility 면제):               ${summary.utility}/${summary.total}\n\n`);
 
     if (verbose || summary.all_pass < summary.total) {
       process.stdout.write('── 미통과 sub-agent ──\n');

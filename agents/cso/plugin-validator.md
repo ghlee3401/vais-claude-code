@@ -16,6 +16,7 @@ advisor:
   model: claude-opus-4-6
   max_uses: 3
   caching: { type: ephemeral, ttl: 5m }
+utility: true
 artifacts:
   - plugin-validation-report
 execution:

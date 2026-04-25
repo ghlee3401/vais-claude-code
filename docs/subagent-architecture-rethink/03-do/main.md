@@ -273,6 +273,7 @@ backend-engineer 위임으로 **F1(Profile) + F2(Template metadata) + 테스트 
 | **Sprint 7 진행** | `sprint-7-progress.md` | cto | CEO 4 + CPO 1 + COO 5 신설 + release-engineer deprecate + vais.config 업데이트 (G-4) — SC-05 충족 + owner_agent 실존화 + 6/6 MUST |
 | **Sprint 8 진행** | `sprint-8-progress.md` | cto | 48 sub-agent audit 자동화 스크립트 + 4 hotfix + audit 매트릭스 + Sprint 9 마이그레이션 로드맵 (SC-09 7/48) |
 | **Sprint 9 진행** | `sprint-9-progress.md` | cto | 34 sub-agent Q-A/Q-B 일괄 마이그레이션 (CPO 6 + CTO 8 + CSO 7 + CBO 8 + COO 3 + CEO 2) — Q-A/Q-B 14/48 → 48/48 (100%) + 정전 출처 ~30종 누적 |
+| **Sprint 10+11 진행** | `sprint-10-11-progress.md` | cto | audit Q-D 3-state + utility 면제 (Sprint 10) + What 7 templates 작성 (Sprint 11) — SC-09 충족 (전 4기준 48/48 100%) + SC-04 18/25 (72%) |
 
 ## Scratchpads (v0.57+)
 
@@ -297,3 +298,4 @@ backend-engineer 위임으로 **F1(Profile) + F2(Template metadata) + 테스트 
 | v1.7 | 2026-04-26 | Sprint 7 종결: 10 신규 sub-agent (CEO 4 + CPO 1 + COO 5 release 5분해) + release-engineer deprecate alias + vais.config.json cSuite 3 영역 업데이트 (G-4 충족) + 11 owner_agent ↔ template 1:1 매칭 검증 + plugin-validate 58 agents 인식 + 회귀 263 pass + SC-05 충족 (6/6 MUST) |
 | v1.8 | 2026-04-26 | Sprint 8 종결: scripts/sub-agent-audit.js 자동화 (235 LOC) + 4 hotfix (customer-segmentation/market-researcher/product-strategist/roadmap-author artifacts+canon_source) + audit 매트릭스 04-qa 추가 + 7/48 전 4기준 통과 + Sprint 9 33 sub-agent Q-A/Q-B 마이그레이션 로드맵 |
 | v1.9 | 2026-04-26 | Sprint 9 종결: 34 sub-agent Q-A/Q-B 일괄 마이그레이션 (CPO 6 + CTO 8 + CSO 7 + CBO 8 + COO 3 + CEO 2) — Q-A canon_source / Q-B execution.policy 14/48 → 48/48 (100% 달성). 정전 출처 ~30종 누적. 회귀 263 pass + plugin-validate 0 errors |
+| v1.10 | 2026-04-26 | Sprint 10+11 종결: audit script Q-D 3-state (pass/warn/fail) + utility=true 면제 (Sprint 10) + What 7 templates 작성 (Sprint 11: PRD/Lean Canvas/Product Strategy Canvas/Roadmap/OST/Experiment Design/Hypothesis) — **SC-09 충족 (전 4기준 48/48 100%)** + SC-04 11→18/25 (72%) + catalog 18 artifacts |

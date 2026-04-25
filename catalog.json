@@ -1,10 +1,10 @@
 {
   "version": "1.0",
-  "generated_at": "2026-04-25T15:21:53.995Z",
-  "total_artifacts": 11,
+  "generated_at": "2026-04-25T22:05:54.683Z",
+  "total_artifacts": 18,
   "policy_distribution": {
-    "always": 9,
-    "scope": 2,
+    "always": 14,
+    "scope": 4,
     "user-select": 0,
     "triggered": 0
   },
@@ -303,6 +303,197 @@
       "template_path": "templates/why/pest.md",
       "project_context_reason": "Why 단계 — 거시환경 변화 (정치·경제·사회·기술) 가 사업 가설에 영향. scope: 글로벌·다국가·규제 산업·12개월+ 장기 기획에서만 의미. 1인 OSS 플러그인은 skip.",
       "review_recommended": false
+    },
+    {
+      "id": "hypothesis",
+      "phase": "what",
+      "owner_agent": "product-discoverer",
+      "canon_source": "Marty Cagan 'Inspired' (2017), Wiley Ch.8 — 8 Risk Categories framework + Cagan & Jones 'Empowered' (2020) — Product Risks",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "risk-hypothesis",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "experiment-design",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/hypothesis.md",
+      "project_context_reason": "What 단계 — Cagan 의 8 risk categories 기반 가설 분류. PRD 작성 전 risks 사전 식별 + experiment-design.md 의 입력. opportunity-solution-tree 와 병렬 작성.",
+      "review_recommended": false
+    },
+    {
+      "id": "opportunity-solution-tree",
+      "phase": "what",
+      "owner_agent": "product-discoverer",
+      "canon_source": "Teresa Torres 'Continuous Discovery Habits' (2021), Product Talk + Torres OST framework (producttalk.org/opportunity-solution-tree)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "discovery-tree",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement",
+          "persona"
+        ],
+        "required_after": [
+          "experiment-design",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/opportunity-solution-tree.md",
+      "project_context_reason": "What 단계 — Discovery 단계의 핵심 visualization. Outcome (북극성) → Opportunities → Solutions → Experiments 트리 구조로 의사결정 추적성 확보.",
+      "review_recommended": false
+    },
+    {
+      "id": "prd",
+      "phase": "what",
+      "owner_agent": "prd-writer",
+      "canon_source": "Marty Cagan 'Inspired' (2017), Wiley + Lenny Rachitsky PRD Template (lennysnewsletter.com) + Wagenaar PRD Best Practices",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "product-requirement-document",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement",
+          "persona",
+          "jobs-to-be-done"
+        ],
+        "required_after": [
+          "backlog",
+          "roadmap"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/prd.md",
+      "project_context_reason": "What 단계 — Vision/Strategy/Persona/JTBD 입력을 실행 가능한 요구사항으로 변환. 모든 product feature 는 PRD 1개 작성. backlog/roadmap 의 prereq.",
+      "review_recommended": false
+    },
+    {
+      "id": "product-strategy-canvas",
+      "phase": "what",
+      "owner_agent": "product-strategist",
+      "canon_source": "Marty Cagan 'Inspired' (2017), Wiley + 'Empowered' (Cagan & Jones, 2020) — Product Strategy Canvas 9 sections framework",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "product-strategy-articulation",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement",
+          "strategy-kernel"
+        ],
+        "required_after": [
+          "prd",
+          "roadmap"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/product-strategy-canvas.md",
+      "project_context_reason": "What 단계 — Vision/Strategy Kernel 입력을 product 차원의 9 섹션으로 구체화. PRD 와 다름: PRD 는 단일 feature, Product Strategy Canvas 는 product 전체.",
+      "review_recommended": false
+    },
+    {
+      "id": "roadmap",
+      "phase": "what",
+      "owner_agent": "roadmap-author",
+      "canon_source": "ProductPlan 'Now-Next-Later Roadmap' (2019), productplan.com + Bruce McCarthy 'Product Roadmaps Relaunched' (2017), O'Reilly + Cagan 'Inspired' (2017) outcome-based roadmap",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "outcome-roadmap",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "okr",
+          "strategy-kernel"
+        ],
+        "required_after": [
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/roadmap.md",
+      "project_context_reason": "What 단계 — OKR + Strategy Kernel 을 product 시간축으로 변환. 기능 목록이 아닌 **결과 (outcome) 중심**. Backlog 의 prereq.",
+      "review_recommended": false
+    },
+    {
+      "id": "experiment-design",
+      "phase": "what",
+      "owner_agent": "product-discoverer",
+      "canon_source": "Teresa Torres 'Continuous Discovery Habits' (2021) + Eric Ries 'The Lean Startup' (2011), Crown Business — Build-Measure-Learn loop + Riskiest Assumption testing",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "discovery_required",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "hypothesis-experiment",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "opportunity-solution-tree"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/experiment-design.md",
+      "project_context_reason": "What 단계 — OST 의 각 Solution 별 검증 실험. Build-Measure-Learn 루프의 Build 전 단계. Riskiest Assumption 우선 검증.",
+      "review_recommended": false
+    },
+    {
+      "id": "lean-canvas",
+      "phase": "what",
+      "owner_agent": "product-strategist",
+      "canon_source": "Ash Maurya 'Running Lean' (2012), O'Reilly + 'Scaling Lean' (2016) — 9-block Business Model Canvas adaptation for early-stage products",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "timeline",
+            "operator": "IN",
+            "value": [
+              "pre-pmf",
+              "mvp",
+              "early-stage",
+              "validation"
+            ]
+          }
+        ],
+        "intent": "business-model-validation",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement"
+        ],
+        "required_after": [
+          "strategy-kernel",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/lean-canvas.md",
+      "project_context_reason": "What 단계 — pre-PMF 단계의 가설 정렬. 기존 사업이거나 PMF 검증 완료 시 Strategy Kernel + PRD 가 더 적합. 1 페이지 9 블록 형태로 빠른 가설 visualization.",
+      "review_recommended": false
     }
   ],
   "by_phase": {
@@ -320,6 +511,15 @@
       "value-proposition-canvas",
       "five-forces-analysis",
       "pest-analysis"
+    ],
+    "what": [
+      "hypothesis",
+      "opportunity-solution-tree",
+      "prd",
+      "product-strategy-canvas",
+      "roadmap",
+      "experiment-design",
+      "lean-canvas"
     ]
   },
   "by_policy": {
@@ -332,11 +532,18 @@
       "jobs-to-be-done",
       "persona",
       "swot-analysis",
-      "value-proposition-canvas"
+      "value-proposition-canvas",
+      "hypothesis",
+      "opportunity-solution-tree",
+      "prd",
+      "product-strategy-canvas",
+      "roadmap"
     ],
     "scope": [
       "five-forces-analysis",
-      "pest-analysis"
+      "pest-analysis",
+      "experiment-design",
+      "lean-canvas"
     ],
     "user-select": [],
     "triggered": []
@@ -374,6 +581,27 @@
     ],
     "macro-environment-scan": [
       "pest-analysis"
+    ],
+    "risk-hypothesis": [
+      "hypothesis"
+    ],
+    "discovery-tree": [
+      "opportunity-solution-tree"
+    ],
+    "product-requirement-document": [
+      "prd"
+    ],
+    "product-strategy-articulation": [
+      "product-strategy-canvas"
+    ],
+    "outcome-roadmap": [
+      "roadmap"
+    ],
+    "hypothesis-experiment": [
+      "experiment-design"
+    ],
+    "business-model-validation": [
+      "lean-canvas"
     ]
   }
 }
