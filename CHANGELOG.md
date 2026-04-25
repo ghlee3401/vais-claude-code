@@ -22,7 +22,10 @@ VAIS sub-agent의 default-execute anti-pattern 해소를 목표로 한 메타-VA
 - 50+ 산출물 카탈로그 + 정전 cross-reference 17개 (Rumelt/Cagan/Torres/SRE Book/DORA 등)
 - 실행 정책 4분류 (Always/Scope/User-select/Triggered) + Project Profile 12 변수
 - C-Suite 공존(clevel-coexistence) 적용 - 같은 main.md에 CPO/CTO H2 섹션 append
-- Decision Record 29건 (D-1~D-8 + D-D1~D-D13 + D-T1~D-T5 + D-IA-01~D-IA-08 + D-IM-01~D-IM-04)
+- Decision Record 36건 누적 (D-1~D-8 + D-D1~D-D13 + D-T1~D-T5 + D-IA-01~D-IA-08 + D-IM-01~D-IM-04 + D-Q1~D-Q4 + D-CR1~D-CR3)
+- CTO QA Sprint 1~3 검증 결과 (`04-qa/cto-qa-results.md`) - 자동 검증 3대 통과 (테스트 263 pass / plugin 0 err / lint 0 warn) + SC 4/6 MUST 통과 (SC-01/02/03/07)
+- CTO Report (`05-report/main.md`) - Sprint 1~3 종결 보고서 + Beta→GA 로드맵 (Sprint 4~14, 약 11주) + Lessons Learned + KPI
+- CPO Report (`05-report/cpo-product-report.md`) - 부분 Beta 4단계 (Beta-1~3 → GA) + Persona 가치 평가 + PRD v2.0 진화 권장
 
 ### Changed
 
