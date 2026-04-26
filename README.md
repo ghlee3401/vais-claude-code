@@ -8,7 +8,7 @@
 
 <p align="center">
   <strong>Virtual AI C-Suite for Software Development</strong><br/>
-  6 C-Level Executives · 38 Specialized Agents · PDCA Workflow Engine
+  6 C-Level Executives · 48 Specialized Agents · PDCA Workflow Engine
 </p>
 
 <p align="center">
@@ -100,20 +100,24 @@ python3 --version  # 3.8 이상
 | **CBO** | Business | 사업성 검증. 시장 분석, GTM, 가격 전략, 재무 모델, unit economics |
 | **COO** | Operations | 배포/운영 준비. CI/CD, 모니터링, 성능 벤치마크, Runbook |
 
-### Sub-agents (Sonnet) — 38 Specialists
+### Sub-agents (Sonnet) — 48 Specialists
 
 <details>
-<summary><strong>CEO</strong> — 2 agents</summary>
+<summary><strong>CEO</strong> — 6 agents</summary>
 
 | Agent | Role |
 |-------|------|
 | absorb-analyzer | 외부 스킬/레퍼런스 흡수 분석 |
 | skill-creator | 신규 스킬/에이전트 마크다운 자동 생성 |
+| vision-author | Vision Statement + BHAG (Collins & Porras 'Built to Last') |
+| strategy-kernel-author | Strategy Kernel — Diagnosis + Guiding Policy + Coherent Actions (Rumelt) |
+| okr-author | OKR 정의 (Grove/Doerr) — Objective + 3~5 KR + 0.7 stretch scoring |
+| pr-faq-author | Amazon Working Backwards PR/FAQ (1-page Press Release + Internal/External FAQ) |
 
 </details>
 
 <details>
-<summary><strong>CPO</strong> — 7 agents</summary>
+<summary><strong>CPO</strong> — 8 agents</summary>
 
 | Agent | Role |
 |-------|------|
@@ -122,6 +126,7 @@ python3 --version  # 3.8 이상
 | product-researcher | 경쟁사 벤치마킹, 사용 패턴 분석 |
 | prd-writer | PRD 작성 (기능/비기능 요구사항, 인수 기준) |
 | backlog-manager | PRD → User Story + Sprint Plan 변환 (INVEST/MoSCoW/RICE) |
+| roadmap-author | Now-Next-Later Roadmap (outcome-based, OKR → backlog 브릿지) |
 | ux-researcher | JTBD 인터뷰, 사용성 테스트, 정보 구조 설계 |
 | data-analyst | 제품 메트릭 분석 (DAU/MAU, A/B 테스트, 퍼널) |
 
@@ -177,11 +182,16 @@ python3 --version  # 3.8 이상
 </details>
 
 <details>
-<summary><strong>COO</strong> — 4 agents</summary>
+<summary><strong>COO</strong> — 9 agents</summary>
 
 | Agent | Role |
 |-------|------|
-| release-engineer | CI/CD 파이프라인, Docker, 배포 자동화 |
+| release-engineer | 배포 자동화 오케스트레이션 |
+| ci-cd-configurator | CI/CD 파이프라인 (GitHub Actions/GitLab CI/CircleCI) — scope-gated (cloud/hybrid only) |
+| container-config-author | Dockerfile + docker-compose (multi-stage + non-root) — scope-gated |
+| migration-planner | DB 스키마 마이그레이션 (forward + rollback + 데이터 손실 위험 평가) — triggered |
+| runbook-author | 운영 Runbook (Google SRE) — deploy checklist + Sev 1~4 incident playbook — scope-gated |
+| release-notes-writer | Release Notes + CHANGELOG.md (Keep a Changelog 6 sections + SemVer 자동 판정) |
 | sre-engineer | 모니터링/알림 설정, incident runbook |
 | release-monitor | 배포 후 canary 모니터링 |
 | performance-engineer | 성능 벤치마크, 회귀 탐지 |
@@ -322,7 +332,7 @@ docs/
 
 ```
 vais-claude-code/
-├── agents/          6 C-Level 디렉토리 + _shared 가드 (38 sub-agents)
+├── agents/          6 C-Level 디렉토리 + _shared 가드 (48 sub-agents)
 ├── skills/vais/     /vais 스킬 진입점 + phase routers + utilities
 ├── hooks/           6 hooks (session, bash-guard, doc-tracker, stop, agent-start/stop)
 ├── lib/             advisor, core, quality, observability, registry, validation
@@ -345,6 +355,8 @@ vais-claude-code/
 | `advisor.enabled` | true | Opus advisor 활성화 |
 | `advisor.monthly_budget_usd` | 200 | 월 advisor 비용 캡 |
 | `automation.level` | L2 | L0 수동 ~ L4 전자동 |
+| `orchestration.profileGateEnabled` | true | Project profile 게이트 (v0.60+ 기본 ON, opt-out 가능) |
+| `orchestration.mcp.enabled` | true | design-system MCP 자동 호출 (v0.61+ 기본 ON, Python3 ≥ 3.8 필수) |
 
 ---
 
@@ -364,7 +376,7 @@ vais-claude-code/
 ## Testing
 
 ```bash
-npm test    # 263 pass, 0 fail, 3 skipped (v0.59.0 — profile-gate / template-validator integration tests 추가)
+npm test    # 281 pass, 0 fail, 3 skipped (v0.61.1 — design-system MCP integration tests 추가)
 ```
 
 ---
