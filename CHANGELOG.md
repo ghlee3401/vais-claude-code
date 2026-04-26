@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.60.0] - 2026-04-26 — Profile Gate 기본값 OFF -> ON 전환 (GA 도달)
+
+v0.59.0 에서 도입된 F1 Project Profile 게이트가 Sprint 7~14 GA 로드맵 완주(sub-agent frontmatter 47/58 마이그레이션 + 신규 sub-agent 10개 + 50+ 템플릿)에 따라 default 활성화. 명시적 `false` 설정만 OFF 유지(opt-out 가능). v0.59.0 출시 당시 R6(기존 워크플로우 작동 중단) 리스크 완화를 위해 OFF 였던 안전장치를, sub-agent 자체의 마이그레이션이 끝난 시점에서 해제.
+
+### Changed
+
+- `lib/project-profile.js > isProfileGateEnabled()` — fallback default `false` → **`true`**. config 키 누락 또는 예외 발생 시에도 게이트 ON으로 동작 (기존 사용자가 구버전 vais.config.json 유지해도 자동 활성화)
+- `vais.config.json > orchestration.profileGateEnabled` — `false` → **`true`**. description 갱신: "기본 OFF, Sprint 1~3 안전 배포" → "기본 ON, GA 이후. 명시적 false 만 opt-out"
+
+### Why
+
+- Sprint 7~14 진행 중 sub-agent 자체가 대규모 변경됨: 34개에 `canon_source` + `execution.policy` frontmatter 추가 (Sprint 9), 신규 sub-agent 10개 (Sprint 7), release-engineer 5분해, 템플릿 30+
+- flag OFF 상태에서는 새 frontmatter (`execution.policy`)가 활용되지 않아 마이그레이션 결과 낭비
+- 263개 테스트 100% pass + 8개 통합 테스트 (T-01~T-07 + TV-01~TV-08) 통과로 안정성 확인
+- 명시적 opt-out 경로 보장 (config에 `false` 명시 시 기존 v0.58.x 동작 그대로 유지)
+
+### Migration
+
+- 신규 install: 자동 ON (별도 조치 없음)
+- 기존 사용자 (vais.config.json 미수정): fallback 도 true 로 변경되어 자동 ON
+- opt-out 원할 시: `vais.config.json > orchestration.profileGateEnabled: false` 명시
+- sub-agent .md / lib / scripts / templates 변경 없음 (행동 변경은 Profile gate 분기 1곳뿐)
+
+### Maintenance
+
+- `.gitignore` — `docs/training/` 항목 제거 (실 사용 없음)
+
 ## [0.59.0] - 2026-04-25 - Project Profile + Template metadata 게이트 도입
 
 VAIS sub-agent의 default-execute anti-pattern 해소를 목표로 한 메타-VAIS 리팩터링 피처 `subagent-architecture-rethink` Sprint 1~3 완료. F1 Project Profile schema + F2 Template metadata schema + 산출물 카탈로그 인프라 도입. feature flag OFF로 backwards compat 보장.

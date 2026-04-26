@@ -1,7 +1,7 @@
 {
   "name": "vais-code",
   "description": "VAIS Code - C-Suite 에이전트 자율 위임 패턴. 4-Gate 시스템, Interface Contract, QA 리턴 경로 지원.",
-  "version": "0.59.0",
+  "version": "0.60.0",
   "author": {
     "name": "VAIS Voice",
     "email": "ghlee0304@ncsoft.com"
