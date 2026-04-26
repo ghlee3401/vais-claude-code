@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.61.0)
+> Virtual AI C-Suite for software development (v0.61.1)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -131,7 +131,7 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 | 의존성 | 최소 버전 | 용도 |
 |--------|---------|------|
 | Node.js | 18 | plugin runtime, hook 실행 |
-| Python3 | 3.10 | `vendor/ui-ux-pro-max/scripts/search.py` — design phase MCP 자동 호출 (Hard fail 정책) |
+| Python3 | 3.8 | `vendor/ui-ux-pro-max/scripts/search.py` — design phase MCP 자동 호출 (Hard fail 정책). vendor 실측 = f-string only (3.6+) 이지만 보수적으로 3.8 minimum |
 
 > Python3 / vendor 누락 시 design phase 진입 시 `lib/mcp-validator.js` 가 한국어 안내 메시지 + `exit(1)`. opt-out: `vais.config.json > orchestration.mcp.enabled: false`.
 

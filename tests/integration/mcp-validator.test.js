@@ -83,8 +83,8 @@ test('TC-2: Python3 미설치 → ok: false, reason: not-installed', () => {
   assert.strictEqual(r.reason, 'not-installed');
 });
 
-test('TC-3: Python 3.9 → ok: false, version-too-low', () => {
-  const cp = makeChildProcessStub(() => 'Python 3.9.18\n');
+test('TC-3: Python 3.7 → ok: false, version-too-low (3.8 minimum)', () => {
+  const cp = makeChildProcessStub(() => 'Python 3.7.16\n');
   const fsStub = makeFsStub();
   const m = loadFresh({
     child_process: cp,
@@ -94,7 +94,20 @@ test('TC-3: Python 3.9 → ok: false, version-too-low', () => {
   const r = m.validateEnvironment();
   assert.strictEqual(r.ok, false);
   assert.strictEqual(r.reason, 'version-too-low');
-  assert.match(r.detail, /3\.9/);
+  assert.match(r.detail, /3\.7/);
+});
+
+test('TC-3b: Python 3.9 → ok: true (3.8 minimum 통과)', () => {
+  const cp = makeChildProcessStub(() => 'Python 3.9.18\n');
+  const fsStub = makeFsStub();
+  const m = loadFresh({
+    child_process: cp,
+    fs: fsStub,
+    './paths': makePathsStub({}),
+  });
+  const r = m.validateEnvironment();
+  assert.strictEqual(r.ok, true);
+  assert.strictEqual(r.pythonVersion, '3.9');
 });
 
 test('TC-4: vendor 디렉토리 누락 → vendor-missing', () => {

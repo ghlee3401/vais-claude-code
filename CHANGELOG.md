@@ -1,5 +1,53 @@
 # Changelog
 
+## [0.61.1] - 2026-04-26 — Python minimum 3.10 -> 3.8 + F-2 manual smoke 성공
+
+v0.61.0 의 CTO QA 단계에서 발견된 **Critical C-1** 해소. vendor 실측 (`vendor/ui-ux-pro-max/scripts/search.py` = f-string only, Python 3.6+) 대비 잠정값 3.10 이 너무 높아 본인 환경 Python 3.9 dogfooding fail. 보수적으로 3.8 minimum 으로 조정 (vendor 실측은 3.6+ 이지만 macOS Big Sur+ 표준 호환).
+
+### Changed
+
+- `lib/mcp-validator.js > MIN_PYTHON_MINOR` = `10` → **`8`**
+- `tests/integration/mcp-validator.test.js`:
+  - TC-3: "Python 3.9 → version-too-low" → **"Python 3.7 → version-too-low (3.8 minimum)"**
+  - TC-3b 추가: "Python 3.9 → ok (3.8 minimum 통과)"
+- `README.md` Quick Start#Requirements: Python ≥ 3.10 → **≥ 3.8**
+- `CLAUDE.md` 의존성 절: 3.10 → 3.8 + 비고 추가 ("vendor 실측 = f-string only 이지만 보수적으로 3.8")
+
+### Added
+
+- `.gitignore`: `design-system/` 추가 (사용자 피처별 token 영속화 폴더 — repo commit X)
+
+### Fixed (Critical resolution)
+
+- **C-1**: dogfooding fail (본인 환경 Python 3.9 → Hard fail 발동). 3.8 minimum 변경으로 본인 환경 통과 확인 (`validateEnvironment() === { ok: true, pythonVersion: '3.9' }`)
+
+### F-2 manual smoke 성공
+
+```bash
+$ node -e "const v = require('./lib/mcp-validator'); console.log(v.runGenerate('test-mcp-feature'))"
+{ ok: true, masterPath: '.../design-system/test-mcp-feature/MASTER.md' }
+
+$ head design-system/test-mcp-feature/MASTER.md
+# Design System Master File
+**Project:** test-mcp-feature
+**Generated:** 2026-04-26 22:28:31
+**Category:** Automotive/Car Dealership
+[Color Palette + Typography + ... 정상 출력]
+```
+
+→ 실 vendor python subprocess 호출 + MASTER.md 영속화 + 정상 BM25 결과 확인.
+
+### QA Gate
+
+- 수정 전: matchRate 91.7%, Critical 1 → **gate verdict = retry**
+- 수정 후: matchRate **100%**, Critical **0** → **gate verdict = pass** ✅
+
+### Testing
+
+- `node --test tests/integration/mcp-{validator,migration}.test.js` — 17 → **18 pass** (+TC-3b)
+- 전체 `npm test` — 280 → 281 pass (skip 3, fail 0)
+- F-2 manual smoke — 본인 환경 Python 3.9 + vendor 데이터 → MASTER.md 생성 성공
+
 ## [0.61.0] - 2026-04-26 — design-system MCP 활성화 (default ON, Hard fail 정책)
 
 v0.48 ~ v0.60.0 12 minor 미루어온 design-system MCP 활성화 약속 이행. ui-designer 가 design phase 진입 시 ui-ux-pro-max MCP 를 자동 호출하여 design token (`design-system/{feature}/MASTER.md`) 을 영속화. Profile gate v0.60.0 패턴 답습 — OSS 사용자 default ON, 명시적 false 만 opt-out. Python3 / vendor 미설치 시 Hard fail (graceful skip 거부) — 사일런트 품질 저하 회피.

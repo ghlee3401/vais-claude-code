@@ -8,3 +8,4 @@ node_modules/
 references/
 __pycache__/
 *.pyc
+design-system/

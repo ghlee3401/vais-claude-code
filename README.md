@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.61.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-0.61.1-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -24,7 +24,7 @@
 | 의존성 | 버전 | 용도 |
 |--------|------|------|
 | Node.js | ≥ 18 | plugin runtime |
-| Python3 | ≥ 3.10 | `vendor/ui-ux-pro-max` 디자인 시스템 검색 — design phase MCP 자동 호출 (v0.61.0+ 기본 ON) |
+| Python3 | ≥ 3.8 | `vendor/ui-ux-pro-max` 디자인 시스템 검색 — design phase MCP 자동 호출 (v0.61.0+ 기본 ON) |
 
 > ⚠️ **Python3 미설치 시** design phase 진입이 차단됩니다 (Hard fail). opt-out 원할 시 `vais.config.json > orchestration.mcp.enabled: false` 설정.
 
@@ -34,7 +34,7 @@ git clone https://github.com/ghlee3401/vais-claude-code.git
 cd vais-claude-code && bash scripts/setup-dev.sh
 
 # Python3 확인 (design phase 자동 호출 사용 시 필수)
-python3 --version  # 3.10 이상
+python3 --version  # 3.8 이상
 
 # In Claude Code
 /reload-plugins
