@@ -21,6 +21,16 @@
             "timeout": 3000
           }
         ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/hooks/design-mcp-trigger.js",
+            "timeout": 30000
+          }
+        ]
       }
     ],
     "PostToolUse": [

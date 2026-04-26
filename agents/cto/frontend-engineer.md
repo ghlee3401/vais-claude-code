@@ -5,7 +5,7 @@ description: |
   Implements frontend interfaces using React/Next.js and related frameworks.
   Use when: delegated by CTO for UI component development or frontend feature implementation.
 model: sonnet
-tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite]
+tools: [Read, Write, Edit, Glob, Grep, Bash, TodoWrite, mcp__vais-design-system__design_stack_search]
 memory: none
 disallowedTools:
   - "Bash(rm -rf*)"

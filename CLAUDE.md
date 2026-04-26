@@ -1,6 +1,6 @@
 # VAIS Code - Claude Code Plugin
 
-> Virtual AI C-Suite for software development (v0.60.0)
+> Virtual AI C-Suite for software development (v0.61.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -121,9 +121,19 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 
 ## Key Configuration
 
-- **vais.config.json**: 워크플로우 단계, C-Suite 역할, 게이트, gap 분석 기준(90%), 피처명 규칙 등 전체 설정
-- **hooks/hooks.json**: Claude Code 훅 정의
+- **vais.config.json**: 워크플로우 단계, C-Suite 역할, 게이트, gap 분석 기준(90%), 피처명 규칙 등 전체 설정. `orchestration.mcp.enabled` (기본 true, v0.61.0+) 으로 design-system MCP 자동 호출 제어
+- **hooks/hooks.json**: Claude Code 훅 정의 (PreToolUse Bash + PreToolUse Agent 의 design-mcp-trigger 포함)
 - **package.json > claude-plugin**: 스킬/에이전트/훅 진입점
+- **.mcp.json**: Claude Code MCP server 등록 (vais-design-system → mcp/design-system-server-runner.js)
+
+### 의존성 (Runtime)
+
+| 의존성 | 최소 버전 | 용도 |
+|--------|---------|------|
+| Node.js | 18 | plugin runtime, hook 실행 |
+| Python3 | 3.10 | `vendor/ui-ux-pro-max/scripts/search.py` — design phase MCP 자동 호출 (Hard fail 정책) |
+
+> Python3 / vendor 누락 시 design phase 진입 시 `lib/mcp-validator.js` 가 한국어 안내 메시지 + `exit(1)`. opt-out: `vais.config.json > orchestration.mcp.enabled: false`.
 
 ## Mandatory Rules
 

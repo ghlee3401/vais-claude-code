@@ -1,5 +1,5 @@
 {
-  "version": "0.60.0",
+  "version": "0.61.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -325,7 +325,11 @@
   "orchestration": {
     "gateAction": "confirm",
     "profileGateEnabled": true,
-    "_profileGateEnabled_description": "F1 Project Profile 게이트 활성화 여부. true = ON (기본, GA 이후). false = 명시적 opt-out. 키 누락 시 lib/project-profile.js 의 fallback 도 true."
+    "_profileGateEnabled_description": "F1 Project Profile 게이트 활성화 여부. true = ON (기본, GA 이후). false = 명시적 opt-out. 키 누락 시 lib/project-profile.js 의 fallback 도 true.",
+    "mcp": {
+      "enabled": true,
+      "_description": "design-system MCP 게이트. true = ON (기본 v0.61.0+, design phase 진입 시 design_system_generate 자동 호출). false = 명시적 opt-out. 키 누락 시 lib/mcp-validator.js fallback 도 true. Hard fail 정책: Python3 미설치 / vendor 손상 시 design phase exit(1)."
+    }
   },
   "gates": {
     "_description": "v0.56 sub-plan 07: 메트릭 기반 게이팅. gate-manager가 defaults + roleOverrides를 읽어 GATE_DEFINITIONS 덮어쓰기.",

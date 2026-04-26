@@ -1,0 +1,10 @@
+{
+  "_comment": "Claude Code MCP server registration. design-system-server-runner.js wraps mcp/design-system-server.json (3 tools: design_search / design_system_generate / design_stack_search). Activated when vais.config.json > orchestration.mcp.enabled is true (default ON since v0.61.0).",
+  "mcpServers": {
+    "vais-design-system": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/design-system-server-runner.js"]
+    }
+  }
+}
