@@ -1,6 +1,6 @@
 # VAIS Code - Agent Instructions
 
-> 이 파일은 AI 코딩 도구(Claude Code, Cursor, Copilot 등)에서 공통으로 참조하는 에이전트 지침입니다.
+> **이 파일의 책임**: Cursor / Copilot / 일반 AI 도구용 호환 지침. Claude Code 는 `CLAUDE.md` 를 우선 참조한다 (자동 로드). 처음 본 AI/사람은 먼저 `ONBOARDING.md` (5분 진입 가이드) 를 읽기를 권장.
 
 ## 프로젝트 구조
 

@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "VAIS Code — 6단계 개발 워크플로우 플러그인 (ideation optional)",
-    "version": "0.62.0"
+    "version": "0.62.1"
   },
   "plugins": [
     {
       "name": "vais-code",
       "source": "./",
       "description": "6-phase development workflow plugin (ideation optional) with 6 C-Suite (CEO/CPO/CTO/CSO/CBO/COO) autonomous delegation, Gate system, and QA return path.",
-      "version": "0.62.0",
+      "version": "0.62.1",
       "author": {
         "name": "VAIS Voice",
         "email": "ghlee0304@ncsoft.com"

@@ -1,5 +1,5 @@
 {
-  "version": "0.62.0",
+  "version": "0.62.1",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -92,7 +92,6 @@
         "layer": "operations",
         "agent": "agents/coo/coo.md",
         "subAgents": [
-          "release-engineer",
           "release-notes-writer",
           "ci-cd-configurator",
           "container-config-author",

@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.62.1] - 2026-05-02 — Legacy prune + ONBOARDING.md 신규로 진입점 정리
+
+`legacy-prune-and-agent-onboarding` 피처 (6/6 phase). 처음 본 AI/사람이 5분 안에 repo 구조를 파악하도록 진입점을 명확화하고, v0.59에서 deprecated 처리된 `release-engineer` alias 와 과거 plan 가이드를 정리.
+
+### Added
+
+- `ONBOARDING.md` (135줄, 신규) — 5분 진입 가이드. 5섹션 (What / Quick Start / Architecture(Mermaid) / 진입점 표 / Next Steps). Mermaid 의존 그래프 (9 노드 + ~12 엣지) 포함.
+- 4 진입점 (CLAUDE.md / AGENTS.md / ONBOARDING.md / SKILL.md) 상단에 "이 파일의 책임" 1줄 명시 — 어디 봐야 하는지 1초에 판별
+
+### Changed
+
+- `CLAUDE.md` — 상단 책임 1줄 + Project Structure 갱신 (sub-agent 38→37, design-system/ 추가, ONBOARDING.md 추가, catalog.json 자동 생성 명시, COO sub-agent 목록을 5 분해 sub-agent 로 갱신)
+- `AGENTS.md` — 상단 책임 1줄 (Cursor/Copilot 호환 명시 + ONBOARDING.md 안내)
+- `skills/vais/SKILL.md` — frontmatter 위 책임 주석 2줄
+- `README.md` — 버전 표기 0.61.1 → 0.62.1 (이전 잔존 정리), npm test 라인 단순화
+- `vais.config.json` — `cSuite.coo.subAgents` 에서 `release-engineer` 제거
+
+### Removed
+
+- `agents/coo/release-engineer.md` — v0.59 에서 5 분해된 deprecated alias. removal_target=v0.60 도달 (현재 v0.62.1 — 늦었지만 정리)
+- `guide/v050_plan/`, `guide/v054/`, `guide/v057/`, `guide/*.md` (~34 파일, ~11,000 줄) — 과거 sprint plan 문서. 작업 완료된 plan 들 — repo 부피 정리
+
+### Documentation
+
+- `docs/legacy-prune-and-agent-onboarding/` 6 phase 산출물 (ideation / plan / design / do / qa / report)
+
+### Notes
+
+- 본 릴리즈는 cleanup + 진입점 정비 — 새 코드 기능 없음 (patch bump)
+- 후속 피처 후보: `agent-frontmatter-unification` / `agent-volume-reduction` (clevel-main-guard 외부화) / `auto-dependency-graph` / `catalog-auto-refresh-audit`
+
+---
+
 ## [0.62.0] - 2026-05-02 — MUI v6 카탈로그 박제 + ui-designer 자동 선택 통합
 
 `mui-design-system-import` 피처 (6/6 phase). MUI Material UI v6.5.0 디자인 시스템을 분석하여 사람·agent 가 읽는 MD 카탈로그로 박제. ui-designer agent 가 design phase 시작 시 등록 DS 를 자동 선택하도록 통합 (medium 강화).

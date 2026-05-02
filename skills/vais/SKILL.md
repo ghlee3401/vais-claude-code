@@ -1,4 +1,6 @@
 ---
+# 이 파일의 책임: `/vais` 명령어 진입점 — phase + 액션 라우팅. Claude Code 가 `/vais ...` 호출 시 자동 로드.
+# 처음 본 AI/사람: 먼저 ONBOARDING.md (5분), 그 다음 본 파일.
 name: vais
 description: >
   Orchestrates a virtual C-Suite (CEO, CPO, CTO, CSO, CBO, COO) to manage product strategy,
