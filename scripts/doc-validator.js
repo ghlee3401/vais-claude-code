@@ -342,6 +342,109 @@ function validateScopeContract(feature) {
 }
 
 /**
+ * v2.0 — artifact MD frontmatter 검증.
+ * 8 필드 (owner / agent / artifact / phase / feature / source / generated / summary).
+ * source 는 외부 자료 흡수 sub-agent 만 필수 (자체 작성 sub-agent 는 생략 가능).
+ *
+ * @param {string} feature
+ * @param {Object} [options] - { phases?: string[] }
+ * @returns {Array<{ code, path, message, severity }>}
+ */
+function validateArtifactFrontmatter(feature, options = {}) {
+  const out = [];
+  if (!feature) return out;
+
+  const OWNER_ENUM = ['ceo', 'cpo', 'cto', 'cso', 'cbo', 'coo'];
+  const PHASE_ENUM = ['ideation', 'plan', 'design', 'do', 'qa', 'report'];
+  const REQUIRED = ['owner', 'agent', 'artifact', 'phase', 'feature', 'generated', 'summary'];
+
+  const phases = options.phases ?? Object.values(PHASE_FOLDERS);
+  const docsRoot = path.join(process.cwd(), 'docs', feature);
+  if (!fs.existsSync(docsRoot)) return out;
+
+  for (const phaseFolder of phases) {
+    const phaseDir = path.join(docsRoot, phaseFolder);
+    if (!fs.existsSync(phaseDir)) continue;
+
+    let files;
+    try { files = fs.readdirSync(phaseDir); }
+    catch (_) { files = []; }
+
+    for (const f of files) {
+      if (!f.endsWith('.md')) continue;
+      // main.md / interface-contract.md 같은 system 파일은 frontmatter spec 다름
+      if (SYSTEM_ARTIFACT_NAMES.has(f)) continue;
+      const p = path.join(phaseDir, f);
+      let stat;
+      try { stat = fs.statSync(p); } catch (_) { continue; }
+      if (!stat.isFile()) continue;
+
+      let content;
+      try { content = fs.readFileSync(p, 'utf8'); } catch (_) { continue; }
+
+      // frontmatter 추출 (--- ... --- 사이)
+      const fmMatch = content.match(/^---\n([\s\S]*?)\n---/);
+      if (!fmMatch) {
+        out.push({ code: 'W-FRONT-00', path: p, message: 'frontmatter 자체 누락', severity: 'warn' });
+        continue;
+      }
+      const fmRaw = fmMatch[1];
+      const fm = {};
+      for (const line of fmRaw.split('\n')) {
+        const colonIdx = line.indexOf(':');
+        if (colonIdx === -1) continue;
+        const k = line.slice(0, colonIdx).trim();
+        const v = line.slice(colonIdx + 1).trim().replace(/^["']|["']$/g, '');
+        fm[k] = v;
+      }
+
+      // 필수 필드 검사
+      for (const field of REQUIRED) {
+        if (!fm[field]) {
+          out.push({ code: 'W-FRONT-01', path: p, message: `frontmatter '${field}' 누락`, severity: 'warn' });
+        }
+      }
+
+      // owner enum
+      if (fm.owner && !OWNER_ENUM.includes(fm.owner)) {
+        out.push({ code: 'W-FRONT-02', path: p, message: `owner '${fm.owner}' ∉ enum (${OWNER_ENUM.join('|')})`, severity: 'warn' });
+      }
+
+      // phase enum
+      if (fm.phase && !PHASE_ENUM.includes(fm.phase)) {
+        out.push({ code: 'W-FRONT-03', path: p, message: `phase '${fm.phase}' ∉ enum`, severity: 'warn' });
+      }
+
+      // 파일 stem = artifact
+      const stem = path.basename(f, '.md');
+      if (fm.artifact && fm.artifact !== stem) {
+        out.push({ code: 'W-FRONT-04', path: p, message: `artifact '${fm.artifact}' ≠ 파일 stem '${stem}'`, severity: 'warn' });
+      }
+
+      // summary 길이
+      if (fm.summary && fm.summary.length > 200) {
+        out.push({ code: 'W-FRONT-05', path: p, message: `summary > 200자 (${fm.summary.length})`, severity: 'warn' });
+      }
+    }
+  }
+
+  return out;
+}
+
+/**
+ * v2.0 frontmatter 경고를 사람이 읽을 수 있는 형식으로 출력
+ */
+function formatFrontmatterWarnings(warnings) {
+  if (!Array.isArray(warnings) || warnings.length === 0) return '';
+  const lines = [`ℹ️  [frontmatter v2.0] ${warnings.length}건 경고:`];
+  for (const w of warnings) {
+    const rel = path.relative(process.cwd(), w.path);
+    lines.push(`   ⚠️  [${w.code}] ${rel}: ${w.message}`);
+  }
+  return lines.join('\n');
+}
+
+/**
  * 검증 결과를 사람이 읽을 수 있는 형식으로 출력 (main.md 중심 — 기존 호환)
  */
 function formatResult(role, feature, result) {
@@ -418,19 +521,23 @@ if (require.main === module) {
   const subDocWarnings = feature ? validateSubDocs(feature) : [];
   const coexistenceWarnings = feature ? validateCoexistence(feature) : [];
   const scopeWarnings = feature ? validateScopeContract(feature) : [];
+  const frontmatterWarnings = feature ? validateArtifactFrontmatter(feature) : []; // v2.0
   result.subDocWarnings = subDocWarnings;
   result.coexistenceWarnings = coexistenceWarnings;
   result.scopeWarnings = scopeWarnings;
+  result.frontmatterWarnings = frontmatterWarnings;
 
   const output = formatResult(role, feature, result);
   const subDocOutput = formatSubDocWarnings(subDocWarnings);
   const coexistenceOutput = formatCoexistenceWarnings(coexistenceWarnings);
   const scopeOutput = formatScopeContractWarnings(scopeWarnings);
+  const frontmatterOutput = formatFrontmatterWarnings(frontmatterWarnings); // v2.0
 
   if (output) process.stderr.write(output + '\n');
   if (subDocOutput) process.stderr.write(subDocOutput + '\n');
   if (coexistenceOutput) process.stderr.write(coexistenceOutput + '\n');
   if (scopeOutput) process.stderr.write(scopeOutput + '\n');
+  if (frontmatterOutput) process.stderr.write(frontmatterOutput + '\n');
 
   process.stdout.write(JSON.stringify(result));
 
@@ -449,4 +556,4 @@ if (require.main === module) {
   process.exit(0);
 }
 
-module.exports = { validateDocs, validateSubDocs, validateCoexistence, validateScopeContract, formatResult, formatSubDocWarnings, formatCoexistenceWarnings, formatScopeContractWarnings, MANDATORY_PHASES, C_LEVEL_ROLES, C_LEVEL_OWNERS, PHASE_FOLDERS };
+module.exports = { validateDocs, validateSubDocs, validateCoexistence, validateScopeContract, validateArtifactFrontmatter, formatResult, formatSubDocWarnings, formatCoexistenceWarnings, formatScopeContractWarnings, formatFrontmatterWarnings, MANDATORY_PHASES, C_LEVEL_ROLES, C_LEVEL_OWNERS, PHASE_FOLDERS };

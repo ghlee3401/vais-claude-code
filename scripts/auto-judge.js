@@ -26,16 +26,37 @@ const { getGapAnalysis, getFeatureRegistry } = require('../lib/status');
 const { EventLogger, EVENT_TYPES } = require('../lib/observability/index');
 
 /**
- * CPO 판정: PRD 8개 섹션 완성도
+ * CPO 판정: PRD 완성도
+ * v2.0: 01-plan/prd.md (artifact 별 분리) 우선 검증. 없으면 옛 do/main.md fallback.
  * 표준 메트릭: designCompleteness (0~100)
  */
 function judgeCPO(feature) {
+  // v2.0 — sub-agent 직접 박제 모델
+  const v2PrdPath = path.join(process.cwd(), 'docs', feature, '01-plan', 'prd.md');
+  if (fs.existsSync(v2PrdPath)) {
+    const content = fs.readFileSync(v2PrdPath, 'utf8');
+    const fmMatch = content.match(/^---\n([\s\S]*?)\n---/);
+    const hasFrontmatter = fmMatch && /owner:\s*cpo/.test(fmMatch[1]) && /artifact:\s*prd/.test(fmMatch[1]);
+    const bodyLength = content.length - (fmMatch ? fmMatch[0].length : 0);
+    const issues = [];
+    if (!hasFrontmatter) issues.push('frontmatter owner=cpo / artifact=prd 누락');
+    if (bodyLength < 200) issues.push(`PRD 본문 부족 (${bodyLength}자, 권장 ≥ 200자)`);
+    const passed = hasFrontmatter && bodyLength >= 200;
+    return {
+      passed,
+      verdict: passed ? 'pass' : 'retry',
+      details: { v2: true, hasFrontmatter, bodyLength, issues },
+      metrics: { designCompleteness: passed ? 100 : Math.min(99, Math.round((bodyLength / 800) * 100)) },
+    };
+  }
+
+  // v1.x fallback — 옛 do/main.md 통합 PRD
   const details = { sections: 0, empty: 0, issues: [] };
   const doPath = resolveDocPath('do', feature, 'cpo');
   if (!doPath || !fs.existsSync(doPath)) {
     return {
       passed: false, verdict: 'retry',
-      details: { ...details, issues: ['PRD 문서(do) 미존재'] },
+      details: { ...details, issues: ['PRD 문서(do) 미존재 (v2.0 01-plan/prd.md 도 없음)'] },
       metrics: { designCompleteness: 0 },
     };
   }
@@ -313,9 +334,13 @@ function judge(role, feature) {
 
 /**
  * 전체 C-Level 일괄 판정 (CEO Final Review용)
+ * v2.0: primary (CPO/CTO/CSO) 만 자동 판정. CBO/COO 는 secondary — 명시 호출 시만 (judge() 직접 호출).
  */
 function judgeAll(feature) {
-  const roles = ['cpo', 'cto', 'cso', 'cbo', 'coo'];
+  // v2.0: primary 만 자동 판정 (CBO/COO 는 secondary, 명시 호출만)
+  const cfg = loadConfig();
+  const primary = cfg?.cSuite?.primary || ['ceo', 'cpo', 'cto', 'cso'];
+  const roles = primary.filter((r) => ['cpo', 'cto', 'cso'].includes(r)); // CEO 는 ideation 만, 판정 대상 X
   const results = {};
   let allPassed = true;
 

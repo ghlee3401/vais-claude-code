@@ -2,7 +2,7 @@
 
 > **이 파일의 책임**: Claude Code 전용 프로젝트 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 먼저 `ONBOARDING.md` (5분 진입 가이드)를 읽으면 빠르다. 다른 AI 도구(Cursor/Copilot)는 `AGENTS.md` 참조.
 >
-> Virtual AI C-Suite for software development (v0.62.2)
+> Virtual AI C-Suite for software development (v0.63.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -143,22 +143,21 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 
 ## Mandatory Rules
 
-1. **기획 없이 코드 금지** — `docs/{feature}/01-plan/` 기획서가 없으면 구현하지 않는다
-2. **워크플로우 순서 준수** — (optional) ideation → plan → design → do → qa → report 순서를 건너뛰지 않는다. plan, design, do, qa는 mandatory phase로 스킵 금지. **ideation은 optional이며 mandatory 목록에 포함하지 않는다** (SC-13). C-Level 간 위임 시에도 각 phase를 순차 별도 호출해야 한다
-3. **산출물 경로** — `docs/{feature}/{NN-phase}/main.md` 형식 준수. Phase↔Folder 매핑: `ideation`→`00-ideation`, `plan`→`01-plan`, `design`→`02-design`, `do`→`03-do`, `qa`→`04-qa`, `report`→`05-report`. 커맨드는 phase 이름(`plan`) 그대로 사용. 대형 피처는 sub-doc 분리 가능 (main.md가 인덱스). Single source of truth: `vais.config.json > workflow.docPaths`. **v0.57+ Sub-doc 표준**: sub-agent 는 `docs/{feature}/{NN-phase}/_tmp/{agent-slug}.md` scratchpad 에 작성, C-Level 은 topic 별 `{topic}.md` 로 합성 (프리셋: `workflow.topicPresets`). `_tmp/` 는 영구 보존 + git 커밋.
-4. **Gate 통과 필수** — 각 Gate의 체크리스트 항목을 모두 확인한 뒤 다음 단계로 진행
+1. **기획 없이 코드 금지** — `docs/{feature}/01-plan/` 기획서가 없으면 구현하지 않는다 (CTO PDCA 만 적용 — v2.0)
+2. **워크플로우 순서 준수 (CTO 만 mandatory)** — CTO PDCA: ideation(optional) → plan → design → do → qa → report 순차. **CEO 는 ideation 만, CPO/CSO 는 CEO 가 활성화한 phase 만, CBO/COO 는 사용자 명시 호출 시만**. v2.0 부터 mandatory 는 CTO 의 plan/design/do/qa 만. 비-CTO 는 CEO 알고리즘 결정에 따른다.
+3. **산출물 경로** — `docs/{feature}/{NN-phase}/main.md` 형식 준수 (각 phase 인덱스). Phase↔Folder 매핑: `ideation`→`00-ideation`, `plan`→`01-plan`, `design`→`02-design`, `do`→`03-do`, `qa`→`04-qa`, `report`→`05-report`. **v2.x sub-agent 직접 박제**: sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 직접 작성 (frontmatter 8 필드 표준). `_tmp` 폐기, 큐레이션 폐기. main.md = 인덱스만 (5 섹션 — Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). Single source: `vais.config.json > workflow.docPaths` + `phaseArtifactMapping`.
+4. **Gate 통과 필수 (CTO PDCA 만)** — 각 Gate 체크리스트 항목을 모두 확인한 뒤 다음 단계로 진행. 비-CTO 는 Gate 시스템 미적용.
 5. **위험 명령 금지** — `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수** — 민감 정보는 반드시 환경 변수로 관리
 7. **참조 투명성** — 외부 문서 참고 시 `// @see {URL}` 주석 추가
-8. **C-Suite 호출 규칙** — 실행 에이전트(infra-architect, backend-engineer, frontend-engineer 등)는 직접 호출 금지, 반드시 CTO를 통해 호출
-9. **완전성 원칙 (Boil the Lake)** — 각 C-Level은 담당 범위를 완전하게 수행. "나중에" 미룸 금지. Lake(끓일 수 있는 범위)는 끓이고, Ocean(전체 재작성 등)은 범위 밖으로 표시
-    - **Lake 는 사용자가 지정한다.** AI 는 Lake 를 자의로 확장하지 않는다. 자발 감지한 확장 후보는 plan/main.md 의 `## 관찰 (후속 과제)` 섹션에 기록만 하고, 사용자 명시 승인 전까지는 In-scope 에 포함하지 않는다.
+8. **C-Suite 호출 규칙** — 실행 에이전트(infra-architect, backend-engineer, frontend-engineer 등)는 직접 호출 금지, 반드시 C-Level 통해 호출. CEO 자동 라우팅 = 4 primary (CEO+CPO+CTO+CSO). CBO/COO = 사용자 명시 호출만.
+9. **완전성 원칙 (CEO 알고리즘 빈틈없는 판단)** — CEO 가 ideation 단계에서 **7 차원 체크리스트** (보안/컴플라이언스/UX/데이터모델/외부통신/성능/제품정의) 빠짐없이 적용. 각 차원 등급에 따라 phase ↔ artifact 자동 매핑. 사용자는 결과만 확인 (AskUserQuestion 클릭). `lib/ceo-algorithm.js` 가 알고리즘 박제.
 10. **탐색 우선 (Search Before Building)** — 빌드 전 기존 솔루션 탐색. 검증된 패턴 → 현재 베스트 프랙티스 → First Principles 순서
-11. **사용자 주권 (User Sovereignty)** — AI는 추천, 사용자가 결정. CEO 체크포인트에서 반드시 사용자 확인
+11. **사용자 주권 (User Sovereignty)** — AI는 추천, 사용자가 결정. **모든 결정 = AskUserQuestion 클릭 인터페이스** (자연어 명령어 안내 금지, 옵션 2~3 권장).
 12. **Plan은 결정, Do는 실행** — Plan 단계에서는 `docs/{feature}/01-plan/` 산출물만 작성. 프로덕트 파일(skills/, agents/, lib/, src/ 등) 생성·수정은 Do 단계에서만 허용
-13. **레거시 경로 금지** — 문서·코드 모두 **top-level** `docs/NN-` (예: `docs/01-plan/`, `docs/02-design/`) 패턴 사용 금지. 새 구조 `docs/{feature}/{NN-phase}/main.md`만 사용 (feature-grouped, phase subfolder에 NN- 접두사). 예외: `docs/_legacy/`, `CHANGELOG.md`(릴리즈 이력), `tests/paths.test.js` 회귀 가드 문자열, 본 피처 문서 자체. `.hooks/pre-commit`이 자동 차단(top-level만 검사 — feature 하위 `docs/{feature}/NN-phase/`는 Rule #3에 의해 허용)하며, 설치는 `npm run prepare-hooks` 1회 실행. `--no-verify` 사용은 금지.
-14. **Sub-doc 보존 원칙 (v0.57+)** — sub-agent 는 자기 분석/설계/구현 결과를 **축약 없이** `docs/{feature}/{NN-phase}/_tmp/{agent-slug}.md` scratchpad 에 기록. C-Level 은 `_tmp/*.md` 전체를 **읽고 큐레이션**(필요성/누락/충돌 판단)하여 **topic 별 `{topic}.md` 문서 여러 개** + `main.md` 인덱스로 재구성. 각 topic 문서는 `## 큐레이션 기록` 섹션(채택/거절/병합/추가) 필수. **`_tmp/` 는 삭제하지 않고 영구 보존 + git 커밋** (추적성). 병렬 sub-agent 가 `main.md`/`{topic}.md` 직접 편집 금지 — race 방지. 검증: `scripts/doc-validator.js` 의 W-SCP/W-TPC/W-IDX 경고 (`workflow.subDocPolicy.enforcement=warn` 기본).
-15. **C-Level 공존 원칙 (v0.58+)** — 같은 `docs/{feature}/{NN-phase}/main.md` 에 여러 C-Level 이 기여할 수 있다. 각 C-Level 은 **자기 진입 시 기존 main.md 를 Read 필수**, `## [{C-LEVEL}] ...` H2 섹션(대문자: `[CBO]`/`[CPO]`/`[CTO]`/`[CSO]`/`[COO]`/`[CEO]`)을 append, **다른 C-Level 의 H2 섹션·Decision Record 행·Topic 인덱스 엔트리 수정·삭제 금지**. topic 문서는 frontmatter `owner: {c-level}` 필수(enum: `ceo\|cpo\|cto\|cso\|cbo\|coo`), 파일명은 topic-first(`requirements.md` O, `cpo-requirements.md` X). 동일 C-Level 재진입 시 자기 섹션 교체 허용하되 `## 변경 이력` entry 필수. **(F14) main.md 가 `workflow.cLevelCoexistencePolicy.mainMdMaxLines`(기본 200) 초과 시 topic 분리 필수 — sub-agent 미위임하는 C-Level 직접 작성 phase(UI 없는 메타 피처 등) 도 동일 적용**. 검증: `scripts/doc-validator.js` 의 `W-OWN-01/02` / `W-MRG-02/03` / `W-MAIN-SIZE` 경고 (`workflow.cLevelCoexistencePolicy.enforcement=warn` 기본). 6 C-Level agent md 에 `agents/_shared/clevel-main-guard.md` 블록 자동 주입 (`scripts/patch-clevel-guard.js`).
+13. **레거시 경로 금지** — 문서·코드 모두 **top-level** `docs/NN-` (예: `docs/01-plan/`, `docs/02-design/`) 패턴 사용 금지. 새 구조 `docs/{feature}/{NN-phase}/{main.md|artifact}.md`만 사용. 예외: `docs/_legacy/`, `CHANGELOG.md`, `tests/paths.test.js`. `.hooks/pre-commit`이 자동 차단. `--no-verify` 사용은 금지.
+14. **Sub-doc v2.0 — 직접 박제** — sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 8 필드 (owner/agent/artifact/phase/feature/source/generated/summary) 표준으로 **직접 박제**. `_tmp` 폐기, 큐레이션 (✅/❌/✓) 폐기, 정보 손실 0, 토큰 약 50% 절감. C-Level 이 main.md 작성 시 frontmatter 의 `summary` 만 읽고 인덱스 자동 생성. 정본: `agents/_shared/subdoc-guard.md` v2.0. patch: `scripts/patch-subdoc-block.js`.
+15. **C-Level 공존 v2.0 — main.md 인덱스만** — 같은 `docs/{feature}/{NN-phase}/main.md` 에 여러 C-Level 이 기여 가능. main.md = 인덱스만 (본문 X). Decision Record append-only + Owner 컬럼 필수 + 다른 C-Level 섹션·행 수정 금지. **Artifacts 표** (옛 Topic Documents 대체) — sub-agent artifact 의 frontmatter 자동 추출. Size budget 200 lines = warn (자연 충족). 정본: `agents/_shared/clevel-main-guard.md` v2.0. patch: `scripts/patch-clevel-guard.js`.
 
 ## Version Management
 

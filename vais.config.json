@@ -1,5 +1,5 @@
 {
-  "version": "0.62.2",
+  "version": "0.63.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -104,6 +104,13 @@
       }
     },
     "rolesList": ["ceo", "cpo", "cto", "cso", "cbo", "coo"],
+    "primary": ["ceo", "cpo", "cto", "cso"],
+    "secondary": ["cbo", "coo"],
+    "_v2_routing_comment": "v2.x — 코드 개발 도우미 정체성. CEO 자동 라우팅 = primary 만. secondary (CBO/COO) 는 사용자 명시 호출 (`/vais cbo|coo {feature}`) 시만 활성. CEO 알고리즘 (lib/ceo-algorithm.js) 이 primary 안에서 7 차원 체크리스트로 활성 C-Level 결정.",
+    "autoRouting": {
+      "default": "primary",
+      "secondaryActivation": "explicit"
+    },
     "autoKeywords": {
       "ceo": [
         "new product",
@@ -260,16 +267,18 @@
       }
     },
     "subDocPolicy": {
-      "_description": "v0.57.0 sub-doc preservation 정책. sub-agent는 _tmp/에 scratchpad, C-Level은 topic 문서로 큐레이션.",
+      "_description": "v2.x — sub-agent 직접 박제 모델. _tmp 폐기, 큐레이션 폐기. v0.57 모델은 orchestration.legacyV1.enabled=true 시만 활성.",
       "enforcement": "warn",
       "_enforcementValues": ["warn", "retry", "fail"],
-      "scratchpadPreserve": true,
+      "scratchpadPreserve": false,
+      "_v1_was_scratchpadPreserve": true,
       "scratchpadMinBytes": 500,
-      "requireCurationRecord": true,
+      "requireCurationRecord": false,
+      "_v1_was_requireCurationRecord": true,
       "reportPhase": "single"
     },
     "cLevelCoexistencePolicy": {
-      "_description": "v0.58.0 multi-C-Level main.md append-merge 정책. v0.58.4: mainMdMaxLinesAction 을 'refuse' 로 승격 — size budget 초과 시 doc-validator 가 exit(1) 차단.",
+      "_description": "v2.x — main.md = 인덱스만 (본문 X). Size budget 200 lines 자연 충족. mainMdMaxLinesAction 'refuse' → 'warn' 강등.",
       "enforcement": "warn",
       "_enforcementValues": ["warn", "retry", "fail"],
       "mainMergeRule": "append-only",
@@ -280,15 +289,61 @@
       "reentrySectionReplace": true,
       "reentryChangelogRequired": true,
       "mainMdMaxLines": 200,
-      "mainMdMaxLinesAction": "refuse",
+      "mainMdMaxLinesAction": "warn",
+      "_v1_was_mainMdMaxLinesAction": "refuse",
       "_mainMdMaxLinesActionValues": ["warn", "refuse"]
     },
     "scopeContractPolicy": {
-      "_description": "v0.58.3 plan-scope-contract 정책. plan/main.md 에 '## 요청 원문' / '## In-scope' / '## Out-of-scope' H2 3섹션 강제. CLAUDE.md Rule #9 (Boil the Lake) dog-fooding. v0.58.4: warn → fail 승격 — 3섹션 누락 시 doc-validator 가 exit(1) 차단.",
-      "enforcement": "fail",
+      "_description": "v2.x — CEO ideation 박제 (artifactPlan) 가 scope contract 자동 충족. v0.58 의 3섹션 강제 폐기. enforcement 'fail' → 'warn' 강등.",
+      "enforcement": "warn",
+      "_v1_was_enforcement": "fail",
       "_enforcementValues": ["warn", "retry", "fail", "off"],
       "targetPhase": "01-plan",
       "requiredSections": ["요청 원문", "In-scope", "Out-of-scope"]
+    },
+    "phaseArtifactMapping": {
+      "_description": "v2.x — CEO 알고리즘의 phase ↔ artifact 활성화 기본 매핑. lib/ceo-algorithm.js 가 사용. CBO/COO 는 secondary 라 자동 매핑에서 빠짐 (사용자 명시 호출 시 별도 처리).",
+      "00-ideation": {
+        "always": [{ "artifact": "ideation-decision", "owner": "ceo", "agent": "ceo-direct" }]
+      },
+      "01-plan": {
+        "conditional": [
+          { "artifact": "prd", "owner": "cpo", "agent": "prd-writer", "trigger": "productDefinition >= low" },
+          { "artifact": "persona", "owner": "cpo", "agent": "ux-researcher", "trigger": "ux >= medium" },
+          { "artifact": "jtbd", "owner": "cpo", "agent": "product-researcher", "trigger": "productDefinition == high" },
+          { "artifact": "tam-sam-som", "owner": "cpo", "agent": "product-researcher", "trigger": "productDefinition == high" },
+          { "artifact": "opportunity-solution-tree", "owner": "cpo", "agent": "product-discoverer", "trigger": "productDefinition == high" },
+          { "artifact": "threat-model", "owner": "cso", "agent": "security-auditor", "trigger": "security >= medium" }
+        ]
+      },
+      "02-design": {
+        "always": [{ "artifact": "architecture", "owner": "cto", "agent": "infra-architect" }],
+        "conditional": [
+          { "artifact": "data-model", "owner": "cto", "agent": "db-architect", "trigger": "dataModel >= medium" },
+          { "artifact": "api-contract", "owner": "cto", "agent": "backend-engineer", "trigger": "externalAPI >= medium" },
+          { "artifact": "ui-flow", "owner": "cto", "agent": "ui-designer", "trigger": "ux >= medium" },
+          { "artifact": "value-proposition-canvas", "owner": "cpo", "agent": "product-strategist", "trigger": "productDefinition == high" },
+          { "artifact": "lean-canvas", "owner": "cpo", "agent": "product-strategist", "trigger": "productDefinition == high" },
+          { "artifact": "product-strategy-canvas", "owner": "cpo", "agent": "product-strategist", "trigger": "productDefinition == high" }
+        ]
+      },
+      "03-do": {
+        "always": [{ "artifact": "implementation-log", "owner": "cto", "agent": "cto-direct" }],
+        "conditional": [
+          { "artifact": "secret-scan", "owner": "cso", "agent": "secret-scanner", "trigger": "security >= medium" },
+          { "artifact": "dependency-vulnerability", "owner": "cso", "agent": "dependency-analyzer", "trigger": "externalAPI >= medium" }
+        ]
+      },
+      "04-qa": {
+        "always": [{ "artifact": "gap-analysis", "owner": "cto", "agent": "qa-engineer" }],
+        "conditional": [
+          { "artifact": "security-audit", "owner": "cso", "agent": "security-auditor", "trigger": "security >= medium" },
+          { "artifact": "compliance-report", "owner": "cso", "agent": "compliance-auditor", "trigger": "compliance != none" }
+        ]
+      },
+      "05-report": {
+        "always": [{ "artifact": "completion-report", "owner": "cto", "agent": "cto-direct" }]
+      }
     }
   },
   "gapThreshold": 0.90,

@@ -1,5 +1,42 @@
 # Changelog
 
+## [0.63.0] - 2026-05-02 — v2.0 모델 도입 시작 (CEO 7 차원 + sub-agent 직접 박제 + AskUserQuestion UX)
+
+`ceo-judgment-strengthening` 피처 (WIP, 11/35 파일). v2.0 통합 모델 spec 박제 + 핵심 정본/모듈/정책/validator 적용. patch 스크립트 실행 (37 sub-agent + 6 C-Level inline 갱신) + 단계 5~6 (C-Level/Skill/lib/진입가이드) 다음 commit.
+
+### Added
+
+- `lib/ceo-algorithm.js` — CEO 7 차원 체크리스트 (보안/컴플라이언스/UX/데이터모델/외부통신/성능/제품정의) + buildArtifactPlan + analyzeCEO entry. smoke test 통과.
+- `templates/main-md.template.md` — 5 섹션 표준 (Executive / Decision Record / Artifacts / CEO 판단 근거 / Next Phase). C-Level 이 phase main.md 작성 시 인덱스 자동 채움.
+- `scripts/doc-validator.js` `validateArtifactFrontmatter()` 신규 (W-FRONT-00~05). artifact MD 의 frontmatter 8 필드 (owner/agent/artifact/phase/feature/source/generated/summary) 검증.
+- `vais.config.json > workflow.phaseArtifactMapping` (신규) — CEO 알고리즘의 phase ↔ artifact 활성화 기본 매핑.
+- `vais.config.json > cSuite.primary/secondary + autoRouting` — 4 primary (CEO/CPO/CTO/CSO) + 2 secondary (CBO/COO 명시 호출만).
+- `docs/simplify-non-cto-workflow/` 17 phase 산출물 (ideation v2.4 + plan 9 + design 7 + do 단계 1~3 진행 로그).
+
+### Changed
+
+- `agents/_shared/subdoc-guard.md` v0.58.4 → **v2.0** (100% 재작성). `_tmp` 폐기, 큐레이션 폐기, sub-agent 가 `docs/{feature}/{phase}/{artifact}.md` 직접 박제. frontmatter 8 필드 표준.
+- `agents/_shared/clevel-main-guard.md` v0.58.4 → **v2.0** (50% 단순화). main.md = 인덱스만, Topic Documents → Artifacts 표, Size budget refuse → warn.
+- `agents/_shared/ideation-guard.md` → **v2.0** (30% 갱신). CEO 7 차원 알고리즘 자동 적용 + AskUserQuestion 클릭 인터페이스 + CBO/COO 명시 호출 정책.
+- `CLAUDE.md` Mandatory Rules #2/#3/#9/#11/#13/#14/#15 갱신 — CTO 만 mandatory PDCA / sub-agent 직접 박제 / AskUserQuestion 클릭 / 4 primary + 2 secondary.
+- `vais.config.json` 정책 enforcement 완화 — `mainMdMaxLinesAction: refuse → warn`, `scopeContractPolicy.enforcement: fail → warn`, `subDocPolicy.requireCurationRecord: true → false`, `scratchpadPreserve: true → false`.
+- `scripts/auto-judge.js` `judgeCPO` v2.0 분기 (`01-plan/prd.md` 우선 검증) + `judgeAll` primary 만 자동 판정.
+- `.claude-plugin/plugin.json` description — "코드 개발 도우미. 4 Primary + 2 Secondary 명시 호출" 정체성 명시.
+
+### Deprecated
+
+- `_tmp/` scratchpad 모델 (v0.57+) — `subDocPolicy.scratchpadPreserve: false` 로 비활성. `legacyV1.enabled` 옵트아웃 가능.
+- 큐레이션 기록 섹션 (✅/❌/✓) — `requireCurationRecord: false`.
+- `topicPresets` (v0.58) — `phaseArtifactMapping` 으로 대체. 옛 키 deprecated 표시 보존.
+
+### Notes
+
+- WIP commit — 11/35 파일. 단계 4 (patch 스크립트 실행 — 37 sub-agent + 6 C-Level inline 일괄 갱신) + 단계 5 (6 C-Level + 7 skill md) + 단계 6 (lib/status / ONBOARDING / AGENTS) 다음 commit.
+- 외부 사용자 호환: 옛 spec inline 주입 본문이 sub-agent md 에 그대로 → 패치 실행 전까지 옛 모델 동작 (안전 마이그레이션).
+- 본 피처 자체가 v2.0 모델 자기 적용 — main.md = 인덱스 (145줄), artifact MD 분리 (16개), frontmatter 8 필드 모두 통과.
+
+---
+
 ## [0.62.2] - 2026-05-02 — docs/ 정리 (이전 작업의 잘못된 git restore 정정)
 
 직전 commit (`679960c`) 에서 working tree 의 빈 docs/ 상태를 잘못 진단해 `git restore docs/` 로 복구한 것을 정정. 사용자가 의도적으로 비운 상태였음 — 본 commit 으로 모든 `docs/{feature}/` 폴더 (이전 작업 4개 + 본 세션 결과물 2개) 제거.
