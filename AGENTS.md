@@ -6,14 +6,19 @@
 
 이 프로젝트는 VAIS Code 플러그인입니다. Claude Code에서 5단계 개발 워크플로우를 제공합니다.
 
-## 개발 워크플로우 (5단계)
+## 개발 워크플로우 (v2.0 — CTO 만 mandatory PDCA)
 
 ```
 📋기획(plan) → 🎨설계(design) → 🔧구현(do) → ✅QA(qa) → 📊보고서(report)
 ```
 
-모든 기능 개발은 반드시 기획(plan)부터 시작합니다.
-각 단계의 산출물은 `docs/{번호}-{단계}/{역할}_{기능명}.{단계}.md`에 저장합니다.
+**v2.0 정책**:
+- **CTO**: 위 5 phase mandatory + 순차. 코드 영역 phase 분리 의미 있음
+- **CEO**: ideation 만 mandatory. 라우팅·최종 리뷰는 phase 분리 안 함
+- **CPO/CSO**: CEO 7 차원 알고리즘이 활성화한 phase 만 실행 (mandatory 미적용)
+- **CBO/COO**: Secondary — 사용자 명시 호출만 활성, mandatory 미적용
+
+각 phase 산출물은 `docs/{feature}/{NN-phase}/main.md` (인덱스) + `{artifact}.md` (sub-agent 직접 박제) 에 저장.
 
 ### 병렬 실행 구간
 
@@ -25,17 +30,24 @@
 Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → QA → Report
 ```
 
-## 실행 방식 (C-Suite 오케스트레이션)
+## 실행 방식 (v2.0 — 4 Primary + 2 Secondary)
 
 ```
-/vais cto login              — CTO가 기술 전체 오케스트레이션 (plan→design→do→qa→report)
-/vais ceo login              — CEO가 비즈니스 전략 + C-Suite 조율
-/vais cpo login              — CPO가 제품 방향 + PRD + 로드맵
+# Primary (CEO 자동 라우팅)
+/vais ceo {feature}          — CEO 7 차원 분석 → 활성 C-Level 자동 결정 → AskUserQuestion 클릭
+/vais cto plan|design|do|qa|report {feature}  — CTO PDCA (mandatory 순서)
+/vais cpo {feature}          — CEO 가 활성화한 phase 만 실행
+/vais cso {feature}          — CEO 가 활성화한 phase 만 실행
+
+# Secondary (사용자 명시 호출만)
+/vais cbo plan|do|qa {feature}  — GTM/마케팅/재무/pricing 필요 시
+/vais coo plan|do|qa {feature}  — 운영/CI/CD/모니터링 필요 시
+
 /vais status                 — 프로젝트 상태 조회
 /vais help                   — 사용법 안내
 ```
 
-실행 에이전트(infra-architect, frontend-engineer, backend-engineer 등)는 직접 호출하지 않습니다. C-레벨 에이전트가 필요에 따라 위임합니다.
+실행 에이전트(infra-architect, frontend-engineer, backend-engineer 등)는 직접 호출하지 않습니다. C-Level 에이전트가 필요에 따라 위임하고, sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 8 필드와 함께 직접 박제합니다.
 
 ## 필수 규칙
 
@@ -45,21 +57,21 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 4. **문서 참조 투명성**: 구현 시 참조한 문서 목록을 산출물 상단에 기록합니다
 5. **위험 명령 금지**: `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수**: 민감 정보는 반드시 환경 변수로 관리합니다
-7. **Sub-doc 보존 (v0.57+)**: sub-agent 는 `docs/{feature}/{NN-phase}/_tmp/{agent-slug}.md` scratchpad 에 축약 없이 기록. C-Level 은 `_tmp/*.md` 를 읽고 topic 별 `{topic}.md` + `main.md` 인덱스로 큐레이션. `_tmp/` 는 영구 보존 + git 커밋. 각 topic 문서에 `## 큐레이션 기록` 섹션 필수. 상세: CLAUDE.md Rule #14
-8. **C-Level 공존 (v0.58+)**: 같은 `{phase}/main.md` 에 여러 C-Level 이 기여. 각 C-Level 은 `## [{C-LEVEL}] ...` H2 섹션 append, 다른 C-Level 섹션·Decision Record 행·Topic 인덱스 수정·삭제 금지. Topic frontmatter `owner: {c-level}` 필수(파일명은 topic-first). main.md 가 `mainMdMaxLines`(기본 200) 초과 시 topic 분리 필수(F14, C-Level 직접 작성 phase 도 동일). 상세: CLAUDE.md Rule #15
+7. **Sub-doc 직접 박제 (v2.0)**: `_tmp/` 폐기. sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 8 필드 (owner/agent/artifact/phase/feature/source/generated/summary) 표준으로 직접 작성. 큐레이션 (✅/❌/✓) 폐기. 정본: `agents/_shared/subdoc-guard.md` v2.0
+8. **C-Level 공존 — main.md 인덱스 (v2.0)**: main.md = 5 섹션 인덱스 (Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). 본문 X. Decision Record append-only + Owner 컬럼 필수. Artifacts 표 = sub-agent artifact frontmatter 자동 추출. 200줄 자연 충족 (refuse 아닌 warn). 정본: `agents/_shared/clevel-main-guard.md` v2.0
 
 ## 에이전트 역할
 
-### C-Suite (전략 레이어, Opus)
+### C-Suite (전략 레이어, Opus) — v2.0 분류
 
-| 에이전트 | 역할 |
-|---------|------|
-| cto | Technical lead orchestrator (required) |
-| ceo | Business strategy + absorb orchestrator |
-| cpo | Product direction + PRD + pm-* sub-agent orchestration |
-| cso | Security Gate A + plugin validation Gate B + independent review Gate C + compliance |
-| cbo | Business layer — GTM, marketing, finance, pricing, unit economics (CMO+CFO 통합) |
-| coo | Operations, CI/CD, monitoring (delegates to release-engineer/sre-engineer) |
+| 에이전트 | 분류 | 역할 |
+|---------|:----:|------|
+| ceo | **Primary** | Top-level orchestrator + 7 차원 알고리즘 (`lib/ceo-algorithm.js`) + ideation + absorb |
+| cpo | **Primary** | Product direction + PRD + 로드맵 + 백로그 (CEO 가 활성화한 phase 만) |
+| cto | **Primary** | Technical lead — 유일한 mandatory PDCA (plan→design→do→qa→report) |
+| cso | **Primary** | Security Gate A/B/C + secret scan + dependency analysis (CEO 활성 phase) |
+| cbo | **Secondary** | GTM/marketing/finance/pricing/unit economics — 사용자 명시 호출만 |
+| coo | **Secondary** | Operations/CI/CD/monitoring — 사용자 명시 호출만 |
 
 ### Execution (실행 레이어, Sonnet)
 

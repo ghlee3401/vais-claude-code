@@ -1,7 +1,8 @@
 # {feature} — 완료 보고서
 
 > 참조 문서: `docs/{feature}/01-plan/main.md`, `docs/{feature}/02-design/main.md`, `docs/{feature}/04-qa/main.md`
-> <!-- size budget: main.md ≤ 200 lines 권장. Report phase 는 `reportPhase: "single"` 정책으로 멀티-오너 허용하나 경고 없음. -->
+> 🎯 **v2.0+**: main.md = 인덱스 우선. 상세 본문은 `docs/{feature}/05-report/{artifact}.md` 분리 권장. 정본: `templates/main-md.template.md`
+> <!-- size budget: main.md ≤ 200 lines (warn). Report phase 는 단일 owner 도 허용. -->
 
 ## Executive Summary
 

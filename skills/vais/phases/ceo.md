@@ -1,7 +1,7 @@
 ---
 name: ceo
-version: 0.50.0
-description: CEO 에이전트 호출. 동적 라우팅 + ideation 분기 + 10+1 시나리오 매핑 + absorb.
+version: 2.0.0
+description: CEO 에이전트 호출. 7 차원 알고리즘 (`lib/ceo-algorithm.js`) + 4 Primary 자동 라우팅 + ideation 분기 + 10+1 시나리오 매핑 + absorb. CBO/COO 는 명시 호출만 활성.
 ---
 
 # CEO Phase

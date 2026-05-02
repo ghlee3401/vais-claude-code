@@ -5,15 +5,15 @@
     "email": "ghlee0304@ncsoft.com"
   },
   "metadata": {
-    "description": "VAIS Code — 6단계 개발 워크플로우 플러그인 (ideation optional)",
-    "version": "0.63.0"
+    "description": "VAIS Code — 코드 개발 도우미. 4 Primary (CEO/CPO/CTO/CSO) + 2 Secondary (CBO/COO 명시 호출). CEO 7 차원 알고리즘 + sub-agent 직접 박제 + AskUserQuestion 클릭",
+    "version": "0.64.0"
   },
   "plugins": [
     {
       "name": "vais-code",
       "source": "./",
-      "description": "6-phase development workflow plugin (ideation optional) with 6 C-Suite (CEO/CPO/CTO/CSO/CBO/COO) autonomous delegation, Gate system, and QA return path.",
-      "version": "0.63.0",
+      "description": "AI code-development assistant simulating a virtual C-Suite. v2.0 — 4 Primary (CEO/CPO/CTO/CSO) auto-routing via CEO 7-dimension algorithm + 2 Secondary (CBO/COO) explicit call only. Sub-agent direct stamping with frontmatter 8 fields. CTO is the only mandatory PDCA (plan→design→do→qa→report).",
+      "version": "0.64.0",
       "author": {
         "name": "VAIS Voice",
         "email": "ghlee0304@ncsoft.com"

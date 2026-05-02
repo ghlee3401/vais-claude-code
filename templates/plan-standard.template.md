@@ -2,7 +2,8 @@
 
 > ⛔ **Plan 단계 범위**: 분석·결정만 기록. 프로덕트 파일 생성·수정은 Do 단계.
 > 📝 **Standard 템플릿** (v0.58.5+) — CP-1 "B. 표준" 선택 시 사용. PRD 있음 / CTO 단독 강행 양쪽 커버. 경량 템플릿은 `plan-minimal.template.md`, 전체는 `plan-extended.template.md`.
-> <!-- size budget: main.md ≤ 200 lines (refuse enforcement). 초과 시 topic 분리. -->
+> 🎯 **v2.0+ CTO 전용**: mandatory PDCA 보유는 CTO 만. 비-CTO 는 CEO 7 차원 알고리즘 결정.
+> <!-- size budget: main.md ≤ 200 lines (warn — v2.0 인덱스 자연 충족). 초과 시 artifact MD 분리. -->
 
 ## 요청 원문
 

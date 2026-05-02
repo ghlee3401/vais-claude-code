@@ -1,7 +1,7 @@
 ---
 name: cpo
-version: 0.50.0
-description: CPO 에이전트 호출. 제품 도메인 오케스트레이션 (PRD + 로드맵 + 백로그). v0.50 backlog-manager 추가.
+version: 2.0.0
+description: CPO 에이전트 호출. 제품 도메인 오케스트레이션 (PRD + 로드맵 + 백로그). v2.0 Primary — CEO 7 차원 알고리즘이 활성화한 phase 만 실행. main.md 인덱스 + sub-agent 직접 박제.
 ---
 
 # CPO Phase

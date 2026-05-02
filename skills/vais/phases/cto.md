@@ -1,7 +1,7 @@
 ---
 name: cto
-version: 0.50.0
-description: CTO 에이전트 호출. 기술 도메인 전체 오케스트레이션 (plan→design→do→qa→report). v0.50 release-engineer/performance-engineer는 COO 소관.
+version: 2.0.0
+description: CTO 에이전트 호출. 기술 도메인 전체 오케스트레이션 (plan→design→do→qa→report). v2.0 Primary — 유일한 mandatory PDCA 보유 (코드 영역 phase 분리 의미). main.md 인덱스 + sub-agent 직접 박제.
 ---
 
 # CTO Phase

@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.64.0] - 2026-05-03 — v2.0 통합 모델 전환 완료 (4 Primary + 2 Secondary, sub-agent 직접 박제, F-1 fix)
+
+`simplify-non-cto-workflow` 피처 PDCA 6/6 완료 (74 파일 변경, 26 artifact 박제). v0.63.0 의 v2.0 도입 작업을 마무리: patch 스크립트 적용 (45 sub-agent + 6 C-Level body inject), C-Level/Skill/lib/진입가이드 갱신, templates v2.0 헤더, marketplace.json description v2.0, F-1 validator bug fix. doc-validator passed (16 artifact frontmatter), auto-judge CTO PASS (matchRate 93%, criticalIssueCount 0), vais-validate-plugin 0 errors / 0 warnings. Breaking change 0건.
+
+### Added
+
+- `lib/status.js` — v2.0 helpers: `getMandatoryPhases(role)` (CTO=plan/design/do/qa, CEO=ideation, 그 외 빈 배열), `isPrimaryRole(role)`, `isSecondaryRole(role)`. `vais.config.json > cSuite.primary/secondary` 참조.
+- `docs/simplify-non-cto-workflow/` — PDCA 6 phase 26 artifact (ideation 1 + plan 10 + design 7 + do 1 + qa 3 + report 4). 모든 artifact frontmatter 8 필드 표준 (owner/agent/artifact/phase/feature/source/generated/summary).
+
+### Changed
+
+- **v2.0 patch 스크립트 적용** (51 파일 inline 갱신): `scripts/patch-subdoc-block.js` → 45 sub-agent body 에 `subdoc-guard v2.0` inject (10 신규 + 35 v0.x→v2.0 교체). `scripts/patch-clevel-guard.js` → 6 C-Level body 에 `clevel-main-guard v2.0` inject (전체 교체).
+- **6 C-Level agent.md** (`agents/{ceo,cpo,cto,cso,cbo,coo}/{c-level}.md`): frontmatter `version: 0.50.0 → 2.0.0`, 옛 v0.57 `<!-- @refactor:begin subdoc-index -->` 블록 일괄 제거 (총 -280 lines, `_tmp/` / "Topic Documents" / "Scratchpads" / "큐레이션 기록" 등 v2.0 inject 와 충돌하던 본문). CEO description v2.0 (`lib/ceo-algorithm.js` 참조), CBO/COO description "Secondary, 명시 호출만" 명시.
+- **6 skill phase router** (`skills/vais/phases/{c-level}.md`): version 2.0 + description 갱신 (CTO Primary mandatory PDCA / CPO·CSO Primary CEO 활성 phase / CBO·COO Secondary 명시 호출). COO mandatory phase 경고 제거.
+- **6 templates v2.0 헤더**: `templates/{plan-{minimal,standard,extended},design,do,qa,report}.template.md` → "CTO 전용 mandatory PDCA" / "main.md = 인덱스만" 안내 추가, size budget refuse → warn 강등 명시.
+- **`.claude-plugin/marketplace.json`**: metadata.description + plugin description v2.0 (4 Primary + 2 Secondary, CEO 7 차원, sub-agent 직접 박제, AskUserQuestion 클릭).
+- **`ONBOARDING.md`** + **`AGENTS.md`** v2.0 동기화 — "What This Is" 4 Primary + 2 Secondary, 워크플로우 시나리오 갱신.
+- **`scripts/cp-guard.js`** — v2.0 호환 정책 코멘트 (4 Primary + 2 Secondary 동일 강제, soft enforcement 유지).
+
+### Deprecated
+
+- `templates/subdoc.template.md` — v0.57 `_tmp/{slug}.md` scratchpad 모델의 흔적. v2.0 sub-agent 직접 박제 모델로 대체. DEPRECATED 헤더 + `REMOVE-IN: v2.1` 명시. backwards-compat 만 유지.
+
+### Fixed
+
+- **F-1**: `scripts/vais-validate-plugin.js` 가 `.mcp.json` 의 `_comment` / `mcpServers` 키를 server 로 오인식하여 2 errors 발생하던 bug 해결. `mcpServers` nested 구조 우선 탐지 + `_` 시작 메타 필드 스킵.
+
 ## [0.63.0] - 2026-05-02 — v2.0 모델 도입 시작 (CEO 7 차원 + sub-agent 직접 박제 + AskUserQuestion UX)
 
 `ceo-judgment-strengthening` 피처 (WIP, 11/35 파일). v2.0 통합 모델 spec 박제 + 핵심 정본/모듈/정책/validator 적용. patch 스크립트 실행 (37 sub-agent + 6 C-Level inline 갱신) + 단계 5~6 (C-Level/Skill/lib/진입가이드) 다음 commit.

@@ -7,29 +7,31 @@
 
 ## 1. What This Is (1분)
 
-**VAIS Code** = Claude Code 플러그인. **AI C-Suite 조직 시뮬레이션** — CEO 가 Product Owner 로서 6 C-Level 팀(CPO/CTO/CSO/CBO/COO)을 고용·지휘하여 서비스 런칭 전체 라이프사이클(아이디어→기획→설계→구현→QA→보고)을 자동 실행한다.
+**VAIS Code** = Claude Code 플러그인. **AI 코드 개발 도우미 (C-Suite 조직 시뮬레이션)** — CEO 가 7 차원 알고리즘으로 활성 C-Level 을 자동 결정하고, 사용자는 AskUserQuestion 클릭만으로 서비스 런칭 라이프사이클(아이디어→기획→설계→구현→QA→보고)을 진행한다.
 
 | 핵심 컨셉 | 설명 |
 |----------|------|
-| **6 C-Level + 37 sub-agent** | 각 C-Level 이 자기 영역의 sub-agent 위임. 사용자는 CEO 1명만 부르거나 개별 C-Level 직접 호출 가능 |
-| **PDCA 워크플로우** | (optional) ideation → plan → design → do → qa → report 6 phase. 각 phase 산출물은 `docs/{feature}/{NN-phase}/main.md` 에 박제 |
-| **Skill + Agent + Hook 3축** | `/vais` 명령어 (skill) → C-Level (agent) → 실행 hook → 산출물 |
+| **4 Primary + 2 Secondary** (v2.0) | Primary (CEO/CPO/CTO/CSO) — CEO 자동 라우팅 / Secondary (CBO/COO) — 사용자 명시 호출만 활성. 코드 개발 외 영역은 옵션. |
+| **CEO 7 차원 알고리즘** | `lib/ceo-algorithm.js` — 보안/컴플라이언스/UX/데이터모델/외부통신/성능/제품정의 휴리스틱 + phase↔artifact 자동 매핑 |
+| **CTO 만 mandatory PDCA** | CTO: plan→design→do→qa 순차 mandatory. CEO ideation 만 mandatory. CPO/CSO/CBO/COO mandatory 미적용 (CEO 알고리즘 결정) |
+| **sub-agent 직접 박제** (v2.0) | `_tmp/` 폐기. sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 8 필드와 함께 직접 작성. main.md = 인덱스만 |
+| **AskUserQuestion 클릭 인터페이스** | 모든 결정 = 도구 호출. 자연어 명령어 안내 금지 |
 
-현재 버전: **v0.62.0** (`design-system/` MUI 카탈로그 + ui-designer DS 자동 선택 통합).
+현재 버전: **v0.63.0** (v2.0 모델 — 4 Primary/2 Secondary + CEO 7 차원 + sub-agent 직접 박제 + main.md 인덱스).
 
 ---
 
 ## 2. Quick Start (1분)
 
-### 시나리오 A — 사용자가 새 피처를 만들고 싶을 때
+### 시나리오 A — 사용자가 새 피처를 만들고 싶을 때 (v2.0 권장)
 
 ```
-/vais ceo ideation 새-피처-아이디어    # 모호한 아이디어 → 합의된 피처
-/vais cto plan {feature}                # 기획서 작성
-/vais cto design {feature}              # 설계서 작성
-/vais cto do {feature}                  # 구현
-/vais cto qa {feature}                  # QA 검증
-/vais cto report {feature}              # 완료 보고서
+/vais ceo ideation 새-피처-아이디어    # 모호한 아이디어 → CEO 7 차원 분석 → 활성 C-Level 자동 결정
+                                          ↓ AskUserQuestion 클릭으로 phase 진행
+                                          ↓ CTO PDCA 만 mandatory, 비-CTO 는 CEO 알고리즘 결정
+/vais cto plan|design|do|qa|report {feature}   # 코드 영역 PDCA (mandatory)
+/vais cbo plan {feature}                # Secondary — GTM/마케팅/재무 필요 시 명시 호출
+/vais coo plan {feature}                # Secondary — 운영/CI/CD 필요 시 명시 호출
 /vais commit                            # 커밋 + semver bump + push
 ```
 
@@ -133,3 +135,4 @@ flowchart TB
 | version | date | change |
 |---------|------|--------|
 | v1.0 | 2026-05-02 | 초기 작성 (5섹션 / Mermaid 그래프 / 진입점 표 / 워크플로우 예시) — `legacy-prune-and-agent-onboarding` 피처 산출물 |
+| v2.0 | 2026-05-02 | v2.0 모델 반영 — 4 Primary + 2 Secondary, CEO 7 차원 알고리즘, sub-agent 직접 박제, main.md 인덱스, AskUserQuestion 클릭 인터페이스. v0.62.0 → v0.63.0. |

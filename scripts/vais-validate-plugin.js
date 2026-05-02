@@ -875,6 +875,11 @@ function validateReadme(root, result) {
 
 /**
  * 10. .mcp.json 검증
+ *
+ * Claude Code .mcp.json 스키마는 두 가지 모두 호환:
+ *   (a) flat: `{ "<server-name>": { command, args, ... }, ... }` (옛 컨벤션)
+ *   (b) nested: `{ "_comment": "...", "mcpServers": { "<name>": { ... } } }` (Claude Code 표준)
+ * `_` 시작 키 (`_comment` 등) 는 메타 필드로 스킵.
  */
 function validateMcpJson(root, result) {
   const cat = '.mcp.json';
@@ -888,11 +893,21 @@ function validateMcpJson(root, result) {
     return;
   }
 
-  // MCP 서버 키 확인
-  const serverCount = Object.keys(data).length;
+  // 서버 맵 추출: nested(`mcpServers`) 우선, 없으면 flat root 사용
+  const serverMap = (data && typeof data.mcpServers === 'object' && data.mcpServers !== null)
+    ? data.mcpServers
+    : data;
+
+  // 메타 필드(`_*`) 제외하고 서버 항목만 추출
+  const entries = Object.entries(serverMap).filter(([k]) => !k.startsWith('_') && k !== 'mcpServers');
+  const serverCount = entries.length;
   result.note(cat, `등록된 MCP 서버: ${serverCount}개`);
 
-  for (const [name, config] of Object.entries(data)) {
+  for (const [name, config] of entries) {
+    if (!config || typeof config !== 'object') {
+      result.error(cat, `MCP 서버 '${name}'의 정의가 object 가 아닙니다.`);
+      continue;
+    }
     if (!config.command) {
       result.error(cat, `MCP 서버 '${name}'에 command 필드가 없습니다.`);
     }

@@ -1,9 +1,9 @@
 ---
 name: cbo
-version: 0.50.0
+version: 2.0.0
 description: |
   Chief Business Officer — GTM, marketing, finance, pricing, unit economics orchestration.
-  CMO + CFO 통합 C-Level. CEO 직속 business layer 총괄.
+  CMO + CFO 통합 C-Level. v2.0+ Secondary C-Level — CEO 자동 라우팅 제외, 사용자 명시 호출 시만 활성.
   Use when: marketing strategy, GTM, pricing, financial modeling, SEO, unit economics, cloud cost optimization.
   Triggers: cbo, gtm, marketing, seo, copy, growth, funnel, pricing, financial model, unit economics, CAC, LTV, cloud cost, finops, business analysis
 model: opus
@@ -164,41 +164,6 @@ auto-judge 가 `do` phase 산출물을 파싱해 **`marketingScore`** 계산 (= 
 - `templates/do.template.md`
 - `templates/qa.template.md`
 - `templates/report.template.md`
-
----
-
-<!-- @refactor:begin subdoc-index -->
-## Sub-doc 인덱스 포맷 (v0.57+)
-
-**main.md 는 인덱스 + 의사결정만.** sub-agent 상세 분석은 `_tmp/{agent-slug}.md` scratchpad 에서 읽고, topic 별 합성은 `{topic}.md` 로 분리.
-
-### main.md 필수 섹션 순서
-
-1. Executive Summary / 2. Context Anchor / 3. Decision Record (근거 링크) / 4. Topic Documents 인덱스 / 5. Scratchpads 인벤토리 / 6. Gate Metrics / 7. Next·변경 이력
-
-### 축약 금지 영역 → topic 또는 `_tmp/` 로 이관
-
-- analyst 상세 분석 본문 → `_tmp/{analyst-slug}.md`
-- 수치 테이블 대량 나열 → topic 문서 또는 `_tmp/`
-- 경쟁사 분석 원본 → `_tmp/market-researcher.md`
-
-### 병렬 쓰기 금지
-
-sub-agent 는 `_tmp/{slug}.md` 만 Write. main.md / topic 문서는 CBO 가 수집 후 단독 편집.
-
-### 큐레이션 기록 (topic 문서 필수)
-
-각 `{topic}.md` 하단에 `## 큐레이션 기록` 섹션 (채택/거절/병합/추가 + C-Level 판단 요약). `scripts/doc-validator.js` 가 `W-TPC-01` 경고 (v0.57 warn only).
-
-### CBO 특화 topic 프리셋
-
-Plan: `market-analysis`, `pricing`, `financial-model`. Do: `gtm-plan`, `copy`. QA: `seo`, `unit-economics`, `marketing-attribution`. `vais.config.json > workflow.topicPresets` 기준 + CBO 확장.
-
-### 재실행
-
-기존 topic + 새 `_tmp/*.md` diff-merge (증분 통합). 백업은 git.
-<!-- @refactor:end subdoc-index -->
-
 ---
 
 <!-- @refactor:begin common-outro -->
@@ -210,75 +175,71 @@ phase 완료 시 "CEO 추천" 블록 위에 **반드시 `---` 수평선**을 넣
 ---
 
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
-## C-LEVEL MAIN.MD COEXISTENCE RULES (v0.58+, active for all C-Level agents)
+## C-LEVEL MAIN.MD RULES (v2.0, active for all C-Level agents)
 
 canonical: `agents/_shared/clevel-main-guard.md`. `scripts/patch-clevel-guard.js` 가 6 C-Level agent 본문에 inline 주입.
 
+> **v2.x 변경 사항**: main.md = 인덱스만 (본문은 artifact MD 분리). 옛 v0.58 의 "Topic Documents" / "Size budget refuse" / "Topic 프리셋" 룰 단순화.
+
 ### 1. 진입 프로토콜
 
-phase 시작 시 **반드시**: Glob → 존재 시 Read → `lib/status.js > getOwnerSectionPresence(feature, phase)` (또는 grep `^## \[[A-Z]+\]`) 로 기존 기여 C-Level 파악. **이전 C-Level 의 H2 섹션·Decision Record 행·Topic 인덱스 엔트리 수정·삭제 금지**.
+phase 시작 시 **반드시**: Glob → 존재 시 Read → 기존 기여 C-Level 파악 (grep `^## \[[A-Z]+\]`). **이전 C-Level 의 H2 섹션·Decision Record 행·Artifacts 표 엔트리 수정·삭제 금지**.
 
-### 2. H2 섹션 규약
+### 2. main.md 구조 (5 섹션 표준)
 
-각 C-Level 은 `## [{OWNER}] {도메인 요약}` H2 섹션을 append. owner 는 **대문자**: `[CEO|CPO|CTO|CSO|CBO|COO]`. 요약 1~5 단락 + 자기 기여 topic 링크. 본문 상세는 topic 문서로 분리.
+`templates/main-md.template.md` 따름:
+1. Executive Summary
+2. Decision Record (multi-owner, append-only)
+3. **Artifacts 표** (이 phase 박제 자료 — frontmatter 자동 추출)
+4. CEO 판단 근거
+5. Next Phase
+
+본문 X. 인덱스만.
 
 ### 3. Decision Record (multi-owner)
 
 ```markdown
-| # | Decision | Owner | Rationale | Source topic |
-|---|----------|-------|-----------|--------------|
+| # | Decision | Owner | Rationale | Source artifact |
+|---|----------|-------|-----------|----------------|
 | 1 | ... | cbo | ... | market-analysis.md |
 ```
 
 자기 결정만 **새 행 append**. Owner 컬럼 누락 → `W-MRG-02`.
 
-### 4. Topic Documents 인덱스
+### 4. Artifacts 표 (옛 Topic Documents 대체)
 
 ```markdown
-| Topic | 파일 | Owner | 요약 | Scratchpads |
+| Artifact | Owner | Agent | Source 거장 | 한 줄 요약 | 파일 |
 ```
 
-자기 topic 엔트리만 append. owner 섹션 0개 + topic 2+ 개 → `W-MRG-03`.
+C-Level 이 자동 채움 (sub-agent artifact 의 frontmatter 추출). 자기 phase 의 artifact 만. 다른 phase 표 수정 X.
 
-### 5. Topic 문서 frontmatter (필수)
+### 5. Artifact 문서 frontmatter (필수)
 
-```yaml
----
-owner: cpo           # enum: ceo|cpo|cto|cso|cbo|coo (필수)
-authors: [prd-writer] # string[] 선택 (sub-agent slug)
-topic: requirements  # 파일 stem 과 일치 (필수)
-phase: plan          # 필수
-feature: {name}      # 선택
----
-```
+`subdoc-guard.md` 참조 — 8 필드 (owner / agent / artifact / phase / feature / source / generated / summary).
 
-파일명은 **topic-first** (`requirements.md` O / `cpo-requirements.md` X). owner 누락 → `W-OWN-01`. owner ∉ enum → `W-OWN-02`.
+파일명 = `artifact` 필드 값 (`prd.md` ↔ `artifact: prd`).
 
-### 6. Topic 프리셋
+### 6. 재진입 (동일 C-Level 동일 phase)
 
-`vais.config.json > workflow.topicPresets.{NN-phase}.{c-level}` (없으면 `_default`, 없으면 `[]`). C-Level 확장 가능 (강제 아님). Helper: `getTopicPreset(phase, cLevel)`.
+`## [{SELF}] ...` 존재 시: 자기 섹션 **교체** 허용 + `## 변경 이력` 에 entry 필수. 이전 근거는 `git log` 추적. **다른 C-Level 섹션·Decision Record·Artifacts 표 엔트리 수정·삭제 금지**.
 
-### 7. 재진입 (동일 C-Level 동일 phase)
+### 7. Size budget (자연 충족)
 
-`## [{SELF}] ...` 존재 시: 자기 섹션 **교체** 허용 + `## 변경 이력` 에 entry 필수 (`| vX.Y | YYYY-MM-DD | {ROLE} 재진입: {요약} |`). 이전 근거는 `git log` 로 추적. **다른 C-Level 섹션·Decision Record·Topic 엔트리 수정·삭제 금지**.
+main.md = 인덱스만이라 200줄 자연 충족. `mainMdMaxLines` warn 으로 강등 (v2.0). validator W-MAIN-SIZE = warn (refuse 아님).
 
-### 8. Size budget (F14)
+### 8. 금지
 
-`mainMdMaxLines` (기본 200) 초과 예상 시 **topic 문서로 본문 이관** → main.md 에는 요약 + 링크만. `_tmp/` 미사용 phase 도 동일 적용. validator `W-MAIN-SIZE` 가 main.md > threshold AND topic 0 AND `_tmp/` 0 조건 감지.
+- ❌ 다른 C-Level H2 섹션·Decision Record 행·Artifacts 표 엔트리 수정·삭제
+- ❌ owner 없는 artifact 파일 Write
+- ❌ main.md 본문 작성 (인덱스만)
+- ❌ artifact MD 통합 (1 artifact = 1 MD 원칙)
 
-**v0.58.4**: `mainMdMaxLinesAction: "refuse"` 승격 — W-MAIN-SIZE 발화 시 doc-validator 가 `exit(1)` 로 차단 (이전: warn only).
+### 9. enforcement (v2.0)
 
-### 9. 금지
-
-- ❌ 다른 C-Level H2 섹션·Decision Record 행·Topic 인덱스 엔트리 수정·삭제
-- ❌ owner 없는 topic 파일 Write
-- ❌ owner-prefix 파일명 (`cpo-requirements.md`)
-
-### 10. enforcement (v0.58.4)
-
-- `cLevelCoexistencePolicy.enforcement = "warn"` (기본) — W-OWN/W-MRG 경고만
-- `mainMdMaxLinesAction = "refuse"` (v0.58.4+ 기본) — 사이즈 초과 시 exit(1)
+- `cLevelCoexistencePolicy.enforcement = "warn"` — W-OWN/W-MRG 경고만
+- `mainMdMaxLinesAction = "warn"` (refuse 아님 — 인덱스 자연 충족)
 - 순서: advisor-guard → subdoc-guard → clevel-main-guard
 
-<!-- clevel-main-guard version: v0.58.4 -->
+<!-- clevel-main-guard version: v2.0 -->
 <!-- vais:clevel-main-guard:end -->

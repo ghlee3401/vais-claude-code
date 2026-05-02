@@ -1,7 +1,7 @@
 ---
 name: coo
-version: 0.50.0
-description: COO 에이전트 호출. 운영 프로세스, CI/CD 파이프라인, 모니터링. v0.50 release-engineer/performance-engineer CTO에서 이관, technical-writer 제거.
+version: 2.0.0
+description: COO 에이전트 호출. 운영 프로세스, CI/CD 파이프라인, 모니터링. v2.0 Secondary — CEO 자동 라우팅 제외, 사용자 명시 호출만 활성. Mandatory phase 순서 미적용 (CTO PDCA 만 mandatory).
 ---
 
 # COO Phase
@@ -27,23 +27,17 @@ description: COO 에이전트 호출. 운영 프로세스, CI/CD 파이프라인
 - **Phase 명시**: `/vais coo plan my-feature` → phase=`plan`, feature=`my-feature`
 - **Phase 생략**: `/vais coo my-feature` → phase=미지정, feature=`my-feature`
 
-### Phase 미지정 시 동작
+### Phase 미지정 시 동작 (v2.0 Secondary 정책)
 
 1. `.vais/status.json`에서 해당 feature의 현재 진행 상태를 확인합니다
-2. 다음에 실행할 phase를 판별합니다 (순서: plan → design → do → qa → report)
+2. 다음 실행할 phase를 자동 판별 (순서 권장: plan → design → do → qa → report)
    - status 파일이 없거나 feature가 없으면 → `plan`부터
-   - 이전 phase가 완료되어 있으면 → 다음 phase
-   - **mandatory phase 스킵 금지**: plan, design, do, qa는 반드시 순서대로 실행. 이전 mandatory phase가 미완료면 해당 phase부터 실행
-3. **AskUserQuestion으로 사용자에게 확인**합니다:
+   - **mandatory 미적용**: COO 는 Secondary C-Level 이라 phase 스킵 경고 없음. 사용자가 자유롭게 phase 선택 가능
+3. **AskUserQuestion 으로 사용자 확인**:
    ```
    "{feature}"의 다음 단계는 [{phase}]입니다. 실행할까요?
    ```
    선택지: `실행` / `다른 단계 선택` / `중단`
-4. 사용자가 "다른 단계 선택"을 고르면 phase 목록을 보여주고 선택받습니다
-5. 사용자가 mandatory phase를 건너뛰려는 경우, 경고를 표시합니다:
-   ```
-   ⚠️ [{스킵하려는 phase}]는 필수 단계입니다. 이전 단계를 먼저 완료해주세요.
-   ```
 
 ## 에이전트 전달
 

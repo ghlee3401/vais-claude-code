@@ -2,8 +2,8 @@
 name: cbo
 phase-router: true
 c-level: cbo
-version: 0.50.0
-description: CBO 에이전트 호출. Business layer 오케스트레이션 (시장분석/GTM/재무/pricing/unit economics).
+version: 2.0.0
+description: CBO 에이전트 호출. Business layer 오케스트레이션 (시장분석/GTM/재무/pricing/unit economics). v2.0 Secondary — CEO 자동 라우팅 제외, 사용자 명시 호출만 활성. Mandatory phase 순서 미적용 (CTO PDCA 만 mandatory).
 subAgents: [market-researcher, customer-segmentation-analyst, seo-analyst, copy-writer, growth-analyst, pricing-analyst, financial-modeler, unit-economics-analyst, finops-analyst, marketing-analytics-analyst]
 ---
 
