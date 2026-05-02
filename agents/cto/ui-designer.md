@@ -129,12 +129,52 @@ includes:
 
 qa-engineer 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
 
+## 디자인 시스템 (DS) 자동 선택 (v1.3.0+, mui-design-system-import 산출물)
+
+design phase 시작 시 **반드시** 다음 절차로 사용할 DS 를 결정합니다:
+
+### 절차
+
+1. **`design-system/INDEX.md` 존재 확인** — Read 시도
+   - **부재** → DS 미등록 상태. 기존 vendor 동작(`design_system_generate` 호출)으로 진행
+   - **존재** → 다음 단계
+2. **등록 DS 목록 추출** — INDEX.md 의 H2 헤더 (`## {ds-name}`) 를 grep 또는 Read 로 파싱
+   - 0개 → 1번 부재 처리
+   - **1개** → 자동 선택 (예: mui 만 있으면 mui 자동) + 사용자에게 알림(`Active DS: mui (auto-selected, only one registered)`)
+   - **2개+** → AskUserQuestion 으로 사용자에게 선택받음 (옵션: 등록 DS 각각 + "none — vendor BM25 만")
+3. **선택된 DS 의 카탈로그 Read** — `design-system/{ds}/MASTER.md` + 필요한 토큰/컴포넌트 MD 를 컨텍스트에 로드
+4. **design 산출물 상단에 명시**:
+   ```markdown
+   > Active Design System: {ds} (selected: auto|user)
+   > 참조 카탈로그: design-system/{ds}/MASTER.md
+   ```
+
+### AskUserQuestion 형식 (2개+ DS 등록 시)
+
+- **question**: `이 피처의 디자인 시스템을 선택해주세요.`
+- **options** (등록 DS 별):
+  - `mui` — Material UI v6 (description: 등록 DS 의 INDEX entry 요약)
+  - `nc` — (다른 DS 가 있으면)
+  - `none — vendor BM25 만 사용` — 카탈로그 무시, 기존 동작
+- 사용자 응답 → 그 DS 사용
+
+### 우선순위 — 카탈로그 사용
+
+- **DS 카탈로그 토큰을 우선 사용**. 새 토큰 ID 발명 금지.
+- 토큰 ID(`color.primary.main` 등)로 참조. hex/px 인라인 금지.
+- 카탈로그에 없는 토큰이 필요하면 → 산출물에 "카탈로그 외 토큰 필요" 섹션에 명시 + `_overrides.json` 추가 제안 (코드는 do phase)
+- MCP `design_search` 결과 중 `baseline` 필드(있으면)를 vendor 결과보다 우선
+
+> 본 절차는 mui-design-system-import 피처 (v1.0.1) 의 medium 강화 산출물입니다. 단일 DS 등록 환경에서는 사실상 자동, 다중 DS 환경에서는 사용자 선택형으로 동작합니다.
+
 ---
 
 | version | date | change |
 |---------|------|--------|
 | v1.0.0 | 2026-04-04 | 초기 작성 — IA, 와이어프레임, UI/UX 설계 |
 | v1.1.0 | 2026-04-05 | 프론트엔드 미학 가이드라인 + 안티패턴 추가 (frontend-design absorb) |
+| v1.2.0 | 2026-05-02 | 디자인 시스템 카탈로그 참조 안내 1줄 추가 (light) — mui-design-system-import 피처 산출물 |
+| v1.3.0 | 2026-05-02 | DS 자동 선택 절차 추가 (medium) — design phase 시작 시 INDEX.md 검사 + 1개면 자동 / 2개+면 AskUserQuestion. mui-design-system-import 피처 v1.0.1 의 medium 강화 후속. |
 
 ---
 

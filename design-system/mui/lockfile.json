@@ -1,0 +1,287 @@
+{
+  "$schema": "https://vais.code/schemas/ds-lockfile.v1.json",
+  "ds": "mui",
+  "version": "1.0.1",
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-05-02T10:04:26.999Z",
+  "generator": {
+    "name": "import-mui-design-system",
+    "version": "0.1.0",
+    "node": "v25.9.0"
+  },
+  "inputs": {
+    "figma": {
+      "fileKey": "X10nxc156LeEsmUHI1uOtO",
+      "lastModified": "2026-04-30T03:38:34Z",
+      "hash": "sha256:a7810f0fc7dccbe2ff7594f2723b549c868502147803c17d99c12272b7d72fc4"
+    },
+    "muiNpm": {
+      "package": "@mui/material",
+      "version": "6.5.0",
+      "hash": "sha256:3b67cbd06dea41bfcfa41d71ba203c6db1c166f13cbaaf56e9a6abc7eb0c621c"
+    },
+    "overrides": null
+  },
+  "outputs": {
+    "tokens": {
+      "color.md": "sha256:c68e1ae58086e038f6892badf94234925d83df45dd31ea04a99c10f4cdfa4d55",
+      "typography.md": "sha256:db3447bc5bc9246a05f4504d68e73c4d26d3d93683e5aa8e38a4f315af68b6dd",
+      "spacing.md": "sha256:6835eb664612b7df7a1487435bd697ebd85471e31a3a4df4ea81ee7294c6a902",
+      "radius.md": "sha256:1f87de81da0ea0e7cac2f5404677f5436f7f031ac8c1d2dc42e2912633995aba",
+      "shadow.md": "sha256:68bdba1cb001286f9f6c5d2bcacfad7a0731f3ae39c9502e3125605e72d5509b"
+    },
+    "components": {
+      "button.md": "sha256:f8590a451a9ccae2216b187ee7cd416b9bca7a830734a8a9c5e0b001a34a9675",
+      "icon-button.md": "sha256:44281620cbe29f0e0ec4dd802fba7b808316ec317c00e7dec39a08b1438b1488",
+      "text-field.md": "sha256:4ca48cf4bf9b915374382258632f17c0c92edd57728f8cc97fa2ffe04883e86e",
+      "select.md": "sha256:5eb656a364e91e00700be4e5b7e4c4698779d1347bb02286c4343d8a048bb80d",
+      "checkbox.md": "sha256:ff2796bcd90caba8479b940cbcd90f61d976810e0f1bb4be4eee3afd4a5423cf",
+      "radio.md": "sha256:a0ac0d021883744484a5b8abd593f9e80fcbeb915f7d824d272affded570a051",
+      "switch.md": "sha256:abadf7f55ee1d4486b50203cac33386eb20b05350f5b8fedc0332cceebf1bd4e",
+      "slider.md": "sha256:c490249b8d30912b8a2d73418d0dadbfebd2667452c31fea9a694ff67808bf2d",
+      "card.md": "sha256:48ddac570e846669d439f80289040426a21f124804b4081ebc45c255e5d4c55a",
+      "modal.md": "sha256:c89ff7e68ae5ca222f3d2a59814d601922dd54a7bf24d6cba418e0fb53a20359",
+      "dialog.md": "sha256:cb9eda9dc1a25c97d0d6ecd284965d575705a664cca703287d87bc5662f84f2b",
+      "snackbar.md": "sha256:cb294c3a2187bc711a25c6c16191918bd264e62ce774ff9bd8196240c80c552c",
+      "alert.md": "sha256:372494c5abc5de0a3bb2a82b2182e7ab108ce2f49c1efa0eb02d2522f937023e",
+      "tabs.md": "sha256:f2dc410a14592afbe0a00b406af85b8ee326d2b08e077f2053cf08ea9afb1ba2",
+      "menu.md": "sha256:2e30c8323e547d71bb8f56bb001cec7535d66ad2611f20f815d1c7f52160c502",
+      "tooltip.md": "sha256:8b81b61a99fdb3b2ac772e6a482c1b1ecf6677d09e2748d542ea1770532a79fa",
+      "chip.md": "sha256:526d41755d5fc8b48fa8c95c89915b8ff12d4310a0e572cf93f5e3c34850e25e",
+      "avatar.md": "sha256:3dfe323d9535bad9e2c1a60bda95be469fe0478b6f6558c74fc84e1dc1e84897",
+      "input.md": "sha256:dcd7af1e41f238b466a214684f3299cc4eb6e8241102c11fd211468a0e1298f1"
+    },
+    "master": "sha256:19ec174b347e5ffe577a9b8a4a0107698299694d5220f6a4c1e4bf0e6a92c627"
+  },
+  "snapshot": {
+    "color": {
+      "primary.main": {
+        "value": "#1976d2",
+        "source": "mui-npm"
+      },
+      "primary.light": {
+        "value": "#42a5f5",
+        "source": "mui-npm"
+      },
+      "primary.dark": {
+        "value": "#1565c0",
+        "source": "mui-npm"
+      },
+      "primary.contrastText": {
+        "value": "#fff",
+        "source": "mui-npm"
+      },
+      "secondary.main": {
+        "value": "#9c27b0",
+        "source": "mui-npm"
+      },
+      "secondary.light": {
+        "value": "#ba68c8",
+        "source": "mui-npm"
+      },
+      "secondary.dark": {
+        "value": "#7b1fa2",
+        "source": "mui-npm"
+      },
+      "secondary.contrastText": {
+        "value": "#fff",
+        "source": "mui-npm"
+      },
+      "error.main": {
+        "value": "#d32f2f",
+        "source": "mui-npm"
+      },
+      "error.light": {
+        "value": "#ef5350",
+        "source": "mui-npm"
+      },
+      "error.dark": {
+        "value": "#c62828",
+        "source": "mui-npm"
+      },
+      "error.contrastText": {
+        "value": "#fff",
+        "source": "mui-npm"
+      },
+      "warning.main": {
+        "value": "#ed6c02",
+        "source": "mui-npm"
+      },
+      "warning.light": {
+        "value": "#ff9800",
+        "source": "mui-npm"
+      },
+      "warning.dark": {
+        "value": "#e65100",
+        "source": "mui-npm"
+      },
+      "warning.contrastText": {
+        "value": "#fff",
+        "source": "mui-npm"
+      },
+      "info.main": {
+        "value": "#0288d1",
+        "source": "mui-npm"
+      },
+      "info.light": {
+        "value": "#03a9f4",
+        "source": "mui-npm"
+      },
+      "info.dark": {
+        "value": "#01579b",
+        "source": "mui-npm"
+      },
+      "info.contrastText": {
+        "value": "#fff",
+        "source": "mui-npm"
+      },
+      "success.main": {
+        "value": "#2e7d32",
+        "source": "mui-npm"
+      },
+      "success.light": {
+        "value": "#4caf50",
+        "source": "mui-npm"
+      },
+      "success.dark": {
+        "value": "#1b5e20",
+        "source": "mui-npm"
+      },
+      "success.contrastText": {
+        "value": "#fff",
+        "source": "mui-npm"
+      },
+      "grey.50": {
+        "value": "#fafafa",
+        "source": "mui-npm"
+      },
+      "grey.100": {
+        "value": "#f5f5f5",
+        "source": "mui-npm"
+      },
+      "grey.200": {
+        "value": "#eeeeee",
+        "source": "mui-npm"
+      },
+      "grey.300": {
+        "value": "#e0e0e0",
+        "source": "mui-npm"
+      },
+      "grey.400": {
+        "value": "#bdbdbd",
+        "source": "mui-npm"
+      },
+      "grey.500": {
+        "value": "#9e9e9e",
+        "source": "mui-npm"
+      },
+      "grey.600": {
+        "value": "#757575",
+        "source": "mui-npm"
+      },
+      "grey.700": {
+        "value": "#616161",
+        "source": "mui-npm"
+      },
+      "grey.800": {
+        "value": "#424242",
+        "source": "mui-npm"
+      },
+      "grey.900": {
+        "value": "#212121",
+        "source": "mui-npm"
+      },
+      "grey.A100": {
+        "value": "#f5f5f5",
+        "source": "mui-npm"
+      },
+      "grey.A200": {
+        "value": "#eeeeee",
+        "source": "mui-npm"
+      },
+      "grey.A400": {
+        "value": "#bdbdbd",
+        "source": "mui-npm"
+      },
+      "grey.A700": {
+        "value": "#616161",
+        "source": "mui-npm"
+      },
+      "text.primary": {
+        "value": "rgba(0, 0, 0, 0.87)",
+        "source": "mui-npm"
+      },
+      "text.secondary": {
+        "value": "rgba(0, 0, 0, 0.6)",
+        "source": "mui-npm"
+      },
+      "text.disabled": {
+        "value": "rgba(0, 0, 0, 0.38)",
+        "source": "mui-npm"
+      },
+      "background.default": {
+        "value": "#fff",
+        "source": "mui-npm"
+      },
+      "background.paper": {
+        "value": "#fff",
+        "source": "mui-npm"
+      },
+      "divider": {
+        "value": "rgba(0, 0, 0, 0.12)",
+        "source": "mui-npm"
+      },
+      "action.active": {
+        "value": "rgba(0, 0, 0, 0.54)",
+        "source": "mui-npm"
+      },
+      "action.hover": {
+        "value": "rgba(0, 0, 0, 0.04)",
+        "source": "mui-npm"
+      },
+      "action.hoverOpacity": {
+        "value": "0.04",
+        "source": "mui-npm"
+      },
+      "action.selected": {
+        "value": "rgba(0, 0, 0, 0.08)",
+        "source": "mui-npm"
+      },
+      "action.selectedOpacity": {
+        "value": "0.08",
+        "source": "mui-npm"
+      },
+      "action.disabled": {
+        "value": "rgba(0, 0, 0, 0.26)",
+        "source": "mui-npm"
+      },
+      "action.disabledBackground": {
+        "value": "rgba(0, 0, 0, 0.12)",
+        "source": "mui-npm"
+      },
+      "action.disabledOpacity": {
+        "value": "0.38",
+        "source": "mui-npm"
+      },
+      "action.focus": {
+        "value": "rgba(0, 0, 0, 0.12)",
+        "source": "mui-npm"
+      },
+      "action.focusOpacity": {
+        "value": "0.12",
+        "source": "mui-npm"
+      },
+      "action.activatedOpacity": {
+        "value": "0.12",
+        "source": "mui-npm"
+      }
+    }
+  },
+  "diff": {
+    "tokensChanged": [],
+    "componentsChanged": [],
+    "added": [],
+    "removed": [],
+    "deprecated": []
+  }
+}

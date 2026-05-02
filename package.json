@@ -1,6 +1,6 @@
 {
   "name": "vais-code",
-  "version": "0.61.1",
+  "version": "0.62.0",
   "description": "Virtual AI C-Suite for software development — Claude Code Plugin",
   "author": "ghlee3401",
   "license": "MIT",
@@ -27,7 +27,11 @@
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
-    "eslint": "^9.0.0"
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^6.1.7",
+    "eslint": "^9.0.0",
+    "react": "^19.2.5"
   },
   "optionalDependencies": {
     "@anthropic-ai/sdk": "^0.30.0"

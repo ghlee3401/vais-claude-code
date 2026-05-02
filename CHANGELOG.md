@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.62.0] - 2026-05-02 — MUI v6 카탈로그 박제 + ui-designer 자동 선택 통합
+
+`mui-design-system-import` 피처 (6/6 phase). MUI Material UI v6.5.0 디자인 시스템을 분석하여 사람·agent 가 읽는 MD 카탈로그로 박제. ui-designer agent 가 design phase 시작 시 등록 DS 를 자동 선택하도록 통합 (medium 강화).
+
+### Added
+
+- `scripts/import-mui-design-system.js` + `scripts/import-mui-helpers/` (8 helpers — env / fetch-figma / fetch-mui / normalize / resolve / emit / components-data) — Figma REST API + MUI npm createTheme cross-check 기반 4-stage 멱등 파이프라인
+- `design-system/INDEX.md` + `design-system/mui/` (28 파일 — MASTER + tokens 5 + components 19 + lockfile + CHANGELOG) — MD 카탈로그 박제 산출물
+- `.env.example` — Figma PAT + file key 환경변수 템플릿
+- `agents/cto/ui-designer.md` v1.3.0 섹션 — design phase 시작 시 INDEX.md 자동 검사 + 등록 DS 1개=자동 / 2개+=AskUserQuestion 절차
+
+### Changed
+
+- `agents/cto/ui-designer.md` — 디자인 시스템 카탈로그 참조 안내 (v1.2.0 light) + DS 자동 선택 절차 (v1.3.0 medium) 추가
+- `package.json` devDependencies — `@mui/material@^6.1.7` + `@emotion/react`/`styled` + `react` (createTheme 호출용 peer dep)
+- `.gitignore` — `design-system/` 차단 해제 (본 피처가 박제하는 카탈로그를 git 추적 대상으로 전환)
+
+### Documentation
+
+- `docs/mui-design-system-import/` 12 phase 산출물 (ideation v1.1 / plan v2.0 4 docs / design v2.0 4 docs / do / qa v1.1 / report v1.1) — 사용자 의도 재확인 정정 (v1.x → v2.0) 사례 박제
+
+### Notes
+
+- Figma free-tier 에서 Variables API 미동작 (Enterprise 전용) — 본 피처는 MUI npm cross-check 로 fallback 동작 확인
+- 런타임 통합 풀 세트 (hook/MCP adapter/router) 는 v2.0 에서 의식적으로 제외 - 후속 피처 `design-system-runtime-integration` 후보로 이관
+
+---
+
 ## [0.61.1] - 2026-04-26 — Python minimum 3.10 -> 3.8 + F-2 manual smoke 성공
 
 v0.61.0 의 CTO QA 단계에서 발견된 **Critical C-1** 해소. vendor 실측 (`vendor/ui-ux-pro-max/scripts/search.py` = f-string only, Python 3.6+) 대비 잠정값 3.10 이 너무 높아 본인 환경 Python 3.9 dogfooding fail. 보수적으로 3.8 minimum 으로 조정 (vendor 실측은 3.6+ 이지만 macOS Big Sur+ 표준 호환).
