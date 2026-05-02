@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.62.2] - 2026-05-02 — docs/ 정리 (이전 작업의 잘못된 git restore 정정)
+
+직전 commit (`679960c`) 에서 working tree 의 빈 docs/ 상태를 잘못 진단해 `git restore docs/` 로 복구한 것을 정정. 사용자가 의도적으로 비운 상태였음 — 본 commit 으로 모든 `docs/{feature}/` 폴더 (이전 작업 4개 + 본 세션 결과물 2개) 제거.
+
+### Removed
+
+- `docs/clevel-doc-coexistence/`
+- `docs/design-system-mcp-activation/`
+- `docs/plan-scope-contract/`
+- `docs/subagent-architecture-rethink/`
+- `docs/mui-design-system-import/`
+- `docs/legacy-prune-and-agent-onboarding/`
+
+### Notes
+
+- 진단 미스 — 사용자 의도(working tree 비우기)를 "누락" 으로 오해. 향후 빈/삭제 working tree 발견 시 자동 git restore 금지, 사용자 의도 확인 우선.
+
+---
+
 ## [0.62.1] - 2026-05-02 — Legacy prune + ONBOARDING.md 신규로 진입점 정리
 
 `legacy-prune-and-agent-onboarding` 피처 (6/6 phase). 처음 본 AI/사람이 5분 안에 repo 구조를 파악하도록 진입점을 명확화하고, v0.59에서 deprecated 처리된 `release-engineer` alias 와 과거 plan 가이드를 정리.

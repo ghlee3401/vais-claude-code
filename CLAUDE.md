@@ -2,7 +2,7 @@
 
 > **이 파일의 책임**: Claude Code 전용 프로젝트 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 먼저 `ONBOARDING.md` (5분 진입 가이드)를 읽으면 빠르다. 다른 AI 도구(Cursor/Copilot)는 `AGENTS.md` 참조.
 >
-> Virtual AI C-Suite for software development (v0.62.1)
+> Virtual AI C-Suite for software development (v0.62.2)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
