@@ -1,4 +1,4 @@
-## SUB-DOC RULES (v2.x, sub-agent 직접 박제)
+## SUB-DOC RULES (0.64.x, sub-agent 직접 박제)
 
 canonical: `agents/_shared/subdoc-guard.md`. `scripts/patch-subdoc-block.js` 로 본문 inline 주입.
 
@@ -50,7 +50,7 @@ summary: "{≤200자 한 줄 요약}"
 }
 ```
 
-`scratchpadPath` 필드는 v0.57 호환용으로 빈 문자열 반환 가능. v2.x 클라이언트는 무시.
+`scratchpadPath` 필드는 v0.57 호환용으로 빈 문자열 반환 가능. 0.64.x 클라이언트는 무시.
 
 ### 영속성
 

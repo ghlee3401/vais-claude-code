@@ -5,7 +5,7 @@ process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] 
  * VAIS Code - Checkpoint Guard
  * C-Level 에이전트 종료 시 필수 체크포인트(AskUserQuestion)가 호출되었는지 검증.
  *
- * v2.0 호환 정책:
+ * Primary/Secondary 정책:
  *   - 4 Primary (CEO/CPO/CTO/CSO) + 2 Secondary (CBO/COO) 모두 동일하게 AskUserQuestion 강제 적용
  *   - Secondary 도 "사용자 명시 호출만" 이지만 호출되면 동일하게 CP 필요
  *   - soft enforcement 유지 (warn only) — 외부 사용자 호환성 + Full-Auto 모드 호환

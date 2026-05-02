@@ -143,7 +143,7 @@ backend-engineer + frontend-engineer 분리 프로젝트에서는 두 서버를 
 ---
 
 <!-- vais:subdoc-guard:begin — injected by scripts/patch-subdoc-block.js. Do not edit inline; update agents/_shared/subdoc-guard.md and re-run the script. -->
-## SUB-DOC RULES (v2.x, sub-agent 직접 박제)
+## SUB-DOC RULES (0.64.x, sub-agent 직접 박제)
 
 canonical: `agents/_shared/subdoc-guard.md`. `scripts/patch-subdoc-block.js` 로 본문 inline 주입.
 
@@ -195,7 +195,7 @@ summary: "{≤200자 한 줄 요약}"
 }
 ```
 
-`scratchpadPath` 필드는 v0.57 호환용으로 빈 문자열 반환 가능. v2.x 클라이언트는 무시.
+`scratchpadPath` 필드는 v0.57 호환용으로 빈 문자열 반환 가능. 0.64.x 클라이언트는 무시.
 
 ### 영속성
 

@@ -2,7 +2,7 @@
 
 canonical: `agents/_shared/ideation-guard.md`.
 
-> **v2.x 변경 사항**: CEO 7 차원 알고리즘 적용 + AskUserQuestion 클릭 인터페이스. 4 C-Suite (CEO+CPO+CTO+CSO) primary 자동 라우팅, CBO/COO 는 사용자 명시 호출 시만.
+> **0.64.x 변경 사항**: CEO 7 차원 알고리즘 적용 + AskUserQuestion 클릭 인터페이스. 4 C-Suite (CEO+CPO+CTO+CSO) primary 자동 라우팅, CBO/COO 는 사용자 명시 호출 시만.
 
 현재 모드: **ideation (Phase 0, optional)** — CEO 가 빈틈없는 분석 수행
 

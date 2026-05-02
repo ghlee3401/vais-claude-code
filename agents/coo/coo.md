@@ -4,7 +4,7 @@ version: 2.0.0
 description: |
   Manages operational processes including CI/CD pipelines, monitoring setup, and workflow optimization.
   Delegates to release-engineer, sre-engineer, release-monitor, performance-engineer sub-agents.
-  v2.0+ Secondary C-Level — CEO 자동 라우팅 제외, 사용자 명시 호출 시만 활성.
+  Secondary C-Level — CEO 자동 라우팅 제외, 사용자 명시 호출 시만 활성.
   Use when: deployment, CI/CD setup, monitoring configuration, or operational process improvement is needed.
   Triggers: coo, operations, 운영, CI/CD, 배포, 모니터링, 프로세스, deploy, monitoring
 model: opus
@@ -280,7 +280,7 @@ phase 완료 시 "CEO 추천" 블록 위에 **반드시 `---` 수평선**을 넣
 
 canonical: `agents/_shared/clevel-main-guard.md`. `scripts/patch-clevel-guard.js` 가 6 C-Level agent 본문에 inline 주입.
 
-> **v2.x 변경 사항**: main.md = 인덱스만 (본문은 artifact MD 분리). 옛 v0.58 의 "Topic Documents" / "Size budget refuse" / "Topic 프리셋" 룰 단순화.
+> **0.64.x 변경 사항**: main.md = 인덱스만 (본문은 artifact MD 분리). 옛 v0.58 의 "Topic Documents" / "Size budget refuse" / "Topic 프리셋" 룰 단순화.
 
 ### 1. 진입 프로토콜
 

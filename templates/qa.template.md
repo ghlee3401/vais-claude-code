@@ -1,7 +1,7 @@
 # {feature} — QA
 
 > 참조 문서: `docs/{feature}/01-plan/main.md`, `docs/{feature}/02-design/main.md`
-> 🎯 **v2.0+**: main.md = 인덱스만. 본문은 `docs/{feature}/04-qa/{artifact}.md` 에 sub-agent 가 직접 박제. 정본: `templates/main-md.template.md`
+> 🎯 **0.64.0+**: main.md = 인덱스만. 본문은 `docs/{feature}/04-qa/{artifact}.md` 에 sub-agent 가 직접 박제. 정본: `templates/main-md.template.md`
 > <!-- size budget: main.md ≤ 200 lines (warn). 초과 시 artifact MD 분리. -->
 
 ## Decision Record (multi-owner)

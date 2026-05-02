@@ -31,7 +31,7 @@ const { EventLogger, EVENT_TYPES } = require('../lib/observability/index');
  * 표준 메트릭: designCompleteness (0~100)
  */
 function judgeCPO(feature) {
-  // v2.0 — sub-agent 직접 박제 모델
+  // 0.64.0+ — sub-agent 직접 박제 모델
   const v2PrdPath = path.join(process.cwd(), 'docs', feature, '01-plan', 'prd.md');
   if (fs.existsSync(v2PrdPath)) {
     const content = fs.readFileSync(v2PrdPath, 'utf8');

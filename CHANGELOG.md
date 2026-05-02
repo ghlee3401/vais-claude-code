@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.64.1] - 2026-05-03 — 단일 namespace 정리 ("v2.0 모델" 라벨 제거)
+
+`unify-version-namespace` 피처 PDCA 5/5 완료 (ideation 생략). 아키텍처 라벨 "v2.0 모델" / "v2.0+" / "v2.x" 등을 사용자 노출 영역에서 일괄 제거하여 plugin semver `0.64.x` 단일 namespace 로 통일. 내부 component-local 블록 마커 (subdoc-guard v2.0, clevel-main-guard v2.0, main-md template v2.0) 는 patch 스크립트 의존성 + HTML 주석 (사용자 비노출) 으로 의도된 분리 유지. Breaking change 0.
+
+### Changed
+
+- **68 파일 / 125 라인 정리** — agent description / template 헤더 / skill phase router / 진입 가이드 (CLAUDE/ONBOARDING/AGENTS) / 코드 코멘트 / `vais.config.json` `_v2_*` → `_routing_comment`/`_legacy_was_*` rename. 임시 Node 스크립트 1회 실행 후 삭제.
+- **블록 마커 보존**: subdoc-guard v2.0 (46) + clevel-main-guard v2.0 (7) + main-md template v2.0 (1) = **54건 KEEP** (component-local 버전, 사용자 비노출).
+- **historical docs**: `docs/simplify-non-cto-workflow/`, `docs/ceo-judgment*/`, `CHANGELOG.md` 변경 0 (시점의 진실 보존).
+
+### Verification
+
+- doc-validator: passed (`unify-version-namespace` 7 artifact frontmatter 통과)
+- vais-validate-plugin: 0 errors / 0 warnings
+- patch idempotency: `patch-subdoc-block.js --dry-run` → 동일 버전 스킵 45/45
+- auto-judge CTO: PASS (matchRate 100%, criticalIssueCount 0)
+
 ## [0.64.0] - 2026-05-03 — v2.0 통합 모델 전환 완료 (4 Primary + 2 Secondary, sub-agent 직접 박제, F-1 fix)
 
 `simplify-non-cto-workflow` 피처 PDCA 6/6 완료 (74 파일 변경, 26 artifact 박제). v0.63.0 의 v2.0 도입 작업을 마무리: patch 스크립트 적용 (45 sub-agent + 6 C-Level body inject), C-Level/Skill/lib/진입가이드 갱신, templates v2.0 헤더, marketplace.json description v2.0, F-1 validator bug fix. doc-validator passed (16 artifact frontmatter), auto-judge CTO PASS (matchRate 93%, criticalIssueCount 0), vais-validate-plugin 0 errors / 0 warnings. Breaking change 0건.

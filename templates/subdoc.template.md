@@ -1,9 +1,9 @@
 # {feature} — {phase} — {agent-slug}
 
-<!-- ⚠️ DEPRECATED — v2.0 부터 폐기. sub-agent 는 `agents/_shared/subdoc-guard.md` v2.0 의 frontmatter 8 필드 표준 사용. 본 템플릿은 backwards-compat 만 제공. -->
+<!-- ⚠️ DEPRECATED — 0.64.0 부터 폐기. sub-agent 는 `agents/_shared/subdoc-guard.md` v2.0 의 frontmatter 8 필드 표준 사용. 본 템플릿은 backwards-compat 만 제공. -->
 <!-- DEPRECATED-AT: 2026-05-02 (simplify-non-cto-workflow do 단계 7) | REMOVE-IN: v2.1 -->
 
-> ⚠️ **DEPRECATED (v2.0+)**: 본 템플릿은 v0.57 `_tmp/{slug}.md` scratchpad 모델의 흔적입니다. v2.0 sub-agent 직접 박제 모델에서는 sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 8 필드 (owner/agent/artifact/phase/feature/source/generated/summary) 와 함께 자유 형식으로 직접 작성합니다. 정본: `agents/_shared/subdoc-guard.md` v2.0.
+> ⚠️ **DEPRECATED (0.64.0+)**: 본 템플릿은 v0.57 `_tmp/{slug}.md` scratchpad 모델의 흔적입니다. v2.0 sub-agent 직접 박제 모델에서는 sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 8 필드 (owner/agent/artifact/phase/feature/source/generated/summary) 와 함께 자유 형식으로 직접 작성합니다. 정본: `agents/_shared/subdoc-guard.md` v2.0.
 
 > Author: {agent-slug}
 > Phase: {NN-phase}

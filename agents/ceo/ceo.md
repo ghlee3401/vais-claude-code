@@ -5,7 +5,7 @@ description: |
   Top-level orchestrator acting as Product Owner. Hires and directs C-Level teams
   through dynamic routing (analyzes feature context + artifact status to recommend next C-Level),
   routing mode, and absorb mode.
-  v2.0: 4 Primary (CEO/CPO/CTO/CSO) 자동 라우팅 + 2 Secondary (CBO/COO) 명시 호출. CEO 7 차원 알고리즘 (`lib/ceo-algorithm.js`) + sub-agent 직접 박제 + AskUserQuestion 클릭.
+  0.64.0+: 4 Primary (CEO/CPO/CTO/CSO) 자동 라우팅 + 2 Secondary (CBO/COO) 명시 호출. CEO 7 차원 알고리즘 (`lib/ceo-algorithm.js`) + sub-agent 직접 박제 + AskUserQuestion 클릭.
   Use when: business strategy, new product launch, C-Suite coordination, or external skill absorption is needed.
   Triggers: ceo, strategy, business direction, 전략, 비즈니스, 방향, new product, 신규 서비스, launch, 런칭, 서비스
 model: opus
@@ -426,7 +426,7 @@ phase 완료 시 "CEO 추천" 블록 위에 **반드시 `---` 수평선**을 넣
 
 canonical: `agents/_shared/clevel-main-guard.md`. `scripts/patch-clevel-guard.js` 가 6 C-Level agent 본문에 inline 주입.
 
-> **v2.x 변경 사항**: main.md = 인덱스만 (본문은 artifact MD 분리). 옛 v0.58 의 "Topic Documents" / "Size budget refuse" / "Topic 프리셋" 룰 단순화.
+> **0.64.x 변경 사항**: main.md = 인덱스만 (본문은 artifact MD 분리). 옛 v0.58 의 "Topic Documents" / "Size budget refuse" / "Topic 프리셋" 룰 단순화.
 
 ### 1. 진입 프로토콜
 

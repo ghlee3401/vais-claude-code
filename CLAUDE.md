@@ -144,8 +144,8 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 ## Mandatory Rules
 
 1. **기획 없이 코드 금지** — `docs/{feature}/01-plan/` 기획서가 없으면 구현하지 않는다 (CTO PDCA 만 적용 — v2.0)
-2. **워크플로우 순서 준수 (CTO 만 mandatory)** — CTO PDCA: ideation(optional) → plan → design → do → qa → report 순차. **CEO 는 ideation 만, CPO/CSO 는 CEO 가 활성화한 phase 만, CBO/COO 는 사용자 명시 호출 시만**. v2.0 부터 mandatory 는 CTO 의 plan/design/do/qa 만. 비-CTO 는 CEO 알고리즘 결정에 따른다.
-3. **산출물 경로** — `docs/{feature}/{NN-phase}/main.md` 형식 준수 (각 phase 인덱스). Phase↔Folder 매핑: `ideation`→`00-ideation`, `plan`→`01-plan`, `design`→`02-design`, `do`→`03-do`, `qa`→`04-qa`, `report`→`05-report`. **v2.x sub-agent 직접 박제**: sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 직접 작성 (frontmatter 8 필드 표준). `_tmp` 폐기, 큐레이션 폐기. main.md = 인덱스만 (5 섹션 — Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). Single source: `vais.config.json > workflow.docPaths` + `phaseArtifactMapping`.
+2. **워크플로우 순서 준수 (CTO 만 mandatory)** — CTO PDCA: ideation(optional) → plan → design → do → qa → report 순차. **CEO 는 ideation 만, CPO/CSO 는 CEO 가 활성화한 phase 만, CBO/COO 는 사용자 명시 호출 시만**. 0.64.0 부터 mandatory 는 CTO 의 plan/design/do/qa 만. 비-CTO 는 CEO 알고리즘 결정에 따른다.
+3. **산출물 경로** — `docs/{feature}/{NN-phase}/main.md` 형식 준수 (각 phase 인덱스). Phase↔Folder 매핑: `ideation`→`00-ideation`, `plan`→`01-plan`, `design`→`02-design`, `do`→`03-do`, `qa`→`04-qa`, `report`→`05-report`. **0.64.x sub-agent 직접 박제**: sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 직접 작성 (frontmatter 8 필드 표준). `_tmp` 폐기, 큐레이션 폐기. main.md = 인덱스만 (5 섹션 — Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). Single source: `vais.config.json > workflow.docPaths` + `phaseArtifactMapping`.
 4. **Gate 통과 필수 (CTO PDCA 만)** — 각 Gate 체크리스트 항목을 모두 확인한 뒤 다음 단계로 진행. 비-CTO 는 Gate 시스템 미적용.
 5. **위험 명령 금지** — `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수** — 민감 정보는 반드시 환경 변수로 관리

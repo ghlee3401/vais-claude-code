@@ -2,7 +2,7 @@
 
 > ⛔ **Design 단계 범위**: 이 문서는 설계 결정만 기록합니다. 프로덕트 파일 생성·수정은 Do 단계에서 수행하세요.
 > 참조 문서: `docs/{feature}/01-plan/main.md`
-> 🎯 **v2.0+**: main.md = 인덱스만 (5 섹션 — Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). 본문은 `docs/{feature}/02-design/{artifact}.md` 에 sub-agent 가 직접 박제. 정본 템플릿: `templates/main-md.template.md`
+> 🎯 **0.64.0+**: main.md = 인덱스만 (5 섹션 — Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). 본문은 `docs/{feature}/02-design/{artifact}.md` 에 sub-agent 가 직접 박제. 정본 템플릿: `templates/main-md.template.md`
 > <!-- size budget: main.md ≤ 200 lines (warn). 초과 시 artifact MD 분리 (sub-agent 직접 박제). -->
 
 ## Decision Record (multi-owner)

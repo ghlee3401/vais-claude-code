@@ -1,7 +1,7 @@
 {
   "name": "vais-code",
   "description": "VAIS Code - 코드 개발 도우미. 4 Primary C-Suite (CEO/CPO/CTO/CSO) + 2 Secondary (CBO/COO 명시 호출). CEO 7 차원 빈틈없는 판단 + sub-agent 직접 박제 + AskUserQuestion 클릭 인터페이스.",
-  "version": "0.64.0",
+  "version": "0.64.1",
   "author": {
     "name": "VAIS Voice",
     "email": "ghlee0304@ncsoft.com"

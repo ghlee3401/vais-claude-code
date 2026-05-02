@@ -17,7 +17,7 @@
 | **sub-agent 직접 박제** (v2.0) | `_tmp/` 폐기. sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 8 필드와 함께 직접 작성. main.md = 인덱스만 |
 | **AskUserQuestion 클릭 인터페이스** | 모든 결정 = 도구 호출. 자연어 명령어 안내 금지 |
 
-현재 버전: **v0.63.0** (v2.0 모델 — 4 Primary/2 Secondary + CEO 7 차원 + sub-agent 직접 박제 + main.md 인덱스).
+현재 버전: **v0.63.0** (0.64.0+ 모델 — 4 Primary/2 Secondary + CEO 7 차원 + sub-agent 직접 박제 + main.md 인덱스).
 
 ---
 
@@ -135,4 +135,4 @@ flowchart TB
 | version | date | change |
 |---------|------|--------|
 | v1.0 | 2026-05-02 | 초기 작성 (5섹션 / Mermaid 그래프 / 진입점 표 / 워크플로우 예시) — `legacy-prune-and-agent-onboarding` 피처 산출물 |
-| v2.0 | 2026-05-02 | v2.0 모델 반영 — 4 Primary + 2 Secondary, CEO 7 차원 알고리즘, sub-agent 직접 박제, main.md 인덱스, AskUserQuestion 클릭 인터페이스. v0.62.0 → v0.63.0. |
+| v2.0 | 2026-05-02 | 0.64.0+ 모델 반영 — 4 Primary + 2 Secondary, CEO 7 차원 알고리즘, sub-agent 직접 박제, main.md 인덱스, AskUserQuestion 클릭 인터페이스. v0.62.0 → v0.63.0. |

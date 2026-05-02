@@ -3,7 +3,7 @@ name: cbo
 version: 2.0.0
 description: |
   Chief Business Officer — GTM, marketing, finance, pricing, unit economics orchestration.
-  CMO + CFO 통합 C-Level. v2.0+ Secondary C-Level — CEO 자동 라우팅 제외, 사용자 명시 호출 시만 활성.
+  CMO + CFO 통합 C-Level. Secondary C-Level — CEO 자동 라우팅 제외, 사용자 명시 호출 시만 활성.
   Use when: marketing strategy, GTM, pricing, financial modeling, SEO, unit economics, cloud cost optimization.
   Triggers: cbo, gtm, marketing, seo, copy, growth, funnel, pricing, financial model, unit economics, CAC, LTV, cloud cost, finops, business analysis
 model: opus
@@ -179,7 +179,7 @@ phase 완료 시 "CEO 추천" 블록 위에 **반드시 `---` 수평선**을 넣
 
 canonical: `agents/_shared/clevel-main-guard.md`. `scripts/patch-clevel-guard.js` 가 6 C-Level agent 본문에 inline 주입.
 
-> **v2.x 변경 사항**: main.md = 인덱스만 (본문은 artifact MD 분리). 옛 v0.58 의 "Topic Documents" / "Size budget refuse" / "Topic 프리셋" 룰 단순화.
+> **0.64.x 변경 사항**: main.md = 인덱스만 (본문은 artifact MD 분리). 옛 v0.58 의 "Topic Documents" / "Size budget refuse" / "Topic 프리셋" 룰 단순화.
 
 ### 1. 진입 프로토콜
 

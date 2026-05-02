@@ -2,7 +2,7 @@
 
 > ⛔ **Plan 단계 범위**: 이 문서는 분석과 결정만 기록합니다. 프로덕트 파일 생성·수정은 Do 단계에서 수행하세요.
 > 📝 **Extended 템플릿** (v0.58.5+) — CP-1 "C. 확장" 선택 시 또는 PRD 부재 CTO 강행 all-in-one 에 사용. 일반 피처는 `plan-standard.template.md` (~180줄), 간단 수정은 `plan-minimal.template.md` (~60줄).
-> 🎯 **v2.0+ CTO 전용**: mandatory PDCA 보유는 CTO 만. 비-CTO 는 CEO 7 차원 알고리즘 결정.
+> 🎯 **CTO 전용**: mandatory PDCA 보유는 CTO 만. 비-CTO 는 CEO 7 차원 알고리즘 결정.
 > <!-- size budget: main.md ≤ 200 lines (warn — v2.0 인덱스 자연 충족, refuse 아님). 초과 시 artifact MD 분리. -->
 
 ## 요청 원문
