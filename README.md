@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.63.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-0.65.3-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -8,11 +8,11 @@
 
 <p align="center">
   <strong>Virtual AI C-Suite for Software Development</strong><br/>
-  6 C-Level Executives · 48 Specialized Agents · PDCA Workflow Engine
+  6 C-Level Executives · 47 Specialized Sub-agents · 7-Dimension Routing Algorithm
 </p>
 
 <p align="center">
-  CEO에게 지시하면 제품 기획, 개발, 보안, 마케팅, 배포를 자율 실행하는 Claude Code 플러그인
+  PO 의 자연어 의도를 CEO 가 7 차원 알고리즘으로 객관 매핑 → 활성 C-Level 동적 결정 → 자동 위임으로 서비스 라이프사이클 실행하는 Claude Code 플러그인
 </p>
 
 ---
@@ -69,38 +69,48 @@ python3 --version  # 3.8 이상
 
 ---
 
-## What Happens When You Run `/vais ceo plan`
+## What Happens When You Run `/vais ceo`
 
-사용자가 "온라인 서점 SaaS 만들어줘"라고 입력하면, CEO가 이를 **S-1 (신규 서비스 풀 개발)** 시나리오로 판별하고 다음 순서로 C-Level을 호출합니다:
+사용자가 "온라인 서점 SaaS 만들어줘"라고 입력하면, CEO 는 **고정 시나리오를 따르지 않고** `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` 를 호출해 7 차원 (보안/컴플라이언스/UX/데이터모델/외부통신/성능/제품정의) 등급을 산출하고, 그 결과로 **활성 C-Level 을 동적으로 결정**합니다.
 
-| Step | C-Level | What They Do | Key Agents |
-|------|---------|-------------|------------|
-| **①** | **CBO** | 시장 기회 분석 + 재무 모델 | market-researcher, financial-modeler, pricing-analyst |
-| **②** | **CPO** | PRD 작성 + 백로그 분해 | prd-writer, backlog-manager, ux-researcher |
-| **③** | **CTO** | 아키텍처 설계 + 코드 구현 + 테스트 | infra-architect, backend/frontend-engineer, test-engineer |
-| **④** | **CSO** | 보안 감사 + 코드 리뷰 + 시크릿 스캔 | security-auditor, secret-scanner, dependency-analyzer |
-| **⑤** | **CBO** | GTM 전략 + SEO + 마케팅 카피 | growth-analyst, seo-analyst, copy-writer |
-| **⑥** | **COO** | CI/CD 파이프라인 + 모니터링 | release-engineer, sre-engineer |
+전형적인 신규 서비스 흐름 (CEO 알고리즘이 dimensions 모두 medium+ 으로 판정한 경우):
+
+| Step | C-Level | What They Do | Note |
+|------|---------|-------------|------|
+| **①** | **CPO** | PRD + 페르소나 + JTBD + Opportunity Solution Tree | productDefinition=high 시 자동 |
+| **②** | **CSO** (선택) | Threat model | security ≥ medium 시 자동 |
+| **③** | **CTO** | 아키텍처 + 데이터 모델 + API 계약 + UI 흐름 → 구현 + QA | mandatory PDCA (plan→design→do→qa) |
+| **④** | **CSO** | OWASP 감사 + 시크릿 스캔 + 의존성 분석 | security/externalAPI ≥ medium 시 |
+| **⑤** | **CBO** (명시 호출) | GTM + 가격 + Unit economics + 재무 모델 | Secondary — `/vais cbo` 로 명시 호출만 |
+| **⑥** | **COO** (명시 호출) | CI/CD + 배포 전략 + 모니터링 + Runbook | Secondary — `/vais coo` 로 명시 호출만 |
 | **Final** | **CEO** | 전체 산출물 종합 리뷰 → 리포트 | — |
 
-각 단계 완료 시 CEO가 결과를 검토하고, 사용자 승인을 받은 뒤 다음 C-Level로 넘어갑니다. CSO 보안 검토에서 이슈가 발견되면 CTO에게 수정을 요청하고 재검토하는 루프가 최대 3회 돌아갑니다.
+**v0.65 핵심 변경**:
+- **4 Primary 자동 라우팅 (CEO/CPO/CTO/CSO)** — CEO 알고리즘이 자동 결정
+- **2 Secondary 명시 호출 (CBO/COO)** — `/vais cbo|coo` 명시 시만 활성. 비즈니스/운영 영역은 옵션
+- **CTO 만 mandatory PDCA**, 비-CTO 는 CEO 알고리즘 결정으로 phase 활성화
+- **lean checkpoint (기본)**: CP-0/CP-Q 만 발동, 나머지는 자동 진행 + outro 한 줄. PO 클릭 ≤ 2회/피처
+- CEO 진입 시 algorithm 결과 (7 차원 등급 표) 를 응답에 직접 인용 — LLM 자체 라우팅 금지 (v0.65.3)
+- CSO ↔ CTO 보안 검토 루프 최대 2회 (`pipeline.reviewLoops.cso-cto.maxIterations`, v0.65 에서 3→2)
 
 ---
 
 ## C-Suite Team
 
-### Executive (Opus)
+### Executive (Opus) — 4 Primary + 2 Secondary
 
-| C-Level | Domain | One-liner |
-|---------|--------|-----------|
-| **CEO** | Strategy | 전체 오케스트레이터. 피처 분석 → 시나리오 판별 → C-Level 동적 라우팅 |
-| **CPO** | Product | 무엇을 만들지 결정. PRD, 사용자 리서치, 백로그 관리 |
-| **CTO** | Technology | 어떻게 만들지 실행. 아키텍처, 개발, 테스트, 디버깅 |
-| **CSO** | Security | 안전한지 확인. OWASP 감사, 시크릿 스캔, 의존성 분석, 독립 코드 리뷰 |
-| **CBO** | Business | 사업성 검증. 시장 분석, GTM, 가격 전략, 재무 모델, unit economics |
-| **COO** | Operations | 배포/운영 준비. CI/CD, 모니터링, 성능 벤치마크, Runbook |
+| C-Level | Tier | Domain | One-liner |
+|---------|------|--------|-----------|
+| **CEO** | Primary | Strategy | 7 차원 알고리즘 (`lib/ceo-algorithm.js`) 으로 PO 의도 매핑 → 활성 C-Level 동적 결정. 자동 라우팅 진입점 |
+| **CPO** | Primary | Product | 무엇을 만들지 결정. PRD, 페르소나, JTBD, Opportunity Solution Tree, 백로그 |
+| **CTO** | Primary | Technology | 어떻게 만들지 실행. 아키텍처, 개발, 테스트, 디버깅. **mandatory PDCA** |
+| **CSO** | Primary | Security | 안전한지 확인. OWASP 감사, 시크릿/의존성 스캔, 독립 코드 리뷰, threat model |
+| **CBO** | Secondary | Business | 사업성 검증. 시장 분석, GTM, 가격 전략, 재무 모델, unit economics. **명시 호출만** (`/vais cbo`) |
+| **COO** | Secondary | Operations | 배포/운영. CI/CD, 모니터링, 성능 벤치마크, Runbook. **명시 호출만** (`/vais coo`) |
 
-### Sub-agents (Sonnet) — 48 Specialists
+> **Primary** = CEO 알고리즘이 자동 라우팅. **Secondary** = 코드 개발 외 영역이라 사용자가 `/vais cbo|coo {feature}` 명시 호출 시만 활성.
+
+### Sub-agents (Sonnet) — 47 Specialists
 
 <details>
 <summary><strong>CEO</strong> — 6 agents</summary>
@@ -182,11 +192,10 @@ python3 --version  # 3.8 이상
 </details>
 
 <details>
-<summary><strong>COO</strong> — 9 agents</summary>
+<summary><strong>COO</strong> — 8 agents (v0.59 release-engineer 5 분해)</summary>
 
 | Agent | Role |
 |-------|------|
-| release-engineer | 배포 자동화 오케스트레이션 |
 | ci-cd-configurator | CI/CD 파이프라인 (GitHub Actions/GitLab CI/CircleCI) — scope-gated (cloud/hybrid only) |
 | container-config-author | Dockerfile + docker-compose (multi-stage + non-root) — scope-gated |
 | migration-planner | DB 스키마 마이그레이션 (forward + rollback + 데이터 손실 위험 평가) — triggered |
@@ -200,48 +209,81 @@ python3 --version  # 3.8 이상
 
 ---
 
-## Scenarios
+## Routing — 7 Dimension Algorithm
 
-CEO는 사용자 요청을 분석하여 10+1 시나리오 중 가장 적합한 흐름을 선택합니다.
+v0.65 부터 고정 시나리오 표는 폐기되었고, CEO 가 `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` 로 7 차원 등급을 산출해 **활성 C-Level 을 동적 결정** 합니다. PO 가 자연어로 의도만 던지면 CEO 가 객관 알고리즘으로 매핑합니다.
 
-| ID | 상황 | 호출 순서 |
-|----|------|-----------|
-| S-0 | 아이디어가 모호할 때 | CEO ideation → 추천 C-Level |
-| S-1 | 신규 서비스 풀 개발 | CBO → CPO → CTO → CSO → CBO → COO |
-| S-2 | 기존 서비스에 기능 추가 | CPO → CTO → CSO → COO |
-| S-3 | 버그 수정 / UX 개선 / 리팩터 | CTO (유형별 분기) |
-| S-4 | 프로덕션 장애 | CTO(incident-responder) → CSO → COO |
-| S-5 | 성능 / 비용 최적화 | CTO(perf) 또는 CBO(finops) |
-| S-6 | 보안 감사 / 컴플라이언스 | CSO ↔ CTO (최대 3회) |
-| S-7 | 마케팅 캠페인 / GTM | CPO → CBO → (CTO) |
-| S-8 | 시장 분석 / IR 보고 | CBO → (CPO) |
-| S-9 | 스킬/에이전트 생성 | CEO(skill-creator) → CSO |
-| S-10 | 정기 운영 / 기술부채 | CTO 또는 COO |
+**7 차원** (`DIMENSIONS` 배열):
+
+| # | 차원 | 트리거 예시 |
+|---|------|-----------|
+| 1 | 보안 (security) | 인증/인가, 결제, 개인정보, secret |
+| 2 | 컴플라이언스 (compliance) | GDPR, 약관, 라이선스, 감사 로그 |
+| 3 | UX | 화면 추가, 사용자 플로우, 정보 구조 |
+| 4 | 데이터모델 (dataModel) | 엔티티, 스키마, 마이그레이션 |
+| 5 | 외부통신 (externalAPI) | 외부 SaaS 연동, 웹훅, OAuth |
+| 6 | 성능 (performance) | 응답시간, 처리량, 비용 |
+| 7 | 제품정의 (productDefinition) | 신규 피처/제품, PRD 부재 |
+
+**알고리즘 흐름**:
+
+```
+사용자 입력
+  ↓
+analyzeDimensions()  → { dim1: 'high', dim2: 'medium', ... } (none/low/medium/high)
+  ↓
+buildArtifactPlan()  → phase × artifact 매트릭스 (각 artifact 의 trigger 함수가 등급 충족 시 활성)
+  ↓
+extractActiveCLevel() → ['ceo', 'cpo', 'cto', ...]   (Primary 만 자동 추천)
+  ↓
+CEO 응답에 7 차원 등급 표 직접 출력 + AskUserQuestion 으로 사용자 승인 (v0.65.3)
+```
+
+**예시 매핑** (`PHASE_ARTIFACT_MAPPING` 발췌):
+
+| Phase | Artifact | Owner | Trigger |
+|-------|----------|-------|---------|
+| 01-plan | prd | cpo | productDefinition !== 'none' |
+| 01-plan | persona | cpo | ux ≥ medium |
+| 01-plan | jtbd | cpo | productDefinition === 'high' |
+| 01-plan | threat-model | cso | security ≥ medium |
+| 02-design | architecture | cto | always |
+| 02-design | data-model | cto | dataModel ≥ medium |
+| 02-design | api-contract | cto | externalAPI ≥ medium |
+| 02-design | ui-flow | cto | ux ≥ medium |
+| 03-do | secret-scan | cso | security ≥ medium |
+| 03-do | dependency-vulnerability | cso | externalAPI ≥ medium |
+
+비-Primary 영역 (CBO/COO) 은 알고리즘 결과에 포함되지 않으며, 사용자가 `/vais cbo|coo {feature}` 로 명시 호출 시만 활성. 정본: `lib/ceo-algorithm.js` (197줄), `agents/ceo/knowledge/seven-dimension-routing.md`.
 
 ---
 
 ## Workflow
 
-모든 C-Level은 동일한 PDCA 워크플로우를 따릅니다:
+**v0.65: CTO 만 mandatory PDCA**, 비-CTO 는 CEO 7 차원 알고리즘 결정으로 phase 활성화.
 
-| Phase | Required | Description |
-|-------|----------|-------------|
-| **Ideation** | Optional | 자유 대화 모드. 산출물 없이 아이디어 숙성. "정리해줘"로 종료 → plan 자동 참조 |
-| **Plan** | **Mandatory** | 요구사항 정의, 범위 설정, 타임라인 |
-| **Design** | **Mandatory** | 아키텍처 설계, 기술 스택, DB 스키마 |
-| **Do** | **Mandatory** | 구현. Sub-agent 병렬 실행 |
-| **QA** | **Mandatory** | Gap 분석, 보안 검증. Match rate ≥ 90% 통과. 미달 시 Do 재실행 (최대 5회) |
-| **Report** | Optional | 최종 리포트, 회고, KPI |
+| Phase | CTO mandatory? | 비-CTO 활성화 조건 | Description |
+|-------|:--------------:|--------------------|-------------|
+| **Ideation** | Optional (CEO) | CEO 진입 시 | 자유 대화 — PRD 부재 / 모호한 요구사항. CEO 가 7 차원 분석 + Plan 자동 참조 |
+| **Plan** | ✓ | CEO 알고리즘이 owner C-Level 추천 시 | 요구사항 정의, 범위 설정, 타임라인 |
+| **Design** | ✓ | CTO 가 cpo prereq 호출 시 | 아키텍처, 데이터 모델, API 계약, UI 흐름 |
+| **Do** | ✓ | CTO 가 sub-agent 병렬 위임 | 구현 (frontend + backend + test 병렬) |
+| **QA** | ✓ | CTO qa-engineer 위임 | Gap 분석. matchRate ≥ 90% (`gapAnalysis.maxIterations` v0.65 = 2, autoIterate `escalate-on-fail`) |
+| **Report** | Optional | 사용자 명시 호출 시 | 최종 리포트, 회고, KPI |
 
-**C-Level 간 의존성:**
+**Lean checkpoint** (기본, v0.65): CP-0 (PRD missing) + CP-Q (Critical or matchRate<90) 만 발동. CP-1/CP-D/CP-G/CP-2 는 자동 진행 + outro 한 줄. PO 클릭 ≤ 2회/피처 추정.
+
+`vais.config.json > workflow.checkpointPolicy.mode = "lean"` (기본). `standard` / `strict` 토글 가능.
+
+**C-Level 간 의존성** (참고 — CEO 가 컨텍스트 따라 유연 판단, hard constraint 아님):
 
 | C-Level | 선행 조건 |
 |---------|-----------|
-| CBO | 없음 (CEO 직접 위임) |
 | CPO | 없음 |
-| CTO | CPO 완료 필요 |
-| CSO | CTO 완료 필요 |
-| COO | CTO 완료 필요 |
+| CTO | CPO 완료 권장 (PRD 입력) |
+| CSO | CTO 완료 (구현물 필요) |
+| COO | CTO 완료 (구현물 필요) |
+| CBO | 없음 (Secondary, 명시 호출만) |
 
 ---
 
@@ -293,38 +335,47 @@ Sub-agent 종료 시 자동 실행되는 검증 파이프라인:
 
 ---
 
-## Document Structure (v0.57+ / v0.58+)
+## Document Structure (v0.65 — sub-agent 직접 박제)
 
 ```
 docs/
 └── {feature}/                    # 피처 중심 구조 (v0.52+)
     └── {NN-phase}/               # 00-ideation / 01-plan / 02-design / 03-do / 04-qa / 05-report
-        ├── main.md               C-Level 의사결정 인덱스 (필수) — v0.58: multi-owner 지원
-        │                         (## [CBO] / ## [CPO] / ## [CTO] ... H2 섹션 append-only)
-        ├── {topic}.md            C-Level 이 합성한 topic 별 문서 (v0.57+, 선택)
-        │                         예: architecture.md / data-model.md / security.md
-        │                         권장 프리셋: vais.config.json > workflow.topicPresets
-        │                         (v0.58: phase×c-level 계층 지원 + frontmatter owner 필수)
-        │                         각 문서에 ## 큐레이션 기록 섹션 필수
-        ├── interface-contract.md (02-design 만, 시스템 산출물)
-        └── _tmp/                 sub-agent scratchpad (v0.57+, 영구 보존 + git 커밋)
-            └── {agent-slug}.md   각 sub-agent 가 자기 분야 원본 분석 기록
-                                  (예: _tmp/backend-engineer.md, _tmp/qa-engineer.md)
+        ├── main.md               # C-Level 5섹션 인덱스 (Executive Summary / Decision Record /
+        │                         #   Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X.
+        │                         # 여러 C-Level 이 기여 시 ## [CEO] / ## [CTO] H2 append-only,
+        │                         # 다른 C-Level 섹션·Decision Record 행 수정 금지
+        ├── {artifact}.md         # sub-agent 직접 박제 (frontmatter 4 필수 — v0.65)
+        │                         # 예: prd.md / persona.md / threat-model.md / architecture.md
+        │                         # 1 sub-agent → N artifact = N MD (큐레이션 X)
+        └── interface-contract.md # (02-design 만, 시스템 산출물)
 ```
 
-**v0.57 Sub-doc Preservation** (2-layer, sub-agent → C-Level):
-- **Layer 1 (scratchpad)**: sub-agent 가 `_tmp/{slug}.md` 에 축약 없이 기록 — 원본 분석 + 메타 헤더 3줄(Author/Phase/Refs)
-- **Layer 2 (큐레이션)**: C-Level 이 `_tmp/*.md` 전체를 읽고 topic 별 `{topic}.md` 문서로 재구성. `main.md` 는 의사결정 요약 + Topic Documents 인덱스
+**v0.65 핵심 변경**:
 
-**v0.58 C-Level Coexistence** (multi-owner main.md, CEO 동적 라우팅):
-- 여러 C-Level 이 같은 `{phase}/main.md` 에 순차 기여 시 덮어쓰기 방지 — 각자 `## [{C-LEVEL}] ...` H2 섹션 append, 다른 C-Level 섹션 수정 금지
-- Topic 문서 frontmatter `owner: {c-level}` 필수 (파일명은 topic-first)
-- Multi-owner Decision Record — `Owner` 컬럼으로 각 결정의 귀속 C-Level 추적
-- **(F14)** main.md 가 `mainMdMaxLines`(기본 200) 초과 AND topic 0 AND `_tmp/` 0 → `W-MAIN-SIZE` 경고. C-Level 직접 작성 phase(UI 없는 메타 피처 등) 에서도 main.md 비대화 방지
+1. **sub-agent 직접 박제** — sub-agent 가 `_tmp/` 폐기 (v0.65.2 정리), `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 와 함께 직접 작성. C-Level 은 main.md 의 Artifacts 표에 frontmatter `summary` 만 인덱싱.
+2. **frontmatter 4 필수** (`vais.config.json > workflow.frontmatterMinimal`):
+   ```yaml
+   ---
+   owner: cto                    # ceo|cpo|cto|cso|cbo|coo
+   artifact: prd                 # 파일 stem 과 일치
+   phase: plan                   # ideation|plan|design|do|qa|report
+   feature: social-login         # kebab-case
+   # 선택 (auto-hydrate): agent / generated / source / summary / knowledge_refs
+   ---
+   ```
+3. **main.md = 5 섹션 인덱스만** — Executive Summary / Decision Record (multi-owner, append-only, Owner 컬럼 필수) / Artifacts 표 / CEO 판단 근거 (7 차원 등급 표 인용 — v0.65.3) / Next Phase. 본문 작성 X (200줄 자연 충족, `mainMdMaxLines` warn).
+4. **Knowledge lazy-load** (`agents/{c-level}/knowledge/*.md`, 19 MD) — phase + artifact 매칭 시만 Read. C-Level 메인의 "Knowledge Index" 표가 trigger 명시.
+5. **Templates 4-tier auto-select** (`scripts/auto-select-template.js`) — `git status` surface count + domain 분포 + PRD 상태로 stub/minimal/standard/extended 자동 선택. `confidence < 0.6` 시 fallback CP-1.
 
-추적성: 사용자가 "이 결정의 근거?" 질문 시 main.md Decision Record → topic 문서 → `_tmp/{slug}.md` 원본까지 추적 가능. `scripts/doc-validator.js` 가 W-SCP/W-TPC/W-IDX (v0.57) + W-OWN/W-MRG/W-MAIN-SIZE (v0.58) + W-SCOPE (v0.58.3) 경고 코드로 품질 체크. **Enforcement (v0.58.4+)**: W-SCOPE-01/02/03 (plan/main.md 필수 3섹션 누락) = **fail** (exit 1), W-MAIN-SIZE (main.md > 200 AND topic 0 AND `_tmp/` 0) = **refuse** (exit 1). 나머지는 warn.
+**검증** (`scripts/doc-validator.js` v2.1):
+- W-OWN-01 (owner 누락) = **warn**
+- W-FRONT-01 (artifact/phase/feature 누락) = warn
+- W-FRONT-02~05 (enum/stem mismatch/summary>200) = warn
+- W-SCOPE-01/02/03 (plan/main.md 필수 3섹션) = **fail** (exit 1)
+- 정본: `vais.config.json > workflow.frontmatterMinimal.required` (config 변경만으로 strict ↔ minimal 토글)
 
-> 호환성: v0.56 이전 피처 문서(main.md 단독)는 그대로 동작. 신규 피처부터 2-layer + multi-owner 모델 적용 권장.
+**호환성**: v0.64 이전 8 필드 frontmatter 산출물 그대로 통과 (모든 필드 채워짐). v0.57 `_tmp/` 산출물은 v0.65.2 에서 패턴 폐기 — 신규 피처부터 sub-agent 직접 박제 모델 적용.
 
 ---
 
@@ -332,14 +383,29 @@ docs/
 
 ```
 vais-claude-code/
-├── agents/          6 C-Level 디렉토리 + _shared 가드 (48 sub-agents)
-├── skills/vais/     /vais 스킬 진입점 + phase routers + utilities
-├── hooks/           6 hooks (session, bash-guard, doc-tracker, stop, agent-start/stop)
-├── lib/             advisor, core, quality, observability, registry, validation
-├── scripts/         CLI 도구 (bash-guard, validators, migration)
-├── templates/       PDCA 문서 템플릿 (plan-minimal/standard/extended 3-tier + design/do/qa/report/ideation)
-├── guide/           v2 설계 문서 (roles, scenarios, agent-mapping, harness)
-├── vais.config.json 플러그인 설정
+├── agents/          6 C-Level 디렉토리 + 47 sub-agents + _shared 가드 + knowledge/ 19 MD
+│   ├── {c-level}/{c-level}.md         # 메인 (orchestrator, thin)
+│   ├── {c-level}/{sub-agent}.md       # 47 specialists
+│   ├── {c-level}/knowledge/*.md       # 도메인 지식 lazy-load (19 MD)
+│   └── _shared/                       # checkpoint-policy / work-rules / outro-format /
+│                                      #   clevel-main-guard / subdoc-guard / advisor-guard
+├── skills/vais/     /vais 스킬 진입점 + phase routers (ceo/cpo/cto/cso/cbo/coo/ideation) + utilities
+├── lib/             ceo-algorithm (197줄, 7 차원), patch-block, status, paths, advisor, ...
+├── scripts/         vais-validate-plugin, doc-validator (v2.1), auto-judge (v0.65.1 신규),
+│                    auto-select-template (v0.65.1 신규), patch-clevel-guard, patch-subdoc-block, ...
+├── templates/       PDCA 문서 템플릿
+│   ├── plan-{stub,minimal,standard,extended}.template.md   # 4-tier auto-select
+│   ├── {ideation,design,do,qa,report}.template.md          # phase 별 (v0.65.2 v0.57 inject 정리)
+│   ├── main-md.template.md                                 # 5 섹션 인덱스 정본
+│   └── {alignment,biz,core,how,what,why}/                  # 36 sub-agent artifact 템플릿
+├── hooks/           SessionStart, PreToolUse (bash-guard, design-mcp-trigger, ideation-guard),
+│                    SubagentStart/Stop, Stop (doc-tracker, doc-validator)
+├── design-system/   v0.62.0+ DS 카탈로그 박제 (mui Material UI v6.5.0)
+├── mcp/             vais-design-system MCP 서버 (design_search / design_system_generate)
+├── ONBOARDING.md    5분 진입 가이드 (v0.62.0+)
+├── CLAUDE.md        Claude Code 전용 지침 (자동 로드)
+├── AGENTS.md        Cursor/Copilot 등 범용 AI 호환 지침
+├── vais.config.json 플러그인 전체 설정
 └── package.json     매니페스트
 ```
 
@@ -347,29 +413,41 @@ vais-claude-code/
 
 ## Configuration
 
+핵심 키 (v0.65.x):
+
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `workflow.phases` | ideation ~ report | PDCA phases (ideation optional) |
-| `dependencies` | cto→cpo, cso→cto, coo→cto, cbo→none | C-Level 의존성 |
+| **`workflow.checkpointPolicy.mode`** | `lean` | v0.65 신규 — `lean` (CP-0/CP-Q 만) / `standard` / `strict` (v0.64 회귀) |
+| **`workflow.template.autoSelect`** | `true` | v0.65 신규 — `scripts/auto-select-template.js` 휴리스틱으로 stub/minimal/standard/extended 자동 선택 |
+| **`workflow.frontmatterMinimal.required`** | `[owner, artifact, phase, feature]` | v0.65.1 — `doc-validator` 가 동적 로드. config 변경만으로 strict ↔ minimal 토글 |
+| **`cSuite.knowledgePath`** | `agents/{role}/knowledge/` | v0.65 신규 — C-Level 도메인 지식 lazy-load 경로 |
+| **`cSuite.primary`** | `[ceo, cpo, cto, cso]` | CEO 자동 라우팅 대상 |
+| **`cSuite.secondary`** | `[cbo, coo]` | 사용자 명시 호출만 |
+| **`gapAnalysis.maxIterations`** | `2` | v0.65 — 5→2 (무한루프 차단). `autoIterate = "escalate-on-fail"` |
+| **`pipeline.reviewLoops.cso-cto.maxIterations`** | `2` | v0.65 — 3→2 |
+| `gates.cto.plan.requirePrd` | `smart` | v0.65 — `missing` 만 CP-0 발동, `partial` 자동 강행 |
 | `gapThreshold` | 0.90 | QA 통과 기준 (90%) |
 | `advisor.enabled` | true | Opus advisor 활성화 |
 | `advisor.monthly_budget_usd` | 200 | 월 advisor 비용 캡 |
-| `automation.level` | L2 | L0 수동 ~ L4 전자동 |
-| `orchestration.profileGateEnabled` | true | Project profile 게이트 (v0.60+ 기본 ON, opt-out 가능) |
 | `orchestration.mcp.enabled` | true | design-system MCP 자동 호출 (v0.61+ 기본 ON, Python3 ≥ 3.8 필수) |
 
 ---
 
-## Migration from v0.49
+## Version Highlights
 
-| v0.49 | v0.50 |
-|-------|-------|
-| 7 C-Level (CMO + CFO 별도) | 6 C-Level (**CBO**로 통합) |
-| 5 phases | 6 phases (+ideation) |
-| `/vais cmo` | → `/vais cbo` |
-| `/vais cfo` | → `/vais cbo` |
+| Version | Highlight |
+|---------|-----------|
+| **v0.65.3** (current) | CEO 진입 절차 박제 — `analyzeCEO()` 호출 → 7 차원 등급 표 출력 → `activeCLevel` 인용 → AskUserQuestion. LLM 자체 라우팅 차단 |
+| v0.65.2 | templates/ 정합성 정리 — v0.57 잔재 (subdoc/finance/ops 템플릿 + Topic Documents inject) 제거 |
+| v0.65.1 | v0.65.0 약속과 코드 정렬 — `doc-validator` v2.1 (4 필수 필드) + `auto-select-template.js` 신규 + CP-G 단일화 + knowledge cross-ref 컨벤션 |
+| v0.65.0 | PO 워크플로우 경량화 (Quiet by Default + Wisdom Split + Anti-Boilerplate) — CP 6→1~2, knowledge/ 19 MD lazy-load, frontmatter 8→4, plan-extended 헤딩 52→22 |
+| v0.64 | 4 Primary + 2 Secondary, sub-agent 직접 박제, main.md 인덱스, AskUserQuestion 클릭 |
+| v0.62 | mui Material UI v6 디자인 시스템 카탈로그 박제 |
+| v0.61 | design-system MCP 자동 호출 (Python3 ≥ 3.8 필수) |
+| v0.50 | CMO + CFO → **CBO** 통합 (7 → 6 C-Level), ideation phase 신설 |
 
-기존 `.vais/status.json`의 `cmo_*`/`cfo_*` 항목은 첫 실행 시 자동 변환. 백업: `.vais/_backup/v049-{ts}.tar.gz`
+전체 이력: [CHANGELOG.md](./CHANGELOG.md)
 
 ---
 
@@ -422,13 +500,14 @@ PR merge를 CI 통과 후에만 허용하려면 저장소 owner가 branch protec
 
 ---
 
-## Design Documents
+## Documentation
 
-- **[C-Suite Roles v2](./guide/csuite-roles-v2.md)** — 6 C-Level 역할 정의, 업무 범위, 경계 케이스, 핸드오프 규칙
-- **[Scenarios v2](./guide/csuite-scenarios-v2.md)** — 10+1 시나리오 단계별 명세 (진입/완료 조건, CEO 판단 기준)
-- **[Agent Mapping v2](./guide/agent-mapping-v2.md)** — Phase별 에이전트 참여 매트릭스, 모델 선택 기준
-- **[Harness Plan v2](./guide/harness-plan-v2.md)** — Hook 시스템, FSM, 4-Step Gate, Advisor 통합
-- **[CHANGELOG](./CHANGELOG.md)** — 전체 버전 이력
+- **[ONBOARDING.md](./ONBOARDING.md)** — 5분 진입 가이드 (처음 본 AI/사람용)
+- **[CLAUDE.md](./CLAUDE.md)** — Claude Code 전용 지침 (자동 로드, Mandatory Rules + Project Structure)
+- **[AGENTS.md](./AGENTS.md)** — Cursor/Copilot 등 범용 AI 호환 지침
+- **[CHANGELOG.md](./CHANGELOG.md)** — 전체 버전 이력
+- **[lib/ceo-algorithm.js](./lib/ceo-algorithm.js)** — 7 차원 알고리즘 정본 (197줄)
+- **[agents/ceo/knowledge/seven-dimension-routing.md](./agents/ceo/knowledge/seven-dimension-routing.md)** — 알고리즘 한국어 명세
 
 ---
 
