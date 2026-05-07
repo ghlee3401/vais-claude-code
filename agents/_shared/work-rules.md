@@ -25,6 +25,16 @@
 - **자기 owner 의 knowledge 도** 풀 prefix 권장 (일관성). 예외: 같은 단락 내 반복 시 stem 만 사용 가능
 - **frontmatter `knowledge_refs`**: 항상 풀 prefix (`agents/cpo/knowledge/prd-eight-sections.md`)
 
+## CEO 알고리즘 인용 규칙 (v0.65.3)
+
+CEO 가 라우팅 결정을 내릴 때 (그리고 다른 C-Level / sub-agent 가 그 결정을 받을 때):
+
+- **정본**: `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` 결과 (7 차원 등급 + activeCLevel + artifactPlan)
+- **CEO 응답**: 7 차원 등급 표를 반드시 응답에 직접 출력 (LLM 자체 라우팅 금지). 절차: `agents/ceo/ceo.md` "CEO 진입 절차"
+- **main.md 인용**: 위임 받은 C-Level 이 main.md "CEO 판단 근거" 섹션에 7 차원 등급 표를 인용 (algorithm 결과 그대로)
+- **LLM 보강**: algorithm 결과를 baseline 으로 인용한 후에만 보강 가능. 차이 발생 시 **사유 1 줄** 기록 필수
+- **변경 시**: `lib/ceo-algorithm.js` 의 7 차원 정의·등급 로직 변경 시 본 컨벤션도 함께 갱신
+
 ## Push 규칙
 
 - `git push` 는 `/vais commit` 을 통해서만 수행.

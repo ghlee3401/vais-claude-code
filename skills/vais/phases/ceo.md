@@ -8,6 +8,8 @@ description: CEO 에이전트 호출. 7 차원 알고리즘 (`lib/ceo-algorithm.
 
 `${CLAUDE_PLUGIN_ROOT}/agents/ceo/ceo.md`를 읽고 그 안의 지침에 따라 실행하세요.
 
+> **v0.65.3 — 진입 시 필수**: CEO 는 사용자 입력을 받으면 반드시 `agents/ceo/ceo.md` 의 "CEO 진입 절차" 4 단계 (`analyzeCEO()` 호출 → 7 차원 표 출력 → activeCLevel 인용 → AskUserQuestion) 를 따른다. LLM 자체 라우팅 금지 (algorithm 결과 인용 후 보강만 허용).
+
 ## 인자 파싱
 
 전달 인자 원본: `$1`
