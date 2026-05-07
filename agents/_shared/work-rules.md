@@ -16,6 +16,15 @@
 - 위임 결과를 받으면 sub-agent artifact 의 frontmatter `summary` 만 main.md Artifacts 표에 인덱싱.
 - 도메인 지식 (`agents/{c-level}/knowledge/*.md`) 은 phase + artifact 매칭 시만 lazy-load.
 
+## Knowledge Cross-Reference 표기 (v0.65)
+
+다른 C-Level 의 `knowledge/` 파일을 참조할 때:
+
+- **항상 풀 prefix 사용**: `agents/{owner}/knowledge/{file}.md` (예: `agents/cpo/knowledge/prd-eight-sections.md`)
+- **owner 가 자명하지 않은 경우** owner 명시: `(owner: cpo)` 같은 짧은 주석
+- **자기 owner 의 knowledge 도** 풀 prefix 권장 (일관성). 예외: 같은 단락 내 반복 시 stem 만 사용 가능
+- **frontmatter `knowledge_refs`**: 항상 풀 prefix (`agents/cpo/knowledge/prd-eight-sections.md`)
+
 ## Push 규칙
 
 - `git push` 는 `/vais commit` 을 통해서만 수행.

@@ -31,6 +31,11 @@ process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] 
  *   W-SCOPE-01: plan/main.md 에 "## 요청 원문" 섹션 누락 (CLAUDE.md Rule #9)
  *   W-SCOPE-02: plan/main.md 에 "## In-scope" 섹션 누락
  *   W-SCOPE-03: plan/main.md 에 "## Out-of-scope" 섹션 누락
+ *
+ * v0.65 변경 (frontmatter v2.1):
+ *   W-FRONT-01 누락 필드 집합이 vais.config.json > workflow.frontmatterMinimal.required 기반으로 축소.
+ *   기본값 ['owner','artifact','phase','feature']. owner 누락은 W-OWN-01 으로 통합.
+ *   agent / generated / summary 는 autoHydrate 대상 — 누락 시 검사 스킵.
  */
 const fs = require('fs');
 const path = require('path');
@@ -342,9 +347,14 @@ function validateScopeContract(feature) {
 }
 
 /**
- * v2.0 — artifact MD frontmatter 검증.
- * 8 필드 (owner / agent / artifact / phase / feature / source / generated / summary).
- * source 는 외부 자료 흡수 sub-agent 만 필수 (자체 작성 sub-agent 는 생략 가능).
+ * v2.1 (0.65+) — artifact MD frontmatter 검증.
+ *
+ * 정본: vais.config.json > workflow.frontmatterMinimal
+ *   - required: 4 필수 필드 (owner / artifact / phase / feature) — 누락 시 warn (owner 만 W-OWN-01, 나머지는 W-FRONT-01)
+ *   - autoHydrate: 3 옵션 필드 (agent / generated / summary) — 누락은 검사 스킵 (sub-agent 또는 hook 이 git log 등으로 hydrate)
+ *   - optional: source / knowledge_refs — 누락 검사 안 함
+ *
+ * Backward-compat: v0.64 8 필드 산출물 그대로 통과.
  *
  * @param {string} feature
  * @param {Object} [options] - { phases?: string[] }
@@ -354,9 +364,14 @@ function validateArtifactFrontmatter(feature, options = {}) {
   const out = [];
   if (!feature) return out;
 
+  const cfg = loadConfig();
+  const fmMin = cfg.workflow?.frontmatterMinimal ?? {};
+  const REQUIRED = Array.isArray(fmMin.required) && fmMin.required.length > 0
+    ? fmMin.required
+    : ['owner', 'artifact', 'phase', 'feature'];
+
   const OWNER_ENUM = ['ceo', 'cpo', 'cto', 'cso', 'cbo', 'coo'];
   const PHASE_ENUM = ['ideation', 'plan', 'design', 'do', 'qa', 'report'];
-  const REQUIRED = ['owner', 'agent', 'artifact', 'phase', 'feature', 'generated', 'summary'];
 
   const phases = options.phases ?? Object.values(PHASE_FOLDERS);
   const docsRoot = path.join(process.cwd(), 'docs', feature);
@@ -398,9 +413,12 @@ function validateArtifactFrontmatter(feature, options = {}) {
         fm[k] = v;
       }
 
-      // 필수 필드 검사
+      // 필수 필드 검사 (v2.1: owner 누락은 W-OWN-01 으로 통합, 나머지는 W-FRONT-01)
       for (const field of REQUIRED) {
-        if (!fm[field]) {
+        if (fm[field]) continue;
+        if (field === 'owner') {
+          out.push({ code: 'W-OWN-01', path: p, message: `frontmatter 'owner' 누락`, severity: 'warn' });
+        } else {
           out.push({ code: 'W-FRONT-01', path: p, message: `frontmatter '${field}' 누락`, severity: 'warn' });
         }
       }
@@ -421,7 +439,7 @@ function validateArtifactFrontmatter(feature, options = {}) {
         out.push({ code: 'W-FRONT-04', path: p, message: `artifact '${fm.artifact}' ≠ 파일 stem '${stem}'`, severity: 'warn' });
       }
 
-      // summary 길이
+      // summary 길이 (있을 때만 — autoHydrate 대상이라 누락 OK)
       if (fm.summary && fm.summary.length > 200) {
         out.push({ code: 'W-FRONT-05', path: p, message: `summary > 200자 (${fm.summary.length})`, severity: 'warn' });
       }
@@ -432,11 +450,11 @@ function validateArtifactFrontmatter(feature, options = {}) {
 }
 
 /**
- * v2.0 frontmatter 경고를 사람이 읽을 수 있는 형식으로 출력
+ * v2.1 frontmatter 경고를 사람이 읽을 수 있는 형식으로 출력
  */
 function formatFrontmatterWarnings(warnings) {
   if (!Array.isArray(warnings) || warnings.length === 0) return '';
-  const lines = [`ℹ️  [frontmatter v2.0] ${warnings.length}건 경고:`];
+  const lines = [`ℹ️  [frontmatter v2.1] ${warnings.length}건 경고:`];
   for (const w of warnings) {
     const rel = path.relative(process.cwd(), w.path);
     lines.push(`   ⚠️  [${w.code}] ${rel}: ${w.message}`);

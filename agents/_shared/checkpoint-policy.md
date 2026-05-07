@@ -29,12 +29,23 @@ canonical for all C-Level CP behavior. C-Level main .md 는 자기 phase 트리�
 
 | C-Level | CP-0 (PRD missing) | CP-Q (critical) | 추가 CP |
 |---------|---|---|--------|
-| CTO | ✓ (Plan 진입) | ✓ (QA 결과) | CP-2 destructive (Do 시작 5+ 파일) |
+| CTO | ✓ (Plan 진입) | ✓ (QA 결과) | CP-2 destructive (Do 시작 5+ 파일) / **CP-G{N}** Gate 1~4 (lean: 자동 통과 + outro / strict: 발동) |
 | CPO | — | ✓ (PRD 완성도 < 80%) | — |
 | CSO | — | ✓ (Critical>0) | CP-C (Critical 발견 즉시 차단 여부) |
 | CEO | — | ✓ (전략 정합성 미달) | CP-A absorb 배분 맵 (absorb 모드 전용) |
 | CBO | — | ✓ (unit economics LTV/CAC<3x) | — |
 | COO | — | ✓ (CI/CD 단계 누락) | — |
+
+### CP-G{N} (CTO 전용)
+
+| Gate | 시점 | 자동 통과 조건 (lean) |
+|------|------|----------------------|
+| 1 | Plan 완료 | feature 레지스트리 + 데이터 모델 + 기술 스택 모두 기재 |
+| 2 | Design 완료 | Interface Contract 생성 (`docs/{feature}/02-design/interface-contract.md`) |
+| 3 | Design+Architect 완료 | DB 스키마 일치 + 마이그레이션 + 빌드 성공 |
+| 4 | Do 완료 | 빌드 성공 + Interface Contract 참조 + 레지스트리 status 갱신 |
+
+자동 통과 시 outro 한 줄로 표시, `--review` 플래그로 강제 발동 가능. 항목별 상세 체크리스트는 `agents/cto/knowledge/gate-system.md` 참조.
 
 ## 자동 진행 outro 포맷 (CP 자동 통과 시)
 

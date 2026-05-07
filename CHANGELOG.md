@@ -1,5 +1,49 @@
 # Changelog
 
+## [0.65.1] - 2026-05-07 — v0.65.0 약속과 코드 정렬 (frontmatter v2.1 enforcement / autoSelect helper / CP-G 일원화)
+
+`align-v065-promises-to-code` 후속 패치. PR #34 (v0.65.0) 머지 후 리뷰에서 "약속 ↔ enforcement" 미정렬 5건 발견 → 5/5 수정.
+
+### Fixed
+
+- **doc-validator frontmatter v2.1 정렬** (`scripts/doc-validator.js`)
+  - `REQUIRED` 8 필드 → 4 필드 (`owner / artifact / phase / feature`). `vais.config.json > workflow.frontmatterMinimal.required` 동적 로드 — config 변경만으로 strict ↔ minimal 토글.
+  - `agent / generated / summary` 누락은 검사 스킵 (autoHydrate 대상). 8 필드 v0.64 산출물 backward-compat 유지.
+  - `owner` 누락 시 W-OWN-01 (warn 유지, coexistence 검증과 코드 통합), 나머지 누락은 W-FRONT-01 (warn).
+  - 라벨 v2.0 → v2.1.
+
+### Added
+
+- **`scripts/auto-select-template.js`** — Plan template 자동 선택 휴리스틱 (CTO knowledge spec 박제).
+  - 입력: `git status` 변경 surface count + top-level domain 분포 + `docs/{feature}/03-do/main.md` PRD 8 섹션 카운트.
+  - 출력: `{ template, templateFile, surface, domains, prd, confidence, reason, fallbackCp }` (JSON or human).
+  - 룰: 1-2 파일+단일 도메인+PRD ≥ partial → stub / 1-2+단일+missing → minimal / 3-10+1~3 도메인 → standard / PRD missing+다중 도메인 → extended / `confidence < 0.6` 시 `fallbackCp=true` (CP-1 발동).
+  - CLI: `node scripts/auto-select-template.js [--feature=<name>] [--json]`.
+
+### Changed
+
+- **CP-G{N} 정의 단일화** (`agents/_shared/checkpoint-policy.md` + `agents/cto/knowledge/gate-system.md`)
+  - 정본 = `checkpoint-policy.md`. CTO 매트릭스 행에 CP-G{N} 명시 (lean: 자동 통과 + outro / strict: 발동) + Gate 1~4 자동 통과 조건 표 박제.
+  - `gate-system.md` 는 CP-G 발동·자동통과 정책 → checkpoint-policy 참조로 단일화. Gate 별 체크리스트와 메트릭(`matchRate` / `criticalIssueCount`) 상세만 유지.
+- **Knowledge cross-reference 컨벤션** (`agents/_shared/work-rules.md` 신규 섹션)
+  - 다른 C-Level knowledge 참조 시 항상 풀 prefix `agents/{owner}/knowledge/{file}.md` 의무화. owner 자명하지 않은 경우 `(owner: cpo)` 짧은 주석.
+  - `agents/cto/cto.md` 의 cross-owner ref (`prd-eight-sections.md` → `agents/cpo/knowledge/prd-eight-sections.md`) + 자기 owner ref (`cto/knowledge/...` → `agents/cto/knowledge/...`) 풀 prefix 적용.
+- **버전 동기화**: package.json / vais.config.json / .claude-plugin/plugin.json / .claude-plugin/marketplace.json — 0.65.0 → 0.65.1.
+
+### Verification
+
+- `node scripts/vais-validate-plugin.js`: 0 errors / 0 warnings (15 info, v0.65.0 동일).
+- `node scripts/patch-clevel-guard.js --dry-run`: 6/6 동일 버전 스킵 (idempotent).
+- `node scripts/patch-subdoc-block.js --dry-run`: 45/45 동일 버전 스킵 (idempotent).
+- doc-validator unit smoke: 4-field artifact = 0 warning ✓ / owner 누락 → W-OWN-01 ✓ / 8-field legacy = 0 warning ✓ / config strict override → 7-field 모드 동작 ✓.
+- auto-select-template smoke: 현재 working tree 6 파일 변경 + 2 도메인 + PRD missing → `extended` 추천 (confidence 0.8) ✓.
+
+### Rollback
+
+- `scripts/doc-validator.js`: `git revert` 단일 파일.
+- `scripts/auto-select-template.js`: `git rm` (다른 코드 의존 없음).
+- 매트릭스/컨벤션 문서 변경: `git revert` 4 .md 파일.
+
 ## [0.65.0] - 2026-05-07 — PO 워크플로우 경량화 (Quiet by Default / Wisdom Split / Anti-Boilerplate)
 
 `optimize-po-workflow` 피처. PO 가 호소한 "너무 많은 과정 + 템플릿 채우기 강박 + 토큰 소비" 문제 해결. C-Level 도메인 지식은 무손실 보존하면서 워크플로우 무게 -50~55% 절감 목표.
