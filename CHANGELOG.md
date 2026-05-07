@@ -1,5 +1,49 @@
 # Changelog
 
+## [0.65.2] - 2026-05-07 — templates/ 정합성 정리 (v0.57 잔재 + dead 템플릿 제거)
+
+`align-templates-to-v065-model` 후속 패치. v0.65.0 sub-agent 직접 박제 모델로 전환 후에도 `templates/` 안에 v0.57 시대 잔재 (subdoc.template.md / Topic Documents / Scratchpads inject) 와 secondary C-Level dead 템플릿 (finance / ops) 이 남아있어 모델 일관성 저해. 정보 손실 0 (대체 정본 모두 존재 — `agents/_shared/subdoc-guard.md` v2.1 / `templates/biz/*.md` / `templates/how/*.md` sub-agent artifact).
+
+### Removed
+
+- **`templates/subdoc.template.md`** (55줄) — v0.57 `_tmp/` scratchpad 모델 폐기 완료. DEPRECATED 헤더 + "REMOVE-IN: v2.1" 명시. 정본 = `agents/_shared/subdoc-guard.md` v2.1 (`scripts/patch-subdoc-block.js` 가 45 sub-agent 에 inline 주입).
+- **`templates/finance.template.md`** (43줄) — 참조 0건. CBO 는 secondary C-Level (명시 호출). CBO design phase 산출물은 `agents/cbo/{financial-modeler,pricing-analyst,unit-economics-analyst}.md` 가 `templates/biz/*.md` artifact 로 직접 박제.
+- **`templates/ops.template.md`** (46줄) — 참조 0건. COO 도 secondary. COO 산출물은 `templates/how/{ci-cd-pipeline,runbook,dockerfile,monitoring-config,migration-plan}.md` sub-agent artifact 로 분리.
+- **`scripts/patch-phase-templates-subdoc.js`** (95줄) — 호출 0건. v0.57 모델 전용 inject 도구 (Topic Documents + Scratchpads 섹션 5 phase template 에 주입). sub-agent 직접 박제 + main-md 5섹션 인덱스 모델로 대체. `vais.config.json > subDocPolicy.scratchpadPreserve = false` (v0.64+) 가 _tmp 모델 비활성화 확정.
+- **5 phase template 의 `<!-- v0.57 subdoc-section begin/end -->` 블록**:
+  - `templates/design.template.md` (302~324, ~22줄)
+  - `templates/do.template.md` (97~119, ~22줄)
+  - `templates/qa.template.md` (183~205, ~22줄)
+  - `templates/report.template.md` (86~94, ~8줄)
+  - `templates/ideation.template.md` (42~60, ~18줄)
+  Topic Documents + Scratchpads 섹션 모두 제거. 각 template 의 frontmatter v2.1 + main-md 5섹션 패턴은 그대로 유지 (inject 블록은 변경 이력 헤딩 직전이라 후행 섹션 영향 없음).
+
+### Changed
+
+- **버전 동기화**: package.json / vais.config.json / .claude-plugin/plugin.json / .claude-plugin/marketplace.json — 0.65.1 → 0.65.2.
+
+### Verification
+
+- `grep -r "v0.57 subdoc-section\|patch-phase-templates-subdoc"` → 0건 (잔재 완전 제거).
+- `node scripts/vais-validate-plugin.js` → 0 errors / 0 warnings (15 info, v0.65.1 동일).
+- `node scripts/patch-clevel-guard.js --dry-run` → 6/6 동일 버전 스킵 (idempotent).
+- `node scripts/patch-subdoc-block.js --dry-run` → 45/45 동일 버전 스킵 (idempotent).
+- `node scripts/auto-select-template.js --feature=template-cleanup --json` → smoke 통과.
+- doc-validator unit smoke (v0.65.1 동일): 4-field artifact = 0 warning ✓.
+
+### 보존 대상 (변경 없음)
+
+- 4-tier plan templates: `plan-{stub,minimal,standard,extended}.template.md` (autoSelect 정합).
+- 4 phase templates 메인 본문 + `ideation.template.md` 본문 (v0.57 inject 블록 외 부분).
+- `main-md.template.md` (C-Level main.md 5섹션 인덱스 정본).
+- `mcp-server.template.json`.
+- `templates/{alignment,biz,core,how,what,why}/` 36 파일 — 전수 조사 결과 모두 active (CEO/CPO/CTO/CSO/CBO/COO sub-agent artifact 또는 prereq). alignment/ 4 파일은 `lib/auto-judge.js` enforcement 미구현 상태이지만 Sprint 14 후속 의도된 보류 (별도 cleanup PR 영역).
+
+### Rollback
+
+- 단일 commit: `git revert <sha>` 한 줄로 전체 회귀.
+- 개별 파일: `git checkout <pre-sha> -- templates/{finance,ops,subdoc}.template.md scripts/patch-phase-templates-subdoc.js`.
+
 ## [0.65.1] - 2026-05-07 — v0.65.0 약속과 코드 정렬 (frontmatter v2.1 enforcement / autoSelect helper / CP-G 일원화)
 
 `align-v065-promises-to-code` 후속 패치. PR #34 (v0.65.0) 머지 후 리뷰에서 "약속 ↔ enforcement" 미정렬 5건 발견 → 5/5 수정.
