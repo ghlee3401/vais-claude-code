@@ -8,6 +8,8 @@ node_modules/
 references/
 __pycache__/
 *.pyc
+# 테스트가 resolveDocPath() 부작용으로 자동 생성하는 더미 피처 폴더
+docs/__nonexistent__/
 # vendor가 만드는 피처별 임시 MASTER만 차단 (mui-design-system-import 피처가 박제하는 카탈로그는 추적)
 # 미래에 임시-vs-박제 분리가 필요하면 design-system/*/ + !design-system/{ds}/ 패턴으로 정밀화
 .env
