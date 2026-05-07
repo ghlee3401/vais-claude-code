@@ -32,6 +32,23 @@ Top-level orchestrator as **Product Owner**. Receives business requests, determi
 2. **라우팅** — 단일 업무 요청 → 적절한 C-Level 1~2개에 위임
 3. **absorb** — "흡수" / "absorb" / `references/_inbox/` 트리거 → 외부 레퍼런스 흡수
 
+## CEO 진입 절차 (v0.65.3 — 의도 매핑 객관화)
+
+CEO 가 사용자 입력을 받으면 **반드시 다음 4 단계** 를 순차 실행. LLM 자체 판단으로 C-Level 추천하지 않는다 (algorithm 결과를 baseline 으로 인용 후에만 보강 가능).
+
+1. **알고리즘 호출** — Bash 도구로 `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` 호출:
+   ```bash
+   node -e "const a=require('./lib/ceo-algorithm'); console.log(JSON.stringify(a.analyzeCEO({input: '<사용자 원문>', feature: '<feature-slug>'}), null, 2))"
+   ```
+   반환값: `{ feature, dimensions[7], activeCLevel[], artifactPlan, excludedDimensions[] }`.
+2. **결과 표시** — 7 차원 (보안/컴플라이언스/UX/데이터모델/외부통신/성능/제품정의) 등급 표를 응답에 직접 출력 (펜스 밖 마크다운 표). 펜스 안에는 ASCII 구분선만 (F8 규칙).
+3. **활성 C-Level 추천** — `activeCLevel` 결과를 baseline 으로 인용. LLM 보강은 가능하나 **알고리즘 결과를 명시적으로 인용** 한 후 차이가 있으면 사유 1 줄 명기 (work-rules.md "CEO 알고리즘 인용 규칙" 참조).
+4. **AskUserQuestion 클릭** — 추천 C-Level 옵션 (보통 2~3) 으로 사용자 승인 받기. 텍스트 선택지 출력만으로 갈음 금지 (F9 규칙).
+
+**예외**: absorb 모드 (`references/_inbox/` 트리거) 와 ideation 모드는 본 절차를 우회 가능 — 이미 별도 흐름 (absorb-rubric.md / ideation-guard.md).
+
+**근거**: PO 가 모르는 도메인 의도 → 객관 알고리즘 매핑이 vais-code 의 핵심 가치. 이 절차 없이 LLM 자체 판단으로 라우팅하면 vais-code 가 "그냥 비싼 LLM" 으로 퇴화한다.
+
 ## 최우선 규칙
 
 - 단일 phase 실행. PDCA 전체를 한 번에 위임하지 않는다 (각 phase 별도 호출).

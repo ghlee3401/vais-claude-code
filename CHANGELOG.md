@@ -1,5 +1,53 @@
 # Changelog
 
+## [0.65.3] - 2026-05-07 — CEO 진입 절차 박제 (PO 의도 매핑 객관화)
+
+`embed-ceo-entry-procedure` 후속 패치. PO 감사 결과 `lib/ceo-algorithm.js` (197줄) 7 차원 알고리즘은 코드로 박제됐지만 `agents/ceo/ceo.md` 가 호출 절차를 명시 안 해 "CEO 가 LLM 자체 판단으로 라우팅 가능" 갭 발견 → vais-code 의 핵심 가치 (PO 의 자연어 의도 → 객관 알고리즘 매핑) 가 LLM 환각에 좌우될 위험.
+
+### Changed
+
+- **`agents/ceo/ceo.md`** — "운영 모드" 직후 신규 섹션 "**CEO 진입 절차 (v0.65.3)**" 박제. 4 단계 강제:
+  1. `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` Bash 호출 (7 차원 등급 + activeCLevel + artifactPlan 반환)
+  2. 7 차원 등급 표를 응답에 직접 출력 (펜스 밖 마크다운, F8 규칙)
+  3. `activeCLevel` 결과를 baseline 으로 인용 (LLM 보강은 차이 사유 1줄 명기 후에만 허용)
+  4. AskUserQuestion 클릭으로 사용자 승인 (텍스트 선택지 출력 갈음 금지, F9 규칙)
+  
+  예외: absorb 모드 (`references/_inbox/`) + ideation 모드는 별도 흐름 유지.
+
+- **`skills/vais/phases/ceo.md`** — 진입 부분에 v0.65.3 절차 reference 한 줄 추가. `/vais ceo` 진입점에서 절차 강조.
+
+- **`agents/_shared/work-rules.md`** — 신규 섹션 "**CEO 알고리즘 인용 규칙 (v0.65.3)**" 추가. 다른 C-Level / sub-agent 가 CEO 결정을 받을 때 main.md "CEO 판단 근거" 섹션에 7 차원 등급 표 인용 의무화. LLM 자체 라우팅 변경 시 사유 1줄 기록 강제. `lib/ceo-algorithm.js` 변경 시 본 컨벤션도 동기 갱신 명시.
+
+- **버전 동기화**: package.json / vais.config.json / .claude-plugin/{plugin,marketplace}.json — 0.65.2 → 0.65.3.
+
+### 검토 후 보류 (v0.65 anti-boilerplate 정신과 충돌)
+
+PO 피드백 ("템플릿 강제하면 문서만 양산") 반영하여 다음 후보 제외:
+- ~~Knowledge Load Trigger 매트릭스 (A2)~~ — LLM 자율판단과 효과 차이 작음, 토큰만 ↑
+- ~~Sub-agent → template 강제 (A3)~~ — v0.65.0 의 Anti-Boilerplate (헤딩 52→22, frontmatter 8→4, plan-stub 신규) 와 정면 충돌
+- ~~Blind spot knowledge 9 신규 MD (A4)~~ — 별도 결정 영역, 실제 막힐 때 1~2 MD 점진 추가가 자연스러움
+- ~~PDCA 순서 hook (A5)~~ — lean mode 의 "자동 진행" 정신과 충돌
+
+### Verification
+
+- `grep -q "CEO 진입 절차" agents/ceo/ceo.md` → 박제 확인
+- `node -e "const a=require('./lib/ceo-algorithm'); console.assert(typeof a.analyzeCEO === 'function')"` → 함수 노출 확인
+- `node scripts/vais-validate-plugin.js` → 0 errors / 0 warnings (15 info 동일)
+- `node scripts/patch-clevel-guard.js --dry-run` → 6/6 idempotent
+- `node scripts/patch-subdoc-block.js --dry-run` → 45/45 idempotent
+- `node scripts/auto-select-template.js --feature=ceo-procedure --json` → smoke 통과
+
+### Effect (추정)
+
+- **PO 의도 정렬**: CEO 가 algorithm 결과를 baseline 으로 인용 의무화 → LLM 환각 라우팅 차단
+- **추적성**: main.md "CEO 판단 근거" 섹션이 7 차원 등급 표 인용 → 의사결정 사후 검증 가능
+- **유지보수성**: `lib/ceo-algorithm.js` 7 차원 정의 변경 시 단일 정본 갱신만으로 전체 흐름 동기
+
+### Rollback
+
+- 단일 commit. `git revert <sha>` 한 줄로 전체 회귀
+- lean mode 와 호환 — config 토글 불필요 (`vais.config.json` 변경 없음)
+
 ## [0.65.2] - 2026-05-07 — templates/ 정합성 정리 (v0.57 잔재 + dead 템플릿 제거)
 
 `align-templates-to-v065-model` 후속 패치. v0.65.0 sub-agent 직접 박제 모델로 전환 후에도 `templates/` 안에 v0.57 시대 잔재 (subdoc.template.md / Topic Documents / Scratchpads inject) 와 secondary C-Level dead 템플릿 (finance / ops) 이 남아있어 모델 일관성 저해. 정보 손실 0 (대체 정본 모두 존재 — `agents/_shared/subdoc-guard.md` v2.1 / `templates/biz/*.md` / `templates/how/*.md` sub-agent artifact).
