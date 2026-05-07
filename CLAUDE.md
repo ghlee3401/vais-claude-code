@@ -156,8 +156,9 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 11. **사용자 주권 (User Sovereignty)** — AI는 추천, 사용자가 결정. **모든 결정 = AskUserQuestion 클릭 인터페이스** (자연어 명령어 안내 금지, 옵션 2~3 권장).
 12. **Plan은 결정, Do는 실행** — Plan 단계에서는 `docs/{feature}/01-plan/` 산출물만 작성. 프로덕트 파일(skills/, agents/, lib/, src/ 등) 생성·수정은 Do 단계에서만 허용
 13. **레거시 경로 금지** — 문서·코드 모두 **top-level** `docs/NN-` (예: `docs/01-plan/`, `docs/02-design/`) 패턴 사용 금지. 새 구조 `docs/{feature}/{NN-phase}/{main.md|artifact}.md`만 사용. 예외: `docs/_legacy/`, `CHANGELOG.md`, `tests/paths.test.js`. `.hooks/pre-commit`이 자동 차단. `--no-verify` 사용은 금지.
-14. **Sub-doc v2.0 — 직접 박제** — sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 8 필드 (owner/agent/artifact/phase/feature/source/generated/summary) 표준으로 **직접 박제**. `_tmp` 폐기, 큐레이션 (✅/❌/✓) 폐기, 정보 손실 0, 토큰 약 50% 절감. C-Level 이 main.md 작성 시 frontmatter 의 `summary` 만 읽고 인덱스 자동 생성. 정본: `agents/_shared/subdoc-guard.md` v2.0. patch: `scripts/patch-subdoc-block.js`.
-15. **C-Level 공존 v2.0 — main.md 인덱스만** — 같은 `docs/{feature}/{NN-phase}/main.md` 에 여러 C-Level 이 기여 가능. main.md = 인덱스만 (본문 X). Decision Record append-only + Owner 컬럼 필수 + 다른 C-Level 섹션·행 수정 금지. **Artifacts 표** (옛 Topic Documents 대체) — sub-agent artifact 의 frontmatter 자동 추출. Size budget 200 lines = warn (자연 충족). 정본: `agents/_shared/clevel-main-guard.md` v2.0. patch: `scripts/patch-clevel-guard.js`.
+14. **Sub-doc v2.1 — 직접 박제, frontmatter 4 필드** — sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter **4 필수 필드** (owner/artifact/phase/feature) 표준으로 직접 박제. agent/generated/source/summary 는 optional (auto-hydrate). `_tmp` 폐기, 큐레이션 폐기. 정본: `agents/_shared/subdoc-guard.md` v2.1.
+15. **C-Level 공존 v2.1 — main.md 인덱스만** — main.md = 5섹션 인덱스 (Executive Summary / Decision Record / Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X. Decision Record append-only + Owner 컬럼 필수 + 다른 C-Level 섹션·행 수정 금지. enforcement: warn. 정본: `agents/_shared/clevel-main-guard.md` v2.1 (8줄 요약). full canonical: `clevel-main-guard.full.md`.
+16. **PO 워크플로우 경량화 v0.65** — Quiet by Default (CP 6→1~2, lean mode 기본) + Wisdom Split (도메인 지식 → `agents/{c-level}/knowledge/` lazy-load) + Anti-Boilerplate (plan 템플릿 헤딩 52→22, autoSelect 자동 선택, gapAnalysis maxIter 5→2). 정책: `vais.config.json > workflow.checkpointPolicy/template/frontmatterMinimal`.
 
 ## Version Management
 

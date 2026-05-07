@@ -1,5 +1,91 @@
 # Changelog
 
+## [0.65.0] - 2026-05-07 — PO 워크플로우 경량화 (Quiet by Default / Wisdom Split / Anti-Boilerplate)
+
+`optimize-po-workflow` 피처. PO 가 호소한 "너무 많은 과정 + 템플릿 채우기 강박 + 토큰 소비" 문제 해결. C-Level 도메인 지식은 무손실 보존하면서 워크플로우 무게 -50~55% 절감 목표.
+
+### 변경 전략 (Three Knobs)
+
+- **K1. Quiet by Default**: CP 6~10회 → 1~2회. PRD missing 또는 QA Critical 일 때만 발동. `vais.config.json > workflow.checkpointPolicy.mode = "lean"` (기본). `standard`/`strict` 토글 가능.
+- **K2. Wisdom Split**: 6 C-Level 메인 .md 평균 410줄 → 135줄 (-67%). 도메인 지식 19개 MD 로 분리하여 `agents/{c-level}/knowledge/` 디렉토리 lazy-load. 메인은 thin orchestrator + Knowledge Index.
+- **K3. Anti-Boilerplate**: plan-extended 헤딩 52→22 (-57%). `plan-stub.template.md` 신규 (20줄, autoSelect 기본). frontmatter 8→4 필수 필드. `clevel-main-guard.md` 70줄 inject → 8줄 summary (canonical full 보존).
+
+### Added
+
+- `agents/{ceo,cpo,cto,cso,cbo,coo}/knowledge/` — 19개 도메인 지식 MD (CEO 2 + CPO 3 + CTO 5 + CSO 3 + CBO 3 + COO 3). lazy-load, 정보 손실 0.
+  - CTO: modification-chaining / interface-contract-schema / gate-system / data-analysis / handoff-routing
+  - CSO: owasp-top10-checklist / threat-model-template / compliance-rubric
+  - CPO: prd-eight-sections / opportunity-solution-tree / jtbd-6-part
+  - CEO: seven-dimension-routing / absorb-rubric
+  - CBO: unit-economics-formulas / pricing-tier-design / gtm-funnel
+  - COO: cicd-four-stages / deployment-strategies / runbook-template
+- `agents/_shared/checkpoint-policy.md` — 통합 CP 정책 (lean/standard/strict mode 매트릭스)
+- `agents/_shared/work-rules.md` — 공통 작업 원칙 (push 규칙, Plan ≠ Do, 위임 vs 직접 작성)
+- `agents/_shared/outro-format.md` — 자동 진행 outro + CP 발동 outro 포맷
+- `agents/_shared/clevel-main-guard.full.md` — v2.0 canonical full 보존 (위반 의심 시 read)
+- `templates/plan-stub.template.md` — 20줄 stub 템플릿 (autoSelect lean 결과)
+- `vais.config.json` 신규 키:
+  - `workflow.checkpointPolicy` (mode: lean/standard/strict + confirmOn/silentOn 트리거)
+  - `workflow.template.autoSelect = true` (변경 surface 휴리스틱 기반 minimal/standard/extended 자동 선택)
+  - `workflow.frontmatterMinimal` (required 4 + autoHydrate + optional)
+  - `cSuite.knowledgePath = "agents/{role}/knowledge/"` (lazy-load 표준 경로)
+
+### Changed
+
+- **6 C-Level 메인 .md** (`agents/{c-level}/{c-level}.md`) — version 2.0.0 → 2.1.0. 평균 410줄 → 135줄 (-67%). 본문에서 분리:
+  - common-rules / checkpoint-rules 상세 → `_shared/checkpoint-policy.md` 참조 1줄
+  - work-rules → `_shared/work-rules.md` 참조 1줄
+  - common-outro → `_shared/outro-format.md` 참조 1줄
+  - clevel-main-guard inject 70줄 → 8줄 summary (v2.1)
+  - 도메인 지식 → `Knowledge Index` 섹션이 knowledge/ 경로 명시
+- **`agents/_shared/clevel-main-guard.md`** v2.0 → v2.1 (67줄 → 14줄 8줄 요약본). canonical full = `clevel-main-guard.full.md`.
+- **`agents/_shared/subdoc-guard.md`** v2.0 → v2.1. frontmatter 8 필드 → **4 필수** (owner/artifact/phase/feature) + 4 optional (agent/generated/source/summary, auto-hydrate). 기존 8필드 산출물 backward-compat (W-FRONT-01 = info severity).
+- **`templates/plan-extended.template.md`** 350줄 → ~210줄. **삭제 섹션**: 0.5 MVP 범위 / 0.6 경쟁 분석 / 7.1 UI 라이브러리 7개 옵션 / 8 화면 목록 / 9 일정 / Topic Documents (v0.57 잔재) / Scratchpads (v0.57 잔재). 헤딩 52 → 22 (-57%).
+- **`vais.config.json`** 변경 값:
+  - `gapAnalysis.maxIterations: 5 → 2` (무한루프 차단)
+  - `gapAnalysis.autoIterate: true → "escalate-on-fail"` (1회 실패 시 자동, 2회 실패 시 CP-Q)
+  - `pipeline.reviewLoops.cso-cto.maxIterations: 3 → 2`
+  - `pipeline.finalReview.maxIterations: 2 → 1`
+  - `gates.cto.plan.requirePrd: "ask" → "smart"` (missing 만 CP-0, partial 자동 강행)
+- **`scripts/patch-subdoc-block.js`** 적용 (45 sub-agent body 에 v2.1 subdoc-guard 일괄 재주입). idempotent — `--dry-run` 동일 버전 스킵.
+- **`CLAUDE.md` Mandatory Rules 14, 15** 압축 (v2.0 → v2.1, 정본 참조 명시) + Rule 16 신규 (PO 워크플로우 경량화 v0.65)
+- **`AGENTS.md`** v2.1 동기화 (Cursor/Copilot 호환 7번/8번 + 9번 신규)
+- **버전 동기화**: package.json / vais.config.json / .claude-plugin/plugin.json / .claude-plugin/marketplace.json — 모두 0.65.0
+
+### Effect (추정)
+
+- **PO 클릭**: 한 피처당 6~10회 → 1~2회 (-80%)
+- **토큰**: 한 피처당 28k → ~13k (-50~55%, 골든 피처 측정 예정)
+- **6 C-Level 메인 합계**: 2,400줄 → 811줄 (-66%, 측정 완료)
+- **plan-extended 헤딩**: 52 → 22 (-57%)
+- **frontmatter 필수 필드**: 8 → 4 (50% 감소)
+- **정보 손실**: 0 (도메인 지식 모두 knowledge/ 보존, full canonical clevel-main-guard.full.md 보존)
+
+### Verification
+
+- `node scripts/vais-validate-plugin.js`: 0 errors / 0 warnings (15 info)
+- `node scripts/patch-clevel-guard.js --dry-run`: 6/6 동일 버전 스킵 (idempotent)
+- `node scripts/patch-subdoc-block.js`: 45/45 v2.0→v2.1 교체 완료
+- 6 C-Level 메인 wc -l: 811 lines total (ceo 163 / cpo 119 / cto 152 / cso 143 / cbo 127 / coo 107)
+
+### Rollback
+
+각 phase 독립 revertable:
+- Phase 1 (config): `git revert` vais.config.json + 4개 manifest version
+- Phase 2 (boilerplate/knowledge): `git revert` agents/_shared/* + agents/{c-level}/* + agents/{c-level}/knowledge/
+- Phase 3 (templates): `git revert` templates/plan-* + agents/_shared/subdoc-guard.md
+- 즉시 회귀: `vais.config.json > workflow.checkpointPolicy.mode = "strict"` 토글 (코드 변경 없이 v0.64 동작)
+
+### 보존 자산 (PO 합의)
+
+도메인 지식 무손실 보존 — `agents/{c-level}/knowledge/` 로 격납만 됐을 뿐 삭제·요약·압축 X:
+- OWASP Top 10 체크리스트 (CSO)
+- 수정 체이닝 매트릭스 + Interface Contract 스키마 (CTO)
+- PRD 8 섹션 + Opportunity Solution Tree + JTBD 6-Part (CPO)
+- 7 차원 동적 라우팅 (CEO, 정본 `lib/ceo-algorithm.js`)
+- Unit Economics 공식 + Pricing Tier + GTM Funnel (CBO)
+- CI/CD 4단계 + Deployment Strategies + Runbook (COO)
+
 ## [0.64.1] - 2026-05-03 — 단일 namespace 정리 ("v2.0 모델" 라벨 제거)
 
 `unify-version-namespace` 피처 PDCA 5/5 완료 (ideation 생략). 아키텍처 라벨 "v2.0 모델" / "v2.0+" / "v2.x" 등을 사용자 노출 영역에서 일괄 제거하여 plugin semver `0.64.x` 단일 namespace 로 통일. 내부 component-local 블록 마커 (subdoc-guard v2.0, clevel-main-guard v2.0, main-md template v2.0) 는 patch 스크립트 의존성 + HTML 주석 (사용자 비노출) 으로 의도된 분리 유지. Breaking change 0.
