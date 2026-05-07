@@ -2,6 +2,8 @@
 
 4개 Gate 에서 바이너리 체크리스트 기반 판정. auto-judge 가 메트릭으로 판정.
 
+> **CP-G{N} 정본**: 발동·자동통과 정책은 `agents/_shared/checkpoint-policy.md` (CTO 행 + CP-G{N} 표). 본 문서는 Gate 별 체크리스트와 메트릭 상세만 다룬다.
+
 ## Gate 체크리스트
 
 | Gate | 시점 | 체크 항목 |
@@ -20,7 +22,7 @@
 
 ## 판정 흐름
 
-체크리스트 검증 → CP-G{N} (lean mode 에서는 자동 통과 + outro 표시) → 다음 단계 진행
+체크리스트 검증 → CP-G{N} (정본: `agents/_shared/checkpoint-policy.md` — lean 자동 통과, strict 발동) → 다음 단계 진행
 
 ## 실행 팁
 

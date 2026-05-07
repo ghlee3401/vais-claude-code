@@ -54,7 +54,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 **위임 방식**: 모두 Agent 도구 호출. 병렬 쌍: `ui-designer + infra-architect` / `frontend-engineer + backend-engineer + test-engineer`. 단독: `qa-engineer`, `incident-responder`(디버깅), `db-architect`(infra-architect 이후 심화). 배포/CI-CD 는 COO 소관.
 
-**수정 요청 시 체이닝**: `cto/knowledge/modification-chaining.md` 참조 (수정 유형 → sub-agent 호출 순서 매트릭스).
+**수정 요청 시 체이닝**: `agents/cto/knowledge/modification-chaining.md` 참조 (수정 유형 → sub-agent 호출 순서 매트릭스).
 
 ## Contract
 
@@ -87,7 +87,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 `vais.config.json > gates.cto.plan.requirePrd = "smart"` (0.65 기본):
 
-1. PRD 파일 검사: `docs/{feature}/03-do/main.md` — Glob 미스 → `quality="missing"` / 8 표준 섹션 (`prd-eight-sections.md` 참조) ≥ 6 → `"full"` / ≥ 1 → `"partial"` / 0 → `"missing"`
+1. PRD 파일 검사: `docs/{feature}/03-do/main.md` — Glob 미스 → `quality="missing"` / 8 표준 섹션 (정본: `agents/cpo/knowledge/prd-eight-sections.md` — owner: cpo) ≥ 6 → `"full"` / ≥ 1 → `"partial"` / 0 → `"missing"`
 2. 분기:
    - `full` → 자동 로드, "기술 변환" 모드 (CP-0 미발동)
    - `partial` → 자동 강행 + plan 0.7 가정 명기 (CP-0 미발동)
