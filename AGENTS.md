@@ -47,7 +47,7 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 /vais help                   — 사용법 안내
 ```
 
-실행 에이전트(infra-architect, frontend-engineer, backend-engineer 등)는 직접 호출하지 않습니다. C-Level 에이전트가 필요에 따라 위임하고, sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 8 필드와 함께 직접 박제합니다.
+실행 에이전트(infra-architect, frontend-engineer, backend-engineer 등)는 직접 호출하지 않습니다. C-Level 에이전트가 필요에 따라 위임하고, sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 **frontmatter v2.1 (4 필수 필드 — owner/artifact/phase/feature)** 과 함께 직접 박제합니다. agent/generated/source/summary 는 auto-hydrate optional (v0.65).
 
 ## 필수 규칙
 
@@ -60,6 +60,7 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 7. **Sub-doc 직접 박제 (v2.1, 0.65)**: `_tmp/` 폐기. sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter **4 필수 필드** (owner/artifact/phase/feature) 직접 작성. agent/generated/source/summary 는 optional (auto-hydrate). 큐레이션 폐기. 정본: `agents/_shared/subdoc-guard.md` v2.1
 8. **C-Level 공존 — main.md 인덱스 (v2.1, 0.65)**: main.md = 5 섹션 인덱스 (Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). 본문 X. Decision Record append-only + Owner 컬럼 필수. enforcement: warn. 정본: `agents/_shared/clevel-main-guard.md` v2.1 (8줄 요약). full canonical: `clevel-main-guard.full.md`.
 9. **PO 워크플로우 경량화 (v0.65)**: Quiet by Default (CP 6→1~2, lean mode 기본 — `vais.config.json > workflow.checkpointPolicy.mode`) + Wisdom Split (도메인 지식 → `agents/{c-level}/knowledge/` lazy-load) + Anti-Boilerplate (plan-extended 헤딩 52→22, autoSelect 자동 선택, gapAnalysis maxIter 5→2). PO 클릭 -80%, 한 피처 토큰 -50~55% 추정.
+10. **CEO 진입 절차 (v0.65.3)**: CEO 가 사용자 입력을 받으면 반드시 4 단계 순차 — (1) `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` Bash 호출 → (2) 7 차원 등급 표 응답에 직접 출력 → (3) `activeCLevel` 결과를 baseline 으로 인용 → (4) AskUserQuestion 클릭. LLM 자체 라우팅 금지. 위임 받은 C-Level 은 main.md "CEO 판단 근거" 섹션에 7 차원 등급 표 인용 의무. 정본: `agents/ceo/ceo.md` "CEO 진입 절차" + `agents/_shared/work-rules.md` "CEO 알고리즘 인용 규칙".
 
 ## 에이전트 역할
 
@@ -84,7 +85,11 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 | backend-engineer | CTO | Backend API implementation |
 | qa-engineer | CTO | Gap analysis + code review + QA verification |
 | test-engineer | CTO | Test code generation (unit/integration/e2e) |
-| release-engineer | CTO/COO | CI/CD + Docker + deployment automation |
+| ci-cd-configurator | COO | CI/CD pipeline (GitHub Actions/GitLab CI/CircleCI) — scope-gated (v0.59 release-engineer 분해) |
+| container-config-author | COO | Dockerfile + docker-compose (multi-stage + non-root) — scope-gated |
+| migration-planner | COO | DB schema migration — forward + rollback + 데이터 손실 위험 평가 |
+| runbook-author | COO | Operations Runbook (Google SRE) + incident playbook |
+| release-notes-writer | COO | Release Notes + CHANGELOG (Keep a Changelog 6 sections + SemVer 자동 판정) |
 | db-architect | CTO | DB schema optimization + migration + query tuning |
 | security-auditor | CSO | Security audit (OWASP Top 10) |
 | secret-scanner | CSO | Source code secret detection |

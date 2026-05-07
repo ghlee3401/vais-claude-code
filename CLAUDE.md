@@ -2,30 +2,30 @@
 
 > **이 파일의 책임**: Claude Code 전용 프로젝트 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 먼저 `ONBOARDING.md` (5분 진입 가이드)를 읽으면 빠르다. 다른 AI 도구(Cursor/Copilot)는 `AGENTS.md` 참조.
 >
-> Virtual AI C-Suite for software development (v0.63.0)
+> Virtual AI C-Suite for software development (v0.65.3)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
 
-AI C-Suite 조직 시뮬레이션 플러그인. CEO가 Product Owner로서 6 C-Level 팀(CPO, CTO, CSO, CBO, COO)을 고용·지휘하여 서비스 런칭 전체 라이프사이클을 자동 실행한다. 개별 C-Level 직접 호출도 가능. v0.50에서 CMO+CFO→CBO 통합, optional ideation phase 신설, Advisor Tool 기본 활성화. v0.61.0+ design-system MCP 활성화. v0.62.0 mui 디자인 시스템 카탈로그 박제 (`design-system/mui/`) + ui-designer DS 자동 선택.
+AI C-Suite 조직 시뮬레이션 플러그인. CEO가 Product Owner로서 6 C-Level 팀(CPO, CTO, CSO, CBO, COO)을 고용·지휘하여 서비스 런칭 전체 라이프사이클을 자동 실행한다. 개별 C-Level 직접 호출도 가능. v0.50에서 CMO+CFO→CBO 통합, optional ideation phase 신설, Advisor Tool 기본 활성화. v0.61.0+ design-system MCP 활성화. v0.62.0 mui 디자인 시스템 카탈로그 박제 (`design-system/mui/`) + ui-designer DS 자동 선택. **v0.65 시리즈** — 0.65.0 PO 워크플로우 경량화 (Quiet by Default + Wisdom Split + Anti-Boilerplate), 0.65.1 약속·코드 정렬 (frontmatter v2.1 4 필수 + auto-select-template + CP-G 단일화), 0.65.2 templates/ 정합성 정리, 0.65.3 CEO 진입 절차 박제 (`analyzeCEO()` 호출 → 7 차원 등급 표 → activeCLevel 인용).
 
 ## Project Structure
 
 ```
 vais-claude-code/
-├── agents/          # C-Level 별 하위 폴더로 구성된 에이전트 (6 C-Level + 37 sub-agent, v0.62.0)
-│   ├── ceo/         #   CEO + absorb-analyzer + skill-creator
-│   ├── cpo/         #   CPO + product-discoverer/strategy/research/prd + backlog-manager + ux-researcher + data-analyst
+├── agents/          # C-Level 별 하위 폴더로 구성된 에이전트 (6 C-Level + 47 sub-agents + knowledge/ 19 MD, v0.65.3)
+│   ├── ceo/         #   CEO + absorb-analyzer + skill-creator + vision-author + strategy-kernel-author + okr-author + pr-faq-author
+│   ├── cpo/         #   CPO + product-discoverer/strategist/researcher + prd-writer + backlog-manager + roadmap-author + ux-researcher + data-analyst
 │   ├── cto/         #   CTO + infra-architect/backend-engineer/frontend-engineer/ui-designer/db-architect/qa-engineer/test-engineer/incident-responder
 │   ├── cso/         #   CSO + security-auditor/code-reviewer/secret-scanner/dependency-analyzer/plugin-validator/skill-validator/compliance-auditor
 │   ├── cbo/         #   CBO + market-researcher/customer-segmentation-analyst/seo-analyst/copy-writer/growth-analyst/pricing-analyst/financial-modeler/unit-economics-analyst/finops-analyst/marketing-analytics-analyst
-│   ├── coo/         #   COO + release-notes-writer/ci-cd-configurator/container-config-author/migration-planner/runbook-author/sre-engineer/release-monitor/performance-engineer (v0.59 release-engineer 5 분해 완료, v0.62.0 alias 제거)
-│   └── _shared/     #   공유 가드 (advisor-guard, ideation-guard, clevel-main-guard, subdoc-guard)
+│   ├── coo/         #   COO + release-notes-writer/ci-cd-configurator/container-config-author/migration-planner/runbook-author/sre-engineer/release-monitor/performance-engineer (v0.59 release-engineer 5 분해 완료, v0.62.0 alias 제거 — 8 sub-agents)
+│   └── _shared/     #   공유 가드 (advisor-guard, ideation-guard, clevel-main-guard, subdoc-guard, checkpoint-policy, work-rules, outro-format — v0.65)
 ├── skills/vais/     # SKILL.md + phases/ + utils/  (`/vais` 명령어 진입점)
 ├── hooks/           # hooks.json, events.json, session-start.js, design-mcp-trigger.js, ideation-guard.js
 ├── lib/             # 핵심 라이브러리 (fs-utils, io, memory, paths, status, mcp-validator, ...)
 ├── scripts/         # doc-validator, auto-judge, patch-*, import-mui-design-system 등
-├── templates/       # PDCA 문서 템플릿 (plan-minimal/standard/extended, design, do, qa, report)
+├── templates/       # PDCA 문서 템플릿 (4-tier plan: stub/minimal/standard/extended + design/do/qa/report/ideation + 6 서브디렉토리 alignment/biz/core/how/what/why)
 ├── mcp/             # MCP 서버 (vais-design-system — design_search / design_system_generate / design_stack_search)
 ├── output-styles/   # 출력 스타일 정의 (session-start hook이 로드)
 ├── docs/            # 피처별 산출물 (docs/{feature}/{phase}/main.md)
@@ -47,7 +47,7 @@ vais-claude-code/
 ### C-Suite (전략 레이어, Opus)
 | Agent | Role |
 |-------|------|
-| CEO | **Top-level orchestrator** — Product Owner, dynamic routing (10+1 시나리오), ideation 라우팅 |
+| CEO | **Top-level orchestrator** — Product Owner. 7 차원 알고리즘 (`lib/ceo-algorithm.js`) 으로 활성 C-Level 동적 결정. v0.65.3 진입 절차 박제 — `analyzeCEO()` 호출 → 7 차원 등급 표 출력 → activeCLevel 인용 → AskUserQuestion |
 | CPO | Product definition + PRD + backlog + pm-* sub-agent orchestration |
 | CTO | Technical lead — Plan→Design→Do→QA development workflow orchestration |
 | CSO | Security & quality review — Gate A(security)/B(plugin)/C(code review) + secret scan + dependency analysis |
@@ -91,13 +91,22 @@ CEO가 피처 성격 + 산출물 상태를 분석하여 다음 C-Level을 동적
 | unit-economics-analyst | CBO | CAC/LTV/cohort/SaaS metrics |
 | finops-analyst | CBO | Cloud cost analysis + optimization |
 | marketing-analytics-analyst | CBO | Multi-touch attribution + channel ROI |
-| release-engineer | COO | CI/CD pipeline + Docker + deployment automation |
+| release-notes-writer | COO | Release Notes + CHANGELOG (Keep a Changelog 6 sections + SemVer 자동 판정) |
+| ci-cd-configurator | COO | CI/CD pipeline (GitHub Actions/GitLab CI/CircleCI) — scope-gated |
+| container-config-author | COO | Dockerfile + docker-compose (multi-stage + non-root) — scope-gated |
+| migration-planner | COO | DB schema migration (forward + rollback + 데이터 손실 위험 평가) — triggered |
+| runbook-author | COO | Operations Runbook (Google SRE) + incident playbook — scope-gated |
 | sre-engineer | COO | SRE/monitoring + incident runbook |
 | release-monitor | COO | Post-deployment canary monitoring |
 | performance-engineer | COO | Performance benchmarks + regression detection |
 | absorb-analyzer | CEO | External skill/reference absorption analysis |
 | skill-creator | CEO | Auto skill/agent markdown generation |
+| vision-author | CEO | Vision Statement + BHAG (Collins & Porras) |
+| strategy-kernel-author | CEO | Strategy Kernel — Diagnosis + Guiding Policy + Coherent Actions (Rumelt) |
+| okr-author | CEO | OKR — Objective + 3~5 KR + 0.7 stretch scoring (Grove/Doerr) |
+| pr-faq-author | CEO | Amazon Working Backwards PR/FAQ |
 | backlog-manager | CPO | PRD → user story + sprint plan conversion |
+| roadmap-author | CPO | Now-Next-Later Roadmap (outcome-based, OKR → backlog 브릿지) |
 | ux-researcher | CPO | UX research (JTBD interviews/usability tests) |
 | data-analyst | CPO/CTO/CBO | Product metrics (DAU/MAU/A/B tests) |
 
@@ -145,7 +154,7 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 
 1. **기획 없이 코드 금지** — `docs/{feature}/01-plan/` 기획서가 없으면 구현하지 않는다 (CTO PDCA 만 적용 — v2.0)
 2. **워크플로우 순서 준수 (CTO 만 mandatory)** — CTO PDCA: ideation(optional) → plan → design → do → qa → report 순차. **CEO 는 ideation 만, CPO/CSO 는 CEO 가 활성화한 phase 만, CBO/COO 는 사용자 명시 호출 시만**. 0.64.0 부터 mandatory 는 CTO 의 plan/design/do/qa 만. 비-CTO 는 CEO 알고리즘 결정에 따른다.
-3. **산출물 경로** — `docs/{feature}/{NN-phase}/main.md` 형식 준수 (각 phase 인덱스). Phase↔Folder 매핑: `ideation`→`00-ideation`, `plan`→`01-plan`, `design`→`02-design`, `do`→`03-do`, `qa`→`04-qa`, `report`→`05-report`. **0.64.x sub-agent 직접 박제**: sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 직접 작성 (frontmatter 8 필드 표준). `_tmp` 폐기, 큐레이션 폐기. main.md = 인덱스만 (5 섹션 — Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). Single source: `vais.config.json > workflow.docPaths` + `phaseArtifactMapping`.
+3. **산출물 경로** — `docs/{feature}/{NN-phase}/main.md` 형식 준수 (각 phase 인덱스). Phase↔Folder 매핑: `ideation`→`00-ideation`, `plan`→`01-plan`, `design`→`02-design`, `do`→`03-do`, `qa`→`04-qa`, `report`→`05-report`. **0.65.x sub-agent 직접 박제**: sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 직접 작성 (frontmatter v2.1 — 4 필수 필드 owner/artifact/phase/feature, agent/generated/source/summary 는 auto-hydrate optional). `_tmp` 폐기, 큐레이션 폐기. main.md = 인덱스만 (5 섹션 — Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). Single source: `vais.config.json > workflow.docPaths` + `phaseArtifactMapping` + `workflow.frontmatterMinimal`.
 4. **Gate 통과 필수 (CTO PDCA 만)** — 각 Gate 체크리스트 항목을 모두 확인한 뒤 다음 단계로 진행. 비-CTO 는 Gate 시스템 미적용.
 5. **위험 명령 금지** — `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수** — 민감 정보는 반드시 환경 변수로 관리
@@ -159,6 +168,7 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 14. **Sub-doc v2.1 — 직접 박제, frontmatter 4 필드** — sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter **4 필수 필드** (owner/artifact/phase/feature) 표준으로 직접 박제. agent/generated/source/summary 는 optional (auto-hydrate). `_tmp` 폐기, 큐레이션 폐기. 정본: `agents/_shared/subdoc-guard.md` v2.1.
 15. **C-Level 공존 v2.1 — main.md 인덱스만** — main.md = 5섹션 인덱스 (Executive Summary / Decision Record / Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X. Decision Record append-only + Owner 컬럼 필수 + 다른 C-Level 섹션·행 수정 금지. enforcement: warn. 정본: `agents/_shared/clevel-main-guard.md` v2.1 (8줄 요약). full canonical: `clevel-main-guard.full.md`.
 16. **PO 워크플로우 경량화 v0.65** — Quiet by Default (CP 6→1~2, lean mode 기본) + Wisdom Split (도메인 지식 → `agents/{c-level}/knowledge/` lazy-load) + Anti-Boilerplate (plan 템플릿 헤딩 52→22, autoSelect 자동 선택, gapAnalysis maxIter 5→2). 정책: `vais.config.json > workflow.checkpointPolicy/template/frontmatterMinimal`.
+17. **CEO 진입 절차 v0.65.3** — CEO 가 사용자 입력을 받으면 반드시 4 단계 순차 실행: (1) `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` Bash 호출 → (2) 7 차원 등급 표 응답에 직접 출력 (펜스 밖) → (3) `activeCLevel` 결과를 baseline 으로 인용 (LLM 보강 시 차이 사유 1줄 명기) → (4) AskUserQuestion 클릭. LLM 자체 라우팅 금지. 다른 C-Level/sub-agent 가 위임 받을 때 main.md "CEO 판단 근거" 섹션에 7 차원 등급 표 인용 의무. 정본: `agents/ceo/ceo.md` "CEO 진입 절차" + `agents/_shared/work-rules.md` "CEO 알고리즘 인용 규칙".
 
 ## Version Management
 
