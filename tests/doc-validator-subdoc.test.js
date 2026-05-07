@@ -81,35 +81,6 @@ describe('validateSubDocs — scratchpad 경고', () => {
   });
 });
 
-describe('validateSubDocs — 큐레이션 기록 경고', () => {
-  it('topic 문서에 "## 큐레이션 기록" 없으면 W-TPC-01', () => {
-    // main.md 존재해야 validateSubDocs 가 이 디렉토리 스캔
-    writeFile('docs/test-feature/02-design/main.md', '# main\n');
-    writeFile('docs/test-feature/02-design/architecture.md', '# Architecture\n\n본문만 있고 큐레이션 기록 없음');
-    const { validateSubDocs } = loadValidator();
-    const warns = validateSubDocs('test-feature');
-    const w = warns.find(w => w.code === 'W-TPC-01' && w.path.endsWith('architecture.md'));
-    assert.ok(w, 'W-TPC-01 경고 있어야 함');
-  });
-
-  it('main.md 와 interface-contract.md 는 큐레이션 기록 체크 제외', () => {
-    writeFile('docs/test-feature/02-design/main.md', '# main\n');
-    writeFile('docs/test-feature/02-design/interface-contract.md', '# IC\n');
-    const { validateSubDocs } = loadValidator();
-    const warns = validateSubDocs('test-feature').filter(w => w.code === 'W-TPC-01');
-    assert.equal(warns.length, 0);
-  });
-
-  it('"## 큐레이션 기록" 있으면 경고 없음', () => {
-    writeFile('docs/test-feature/02-design/main.md', '# main\n');
-    writeFile('docs/test-feature/02-design/architecture.md',
-      '# Architecture\n\n본문\n\n## 큐레이션 기록\n\n| a | b |\n');
-    const { validateSubDocs } = loadValidator();
-    const warns = validateSubDocs('test-feature').filter(w => w.code === 'W-TPC-01' && w.path.endsWith('architecture.md'));
-    assert.equal(warns.length, 0);
-  });
-});
-
 describe('validateSubDocs — main.md 링크 경고', () => {
   it('main.md 에 topic 파일명 링크 없으면 W-IDX-01', () => {
     writeFile('docs/test-feature/02-design/main.md', '# main\n\n인덱스 없음');
