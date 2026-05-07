@@ -57,8 +57,9 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 4. **문서 참조 투명성**: 구현 시 참조한 문서 목록을 산출물 상단에 기록합니다
 5. **위험 명령 금지**: `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수**: 민감 정보는 반드시 환경 변수로 관리합니다
-7. **Sub-doc 직접 박제 (v2.0)**: `_tmp/` 폐기. sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 8 필드 (owner/agent/artifact/phase/feature/source/generated/summary) 표준으로 직접 작성. 큐레이션 (✅/❌/✓) 폐기. 정본: `agents/_shared/subdoc-guard.md` v2.0
-8. **C-Level 공존 — main.md 인덱스 (v2.0)**: main.md = 5 섹션 인덱스 (Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). 본문 X. Decision Record append-only + Owner 컬럼 필수. Artifacts 표 = sub-agent artifact frontmatter 자동 추출. 200줄 자연 충족 (refuse 아닌 warn). 정본: `agents/_shared/clevel-main-guard.md` v2.0
+7. **Sub-doc 직접 박제 (v2.1, 0.65)**: `_tmp/` 폐기. sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter **4 필수 필드** (owner/artifact/phase/feature) 직접 작성. agent/generated/source/summary 는 optional (auto-hydrate). 큐레이션 폐기. 정본: `agents/_shared/subdoc-guard.md` v2.1
+8. **C-Level 공존 — main.md 인덱스 (v2.1, 0.65)**: main.md = 5 섹션 인덱스 (Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). 본문 X. Decision Record append-only + Owner 컬럼 필수. enforcement: warn. 정본: `agents/_shared/clevel-main-guard.md` v2.1 (8줄 요약). full canonical: `clevel-main-guard.full.md`.
+9. **PO 워크플로우 경량화 (v0.65)**: Quiet by Default (CP 6→1~2, lean mode 기본 — `vais.config.json > workflow.checkpointPolicy.mode`) + Wisdom Split (도메인 지식 → `agents/{c-level}/knowledge/` lazy-load) + Anti-Boilerplate (plan-extended 헤딩 52→22, autoSelect 자동 선택, gapAnalysis maxIter 5→2). PO 클릭 -80%, 한 피처 토큰 -50~55% 추정.
 
 ## 에이전트 역할
 

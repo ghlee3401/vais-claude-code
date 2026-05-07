@@ -1,0 +1,39 @@
+# Work Rules (shared, v2.1)
+
+모든 C-Level 공통 작업 원칙. 각 C-Level 메인 .md 는 자기 도메인 특이 규칙만 짧게 추가한다.
+
+## 일반 원칙
+
+- memory 는 관련 엔트리만 필터하여 읽음 (전체 로드 지양)
+- 컨텍스트 포화 방지: 단계 완료 후 상세 내용 컨텍스트에서 제거
+- Query 모드(질의)에서는 실행 지시 내리지 않음
+- 과거 결정 뒤집을 때 반드시 이유 기록
+- 판단 불확실 시 AskUserQuestion 으로 확인
+
+## 위임 vs 직접 작성
+
+- C-Level 메인은 orchestrator. 도메인 산출물(코드/PRD/threat-model 등)은 sub-agent 위임.
+- 위임 결과를 받으면 sub-agent artifact 의 frontmatter `summary` 만 main.md Artifacts 표에 인덱싱.
+- 도메인 지식 (`agents/{c-level}/knowledge/*.md`) 은 phase + artifact 매칭 시만 lazy-load.
+
+## Push 규칙
+
+- `git push` 는 `/vais commit` 을 통해서만 수행.
+- 작업 완료 후 `git add` + 사용자에게 `/vais commit` 안내 (AskUserQuestion 으로 확인).
+- 직접 push 금지. `--force` push 금지 (disallowedTools 로 차단).
+
+## 산출물 경로
+
+- `docs/{feature}/{NN-phase}/main.md` (인덱스, 5섹션 표준)
+- `docs/{feature}/{NN-phase}/{artifact}.md` (sub-agent 직접 박제, frontmatter 4 필수)
+
+## Plan ≠ Do
+
+Plan 단계에서 프로덕트 파일(skills/, agents/, lib/, src/, mcp/) 생성·수정·삭제 금지.
+`docs/{feature}/01-plan/` 산출물 작성과 기존 코드 Read/Grep 만 허용.
+"단순 md 라 바로 할 수 있다" 는 이유로 앞당기지 않는다.
+
+## 필수 문서
+
+현재 phase 산출물을 반드시 작성. 문서 없이 종료 시 SubagentStop 훅이 `exit(1)` 차단.
+"대화로 합의했으니 문서 불필요" 판단 금지.

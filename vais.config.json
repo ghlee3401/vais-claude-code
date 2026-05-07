@@ -1,5 +1,5 @@
 {
-  "version": "0.64.1",
+  "version": "0.65.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -106,6 +106,8 @@
     "rolesList": ["ceo", "cpo", "cto", "cso", "cbo", "coo"],
     "primary": ["ceo", "cpo", "cto", "cso"],
     "secondary": ["cbo", "coo"],
+    "knowledgePath": "agents/{role}/knowledge/",
+    "_knowledgePath_description": "0.65.x — C-Level 도메인 지식 lazy-load 경로. C-Level 메인 .md 의 'Knowledge Index' 섹션이 이 경로 하위 MD 들을 참조. phase + artifact 매칭 시만 Read.",
     "_routing_comment": "0.64.x — 코드 개발 도우미 정체성. CEO 자동 라우팅 = primary 만. secondary (CBO/COO) 는 사용자 명시 호출 (`/vais cbo|coo {feature}`) 시만 활성. CEO 알고리즘 (lib/ceo-algorithm.js) 이 primary 안에서 7 차원 체크리스트로 활성 C-Level 결정.",
     "autoRouting": {
       "default": "primary",
@@ -164,12 +166,14 @@
     "routing": "dynamic",
     "reviewLoops": {
       "cso-cto": {
-        "maxIterations": 3,
+        "maxIterations": 2,
+        "_v0_64_was_maxIterations": 3,
         "trigger": "critical > 0"
       }
     },
     "finalReview": {
-      "maxIterations": 2
+      "maxIterations": 1,
+      "_v0_64_was_maxIterations": 2
     }
   },
   "observability": {
@@ -187,6 +191,33 @@
   },
   "workflow": {
     "_sot": "PDCA 단계의 단일 진실 소스(SoT)는 본 키. CLAUDE.md/cto.md의 단계 표는 표시용 사본이며 본 키와 동기화 필수.",
+    "checkpointPolicy": {
+      "_description": "0.65.x — Quiet by Default. CP는 위험/destructive/불명확 scope 일 때만 발동. 일반 흐름은 침묵 진행 + outro 한 줄 요약. PO 가 'strict' 모드로 토글하면 v0.64 동작으로 회귀.",
+      "mode": "lean",
+      "_modeValues": ["lean", "standard", "strict"],
+      "_modeDescription": {
+        "lean": "CP-0(PRD missing) + CP-Q(critical|matchRate<90) 만 발동. CP-1/CP-D/CP-G/CP-2 는 자동 + outro 표시.",
+        "standard": "CP-0 + CP-2(Do 시작 destructive) + CP-Q 발동. CP-1/CP-D/CP-G 자동.",
+        "strict": "v0.64 동작 (6 CP 모두 발동)."
+      },
+      "confirmOn": ["risk", "destructive", "ambiguous-scope"],
+      "silentOn": ["scope-tier", "architecture-default", "gate-pass"]
+    },
+    "template": {
+      "_description": "0.65.x — autoSelect=true 시 변경 surface(Glob *.{js,ts,py} count + 사용자 요청 길이) 기반으로 minimal/standard/extended 자동 선택. plan outro 한 줄 '범위: standard (자동, 수정?)' 즉시 fallback CP.",
+      "autoSelect": true,
+      "_autoSelectDescription": "true = CP-1 클릭 제거, 휴리스틱 자동 선택. false = 매번 사용자 선택.",
+      "stub": "plan-stub.template.md",
+      "minimal": "plan-minimal.template.md",
+      "standard": "plan-standard.template.md",
+      "extended": "plan-extended.template.md"
+    },
+    "frontmatterMinimal": {
+      "_description": "0.65.x — sub-agent artifact frontmatter 4 필수 필드. agent/generated/source/summary 는 자동 hydrate (git log, 본문 추출). 기존 8필드 산출물은 backward-compat (W-FRONT-01 → info).",
+      "required": ["owner", "artifact", "phase", "feature"],
+      "autoHydrate": ["agent", "generated", "summary"],
+      "optional": ["source", "knowledge_refs"]
+    },
     "phases": [
       "ideation",
       "plan",
@@ -349,8 +380,16 @@
   "gapThreshold": 0.90,
   "gapAnalysis": {
     "matchThreshold": 90,
-    "maxIterations": 5,
-    "autoIterate": true
+    "maxIterations": 2,
+    "_v0_64_was_maxIterations": 5,
+    "autoIterate": "escalate-on-fail",
+    "_v0_64_was_autoIterate": true,
+    "_autoIterateValues": ["escalate-on-fail", true, false],
+    "_autoIterateDescription": {
+      "escalate-on-fail": "1회 자동 재시도, 2회 실패 시 CP-Q 발동 (v0.65 기본). 무한루프 차단.",
+      "true": "matchRate < threshold 시 maxIterations 까지 자동 반복 (v0.64 동작).",
+      "false": "재시도 없이 첫 결과 반환."
+    }
   },
   "qa": {
     "autoReview": true,
@@ -403,10 +442,12 @@
     },
     "cto": {
       "plan": {
-        "requirePrd": "ask",
-        "_requirePrdValues": ["ask", "strict", "skip"],
+        "requirePrd": "smart",
+        "_v0_64_was_requirePrd": "ask",
+        "_requirePrdValues": ["smart", "ask", "strict", "skip"],
         "_requirePrdDescription": {
-          "ask": "PRD 부재/부실 시 CP-0 체크포인트로 사용자에게 4 옵션 제시 (기본)",
+          "smart": "0.65.x 기본. PRD 부재(missing) 시만 CP-0 발동. partial 은 자동 강행 + plan 0.7 가정 명기. full 은 침묵 진행.",
+          "ask": "v0.64 동작. PRD 부재/부실 시 CP-0 체크포인트로 사용자에게 4 옵션 제시.",
           "strict": "PRD 부재/부실 시 자동 거부, CPO 실행 안내만",
           "skip": "PRD 검사 자체를 생략하고 자동 강행"
         },
