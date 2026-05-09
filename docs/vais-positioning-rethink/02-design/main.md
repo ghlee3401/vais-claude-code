@@ -22,6 +22,7 @@ CTO design — vais-code 는 CLI 기반이라 ui-designer 생략. infra-architec
 | 2026-05-09 | **M1 PoC = 3 단계 negative test** — Step1 stub 박제 + signature 검색 (PASS A), Step2 파일명 변경 + 재호출 (PASS B = 실패 확인), Step3 결과 매트릭스 → autonomous discovery 판정 | CTO (design) | m1-poc-design §1 |
 | 2026-05-09 | **Manual @include fallback** — 각 agent .md 의 Knowledge Index 섹션에 *literal Read 지시* + sub-agent 가 Read 도구 명시 호출. PoC FAIL 시 즉시 전환 가능. 콘텐츠 동일, 형식만 다름 | CTO (design) | m1-poc-design §2 |
 | 2026-05-09 | **Design Gate 통과** — 6/6 (ui 생략 정당화 / hook 재활용 / LLM 휴리스틱 spec / status 스키마 / PoC 절차 / fallback 즉시 전환). CTO do (W1 D1 PoC) 진입 가능 | CTO (design) | 본 main.md |
+| 2026-05-09 | **Design Lean Rewrite v2.0** — 4 critical 이슈 (§7 cto-tech-plan 중복 / Decision Record 분산 / manual fallback 비대 / PoC 시간 ceremony) 처리. m0-design 235→~150, m1-poc-design 137→~75. 합계 424 → ~280 (-34%). lean 정신 일관성 검증 (두 번째 self-application) | CTO (design v2) | design 검토 chat |
 
 ## Artifacts
 
@@ -49,4 +50,5 @@ PRD v2.0 §5 (lazy-load PoC W1 D1) + cto-tech-plan v2.0 §2 (negative test 재�
 
 | version | date | change |
 |---------|------|--------|
-| v1.0 | 2026-05-09 | 초기 작성 — CTO design (ui-designer 생략, infra-architect 영역만, lean). 7 Decision Record + 2 artifacts |
+| v1.0 | 2026-05-09 | 초기 작성 — CTO design (ui-designer 생략, infra-architect 영역만). 7 Decision Record + 2 artifacts. 424 줄 |
+| v2.0 | 2026-05-09 | **Lean Rewrite** — 4 critical 이슈 처리 (중복/분산/비대/ceremony). 8 Decision Record. 424 → ~280 (-34%). vais-code lean 정신 일관성 두 번째 검증 |
