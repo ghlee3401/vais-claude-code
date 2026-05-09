@@ -23,6 +23,11 @@ vais-code 의 정체성·범위·우선순위를 재정의하는 ideation. CC na
 | 2026-05-09 | M0 메커니즘 = working-notes 자동 누적 (①) + Decision Record append-only (②) + 사용자 "체크포인트" 키워드 (③) + session-start 자동 복원 (④) | CEO (ideation) | working-notes turn 7 |
 | 2026-05-09 | v0.66~v0.71 잠정 로드맵: M0 + M1 → M2 (Delegation Protocol) → M3 (문서 메타-가이드) → A (CTO 슬림화) → B (Target-app Bootstrap) → M4 (Cadence Automation) | CEO (ideation) | working-notes turn 6 |
 | 2026-05-09 | 본 ideation 자체를 즉시 박제 — v0.66 M0 의 가장 강한 use case (self-application) 으로 활용. AskUserQuestion 회피·user 명시 요청에 응답하는 자발적 박제이며 ideation-guard 와 충돌 X | CEO (ideation) | working-notes turn 8 |
+| 2026-05-09 | **Q1 해결** — Tier-1 6 개 framework: CEO Rumelt Strategy Kernel / CPO PRD writing OJT (8 섹션 + JTBD 인터뷰) / CTO Architecture decision (system design 5 단계 + ADR) / CSO OWASP + GDPR 한국 적용 / CBO Financial Modeler 3-Statement + CAC/LTV / COO Incident playbook (Sev 1~4 + SLA). 기준 = "사용자 즉각 효용" + "vanilla CC 차별화 큼" 조합. CBO 는 JTBD VPC → Financial Modeler 로 변경 (1 PO 가 가장 부재한 영역) | CEO (ideation Q1) | working-notes Q1 |
+| 2026-05-09 | **Q2 해결** — M0 working-notes append 트리거 = 매 turn + LLM 휴리스틱 선별 (결정/새 정보 turn 만 기록, 단순 확인은 skip). hook 으로 강제, 사용자 부담 0. | CEO (ideation Q2) | working-notes Q2 |
+| 2026-05-09 | **Q3 해결** — 정체성 대외 메시지화 = 점진적. 내부 (CLAUDE.md / agents/_shared/work-rules.md) 즉시 박제, README/AGENTS.md 는 v0.67 이후 dogfood 검증 후. v0.66 작업 범위에서 README 변경 X. | CEO (ideation Q3) | working-notes Q3 |
+| 2026-05-09 | **Q4 해결** — Target-app Bootstrap = Hybrid. 부분 (CLAUDE.md/.claude/settings.json/AGENTS auto-init, knowledge 흡수 없이) v0.67. 풀 distribution v0.70+. 사용자 turn 1 직접 명시 화두라 v0.70 후순위 부적절. | CEO (ideation Q4) | working-notes Q4 |
+| 2026-05-09 | **Q5 해결** — M2 Delegation Protocol 별도 모듈 폐기. M1 knowledge 안에 흡수 (각 C-Level/knowledge/delegation-context.md) + 공통 프로토콜은 agents/_shared/delegation-protocol.md. v0.67 슬롯은 target-app 부분 Bootstrap 으로 대체. | CEO (ideation Q5) | working-notes Q5 |
 
 ## Artifacts
 
@@ -43,20 +48,21 @@ vais-code 의 정체성·범위·우선순위를 재정의하는 ideation. CC na
 
 | 모듈 | 역할 | 상태 |
 |------|------|------|
-| **M0. Ideation Continuity** | working-notes 자동 + Decision Record append + 체크포인트 키워드 + session-start 복원 | v0.66 선결과제 (turn 7 도출) |
-| **M1. Knowledge Pack 강화** | 6 C-Level knowledge/ 디렉토리에 부서장 OJT 깊이로 framework + 실무 매뉴얼 + 의사결정 패턴 박제 (Tier-1 6 개 우선) | v0.66 본진 |
-| M2. Delegation Protocol | CEO ↔ C-Level ↔ sub-agent 위임 시 컨텍스트/spec/검증 프로토콜 | v0.67 |
-| M3. 문서 메타-가이드 | 산출물의 *왜/언제* 박제 (PRD vs RFC vs Decision Log) | v0.68 |
+| **M0. Ideation Continuity** | working-notes 자동 + Decision Record append + 체크포인트 키워드 + session-start 복원 | v0.66 선결과제 |
+| **M1. Knowledge Pack Tier-1 6 개** | CEO Rumelt / CPO PRD OJT / CTO Architecture / CSO OWASP+GDPR / CBO Financial Modeler / COO Incident Playbook | v0.66 본진 |
+| Target-app Bootstrap (부분) | `/vais init {app}` — CLAUDE.md/.claude/settings/AGENTS auto-init (knowledge 흡수 없이) | v0.67 |
+| M3. 문서 메타-가이드 + M1 Tier-2 | 산출물의 *왜/언제* 박제 + Tier-2 knowledge 박제 | v0.68 |
 | A. CTO 슬림화 | CC native 분기점 정합 정리 | v0.69 |
-| B. Target-app Bootstrap | knowledge 를 다른 앱으로 distribution | v0.70 |
+| B. Target-app **풀** Distribution | knowledge pack 내장 부트스트랩 (M1 충실 후) | v0.70+ |
 | M4. 부서장 Cadence | 일/주/월/분기 cadence 자동 트리거 | v0.71+ |
+| ~~M2. Delegation Protocol~~ | ❌ 폐기 — M1 knowledge 안에 흡수 + `agents/_shared/delegation-protocol.md` (공통) | — |
 
 ### 권장 다음 단계
 
 `/vais cpo plan vais-positioning-rethink` — CPO 에게 PRD 작성 위임. 범위 = M0 + M1 첫 sprint. PRD 가 정의해야 할 것:
 
 - M0 4 메커니즘의 구체 구현 spec (working-notes 형식, Decision Record 트리거 조건, 체크포인트 키워드 목록, session-start hook 동작)
-- M1 Tier-1 6 개 knowledge 박제 우선순위 (CEO Rumelt / CPO PRD writing / CTO system design / CSO OWASP / CBO JTBD VPC / COO incident playbook)
+- M1 Tier-1 6 개 knowledge 박제 (Q1 해결): CEO Rumelt / CPO PRD OJT / CTO Architecture / CSO OWASP+GDPR 한국 / CBO Financial Modeler 3-Statement / COO Incident Playbook
 - 박제 깊이 기준 (3000~5000 자 / OJT 매뉴얼 수준 / 4 요소: framework + 실무단계 + 의사결정패턴 + 산출물양식)
 - 사용자 페르소나 (1 PO = 본 사용자 자신 — dogfood 우선)
 - 성공 기준 (M0: 세션 끊겨도 5 줄 요약으로 회복 가능 / M1: dogfood 시 vanilla CC plan 대비 차별화 입증)
@@ -66,3 +72,4 @@ vais-code 의 정체성·범위·우선순위를 재정의하는 ideation. CC na
 | version | date | change |
 |---------|------|--------|
 | v1.0 | 2026-05-09 | 초기 작성 — turn 1~8 ideation 핵심 박제. 사용자 명시 요청 ("니가 추천해줘") 에 따라 즉시 dogfood 박제 |
+| v1.1 | 2026-05-09 | Q1~Q5 해결 박제 — Tier-1 6 개 (CBO 는 Financial Modeler 로 변경) / M0 트리거 / 정체성 점진적 대외화 / Target-app Hybrid (부분 v0.67) / M2 폐기 + 흡수. 로드맵 v2 반영 |

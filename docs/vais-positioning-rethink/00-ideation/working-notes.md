@@ -99,20 +99,109 @@ CEO 추천:
 3. `.vais/status.json` 갱신 (vais-positioning-rethink 등록 + activeFeature 전환)
 4. `MEMORY.md` 갱신 (1 줄 인덱스 + project memory 파일)
 
-다음 단계: `/vais cpo plan vais-positioning-rethink` 권장 — PRD 작성으로 M0+M1 spec 구체화.
+→ git commit `ec5df77` 으로 박제 못박음.
 
-## Open Questions (미해결)
+### Turn 9 — Q1~Q5 해결 토론
 
-| Q | 메모 |
+사용자 선택: "Open Questions 먼저 논의" (commit 후).
+
+#### Q1. Tier-1 6 개 framework 선택 기준
+
+3 후보:
+- (a) 가장 자주 쓰는 것 (frequency)
+- (b) 가장 차별화 큰 것 (uniqueness vs vanilla CC)
+- (c) 사용자 즉각 효용 큰 것 (immediate value)
+
+→ **답: (c) + (b) 조합**. PO 가 매주 마주치는데 vanilla CC 로 못 푸는 것 우선.
+
+Tier-1 6 개:
+1. CEO Rumelt Strategy Kernel — 전략 결정 매뉴얼 (Diagnosis-Guiding-Coherent 인과 사슬)
+2. CPO PRD writing OJT (8 섹션 + JTBD 인터뷰 스크립트) — PO 가 매주 1+회
+3. CTO Architecture decision (system design 5 단계 + ADR) — 부서장의 가장 비싼 결정
+4. CSO OWASP + GDPR 한국 적용 체크리스트 — 1 PO 가 가장 부재한 영역
+5. **CBO Financial Modeler 3-Statement + CAC/LTV** — 1 PO 가 가장 두려워하는 영역. JTBD VPC 보다 dogfood 효용↑
+6. COO Incident playbook (Sev 1~4 + SLA) — 운영 부서장 매뉴얼 핵심
+
+#### Q2. M0 working-notes 자동 append 트리거
+
+3 후보:
+- (a) 매 turn — 자동 append
+- (b) N turn 마다 — 5 turn 단위
+- (c) 사용자 명시 키워드만 — "체크포인트"
+
+→ **답: (a) 매 turn + LLM 휴리스틱 선별**.
+
+기록 가치 휴리스틱:
+| turn 유형 | 동작 |
+|----------|------|
+| 결정 내려진 turn | append 1~3 줄 + Decision Record 동시 append |
+| 새 정보·관점 등장 turn | append 1~3 줄 |
+| 단순 확인 ("OK", "그래") | skip |
+| 명확화 질문 | skip 또는 1 줄 |
+
+비용: turn 당 LLM 호출 1 회 (요약·판단). prompt 100 + response 30 토큰. hook 자동화 → 사용자 부담 0.
+
+#### Q3. 정체성 대외 메시지화
+
+→ **답: 점진적 — 내부 즉시, 대외는 v0.67 후**.
+
+근거:
+- 정체성은 *가설 단계*. dogfood (M1 6 개) 검증 후 README 갱신해야 안전
+- "부서장 매뉴얼" 은 한국 기업적 어휘 — 글로벌 OSS 메시지로 retraction 비용 큼
+- 내부 박제 즉시 (CLAUDE.md / agents/_shared/work-rules.md) — internal alignment 용
+- v0.66 작업에서 README/AGENTS.md 변경 X. CLAUDE.md 만 정체성 1 줄 추가
+
+#### Q4. Target-app Bootstrap 우선순위
+
+CEO 후순위 (v0.70+) 안 vs 사용자 turn 1 직접 화두 충돌.
+
+→ **답: Hybrid — 부분 v0.67, 풀 v0.70+**.
+
+| Sprint | 범위 | 전제 |
+|--------|------|------|
+| v0.67 | **부분 Bootstrap**: `/vais init {target-app}` 가 CLAUDE.md + `.claude/settings.json` + AGENTS.md 자동 생성 (knowledge 흡수 없이, templates 기반) | M0 박힘 |
+| v0.70+ | **풀 Distribution**: target-app 의 dev 진행 중 결정·컨벤션이 자동 누적. knowledge pack 내장 | M1 충실 후 |
+
+#### Q5. M2 Delegation Protocol 위치
+
+→ **답: M1 흡수 + 공통은 _shared/**.
+
+| 위치 | 내용 |
+|------|------|
+| `agents/{c-level}/knowledge/delegation-context.md` | 각 C-Level 이 sub-agent 에게 *어떤 컨텍스트* 를 줘야 하는지 (도메인 의존) |
+| `agents/_shared/delegation-protocol.md` | 공통 위임 프로토콜 — spec 양식, 위임 실패 패턴, 검증 체크리스트 (도메인 무관) |
+
+→ M2 별도 모듈 폐기. v0.67 슬롯 → target-app 부분 Bootstrap 으로 대체.
+
+#### 도출된 로드맵 v2
+
+| 버전 | 모듈 |
+|------|------|
+| v0.66 | M0 + M1 Tier-1 6 개 |
+| v0.67 | Target-app Bootstrap 부분 (Q4 hybrid) |
+| v0.68 | M3 + M1 Tier-2 |
+| v0.69 | A. CTO 슬림화 |
+| v0.70+ | B. Target-app 풀 distribution |
+| v0.71+ | M4. Cadence |
+| ~~M2~~ | 폐기 → M1 흡수 + `_shared/delegation-protocol.md` |
+
+사용자 답변: "전수 동의 — 박제 후 PRD 진행".
+
+→ main.md Decision Record + 본 working-notes 업데이트 후 `/vais cpo plan vais-positioning-rethink` 진행.
+
+## Open Questions (해결 완료 — turn 9)
+
+| Q | 해결 |
 |---|------|
-| Q1 | M1 Tier-1 6 개 박제 시 framework 선택 기준? (가장 자주 쓰는 것 vs 가장 차별화 큰 것 vs 사용자 즉각 효용 큰 것) |
-| Q2 | M0 의 working-notes 자동 append 트리거? (매 turn / N turn 마다 / 사용자 명시 키워드만) |
-| Q3 | "부서장 매뉴얼" 정체성을 README/AGENTS.md 에 명시할 것인가? (대외 메시지 일관성 vs 너무 좁아 보일 위험) |
-| Q4 | Target-app Bootstrap (B) 우선순위 — v0.70 으로 미루는 게 맞나? 사용자 dogfood 외 외부 사용자 유입 동기로는 B 가 첫 trigger 일 수도 |
-| Q5 | M2 Delegation Protocol 의 위치 — 별도 모듈 vs M1 Knowledge Pack 안에 흡수 (각 C-Level knowledge/ 에 "위임 방법" 챕터로) |
+| Q1 ✅ | Tier-1 6 개 = Rumelt / PRD OJT / Architecture / OWASP+GDPR / **Financial Modeler** / Incident Playbook (CBO 는 JTBD VPC 가 아닌 financial 로 변경) |
+| Q2 ✅ | 매 turn + LLM 휴리스틱 선별 (결정/새 정보 turn 만, 단순 확인 skip). hook 자동화 |
+| Q3 ✅ | 점진적 — 내부 즉시, 대외 (README) 는 v0.67 후 dogfood 검증 후 |
+| Q4 ✅ | Hybrid — 부분 Bootstrap v0.67, 풀 Distribution v0.70+ |
+| Q5 ✅ | M2 폐기 → M1 knowledge 흡수 + `agents/_shared/delegation-protocol.md` (공통) |
 
 ## 변경 이력
 
 | version | date | change |
 |---------|------|--------|
 | v1.0 | 2026-05-09 | 초기 작성 — Session 1 (turn 1~8) 박제 |
+| v1.1 | 2026-05-09 | Turn 9 추가 — Q1~Q5 해결 토론 + 로드맵 v2 도출. Open Questions 5 개 모두 ✅ resolved |
