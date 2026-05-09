@@ -110,12 +110,15 @@ mandatory phase (plan/design/do/qa) 건너뛰기 금지. CPO/CSO/CBO/COO 동일.
 | CBO | SEO ≥ 80 + unit economics 타당성 | CBO 재실행 |
 | COO | CI/CD 모든 단계 정의 | COO 재실행 |
 
-## Knowledge Index (v0.65, lazy-load)
+## Knowledge Index (v0.66, manual @include — H4 PoC 결과 반영)
 
-| Knowledge | 사용 시점 | 경로 |
-|-----------|----------|------|
-| 7 차원 동적 라우팅 알고리즘 | ideation phase + 서비스 런칭 라우팅 | `agents/ceo/knowledge/seven-dimension-routing.md` (정본: `lib/ceo-algorithm.js`) |
-| Absorb Rubric | absorb 모드 (외부 레퍼런스 흡수) | `agents/ceo/knowledge/absorb-rubric.md` |
+> H4 lazy-load PoC 결과 (`docs/vais-positioning-rethink/03-do/poc-result.md`) — autonomous discovery 미동작, **manual @include 채택**. 매칭 조건 시 *literal Read* 후 답변 작성.
+
+| Knowledge | 사용 조건 | 명시 행동 |
+|-----------|---------|---------|
+| 7 차원 동적 라우팅 알고리즘 | ideation phase + 서비스 런칭 라우팅 | **Read `agents/ceo/knowledge/seven-dimension-routing.md`** 후 답변 (정본: `lib/ceo-algorithm.js`) |
+| Absorb Rubric | absorb 모드 (외부 레퍼런스 흡수) | **Read `agents/ceo/knowledge/absorb-rubric.md`** 후 답변 |
+| Rumelt Strategy Kernel | 전략 결정 / 신규 서비스 포지셔닝 / 위기 대응 (현재 PoC stub, W1 D5 정식 박제 예정) | **Read `agents/ceo/knowledge/rumelt-strategy-kernel.md`** 후 답변. Diagnosis-Guiding Policy-Coherent Actions 인과 사슬 적용 |
 
 ## PDCA — 라우팅 모드
 

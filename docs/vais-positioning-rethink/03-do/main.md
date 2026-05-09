@@ -22,13 +22,17 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | 2026-05-09 | Sprint Plan = 4 주 (week 1 M0 인프라, week 2 M1 첫 3 framework, week 3 M1 나머지 3, week 4 dogfood + CLAUDE.md/CHANGELOG) | CPO (do) | prd-writer Sprint |
 | 2026-05-09 | Must Have (MoSCoW) = M0 working-notes 자동 + Decision Record append + session-start 복원, M1 6 개 framework, CLAUDE.md 1 줄 추가. Should Have = 체크포인트 키워드. Could Have = OJT 깊이 cross-review. Won't Have = README/AGENTS 업데이트 (v0.67 후) | CPO (do) | prd-writer MoSCoW |
 | 2026-05-09 | **PRD v2.0 Lean Rewrite** (Plan 검토 후) — 8 섹션 + 7 부록 → 8 섹션 본문 통합 (lean). M1 = Tier-1A 3 개만, Tier-1B v0.67+ 이동. KR3 객관화 (grep). H1, H4 핵심 2 가정만. Sprint v2 (4 주 → 2 주). 704 → ~250 줄 | CPO (do v2) | prd v2.0 |
+| 2026-05-09 | **CTO Do W1 D1 — H4 PoC empirical 결정** — Step 1 진행 전 source-of-truth 증거 (vais.config.json 명세 "manual reference" / runtime 코드 부재 / CEO Index 미등재) 로 즉시 FAIL 판정. Step 2 negative test 불필요. **manual @include fallback 채택** | CTO (do W1D1) | poc-result.md |
+| 2026-05-09 | **CEO ceo.md Knowledge Index 갱신** — *manual @include* 형식으로 변경. Rumelt Strategy Kernel entry 추가 (PoC stub). 모든 entry 에 *literal Read 지시* 명시 ("Read X 후 답변") | CTO (do W1D1) | agents/ceo/ceo.md (수정) |
+| 2026-05-09 | **PoC 30 분 단축** — design §4 추정 (PASS ~1h / FAIL ~2h) 대비 empirical 증거로 ~30 분 완료. W1 D1 잔여 ~3.5h 으로 M0 status.json 스키마 + working-notes hook 작업 시작 가능 (계획보다 앞당김) | CTO (do W1D1) | poc-result.md §4 |
 
 ## Artifacts
 
 | File | Type | Description |
 |------|------|-------------|
-| `03-do/main.md` | 인덱스 | 본 문서 |
-| `03-do/prd.md` | PRD | prd-writer 합성, 8 섹션 + 7 부록, 704 줄 |
+| `03-do/main.md` | 인덱스 (CPO + CTO 공동) | 본 문서 |
+| `03-do/prd.md` | PRD (CPO) | prd-writer 합성, 8 섹션 + 7 부록 → v2.0 lean (189 줄) |
+| `03-do/poc-result.md` | PoC 결과 (CTO) | H4 lazy-load PoC empirical 결정 (manual @include 채택) |
 
 ## CEO 판단 근거
 
