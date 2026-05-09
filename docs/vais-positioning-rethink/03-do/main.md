@@ -21,6 +21,7 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | 2026-05-09 | OKR Key Results 5 개 = (1) M0 4 메커니즘 + 5 분 회복 입증 (2) M1 Tier-1 6/6 통과 (3) dogfood A/B 차별화 (4) CLAUDE.md 정체성 반영 (5) CHANGELOG v0.66 entry | CPO (do) | prd-writer 4 |
 | 2026-05-09 | Sprint Plan = 4 주 (week 1 M0 인프라, week 2 M1 첫 3 framework, week 3 M1 나머지 3, week 4 dogfood + CLAUDE.md/CHANGELOG) | CPO (do) | prd-writer Sprint |
 | 2026-05-09 | Must Have (MoSCoW) = M0 working-notes 자동 + Decision Record append + session-start 복원, M1 6 개 framework, CLAUDE.md 1 줄 추가. Should Have = 체크포인트 키워드. Could Have = OJT 깊이 cross-review. Won't Have = README/AGENTS 업데이트 (v0.67 후) | CPO (do) | prd-writer MoSCoW |
+| 2026-05-09 | **PRD v2.0 Lean Rewrite** (Plan 검토 후) — 8 섹션 + 7 부록 → 8 섹션 본문 통합 (lean). M1 = Tier-1A 3 개만, Tier-1B v0.67+ 이동. KR3 객관화 (grep). H1, H4 핵심 2 가정만. Sprint v2 (4 주 → 2 주). 704 → ~250 줄 | CPO (do v2) | prd v2.0 |
 
 ## Artifacts
 

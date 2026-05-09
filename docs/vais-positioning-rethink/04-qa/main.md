@@ -20,6 +20,7 @@ CPO QA: PRD 8 섹션 + 7 부록 정량 검증. 결과 **8/8 + 7/7 = 100%** (통�
 | 2026-05-09 | H1~H5 5 가정 모두 검증 방법 명시 — H4 (lazy-load 동작) 가 가장 큰 리스크. CTO plan 에서 PoC 우선 처리 권장 | CPO (qa) | qa-report §3 |
 | 2026-05-09 | Minor 이슈 5 개 식별 (Sprint Week 1 8 task 부하 / R-1 realism / H4 PoC / H5 표본 / 7.3-7.4 충돌). CTO plan 에서 해소 권장 — 본 QA 단계에서 PRD 재작성 불필요 | CPO (qa) | qa-report §4 |
 | 2026-05-09 | CTO 핸드오프 컨텍스트 = prd-writer 결과 그대로 충분. 추가 report phase 생략 가능 (사용자 선택) | CPO (qa) | qa-report §5 |
+| 2026-05-09 | **QA v2.0 Lean Rewrite** — PRD v2 + Plan v2 재검증. 7 critical 이슈 모두 처리 (self-referential trap / H4 PoC negative / Tier-1B v0.67 / Sprint source / KR3 grep / H1 양해 / day 단위). PRD 100% + KR 5/5 객관 측정 + H1/H4 검증 가능. PASS 유지 | CPO (qa v2) | qa-report v2.0 |
 
 ## Artifacts
 

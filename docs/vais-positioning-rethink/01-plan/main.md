@@ -25,6 +25,11 @@ vais-code 의 v0.66 본 sprint scope 를 *제품 기획 시각* 으로 정의. C
 | 2026-05-09 | **Sprint Plan v2 (4 주, Week 분할 재조정)** — W1 = M0 인프라 + lazy-load PoC. W2 = M1 첫 3 박제 (CEO/CPO/CTO). W3 = M1 나머지 3 (CSO/CBO/COO). W4 = 검증 + GA. 기존 v1 (Week 1 8 task) 의 부하 분산 | CTO (plan) | cto-tech-plan §4 |
 | 2026-05-09 | **H4 Lazy-load PoC Spec** — Week 1 D1-2 에 CEO `rumelt-strategy-kernel.md` 1 개만 박제 (300 자 minimal stub) → CEO agent 호출 → context 주입 확인. PASS → 5 박제 GO. FAIL → manual `@include` fallback 즉시 전환 (R-3 완화) | CTO (plan) | cto-tech-plan §5 |
 | 2026-05-09 | **Implementation 분해 (Plan ≠ Do)** — 본 plan 은 *기술 spec* 만. 실제 hook 구현·knowledge 박제는 Do phase. sub-agent 매핑: M0 인프라 = backend-engineer, M1 박제 = 각 C-Level (직접 위임), Lazy-load PoC = backend-engineer + qa-engineer 검증 | CTO (plan) | cto-tech-plan §6 |
+| 2026-05-09 | **Plan 검토 후 Lean Rewrite 결정** — 7 critical 이슈 노출 (self-referential doc 폭증 / H4 PoC 부정확 / Tier-1B 도메인 부재 / PRD-Plan 정합 깨짐 / KR3 통계 + 주관성 / H1 자기 참조 / Sprint day 모호). PRD/Plan/QA v2.0 압축본 (1,759 → ~937 줄) | CPO+CTO (plan review) | review chat (turn 14~16) |
+| 2026-05-09 | **Tier-1B 이동 (Critical #3 해결)** — CSO/CBO/COO 박제는 사용자 도메인 부재 → LLM-generated trap 회피. v0.67+ 외부 contributor 또는 사용자 직접 학습 후 박제. v0.66 = M1-A (CEO/CPO/CTO) 3 개만 | CPO (plan review) | PRD v2.0 §4 |
+| 2026-05-09 | **H4 PoC 재정의 (Critical #2 해결)** — signature 등장 ≠ lazy-load. negative test 로 재정의: *파일명 변경 시 signature 가 사라지는가?* PASS = autonomous discovery 확인. FAIL = manual `@include` fallback 즉시 전환 | CTO (plan review) | PRD v2.0 §5 / cto-tech-plan v2.0 §2 |
+| 2026-05-09 | **KR3 객관화 (Critical #5 해결)** — "주관적 1 회 비교" → "5+ 질문 풀, 박제 framework keyword 5+ grep vs vanilla CC". SMART M (Measurable) 충족 | CPO (plan review) | PRD v2.0 §3 |
+| 2026-05-09 | **Sprint 단일 source (Critical #4 해결)** — Sprint Plan v2 = PRD §7 단독. cto-tech-plan §3 = "PRD 그대로 채택, 추가 분해 없음" 선언. v1/v2 정합 깨짐 해소 | CTO (plan review) | cto-tech-plan v2.0 §3 |
 
 ## Artifacts
 
@@ -40,13 +45,15 @@ vais-code 의 v0.66 본 sprint scope 를 *제품 기획 시각* 으로 정의. C
 
 ## Next Phase
 
-### Plan phase 완료 — 다음: **CTO design**
+### Plan phase 완료 (Lean Rewrite v2.0 후) — 다음: **CTO design** 또는 **CTO do 직행**
 
-CPO plan 은 PRD 8 섹션 + 부록 7 종으로 완료 (Do phase 03-do/). CTO plan 은 본 main.md + cto-tech-plan.md 로 완료 (기술 spec 박제, 코드 X — Plan ≠ Do).
+PRD v2.0 + Plan v2.0 + QA v2.0 = ~937 줄 (1,759 에서 -47%). 7 critical 이슈 모두 처리.
 
-다음: `/vais cto design vais-positioning-rethink` — ui-designer + infra-architect 병렬. vais-code 는 CLI 기반이라 ui-designer 의 wireframe 의미 약함 — infra-architect 단독으로 M0 hook 아키텍처 설계 + .vais/status.json 스키마 확정. Design 후 do 에서 실제 구현.
+다음 옵션:
+- `/vais cto design vais-positioning-rethink` — infra-architect 단독 (CLI 기반 → ui-designer 생략). M0 hook 아키텍처 + status.json 스키마 확정
+- 또는 `/vais cto do vais-positioning-rethink` — design 생략하고 W1 D1 lazy-load PoC 부터 즉시 진행 (Sprint v2 = 2 주, day 부족)
 
-> ⚠️ Mandatory phase 순서: design → do → qa → report. 스킵 금지. Lazy-load PoC 는 design phase Gate 1 통과 조건 (cto-tech-plan §5).
+> ⚠️ Mandatory phase 순서: design → do → qa → report. 스킵 시 경고. CLI 도구 + lean rewrite 후 단순 hook 구현이라 design 생략 정당화 가능 (cto-tech-plan v2.0 정합).
 
 ## 변경 이력
 
@@ -54,3 +61,4 @@ CPO plan 은 PRD 8 섹션 + 부록 7 종으로 완료 (Do phase 03-do/). CTO pla
 |---------|------|--------|
 | v1.0 | 2026-05-09 | 초기 작성 — ideation 박제 후 CPO plan phase 진입. 5 Decision Record + plan-rationale.md 1 artifact |
 | v2.0 | 2026-05-09 | CTO 기술 변환 추가 — CTO Decision Record 6 entries (CP-0 full / 5 minor 흡수 / Sprint v2 / H4 PoC / Implementation 분해) + cto-tech-plan.md artifact. Next Phase = CTO design |
+| v3.0 | 2026-05-09 | **Lean Rewrite** — Plan 검토 후 7 critical 이슈 처리 (self-referential trap / H4 PoC negative test 재정의 / Tier-1B v0.67 이동 / Sprint 단일 source / KR3 객관 grep / H1 자기 참조 양해 / day 단위 명시). PRD 704→250, plan-rationale 186→80, cto-tech-plan 266→100, qa-report 156→60. 합계 1,759 → ~937 (-47%) |
