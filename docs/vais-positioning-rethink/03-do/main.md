@@ -25,6 +25,8 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | 2026-05-09 | **CTO Do W1 D1 — H4 PoC empirical 결정** — Step 1 진행 전 source-of-truth 증거 (vais.config.json 명세 "manual reference" / runtime 코드 부재 / CEO Index 미등재) 로 즉시 FAIL 판정. Step 2 negative test 불필요. **manual @include fallback 채택** | CTO (do W1D1) | poc-result.md |
 | 2026-05-09 | **CEO ceo.md Knowledge Index 갱신** — *manual @include* 형식으로 변경. Rumelt Strategy Kernel entry 추가 (PoC stub). 모든 entry 에 *literal Read 지시* 명시 ("Read X 후 답변") | CTO (do W1D1) | agents/ceo/ceo.md (수정) |
 | 2026-05-09 | **PoC 30 분 단축** — design §4 추정 (PASS ~1h / FAIL ~2h) 대비 empirical 증거로 ~30 분 완료. W1 D1 잔여 ~3.5h 으로 M0 status.json 스키마 + working-notes hook 작업 시작 가능 (계획보다 앞당김) | CTO (do W1D1) | poc-result.md §4 |
+| 2026-05-09 | **CTO Do W1 D2 — M0 인프라 코드 박제** — `lib/status.js` 4 ideation helpers (set/get/list/clear) + `lib/llm-heuristic.js` 신규 (Claude Haiku wrapper, fail-safe SKIP fallback) + `lib/m0-record-turn.js` 신규 worker (transcript JSONL parse + LLM 휴리스틱 + working-notes append + Decision Record M0-②) + `scripts/stop-handler.js` 확장 (detached 자식 spawn — fire-and-forget). 총 ~315 줄 코드 추가 | CTO (do W1D2) | lib/m0-record-turn.js + lib/llm-heuristic.js |
+| 2026-05-09 | **BC + 안전성 — Stop hook 무영향 정책** — ideation.inProgress=true + transcript_path 가용 시에만 worker spawn. detached + stdio:ignore 로 사용자 경험 영향 0. SDK 미설치/API 키 부재/timeout/JSON 파싱 실패 모두 default SKIP fallback. 본 vais-positioning-rethink ideation 은 inProgress=false (status.json 미존재 시 null) 라 hook 미동작 — 다음 ideation feature 에서 실제 검증 | CTO (do W1D2) | scripts/stop-handler.js + lib/llm-heuristic.js |
 
 ## Artifacts
 
@@ -33,6 +35,8 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | `03-do/main.md` | 인덱스 (CPO + CTO 공동) | 본 문서 |
 | `03-do/prd.md` | PRD (CPO) | prd-writer 합성, 8 섹션 + 7 부록 → v2.0 lean (189 줄) |
 | `03-do/poc-result.md` | PoC 결과 (CTO) | H4 lazy-load PoC empirical 결정 (manual @include 채택) |
+| **코드 변경** (W1 D1) | `agents/ceo/ceo.md` Knowledge Index 갱신 + `agents/ceo/knowledge/rumelt-strategy-kernel.md` PoC stub | git 64e3801 |
+| **코드 변경** (W1 D2) | `lib/status.js` (+4 ideation helpers) / `lib/llm-heuristic.js` (신규) / `lib/m0-record-turn.js` (신규 worker) / `scripts/stop-handler.js` (M0-① detached spawn) | 본 commit |
 
 ## CEO 판단 근거
 

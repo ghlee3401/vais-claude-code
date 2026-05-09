@@ -6,10 +6,12 @@ process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] 
  * 응답 완료 시 현재 진행 상태 요약 + 다음 단계 안내
  */
 const fs = require('fs');
+const path = require('path');
+const { spawn } = require('child_process');
 const { readStdin, outputAllow } = require('../lib/io');
 const { debugLog } = require('../lib/debug');
 const { logHook } = require('../lib/hook-logger');
-const { getActiveFeature, getProgressSummary } = require('../lib/status');
+const { getActiveFeature, getProgressSummary, getIdeationProgress } = require('../lib/status');
 const { loadConfig } = require('../lib/paths');
 const { sendWebhook } = require('../lib/webhook');
 
@@ -44,11 +46,32 @@ function buildProgressBar(done, total, width = 10) {
 }
 
 function main() {
-readStdin(); // stdin 소비 (내용 미사용)
+const input = readStdin(); // v0.66 — input 캡처 (transcript_path 추출용)
 
 const config = loadConfig();
 const version = config.version || '0.0.0';
 const activeFeature = getActiveFeature();
+
+// v0.66 M0-① — Ideation Continuity worker (fire-and-forget detached)
+// 활성 feature 의 ideation.inProgress=true + transcript_path 가용 시만.
+// 실패 silent — 사용자 경험에 영향 없음.
+try {
+  const ideation = activeFeature ? getIdeationProgress(activeFeature) : null;
+  const transcriptPath = input?.transcript_path;
+  if (ideation?.inProgress === true && transcriptPath && typeof transcriptPath === 'string') {
+    const workerPath = path.join(__dirname, '..', 'lib', 'm0-record-turn.js');
+    if (fs.existsSync(workerPath)) {
+      const child = spawn(process.execPath, [workerPath, transcriptPath, activeFeature], {
+        detached: true,
+        stdio: 'ignore',
+      });
+      child.unref();
+      debugLog('StopHandler', 'M0-① worker spawned', { feature: activeFeature, transcriptPath });
+    }
+  }
+} catch (e) {
+  debugLog('StopHandler', 'M0-① spawn failed (silent)', { error: e.message });
+}
 
 // 활성 피처가 없을 때: 버전 정보만 표시
 if (!activeFeature) {
