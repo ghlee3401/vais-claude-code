@@ -1,5 +1,59 @@
 # Changelog
 
+## [0.66.0] - Unreleased — vais-positioning-rethink: Organization-in-a-box 정체성 박제
+
+**정체성 재정의** — vais-code = *organization-in-a-box* (부서장 매뉴얼). PO 1 명이 부서장 OJT 매뉴얼을 통해 가상 C-Suite 조직을 운영하는 도구. claude-code native 진화 (plan/review/parallel agents) 와의 차별화 = *부서장 OJT 4 요소* (framework + 실무 단계 + 의사결정 패턴 + 산출물 양식) 박제.
+
+피처: `vais-positioning-rethink`. 16 commits (Sprint W1+W2). PRD v1→v2 Lean Rewrite (-49% 분량) + Design Lean Rewrite (-37%) 통해 *plan 자체가 doc 폭증 화두 위반하지 않게* 박제.
+
+### Added — M0 (Ideation Continuity, 4 메커니즘)
+
+- **`lib/status.js`** — ideation 진행 상태 4 helpers (`setIdeationProgress` / `getIdeationProgress` / `listInProgressIdeations` / `clearIdeationProgress`). `features.{name}.ideation = { inProgress, lastTurn, workingNotesPath, mainMdPath, lastUpdated }`.
+- **`lib/llm-heuristic.js`** — Anthropic SDK wrapper (`@anthropic-ai/sdk` ^0.30.0, `optionalDependency`). `judgeTurnWorth()` async — claude-haiku-4-5 SYSTEM_PROMPT 로 KEPT/SKIP + decisionKeywords 판정. SDK 미설치/API 키 부재/timeout/JSON 파싱 실패 모두 default SKIP fallback.
+- **`lib/m0-record-turn.js`** — Stop hook 으로부터 spawn 되는 detached worker. transcript JSONL parse → 마지막 user+assistant turn 추출 → judgeTurnWorth → KEPT 시 working-notes append + decisionKeywords 시 main.md Decision Record 행 append. 모든 실패 silent `process.exit(0)`.
+- **`scripts/stop-handler.js`** — `child.unref()` 로 fire-and-forget worker spawn. ideation.inProgress=true + transcript_path 가용 시에만 발동 (BC + 무영향).
+- **`hooks/checkpoint-keyword.js`** — UserPromptSubmit handler. 5 키워드 (`체크포인트` / `여기까지 정리` / `여기까지정리` / `checkpoint` / `summary so far`) 감지 → main.md Decision Record 마지막 3 + working-notes 마지막 entry 추출 → additionalContext 출력.
+- **`hooks/session-start.js`** — `listInProgressIdeations()` 호출 추가 + `_renderIdeationRestore()` 함수로 in-progress ideation 발견 시 5 줄 요약 prepend.
+- **`hooks/hooks.json`** — UserPromptSubmit 이벤트에 `checkpoint-keyword.js` 등록 1 항목.
+
+### Added — M1 Knowledge Pack Tier-1A (3 부서장 OJT)
+
+manual @include Knowledge Index — H4 PoC 결과 (autonomous lazy-load 미동작 — `docs/vais-positioning-rethink/03-do/poc-result.md`) 로 *literal "Read X 후 답변"* 형식 채택.
+
+- **`agents/ceo/knowledge/rumelt-strategy-kernel.md`** (211 줄, 6,819자) — Rumelt *Good Strategy / Bad Strategy* + Diagnosis-Guiding Policy-Coherent Actions 인과 사슬 + 5 Step 워크숍 + Bad Strategy 4 함정 + ADR 양식 + R-1 vais-positioning-rethink 자기 적용 사례.
+- **`agents/cpo/knowledge/prd-writing-ojt.md`** (215 줄, 6,675자) — PRD ≠ Spec/Plan/Brief + Cagan 8 섹션 의미 + 5 Step 작성 OJT (JTBD Bob Moesta 5 질문 + Working Backward) + 흔한 실수 7 + 부록 결정 매트릭스 + R-1 PRD v1→v2 Lean Rewrite 회고.
+- **`agents/cto/knowledge/architecture-decision.md`** (233 줄, 11,690byte) — Decision/Design/Implementation 분리 + Reversibility 4 등급 + C4 4 Level + 5 Step OJT (Trigger → Context+Constraint+Assumption → ≥3 옵션 → Trade-off Matrix → ADR) + 흔한 실수 7 + Trade-off Catalog 7 dilemma + MADR v3 template + R-1 자기 적용 3 ADR.
+
+### Changed
+
+- **`agents/{ceo,cpo,cto}/{ceo,cpo,cto}.md`** — Knowledge Index lazy-load → manual @include 형식 통일. 4 Primary 중 3 개 (CEO 3 + CPO 4 + CTO 6 = 13 entries) 적용. CSO 는 Tier-1B v0.67+ 이연.
+- **`CLAUDE.md`** — "What This Project Is" 섹션 첫 줄에 정체성 1 줄 추가 — *organization-in-a-box (부서장 매뉴얼)*. KR4 직접 충족.
+
+### Validated — KR3 dogfood A/B 5/5 PASS
+
+`docs/vais-positioning-rethink/03-do/dogfood-ab-result.md` — 5 grep metric:
+
+| Metric | 결과 |
+|--------|------|
+| M1 파일 존재 | Tier-1A 3/3 (31,475 byte) ✅ |
+| M2 manual @include 진입점 | 13 entries ✅ |
+| M3 OJT 4 요소 헤딩 | 12/12 (100%) ✅ |
+| M4 R-1 자기 적용 인용 | 6 회 (3+2+1) ✅ |
+| M5 vanilla CC 차별화 | 13 vs 0 hit ✅ |
+
+### Deferred to v0.67+
+
+- M1-B Tier-1B Knowledge Pack (CSO/CBO/COO 부서장 OJT) — 외부 도메인, contributor 확보 후
+- Target-app Bootstrap (end-user app CLAUDE.md 자동 생성)
+- README/AGENTS.md 정체성 대외화
+- Runtime instrumentation — Read tool 호출 시 OJT 파일 grep 카운트 (정적 grep → 동적 측정)
+- OJT budget 5,000자 → 7,000자 재조정 (실측 평균 ~6,750자 기반)
+
+### Known Limitations
+
+- M0-① working-notes 자동 누적 — *본 vais-positioning-rethink ideation* 은 inProgress=false 라 미발동. 다음 ideation feature 에서 실 운영 검증 필요 (KR1 의 운영 검증 후속).
+- 정적 grep 한계 — sub-agent 가 Knowledge Index 의 Read 지시를 *실제로* 따르는지는 runtime instrumentation (v0.67+) 까지 보류.
+
 ## [0.65.3] - 2026-05-07 — CEO 진입 절차 박제 (PO 의도 매핑 객관화)
 
 `embed-ceo-entry-procedure` 후속 패치. PO 감사 결과 `lib/ceo-algorithm.js` (197줄) 7 차원 알고리즘은 코드로 박제됐지만 `agents/ceo/ceo.md` 가 호출 절차를 명시 안 해 "CEO 가 LLM 자체 판단으로 라우팅 가능" 갭 발견 → vais-code 의 핵심 가치 (PO 의 자연어 의도 → 객관 알고리즘 매핑) 가 LLM 환각에 좌우될 위험.

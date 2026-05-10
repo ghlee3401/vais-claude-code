@@ -7,7 +7,9 @@
 
 ## What This Project Is
 
-AI C-Suite 조직 시뮬레이션 플러그인. CEO가 Product Owner로서 6 C-Level 팀(CPO, CTO, CSO, CBO, COO)을 고용·지휘하여 서비스 런칭 전체 라이프사이클을 자동 실행한다. 개별 C-Level 직접 호출도 가능. v0.50에서 CMO+CFO→CBO 통합, optional ideation phase 신설, Advisor Tool 기본 활성화. v0.61.0+ design-system MCP 활성화. v0.62.0 mui 디자인 시스템 카탈로그 박제 (`design-system/mui/`) + ui-designer DS 자동 선택. **v0.65 시리즈** — 0.65.0 PO 워크플로우 경량화 (Quiet by Default + Wisdom Split + Anti-Boilerplate), 0.65.1 약속·코드 정렬 (frontmatter v2.1 4 필수 + auto-select-template + CP-G 단일화), 0.65.2 templates/ 정합성 정리, 0.65.3 CEO 진입 절차 박제 (`analyzeCEO()` 호출 → 7 차원 등급 표 → activeCLevel 인용).
+**vais-code 정체성 (v0.66+)**: *organization-in-a-box* — PO 1 명이 부서장 OJT 매뉴얼 (도메인 지식 박제) 을 통해 가상 C-Suite 조직을 운영하는 도구. 부서장 OJT 4 요소 (framework + 실무 단계 + 의사결정 패턴 + 산출물 양식) 가 grep 가능 영역에 박제되어 vanilla CC 와 차별화.
+
+AI C-Suite 조직 시뮬레이션 플러그인. CEO가 Product Owner로서 6 C-Level 팀(CPO, CTO, CSO, CBO, COO)을 고용·지휘하여 서비스 런칭 전체 라이프사이클을 자동 실행한다. 개별 C-Level 직접 호출도 가능. v0.50에서 CMO+CFO→CBO 통합, optional ideation phase 신설, Advisor Tool 기본 활성화. v0.61.0+ design-system MCP 활성화. v0.62.0 mui 디자인 시스템 카탈로그 박제 (`design-system/mui/`) + ui-designer DS 자동 선택. **v0.65 시리즈** — 0.65.0 PO 워크플로우 경량화 (Quiet by Default + Wisdom Split + Anti-Boilerplate), 0.65.1 약속·코드 정렬 (frontmatter v2.1 4 필수 + auto-select-template + CP-G 단일화), 0.65.2 templates/ 정합성 정리, 0.65.3 CEO 진입 절차 박제 (`analyzeCEO()` 호출 → 7 차원 등급 표 → activeCLevel 인용). **v0.66.0** — Ideation Continuity (M0 4 메커니즘) + Knowledge Pack Tier-1A (CEO Rumelt + CPO PRD OJT + CTO Architecture Decision) + manual @include Knowledge Index.
 
 ## Project Structure
 

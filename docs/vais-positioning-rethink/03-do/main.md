@@ -39,6 +39,10 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | 2026-05-10 | **Tier-1A 박제 완료 (3/3)** — CEO Rumelt + CPO PRD Writing OJT + CTO Architecture Decision. 부서장 OJT 매뉴얼 평균 ~6,750자 → 11,690 byte (W2 D1 은 multi-byte 기준 측정). Tier-1A = vais-code 정체성 박제 완료 — 다음 W2 D2 dogfood A/B 검증 단계로 KR3 객관 측정 진입 | CTO (do W2D1) | Tier-1A summary |
 | 2026-05-10 | **CTO Do W2 D2 — KR3 dogfood A/B 검증 = 5/5 PASS (100%)** — `docs/vais-positioning-rethink/03-do/dogfood-ab-result.md` 신규. M1 파일 존재 (31,475byte 3/3) + M2 manual @include 진입점 (13 entries: CEO 3 + CPO 4 + CTO 6) + M3 OJT 4 요소 (12/12 100%) + M4 R-1 자기 적용 (6 회 인용 3/3) + M5 vanilla CC 차별화 (13 vs 0). 정적 grep 한계 명기 + 후속 runtime instrumentation v0.67+ 권장 | CTO (do W2D2) | dogfood-ab-result.md |
 | 2026-05-10 | **KR3 정량 입증 — vais-code 정체성 grep 영역 박제** — vanilla CC vs vais-code 의 *부서장 OJT* 차이가 grep 13 vs 0 으로 정량 측정 가능. PRD §4 OKR 5 KR 중 KR3 객관화 (PRD v2.0 Lean Rewrite 의 핵심 개선) 입증. v0.66 GA 의 차별화 진입점 정량 근거 확보 | CTO (do W2D2) | KR3 summary |
+| 2026-05-10 | **CTO Do W2 D3 — AC 13 점검 박제** — `docs/vais-positioning-rethink/03-do/ac-check.md` 신규. KR 5/5 + Must 7/7 + Should 1/1 = 13/13 충족. Won't 3 정상 미박제 (v0.67+ 이연 명시). KR1 운영 검증만 다음 ideation feature 까지 보류 | CTO (do W2D3) | ac-check.md |
+| 2026-05-10 | **CLAUDE.md 정체성 1 줄 박제 — KR4 직접 충족** — "What This Project Is" 섹션 첫 줄에 *organization-in-a-box (부서장 매뉴얼)* + 부서장 OJT 4 요소 + v0.66.0 변경 사항 1 문단 추가. grep "organization-in-a-box" → 1 hit (PASS) | CTO (do W2D3) | CLAUDE.md |
+| 2026-05-10 | **CHANGELOG v0.66.0 entry 박제 — KR5 직접 충족** — Keep a Changelog 형식으로 Added (M0 + M1 Tier-1A) + Changed (Knowledge Index manual @include + CLAUDE.md) + Validated (KR3 5/5 PASS) + Deferred to v0.67+ + Known Limitations 5 섹션. Lean Rewrite ref + 16 commits 통계. release date "Unreleased" — W2 D5 GA 시 confirm | CTO (do W2D3) | CHANGELOG.md |
+| 2026-05-10 | **AC 13/13 충족 + GA 준비 완료** — Sprint W2 D3 종료. 남은 W2 D4 (qa 검토) + W2 D5 (`/vais commit` → v0.66.0 tag → GA). v0.66.0 의 차별화 진입점 (organization-in-a-box) 이 코드 + 박제 + grep 결과 + CLAUDE.md + CHANGELOG 모두에서 일관 표현 | CTO (do W2D3) | GA prep |
 
 ## Artifacts
 
@@ -53,7 +57,8 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | **박제** (W1 D4) | `agents/ceo/knowledge/rumelt-strategy-kernel.md` (정식 OJT 211줄, 6,819자) + `agents/ceo/ceo.md` Knowledge Index 갱신 | git 2a4cf19 |
 | **박제** (W1 D5) | `agents/cpo/knowledge/prd-writing-ojt.md` (정식 OJT 215줄, 6,675자) + `agents/cpo/cpo.md` Knowledge Index manual @include | git db26d21 |
 | **박제** (W2 D1) | `agents/cto/knowledge/architecture-decision.md` (정식 OJT 233줄, 11,690byte) + `agents/cto/cto.md` Knowledge Index manual @include — Tier-1A 3/3 완료 | git c4f4084 |
-| **박제** (W2 D2) | `03-do/dogfood-ab-result.md` (KR3 검증 5/5 PASS — M1~M5 grep metric 정량 측정) | 본 commit |
+| **박제** (W2 D2) | `03-do/dogfood-ab-result.md` (KR3 검증 5/5 PASS — M1~M5 grep metric 정량 측정) | git 7451308 |
+| **박제** (W2 D3) | `03-do/ac-check.md` (AC 13/13) + `CLAUDE.md` 정체성 1 줄 (KR4) + `CHANGELOG.md` v0.66.0 entry (KR5) | 본 commit |
 
 ## CEO 판단 근거
 
@@ -80,3 +85,4 @@ prd-writer 가 이미 CTO 핸드오프 컨텍스트 (핵심 문제/타깃 사용
 | v1.0 | 2026-05-09 | 초기 작성 — prd-writer 결과 인덱스. PRD 704 줄, 8 섹션 + 7 부록 |
 | v1.1 | 2026-05-10 | W2 D1 — CTO Architecture Decision OJT 박제 + Tier-1A 3/3 완료 entry 추가 |
 | v1.2 | 2026-05-10 | W2 D2 — KR3 dogfood A/B 검증 5/5 PASS entry 추가 + Artifacts 표 dogfood-ab-result.md |
+| v1.3 | 2026-05-10 | W2 D3 — AC 13/13 + CLAUDE.md 정체성 + CHANGELOG v0.66.0 entry. GA 준비 완료 |
