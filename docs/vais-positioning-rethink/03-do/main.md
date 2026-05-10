@@ -37,6 +37,8 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | 2026-05-10 | **CTO Do W2 D1 — M1 CTO Architecture Decision OJT 정식 박제** — `agents/cto/knowledge/architecture-decision.md` 신규 (233 줄, 11,690 byte). OJT 4 요소: §1 Framework (Decision/Design/Implementation 분리 + Reversibility 4 등급 + C4 4 Level) + §2 5 Step OJT (Trigger 식별 → Context+Constraint+Assumption → ≥3 옵션 generation → Trade-off Matrix → ADR 작성) + §3 의사결정 패턴 (흔한 실수 7 + Trade-off Catalog 7 dilemma + 5 질문 체크리스트) + §4 양식 (MADR v3 template + 좋은/나쁜 ADR 비교). R-1 완화: §5 vais-positioning-rethink 자기 적용 사례 3 ADR (H4 manual @include / detached worker / OJT budget 재조정) | CTO (do W2D1) | agents/cto/knowledge/architecture-decision.md |
 | 2026-05-10 | **CTO cto.md Knowledge Index 갱신** — manual @include 형식 적용 (W1 D1 의 ceo.md / W1 D5 의 cpo.md 와 일관성). 기존 5 entry + Architecture Decision OJT 1 entry 추가 = 6 entries. 4 Primary C-Level (CEO/CPO/CTO/CSO) 중 3 개 manual @include 통일 (CSO 는 Tier-1B 로 v0.67+ 이연) | CTO (do W2D1) | agents/cto/cto.md |
 | 2026-05-10 | **Tier-1A 박제 완료 (3/3)** — CEO Rumelt + CPO PRD Writing OJT + CTO Architecture Decision. 부서장 OJT 매뉴얼 평균 ~6,750자 → 11,690 byte (W2 D1 은 multi-byte 기준 측정). Tier-1A = vais-code 정체성 박제 완료 — 다음 W2 D2 dogfood A/B 검증 단계로 KR3 객관 측정 진입 | CTO (do W2D1) | Tier-1A summary |
+| 2026-05-10 | **CTO Do W2 D2 — KR3 dogfood A/B 검증 = 5/5 PASS (100%)** — `docs/vais-positioning-rethink/03-do/dogfood-ab-result.md` 신규. M1 파일 존재 (31,475byte 3/3) + M2 manual @include 진입점 (13 entries: CEO 3 + CPO 4 + CTO 6) + M3 OJT 4 요소 (12/12 100%) + M4 R-1 자기 적용 (6 회 인용 3/3) + M5 vanilla CC 차별화 (13 vs 0). 정적 grep 한계 명기 + 후속 runtime instrumentation v0.67+ 권장 | CTO (do W2D2) | dogfood-ab-result.md |
+| 2026-05-10 | **KR3 정량 입증 — vais-code 정체성 grep 영역 박제** — vanilla CC vs vais-code 의 *부서장 OJT* 차이가 grep 13 vs 0 으로 정량 측정 가능. PRD §4 OKR 5 KR 중 KR3 객관화 (PRD v2.0 Lean Rewrite 의 핵심 개선) 입증. v0.66 GA 의 차별화 진입점 정량 근거 확보 | CTO (do W2D2) | KR3 summary |
 
 ## Artifacts
 
@@ -50,7 +52,8 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | **코드 변경** (W1 D3) | `hooks/checkpoint-keyword.js` (신규 M0-③) / `hooks/session-start.js` (M0-④ ideation 복원 확장) / `hooks/hooks.json` (UserPromptSubmit 등록) | git 1ff1395 |
 | **박제** (W1 D4) | `agents/ceo/knowledge/rumelt-strategy-kernel.md` (정식 OJT 211줄, 6,819자) + `agents/ceo/ceo.md` Knowledge Index 갱신 | git 2a4cf19 |
 | **박제** (W1 D5) | `agents/cpo/knowledge/prd-writing-ojt.md` (정식 OJT 215줄, 6,675자) + `agents/cpo/cpo.md` Knowledge Index manual @include | git db26d21 |
-| **박제** (W2 D1) | `agents/cto/knowledge/architecture-decision.md` (정식 OJT 233줄, 11,690byte) + `agents/cto/cto.md` Knowledge Index manual @include — Tier-1A 3/3 완료 | 본 commit |
+| **박제** (W2 D1) | `agents/cto/knowledge/architecture-decision.md` (정식 OJT 233줄, 11,690byte) + `agents/cto/cto.md` Knowledge Index manual @include — Tier-1A 3/3 완료 | git c4f4084 |
+| **박제** (W2 D2) | `03-do/dogfood-ab-result.md` (KR3 검증 5/5 PASS — M1~M5 grep metric 정량 측정) | 본 commit |
 
 ## CEO 판단 근거
 
@@ -76,3 +79,4 @@ prd-writer 가 이미 CTO 핸드오프 컨텍스트 (핵심 문제/타깃 사용
 |---------|------|--------|
 | v1.0 | 2026-05-09 | 초기 작성 — prd-writer 결과 인덱스. PRD 704 줄, 8 섹션 + 7 부록 |
 | v1.1 | 2026-05-10 | W2 D1 — CTO Architecture Decision OJT 박제 + Tier-1A 3/3 완료 entry 추가 |
+| v1.2 | 2026-05-10 | W2 D2 — KR3 dogfood A/B 검증 5/5 PASS entry 추가 + Artifacts 표 dogfood-ab-result.md |
