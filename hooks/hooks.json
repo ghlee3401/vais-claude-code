@@ -71,6 +71,17 @@
         ]
       }
     ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/hooks/checkpoint-keyword.js",
+            "timeout": 3000
+          }
+        ]
+      }
+    ],
     "SubagentStart": [
       {
         "hooks": [

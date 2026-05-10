@@ -8,7 +8,8 @@ const { spawnSync } = require('child_process');
 const { debugLog } = require('../lib/debug');
 const { logHook } = require('../lib/hook-logger');
 const { ensureVaisDirs, loadConfig, loadOutputStyle } = require('../lib/paths');
-const { getStatus, getActiveFeature, getProgressSummary, ensureMigrated } = require('../lib/status');
+const { getStatus, getActiveFeature, getProgressSummary, ensureMigrated, listInProgressIdeations } = require('../lib/status');
+const fs = require('fs');
 const { sendWebhook } = require('../lib/webhook');
 
 /**
@@ -46,6 +47,16 @@ function main() {
   const featureNames = Object.keys(status.features || {});
 
   let ctx = '';
+
+  // v0.66 M0-④ — Ideation 자동 복원 (in-progress 감지 시 5 줄 요약 prepend)
+  try {
+    const inProgressList = listInProgressIdeations();
+    if (Array.isArray(inProgressList) && inProgressList.length > 0) {
+      ctx += _renderIdeationRestore(inProgressList) + '\n\n';
+    }
+  } catch (e) {
+    debugLog('SessionStart', 'Ideation restore failed', { error: e.message });
+  }
 
   // Plan SC: SC-01, SC-02 — Progress Bar + Workflow Map (피처 있을 때만)
   if (activeFeature) {
@@ -141,7 +152,57 @@ function main() {
   process.exit(0);
 }
 
-module.exports = { main };
+/**
+ * v0.66 M0-④ — In-progress ideation 5 줄 요약 렌더.
+ * @param {Array<{feature, ideation}>} list
+ * @returns {string} 마크다운 블록
+ */
+function _renderIdeationRestore(list) {
+  const lines = [];
+  for (const { feature, ideation } of list) {
+    lines.push(`🔄 **진행 중 ideation 발견** — \`${feature}\` (turn ${ideation.lastTurn || '?'})`);
+
+    // Decision Record 마지막 3
+    try {
+      if (ideation.mainMdPath && fs.existsSync(ideation.mainMdPath)) {
+        const content = fs.readFileSync(ideation.mainMdPath, 'utf8');
+        const dr = content.match(/## Decision Record[\s\S]*?\n((?:\|[^\n]+\|\n)+)/);
+        if (dr) {
+          const allRows = dr[1].split('\n').filter(l => l.startsWith('|'));
+          const dataRows = allRows.slice(2).slice(-3);
+          if (dataRows.length > 0) {
+            lines.push(`📌 **핵심 결정 (Decision Record 마지막 3)**:`);
+            // 표 형식 그대로 출력 (header + separator 포함하여 markdown 표 유지)
+            lines.push(allRows[0]); // header
+            lines.push(allRows[1]); // separator
+            dataRows.forEach(r => lines.push(r));
+          }
+        }
+      }
+    } catch (_) { /* silent */ }
+
+    // working-notes 마지막 entry
+    try {
+      if (ideation.workingNotesPath && fs.existsSync(ideation.workingNotesPath)) {
+        const content = fs.readFileSync(ideation.workingNotesPath, 'utf8');
+        const sections = content.split(/^### /m);
+        if (sections.length >= 2) {
+          const last = '### ' + sections[sections.length - 1].split('\n').slice(0, 4).join('\n');
+          lines.push(``);
+          lines.push(`📝 **마지막 working-notes**:`);
+          lines.push(last.slice(0, 400));
+        }
+      }
+    } catch (_) { /* silent */ }
+
+    lines.push(``);
+    lines.push(`💡 **계속하시려면**: 그대로 ideation 이어서 발화하세요. 새로 시작하려면 \`/vais ceo ideation {새-피처명}\`.`);
+    lines.push(``);
+  }
+  return lines.join('\n');
+}
+
+module.exports = { main, _renderIdeationRestore };
 
 if (require.main === module) {
   main();

@@ -27,6 +27,8 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | 2026-05-09 | **PoC 30 분 단축** — design §4 추정 (PASS ~1h / FAIL ~2h) 대비 empirical 증거로 ~30 분 완료. W1 D1 잔여 ~3.5h 으로 M0 status.json 스키마 + working-notes hook 작업 시작 가능 (계획보다 앞당김) | CTO (do W1D1) | poc-result.md §4 |
 | 2026-05-09 | **CTO Do W1 D2 — M0 인프라 코드 박제** — `lib/status.js` 4 ideation helpers (set/get/list/clear) + `lib/llm-heuristic.js` 신규 (Claude Haiku wrapper, fail-safe SKIP fallback) + `lib/m0-record-turn.js` 신규 worker (transcript JSONL parse + LLM 휴리스틱 + working-notes append + Decision Record M0-②) + `scripts/stop-handler.js` 확장 (detached 자식 spawn — fire-and-forget). 총 ~315 줄 코드 추가 | CTO (do W1D2) | lib/m0-record-turn.js + lib/llm-heuristic.js |
 | 2026-05-09 | **BC + 안전성 — Stop hook 무영향 정책** — ideation.inProgress=true + transcript_path 가용 시에만 worker spawn. detached + stdio:ignore 로 사용자 경험 영향 0. SDK 미설치/API 키 부재/timeout/JSON 파싱 실패 모두 default SKIP fallback. 본 vais-positioning-rethink ideation 은 inProgress=false (status.json 미존재 시 null) 라 hook 미동작 — 다음 ideation feature 에서 실제 검증 | CTO (do W1D2) | scripts/stop-handler.js + lib/llm-heuristic.js |
+| 2026-05-10 | **CTO Do W1 D3 — M0-③ + M0-④ 완성** — `hooks/checkpoint-keyword.js` 신규 (UserPromptSubmit 핸들러, 키워드 5종 감지 + main.md Decision Record 마지막 3 + working-notes 마지막 entry 추출 → additionalContext) + `hooks/session-start.js` 확장 (`listInProgressIdeations` 호출, in-progress 발견 시 5 줄 요약 prepend) + `hooks/hooks.json` UserPromptSubmit 등록 1 항목. 모든 실패 silent pass-through. Smoke test PASS (키워드 감지 + Decision Record 추출). | CTO (do W1D3) | hooks/checkpoint-keyword.js + hooks/session-start.js |
+| 2026-05-10 | **M0 4 메커니즘 코드 박제 완료** — ① working-notes 자동 누적 (Stop hook 확장 + worker) / ② Decision Record append (worker 의 KEPT 분기) / ③ "체크포인트" 키워드 (UserPromptSubmit 신규) / ④ session-start 자동 복원 (기존 hook 확장). M1-A 박제 (W1 D4-D5 + W2 D1-D3) 부터 본격 dogfood 검증 가능 | CTO (do W1D3) | M0 4/4 통합 |
 
 ## Artifacts
 
@@ -36,7 +38,8 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | `03-do/prd.md` | PRD (CPO) | prd-writer 합성, 8 섹션 + 7 부록 → v2.0 lean (189 줄) |
 | `03-do/poc-result.md` | PoC 결과 (CTO) | H4 lazy-load PoC empirical 결정 (manual @include 채택) |
 | **코드 변경** (W1 D1) | `agents/ceo/ceo.md` Knowledge Index 갱신 + `agents/ceo/knowledge/rumelt-strategy-kernel.md` PoC stub | git 64e3801 |
-| **코드 변경** (W1 D2) | `lib/status.js` (+4 ideation helpers) / `lib/llm-heuristic.js` (신규) / `lib/m0-record-turn.js` (신규 worker) / `scripts/stop-handler.js` (M0-① detached spawn) | 본 commit |
+| **코드 변경** (W1 D2) | `lib/status.js` (+4 ideation helpers) / `lib/llm-heuristic.js` (신규) / `lib/m0-record-turn.js` (신규 worker) / `scripts/stop-handler.js` (M0-① detached spawn) | git fc7883b |
+| **코드 변경** (W1 D3) | `hooks/checkpoint-keyword.js` (신규 M0-③) / `hooks/session-start.js` (M0-④ ideation 복원 확장) / `hooks/hooks.json` (UserPromptSubmit 등록) | 본 commit |
 
 ## CEO 판단 근거
 
