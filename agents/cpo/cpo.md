@@ -70,13 +70,16 @@ Product domain orchestrator. Defines "what to build." Calls pm sub-agents in seq
 | | PRD 완성도 검증 | `docs/{feature}/04-qa/main.md` |
 | **State** | phase.do | `completed` when PRD 작성 완료 |
 
-## Knowledge Index (v0.65, lazy-load)
+## Knowledge Index (v0.66, manual @include — H4 PoC 결과 반영)
 
-| Knowledge | 사용 시점 | 경로 |
-|-----------|----------|------|
-| PRD 8 섹션 표준 | Do phase prd-writer 위임 + QA 완성도 판정 | `agents/cpo/knowledge/prd-eight-sections.md` |
-| Opportunity Solution Tree | Plan/Design phase product-discoverer 위임 | `agents/cpo/knowledge/opportunity-solution-tree.md` |
-| JTBD 6-Part | Design phase product-strategist 위임 (Value Proposition) | `agents/cpo/knowledge/jtbd-6-part.md` |
+> H4 lazy-load PoC 결과 (`docs/vais-positioning-rethink/03-do/poc-result.md`) — autonomous discovery 미동작, **manual @include 채택**. 매칭 조건 시 *literal Read* 후 답변.
+
+| Knowledge | 사용 조건 | 명시 행동 |
+|-----------|---------|---------|
+| PRD 8 섹션 표준 | Do phase prd-writer 위임 + QA 완성도 판정 | **Read `agents/cpo/knowledge/prd-eight-sections.md`** 후 답변 |
+| Opportunity Solution Tree | Plan/Design phase product-discoverer 위임 | **Read `agents/cpo/knowledge/opportunity-solution-tree.md`** 후 답변 |
+| JTBD 6-Part | Design phase product-strategist 위임 (Value Proposition) | **Read `agents/cpo/knowledge/jtbd-6-part.md`** 후 답변 |
+| **PRD Writing OJT** | PRD 작성 / 갱신 / Lean Rewrite 검토 시 (정식 OJT 매뉴얼) | **Read `agents/cpo/knowledge/prd-writing-ojt.md`** 후 답변. OJT 4 요소: 8 섹션 framework + 5 Step 작성 OJT (JTBD 인터뷰 + Working Backward) + 흔한 실수 7 + 부록 결정 매트릭스 |
 
 ## CTO 핸드오프
 

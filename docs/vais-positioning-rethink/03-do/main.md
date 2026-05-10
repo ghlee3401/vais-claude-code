@@ -31,6 +31,9 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | 2026-05-10 | **M0 4 메커니즘 코드 박제 완료** — ① working-notes 자동 누적 (Stop hook 확장 + worker) / ② Decision Record append (worker 의 KEPT 분기) / ③ "체크포인트" 키워드 (UserPromptSubmit 신규) / ④ session-start 자동 복원 (기존 hook 확장). M1-A 박제 (W1 D4-D5 + W2 D1-D3) 부터 본격 dogfood 검증 가능 | CTO (do W1D3) | M0 4/4 통합 |
 | 2026-05-10 | **CTO Do W1 D4 — M1 CEO Rumelt 정식 박제** — PoC stub (~25 줄) → 정식 OJT 매뉴얼 (211 줄, 6,819 자). 4 요소 충족: §1 Framework 정의 (Strategy Kernel + Bad Strategy 4 함정) + §2 5 Step 워크숍 (Diagnosis/Policy/Actions/Cascade/Self-deception) + §3 의사결정 패턴 (5 질문 체크리스트) + §4 ADR 양식. R-1 완화: §5 vais-positioning-rethink 자기 적용 사례 (Lean Rewrite = Step 5 의 실증). 5000자 budget +36% — OJT depth 우선 | CTO (do W1D4) | agents/ceo/knowledge/rumelt-strategy-kernel.md |
 | 2026-05-10 | **CEO ceo.md Knowledge Index 갱신** — Rumelt entry 의 "PoC stub" 표기 제거 + OJT 4 요소 요약 추가. 정식 박제 반영 | CTO (do W1D4) | agents/ceo/ceo.md |
+| 2026-05-10 | **CTO Do W1 D5 — M1 CPO PRD Writing OJT 정식 박제** — `agents/cpo/knowledge/prd-writing-ojt.md` 신규 (215 줄, 6,675 자). OJT 4 요소: §1 PRD framework (8 섹션 의미 + 부록 7 종) + §2 5 Step 작성 OJT (JTBD 인터뷰 + Working Backward + 작성 순서 + Lean Review) + §3 의사결정 패턴 (흔한 실수 7 + 부록 결정 매트릭스 + 5 질문 체크리스트) + §4 양식 (PRD template + 좋은/나쁜 예). R-1 완화: §5 vais-positioning-rethink PRD v1→v2 Lean Rewrite 경험 (실수 1/5/6 발생 + 회피) | CTO (do W1D5) | agents/cpo/knowledge/prd-writing-ojt.md |
+| 2026-05-10 | **CPO cpo.md Knowledge Index 갱신** — manual @include 형식 적용 (W1 D1 의 ceo.md 와 일관성). 기존 3 entry + PRD Writing OJT 1 entry 추가 = 4 entries | CTO (do W1D5) | agents/cpo/cpo.md |
+| 2026-05-10 | **OJT 4 요소 분량 budget 재검토** — Rumelt 6,819자 + PRD OJT 6,675자 = 평균 ~6,750자. PRD §2.2 의 "각 3000~5000 자" budget 은 비현실적 (OJT 4 요소 충족 시 자연 6000~7000자). 향후 sprint 에서 budget 조정 권장 (5000 → 7000자) | CTO (do W1D5) | budget 재검토 (PRD §2.2 vs 실측) |
 
 ## Artifacts
 
