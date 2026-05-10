@@ -34,6 +34,9 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | 2026-05-10 | **CTO Do W1 D5 — M1 CPO PRD Writing OJT 정식 박제** — `agents/cpo/knowledge/prd-writing-ojt.md` 신규 (215 줄, 6,675 자). OJT 4 요소: §1 PRD framework (8 섹션 의미 + 부록 7 종) + §2 5 Step 작성 OJT (JTBD 인터뷰 + Working Backward + 작성 순서 + Lean Review) + §3 의사결정 패턴 (흔한 실수 7 + 부록 결정 매트릭스 + 5 질문 체크리스트) + §4 양식 (PRD template + 좋은/나쁜 예). R-1 완화: §5 vais-positioning-rethink PRD v1→v2 Lean Rewrite 경험 (실수 1/5/6 발생 + 회피) | CTO (do W1D5) | agents/cpo/knowledge/prd-writing-ojt.md |
 | 2026-05-10 | **CPO cpo.md Knowledge Index 갱신** — manual @include 형식 적용 (W1 D1 의 ceo.md 와 일관성). 기존 3 entry + PRD Writing OJT 1 entry 추가 = 4 entries | CTO (do W1D5) | agents/cpo/cpo.md |
 | 2026-05-10 | **OJT 4 요소 분량 budget 재검토** — Rumelt 6,819자 + PRD OJT 6,675자 = 평균 ~6,750자. PRD §2.2 의 "각 3000~5000 자" budget 은 비현실적 (OJT 4 요소 충족 시 자연 6000~7000자). 향후 sprint 에서 budget 조정 권장 (5000 → 7000자) | CTO (do W1D5) | budget 재검토 (PRD §2.2 vs 실측) |
+| 2026-05-10 | **CTO Do W2 D1 — M1 CTO Architecture Decision OJT 정식 박제** — `agents/cto/knowledge/architecture-decision.md` 신규 (233 줄, 11,690 byte). OJT 4 요소: §1 Framework (Decision/Design/Implementation 분리 + Reversibility 4 등급 + C4 4 Level) + §2 5 Step OJT (Trigger 식별 → Context+Constraint+Assumption → ≥3 옵션 generation → Trade-off Matrix → ADR 작성) + §3 의사결정 패턴 (흔한 실수 7 + Trade-off Catalog 7 dilemma + 5 질문 체크리스트) + §4 양식 (MADR v3 template + 좋은/나쁜 ADR 비교). R-1 완화: §5 vais-positioning-rethink 자기 적용 사례 3 ADR (H4 manual @include / detached worker / OJT budget 재조정) | CTO (do W2D1) | agents/cto/knowledge/architecture-decision.md |
+| 2026-05-10 | **CTO cto.md Knowledge Index 갱신** — manual @include 형식 적용 (W1 D1 의 ceo.md / W1 D5 의 cpo.md 와 일관성). 기존 5 entry + Architecture Decision OJT 1 entry 추가 = 6 entries. 4 Primary C-Level (CEO/CPO/CTO/CSO) 중 3 개 manual @include 통일 (CSO 는 Tier-1B 로 v0.67+ 이연) | CTO (do W2D1) | agents/cto/cto.md |
+| 2026-05-10 | **Tier-1A 박제 완료 (3/3)** — CEO Rumelt + CPO PRD Writing OJT + CTO Architecture Decision. 부서장 OJT 매뉴얼 평균 ~6,750자 → 11,690 byte (W2 D1 은 multi-byte 기준 측정). Tier-1A = vais-code 정체성 박제 완료 — 다음 W2 D2 dogfood A/B 검증 단계로 KR3 객관 측정 진입 | CTO (do W2D1) | Tier-1A summary |
 
 ## Artifacts
 
@@ -44,7 +47,10 @@ prd-writer 가 plan-rationale + ideation 박제를 입력으로 PRD 8 섹션 + �
 | `03-do/poc-result.md` | PoC 결과 (CTO) | H4 lazy-load PoC empirical 결정 (manual @include 채택) |
 | **코드 변경** (W1 D1) | `agents/ceo/ceo.md` Knowledge Index 갱신 + `agents/ceo/knowledge/rumelt-strategy-kernel.md` PoC stub | git 64e3801 |
 | **코드 변경** (W1 D2) | `lib/status.js` (+4 ideation helpers) / `lib/llm-heuristic.js` (신규) / `lib/m0-record-turn.js` (신규 worker) / `scripts/stop-handler.js` (M0-① detached spawn) | git fc7883b |
-| **코드 변경** (W1 D3) | `hooks/checkpoint-keyword.js` (신규 M0-③) / `hooks/session-start.js` (M0-④ ideation 복원 확장) / `hooks/hooks.json` (UserPromptSubmit 등록) | 본 commit |
+| **코드 변경** (W1 D3) | `hooks/checkpoint-keyword.js` (신규 M0-③) / `hooks/session-start.js` (M0-④ ideation 복원 확장) / `hooks/hooks.json` (UserPromptSubmit 등록) | git 1ff1395 |
+| **박제** (W1 D4) | `agents/ceo/knowledge/rumelt-strategy-kernel.md` (정식 OJT 211줄, 6,819자) + `agents/ceo/ceo.md` Knowledge Index 갱신 | git 2a4cf19 |
+| **박제** (W1 D5) | `agents/cpo/knowledge/prd-writing-ojt.md` (정식 OJT 215줄, 6,675자) + `agents/cpo/cpo.md` Knowledge Index manual @include | git db26d21 |
+| **박제** (W2 D1) | `agents/cto/knowledge/architecture-decision.md` (정식 OJT 233줄, 11,690byte) + `agents/cto/cto.md` Knowledge Index manual @include — Tier-1A 3/3 완료 | 본 commit |
 
 ## CEO 판단 근거
 
@@ -69,3 +75,4 @@ prd-writer 가 이미 CTO 핸드오프 컨텍스트 (핵심 문제/타깃 사용
 | version | date | change |
 |---------|------|--------|
 | v1.0 | 2026-05-09 | 초기 작성 — prd-writer 결과 인덱스. PRD 704 줄, 8 섹션 + 7 부록 |
+| v1.1 | 2026-05-10 | W2 D1 — CTO Architecture Decision OJT 박제 + Tier-1A 3/3 완료 entry 추가 |

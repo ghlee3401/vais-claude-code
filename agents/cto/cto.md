@@ -71,17 +71,18 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 **Feature명 생성 규칙**: 사용자가 피처명 생략/한국어로 요청 시 (1) 패턴 `{대상}-{행위}` 또는 `{도메인}-{기능}-{세부}` (2~4단어), (2) 의도 반영 — 단순 명사 금지, (3) 변환 예시: "로그인 기능"→`user-login-flow` / "결제 실패 시 재시도"→`payment-retry-logic` / "대시보드 실시간 차트"→`dashboard-realtime-chart`, (4) 금지: 단어 1개 (`login`, `payment`, `chart`).
 
-## Knowledge Index (v0.65, lazy-load)
+## Knowledge Index (v0.66, manual @include — H4 PoC 결과 반영)
 
-도메인 지식은 phase + artifact 매칭 시만 Read.
+> H4 lazy-load PoC 결과 (`docs/vais-positioning-rethink/03-do/poc-result.md`) — autonomous discovery 미동작, **manual @include 채택**. 매칭 조건 시 *literal Read* 후 답변.
 
-| Knowledge | 사용 시점 | 경로 |
-|-----------|----------|------|
-| 수정 체이닝 매트릭스 | 수정 요청 시 sub-agent 호출 순서 결정 | `agents/cto/knowledge/modification-chaining.md` |
-| Interface Contract 스키마 | Design phase Gate 2 산출물 | `agents/cto/knowledge/interface-contract-schema.md` |
-| Gate System | Plan/Design/Do 완료 판정 | `agents/cto/knowledge/gate-system.md` |
-| Data Analysis (SQL/AB Test) | QA phase 메트릭 검증 | `agents/cto/knowledge/data-analysis.md` |
-| Handoff Routing | C-Level 핸드오프 / QA 리턴 / incident-responder 호출 | `agents/cto/knowledge/handoff-routing.md` |
+| Knowledge | 사용 조건 | 명시 행동 |
+|-----------|---------|---------|
+| 수정 체이닝 매트릭스 | 수정 요청 시 sub-agent 호출 순서 결정 | **Read `agents/cto/knowledge/modification-chaining.md`** 후 답변 |
+| Interface Contract 스키마 | Design phase Gate 2 산출물 | **Read `agents/cto/knowledge/interface-contract-schema.md`** 후 답변 |
+| Gate System | Plan/Design/Do 완료 판정 | **Read `agents/cto/knowledge/gate-system.md`** 후 답변 |
+| Data Analysis (SQL/AB Test) | QA phase 메트릭 검증 | **Read `agents/cto/knowledge/data-analysis.md`** 후 답변 |
+| Handoff Routing | C-Level 핸드오프 / QA 리턴 / incident-responder 호출 | **Read `agents/cto/knowledge/handoff-routing.md`** 후 답변 |
+| **Architecture Decision OJT** | 신규 컴포넌트·라이브러리·인프라 도입 / Hard-to-reverse 이상 변경 / Trade-off 결정 (정식 OJT 매뉴얼) | **Read `agents/cto/knowledge/architecture-decision.md`** 후 답변. OJT 4 요소: 결정/설계/구현 분리 + 5 Step 워크숍 (Trigger → Context → Options → Trade-off Matrix → ADR) + 흔한 실수 7 + Trade-off Catalog + MADR v3 template |
 
 ## Plan phase 진입 — CP-0 (lean mode)
 
