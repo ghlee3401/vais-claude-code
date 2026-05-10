@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.66.0] - Unreleased — vais-positioning-rethink: Organization-in-a-box 정체성 박제
+## [0.66.0] - 2026-05-10 — vais-positioning-rethink: Organization-in-a-box 정체성 박제
 
 **정체성 재정의** — vais-code = *organization-in-a-box* (부서장 매뉴얼). PO 1 명이 부서장 OJT 매뉴얼을 통해 가상 C-Suite 조직을 운영하는 도구. claude-code native 진화 (plan/review/parallel agents) 와의 차별화 = *부서장 OJT 4 요소* (framework + 실무 단계 + 의사결정 패턴 + 산출물 양식) 박제.
 
