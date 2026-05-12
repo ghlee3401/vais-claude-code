@@ -20,7 +20,7 @@
 | **Knowledge lazy-load** (v0.65) | `agents/{c-level}/knowledge/` 19 MD — phase + artifact 매칭 시만 Read. 메인 .md 의 "Knowledge Index" 표가 trigger |
 | **CEO 진입 절차 강제** (v0.65.3) | CEO 가 4 단계 순차 — `analyzeCEO()` Bash 호출 → 7 차원 등급 표 출력 → activeCLevel 인용 → AskUserQuestion. LLM 자체 라우팅 금지 |
 
-현재 버전: **v0.65.3** (v0.65.0 PO 워크플로우 경량화 → v0.65.1 약속·코드 정렬 → v0.65.2 templates/ 정합성 → v0.65.3 CEO 진입 절차 박제).
+현재 버전: **v0.66.1** (0.66.0 organization-in-a-box 정체성 박제 + M0 4 메커니즘 + M1 Tier-1A → 0.66.1 cross-model 분석 P0 hotfix: `analyzeCEO` 인터페이스 통일 + 회귀 테스트 + 버전·메타·session-start 안내 정렬).
 
 ---
 

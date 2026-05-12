@@ -114,8 +114,8 @@ function main() {
   ctx += `## 시작하기\n\n`;
   ctx += `| 커맨드 | 설명 |\n`;
   ctx += `|--------|------|\n`;
-  ctx += `| \`/vais auto {기능}\` | 전체 자동 워크플로우 |\n`;
-  ctx += `| \`/vais plan {기능}\` | 기획부터 시작 |\n`;
+  ctx += `| \`/vais ceo ideation {기능}\` | 아이디어 → CEO 7 차원 라우팅 → 활성 C-Level 추천 |\n`;
+  ctx += `| \`/vais cto plan {기능}\` | 기획서부터 시작 (mandatory PDCA 진입점) |\n`;
   ctx += `| \`/vais status\` | 진행 상태 확인 |\n`;
   ctx += `| \`/vais help\` | 사용법 안내 |\n\n`;
 

@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.66.1] - 2026-05-12 — v0-66-1-hotfix-alignment: cross-model P0 정합 hotfix
+
+Codex / Claude / Gemini 3 모델 cross-model 분석 (`docs/multimodel-repo-analysis/`) 에서 합의된 **P0 3 항** (α `analyzeCEO` 인터페이스 / β 버전 메타 / γ session-start 명령 안내) 을 1 PR 로 봉합. v0.66.0 GA tag 는 유지하고 hotfix release 로 분리.
+
+피처: `v0-66-1-hotfix-alignment`. ~85 분 작업.
+
+### Fixed
+
+- **`lib/ceo-algorithm.js`** — `analyzeCEO` 진입에 `rawText || input` 폴백 1 줄 + JSDoc 명시. v0.65.3 문서 (`agents/ceo/ceo.md`) 가 `{input: ...}` 으로 안내한 흔적으로 인해 `rawText = undefined` → 모든 7 차원 default 등급 → CEO 라우팅 무력화되던 P0 버그 봉합. 3 모델 (Codex P0-1 / Claude §1.1 / Gemini #1) 동일 진단.
+- **`agents/ceo/ceo.md`** — 호출 안내를 `{rawText: '<사용자 원문>', feature: ...}` 정본 표기로 정정. 코드와 문서 단일 SoT 화.
+- **`hooks/session-start.js`** — 첫 진입 안내 명령을 4-토큰 형식 (`/vais ceo ideation {기능}` + `/vais cto plan {기능}`) 으로 정렬. output style strict 4-token 강제와 정합. P0-γ.
+- **`.claude-plugin/marketplace.json`** — description 의 "frontmatter 8 fields" → "frontmatter 4 mandatory fields (owner/artifact/phase/feature)" 정정. v2.1 정책 단일화.
+
+### Changed
+
+- **버전 일괄 0.66.0 → 0.66.1**: `package.json`, `vais.config.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` (metadata + plugins[0]).
+- **`CLAUDE.md`** 헤더 ("v0.65.3" → "v0.66.1"), **`ONBOARDING.md`** 현재 버전 라벨 ("v0.65.3" → "v0.66.1"). 역사적 "v0.65.3 도입" 표기 (CEO 진입 절차 박제 시점 등) 는 fact 보존 위해 유지.
+
+### Added — Regression test
+
+- **`tests/ceo-algorithm.test.js`** (9 케이스) — rawText 정본 / input 알리아스 backward-compat / 입력 누락 falsy / 7 차원 등급 산출 / activeCLevel 4 primary 한정 / secondary 제외 / always artifact 보장 / GRADE_ORDER 단조성. 휴리스틱 변경에 brittle 하지 않도록 `gradeAtLeast` 로 단조성만 검증.
+
+### Cross-Model 분석 산출물 (ideation phase 박제)
+
+- **`docs/multimodel-repo-analysis/00-ideation/`** — Codex / Claude / Gemini 각 분석 + synthesis (3 모델 합의·unique·충돌·통합 우선순위 10 항·옵션 A/B/C). 본 hotfix = synthesis §5 옵션 A 의 실행 결과.
+
+### Not in scope (v0.66.2 / v0.67 이연)
+
+- P1: COO 마크다운 release-engineer 잔여 + `agent-start.js` whitelist 동적화, doc-validator W-MRG-03 v2.1 정렬, M0 4 메커니즘 운영 검증, PO 진입점 일관화.
+- P2: Knowledge Pack 3 C-Level (CSO/CBO/COO) OJT 4 요소 보강, design-system MCP 산출 위치 정책 명시, vendor env 문서화.
+
+---
+
 ## [0.66.0] - 2026-05-10 — vais-positioning-rethink: Organization-in-a-box 정체성 박제
 
 **정체성 재정의** — vais-code = *organization-in-a-box* (부서장 매뉴얼). PO 1 명이 부서장 OJT 매뉴얼을 통해 가상 C-Suite 조직을 운영하는 도구. claude-code native 진화 (plan/review/parallel agents) 와의 차별화 = *부서장 OJT 4 요소* (framework + 실무 단계 + 의사결정 패턴 + 산출물 양식) 박제.

@@ -38,7 +38,7 @@ CEO 가 사용자 입력을 받으면 **반드시 다음 4 단계** 를 순차 �
 
 1. **알고리즘 호출** — Bash 도구로 `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` 호출:
    ```bash
-   node -e "const a=require('./lib/ceo-algorithm'); console.log(JSON.stringify(a.analyzeCEO({input: '<사용자 원문>', feature: '<feature-slug>'}), null, 2))"
+   node -e "const a=require('./lib/ceo-algorithm'); console.log(JSON.stringify(a.analyzeCEO({rawText: '<사용자 원문>', feature: '<feature-slug>'}), null, 2))"
    ```
    반환값: `{ feature, dimensions[7], activeCLevel[], artifactPlan, excludedDimensions[] }`.
 2. **결과 표시** — 7 차원 (보안/컴플라이언스/UX/데이터모델/외부통신/성능/제품정의) 등급 표를 응답에 직접 출력 (펜스 밖 마크다운 표). 펜스 안에는 ASCII 구분선만 (F8 규칙).
