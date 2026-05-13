@@ -1,5 +1,5 @@
 {
-  "version": "0.66.1",
+  "version": "0.67.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -108,7 +108,7 @@
     "secondary": ["cbo", "coo"],
     "knowledgePath": "agents/{role}/knowledge/",
     "_knowledgePath_description": "0.65.x — C-Level 도메인 지식 lazy-load 경로. C-Level 메인 .md 의 'Knowledge Index' 섹션이 이 경로 하위 MD 들을 참조. phase + artifact 매칭 시만 Read.",
-    "_routing_comment": "0.64.x — 코드 개발 도우미 정체성. CEO 자동 라우팅 = primary 만. secondary (CBO/COO) 는 사용자 명시 호출 (`/vais cbo|coo {feature}`) 시만 활성. CEO 알고리즘 (lib/ceo-algorithm.js) 이 primary 안에서 7 차원 체크리스트로 활성 C-Level 결정.",
+    "_routing_comment": "0.66.x — 코드 개발 도우미 정체성. CEO 자동 라우팅 = primary 만. secondary (CBO/COO) 는 사용자 명시 phase 호출 (`/vais cbo plan|do|qa {feature}`, `/vais coo plan|do|qa {feature}`) 시만 활성. CEO 알고리즘 (lib/ceo-algorithm.js) 이 primary 안에서 7 차원 체크리스트로 활성 C-Level 결정.",
     "autoRouting": {
       "default": "primary",
       "secondaryActivation": "explicit"
@@ -230,7 +230,8 @@
       "plan",
       "design",
       "do",
-      "qa"
+      "qa",
+      "report"
     ],
     "optionalPhases": [
       "ideation"

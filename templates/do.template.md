@@ -1,17 +1,15 @@
 # {feature} — 인프라 설계
 
 > 참조 문서: `docs/{feature}/01-plan/main.md`, `docs/{feature}/02-design/main.md`
-> 🎯 **0.64.0+**: main.md = 인덱스만. 본문은 `docs/{feature}/03-do/{artifact}.md` 에 sub-agent 가 직접 박제. 정본: `templates/main-md.template.md`
-> <!-- size budget: main.md ≤ 200 lines (warn). 초과 시 artifact MD 분리. -->
+> 🎯 **artifact body template**: 이 구조는 `docs/{feature}/03-do/{artifact}.md` 에 사용합니다. Phase index 는 `templates/main-md.template.md`.
 
 ## Decision Record (multi-owner)
 
-<!-- 각 C-Level 이 자기 결정 행을 append. Owner 컬럼 필수.
-     C-Level 별 H2 섹션: ## [CTO] 구현 결정 / ## [CSO] 보안 이슈 / ... -->
+<!-- 각 C-Level 이 자기 결정 행을 append. Owner 컬럼 필수. -->
 
-| # | Decision | Owner | Rationale | Source topic |
+| # | Decision | Owner | Rationale | Source artifact |
 |---|----------|:-----:|-----------|--------------|
-| 1 | {구현 결정} | cto | {근거} | `{topic}.md` |
+| 1 | {구현 결정} | cto | {근거} | `{artifact}.md` |
 
 ## 1. DB 개요
 
@@ -103,4 +101,4 @@ src/
 |---------|------|--------|
 | v1.0 | {date} | 초기 작성 |
 
-<!-- template version: v0.58.0 (v0.57+ subdoc / v0.58+ clevel-coexistence 포함) -->
+<!-- template version: v0.66.2 (artifact body / main-md index split) -->

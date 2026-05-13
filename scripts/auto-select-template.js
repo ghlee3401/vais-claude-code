@@ -16,7 +16,7 @@ process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS] auto-
  * 휴리스틱 (CTO knowledge/modification-chaining.md 와 의도 동일):
  *   surface = git status 상 변경 surface (modified + added + untracked, 추적 가능 .{js,ts,py,md,json,...})
  *   domains = 변경 파일들의 top-level prefix 집합 ({frontend, backend, lib, agents, skills, scripts, docs, ...})
- *   prdQuality = docs/{feature}/03-do/main.md 의 ## 1.~## 8. 헤더 카운트 → full(≥6) / partial(≥1) / missing(0)
+ *   prdQuality = docs/{feature}/01-plan/prd.md 의 ## 1.~## 8. 헤더 카운트 → full(≥6) / partial(≥1) / missing(0)
  *
  * 추천 룰:
  *   - surface ≤ 2 + domains.size ≤ 1 + prdQuality !== 'missing'    → stub      (confidence 0.9)
@@ -91,8 +91,13 @@ function inferDomains(files) {
 
 function detectPrdQuality(feature) {
   if (!feature) return 'missing';
-  const prdPath = path.join(process.cwd(), 'docs', feature, '03-do', 'main.md');
-  if (!fs.existsSync(prdPath)) return 'missing';
+  const candidatePaths = [
+    path.join(process.cwd(), 'docs', feature, '01-plan', 'prd.md'),
+    // Backward compatibility for pre-v0.64 integrated PRD documents.
+    path.join(process.cwd(), 'docs', feature, '03-do', 'main.md'),
+  ];
+  const prdPath = candidatePaths.find((p) => fs.existsSync(p));
+  if (!prdPath) return 'missing';
   let content;
   try { content = fs.readFileSync(prdPath, 'utf8'); }
   catch (_) { return 'missing'; }

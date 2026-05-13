@@ -1,6 +1,7 @@
-## IDEATION MODE GUARD (v2.0, active for CEO ideation)
+## IDEATION MODE GUARD (v2.2, active for CEO ideation)
 
 canonical: `agents/_shared/ideation-guard.md`.
+workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
 
 > **0.64.x 변경 사항**: CEO 7 차원 알고리즘 적용 + AskUserQuestion 클릭 인터페이스. 4 C-Suite (CEO+CPO+CTO+CSO) primary 자동 라우팅, CBO/COO 는 사용자 명시 호출 시만.
 
@@ -19,7 +20,7 @@ analyzeCEO():
   3. buildArtifactPlan() — 활성 artifact 목록
   4. extractActiveCLevel() — primary (CEO+CPO+CTO+CSO) 만
    ↓
-CEO 가 ideation 박제: docs/{feature}/00-ideation/main.md (frontmatter `summary`)
+CEO 가 ideation index/artifact 박제: docs/{feature}/00-ideation/main.md + ideation-decision.md
    ↓
 사용자에게 AskUserQuestion (옵션 2~3):
   - 진행 (CEO 결정대로)
@@ -67,12 +68,13 @@ CEO 가 자동으로 CBO/COO 활성화하지 **않음**. 다음 시나리오만 
 
 ### 종료 루틴 A (요약 + plan 경로)
 
-1. CEO 알고리즘 결과 + 사용자 합의 → `docs/{feature}/00-ideation/main.md` 저장
-2. frontmatter 8 필드 (owner: ceo / agent: ceo-direct / artifact: ideation-decision / phase: ideation / ...)
-3. 본문 = 7 차원 분석표 + activeCLevel + artifactPlan + Decision Record
-4. `ideation_ended` 이벤트 기록
-5. AskUserQuestion: "다음 phase 자동 진행 / 검토 / 종료"
-6. 사용자 클릭 → 자동 PDCA
+1. CEO 알고리즘 결과 + 사용자 합의 → `docs/{feature}/00-ideation/main.md` index 저장
+2. routing 본문 → `docs/{feature}/00-ideation/ideation-decision.md` artifact 저장
+3. frontmatter 필수 4 필드 (`owner`, `artifact`, `phase`, `feature`) + optional `agent/generated/summary`
+4. artifact 본문 = 7 차원 분석표 + activeCLevel + artifactPlan + Decision Record
+5. `ideation_ended` 이벤트 기록
+6. AskUserQuestion: "다음 phase 자동 진행 / 검토 / 종료"
+7. 사용자 클릭 → 자동 PDCA
 
 ### 종료 루틴 B (직접 실행)
 
@@ -81,17 +83,17 @@ CEO 가 자동으로 CBO/COO 활성화하지 **않음**. 다음 시나리오만 
 3. PDCA phase rail 이탈 — 이후 일반 Claude Code 도구로 직접 처리
 4. 사용자에게 한 줄 확인: "직접 실행 모드로 진행합니다."
 
-### 박제 형식 (00-ideation/main.md)
+### 박제 형식 (00-ideation/ideation-decision.md)
 
-frontmatter 8 필드 + 본문:
+frontmatter 4 필수 필드 + optional 필드:
 
 ```yaml
 ---
 owner: ceo
-agent: ceo-direct
 artifact: ideation-decision
 phase: ideation
 feature: {feature}
+agent: ceo-direct
 generated: YYYY-MM-DD
 summary: "{7 차원 핵심 등급 + 활성 C-Level 요약}"
 ---
@@ -103,4 +105,6 @@ summary: "{7 차원 핵심 등급 + 활성 C-Level 요약}"
 - artifactPlan (phase 별 활성 artifact)
 - 사용자 합의 시각
 
-<!-- ideation-guard version: v2.0 -->
+`00-ideation/main.md` 는 C-Level main.md 5섹션 index 규칙을 따른다.
+
+<!-- ideation-guard version: v2.2 -->

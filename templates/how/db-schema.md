@@ -131,7 +131,7 @@ graph LR
   Profile --> CLevel[6 C-Level]
   Catalog --> SubAgent[44 sub-agent]
   Status --> Docs
-  Docs --> Tmp[_tmp/ scratchpad]
+  Docs --> Artifacts[direct artifact MD]
 ```
 
 ### 3. "Tables"

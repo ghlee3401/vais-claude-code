@@ -63,12 +63,15 @@ entrypoints:
    - `decisions` (확정된 결정)
    - `open_questions` (미해결)
    - `next_step` (추천 C-Level + phase)
-2. `templates/ideation.template.md` 구조로 채움
-3. `docs/{topic}/00-ideation/main.md` 저장 (NN- 규약)
-4. `ideation_ended` 이벤트 기록 `{status: "summarized"}`
-5. 후속 제안:
+2. `docs/{topic}/00-ideation/main.md` 는 5섹션 index 로 저장합니다.
+3. 7 차원 분석표, activeCLevel, artifactPlan, 사용자 합의 본문은 `docs/{topic}/00-ideation/ideation-decision.md` artifact 로 저장합니다.
+4. artifact frontmatter 는 필수 4 필드(`owner`, `artifact`, `phase`, `feature`)를 사용합니다.
+5. `ideation_ended` 이벤트 기록 `{status: "summarized"}`
+6. 후속 제안:
    - CEO 라우팅: AskUserQuestion으로 다음 C-Level 추천
-   - 일반 C-Level: "`/vais {role} plan {topic}`으로 진입하시겠어요?" 1회만 제안
+   - CTO 구현 흐름: `/vais cto plan {topic}`
+   - CPO/CSO: CEO artifactPlan 이 활성화한 경우에만 제안
+   - CBO/COO: 사용자 명시 요청이 있을 때만 제안
 
 ## 종료 루틴 B — 직접 실행 (문서 없이 종료)
 

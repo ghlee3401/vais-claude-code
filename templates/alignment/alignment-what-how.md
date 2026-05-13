@@ -82,17 +82,17 @@ project_context_reason: "Alignment 단계 — What (PRD/Roadmap) ↔ How (Archit
 
 | What | How | 정합 |
 |------|-----|:---:|
-| PRD §4 Solution (Profile + Catalog + clevel-coexistence) | architecture-design (Mermaid: Skill→CLevel→SubAgent→Profile→Catalog→Hooks) | ✅ |
+| PRD §4 Solution (Profile + Catalog + phase index) | architecture-design (Mermaid: Skill→CLevel→SubAgent→Profile→Catalog→Hooks) | ✅ |
 | PRD §5 Must F1 (Profile schema) | api-implementation (Hook PostToolUse — ideation-guard) + lib/project-profile.js | ✅ |
 | PRD §5 Must F2 (Template metadata) | scripts/template-validator.js + scripts/build-catalog.js | ✅ |
 | PRD §5 Must F3 (50+ catalog) | templates/{core/why/what/how/biz/alignment}/*.md (34 templates by Sprint 13) | ✅ (catalog 34) |
 | PRD §5 Must F4 (44 sub-agent audit) | scripts/sub-agent-audit.js + 매트릭스 | ✅ |
-| PRD §5 Must F5 (release 5분해) | agents/coo/{release-notes-writer / ci-cd-configurator / etc} × 5 + deprecate alias | ✅ |
+| PRD §5 Must F5 (COO 운영 agent 분리) | agents/coo/{release-notes-writer / ci-cd-configurator / etc} + registry 검증 | ✅ |
 | PRD §5 Must F6 (CEO 4 + CPO 1 신규) | agents/ceo/{vision-author / strategy-kernel-author / okr-author / pr-faq-author}.md + agents/cpo/roadmap-author.md | ✅ |
 | PRD §5 Must F7 (Alignment α + β) | templates/alignment/*.md × 3 + lib/auto-judge.js (β — Sprint 14 권장 구현) | ⚠ partial — α 자동 검증 lib 미구현 |
 | PRD §5 Must F8 (VPC 재매핑) | copy-writer (CBO) → product-strategist (CPO) ownership 이관 | ✅ |
 | PRD §7 Success Metric KR1~KR5 | sub-agent-audit + template-validator (자동) + 외부 인터뷰 (Sprint 14 manual) | ✅ 4/5 자동 / 1 manual |
-| PRD §8 Risks R1~R7 | feature flag / deprecate alias / atomicWriteSync / FAILSAFE_SCHEMA | ✅ |
+| PRD §8 Risks R1~R7 | feature flag / registry migration / atomicWriteSync / FAILSAFE_SCHEMA | ✅ |
 
 ### NFR 검증
 

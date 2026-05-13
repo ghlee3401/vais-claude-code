@@ -15,7 +15,7 @@
  *
  * @see https://github.com/jonschlinkert/gray-matter#readme
  * @see docs/subagent-architecture-rethink/02-design/technical-architecture-design.md 섹션 3
- * @see docs/subagent-architecture-rethink/02-design/_tmp/infra-architect.md 섹션 3.1
+ * @see docs/subagent-architecture-rethink/02-design/technical-architecture-design.md 섹션 3.1
  *
  * > 참조 문서:
  * > - technical-architecture-design.md 섹션 3: template-validator CLI 스펙
@@ -91,7 +91,7 @@ const MIN_ANTIPATTERN_ITEMS = 3;
  *   antipatternCount: number
  * }}
  *
- * @see docs/subagent-architecture-rethink/02-design/_tmp/infra-architect.md 섹션 3.1
+ * @see docs/subagent-architecture-rethink/02-design/technical-architecture-design.md 섹션 3.1
  */
 function checkDepthC(content) {
   // 1. sample 섹션 검증

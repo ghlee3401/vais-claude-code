@@ -59,16 +59,15 @@ Read 도구로 `.vais/status.json`을 읽어 현재 피처 진행 상태를 파�
 
 | 액션 | 설명 |
 |------|------|
-| `ceo [phase] [feature]` | CEO — 비즈니스 전략 + C-Suite 동적 라우팅 |
-| `cpo [phase] [feature]` | CPO — 제품 방향 + PRD + 로드맵 + 백로그 |
-| `cto [phase] [feature]` | CTO — 기술 전체 오케스트레이션 |
-| `cso [phase] [feature]` | CSO — 보안 검토 + 시크릿 스캔 + 의존성 분석 |
-| `cbo [phase] [feature]` | CBO — 마케팅/GTM + 재무/가격 + unit economics |
-| `coo [phase] [feature]` | COO — 운영/CI/CD + 성능 벤치마크 |
+| `ceo [feature]` | CEO — 7 차원 알고리즘 + Primary C-Level 라우팅 + ideation |
+| `cto plan|design|do|qa|report [feature]` | CTO — 기술 전체 오케스트레이션. 유일한 mandatory PDCA |
+| `cpo [phase] [feature]` | CPO — 제품 방향 + PRD + 로드맵 + 백로그. CEO 활성 artifact 만 실행 |
+| `cso [phase] [feature]` | CSO — 보안 검토 + 시크릿 스캔 + 의존성 분석. CEO 활성 artifact 만 실행 |
+| `cbo plan|do|qa [feature]` | CBO — 마케팅/GTM + 재무/가격 + unit economics. 사용자 명시 호출만 |
+| `coo plan|do|qa [feature]` | COO — 운영/CI/CD + 성능 벤치마크. 사용자 명시 호출만 |
 
-> **phase**: `ideation` (optional) / `plan` / `design` / `do` / `qa` / `report`
-> (생략 시 status 기반 다음 phase 판별 → 사용자 확인)
-> **ideation**: `/vais {c-level} ideation [topic]` 또는 `/vais ideation [topic]` (CEO 기본)
+> **phase 계약**: 공통 phase rail 이 아닙니다. CTO 만 `plan → design → do → qa → report` 순차 mandatory 입니다. CEO 는 phase 생략 시 ideation/routing entry 로 동작합니다. CPO/CSO 는 CEO artifactPlan 이 활성화한 phase 만, CBO/COO 는 사용자 명시 호출한 `plan|do|qa` 만 실행합니다.
+> **ideation**: `/vais ceo [topic]`, `/vais ceo ideation [topic]`, 또는 `/vais ideation [topic]` (CEO 기본)
 
 ### 유틸리티
 
@@ -95,6 +94,8 @@ Read 도구로 `.vais/status.json`을 읽어 현재 피처 진행 상태를 파�
 ## 완료 아웃로 (모든 액션 공통)
 
 **모든 액션이 끝나면 반드시** 아래 2단계를 수행하세요:
+
+> CBO/COO 같은 Secondary router 가 별도 "완료 후 처리"를 명시한 경우에는 해당 router 의 선택지를 우선합니다. 단, AskUserQuestion 필수 원칙은 동일합니다.
 
 ### 1단계: 완료 메시지 출력
 

@@ -33,7 +33,7 @@ description: CTO 에이전트 호출. 기술 도메인 전체 오케스트레이
 2. 다음에 실행할 phase를 판별합니다 (순서: plan → design → do → qa → report)
    - status 파일이 없거나 feature가 없으면 → `plan`부터
    - 이전 phase가 완료되어 있으면 → 다음 phase
-   - **mandatory phase 스킵 금지**: plan, design, do, qa는 반드시 순서대로 실행. 이전 mandatory phase가 미완료면 해당 phase부터 실행 (예: plan 완료 후 design 미완료 → design부터)
+   - **mandatory phase 스킵 금지**: plan, design, do, qa, report 는 반드시 순서대로 실행. 이전 mandatory phase가 미완료면 해당 phase부터 실행 (예: plan 완료 후 design 미완료 → design부터)
 3. **AskUserQuestion으로 사용자에게 확인**합니다:
    ```
    "{feature}"의 다음 단계는 [{phase}]입니다. 실행할까요?
@@ -55,9 +55,9 @@ description: CTO 에이전트 호출. 기술 도메인 전체 오케스트레이
 
 에이전트가 phase를 완료한 뒤, SKILL.md 아웃로의 **"다음 스텝"** 섹션에서 CEO 추천을 수행합니다:
 
-1. `docs/` 폴더를 Glob으로 스캔하여 `*_{feature}.*.md` 파일 존재 여부로 완료된 C-Level 파악
+1. `docs/{feature}/**/*.md` 를 Glob으로 스캔하여 완료된 C-Level/artifact 파악
 2. 현재 피처의 성격 분석 (피처명 + 사용자 컨텍스트)
-3. `vais.config.json`의 `launchPipeline.dependencies`에서 의존성 확인
+3. `vais.config.json`의 `dependencies`에서 의존성 확인
 4. 아직 실행되지 않은 C-Level 중 다음으로 적합한 것을 추천
 5. **추천 요약을 응답에 직접 출력**한 뒤, **반드시 AskUserQuestion 도구로 사용자 응답을 받습니다** (텍스트 선택지로만 표시 금지).
 

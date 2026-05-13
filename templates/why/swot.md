@@ -89,7 +89,7 @@ project_context_reason: "Why 단계 — 회사·제품의 내부 (S/W) + 외부 
 #### Strengths
 - 6 C-Level + 44 sub-agent 오케스트레이션 — 도메인 특화
 - 정전 매핑 카탈로그 (50+ 산출물 × 정전 출처) 진행 중 — 큐레이션 moat
-- clevel-coexistence + sub-doc 보존 등 메타-아키텍처 차별화
+- phase index + direct artifact 보존 등 메타-아키텍처 차별화
 - 1 인 운영 → 빠른 피벗 가능
 - Claude Opus 4.x 1M context 의 의사결정 추적성 우수
 
@@ -119,7 +119,7 @@ project_context_reason: "Why 단계 — 회사·제품의 내부 (S/W) + 외부 
 | 전략 | 내용 | 우선순위 |
 |------|------|:------:|
 | **SO**: 정전 카탈로그 (S) + 마켓플레이스 first mover (O) → **2026 Q3 GA + 카탈로그 OSS 공개** | OSS 컨트리뷰션 acceleration | 높음 |
-| **SO**: clevel-coexistence (S) + 솔로 빌더 트렌드 (O) → **솔로 빌더 전용 documentation + 사례 publish** | P1 시장 직접 공략 | 높음 |
+| **SO**: phase index architecture (S) + 솔로 빌더 트렌드 (O) → **솔로 빌더 전용 documentation + 사례 publish** | P1 시장 직접 공략 | 높음 |
 | **ST**: 정전 매핑 (S) + AutoGPT 경쟁 위협 (T) → **카탈로그 깊이 + 6 C-Level 도메인 특화 강조** | 차별화 강화 | 중간 |
 | **ST**: 1M context (S) + Anthropic 의존 (T) → **MCP 표준 채택 → 일부 LLM 독립성 확보** | 공급자 risk 완화 | 중간 |
 | **WO**: 1 인 운영 (W) + OSS 커뮤니티 (O) → **PR contributor 50+ 모집 + 분산 ownership** | bus factor 완화 | 높음 |

@@ -29,21 +29,20 @@ description: CSO 에이전트 호출. 보안 검토(Gate A) + 플러그인 검�
 
 ### Phase 미지정 시 동작
 
-1. `.vais/status.json`에서 해당 feature의 현재 진행 상태를 확인합니다
-2. 다음에 실행할 phase를 판별합니다 (순서: plan → design → do → qa → report)
-   - status 파일이 없거나 feature가 없으면 → `plan`부터
-   - 이전 phase가 완료되어 있으면 → 다음 phase
-   - **mandatory phase 스킵 금지**: plan, design, do, qa는 반드시 순서대로 실행. 이전 mandatory phase가 미완료면 해당 phase부터 실행
-3. **AskUserQuestion으로 사용자에게 확인**합니다:
-   ```
-   "{feature}"의 다음 단계는 [{phase}]입니다. 실행할까요?
-   ```
-   선택지: `실행` / `다른 단계 선택` / `중단`
-4. 사용자가 "다른 단계 선택"을 고르면 phase 목록을 보여주고 선택받습니다
-5. 사용자가 mandatory phase를 건너뛰려는 경우, 경고를 표시합니다:
-   ```
-   ⚠️ [{스킵하려는 phase}]는 필수 단계입니다. 이전 단계를 먼저 완료해주세요.
-   ```
+CSO 는 mandatory PDCA owner 가 아닙니다. phase 가 생략되면 CEO artifactPlan 기준으로 CSO 가 맡을 다음 security artifact 를 찾습니다.
+
+1. `docs/{feature}/00-ideation/ideation-decision.md` 또는 `docs/{feature}/00-ideation/main.md` 에서 CEO 의 `artifactPlan` / `activeCLevel` 근거를 확인합니다.
+2. `artifactPlan` 안에서 `owner=cso` 인 미완료 artifact 의 phase 를 선택합니다.
+   - 예: `01-plan/threat-model.md`, `03-do/secret-scan.md`, `04-qa/security-audit.md`
+3. CEO 근거가 없거나 CSO artifact 가 없으면 AskUserQuestion 으로 확인합니다.
+   - `CEO 라우팅 먼저 실행` — `/vais ceo {feature}`
+   - `CSO qa 명시 실행` — 사용자 명시 호출로 간주하고 `/vais cso qa {feature}`
+   - `중단`
+4. CSO 는 plan/design/do/qa/report 순서 강제를 하지 않습니다. CTO mandatory PDCA 는 `/vais cto ...` 라우터의 책임입니다.
+
+### Phase 명시 시 동작
+
+사용자가 `/vais cso {phase} {feature}` 를 명시하면 해당 phase 의 CSO artifact 실행을 승인한 것으로 봅니다. 단, CEO artifactPlan 이 존재하면 그 근거를 main.md "CEO 판단 근거" 섹션에 인용합니다.
 
 ## 에이전트 전달
 
@@ -55,9 +54,9 @@ description: CSO 에이전트 호출. 보안 검토(Gate A) + 플러그인 검�
 
 에이전트가 phase를 완료한 뒤, SKILL.md 아웃로의 **"다음 스텝"** 섹션에서 CEO 추천을 수행합니다:
 
-1. `docs/` 폴더를 Glob으로 스캔하여 `*_{feature}.*.md` 파일 존재 여부로 완료된 C-Level 파악
+1. `docs/{feature}/**/*.md` 를 Glob으로 스캔하여 완료된 C-Level/artifact 파악
 2. 현재 피처의 성격 분석 (피처명 + 사용자 컨텍스트)
-3. `vais.config.json`의 `launchPipeline.dependencies`에서 의존성 확인
+3. `vais.config.json`의 `dependencies`에서 의존성 확인
 4. 아직 실행되지 않은 C-Level 중 다음으로 적합한 것을 추천
 5. **추천 요약을 응답에 직접 출력**한 뒤, **반드시 AskUserQuestion 도구로 사용자 응답을 받습니다** (텍스트 선택지로만 표시 금지).
 

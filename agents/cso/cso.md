@@ -45,17 +45,17 @@ Security and quality domain orchestrator. Manages Gate A (security review), Gate
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 위협 범위 + OWASP 체크 대상 정의 | `docs/{feature}/01-plan/main.md` |
-| Design | 직접 | 위협 모델 + 보안 체크리스트 | (선택) `docs/{feature}/02-design/threat-model.md` |
-| Do | security-auditor | OWASP Top 10 스캔 | `docs/{feature}/03-do/main.md` |
-| Check | 직접 + compliance-auditor | Critical 판정 + 규정 준수 검증 | `docs/{feature}/04-qa/main.md` |
+| Plan | 직접 또는 security-auditor | 위협 범위 + OWASP 체크 대상 정의 | `docs/{feature}/01-plan/threat-model.md` |
+| Design | 직접 | 보안 설계 체크리스트 | `docs/{feature}/02-design/security-checklist.md` |
+| Do | secret-scanner + dependency-analyzer | secret / dependency vulnerability 스캔 | `docs/{feature}/03-do/{artifact}.md` |
+| QA | security-auditor + compliance-auditor | Critical 판정 + 규정 준수 검증 | `docs/{feature}/04-qa/{artifact}.md` |
 
 ### Gate B — 플러그인 검증
 
 | 단계 | 실행자 | 산출물 |
 |------|--------|--------|
-| Do | plugin-validator (배포) **또는** skill-validator (개별 skill/agent 작성 품질) | `docs/{feature}/03-do/main.md` |
-| Check | 직접 | 승인/거부 최종 판정 |
+| Do | plugin-validator (배포) **또는** skill-validator (개별 skill/agent 작성 품질) | `docs/{feature}/03-do/{artifact}.md` |
+| QA | 직접 | 승인/거부 최종 판정 |
 
 **분기**: 사용자가 `배포`/`마켓플레이스`/`release` → plugin-validator / `스킬 검증`/`흡수`/`absorb` → skill-validator. 모호 시 AskUserQuestion.
 
@@ -92,12 +92,13 @@ CTO QA 통과 후, 독립적 관점에서 재검증 (이중 검증).
 |------|------|-----|
 | **Input** | feature | 피처명 |
 | | context | 구현 코드 또는 플러그인 구조 |
-| **Output** (필수) | 보안 검토 결과 | `docs/{feature}/03-do/main.md` |
-| | 보안 판정 | `docs/{feature}/04-qa/main.md` |
+| **Output** (필수) | threat model | `docs/{feature}/01-plan/threat-model.md` |
+| | 보안 스캔 결과 | `docs/{feature}/03-do/{artifact}.md` |
+| | 보안 판정 | `docs/{feature}/04-qa/security-audit.md` |
 
 ## CTO 핸드오프
 
-Gate A OWASP Critical → 코드 수정 / Gate B 플러그인 구조 문제 → 파일 수정. 형식: 요청 C-Level=CSO / 이슈 목록 / 근거 문서=`docs/{feature}/04-qa/main.md` / 완료 조건=OWASP 8/10+ + Critical 0 / 다음=`/vais cto {feature}` / 재검증=`/vais cso {feature}`.
+Gate A OWASP Critical → 코드 수정 / Gate B 플러그인 구조 문제 → 파일 수정. 형식: 요청 C-Level=CSO / 이슈 목록 / 근거 문서=`docs/{feature}/04-qa/security-audit.md` / 완료 조건=OWASP 8/10+ + Critical 0 / 다음=`/vais cto {feature}` / 재검증=`/vais cso {feature}`.
 
 **사용자 확인**: 핸드오프 전 AskUserQuestion: "CTO 에게 수정을 요청할까요?"
 
@@ -125,19 +126,22 @@ auto-judge 파싱 패턴: `Critical: N`, `OWASP: N/10`. 숫자 명시 필수.
 - **L3** (항상): `.vais/status.json`
 - **L4** (체이닝): CTO 구현 산출물
 
+---
+
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
-## C-LEVEL MAIN.MD RULES (v2.1 summary)
+## C-LEVEL MAIN.MD RULES (v2.2 summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
+workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
 
 1. main.md = 5섹션 인덱스 (Executive Summary / Decision Record / Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X.
-2. 다른 C-Level 의 H2 섹션·Decision Record 행·Artifacts 표 엔트리 수정·삭제 금지.
-3. 자기 결정만 append-only (Owner 컬럼 필수, 누락 → `W-MRG-02`).
-4. Artifact frontmatter 4 필수 (owner/artifact/phase/feature). 상세: `subdoc-guard.md` v2.1.
-5. 재진입 시 자기 H2 섹션 교체 + `## 변경 이력` entry. 이전 근거는 git log.
+2. 다른 C-Level 의 Decision Record 행·Artifacts 표 엔트리 수정·삭제 금지. legacy owner H2 섹션이 있으면 보존.
+3. Decision Record 는 append-only. Owner 컬럼 필수, 누락 → `W-MRG-02`.
+4. Artifact frontmatter 4 필수 (owner/artifact/phase/feature). 상세: `subdoc-guard.md` v2.2.
+5. 재진입 시 자기 owner 의 요약·Next Phase 갱신 가능. Decision Record 는 새 행 append, Artifacts 는 자기 artifact row 만 갱신/추가.
 6. 1 artifact = 1 MD (통합 금지). 파일명 = frontmatter `artifact` 값.
 7. enforcement: warn (W-OWN/W-MRG/W-MAIN-SIZE 모두 경고). 순서: advisor-guard → subdoc-guard → clevel-main-guard.
 8. main.md = 인덱스라 200줄 자연 충족. `mainMdMaxLines` warn (refuse 아님).
 
-<!-- clevel-main-guard version: v2.1 -->
+<!-- clevel-main-guard version: v2.2 -->
 <!-- vais:clevel-main-guard:end -->

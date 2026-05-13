@@ -18,7 +18,7 @@
 | 메트릭 | 소스 | threshold | 패턴 |
 |--------|------|-----------|------|
 | `matchRate` | `.vais/status.json` gap analysis | ≥ 90 | `qa-engineer` 가 `lib/status.saveGapAnalysis` 호출 필수 |
-| `criticalIssueCount` | `docs/{feature}/04-qa/main.md` | === 0 | `Critical: N` 형식 숫자 명시 |
+| `criticalIssueCount` | `docs/{feature}/04-qa/gap-analysis.md` 또는 QA artifact | === 0 | `Critical: N` 형식 숫자 명시 |
 
 ## 판정 흐름
 
@@ -27,5 +27,5 @@
 ## 실행 팁
 
 - QA phase 에서 `qa-engineer` 가 Gap 계산 후 `lib/status.saveGapAnalysis` 호출 필수 — `scripts/auto-judge.js` 가 `getGapAnalysis(feature).matchRate` 직접 읽음
-- QA 문서에 `Critical: 0` / `Critical: 2` 같이 **명시적 숫자 표기** — auto-judge 가 `/Critical[:\s]*(\d+)/i` 로 파싱
+- QA artifact 에 `Critical: 0` / `Critical: 2` 같이 **명시적 숫자 표기** — auto-judge 가 `/Critical[:\s]*(\d+)/i` 로 파싱
 - `matchRate < 90` 이면 gate verdict = `retry` → qa-engineer 재실행 권장 (lean mode 에서 escalate-on-fail 1회 후 CP-Q 발동)

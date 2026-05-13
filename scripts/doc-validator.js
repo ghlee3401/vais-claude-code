@@ -3,16 +3,16 @@ process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] d
 process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] doc-validator rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(0); });
 /**
  * VAIS Code - Document Validator
- * C-Level 에이전트 종료 시 필수 문서 존재 여부 + v0.57 sub-doc 검증.
+ * C-Level 에이전트 종료 시 필수 문서 존재 여부 + legacy sub-doc compatibility 검증.
  *
  * 사용: node scripts/doc-validator.js <role> <feature>
  * 반환: JSON { passed, missing, warnings, subDocWarnings }
  *   - passed: boolean (필수 main.md 모두 존재)
  *   - missing: [{ phase, path }]
  *   - warnings: [string] (일반 경고)
- *   - subDocWarnings: [{ code, path, message }] (v0.57 sub-doc 경고, enforcement=warn 시 exit에 영향 없음)
+ *   - subDocWarnings: [{ code, path, message }] (legacy sub-doc 경고, enforcement=warn 시 exit에 영향 없음)
  *
- * v0.57 경고 코드:
+ * legacy sub-doc compatibility 경고 코드:
  *   W-SCP-01: _tmp/{slug}.md Author 헤더 누락
  *   W-SCP-02: _tmp/{slug}.md Phase 헤더 누락
  *   W-SCP-03: _tmp/{slug}.md 크기 < scratchpadMinBytes
@@ -20,12 +20,12 @@ process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] 
  *   W-IDX-01: main.md 에 topic 문서 링크 누락
  *   W-MAIN-01: main.md 누락 (기존 missing 과 동일, 코드 부여)
  *
- * v0.58 경고 코드 (clevel-doc-coexistence):
+ * C-Level phase-index coexistence 경고 코드:
  *   W-OWN-01: topic.md frontmatter 에 owner 누락
  *   W-OWN-02: topic.md frontmatter owner 값이 C-Level enum 외
  *   W-MRG-02: main.md Decision Record 표에 Owner 컬럼 누락
- *   W-MRG-03: topic ≥ 2 이지만 main.md 에 ## [{C-LEVEL}] 섹션 0개
- *   W-MAIN-SIZE: main.md 라인 수 > mainMdMaxLines AND topic 0 AND _tmp/ 0 (F14)
+ *   W-MRG-03: artifact ≥ 2 이지만 main.md 가 5섹션 index 도 legacy owner-H2 모델도 아님
+ *   W-MAIN-SIZE: main.md 라인 수 > mainMdMaxLines AND artifact 0 AND legacy _tmp/ 0
  *
  * v0.58.3 경고 코드 (plan-scope-contract):
  *   W-SCOPE-01: plan/main.md 에 "## 요청 원문" 섹션 누락 (CLAUDE.md Rule #9)
@@ -40,13 +40,10 @@ process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] 
 const fs = require('fs');
 const path = require('path');
 const { loadConfig, resolveDocPath } = require('../lib/paths');
-const { getActiveFeature } = require('../lib/status');
+const { getActiveFeature, getMandatoryPhases } = require('../lib/status');
 
 // C-Level 역할 목록
 const C_LEVEL_ROLES = ['ceo', 'cpo', 'cto', 'cso', 'cbo', 'coo'];
-
-// 역할별 필수 phase (모든 C-Level 공통: plan, do, qa)
-const MANDATORY_PHASES = ['plan', 'do', 'qa'];
 
 // v0.57: phase 폴더 매핑 (subDoc 스캔용)
 const PHASE_FOLDERS = {
@@ -64,6 +61,21 @@ const SYSTEM_ARTIFACT_NAMES = new Set(['main.md', 'interface-contract.md']);
 // v0.58: C-Level 소유권 enum
 const C_LEVEL_OWNERS = new Set(['ceo', 'cpo', 'cto', 'cso', 'cbo', 'coo']);
 
+function hasPhaseIndexSections(content) {
+  const required = [
+    /^##\s+(?:\d+\.\s+)?Executive Summary\s*$/mi,
+    /^##\s+(?:\d+\.\s+)?Decision Record\b/mi,
+    /^##\s+(?:\d+\.\s+)?Artifacts\b/mi,
+    /^##\s+(?:\d+\.\s+)?CEO 판단 근거\s*$/mi,
+    /^##\s+(?:\d+\.\s+)?Next Phase\b/mi,
+  ];
+  return required.every((re) => re.test(content));
+}
+
+function hasLegacyOwnerSections(content) {
+  return (content.match(/^##\s+\[(CBO|CPO|CTO|CSO|COO|CEO)\]\s/gm) || []).length > 0;
+}
+
 /**
  * 역할+피처에 대해 필수 문서 존재 여부 검증 (기존 동작 유지)
  */
@@ -79,7 +91,43 @@ function validateDocs(role, feature) {
     return result;
   }
 
-  for (const phase of MANDATORY_PHASES) {
+  // v0.66.2 — empty feature folder 자동 인식. docs/{feature}/ 폴더 하위에 어떤 .md 도
+  // 없으면 historical/empty (예: v0.57 시기 ideation 만 박제 후 본격 진행 X) → skip.
+  const featureRoot = path.join(process.cwd(), 'docs', feature);
+  if (fs.existsSync(featureRoot)) {
+    const hasAnyMd = (function walk(dir) {
+      let entries;
+      try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch (_) { return false; }
+      for (const ent of entries) {
+        const p = path.join(dir, ent.name);
+        if (ent.isFile() && ent.name.endsWith('.md')) return true;
+        if (ent.isDirectory() && walk(p)) return true;
+      }
+      return false;
+    })(featureRoot);
+    if (!hasAnyMd) {
+      result.warnings.push(`empty feature folder — mandatoryPhases 검사 skip (historical/empty)`);
+      return result;
+    }
+  }
+
+  // v0.66.2 — ideation-only feature 자동 인식. 00-ideation/main.md 만 존재하고
+  // mandatory phase 가 모두 부재면 (분석 인덱스 등 정식 PDCA 진행 의도 없는 폴더),
+  // mandatoryPhases 검사를 skip 한다. backward-compat.
+  const ideationMain = path.join(process.cwd(), 'docs', feature, '00-ideation', 'main.md');
+  if (fs.existsSync(ideationMain)) {
+    const mandatory = getMandatoryPhases(role);
+    const anyMandatory = mandatory.some((p) => {
+      const dp = resolveDocPath(p, feature, role);
+      return dp && fs.existsSync(dp);
+    });
+    if (!anyMandatory) {
+      result.warnings.push(`ideation-only feature (00-ideation/main.md only) — mandatoryPhases 검사 skip`);
+      return result;
+    }
+  }
+
+  for (const phase of getMandatoryPhases(role)) {
     const docPath = resolveDocPath(phase, feature, role);
     if (!docPath) {
       result.warnings.push(`${phase} 문서 경로 해석 실패`);
@@ -200,7 +248,7 @@ function validateSubDocs(feature, options = {}) {
 }
 
 /**
- * v0.58 C-Level coexistence 검증 — topic frontmatter owner + main.md 멀티-오너 구조 + size budget.
+ * C-Level coexistence 검증 — artifact frontmatter owner + main.md 5섹션 index/legacy 멀티-오너 구조 + size budget.
  * enforcement=warn 기본이라 exit 에 영향 주지 않음.
  *
  * @param {string} feature
@@ -289,10 +337,11 @@ function validateCoexistence(feature, options = {}) {
       }
     }
 
-    // 2b. C-Level 섹션 카운트 vs topic 파일 개수 (W-MRG-03)
-    const ownerSections = (mainContent.match(/^##\s+\[(CBO|CPO|CTO|CSO|COO|CEO)\]\s/gm) || []).length;
-    if (topicFiles.length >= 2 && ownerSections === 0) {
-      out.push({ code: 'W-MRG-03', path: mainPath, message: `multi-owner topics present (${topicFiles.length}) but no H2 owner section found (## [CBO|CPO|CTO|CSO|COO|CEO])` });
+    // 2b. main.md 는 현재 5섹션 phase index 이거나 legacy owner-H2 모델이면 통과 (W-MRG-03)
+    const hasCurrentIndex = hasPhaseIndexSections(mainContent);
+    const hasOwnerSections = hasLegacyOwnerSections(mainContent);
+    if (topicFiles.length >= 2 && !hasCurrentIndex && !hasOwnerSections) {
+      out.push({ code: 'W-MRG-03', path: mainPath, message: `multiple artifacts present (${topicFiles.length}) but main.md is neither 5-section phase index nor legacy owner-H2 model` });
     }
 
     // 2c. Size budget (W-MAIN-SIZE, F14) — main.md 가 threshold 초과 AND topic 0 AND _tmp/ 0
@@ -303,7 +352,7 @@ function validateCoexistence(feature, options = {}) {
       out.push({
         code: 'W-MAIN-SIZE',
         path: mainPath,
-        message: `main.md ${lines} lines exceeds mainMdMaxLines (${maxLines}); consider topic split (v0.57 _tmp/ + v0.58 topic)`
+        message: `main.md ${lines} lines exceeds mainMdMaxLines (${maxLines}); split body into artifact MD files`
       });
     }
   }
@@ -327,20 +376,35 @@ function validateScopeContract(feature) {
   const enforcement = policy.enforcement ?? 'warn';
   if (enforcement === 'off') return out;
 
-  const planMain = path.join(process.cwd(), 'docs', feature, '01-plan', 'main.md');
+  const planDir = path.join(process.cwd(), 'docs', feature, '01-plan');
+  const planMain = path.join(planDir, 'main.md');
   if (!fs.existsSync(planMain)) return out;
 
-  let content;
-  try { content = fs.readFileSync(planMain, 'utf8'); } catch (_) { return out; }
+  // v0.66.2 — 5섹션 index 정책 대응. main.md 외에 같은 폴더의 plan body artifact
+  // (예: tech-plan.md, plan-rationale.md, plan.md) 도 fallback 검사.
+  // workflow-contract-matrix §8 — main.md must remain an index. body 는 별도 artifact MD.
+  let combined;
+  try {
+    combined = fs.readFileSync(planMain, 'utf8');
+    for (const fname of fs.readdirSync(planDir)) {
+      if (fname === 'main.md' || !fname.endsWith('.md')) continue;
+      try { combined += '\n' + fs.readFileSync(path.join(planDir, fname), 'utf8'); }
+      catch (_) { /* skip unreadable */ }
+    }
+  } catch (_) { return out; }
 
-  if (!/^## 요청 원문\s*$/m.test(content)) {
-    out.push({ code: 'W-SCOPE-01', path: planMain, message: '"## 요청 원문" 섹션 누락 (Rule #9 — 사용자 요청 축약 없이 인용)' });
+  // v0.66.2 regex 완화 — numeric prefix (`## 0. `) 와 parenthetical suffix (`(synthesis 인용)`)
+  // 모두 허용. 정책 의도는 "원문 인용 / scope 명시" 가 있어야 한다 이지 정확한 H2 텍스트 강제 X.
+  // 끝부분 \b 제거 — 한글 글자(요청 원문)는 \w 에 포함되지 않아 word-boundary 가
+  // 항상 false 가 되어 매치 실패하던 버그. 영어 In-scope/Out-of-scope 도 일관성 유지를 위해 동일.
+  if (!/^##\s+(?:\d+\.\s*)?요청 원문/m.test(combined)) {
+    out.push({ code: 'W-SCOPE-01', path: planMain, message: '"## 요청 원문" 섹션 누락 (Rule #9 — main.md 또는 plan body artifact 에 작성)' });
   }
-  if (!/^## In-scope\s*$/m.test(content)) {
-    out.push({ code: 'W-SCOPE-02', path: planMain, message: '"## In-scope" 섹션 누락' });
+  if (!/^##\s+(?:\d+\.\s*)?In-scope/m.test(combined)) {
+    out.push({ code: 'W-SCOPE-02', path: planMain, message: '"## In-scope" 섹션 누락 (main.md 또는 plan body artifact)' });
   }
-  if (!/^## Out-of-scope\s*$/m.test(content)) {
-    out.push({ code: 'W-SCOPE-03', path: planMain, message: '"## Out-of-scope" 섹션 누락 (명시 없으면 "(없음)" 한 줄)' });
+  if (!/^##\s+(?:\d+\.\s*)?Out-of-scope/m.test(combined)) {
+    out.push({ code: 'W-SCOPE-03', path: planMain, message: '"## Out-of-scope" 섹션 누락 (명시 없으면 "(없음)" 한 줄. main.md 또는 plan body artifact)' });
   }
 
   return out;
@@ -505,7 +569,7 @@ function formatSubDocWarnings(warnings) {
  */
 function formatCoexistenceWarnings(warnings) {
   if (!Array.isArray(warnings) || warnings.length === 0) return '';
-  const lines = [`ℹ️  [clevel-coexistence v0.58] ${warnings.length}건 경고:`];
+  const lines = [`ℹ️  [phase-index coexistence v2.2] ${warnings.length}건 경고:`];
   for (const w of warnings) {
     const rel = path.relative(process.cwd(), w.path);
     lines.push(`   ⚠️  [${w.code}] ${rel}: ${w.message}`);
@@ -574,4 +638,4 @@ if (require.main === module) {
   process.exit(0);
 }
 
-module.exports = { validateDocs, validateSubDocs, validateCoexistence, validateScopeContract, validateArtifactFrontmatter, formatResult, formatSubDocWarnings, formatCoexistenceWarnings, formatScopeContractWarnings, formatFrontmatterWarnings, MANDATORY_PHASES, C_LEVEL_ROLES, C_LEVEL_OWNERS, PHASE_FOLDERS };
+module.exports = { validateDocs, validateSubDocs, validateCoexistence, validateScopeContract, validateArtifactFrontmatter, formatResult, formatSubDocWarnings, formatCoexistenceWarnings, formatScopeContractWarnings, formatFrontmatterWarnings, C_LEVEL_ROLES, C_LEVEL_OWNERS, PHASE_FOLDERS };

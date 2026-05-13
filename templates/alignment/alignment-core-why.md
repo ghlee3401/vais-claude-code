@@ -80,7 +80,7 @@ project_context_reason: "Alignment 단계 — Core (Vision/Strategy) ↔ Why (PE
 | Strategy Diagnosis ("default-execute anti-pattern") | PEST T (LLM 발전 → 잘못된 산출물 양산) | ✅ aligned |
 | Strategy Diagnosis | Five Forces (Threat of New Entrants High — generic AI 도구 진입) | ✅ aligned |
 | Guiding Policy ("Profile 게이트 + 4-policy") | SWOT TOWS WO ("정전 카탈로그 + 솔로 빌더 트렌드") | ✅ aligned |
-| Coherent Actions (4: Profile 합의 / metadata / release 5분해 / 50+ 카탈로그) | VPC Pain Reliever 4개 (정전 출처 / Profile 게이트 / clevel-coexistence / Sprint Roadmap) | ✅ aligned (1:1 매핑) |
+| Coherent Actions (4: Profile 합의 / metadata / COO 운영 agent 분리 / 50+ 카탈로그) | VPC Pain Reliever 4개 (정전 출처 / Profile 게이트 / artifact index / Sprint Roadmap) | ✅ aligned (1:1 매핑) |
 | OKR Objective ("default-execute 해소 + 신뢰 C-Suite") | Persona End Goal ("30분 PRD + 정전 출처 + 영역 무관 점검") | ✅ aligned |
 | OKR KR1 (Profile 게이트 95% 적중) | VPC Required Gain ("30분 PRD") | ✅ aligned |
 | PR-FAQ Customer Quote (가상 솔로 빌더) | Persona Quote ("ChatGPT 산출물 신뢰 의심") | ✅ aligned (voice 일치) |

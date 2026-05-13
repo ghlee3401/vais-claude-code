@@ -69,7 +69,7 @@ project_context_reason: "What 단계 — Vision/Strategy Kernel 입력을 produc
 
 - Sprint 1~3 ✅: Profile + Template metadata + audit 인프라
 - Sprint 4~6 ✅: Core 5 + Why 6 templates + VPC 재매핑
-- Sprint 7~8 ✅: 10 신규 sub-agent + release 5분해 + audit 매트릭스
+- Sprint 7~8 ✅: 10 신규 sub-agent + COO 운영 agent 분리 + audit 매트릭스
 - Sprint 9 ✅: 34 sub-agent Q-A/Q-B 마이그레이션
 - Sprint 10~11 (현재): audit 보강 + What 7 templates
 - Sprint 12 (예정): How 11 templates + Biz 5
@@ -80,7 +80,7 @@ project_context_reason: "What 단계 — Vision/Strategy Kernel 입력을 produc
 | Risk | Severity | Mitigation |
 |------|:--------:|-----------|
 | R1 작업량 폭증 | High → Med (Sprint 4~9 측정 후) | 5 파일럿 측정 + partial Beta |
-| R4 파괴적 변경 | Med | feature flag + deprecate alias |
+| R4 파괴적 변경 | Med | feature flag + registry migration |
 | R5 외부 인터뷰 모집 지연 | Med | NCSOFT 사내 도입 → 자연 인터뷰 |
 
 ### 7. Budget

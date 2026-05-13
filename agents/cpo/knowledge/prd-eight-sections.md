@@ -1,6 +1,6 @@
 # PRD 8 섹션 표준 (CPO)
 
-`do` phase 산출물 (`docs/{feature}/03-do/main.md`) 의 PRD 8개 섹션. auto-judge 가 `designCompleteness` 메트릭 계산 시 사용 (vais.config.json > gates.defaults.designCompleteness = 80).
+현재 PRD 정본은 `docs/{feature}/01-plan/prd.md` artifact 이다. 이 문서는 CPO 가 PRD 를 작성하거나 QA 할 때 사용하는 8개 섹션 품질 기준이며, `designCompleteness` 판단의 기준선으로 사용한다 (vais.config.json > gates.defaults.designCompleteness = 80).
 
 ## 섹션 매트릭스
 

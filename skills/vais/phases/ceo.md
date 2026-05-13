@@ -32,21 +32,21 @@ description: CEO 에이전트 호출. 7 차원 알고리즘 (`lib/ceo-algorithm.
 
 ### Phase 미지정 시 동작
 
-1. `.vais/status.json`에서 해당 feature의 현재 진행 상태를 확인합니다
-2. 다음에 실행할 phase를 판별합니다 (순서: plan → design → do → qa → report)
-   - status 파일이 없거나 feature가 없으면 → `plan`부터
-   - 이전 phase가 완료되어 있으면 → 다음 phase
-   - **mandatory phase 스킵 금지**: plan, design, do, qa는 반드시 순서대로 실행. 이전 mandatory phase가 미완료면 해당 phase부터 실행
-3. **AskUserQuestion으로 사용자에게 확인**합니다:
-   ```
-   "{feature}"의 다음 단계는 [{phase}]입니다. 실행할까요?
-   ```
-   선택지: `실행` / `다른 단계 선택` / `중단`
-4. 사용자가 "다른 단계 선택"을 고르면 phase 목록을 보여주고 선택받습니다
-5. 사용자가 mandatory phase를 건너뛰려는 경우, 경고를 표시합니다:
-   ```
-   ⚠️ [{스킵하려는 phase}]는 필수 단계입니다. 이전 단계를 먼저 완료해주세요.
-   ```
+CEO 는 mandatory PDCA owner 가 아닙니다. phase 가 생략되면 `phase=ideation` 으로 간주하고 routing entry 를 실행합니다.
+
+1. 사용자 입력 전체를 feature/topic 후보로 사용합니다.
+2. `agents/ceo/ceo.md` 의 "CEO 진입 절차" 4 단계를 수행합니다.
+   - `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` 호출
+   - 7 차원 등급 표를 응답에 직접 출력
+   - `activeCLevel` / `artifactPlan` 을 baseline 으로 인용
+   - AskUserQuestion 으로 다음 실행을 확인
+3. CTO phase 순서 강제는 하지 않습니다. CTO mandatory PDCA 는 `/vais cto ...` 라우터의 책임입니다.
+
+### Phase 명시 시 동작
+
+- `ideation`: 아래 Ideation 분기로 이동합니다.
+- `plan|design|do|qa|report`: CEO 가 직접 해당 phase 를 mandatory 실행하지 않습니다. 명시 phase 는 routing context 로만 사용하고, `analyzeCEO()` 결과에 따라 활성 C-Level/phase 를 AskUserQuestion 으로 확인합니다.
+- 사용자가 기술 구현 phase 를 명시했으면 기본 추천은 `/vais cto {phase} {feature}` 입니다.
 
 ### Ideation 분기
 
@@ -62,16 +62,16 @@ CEO는 사용자 입력을 분석하여 아래 시나리오 중 가장 적합한
 | ID | 트리거 | 권장 흐름 |
 |----|--------|-----------|
 | S-0 | 아이디어 모호, 탐색 필요 | CEO ideation → 추천 C-Level |
-| S-1 | 신규 서비스 풀 개발 | CBO(market)→CPO→CTO→CSO→CBO(GTM)→COO |
-| S-2 | 기능 추가, 기존 서비스 확장 | CPO→CTO→CSO→COO |
+| S-1 | 신규 서비스 풀 개발 | CEO routing → CPO→CTO→CSO. CBO/COO 는 사용자 명시 시 제안 |
+| S-2 | 기능 추가, 기존 서비스 확장 | CEO routing → CPO→CTO→CSO. COO 는 사용자 명시 시 제안 |
 | S-3 | 버그/UX 개선/리팩터 | branch별 (CTO or CPO) |
-| S-4 | 프로덕션 장애 | CTO(incident-responder)→CSO→COO |
-| S-5 | 성능 최적화 / 비용 절감 | CTO(perf) or CBO(finops) |
-| S-6 | 보안 감사 / 컴플라이언스 | CSO↔CTO loop (max 3) |
-| S-7 | 마케팅 캠페인 / GTM | CPO→CBO→(CTO) |
-| S-8 | 시장 분석 / 사업 분석 | CBO→(CPO) |
+| S-4 | 프로덕션 장애 | CTO(incident-responder)→CSO. COO 는 사용자 명시 시 제안 |
+| S-5 | 성능 최적화 / 비용 절감 | CTO(perf). FinOps 사업 분석은 CBO 명시 호출 제안 |
+| S-6 | 보안 감사 / 컴플라이언스 | CSO↔CTO loop (max 2) |
+| S-7 | 마케팅 캠페인 / GTM | CBO 명시 호출 제안 → 필요 시 CPO/CTO |
+| S-8 | 시장 분석 / 사업 분석 | CBO 명시 호출 제안 → 필요 시 CPO |
 | S-9 | skill/agent 생성 / 흡수 | CEO(skill-creator)→CSO |
-| S-10 | 정기 운영 / 기술부채 | CTO or COO |
+| S-10 | 정기 운영 / 기술부채 | CTO. COO 는 사용자 명시 시 제안 |
 
 ## 에이전트 전달
 
@@ -83,7 +83,7 @@ CEO는 사용자 입력을 분석하여 아래 시나리오 중 가장 적합한
 
 에이전트가 phase를 완료한 뒤, SKILL.md 아웃로의 **"다음 스텝"** 섹션에서 CEO 추천을 수행합니다:
 
-1. `docs/` 폴더를 Glob으로 스캔하여 `*_{feature}.*.md` 파일 존재 여부로 완료된 C-Level 파악
+1. `docs/{feature}/**/*.md` 를 Glob으로 스캔하여 완료된 C-Level/artifact 파악
 2. 현재 피처의 성격 분석 (피처명 + 사용자 컨텍스트)
 3. `vais.config.json`의 `dependencies`에서 의존성 확인
 4. 아직 실행되지 않은 C-Level 중 다음으로 적합한 것을 추천

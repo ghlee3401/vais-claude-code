@@ -103,4 +103,4 @@ VAIS sub-agent 의 "default-execute" 패턴을 해소하여, 사용자가 "쓸�
 
 | version | date | change |
 |---------|------|--------|
-| v1.0 | 2026-04-25 | 초기 작성 — Sprint 4 Day 3. design `_tmp/infra-architect.md` §6.3 draft 정식 이관 + Grove 정전 출처 추가 + Cascading/Sandbagging anti-pattern 추가 (3→6 확장) + 계약 검증 단락 + KR5 (외부 인터뷰) 추가 |
+| v1.0 | 2026-04-25 | 초기 작성 — Sprint 4 Day 3. architecture draft 정식 이관 + Grove 정전 출처 추가 + Cascading/Sandbagging anti-pattern 추가 (3→6 확장) + 계약 검증 단락 + KR5 (외부 인터뷰) 추가 |

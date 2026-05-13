@@ -72,11 +72,11 @@ project_context_reason: "Alignment 단계 — Why (JTBD/Persona/VPC) ↔ What (P
 |-----|------|:---:|
 | JTBD Core Job ("정전 출처 명시 산출물 30분 내") | PRD §3 (Top Pain "ChatGPT 산출물 신뢰 의심") | ✅ aligned |
 | Persona P1 김지원 | PRD §3 Primary Persona (P1 김지원) | ✅ aligned |
-| VPC Pain Extreme 5개 | PRD §5 Must (F1~F5: Profile/Template/Catalog/Audit/release 5분해) | ✅ 1:1 매핑 |
+| VPC Pain Extreme 5개 | PRD §5 Must (F1~F5: Profile/Template/Catalog/Audit/COO 운영 agent 분리) | ✅ 1:1 매핑 |
 | VPC Gain Required ("30분 PRD") | PRD §7 KR1 ("Profile 게이트 95% 적중") + KR2 ("25 templates") | ✅ 측정 가능 |
 | JTBD Forces (Push+Pull > Anxiety+Habit) | PRD Pre-mortem ("외부 인터뷰 부재 / over-engineering / overflow") | ✅ aligned |
 | OST Outcome ("Activation Rate 50%") | OKR KR2 + KR5 (외부 인터뷰 5~7명) | ✅ aligned |
-| OST Solutions (S1~S11) | PRD §4 Solution Overview (Profile + Catalog + clevel-coexistence) | ✅ aligned |
+| OST Solutions (S1~S11) | PRD §4 Solution Overview (Profile + Catalog + phase index) | ✅ aligned |
 | Hypothesis 8 risk | PRD Pre-mortem 3 시나리오 (over-engineering / 외부 인터뷰 / overflow) | ⚠ partial — 5 risk (Ethical/Regulatory/Strategic Fit/Security 등) PRD 미반영 |
 | Roadmap Now (Sprint 1~14 GA) | PRD Must F1~F8 | ✅ aligned |
 | PRD designCompleteness 100% | (CPO QA SC-07 검증) | ✅ |

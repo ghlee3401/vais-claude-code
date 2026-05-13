@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "VAIS Code — organization-in-a-box (부서장 매뉴얼). 4 Primary (CEO/CPO/CTO/CSO) + 2 Secondary (CBO/COO 명시 호출). CEO 7 차원 알고리즘 + sub-agent 직접 박제 (frontmatter 4 필수 필드) + AskUserQuestion 클릭. v0.66: M0 Ideation Continuity + M1 Tier-1A Knowledge Pack (Rumelt + PRD OJT + Architecture Decision)",
-    "version": "0.66.1"
+    "version": "0.67.0"
   },
   "plugins": [
     {
       "name": "vais-code",
       "source": "./",
       "description": "AI code-development assistant simulating a virtual C-Suite. v2.0 — 4 Primary (CEO/CPO/CTO/CSO) auto-routing via CEO 7-dimension algorithm + 2 Secondary (CBO/COO) explicit call only. Sub-agent direct stamping with frontmatter 4 mandatory fields (owner/artifact/phase/feature). CTO is the only mandatory PDCA (plan→design→do→qa→report).",
-      "version": "0.66.1",
+      "version": "0.67.0",
       "author": {
         "name": "VAIS Voice",
         "email": "ghlee0304@ncsoft.com"

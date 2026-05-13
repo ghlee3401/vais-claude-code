@@ -221,7 +221,7 @@ jobs:
 
 ## ⚠ Anti-pattern (Forsgren + Humble & Farley 명시)
 
-- **scope 무시 default-execute**: Profile 미평가 + 모든 프로젝트에 CI/CD 생성 — 본 sub-agent 가 정확히 해소하려는 anti-pattern. v0.50~0.58 release-engineer 사례.
+- **scope 무시 default-execute**: Profile 미평가 + 모든 프로젝트에 CI/CD 생성 — 본 sub-agent 가 정확히 해소하려는 anti-pattern. legacy all-in-one ops agent 사례.
 - **deploy without rollback**: rollback 자동화 부재 — 장애 시 수동 강제.
 - **prod 자동 deploy without approval**: GitHub Environment 의 manual approval 없이 main → prod — 의도치 않은 변경.
 - **Pipeline > 30분**: Lead Time 폭증 — DORA Elite 카테고리 이탈. **stage 시간 제한 필수**.

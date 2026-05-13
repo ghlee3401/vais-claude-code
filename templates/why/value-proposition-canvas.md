@@ -169,7 +169,7 @@ project_context_reason: "Why 단계 — Customer Profile (JTBD/Persona 기반) �
 |----------|-----------|:-----:|
 | 정전 출처 frontmatter 강제 (canon_source) | "정전 출처 부재" | **Essential** |
 | Profile 게이트 + scope-conditional sub-agent | "새 영역 막막" → 자동 호출 | **Essential** |
-| clevel-coexistence + sub-doc 보존 | "context 손실 / 결정 휘발" | **Essential** |
+| phase index + direct artifact 보존 | "context 손실 / 결정 휘발" | **Essential** |
 | Sprint 단위 Roadmap + RICE 우선순위 | "투자자 자료 1 주" → 30분 PRD | **Essential** |
 
 #### Gain Creators
@@ -187,7 +187,7 @@ project_context_reason: "Why 단계 — Customer Profile (JTBD/Persona 기반) �
 |---|---|:---:|
 | 정전 출처 부재 (Extreme) | canon_source 강제 (Essential) | ✅ Strong |
 | 새 영역 막막 (Extreme) | Profile 게이트 + scope (Essential) | ✅ Strong |
-| context 손실 (Moderate) | clevel-coexistence + sub-doc (Essential) | ✅ Strong |
+| context 손실 (Moderate) | phase index + direct artifact (Essential) | ✅ Strong |
 | 투자자 자료 1 주 (Extreme) | Sprint Roadmap + RICE (Essential) | ✅ Strong |
 | 결정 근거 휘발 (Moderate) | Decision Record append-only (Important) | ✅ |
 

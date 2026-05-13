@@ -14,14 +14,14 @@
 | 버그/에러 조사 | `incident-responder` (근본 원인 분석 후 수정) |
 | 테스트 추가/수정 | `test-engineer` |
 | DB 스키마 최적화 | `db-architect` |
-| CI/CD 설정 | COO `release-engineer` (v0.50+ COO 소관) |
+| CI/CD 설정 | COO `ci-cd-configurator` |
 
 ## 위임 방식
 
 - 모두 `Agent` 도구 호출
 - 병렬 쌍: `ui-designer + infra-architect` / `frontend-engineer + backend-engineer` / `frontend-engineer + backend-engineer + test-engineer`
 - 단독: `qa-engineer`, `test-engineer`, `incident-responder`(디버깅), `db-architect`(infra-architect 이후 심화)
-- 배포/CI-CD 는 COO 소관
+- 배포/CI-CD 는 COO 소관이며 Secondary 명시 호출만 사용 (`/vais coo do {feature}` 등)
 
 ## 선택 휴리스틱
 

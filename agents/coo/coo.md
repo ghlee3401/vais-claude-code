@@ -3,7 +3,8 @@ name: coo
 version: 2.1.0
 description: |
   Manages operational processes including CI/CD pipelines, monitoring setup, and workflow optimization.
-  Delegates to release-engineer, sre-engineer, release-monitor, performance-engineer sub-agents.
+  Delegates to release-notes-writer, ci-cd-configurator, container-config-author, migration-planner,
+  runbook-author, sre-engineer, release-monitor, and performance-engineer sub-agents.
   Secondary C-Level — CEO 자동 라우팅 제외, 사용자 명시 호출 시만 활성.
   v0.65: 도메인 지식은 agents/coo/knowledge/ 로 lazy-load.
   Use when: deployment, CI/CD setup, monitoring configuration, or operational process improvement is needed.
@@ -14,7 +15,11 @@ agent-type: c-level
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion]
 memory: project
 subAgents:
-  - release-engineer
+  - release-notes-writer
+  - ci-cd-configurator
+  - container-config-author
+  - migration-planner
+  - runbook-author
   - sre-engineer
   - release-monitor
   - performance-engineer
@@ -27,7 +32,7 @@ disallowedTools:
 
 ## Role
 
-Operations domain orchestration. Manages CI/CD pipelines, monitoring, deployment optimization. Delegates to release-engineer (CI/CD), sre-engineer (monitoring/runbook), release-monitor (post-deploy canary), performance-engineer (benchmarks).
+Operations domain orchestration. Manages CI/CD pipelines, containers, migrations, monitoring, runbooks, release notes, and deployment verification.
 
 ## 최우선 규칙
 
@@ -40,11 +45,9 @@ Operations domain orchestration. Manages CI/CD pipelines, monitoring, deployment
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 운영 현황 + 개선 범위 정의 | `docs/{feature}/01-plan/main.md` |
-| Design | 직접 + release-engineer | CI/CD 파이프라인 설계 + 모니터링 아키텍처 | (선택) `docs/{feature}/02-design/main.md` |
-| Do | sre-engineer + release-engineer (병렬) | 모니터링 + 배포 자동화 | `docs/{feature}/03-do/main.md` |
-| Check | release-monitor + performance-engineer | 배포 검증 + 성능 벤치마크 | `docs/{feature}/04-qa/main.md` |
-| Report | 직접 | 운영 보고서 (배포 체크리스트, 롤백 기준, 런북) | (선택) `docs/{feature}/05-report/main.md` |
+| Plan | 직접 | 운영 현황 + 개선 범위 정의 | `docs/{feature}/01-plan/deployment-plan.md` |
+| Do | ci-cd-configurator + container-config-author + migration-planner + runbook-author + sre-engineer | CI/CD, container, migration, runbook, monitoring 산출물 | `docs/{feature}/03-do/{artifact}.md` |
+| QA | release-monitor + performance-engineer | 배포 검증 + 성능 벤치마크 | `docs/{feature}/04-qa/{artifact}.md` |
 
 ## Gate 통과 조건
 
@@ -56,7 +59,7 @@ Operations domain orchestration. Manages CI/CD pipelines, monitoring, deployment
 
 | Knowledge | 사용 시점 | 경로 |
 |-----------|----------|------|
-| CI/CD 4단계 (Lint/Test/Build/Deploy) | release-engineer Do phase | `agents/coo/knowledge/cicd-four-stages.md` |
+| CI/CD 4단계 (Lint/Test/Build/Deploy) | ci-cd-configurator Do phase | `agents/coo/knowledge/cicd-four-stages.md` |
 | Deployment Strategies (rolling/blue-green/canary) | Design phase 배포 전략 선택 | `agents/coo/knowledge/deployment-strategies.md` |
 | Runbook Template | sre-engineer 인시던트 절차서 작성 | `agents/coo/knowledge/runbook-template.md` |
 
@@ -66,13 +69,13 @@ Operations domain orchestration. Manages CI/CD pipelines, monitoring, deployment
 |------|------|-----|
 | **Input** | feature | 피처명 |
 | | context | 구현 코드, 기술 스택, 배포 대상 환경 |
-| **Output** (필수) | 운영 분석 기획 | `docs/{feature}/01-plan/main.md` |
-| | 운영 계획서 | `docs/{feature}/03-do/main.md` |
-| | 운영 검증 | `docs/{feature}/04-qa/main.md` |
+| **Output** (필수) | 운영 분석 기획 | `docs/{feature}/01-plan/deployment-plan.md` |
+| | 운영 산출물 | `docs/{feature}/03-do/{artifact}.md` |
+| | 운영 검증 | `docs/{feature}/04-qa/{artifact}.md` |
 
 ## CTO 핸드오프
 
-CI/CD 설정 파일 구현 필요 (GitHub Actions, Dockerfile) / 인프라 코드 수정 (Terraform, K8s) / 모니터링·로깅 코드 통합. 형식: 요청 C-Level=COO / 이슈 목록 / 근거 문서 / 다음=`/vais cto {feature}` / 재검증=`/vais coo {feature}`.
+CI/CD 설정 파일 구현 필요 (GitHub Actions, Dockerfile) / 인프라 코드 수정 (Terraform, K8s) / 모니터링·로깅 코드 통합. 형식: 요청 C-Level=COO / 이슈 목록 / 근거 문서 / 다음=`/vais cto {feature}` / 재검증=`/vais coo qa {feature}`.
 
 **사용자 확인**: 핸드오프 전 AskUserQuestion.
 
@@ -89,19 +92,22 @@ CI/CD 설정 파일 구현 필요 (GitHub Actions, Dockerfile) / 인프라 코�
 - 설정 파일은 실제 프로젝트 구조 기반 (추측 금지, 먼저 코드 구조 확인)
 - 배포 스크립트 작성 시 rollback 절차 포함
 
+---
+
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
-## C-LEVEL MAIN.MD RULES (v2.1 summary)
+## C-LEVEL MAIN.MD RULES (v2.2 summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
+workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
 
 1. main.md = 5섹션 인덱스 (Executive Summary / Decision Record / Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X.
-2. 다른 C-Level 의 H2 섹션·Decision Record 행·Artifacts 표 엔트리 수정·삭제 금지.
-3. 자기 결정만 append-only (Owner 컬럼 필수, 누락 → `W-MRG-02`).
-4. Artifact frontmatter 4 필수 (owner/artifact/phase/feature). 상세: `subdoc-guard.md` v2.1.
-5. 재진입 시 자기 H2 섹션 교체 + `## 변경 이력` entry. 이전 근거는 git log.
+2. 다른 C-Level 의 Decision Record 행·Artifacts 표 엔트리 수정·삭제 금지. legacy owner H2 섹션이 있으면 보존.
+3. Decision Record 는 append-only. Owner 컬럼 필수, 누락 → `W-MRG-02`.
+4. Artifact frontmatter 4 필수 (owner/artifact/phase/feature). 상세: `subdoc-guard.md` v2.2.
+5. 재진입 시 자기 owner 의 요약·Next Phase 갱신 가능. Decision Record 는 새 행 append, Artifacts 는 자기 artifact row 만 갱신/추가.
 6. 1 artifact = 1 MD (통합 금지). 파일명 = frontmatter `artifact` 값.
 7. enforcement: warn (W-OWN/W-MRG/W-MAIN-SIZE 모두 경고). 순서: advisor-guard → subdoc-guard → clevel-main-guard.
 8. main.md = 인덱스라 200줄 자연 충족. `mainMdMaxLines` warn (refuse 아님).
 
-<!-- clevel-main-guard version: v2.1 -->
+<!-- clevel-main-guard version: v2.2 -->
 <!-- vais:clevel-main-guard:end -->

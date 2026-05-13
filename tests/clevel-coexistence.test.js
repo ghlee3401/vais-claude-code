@@ -143,6 +143,34 @@ describe('T7: W-MRG-03 — topic ≥ 2 이지만 owner 섹션 0개', () => {
     const warns = validator.validateCoexistence('demo');
     assert.ok(!warns.some(w => w.code === 'W-MRG-03'), `unexpected W-MRG-03 in ${JSON.stringify(warns)}`);
   });
+  it('5섹션 phase index 이면 owner H2 없이도 W-MRG-03 을 발화하지 않는다', () => {
+    write(`${tmpDir}/docs/demo/01-plan/main.md`, [
+      '# demo',
+      '',
+      '## Executive Summary',
+      '요약',
+      '',
+      '## Decision Record',
+      '| # | Decision | Owner | Rationale | Source artifact |',
+      '|---|----------|:-----:|-----------|-----------------|',
+      '| 1 | foo | cto | bar | `a.md` |',
+      '',
+      '## Artifacts',
+      '| File | Type | Description |',
+      '|------|------|-------------|',
+      '',
+      '## CEO 판단 근거',
+      '근거',
+      '',
+      '## Next Phase',
+      '다음',
+      '',
+    ].join('\n'));
+    write(`${tmpDir}/docs/demo/01-plan/a.md`, '---\nowner: cto\nartifact: a\nphase: plan\nfeature: demo\n---\n본문');
+    write(`${tmpDir}/docs/demo/01-plan/b.md`, '---\nowner: cpo\nartifact: b\nphase: plan\nfeature: demo\n---\n본문');
+    const warns = validator.validateCoexistence('demo');
+    assert.ok(!warns.some(w => w.code === 'W-MRG-03'), `unexpected W-MRG-03 in ${JSON.stringify(warns)}`);
+  });
 });
 
 describe('T8: 재진입 — 자기 섹션 교체 허용 (status 기록)', () => {

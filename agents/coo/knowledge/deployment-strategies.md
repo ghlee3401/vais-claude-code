@@ -1,6 +1,6 @@
 # Deployment Strategies (COO)
 
-release-engineer + sre-engineer 가 사용. 배포 전략 선택 기준.
+ci-cd-configurator, runbook-author, sre-engineer, release-monitor 가 사용. 배포 전략 선택 기준.
 
 ## 전략 매트릭스
 
@@ -26,7 +26,7 @@ breaking change 위험 → Canary + auto-rollback (release-monitor)
 
 1. **트리거 정의** — 에러율 > 5% 또는 p99 > 5s 또는 수동
 2. **자동 rollback** — release-monitor 가 5분 윈도우 metric 감지 시
-3. **수동 절차** — `/vais coo {feature} --rollback`
+3. **수동 절차** — `/vais coo do {feature} --rollback`
 4. **DB 호환성** — backward-compatible migration 필수 (예: column drop 은 다음 release 로)
 
 ## Canary 단계

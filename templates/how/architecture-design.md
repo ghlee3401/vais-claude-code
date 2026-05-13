@@ -116,16 +116,16 @@ graph LR
 | 3 | CTO → Sub-agent | task + scope_conditions |
 | 4 | Sub-agent → Anthropic | system prompt + user message |
 | 5 | Anthropic → Sub-agent | output |
-| 6 | Sub-agent → docs/_tmp/ | scratchpad write |
-| 7 | CTO → docs/03-do/main.md | 큐레이션 + topic 분리 |
+| 6 | Sub-agent → `docs/{feature}/{NN-phase}/{artifact}.md` | direct artifact write |
+| 7 | CTO → `docs/{feature}/{NN-phase}/main.md` | phase index update |
 
 ### 5. ADR
 
 | # | Decision | Trade-off | Rationale |
 |:-:|---------|-----------|-----------|
 | ADR-1 | Node.js CJS 유지 (TypeScript 거절) | TS 타입 안전 vs JS 단순성 | 1인 운영 / 작은 코드베이스 / 학습 곡선 최소화 |
-| ADR-2 | clevel-coexistence (multiple C-Level main.md 공유) | 단일 owner vs append-only conflict | 메타-피처 (CPO+CTO 동시 기여) 지원 필요 |
-| ADR-3 | sub-doc preservation (_tmp/ 영구 보존) | git 용량 증가 vs 추적성 | 의사결정 큐레이션 추적 (Rule 14) |
+| ADR-2 | C-Level phase index 공존 | 단일 owner vs append-only conflict | 메타-피처 (CPO+CTO 동시 기여) 지원 필요 |
+| ADR-3 | direct artifact preservation | git 용량 증가 vs 추적성 | sub-agent 원본 산출물 보존 + main.md 비대화 방지 |
 | ADR-4 | feature flag profileGateEnabled: false 기본 | safe rollout vs immediate value | backwards compat + 점진 활성화 (R6 완화) |
 
 ---

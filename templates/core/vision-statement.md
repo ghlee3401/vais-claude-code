@@ -89,4 +89,4 @@ project_context_reason: "Core 단계 첫 번째 산출물 — 모든 전략·결
 
 | version | date | change |
 |---------|------|--------|
-| v1.0 | 2026-04-25 | 초기 작성 — Sprint 4 Day 1, RA-3 1차 측정. design _tmp/infra-architect.md §6.1 draft 정식 이관 |
+| v1.0 | 2026-04-25 | 초기 작성 — Sprint 4 Day 1, RA-3 1차 측정. architecture draft 정식 이관 |

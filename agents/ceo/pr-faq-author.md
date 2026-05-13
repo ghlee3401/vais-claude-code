@@ -53,7 +53,7 @@ CEO 위임 sub-agent. Amazon Working Backwards 방식 PR-FAQ 전문 작성가. B
 
 | Deliverable | Format | Path |
 |------|--------|------|
-| PR-FAQ | `templates/core/pr-faq.md` 형식 | `_tmp/pr-faq-author.md` (scratchpad) |
+| PR-FAQ | `templates/core/pr-faq.md` 형식 | `docs/{feature}/{NN-phase}/pr-faq.md` |
 | Press Release | 1 페이지, 5 단락 (Heading / Sub / Summary / Problem / Solution / Quote / Closing) | (동일) |
 | Internal FAQ | 6 항목 (timing / risk / P&L / failure / competition / strategy fit) | (동일) |
 | External FAQ | 5 항목 (가격 / 차별점 / 시작 / 프라이버시 / 지원) | (동일) |
@@ -66,7 +66,7 @@ CEO 위임 sub-agent. Amazon Working Backwards 방식 PR-FAQ 전문 작성가. B
 3. **External FAQ** — 고객 첫 5분 질문 5개 (가격 / 차별점 / 시작 방법 / 프라이버시 / 지원 채널)
 4. **Internal FAQ** — 의사결정·자원·리스크 6개 (timing rationale / 기술 위험 / 손익분기 / 실패 시나리오 / 경쟁사 대응 / 전략 정합)
 5. **Clarity Test** — PR 이 1분 내 이해 가능한지 자가 평가
-6. 산출물 저장 + CEO 큐레이션 대기
+6. `pr-faq.md` artifact 직접 저장 + CEO 에 handoff
 
 ## ⚠ Anti-pattern (Bezos 메모 + Bryar/Carr 경고)
 
@@ -80,14 +80,14 @@ CEO 위임 sub-agent. Amazon Working Backwards 방식 PR-FAQ 전문 작성가. B
 ---
 
 <!-- vais:advisor-guard:begin --><!-- vais:advisor-guard:end -->
-<!-- vais:subdoc-guard:begin --><!-- vais:subdoc-guard:end -->
 
 ---
 
 <!-- vais:subdoc-guard:begin — injected by scripts/patch-subdoc-block.js. Do not edit inline; update agents/_shared/subdoc-guard.md and re-run the script. -->
-## SUB-DOC RULES (v2.1, 0.65.x — sub-agent 직접 박제, frontmatter 4 필드 슬림)
+## SUB-DOC RULES (v2.2, 0.66.x — sub-agent 직접 박제, frontmatter 4 필드 슬림)
 
 canonical: `agents/_shared/subdoc-guard.md`. `scripts/patch-subdoc-block.js` 로 본문 inline 주입.
+workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
 
 ### 박제 위치
 
@@ -98,19 +98,19 @@ canonical: `agents/_shared/subdoc-guard.md`. `scripts/patch-subdoc-block.js` 로
 ```yaml
 ---
 # 필수 4 필드
-owner: cto                    # ceo|cpo|cto|cso|cbo|coo
-artifact: prd                 # 파일 stem 과 일치
-phase: plan                   # ideation|plan|design|do|qa|report
-feature: social-login         # kebab-case
+owner: "{owner}"              # ceo|cpo|cto|cso|cbo|coo
+artifact: "{artifact}"        # 파일 stem 과 일치
+phase: "{phase}"              # ideation|plan|design|do|qa|report
+feature: "{feature}"          # kebab-case
 
 # 선택 (v0.65 — auto-hydrate 가능, missing 시 W-FRONT-01 = info severity)
-# agent: prd-writer           # 없으면 git blame 첫 커밋자
-# generated: 2026-05-07       # 없으면 git log -1 --format=%ad
+# agent: "{agent}"            # 없으면 git blame 첫 커밋자
+# generated: YYYY-MM-DD       # 없으면 git log -1 --format=%ad
 # source: "{외부 거장}"       # 외부 자료 흡수 시만, 자체 작성 시 빈 문자열
 # summary: "{≤200자 요약}"   # 없으면 본문 첫 paragraph 200자 자동 추출
 
 # 선택 (v0.65 신규)
-# knowledge_refs: [cto/knowledge/data-analysis.md]   # 사용한 도메인 지식 (lazy-load 추적)
+# knowledge_refs: ["agents/{owner}/knowledge/{file}.md"]   # 사용한 도메인 지식 (lazy-load 추적)
 ---
 ```
 
@@ -121,17 +121,18 @@ feature: social-login         # kebab-case
 3. 파일 stem = `artifact` 필드 값
 4. 위치 = `docs/{feature}/{NN-phase}/{artifact}.md`
 5. **Phase 폴더 매핑**: ideation→00-ideation / plan→01-plan / design→02-design / do→03-do / qa→04-qa / report→05-report
+6. C-Level 이 직접 작성하는 artifact 도 같은 위치·frontmatter 규칙을 따른다.
 
 ### Backward-compat (0.64 → 0.65)
 
-- 기존 8 필드 frontmatter 산출물은 그대로 valid (모든 필드 통과)
-- 신규 산출물은 4 필드만 작성해도 W-FRONT-01 = info (warn 아님)
+- 기존 확장 frontmatter 산출물은 그대로 valid (모든 필드 통과)
+- 신규 산출물은 4 필드만 작성하면 valid. optional auto-hydrate 누락은 W-FRONT-01 = info (warn 아님)
 - doc-validator: `owner` 누락 → W-OWN-01 (warn 유지) / `artifact|phase|feature` 누락 → W-FRONT-01 (info)
 
 ### 금지
 
 - ❌ `_tmp/` 폴더 사용 (v0.57 모델 폐기)
-- ❌ C-Level `main.md` 직접 Write/Edit (C-Level 단독)
+- ❌ sub-agent 의 `main.md` Write/Edit (`main.md` 는 C-Level index 전용)
 - ❌ 다른 sub-agent artifact 수정 (race 방지)
 - ❌ 큐레이션 기록 섹션 (`✅ 채택 / ❌ 거절 / ✓ 병합`) (폐기)
 - ❌ 한 파일에 N artifact 통합 (거장 framework 분리 원칙)
@@ -142,7 +143,7 @@ feature: social-login         # kebab-case
 ```json
 {
   "artifacts": [
-    "docs/{feature}/{phase}/{name}.md"
+    "docs/{feature}/{NN-phase}/{artifact}.md"
   ]
 }
 ```
@@ -151,5 +152,5 @@ feature: social-login         # kebab-case
 
 artifact MD = 영구 보존 + git 커밋. 거장 framework 별로 1 파일이라 grep 쉬움.
 
-<!-- subdoc-guard version: v2.1 -->
+<!-- subdoc-guard version: v2.2 -->
 <!-- vais:subdoc-guard:end -->

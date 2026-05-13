@@ -14,16 +14,18 @@
 - 흡수 결과는 `agents/`, `skills/`, `references/` (루트) 등 적절 위치 배치
 - Do 완료 후 `_inbox/` 원본 삭제 (CP-A 에서 확인)
 
-## absorb 모드 PDCA
+## absorb 모드 Artifact Flow
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 외부 파일 스캔 + 핵심 기능 추출 + 전략 판단 | `docs/{feature}/01-plan/main.md` |
-| Design | absorb-analyzer | 중복 분석 + C레벨 배분 맵 + MCP 적합성 심화 분석 | (선택) |
-| Do | 직접 | 배분 맵 기반 분기 실행 | `docs/{feature}/03-do/main.md` |
-| Check | 직접 | 추가된 서브에이전트/MCP Tool 위치 검증 + 충돌 확인 | `docs/{feature}/04-qa/main.md` |
+| Plan | 직접 | 외부 파일 스캔 + 핵심 기능 추출 + 전략 판단 | `docs/{feature}/01-plan/absorb-plan.md` |
+| Design | absorb-analyzer | 중복 분석 + C레벨 배분 맵 + MCP 적합성 심화 분석 | `docs/{feature}/02-design/absorb-analysis.md` |
+| Do | 직접 | 배분 맵 기반 분기 실행 | `docs/{feature}/03-do/absorb-implementation.md` |
+| Check | 직접 | 추가된 서브에이전트/MCP Tool 위치 검증 + 충돌 확인 | `docs/{feature}/04-qa/absorb-check.md` |
 | Cleanup | 직접 | `_inbox/` 원본 삭제 + 사용자 확인 | — |
-| Report | 직접 | `docs/absorption-ledger.jsonl` + 최종 보고 | (선택) |
+| Report | 직접 | `docs/absorption-ledger.jsonl` + 최종 보고 | `docs/{feature}/05-report/absorb-report.md` |
+
+각 phase 의 `main.md` 는 `templates/main-md.template.md` 형식의 index 로만 갱신한다.
 
 ## absorb Do 분기 (action 값 기반)
 

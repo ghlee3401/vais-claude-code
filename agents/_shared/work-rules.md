@@ -1,6 +1,8 @@
-# Work Rules (shared, v2.1)
+# Work Rules (shared, v2.2)
 
 모든 C-Level 공통 작업 원칙. 각 C-Level 메인 .md 는 자기 도메인 특이 규칙만 짧게 추가한다.
+
+workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
 
 ## 일반 원칙
 
@@ -14,7 +16,15 @@
 
 - C-Level 메인은 orchestrator. 도메인 산출물(코드/PRD/threat-model 등)은 sub-agent 위임.
 - 위임 결과를 받으면 sub-agent artifact 의 frontmatter `summary` 만 main.md Artifacts 표에 인덱싱.
-- 도메인 지식 (`agents/{c-level}/knowledge/*.md`) 은 phase + artifact 매칭 시만 lazy-load.
+- 도메인 지식 (`agents/{owner}/knowledge/*.md`) 은 phase + artifact 매칭 시만 lazy-load.
+
+## Activation Contract
+
+- CEO 는 ideation/routing owner. `lib/ceo-algorithm.js` 의 7 차원 분석 결과를 baseline 으로 쓴다.
+- CTO 만 plan → design → do → qa → report mandatory 흐름을 가진다.
+- CPO/CSO 는 CEO 알고리즘이 활성화한 phase/artifact 만 실행한다. 자체 mandatory phase 없음.
+- CBO/COO 는 secondary 이며 사용자 명시 호출 시에만 실행한다. CEO primary routing 이 자동 활성화하지 않는다.
+- 실행 sub-agent 직접 호출 금지. C-Level 이 artifact 단위로 위임한다.
 
 ## Knowledge Cross-Reference 표기 (v0.65)
 
@@ -45,6 +55,7 @@ CEO 가 라우팅 결정을 내릴 때 (그리고 다른 C-Level / sub-agent 가
 
 - `docs/{feature}/{NN-phase}/main.md` (인덱스, 5섹션 표준)
 - `docs/{feature}/{NN-phase}/{artifact}.md` (sub-agent 직접 박제, frontmatter 4 필수)
+- `main.md` 는 본문을 흡수하지 않는다. PRD, architecture, QA, audit, financial model, runbook 등은 개별 artifact 로 유지한다.
 
 ## Plan ≠ Do
 

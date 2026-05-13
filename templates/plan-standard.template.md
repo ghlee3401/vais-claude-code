@@ -3,7 +3,7 @@
 > ⛔ **Plan 단계 범위**: 분석·결정만 기록. 프로덕트 파일 생성·수정은 Do 단계.
 > 📝 **Standard 템플릿** (v0.58.5+) — CP-1 "B. 표준" 선택 시 사용. PRD 있음 / CTO 단독 강행 양쪽 커버. 경량 템플릿은 `plan-minimal.template.md`, 전체는 `plan-extended.template.md`.
 > 🎯 **CTO 전용**: mandatory PDCA 보유는 CTO 만. 비-CTO 는 CEO 7 차원 알고리즘 결정.
-> <!-- size budget: main.md ≤ 200 lines (warn — v2.0 인덱스 자연 충족). 초과 시 artifact MD 분리. -->
+> <!-- artifact body template: phase index 는 templates/main-md.template.md 사용. -->
 
 ## 요청 원문
 
@@ -49,17 +49,9 @@
 
 <!-- 각 C-Level 이 자기 결정 행을 append. 이전 행 수정·삭제 금지. Owner 컬럼 필수. -->
 
-| # | Decision | Owner | Rationale | Source topic |
+| # | Decision | Owner | Rationale | Source artifact |
 |---|----------|:-----:|-----------|--------------|
-| 1 | {결정 한 줄} | cto | {근거} | `{topic}.md` |
-
-<!-- 각 C-Level 이 기여하는 경우 아래 H2 섹션을 순서대로 append:
-     ## [CBO] 시장 분석 / GTM
-     ## [CPO] 제품 정의
-     ## [CTO] 기술 스케치
-     ## [CSO] 보안 요구사항
-     ## [COO] 운영 준비
-     (비대문자/다른 owner prefix 금지. 이전 C-Level 섹션 수정·삭제 금지.) -->
+| 1 | {결정 한 줄} | cto | {근거} | `{artifact}.md` |
 
 ---
 
@@ -76,12 +68,12 @@
 
 ## 0.7 PRD 입력 (CTO 전용 강행 체크)
 
-> CTO plan 은 CPO PRD(`docs/{feature}/03-do/main.md`)를 입력으로 동작. PRD 없거나 부실 시 "강행 모드" 표시.
+> CTO plan 은 CPO PRD(`docs/{feature}/01-plan/prd.md`)를 입력으로 동작. PRD 없거나 부실 시 "강행 모드" 표시.
 > CTO 외 C-Level 은 이 섹션을 "(N/A — CTO 전용)" 한 줄로 대체.
 
 | Key | Value |
 |-----|-------|
-| PRD 경로 | `docs/{feature}/03-do/main.md` 또는 "없음 (강행 모드)" |
+| PRD 경로 | `docs/{feature}/01-plan/prd.md` 또는 "없음 (강행 모드)" |
 | 완성도 | full / partial(N/8) / missing |
 | 검사 시각 | YYYY-MM-DD |
 
@@ -187,23 +179,14 @@
 
 ---
 
-## Topic Documents (v0.57+)
+## Artifact References
 
-> C-Level 이 `_tmp/*.md` scratchpad 를 읽고 주제별로 합성한 문서 인덱스. `owner` 컬럼 frontmatter 와 일치.
+> 상세 본문은 각 artifact 파일에 직접 작성한다. `main.md` 는 `templates/main-md.template.md` 형식의 phase index 만 유지한다.
 
-| Topic | 파일 | Owner | 한 줄 요약 | 참조 scratchpad |
-|-------|------|:-----:|-----------|----------------|
-| | `{topic}.md` | cto | | |
-
-<!-- Phase 별 권장 topic 프리셋: vais.config.json > workflow.topicPresets.01-plan.{c-level} -->
-
-## Scratchpads (v0.57+)
-
-> sub-agent 가 작성한 `_tmp/*.md` 인벤토리. `scripts/doc-validator.js` 가 size/metadata 검증.
-
-| Agent | 경로 | 크기 | 갱신 |
-|-------|------|:----:|-----|
-| | `_tmp/{agent-slug}.md` | | |
+| Artifact | Phase | Owner | 한 줄 요약 | 파일 |
+|----------|-------|:-----:|-----------|------|
+| PRD | plan | cpo | {있으면 요약} | `docs/{feature}/01-plan/prd.md` |
+| 기술 계획 | plan | cto | {본 문서 요약} | `docs/{feature}/01-plan/tech-plan.md` |
 
 ---
 
@@ -214,4 +197,4 @@
 | v1.0 | | 초기 작성 |
 | v1.1 | YYYY-MM-DD | {ROLE} 재진입: {요약} |
 
-<!-- template version: plan-standard v0.58.5 (v0.57+ subdoc / v0.58+ clevel-coexistence 포함) -->
+<!-- template version: plan-standard v0.66.2 (artifact body / main-md index split) -->

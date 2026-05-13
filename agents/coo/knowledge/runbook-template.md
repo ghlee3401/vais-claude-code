@@ -1,6 +1,6 @@
 # Runbook Template (COO)
 
-sre-engineer 가 작성. 인시던트 발생 시 on-call 이 즉시 따라할 수 있는 절차서.
+runbook-author 가 작성하고, sre-engineer 가 alert/monitoring 관점에서 검토하거나 incident-runbook 으로 확장한다. 인시던트 발생 시 on-call 이 즉시 따라할 수 있는 절차서.
 
 ## 표준 구조
 
@@ -31,7 +31,7 @@ sre-engineer 가 작성. 인시던트 발생 시 on-call 이 즉시 따라할 �
 
 ## 5. Rollback
 - 트리거: 에러율 > 5% 또는 수동
-- 절차: `/vais coo {feature} --rollback` 또는 `kubectl rollout undo`
+- 절차: `/vais coo do {feature} --rollback` 또는 `kubectl rollout undo`
 - DB 호환성: backward-compatible 검증
 
 ## 6. Postmortem 템플릿
@@ -51,4 +51,6 @@ sre-engineer 가 작성. 인시던트 발생 시 on-call 이 즉시 따라할 �
 
 ## artifact 박제
 
-`docs/{feature}/03-do/runbook.md` (frontmatter: `owner: coo`, `agent: sre-engineer`, `artifact: runbook`)
+`docs/{feature}/03-do/runbook.md` (frontmatter: `owner: coo`, `agent: runbook-author`, `artifact: runbook`)
+
+SRE 전용 인시던트 런북이 필요하면 별도 artifact 로 `docs/{feature}/03-do/incident-runbook.md` 를 작성한다.

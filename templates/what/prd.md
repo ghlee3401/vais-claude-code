@@ -63,7 +63,7 @@ project_context_reason: "What 단계 — Vision/Strategy/Persona/JTBD 입력을 
 
 | 항목 | 참조 |
 |------|------|
-| **Wireframe** | `_tmp/ui-designer.md` 또는 Figma 링크 |
+| **Wireframe** | `docs/{feature}/02-design/ui-design.md` 또는 Figma 링크 |
 | **User Flow** | (단계별 다이어그램) |
 | **Empty/Error/Loading 상태** | (반드시 명시 — Cagan 강조) |
 
@@ -129,7 +129,7 @@ VAIS Code 는 Project Profile (12 변수: type/target_market/deployment.target/u
 | Must | F2 Template metadata schema | template-validator 25/25 통과 | 높음 |
 | Must | F3 Catalog 50+ 산출물 (depth c) | catalog.json 50+ artifacts | 높음 |
 | Must | F4 44 sub-agent audit Q-A/B/C/D | sub-agent-audit 48/48 통과 | 높음 |
-| Must | F5 release-engineer 5분해 | 5 신규 sub-agent + deprecate alias | 높음 |
+| Must | F5 COO 운영 agent 분리 | release notes / CI/CD / container / migration / runbook 담당 분리 | 높음 |
 | Should | F6 신규 5 sub-agent (CEO 4 + CPO 1) | catalog owner_agent 매칭 | 중간 |
 | Should | F7 Alignment α + β | EXP-4 70%+ 감지율 | 중간 |
 | Should | F8 VPC 재매핑 | copy-writer → product-strategist 이관 | 중간 |
@@ -159,7 +159,7 @@ VAIS Code 는 Project Profile (12 변수: type/target_market/deployment.target/u
 |------|:--------:|------------|
 | R1 작업량 폭증 (50+ template) | High | Sprint 1~3 후 5 파일럿 측정 → 보정 |
 | R4 파괴적 변경 | Med | feature flag profileGateEnabled: false 기본 |
-| R6 작동 중단 | Med | release-engineer deprecated alias |
+| R6 작동 중단 | Med | legacy agent alias 제거와 registry 검증 |
 
 **Pre-mortem**: 1년 후 실패한다면?
 1. 정전 출처 명시가 OSS 사용자에게 over-engineering 으로 받아들여짐

@@ -46,11 +46,13 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | CP-0 PRD 검사 (lean: missing only) → 요구사항 정리 → 범위 자동 선택 (autoSelect) → 기술 계획서 | `docs/{feature}/01-plan/main.md` |
-| Design | ui-designer + infra-architect (병렬) | 화면설계 + 인프라 설계 | `docs/{feature}/02-design/main.md` + sub-agent artifact |
-| Do | frontend-engineer + backend-engineer + test-engineer (병렬) | 병렬 구현 + 테스트 코드 | `docs/{feature}/03-do/main.md` + 구현 코드 |
-| Check | qa-engineer | 빌드+테스트+갭 분석 | `docs/{feature}/04-qa/main.md` |
-| Report | 직접 | memory 기록 + 완료 보고서 | `docs/{feature}/05-report/main.md` |
+| Plan | 직접 | CP-0 PRD 검사 (lean: missing only) → 요구사항 정리 → 범위 자동 선택 (autoSelect) → 기술 계획서 | `docs/{feature}/01-plan/tech-plan.md` |
+| Design | ui-designer + infra-architect (병렬) | 화면설계 + 인프라 설계 | `docs/{feature}/02-design/{artifact}.md` |
+| Do | frontend-engineer + backend-engineer + test-engineer (병렬) | 병렬 구현 + 테스트 코드 | `docs/{feature}/03-do/implementation-log.md` + 구현 코드 |
+| QA | qa-engineer | 빌드+테스트+갭 분석 | `docs/{feature}/04-qa/gap-analysis.md` |
+| Report | 직접 | memory 기록 + 완료 보고서 | `docs/{feature}/05-report/completion-report.md` |
+
+각 phase 의 `main.md` 는 5섹션 인덱스만 작성한다. 상세 본문은 위 artifact 파일에 둔다.
 
 **위임 방식**: 모두 Agent 도구 호출. 병렬 쌍: `ui-designer + infra-architect` / `frontend-engineer + backend-engineer + test-engineer`. 단독: `qa-engineer`, `incident-responder`(디버깅), `db-architect`(infra-architect 이후 심화). 배포/CI-CD 는 COO 소관.
 
@@ -61,12 +63,12 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 | 구분 | 항목 | 값 |
 |------|------|-----|
 | **Input** | feature | 피처명 (kebab-case 2~4단어로 의도 표현) |
-| | context | 사용자 요구사항 또는 CPO PRD (`docs/{feature}/03-do/main.md`) |
-| **Output** (필수) | 기획서 | `docs/{feature}/01-plan/main.md` |
-| | 설계서 | `docs/{feature}/02-design/main.md` |
-| | 구현 로그 | `docs/{feature}/03-do/main.md` |
-| | QA 분석 | `docs/{feature}/04-qa/main.md` |
-| **Output** (선택) | 보고서 | `docs/{feature}/05-report/main.md` |
+| | context | 사용자 요구사항 또는 CPO PRD (`docs/{feature}/01-plan/prd.md`) |
+| **Output** (필수) | 기술 계획서 | `docs/{feature}/01-plan/tech-plan.md` |
+| | 설계 artifact | `docs/{feature}/02-design/{artifact}.md` |
+| | 구현 로그 | `docs/{feature}/03-do/implementation-log.md` |
+| | QA 분석 | `docs/{feature}/04-qa/gap-analysis.md` |
+| **Output** (선택) | 보고서 | `docs/{feature}/05-report/completion-report.md` |
 | **State** | phase | `plan` → `design` → `do` → `qa` → `report` 순차 전환 |
 
 **Feature명 생성 규칙**: 사용자가 피처명 생략/한국어로 요청 시 (1) 패턴 `{대상}-{행위}` 또는 `{도메인}-{기능}-{세부}` (2~4단어), (2) 의도 반영 — 단순 명사 금지, (3) 변환 예시: "로그인 기능"→`user-login-flow` / "결제 실패 시 재시도"→`payment-retry-logic` / "대시보드 실시간 차트"→`dashboard-realtime-chart`, (4) 금지: 단어 1개 (`login`, `payment`, `chart`).
@@ -88,7 +90,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 `vais.config.json > gates.cto.plan.requirePrd = "smart"` (0.65 기본):
 
-1. PRD 파일 검사: `docs/{feature}/03-do/main.md` — Glob 미스 → `quality="missing"` / 8 표준 섹션 (정본: `agents/cpo/knowledge/prd-eight-sections.md` — owner: cpo) ≥ 6 → `"full"` / ≥ 1 → `"partial"` / 0 → `"missing"`
+1. PRD 파일 검사: `docs/{feature}/01-plan/prd.md` — Glob 미스 → `quality="missing"` / 8 표준 섹션 (정본: `agents/cpo/knowledge/prd-eight-sections.md` — owner: cpo) ≥ 6 → `"full"` / ≥ 1 → `"partial"` / 0 → `"missing"`
 2. 분기:
    - `full` → 자동 로드, "기술 변환" 모드 (CP-0 미발동)
    - `partial` → 자동 강행 + plan 0.7 가정 명기 (CP-0 미발동)
@@ -108,7 +110,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 ## Plan Scope Default (v0.58.3+, enforcement: warn v0.65+)
 
-1. **사용자 요청 원문을 축약·재해석하지 않고 그대로 인용** → `docs/{feature}/01-plan/main.md` 의 `## 요청 원문` 섹션
+1. **사용자 요청 원문을 축약·재해석하지 않고 그대로 인용** → `docs/{feature}/01-plan/tech-plan.md` 의 `## 요청 원문` 섹션
 2. **In-scope 는 요청 원문에 명시된 항목 + 기술적 전제조건** (의존성·런타임 등) 만 포함
 3. 자발 감지한 품질 리스크는 `## 관찰 (후속 과제)` 섹션에 **기록만**. 다음 phase 가 자동 승계 X.
 4. 사용자가 명시적으로 확장 요청 시 In-scope 로 이동하고 재승인.
@@ -117,7 +119,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 ## Context Load
 
-- **L0** (plan phase 진입 시): `docs/{feature}/03-do/main.md` PRD 검사 (CP-0 분기)
+- **L0** (plan phase 진입 시): `docs/{feature}/01-plan/prd.md` PRD 검사 (CP-0 분기)
 - **L1** (항상): `vais.config.json` — `workflow.checkpointPolicy` + `gates.cto.plan` 값 확인
 - **L2** (항상): `.vais/memory.json` 관련 엔트리만 필터
 - **L3** (항상): `.vais/status.json`
@@ -127,27 +129,30 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 | phase | 문서 | 경로 |
 |-------|------|------|
-| plan | 기획서 | `docs/{feature}/01-plan/main.md` |
+| plan | 기술 계획서 | `docs/{feature}/01-plan/tech-plan.md` |
 | design | 설계서 + sub-agent artifact | `docs/{feature}/02-design/` |
-| do | 구현 로그 + 코드 | `docs/{feature}/03-do/main.md` |
-| qa | QA 분석 + gap-analysis | `docs/{feature}/04-qa/main.md` |
-| report | 보고서 | `docs/{feature}/05-report/main.md` |
+| do | 구현 로그 + 코드 | `docs/{feature}/03-do/implementation-log.md` |
+| qa | QA 분석 + gap-analysis | `docs/{feature}/04-qa/gap-analysis.md` |
+| report | 보고서 | `docs/{feature}/05-report/completion-report.md` |
 
 각 문서는 `templates/` 해당 템플릿 참조.
 
+---
+
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
-## C-LEVEL MAIN.MD RULES (v2.1 summary)
+## C-LEVEL MAIN.MD RULES (v2.2 summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
+workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
 
 1. main.md = 5섹션 인덱스 (Executive Summary / Decision Record / Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X.
-2. 다른 C-Level 의 H2 섹션·Decision Record 행·Artifacts 표 엔트리 수정·삭제 금지.
-3. 자기 결정만 append-only (Owner 컬럼 필수, 누락 → `W-MRG-02`).
-4. Artifact frontmatter 4 필수 (owner/artifact/phase/feature). 상세: `subdoc-guard.md` v2.1.
-5. 재진입 시 자기 H2 섹션 교체 + `## 변경 이력` entry. 이전 근거는 git log.
+2. 다른 C-Level 의 Decision Record 행·Artifacts 표 엔트리 수정·삭제 금지. legacy owner H2 섹션이 있으면 보존.
+3. Decision Record 는 append-only. Owner 컬럼 필수, 누락 → `W-MRG-02`.
+4. Artifact frontmatter 4 필수 (owner/artifact/phase/feature). 상세: `subdoc-guard.md` v2.2.
+5. 재진입 시 자기 owner 의 요약·Next Phase 갱신 가능. Decision Record 는 새 행 append, Artifacts 는 자기 artifact row 만 갱신/추가.
 6. 1 artifact = 1 MD (통합 금지). 파일명 = frontmatter `artifact` 값.
 7. enforcement: warn (W-OWN/W-MRG/W-MAIN-SIZE 모두 경고). 순서: advisor-guard → subdoc-guard → clevel-main-guard.
 8. main.md = 인덱스라 200줄 자연 충족. `mainMdMaxLines` warn (refuse 아님).
 
-<!-- clevel-main-guard version: v2.1 -->
+<!-- clevel-main-guard version: v2.2 -->
 <!-- vais:clevel-main-guard:end -->

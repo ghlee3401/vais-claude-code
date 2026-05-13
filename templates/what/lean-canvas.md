@@ -64,9 +64,9 @@ project_context_reason: "What 단계 — pre-PMF 단계의 가설 정렬. 기존
 | Block | 내용 |
 |-------|------|
 | **1. Problem** | (a) 1인 빌더는 PRD/아키텍처/GTM 영역 전반 못 챙김 (Extreme) / (b) ChatGPT 산출물 정전 출처 부재 — 신뢰 의심 (Extreme) / (c) 매번 prompt 재구성 — context 손실 (Moderate) — **현재 대안**: ChatGPT Pro / Cursor / 인적 컨설팅 (각 부족) |
-| **2. Solution** | (a) 6 C-Level + 44 sub-agent 도메인 분담 / (b) 50+ template 정전 출처 frontmatter 강제 / (c) clevel-coexistence + sub-doc 보존 — Profile 1회 합의로 모든 sub-agent 자동 정렬 |
+| **2. Solution** | (a) 6 C-Level + 44 sub-agent 도메인 분담 / (b) 50+ template 정전 출처 frontmatter 강제 / (c) phase index + direct artifact 보존 — Profile 1회 합의로 모든 sub-agent 자동 정렬 |
 | **3. UVP** | "For 솔로 빌더 + 소규모 팀 PM, VAIS Code is AI C-Suite Plugin that delivers canon-grounded artifacts matched to your project profile — unlike generic AI tools producing arbitrary formats with no workflow continuity" |
-| **4. Unfair Advantage** | (a) 50+ 산출물 ↔ ~30 정전 cross-reference 큐레이션 — 수개월 작업 / (b) clevel-coexistence + sub-doc 보존 메타-아키텍처 — 단순 prompt 복제 X / (c) 1M context Opus 4.x 활용 |
+| **4. Unfair Advantage** | (a) 50+ 산출물 ↔ ~30 정전 cross-reference 큐레이션 — 수개월 작업 / (b) phase index + direct artifact 메타-아키텍처 — 단순 prompt 복제 X / (c) 1M context Opus 4.x 활용 |
 | **5. Customer Segments** | **Primary**: 1인 SaaS 창업자 (P1, 김지원) / **Secondary**: 스타트업 CTO (P2) + 엔터프라이즈 PM (P3) / **Early Adopter**: NCSOFT 음성기술팀 (Beta-2 후보) |
 | **6. Channels** | OSS GitHub (organic) + Claude Code marketplace (Anthropic 공식) + 사내 도입 (NCSOFT) + Lenny Newsletter / Indie Hackers (콘텐츠) |
 | **7. Revenue Streams** | OSS 무료 (현재) → Enterprise 버전 (사내 정전 + 회사별 카탈로그, 2027 H2) → SaaS hosted (option, 2028 H2) |

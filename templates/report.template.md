@@ -1,8 +1,7 @@
 # {feature} — 완료 보고서
 
 > 참조 문서: `docs/{feature}/01-plan/main.md`, `docs/{feature}/02-design/main.md`, `docs/{feature}/04-qa/main.md`
-> 🎯 **0.64.0+**: main.md = 인덱스 우선. 상세 본문은 `docs/{feature}/05-report/{artifact}.md` 분리 권장. 정본: `templates/main-md.template.md`
-> <!-- size budget: main.md ≤ 200 lines (warn). Report phase 는 단일 owner 도 허용. -->
+> 🎯 **artifact body template**: 이 구조는 `docs/{feature}/05-report/{artifact}.md` 에 사용합니다. Phase index 는 `templates/main-md.template.md`.
 
 ## Executive Summary
 
@@ -38,12 +37,12 @@
 
 ## PDCA Cycle Summary
 
-| Phase | Status | Key Output |
-|-------|--------|------------|
-| Plan | ✅/⬜ | `docs/{feature}/01-plan/main.md` |
-| Design | ✅/⬜ | `docs/{feature}/02-design/main.md` |
-| Do | ✅/⬜ | `docs/{feature}/03-do/main.md` |
-| QA | ✅/⬜ | `docs/{feature}/04-qa/main.md` |
+| Phase | Status | Phase Index | Representative Artifact |
+|-------|--------|-------------|-------------------------|
+| Plan | ✅/⬜ | `01-plan/main.md` | `docs/{feature}/01-plan/tech-plan.md` |
+| Design | ✅/⬜ | `02-design/main.md` | `docs/{feature}/02-design/{artifact}.md` |
+| Do | ✅/⬜ | `main.md` in `03-do/` | `docs/{feature}/03-do/implementation-log.md` |
+| QA | ✅/⬜ | `04-qa/main.md` | `docs/{feature}/04-qa/gap-analysis.md` |
 
 ---
 
@@ -92,4 +91,4 @@
 |---------|------|--------|
 | v1.0 | {date} | 초기 작성 |
 
-<!-- template version: v0.58.0 (v0.57+ subdoc / v0.58+ clevel-coexistence 포함) -->
+<!-- template version: v0.66.2 (artifact body / main-md index split) -->

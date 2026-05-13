@@ -71,7 +71,7 @@ project_context_reason: "Why 단계 — 고객이 **무엇을 사는지** 보다
 | **1** | Situation | 1 인 창업자가 새 피처를 시작 / 투자자 미팅 1 주 전 자료 작성 / 기존 generic AI 도구 (ChatGPT) 산출물의 정전 출처 부재로 신뢰 의심받음 |
 | **2** | Motivation | "내가 모르는 영역도 정전 수준으로 챙기고 싶다" — 지식 격차에 대한 위기감 + 시간 압박 + 신뢰성 요구 |
 | **3** | Expected Outcome | (a) 30 분 내 PRD 8 섹션 완성 (b) 모든 산출물에 정전 출처 명시 (Cagan / Rumelt / Torres) (c) 본인이 모르는 영역도 자동 점검 |
-| **4** | Forces of Progress | **Push**: ChatGPT 산출물 신뢰 부족 / 시간 부족 / 영역 지식 부족 / **Pull**: VAIS 의 정전 카탈로그 + Profile 게이트 + clevel-coexistence |
+| **4** | Forces of Progress | **Push**: ChatGPT 산출물 신뢰 부족 / 시간 부족 / 영역 지식 부족 / **Pull**: VAIS 의 정전 카탈로그 + Profile 게이트 + phase index |
 | **5** | Forces of Inertia | **Anxiety**: 새 도구 학습 부담 / Profile 12 변수 입력 부담 / **Habit**: 기존 ChatGPT 워크플로우 / generic prompt 익숙함 |
 | **6** | F/E/S Jobs | **Functional**: 30 분 내 PRD / 정전 출처 명시 / **Emotional**: "전문가가 검토한 산출물" 안심 / **Social**: 투자자·동료에게 "어떻게 이런 자료를 혼자 만들었나?" 인정 |
 

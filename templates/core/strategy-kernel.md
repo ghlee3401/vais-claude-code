@@ -63,7 +63,7 @@ project_context_reason: "Core 단계 두 번째 산출물 — Vision 을 실행 
 
 ### 1. Diagnosis
 
-VAIS 의 44 개 sub-agent 는 호출되면 무조건 산출물을 생성하는 "default-execute" 패턴이다. 사용자의 프로젝트 맥락 (B2B SaaS vs 개인 OSS 플러그인 / MVP vs Scale / cloud vs local-only) 과 무관하게 동일 산출물을 만들어, 결과적으로 "쓸데없이 CI/CD 를 만든다" 같은 마찰이 6 개 sub-agent 에서 동일 패턴으로 확인된다 (release-engineer / infra-architect / test-engineer / seo-analyst / finops-analyst / compliance-auditor). **근본 문제는 sub-agent 행동 모델에 맥락 인식 메커니즘이 없다는 점이다** — 이는 단일 sub-agent 의 prompt 수정으로 해결되지 않는 시스템 차원 결함이다.
+VAIS 의 44 개 sub-agent 는 호출되면 무조건 산출물을 생성하는 "default-execute" 패턴이다. 사용자의 프로젝트 맥락 (B2B SaaS vs 개인 OSS 플러그인 / MVP vs Scale / cloud vs local-only) 과 무관하게 동일 산출물을 만들어, 결과적으로 "쓸데없이 CI/CD 를 만든다" 같은 마찰이 여러 sub-agent 에서 동일 패턴으로 확인된다 (all-in-one ops agent / infra-architect / test-engineer / seo-analyst / finops-analyst / compliance-auditor). **근본 문제는 sub-agent 행동 모델에 맥락 인식 메커니즘이 없다는 점이다** — 이는 단일 sub-agent 의 prompt 수정으로 해결되지 않는 시스템 차원 결함이다.
 
 ### 2. Guiding Policy
 
@@ -75,7 +75,7 @@ VAIS 의 모든 sub-agent 는 **Project Profile (12 변수) + 산출물 메타�
 |:-:|------|--------------|-----------|
 | 1 | ideation 종료 시 Project Profile 12 변수 합의 → `.vais/profile.yaml` 저장 | 맥락 포착의 단일 진입점 (Single Source of Context) | 행동 2, 3 모두 profile.yaml 을 입력으로 사용 |
 | 2 | 모든 template frontmatter 에 `execution.scope_conditions` 정의 → validator 강제 | 정책이 데이터로 표현되어 코드가 실행 | 행동 1 의 profile 과 행동 4 의 catalog 가 결합되어야 효과 발생 |
-| 3 | release-engineer 5 분해 — scope 별 sub-agent 분리 (release-notes-writer / ci-cd-configurator / container-config-author / migration-planner / runbook-author) | 가장 큰 마찰 직접 해소 + 정책 적용 시범 사례 | 행동 2 의 frontmatter 정책이 5 개 신규 sub-agent 에서 즉시 검증됨 |
+| 3 | COO 운영 agent 분해 — scope 별 sub-agent 분리 (release-notes-writer / ci-cd-configurator / container-config-author / migration-planner / runbook-author) | 가장 큰 마찰 직접 해소 + 정책 적용 시범 사례 | 행동 2 의 frontmatter 정책이 신규 sub-agent 에서 즉시 검증됨 |
 | 4 | 50+ 산출물 카탈로그 (depth c) — 정전 출처 + scope_conditions + checklist + anti-pattern 명시 | 맥락-산출물 계약을 신뢰 가능하게 (auditable) | 행동 1, 2 의 데이터 모델을 채우는 콘텐츠 |
 
 → **상호 강화 검증**: 4 개 행동 중 어느 하나라도 빠지면 나머지가 무력화 (행동 1 없으면 2 의 scope 평가 불가 / 행동 2 없으면 4 의 카탈로그가 정책 데이터 없음 / 행동 3 없으면 가장 가시적 사례 미해소 / 행동 4 없으면 1·2·3 의 빈 그릇).
@@ -108,4 +108,4 @@ VAIS 의 모든 sub-agent 는 **Project Profile (12 변수) + 산출물 메타�
 
 | version | date | change |
 |---------|------|--------|
-| v1.0 | 2026-04-25 | 초기 작성 — Sprint 4 Day 2. design `_tmp/infra-architect.md` §6.2 draft 정식 이관 + 상호 강화 검증 단락 추가 + anti-pattern 3→5 확장 |
+| v1.0 | 2026-04-25 | 초기 작성 — Sprint 4 Day 2. architecture draft 정식 이관 + 상호 강화 검증 단락 추가 + anti-pattern 3→5 확장 |

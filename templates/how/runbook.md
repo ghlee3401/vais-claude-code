@@ -145,7 +145,7 @@ kubectl logs -f deployment/{service-name} --since=1h
 |:---:|------|------|
 | Sev 1 | 마켓플레이스 install 실패 100% | 즉시 (15분) |
 | Sev 2 | 특정 sub-agent 호출 실패 | 1 일 |
-| Sev 3 | docs/_tmp/ 자동 정리 안됨 | 다음 patch |
+| Sev 3 | phase index 와 artifact 목록 불일치 | 다음 patch |
 | Sev 4 | typo / cosmetic | 다음 release |
 
 ---

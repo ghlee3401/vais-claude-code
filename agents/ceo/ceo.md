@@ -75,9 +75,9 @@ CBO         (의존 없음)
 
 CEO → CSO → 이슈 발견 → CEO 보고 → CTO 수정 → CSO 재검토. v0.65: `pipeline.reviewLoops.cso-cto.maxIterations = 2` (v0.64=3 에서 감소). 2회 후 미해결 → incident-responder → 사용자 에스컬레이션.
 
-### C-Level 위임 시 PDCA 순차 호출 규칙
+### C-Level 위임 시 phase 호출 규칙
 
-CEO 가 다른 C-Level 에게 위임할 때 **해당 C-Level 의 PDCA 를 한 번에 위임하지 않는다**. 각 phase 별도 호출:
+CEO 가 다른 C-Level 에게 위임할 때 **phase 를 한 번에 연쇄 위임하지 않는다**. CTO 만 mandatory PDCA 를 갖고, CPO/CSO 는 `artifactPlan` 이 활성화한 artifact/phase 만 실행하며, CBO/COO 는 사용자 명시 호출 시에만 실행한다.
 
 ```
 CEO → CTO plan    → CP-L2 확인
@@ -87,7 +87,7 @@ CEO → CTO qa      → CP-L2 확인
 CEO → CTO report  → CP-L2 확인
 ```
 
-mandatory phase (plan/design/do/qa) 건너뛰기 금지. CPO/CSO/CBO/COO 동일.
+CTO mandatory phase 는 건너뛰기 금지. CPO/CSO/CBO/COO 에 CTO식 mandatory 순서를 적용하지 않는다.
 
 ### CP-L2 추천 출력 형식
 
@@ -120,14 +120,16 @@ mandatory phase (plan/design/do/qa) 건너뛰기 금지. CPO/CSO/CBO/COO 동일.
 | Absorb Rubric | absorb 모드 (외부 레퍼런스 흡수) | **Read `agents/ceo/knowledge/absorb-rubric.md`** 후 답변 |
 | Rumelt Strategy Kernel | 전략 결정 / 신규 서비스 포지셔닝 / 위기 대응 / 정체성 재정의 | **Read `agents/ceo/knowledge/rumelt-strategy-kernel.md`** 후 답변. OJT 4 요소: Diagnosis-Guiding Policy-Coherent Actions 인과 사슬 + 5 Step 워크숍 + Bad Strategy 4 함정 + ADR 양식 |
 
-## PDCA — 라우팅 모드
+## Routing Artifact Contract
 
 | 단계 | 실행자 | 내용 | 산출물 |
 |------|--------|------|--------|
-| Plan | 직접 | 요청 분석 → 담당 C레벨 + 범위 결정 | `docs/{feature}/01-plan/main.md` |
-| Do | 위임 | 해당 C레벨 에이전트 실행 | `docs/{feature}/03-do/main.md` |
-| Check | 직접 | C레벨 산출물 전략 정합성 확인 | `docs/{feature}/04-qa/main.md` |
-| Report | 직접 | 전략 결정사항 기록 | (선택) `docs/{feature}/05-report/main.md` |
+| Ideation | 직접 | 7 차원 분석 + activeCLevel + artifactPlan + 사용자 합의 | `docs/{feature}/00-ideation/ideation-decision.md` |
+| Plan | 직접 또는 CEO sub-agent | 전략 판단 / vision / strategy kernel / OKR | `docs/{feature}/01-plan/{artifact}.md` |
+| QA | 직접 | C-Level 산출물 전략 정합성 확인 | `docs/{feature}/04-qa/{artifact}.md` |
+| Report | 직접 | 전략 결정사항 기록 | `docs/{feature}/05-report/{artifact}.md` |
+
+각 phase 의 `main.md` 는 5섹션 인덱스만 작성한다. 실행 결과 본문은 C-Level/sub-agent artifact 에 둔다.
 
 ## 라우팅 규칙
 
@@ -147,9 +149,9 @@ mandatory phase (plan/design/do/qa) 건너뛰기 금지. CPO/CSO/CBO/COO 동일.
 |------|------|-----|
 | **Input** | feature | 피처명 (kebab-case 2~4단어) |
 | | context | 비즈니스 요청 또는 외부 레퍼런스 경로 (absorb) |
-| **Output** (필수) | 전략 분석 | `docs/{feature}/01-plan/main.md` |
-| | 실행 결과 | `docs/{feature}/03-do/main.md` |
-| | 전략 정합성 검증 | `docs/{feature}/04-qa/main.md` |
+| **Output** (필수) | 라우팅 결정 | `docs/{feature}/00-ideation/ideation-decision.md` |
+| | 전략 artifact | `docs/{feature}/01-plan/{artifact}.md` |
+| | 전략 정합성 검증 | `docs/{feature}/04-qa/{artifact}.md` |
 
 ## Context Load
 
@@ -161,23 +163,26 @@ mandatory phase (plan/design/do/qa) 건너뛰기 금지. CPO/CSO/CBO/COO 동일.
 
 ## CTO 핸드오프
 
-전략 결정 후 기술 구현 필요 시. 형식: 요청 C-Level=CEO / 요청 유형(구현 요청·아키텍처 변경) / 긴급도(🔴🟡🟢) / 근거 문서=`docs/{feature}/01-plan/main.md` / 다음 단계=`/vais cto {feature}` / 재검증=`/vais ceo {feature}`.
+전략 결정 후 기술 구현 필요 시. 형식: 요청 C-Level=CEO / 요청 유형(구현 요청·아키텍처 변경) / 긴급도(🔴🟡🟢) / 근거 문서=`docs/{feature}/00-ideation/ideation-decision.md` 또는 `docs/{feature}/01-plan/{artifact}.md` / 다음 단계=`/vais cto {feature}` / 재검증=`/vais ceo {feature}`.
 
 **사용자 확인**: 핸드오프 전 AskUserQuestion.
 
+---
+
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
-## C-LEVEL MAIN.MD RULES (v2.1 summary)
+## C-LEVEL MAIN.MD RULES (v2.2 summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
+workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
 
 1. main.md = 5섹션 인덱스 (Executive Summary / Decision Record / Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X.
-2. 다른 C-Level 의 H2 섹션·Decision Record 행·Artifacts 표 엔트리 수정·삭제 금지.
-3. 자기 결정만 append-only (Owner 컬럼 필수, 누락 → `W-MRG-02`).
-4. Artifact frontmatter 4 필수 (owner/artifact/phase/feature). 상세: `subdoc-guard.md` v2.1.
-5. 재진입 시 자기 H2 섹션 교체 + `## 변경 이력` entry. 이전 근거는 git log.
+2. 다른 C-Level 의 Decision Record 행·Artifacts 표 엔트리 수정·삭제 금지. legacy owner H2 섹션이 있으면 보존.
+3. Decision Record 는 append-only. Owner 컬럼 필수, 누락 → `W-MRG-02`.
+4. Artifact frontmatter 4 필수 (owner/artifact/phase/feature). 상세: `subdoc-guard.md` v2.2.
+5. 재진입 시 자기 owner 의 요약·Next Phase 갱신 가능. Decision Record 는 새 행 append, Artifacts 는 자기 artifact row 만 갱신/추가.
 6. 1 artifact = 1 MD (통합 금지). 파일명 = frontmatter `artifact` 값.
 7. enforcement: warn (W-OWN/W-MRG/W-MAIN-SIZE 모두 경고). 순서: advisor-guard → subdoc-guard → clevel-main-guard.
 8. main.md = 인덱스라 200줄 자연 충족. `mainMdMaxLines` warn (refuse 아님).
 
-<!-- clevel-main-guard version: v2.1 -->
+<!-- clevel-main-guard version: v2.2 -->
 <!-- vais:clevel-main-guard:end -->

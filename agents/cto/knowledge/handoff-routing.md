@@ -19,15 +19,15 @@
 | 요청 C-Level | 전형적 이슈 | 재검증 |
 |-------------|-----------|--------|
 | CSO | 보안 취약점, 플러그인 구조 문제 | `/vais cso {feature}` |
-| CBO | SEO 점수 미달, 마케팅/비용 관련 기술 요구사항 | `/vais cbo {feature}` |
-| COO | CI/CD 파이프라인 구현, 인프라 설정 | `/vais coo {feature}` |
+| CBO | SEO 점수 미달, 마케팅/비용 관련 기술 요구사항 | `/vais cbo qa {feature}` 또는 요청 phase |
+| COO | CI/CD 파이프라인 구현, 인프라 설정 | `/vais coo qa {feature}` 또는 요청 phase |
 | CPO | PRD 요구사항 구현 | `/vais cpo {feature}` |
 | CEO | 전략 결정에 따른 기술 변경 | `/vais ceo {feature}` |
 
 ## Context Load (핸드오프 수신 시)
 
 기본 L1-L3 외 추가:
-- **L4** = 요청 C-Level 산출물 (`docs/{feature}/03-do/main.md`, `docs/{feature}/04-qa/main.md`)
+- **L4** = 요청 C-Level artifact (`docs/{feature}/{NN-phase}/{artifact}.md`) + 해당 phase index (`main.md`)
 
 ## incident-responder 자동 호출 조건
 

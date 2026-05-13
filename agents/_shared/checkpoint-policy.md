@@ -1,6 +1,7 @@
-# Checkpoint Policy (v2.1, 0.65.x)
+# Checkpoint Policy (v2.2, 0.66.x)
 
 canonical for all C-Level CP behavior. C-Level main .md 는 자기 phase 트리거만 짧게 명시하고 본 정책을 참조한다.
+workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
 
 ## 모드 (vais.config.json > workflow.checkpointPolicy.mode)
 
@@ -27,14 +28,16 @@ canonical for all C-Level CP behavior. C-Level main .md 는 자기 phase 트리�
 
 ## C-Level 별 CP 트리거 매트릭스
 
-| C-Level | CP-0 (PRD missing) | CP-Q (critical) | 추가 CP |
-|---------|---|---|--------|
-| CTO | ✓ (Plan 진입) | ✓ (QA 결과) | CP-2 destructive (Do 시작 5+ 파일) / **CP-G{N}** Gate 1~4 (lean: 자동 통과 + outro / strict: 발동) |
-| CPO | — | ✓ (PRD 완성도 < 80%) | — |
-| CSO | — | ✓ (Critical>0) | CP-C (Critical 발견 즉시 차단 여부) |
-| CEO | — | ✓ (전략 정합성 미달) | CP-A absorb 배분 맵 (absorb 모드 전용) |
-| CBO | — | ✓ (unit economics LTV/CAC<3x) | — |
-| COO | — | ✓ (CI/CD 단계 누락) | — |
+| C-Level | Activation scope | CP-0 (PRD missing) | CP-Q (critical) | 추가 CP |
+|---------|------------------|---|---|--------|
+| CTO | mandatory PDCA owner | ✓ (Plan 진입) | ✓ (QA 결과) | CP-2 destructive (Do 시작 5+ 파일) / **CP-G{N}** Gate 1~4 (lean: 자동 통과 + outro / strict: 발동) |
+| CPO | CEO-activated artifact only | — | ✓ (활성 PRD 완성도 < 80%) | — |
+| CSO | CEO-activated artifact only | — | ✓ (활성 security artifact Critical>0) | CP-C (Critical 발견 즉시 차단 여부) |
+| CEO | ideation/routing owner | — | ✓ (전략 정합성 미달) | CP-A absorb 배분 맵 (absorb 모드 전용) |
+| CBO | explicit secondary only | — | ✓ (명시 호출된 unit economics LTV/CAC<3x) | — |
+| COO | explicit secondary only | — | ✓ (명시 호출된 CI/CD 단계 누락) | — |
+
+CPO/CSO/CBO/COO 는 자체 mandatory phase 를 갖지 않는다. CP 는 해당 role 이 활성화된 artifact 또는 명시 호출된 phase 안에서만 적용한다.
 
 ### CP-G{N} (CTO 전용)
 

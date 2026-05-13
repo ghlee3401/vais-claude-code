@@ -1,5 +1,66 @@
 # Changelog
 
+## [0.67.0] - 2026-05-14 — workflow-contract-alignment: v2.2 alignment + cross-review 권고 해소
+
+VAIS Code 의 content/workflow contract 를 7 단계로 정렬. contract matrix 박제 + shared guard v2.2 전파 (45 sub-agent + 6 C-Level) + phase router 정합 + agent prompt artifact path 정렬 + template phase index/body 분리 + knowledge lazy-load 정렬 + runtime/validator drift 정리. Claude 3rd-reviewer cross-review 권고 2 항 (W-SCOPE 정합 / mandatoryPhases retroactive backward-compat) 통합 해소.
+
+피처: `workflow-contract-alignment` (코덱스 작업) + Claude cross-review + recommendations-fix. 113 files (109 modified + 4 신규 + 17 doc artifacts).
+
+### Added
+
+- **`docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`** — phase/owner/activation/artifact/path/validator 계약 매트릭스. 본 sprint 이후 모든 alignment 작업의 기준선.
+- **`docs/workflow-contract-alignment/04-qa/cross-review-by-claude.md`** — 3rd-reviewer 독립 재검증. 코덱스 self-QA 의 8 claim 모두 명령 재현 PASS + legacy 4 패턴 잔존 0 grep + CEO 회귀 9/9 + mandatoryPhases 동기화 확인. Verdict PASS w/ 권고 2.
+- **`docs/workflow-contract-alignment/03-do/recommendations-fix-log.md`** — cross-review 권고 1+2 통합 해소 로그.
+- **5 stage do logs** (`shared-guard / phase-router / agent-prompt / template / knowledge`) + **5 stage qa reports** + final-validation-report.
+- **`agents/_shared/clevel-main-guard.full.md`** v2.2 정본 (main.md 5섹션 index-only + Decision Record append-only + Owner 컬럼 필수).
+- **이전 박제 retroactive backfill**: `docs/vais-positioning-rethink/05-report/main.md` (5섹션 stub), `docs/v0-66-1-hotfix-alignment/02-design/main.md` + `05-report/main.md` (5섹션 stub, design/report 의도 생략 정당성 명시), `docs/vais-positioning-rethink/01-plan/plan-rationale.md` 상단 scope 섹션 append.
+
+### Changed
+
+- **CTO mandatoryPhases** — `vais.config.json.workflow.mandatoryPhases` + `lib/status.getMandatoryPhases('cto')` 에 `report` 추가. CTO PDCA = plan→design→do→qa→report (5 phase).
+- **shared guard v2.2 전파** — 6 C-Level main + 45 sub-agent inline guard 블록 정합. `scripts/patch-clevel-guard.js` + `scripts/patch-subdoc-block.js` 가 separator 없는 기존 inline block 과 중복 managed block 모두 idempotent 갱신.
+- **C-Level main.md 정책** — owner H2 섹션 중심 → 5섹션 index 중심 (Executive Summary / Decision Record / Artifacts / CEO 판단 근거 / Next Phase). legacy owner H2 는 보존 대상.
+- **subdoc-guard.md** — 고정 예시값 (`owner: cto`, `artifact: prd`) 제거 → 역할 중립 placeholder.
+- **PRD 정본 경로** — `01-plan/prd.md` (이전 `03-do/main.md` 본문 박제 → deprecated). `scripts/auto-select-template.js` 도 동일하게 정렬.
+- **CPO/CSO 라우터** — CTO식 mandatory phase 순서 강제 제거. CEO algorithm 활성화 phase 만 실행.
+- **CBO/COO** — Secondary 명시 호출 (`/vais cbo plan|do|qa`, `/vais coo plan|do|qa`) 만으로 활성. CEO 자동 라우팅 X.
+- **C-Level agent prompt** — `main.md` 본문 산출물 지시 → direct artifact path 지시. CEO/CPO author sub-agent 의 `_tmp` scratchpad/큐레이션 대기 → direct artifact 저장.
+- **templates** — phase index 와 artifact body 역할 분리. `main-md.template.md` 가 phase index 전용.
+- **knowledge lazy-load** — old PRD path, retired COO agent, Secondary phase omission, QA metric source drift 정리.
+- **버전 일괄 0.66.1 → 0.67.0** — package.json + vais.config.json + .claude-plugin/{plugin,marketplace}.json (metadata + plugins[0]) + CLAUDE.md 헤더 + ONBOARDING.md "현재 버전" 라벨.
+
+### Fixed
+
+- **`scripts/agent-start.js`** — retired `release-engineer` 제거, split COO agents (release-notes-writer, ci-cd-configurator, container-config-author, migration-planner, runbook-author, sre-engineer, release-monitor, performance-engineer) 추가. P1-δ 완전 해소.
+- **`scripts/doc-validator.js` `validateScopeContract`** — (a) `01-plan/main.md` 외 plan body artifact (tech-plan.md / plan-rationale.md / plan.md) fallback 검사 추가, (b) regex `\b` 제거 — 한글 매치 버그 봉합 (`요청 원문` 의 `문` 다음 word-boundary false 로 매치 실패하던 원인) + numeric prefix (`## 0. `) 와 parenthetical suffix 허용. W-SCOPE-01/02/03 false-positive 봉합.
+- **`scripts/doc-validator.js` `validateDocs`** — empty-feature 자동 인식 (재귀 walk) + ideation-only 자동 인식. historical/empty feature folder retroactive mandatory 검사 skip.
+- **`lib/patch-block.js`** — separator 없는 기존 inline block 과 중복 managed block 안전하게 갱신 (idempotency 보강).
+- **doc-validator W-MRG-03** — 5섹션 phase index 를 current model 로 인식. P1-ε 완전 해소.
+
+### Documentation
+
+- **`CLAUDE.md`** + **`ONBOARDING.md`** — 0.67 sprint 요약 라벨 갱신.
+- **`agents/_shared/work-rules.md`** — workflow contract matrix 참조 추가.
+
+### Testing
+
+- **`tests/clevel-coexistence.test.js`** + **`tests/status.test.js`** — +28 + +26 라인. mandatoryPhases report 포함 / 5섹션 index 인식 케이스 추가. 합계 290 → 293 tests.
+
+### Compatibility
+
+- Backward compat code 유지: 옛 `_tmp` scratchpad 기록, 옛 QA fallback parsing, owner H2 main.md (legacy). Current active prompt/template/knowledge/validator guidance 는 모두 5섹션 index + direct artifact contract 가리킴.
+
+### 검증 결과
+
+- `npm test`: 293 / 290 pass / 3 skipped / 0 fail
+- `npm run lint`: clean
+- `node scripts/vais-validate-plugin.js .`: 0 errors / 0 warnings
+- `node scripts/doc-validator.js cto {feature}`: 5 피처 (vais-positioning-rethink, v0-66-1-hotfix-alignment, multimodel-repo-analysis, clevel-doc-coexistence, workflow-contract-alignment) 모두 `passed: true`
+- `node scripts/template-validator.js templates --depth-check`: 38/38 templates valid
+- CEO 라우팅 v0.66.1 hotfix 호환: 회귀 9/9 PASS, `input` 알리아스 dogfood 정상
+
+---
+
 ## [0.66.1] - 2026-05-12 — v0-66-1-hotfix-alignment: cross-model P0 정합 hotfix
 
 Codex / Claude / Gemini 3 모델 cross-model 분석 (`docs/multimodel-repo-analysis/`) 에서 합의된 **P0 3 항** (α `analyzeCEO` 인터페이스 / β 버전 메타 / γ session-start 명령 안내) 을 1 PR 로 봉합. v0.66.0 GA tag 는 유지하고 hotfix release 로 분리.

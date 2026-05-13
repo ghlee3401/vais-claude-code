@@ -31,7 +31,9 @@ const VALID_ROLES = (() => {
       'growth-analyst', 'pricing-analyst', 'financial-modeler', 'unit-economics-analyst',
       'finops-analyst', 'marketing-analytics-analyst',
       // COO
-      'release-engineer', 'sre-engineer', 'release-monitor', 'performance-engineer',
+      'release-notes-writer', 'ci-cd-configurator', 'container-config-author',
+      'migration-planner', 'runbook-author', 'sre-engineer', 'release-monitor',
+      'performance-engineer',
     ];
     return new Set([...cSuiteRoles, ...execRoles]);
   } catch {

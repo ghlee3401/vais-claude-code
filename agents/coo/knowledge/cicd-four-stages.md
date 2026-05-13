@@ -1,6 +1,6 @@
 # CI/CD 4단계 표준 (COO)
 
-release-engineer 가 사용. auto-judge 가 `opsReadiness` 메트릭 (>= 70 통과) 계산.
+ci-cd-configurator 가 사용. auto-judge 가 `opsReadiness` 메트릭 (>= 70 통과) 계산.
 
 ## 4단계 (필수)
 

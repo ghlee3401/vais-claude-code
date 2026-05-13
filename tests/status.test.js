@@ -46,6 +46,20 @@ describe('createEmptyStatus', () => {
   });
 });
 
+describe('getMandatoryPhases', () => {
+  it('CTO만 report 포함 mandatory PDCA를 가진다', () => {
+    const status = loadStatus();
+    assert.deepEqual(status.getMandatoryPhases('cto'), ['plan', 'design', 'do', 'qa', 'report']);
+    assert.deepEqual(status.getMandatoryPhases('cpo'), []);
+    assert.deepEqual(status.getMandatoryPhases('coo'), []);
+  });
+
+  it('CEO는 ideation만 mandatory로 취급한다', () => {
+    const status = loadStatus();
+    assert.deepEqual(status.getMandatoryPhases('ceo'), ['ideation']);
+  });
+});
+
 describe('initFeature', () => {
   it('새 피처를 초기화한다', () => {
     const status = loadStatus();

@@ -9,6 +9,23 @@ feature: vais-positioning-rethink
 
 > CPO 의 Plan phase 분석. Lean Rewrite 후 80 줄 목표. PRD 입력 자료.
 
+## 요청 원문
+
+> "vais-code 의 정체성을 다시 정의하고, 부서장 OJT 매뉴얼 (도메인 지식 박제) 을 통해 가상 C-Suite 조직을 운영하는 organization-in-a-box 로 포지셔닝. M0 (Ideation Continuity 4 메커니즘) + M1 Tier-1A Knowledge Pack (CEO Rumelt + CPO PRD OJT + CTO Architecture Decision) 박제." (사용자 ideation turn 5 발화 — workflow-contract-alignment 정렬 시점 retroactive backfill, 2026-05-13)
+
+## In-scope
+
+- vais-code 정체성 재정의 (organization-in-a-box / 부서장 매뉴얼) + CLAUDE.md 명시
+- M0 4 메커니즘 (status.js helpers / llm-heuristic / m0-record-turn / stop-handler / checkpoint-keyword hook)
+- M1 Tier-1A 3 박제 (CEO Rumelt 6,819자 / CPO PRD OJT 6,675자 / CTO Architecture Decision 11,690byte)
+- manual @include Knowledge Index (H4 PoC 결과 — autonomous lazy-load 미동작 으로 manual 채택)
+
+## Out-of-scope
+
+- M1 Tier-1B (CSO/CBO/COO 박제) — v0.67+ 외부 contributor 또는 사용자 직접 학습 후 박제. v0.66 = Tier-1A 만.
+- 팀/기업 페르소나 (v0.70+)
+- Target-app Bootstrap (v0.67+)
+
 ## §1. 기회 + 부재 갭 (압축)
 
 사용자 turn 5 발화 — 부서장 7 영역 (기획/운영/전략/PM/문서/팀원지시/개발) 의 다학제 도메인 지식 부재. vanilla CC 는 코드 영역만 — 비-코드 부서장 영역 비어있음.

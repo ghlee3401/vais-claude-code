@@ -2,17 +2,15 @@
 
 > ⛔ **Design 단계 범위**: 이 문서는 설계 결정만 기록합니다. 프로덕트 파일 생성·수정은 Do 단계에서 수행하세요.
 > 참조 문서: `docs/{feature}/01-plan/main.md`
-> 🎯 **0.64.0+**: main.md = 인덱스만 (5 섹션 — Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). 본문은 `docs/{feature}/02-design/{artifact}.md` 에 sub-agent 가 직접 박제. 정본 템플릿: `templates/main-md.template.md`
-> <!-- size budget: main.md ≤ 200 lines (warn). 초과 시 artifact MD 분리 (sub-agent 직접 박제). -->
+> 🎯 **artifact body template**: 이 구조는 `docs/{feature}/02-design/{artifact}.md` 에 사용합니다. Phase index 는 `templates/main-md.template.md`.
 
 ## Decision Record (multi-owner)
 
-<!-- 각 C-Level 이 자기 결정 행을 append. 이전 행 수정·삭제 금지. Owner 컬럼 필수.
-     C-Level 별 H2 섹션 플레이스홀더: ## [CBO]/[CPO]/[CTO]/[CSO]/[COO] {도메인 요약} -->
+<!-- 각 C-Level 이 자기 결정 행을 append. 이전 행 수정·삭제 금지. Owner 컬럼 필수. -->
 
-| # | Decision | Owner | Rationale | Source topic |
+| # | Decision | Owner | Rationale | Source artifact |
 |---|----------|:-----:|-----------|--------------|
-| 1 | {설계 결정} | cto | {근거} | `{topic}.md` |
+| 1 | {설계 결정} | cto | {근거} | `{artifact}.md` |
 
 ## Context Anchor
 
@@ -309,4 +307,4 @@ flowchart TD
 | v1.0 | | 초기 작성 |
 | v1.1 | 2026-04-08 | Part 4/5 (Tech Stack Lock + Implementation Contract) 추가, Architecture Options 표 압축, 네비/사이트맵 통합 |
 
-<!-- template version: v0.58.0 (v0.57+ subdoc / v0.58+ clevel-coexistence 포함) -->
+<!-- template version: v0.66.2 (artifact body / main-md index split) -->

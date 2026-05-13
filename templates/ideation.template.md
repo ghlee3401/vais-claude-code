@@ -47,4 +47,4 @@
 |---------|------|--------|
 | v1.0 | | 초기 작성 |
 
-<!-- template version: v0.58.0 (v0.57+ subdoc / v0.58+ clevel-coexistence 호환) -->
+<!-- template version: v0.66.2 (ideation artifact body / main-md index split) -->
