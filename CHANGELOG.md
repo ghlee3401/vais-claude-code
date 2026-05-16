@@ -1,5 +1,50 @@
 # Changelog
 
+## [0.68.0] - 2026-05-16 — agent-teams-orchestration: v2 대화-합성 모델 도입
+
+Claude Code 2.x Agent Teams (SendMessage + background sessions + worktree) 를 vais-code 오케스트레이션에 도입. **v1 (병렬-생산 후 머지) 에서 v2 (대화-합성) 로 pivot** — 사용자 직관 질문 "에이전트끼리 얘기해서 하나의 문서로 작성하는건가?" 가 트리거. opt-in 비파괴 토글 (`agentTeams.enabled` default false) 로 0.67.0 byte-level 동등 동작 보장.
+
+피처: `agent-teams-orchestration` (v2 대화-합성). 29 파일 변경 (18 신규 + 11 수정) + 10 docs + 8 v1 archive. lint pass + 309/312 tests pass + validate 0 err / 0 warn / 16 info.
+
+### Added
+
+- **v2 대화-합성 모델** — `skills/vais/utils/conversation-orchestrator.js` (ConversationSession + Lazy Consensus 5-state FSM: draft / review-window / objection-raised / revision / consensus-reached / timeout)
+- **synthesizer 라우팅** — `lib/ceo-algorithm.js` 5 신규 export (selectSynthesizer / selectParticipants / computeParallelGroup / detectDominantDomain / SYNTHESIZER_MATRIX) + analyzeCEO 4 신규 필드 (parallelGroup / synthesizer / participants / dominantDomain / conversationMode)
+- **합성문 + decisions-log 템플릿** — `templates/synthesis.template.md` (9 섹션 표준) + `templates/decisions-log.template.md` (timeline + Lazy Consensus 상태 + 참여 actor)
+- **Sub-agent worktree 병렬 (패턴 D)** — `lib/worktree-manager.js` (createWorktree / mergeBack / listStale / cleanupWorktree, cleanup 은 `{ confirm: true }` 강제) + `skills/vais/utils/subagent-dispatcher.js`
+- **status.json v4 마이그레이션** — `scripts/migrate-status-v3-to-v4.js` (idempotent + .v3.bak 백업 + atomic write)
+- **lock + synthesisHistory API** — `lib/status.js` 9 신규 export (acquireLock / releaseLock / isStaleLock / acquireSubagentLock / releaseSubagentLock / listSubagentLocks / recordSynthesis / getSynthesisHistory / getActiveFeatures)
+- **CC 버전 감지** — `lib/cc-version-detect.js` (Claude Code 2.1+ 감지 + agentTeams allowed 종합 판정 + sequential fallback)
+- **Skills 4 신규** — `skills/vais/utils/teams-status.md`, `teams-cleanup.md`, `schedule-cso.md`, `schedule-cbo.md`
+- **validate-plugin 3 신규 validator** — validateAgentTeamsConfig (T4 mitigation) / validateStatusV4Schema / validateSynthesisConsistency (C1~C2 일관성)
+- **session-start v4** — `activeFeatures[]` 다중 마커 (Set 기반) + v4 안내 메시지
+- **신규 4 test 파일** — lazy-consensus-fsm (6 case) + subagent-worktree-merge (6 case) + worktree-merge-safety (T6 4 case) + synthesis-consistency (C1~C4 3 case)
+- **Mandatory Rules** — CLAUDE.md #18 (agentTeams opt-in) + #19 (sub-agent worktree) + #20 (합성문 v2 + Lazy Consensus)
+- **vais.config.json** `orchestration.agentTeams` 섹션 10 필드
+
+### Changed
+
+- `agents/_shared/clevel-main-guard.md` + `.full.md` v2.2 → v3.0 — v1 (5섹션 인덱스) + v2 (합성문 9섹션) 2 모델 공존 규칙. frontmatter `model-version` 필드로 분기. 기존 5 완료 피처는 본문 변환 X.
+- `agents/_shared/work-rules.md` v2.2 → v2.3 — SendMessage v2 정책 (C↔C 허용, sub→sub 금지) + Lazy Consensus 정책 박제
+- `agents/ceo/ceo.md` — analyzeCEO 호출 시 synthesizer + participants + parallelGroup + dominantDomain + conversationMode 5 신규 필드 표시
+- `agents/cto/cto.md` — Do phase `agentTeams.subagentSessions` 토글 분기 (패턴 C vs D), 패턴 D 활성 시 worktree-manager 호출 책임 + mergeBack 시 AskUserQuestion 강제
+
+### Security
+
+- **T1** SendMessage C-Level 통신 오용 → work-rules.md v2.3 박제
+- **T4** agentTeams.enabled=true PR commit 모르게 활성화 → validate-plugin warning
+- **T6** Sub-agent merge race → worktree-manager mergeBack lint/test 게이트 (CSO-G6 test)
+- **T7** Stale worktree → listStale + teams-cleanup 사용자 명시 호출만 (memory feedback_no_auto_git_restore 정합)
+- **T8** Sub→Sub SendMessage → work-rules.md v2.3 line 80 grep 매치 (CSO-G7)
+
+### Migration Guide
+
+- **기본 동작**: 0.67.0 byte-level 동등 (`agentTeams.enabled: false` default)
+- **v2 활성**: `vais.config.json > orchestration.agentTeams.enabled = true`
+- **status.json v3 → v4**: `node scripts/migrate-status-v3-to-v4.js` (idempotent, 백업 자동 생성)
+- **기존 5 완료 피처 main.md**: frontmatter `model-version: v1` 1줄 추가 권장 (선택, 본문 변환 X)
+- **신규 피처 (agentTeams 활성)**: 합성문 9섹션 + decisions-log 표준 자동 적용
+
 ## [0.67.0] - 2026-05-14 — workflow-contract-alignment: v2.2 alignment + cross-review 권고 해소
 
 VAIS Code 의 content/workflow contract 를 7 단계로 정렬. contract matrix 박제 + shared guard v2.2 전파 (45 sub-agent + 6 C-Level) + phase router 정합 + agent prompt artifact path 정렬 + template phase index/body 분리 + knowledge lazy-load 정렬 + runtime/validator drift 정리. Claude 3rd-reviewer cross-review 권고 2 항 (W-SCOPE 정합 / mandatoryPhases retroactive backward-compat) 통합 해소.

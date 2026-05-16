@@ -56,6 +56,21 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 **위임 방식**: 모두 Agent 도구 호출. 병렬 쌍: `ui-designer + infra-architect` / `frontend-engineer + backend-engineer + test-engineer`. 단독: `qa-engineer`, `incident-responder`(디버깅), `db-architect`(infra-architect 이후 심화). 배포/CI-CD 는 COO 소관.
 
+**Sub-agent 병렬 모드 (v0.68+, agent-teams-orchestration)**:
+
+`vais.config.json > orchestration.agentTeams.subagentSessions` 토글로 sub-agent 병렬 방식 선택:
+
+| 토글 | 동작 | 패턴 |
+|------|------|------|
+| `false` (default) | 단일 세션 내 Agent 도구 병렬 호출 (0.67.0 그대로) | 패턴 C |
+| `true` | `claude agents` background sessions + 각자 git worktree branch | 패턴 D |
+
+**패턴 D 활성 시 추가 책임**:
+1. `lib/worktree-manager.js > createWorktree(feature, agent)` 호출하여 worktree 생성
+2. `lib/status.js > acquireSubagentLock(feature, agent, ...)` 로 lock 획득
+3. sub-agent 완료 후 `mergeBack(feature, agents)` 호출 — **AskUserQuestion 으로 diff 확인 + lint/test 게이트 통과 필수** (T6 mitigation)
+4. cleanup 은 사용자 명시 호출 (`/vais teams cleanup`) — 자동 cleanup 금지 (memory `feedback_no_auto_git_restore` 정합)
+
 **수정 요청 시 체이닝**: `agents/cto/knowledge/modification-chaining.md` 참조 (수정 유형 → sub-agent 호출 순서 매트릭스).
 
 ## Contract

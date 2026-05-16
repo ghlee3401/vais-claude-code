@@ -2,7 +2,7 @@
 
 > **이 파일의 책임**: Claude Code 전용 프로젝트 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 먼저 `ONBOARDING.md` (5분 진입 가이드)를 읽으면 빠르다. 다른 AI 도구(Cursor/Copilot)는 `AGENTS.md` 참조.
 >
-> Virtual AI C-Suite for software development (v0.67.0)
+> Virtual AI C-Suite for software development (v0.68.0)
 > Claude Code marketplace plugin: `vais-code`
 
 ## What This Project Is
@@ -171,6 +171,9 @@ CEO가 피처 성격 + 산출물 상태 분석 → 다음 C-Level 추천 → 사
 15. **C-Level 공존 v2.1 — main.md 인덱스만** — main.md = 5섹션 인덱스 (Executive Summary / Decision Record / Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X. Decision Record append-only + Owner 컬럼 필수 + 다른 C-Level 섹션·행 수정 금지. enforcement: warn. 정본: `agents/_shared/clevel-main-guard.md` v2.1 (8줄 요약). full canonical: `clevel-main-guard.full.md`.
 16. **PO 워크플로우 경량화 v0.65** — Quiet by Default (CP 6→1~2, lean mode 기본) + Wisdom Split (도메인 지식 → `agents/{c-level}/knowledge/` lazy-load) + Anti-Boilerplate (plan 템플릿 헤딩 52→22, autoSelect 자동 선택, gapAnalysis maxIter 5→2). 정책: `vais.config.json > workflow.checkpointPolicy/template/frontmatterMinimal`.
 17. **CEO 진입 절차 v0.65.3** — CEO 가 사용자 입력을 받으면 반드시 4 단계 순차 실행: (1) `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` Bash 호출 → (2) 7 차원 등급 표 응답에 직접 출력 (펜스 밖) → (3) `activeCLevel` 결과를 baseline 으로 인용 (LLM 보강 시 차이 사유 1줄 명기) → (4) AskUserQuestion 클릭. LLM 자체 라우팅 금지. 다른 C-Level/sub-agent 가 위임 받을 때 main.md "CEO 판단 근거" 섹션에 7 차원 등급 표 인용 의무. 정본: `agents/ceo/ceo.md` "CEO 진입 절차" + `agents/_shared/work-rules.md` "CEO 알고리즘 인용 규칙".
+18. **Agent Teams opt-in 정책 v0.68 (agent-teams-orchestration)** — `vais.config.json > orchestration.agentTeams.enabled` 기본 false. true 시 v2 대화-합성 모델 활성: (1) CEO 알고리즘 `parallelGroup` + `synthesizer` 필드 산출 (2) `skills/vais/utils/conversation-orchestrator.js` 가 Lazy Consensus 5-state FSM 진행 (3) main.md = 합성문 (synthesizer 단독) + `decisions-log.md` = SendMessage timeline. enabled=false 면 0.67.0 byte-level 동등 (sequential + 5섹션 인덱스). 검증: `scripts/vais-validate-plugin.js > validateAgentTeamsConfig` 가 enabled=true PR commit 시 warning. 정본: `docs/agent-teams-orchestration/02-design/main.md` + `agents/_shared/clevel-main-guard.md` v3.0.
+19. **Sub-agent worktree 정책 (패턴 D, v0.68+)** — `agentTeams.subagentSessions` sub-toggle (default false). true 시 sub-agent 가 git worktree branch (`feat/{feature}-{agent}`) 에서 독립 작업. CTO `mergeBack(feature, agents)` 호출 시 **AskUserQuestion 으로 diff 확인 + lint/test 게이트** 통과 필수 (T6 mitigation). 자동 cleanup 금지 — `/vais teams cleanup` 사용자 명시 호출만 (memory `feedback_no_auto_git_restore` 정합). 정본: `lib/worktree-manager.js`.
+20. **합성문 모델 v2 + Lazy Consensus 정책 (v0.68+)** — agentTeams 활성 신규 피처는 main.md = 합성문 9섹션 (`templates/synthesis.template.md`) + decisions-log = timeline (`templates/decisions-log.template.md`). frontmatter 6 필수 (owner/artifact/phase/feature/**synthesizer**/**model-version: v2**). 기존 5 완료 피처는 frontmatter `model-version: v1` 추가만 + 본문 보존 (마이그레이션 무손실). SendMessage 정책 v2: C-Level↔C-Level 허용 (대화), sub→sub 금지 (T8). 정본: `agents/_shared/clevel-main-guard.full.md` v3.0 + `agents/_shared/work-rules.md` v2.3.
 
 ## Version Management
 

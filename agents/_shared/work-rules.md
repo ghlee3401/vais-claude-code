@@ -1,4 +1,4 @@
-# Work Rules (shared, v2.2)
+# Work Rules (shared, v2.3)
 
 모든 C-Level 공통 작업 원칙. 각 C-Level 메인 .md 는 자기 도메인 특이 규칙만 짧게 추가한다.
 
@@ -67,3 +67,39 @@ Plan 단계에서 프로덕트 파일(skills/, agents/, lib/, src/, mcp/) 생성
 
 현재 phase 산출물을 반드시 작성. 문서 없이 종료 시 SubagentStop 훅이 `exit(1)` 차단.
 "대화로 합의했으니 문서 불필요" 판단 금지.
+
+## SendMessage 정책 (v0.68+ — agent-teams-orchestration 도입)
+
+`orchestration.agentTeams.enabled=true` 시 활성. false 일 때는 0.67.0 sequential 동작 (SendMessage 미사용).
+
+**ALLOWED**:
+- C-Level → C-Level (대화 모드, v2 Conversation Orchestrator 가 관리)
+- C-Level → sub-agent (위임 — 항상 허용)
+
+**FORBIDDEN**:
+- sub-agent → sub-agent (같은 C-Level 하위든 다른 C-Level 하위든 모두 금지 — T8 위협, security-review.md 참조)
+- sub-agent → C-Level (응답만 허용, request 금지)
+
+**Enforcement**:
+- v2 design `interface-contract.md` §10.2 ALLOWED/FORBIDDEN 표 박제
+- QA Gate CSO-G7: `grep -n "sub-agent → sub-agent" agents/_shared/work-rules.md` 매치 확인
+- 선택적 PreToolUse hook 으로 SendMessage `to:` 타깃 검증 (v2.1 후보)
+
+## Lazy Consensus 정책 (v0.68+ — agent-teams-orchestration)
+
+`orchestration.agentTeams.enabled=true` 시 phase 진입마다 적용.
+
+**State Machine (5 states)**: draft → review-window → (consensus-reached | objection-raised → revision → review-window) → consensus-reached (또는 timeout)
+
+**규칙**:
+- 도메인 리드 (synthesizer) 가 draft 작성 → SendMessage 로 다른 C-Level (participants) review 요청
+- N=`consensusTurns` (기본 2) 턴 내 이의 없으면 자동 합의
+- 이의 1건 이상 시 synthesizer 가 revision → 재 review 라운드
+- consensusTurns 초과 시 timeout — synthesizer 단독 강행 + decisions-log 에 `timeout` event 박제 (unresolvedObjections 보존)
+
+**박제 의무**:
+- main.md = 합성문 (synthesizer 단독 작성)
+- decisions-log.md = timeline (모든 SendMessage event)
+- frontmatter `synthesizer` 필드 = 합성문/timeline 일관성 (Do 작업 test C1~C2)
+
+**호환성**: `agentTeams.enabled=false` 인 기존 워크플로우 (5섹션 인덱스 + append-only Decision Record) 와 직교 — 둘은 mutually exclusive.

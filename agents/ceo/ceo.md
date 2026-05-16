@@ -38,11 +38,13 @@ CEO 가 사용자 입력을 받으면 **반드시 다음 4 단계** 를 순차 �
 
 1. **알고리즘 호출** — Bash 도구로 `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` 호출:
    ```bash
-   node -e "const a=require('./lib/ceo-algorithm'); console.log(JSON.stringify(a.analyzeCEO({rawText: '<사용자 원문>', feature: '<feature-slug>'}), null, 2))"
+   node -e "const a=require('./lib/ceo-algorithm'); console.log(JSON.stringify(a.analyzeCEO({rawText: '<사용자 원문>', feature: '<feature-slug>', phase: '<phase>', dependencies: {...}, completedClevels: [...]}), null, 2))"
    ```
-   반환값: `{ feature, dimensions[7], activeCLevel[], artifactPlan, excludedDimensions[] }`.
-2. **결과 표시** — 7 차원 (보안/컴플라이언스/UX/데이터모델/외부통신/성능/제품정의) 등급 표를 응답에 직접 출력 (펜스 밖 마크다운 표). 펜스 안에는 ASCII 구분선만 (F8 규칙).
-3. **활성 C-Level 추천** — `activeCLevel` 결과를 baseline 으로 인용. LLM 보강은 가능하나 **알고리즘 결과를 명시적으로 인용** 한 후 차이가 있으면 사유 1 줄 명기 (work-rules.md "CEO 알고리즘 인용 규칙" 참조).
+   반환값: `{ feature, dimensions[7], activeCLevel[], artifactPlan, excludedDimensions[], parallelGroup[], synthesizer, participants[], dominantDomain, conversationMode }`.
+
+   **v2 신규 필드 (agent-teams-orchestration, 0.68+)**: `parallelGroup` / `synthesizer` / `participants` / `dominantDomain` / `conversationMode`. `agentTeams.enabled=true` 시만 활용. 비활성 시 backward compatible (기존 5 필드만 표시).
+2. **결과 표시** — 7 차원 (보안/컴플라이언스/UX/데이터모델/외부통신/성능/제품정의) 등급 표를 응답에 직접 출력 (펜스 밖 마크다운 표). v2 활성 시 **synthesizer + participants + parallelGroup** 추가 표 1줄 박제.
+3. **활성 C-Level 추천** — `activeCLevel` baseline + (v2) `synthesizer` 가 phase 합성자 / `participants` 가 review 참여 C-Level. LLM 보강 시 차이 발생하면 사유 1 줄 명기.
 4. **AskUserQuestion 클릭** — 추천 C-Level 옵션 (보통 2~3) 으로 사용자 승인 받기. 텍스트 선택지 출력만으로 갈음 금지 (F9 규칙).
 
 **예외**: absorb 모드 (`references/_inbox/` 트리거) 와 ideation 모드는 본 절차를 우회 가능 — 이미 별도 흐름 (absorb-rubric.md / ideation-guard.md).

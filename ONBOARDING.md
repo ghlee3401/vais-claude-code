@@ -20,7 +20,7 @@
 | **Knowledge lazy-load** (v0.65) | `agents/{c-level}/knowledge/` 19 MD — phase + artifact 매칭 시만 Read. 메인 .md 의 "Knowledge Index" 표가 trigger |
 | **CEO 진입 절차 강제** (v0.65.3) | CEO 가 4 단계 순차 — `analyzeCEO()` Bash 호출 → 7 차원 등급 표 출력 → activeCLevel 인용 → AskUserQuestion. LLM 자체 라우팅 금지 |
 
-현재 버전: **v0.67.0** (0.66.0 organization-in-a-box → 0.66.1 cross-model P0 hotfix → 0.67.0 workflow contract alignment: v2.2 shared guard 전파 + 5섹션 index 정본화 + CTO mandatoryPhases report 포함 + retired `release-engineer` 제거 + doc-validator W-SCOPE/W-MRG 정합 + retroactive backfill).
+현재 버전: **v0.68.0** (0.66.0 organization-in-a-box → 0.66.1 cross-model P0 hotfix → 0.67.0 workflow contract alignment → 0.68.0 Agent Teams 대화-합성 모델 도입: Conversation Orchestrator + Lazy Consensus 5-state FSM + 합성문/decisions-log 템플릿 + 패턴 D sub-agent worktree + status.json v4 + clevel-doc-coexistence v3 — opt-in default false 로 0.67.0 byte-level 동등).
 
 ---
 

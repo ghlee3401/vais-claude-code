@@ -8,7 +8,7 @@ const { spawnSync } = require('child_process');
 const { debugLog } = require('../lib/debug');
 const { logHook } = require('../lib/hook-logger');
 const { ensureVaisDirs, loadConfig, loadOutputStyle } = require('../lib/paths');
-const { getStatus, getActiveFeature, getProgressSummary, ensureMigrated, listInProgressIdeations } = require('../lib/status');
+const { getStatus, getActiveFeature, getActiveFeatures, getProgressSummary, ensureMigrated, listInProgressIdeations } = require('../lib/status');
 const fs = require('fs');
 const { sendWebhook } = require('../lib/webhook');
 
@@ -43,6 +43,8 @@ function main() {
   const config = loadConfig();
   const VERSION = config.version || '0.0.0';
   const activeFeature = getActiveFeature();
+  // v4 (agent-teams-orchestration) — 다중 활성 피처 지원 (backward compatible)
+  const activeFeatures = getActiveFeatures();
   const status = getStatus();
   const featureNames = Object.keys(status.features || {});
 
@@ -95,17 +97,21 @@ function main() {
 
   if (featureNames.length > 0) {
     ctx += `## 진행 중인 피처\n\n`;
+    const activeSet = new Set(activeFeatures); // v4 — 다중 활성 피처 지원
     for (const fname of featureNames) {
       try {
         const summary = getProgressSummary(fname);
         if (!summary) continue;
-        const marker = fname === activeFeature ? '👉 ' : '   ';
+        const marker = activeSet.has(fname) ? '👉 ' : '   ';
         ctx += `${marker}**${fname}** — ${summary.currentPhaseName} ${summary.progressCompact}\n`;
       } catch (e) {
         debugLog('SessionStart', 'feature summary failed', { feature: fname, error: e.message });
-        const marker = fname === activeFeature ? '👉 ' : '   ';
+        const marker = activeSet.has(fname) ? '👉 ' : '   ';
         ctx += `${marker}**${fname}** — ⚠️ status 스키마 손상 — .vais/status.json 삭제 후 세션 재시작\n`;
       }
+    }
+    if (activeFeatures.length > 1) {
+      ctx += `\n> ℹ️  v4: ${activeFeatures.length}개 피처 동시 활성 (agent-teams-orchestration 멀티피처 모드)\n`;
     }
     ctx += `\n`;
   }
