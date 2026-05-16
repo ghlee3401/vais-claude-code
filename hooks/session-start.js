@@ -11,6 +11,7 @@ const { ensureVaisDirs, loadConfig, loadOutputStyle } = require('../lib/paths');
 const { getStatus, getActiveFeature, getActiveFeatures, getProgressSummary, ensureMigrated, listInProgressIdeations } = require('../lib/status');
 const fs = require('fs');
 const { sendWebhook } = require('../lib/webhook');
+const { checkAgentTeamsAllowed } = require('../lib/cc-version-detect');
 
 /**
  * Advisor 모드 판정 (session 1회).
@@ -41,6 +42,32 @@ function main() {
   detectAdvisorMode();
 
   const config = loadConfig();
+
+  // Agent Teams 경고 분기 — config 로드 직후. 예외는 silent (hook hard fail 방지)
+  try {
+    const agentTeamsEnabled = config?.orchestration?.agentTeams?.enabled ?? false;
+    if (agentTeamsEnabled) {
+      const result = checkAgentTeamsAllowed(agentTeamsEnabled);
+      if (result.allowed && result.simulationMode) {
+        // enabled=true + CC 2.1+ + env flag missing
+        process.stderr.write(
+          '[VAIS] ⚠️  Agent Teams enabled but CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS env not set' +
+          ' — using simulation. See ONBOARDING.md#agent-teams-activation\n'
+        );
+      } else if (!result.allowed && result.reason && result.reason.includes('< 2.1.0')) {
+        // enabled=true + env flag set + CC < 2.1
+        process.stderr.write(
+          '[VAIS] ⚠️  Agent Teams requires Claude Code 2.1+' +
+          ' — sequential fallback\n'
+        );
+      }
+      // allowed=true + simulationMode=false → 조용 (정상 활성)
+    }
+    // agentTeamsEnabled=false → 조용
+  } catch (_) {
+    // silent — hook 가 hard fail 하지 않도록
+  }
+
   const VERSION = config.version || '0.0.0';
   const activeFeature = getActiveFeature();
   // v4 (agent-teams-orchestration) — 다중 활성 피처 지원 (backward compatible)

@@ -6,9 +6,13 @@
  * v2 design `main.md` §3 + §4 박제.
  * Lazy Consensus 5-state FSM: draft → review-window → (consensus-reached | objection-raised → revision → review-window) → consensus-reached (or timeout)
  *
- * **주의**: 본 모듈은 실제 SendMessage 도구 호출 wrapper. Claude Code 외부에서는 dryRun 모드로만 동작.
+ * **주의**: 본 모듈은 실제 SendMessage 도구 호출 wrapper. Claude Code 외부에서는 simulation 모드로만 동작.
  * Hook 또는 skill phase 진입 시 호출.
+ *
+ * v0.69.0 변경: simulationMode / real 분기 + T1~T3 security mitigation 추가.
  */
+
+const crypto = require('crypto');
 
 const STATES = Object.freeze({
   DRAFT: 'draft',
@@ -27,6 +31,23 @@ const EVENT_TYPES = Object.freeze({
   TIMEOUT: 'timeout',
 });
 
+// [T1] SendMessage body 에서 시크릿 패턴 검출용 regex — security-gate-plan §3 AC-CSO-1
+const SECRET_PATTERNS = [
+  /(password|passwd)\s*[:=]\s*["'][^"']{8,}/i,
+  /secret\s*[:=]\s*["'][^"']{8,}/i,
+  /api[_-]?key\s*[:=]\s*["'][^"']{8,}/i,
+  /token\s*[:=]\s*["'][^"']{8,}/i,
+];
+
+/**
+ * SHA-256 해시 (real 모드 messageHash 용).
+ * @param {string} text
+ * @returns {string}
+ */
+function _sha256(text) {
+  return crypto.createHash('sha256').update(text, 'utf8').digest('hex');
+}
+
 /**
  * 단일 phase 대화 세션.
  *
@@ -37,8 +58,11 @@ const EVENT_TYPES = Object.freeze({
  * @param {string[]} opts.participants - 다른 C-Level 목록
  * @param {number} [opts.consensusTurns=2]
  * @param {number} [opts.turnTimeoutMs=60000]
- * @param {boolean} [opts.dryRun=false] - 실제 SendMessage 없이 시뮬레이션
- * @param {function} [opts.sendMessageFn] - 외부 주입 SendMessage 함수 (test 용)
+ * @param {boolean} [opts.dryRun=false] - (legacy) 하위 호환 — 내부적으로 simulationMode 로 매핑
+ * @param {boolean} [opts.simulationMode=true] - true = 0.68.0 byte-compat simulation, false = real SendMessage
+ * @param {'main'|'c-level'|'sub-agent'} [opts.callerContext='main'] - T3 분기용
+ * @param {string[]} [opts.parallelGroup=[]] - T2 화이트리스트 구성용
+ * @param {function} [opts.sendMessageFn] - 외부 주입 SendMessage 함수 (test / real 모드)
  */
 class ConversationSession {
   constructor(opts) {
@@ -51,7 +75,32 @@ class ConversationSession {
     this.participants = opts.participants || [];
     this.consensusTurns = opts.consensusTurns ?? 2;
     this.turnTimeoutMs = opts.turnTimeoutMs ?? 60000;
-    this.dryRun = !!opts.dryRun;
+
+    // dryRun (legacy) → simulationMode 매핑. opts.simulationMode 명시 시 우선
+    if (opts.simulationMode !== undefined) {
+      this.simulationMode = !!opts.simulationMode;
+    } else if (opts.dryRun !== undefined) {
+      this.simulationMode = !!opts.dryRun;
+    } else {
+      this.simulationMode = true; // 기본값: 안전
+    }
+    // 하위 호환 — dryRun 필드도 유지
+    this.dryRun = this.simulationMode;
+
+    this.mode = this.simulationMode ? 'simulated' : 'real';
+
+    // [T3] caller context — sub-agent 발신 차단용
+    this.callerContext = opts.callerContext || 'main';
+
+    // [T2] 화이트리스트 구성 — parallelGroup + participants + 'main' + synthesizer
+    this.parallelGroup = opts.parallelGroup || [];
+    this.allowedActors = Array.from(new Set([
+      ...this.parallelGroup,
+      ...this.participants,
+      'main',
+      this.synthesizer,
+    ]));
+
     this.sendMessageFn = opts.sendMessageFn || null;
     this.state = STATES.DRAFT;
     this.events = [];
@@ -82,14 +131,22 @@ class ConversationSession {
 
   /**
    * decisions-log event 박제.
+   * @param {string} eventType
+   * @param {string} actor
+   * @param {string} topic
+   * @param {object|string} [refObj={}]
+   * @param {string} [mode] - 'real' | 'simulated'
+   * @param {string|null} [messageHash] - SHA-256 (real 만), simulated = null
    */
-  log(eventType, actor, topic, refObj = {}) {
+  log(eventType, actor, topic, refObj = {}, mode = this.mode, messageHash = null) {
     this.events.push({
       time: new Date().toISOString(),
       actor,
       eventType,
       topic,
       ref: (typeof refObj === 'string' ? refObj : JSON.stringify(refObj)).slice(0, 200),
+      mode,
+      messageHash,
     });
   }
 
@@ -104,8 +161,8 @@ class ConversationSession {
   }
 
   /**
-   * Review window 열기. participant 들에게 SendMessage (또는 dryRun).
-   * @returns {Promise<Array<{ actor, eventType, topic, ref }>>}
+   * Review window 열기. participant 들에게 SendMessage (또는 simulation).
+   * @returns {Promise<Array<{ actor, eventType, topic, ref, mode, messageHash }>>}
    */
   async openReviewWindow() {
     this._transition(STATES.REVIEW_WINDOW, 'openReviewWindow');
@@ -113,24 +170,102 @@ class ConversationSession {
     for (const p of this.participants) {
       const r = await this._sendReviewRequest(p);
       responses.push(r);
-      this.log(r.eventType, r.actor, r.topic, r.ref || {});
+      this.log(r.eventType, r.actor, r.topic, r.ref || {}, r.mode, r.messageHash || null);
     }
     return responses;
   }
 
+  /**
+   * [T3] main→sub 일방향 정책. sub-agent 호출 시 throw.
+   * 보안 위협: sub-agent 가 SendMessage 를 통해 prompt injection 전달 가능.
+   */
+  _enforceMainSubDirectionality(targetActor) {
+    if (this.callerContext === 'sub-agent') {
+      const msg =
+        `[T3] SendMessage blocked: sub-agent caller is not allowed to send messages. ` +
+        `caller=${this.callerContext}, target=${targetActor}, feature=${this.feature}`;
+      process.stderr.write('[VAIS] ⚠️  ' + msg + '\n');
+      this.log('security-block', 'system', msg, {}, this.mode, null);
+      throw new Error(msg);
+    }
+  }
+
+  /**
+   * [T2] actor 화이트리스트 검증. unknown → drop (silent + warn).
+   * 보안 위협: agent ID 위조로 의사결정 라우팅 교란.
+   * @returns {boolean} true = 허용, false = drop
+   */
+  _validateActor(actor) {
+    if (!this.allowedActors.includes(actor)) {
+      const msg =
+        `[T2] Unknown actor '${actor}' — message dropped. ` +
+        `allowed=${JSON.stringify(this.allowedActors)}, feature=${this.feature}`;
+      process.stderr.write('[VAIS] ⚠️  ' + msg + '\n');
+      this.log('security-block', 'system', msg, {}, this.mode, null);
+      // throw 하지 않고 drop — ID 위조 시 파이프라인 전체 중단 방지
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * [T1] SendMessage body 시크릿 grep. hit → throw.
+   * 보안 위협: SendMessage body 에 민감 정보(API 키, 토큰 등) 포함 가능.
+   */
+  _scanSecrets(text) {
+    for (const pattern of SECRET_PATTERNS) {
+      if (pattern.test(text)) {
+        const msg =
+          `[T1] Secret pattern detected in SendMessage body — send blocked. ` +
+          `pattern=${pattern.source.slice(0, 50)}, feature=${this.feature}`;
+        process.stderr.write('[VAIS] ⚠️  ' + msg + '\n');
+        this.log('security-block', 'system', msg, {}, this.mode, null);
+        throw new Error(msg);
+      }
+    }
+  }
+
+  /** review prompt 구성. */
+  _buildReviewPrompt() {
+    return `Review draft for ${this.feature}/${this.phase}. window N=${this.consensusTurns}. 이의 있으면 '반박'+topic, 없으면 '합의'.`;
+  }
+
   async _sendReviewRequest(participantClevel) {
-    if (this.dryRun) {
-      // dryRun = no SendMessage, 항상 합의 응답
+    // simulated 모드: 0.68.0 byte-compat — 보안 함수 호출 없이 그대로
+    if (this.simulationMode) {
       return {
         actor: participantClevel,
         eventType: EVENT_TYPES.AGREE,
-        topic: `[dryRun] auto-agree on draft v${this.roundCount + 1}`,
+        topic: `[simulated] auto-agree on draft v${this.roundCount + 1}`,
+        mode: 'simulated',
+        messageHash: null,
       };
     }
-    if (!this.sendMessageFn) {
-      throw new Error('sendMessageFn required when dryRun=false');
+
+    // real 모드 — T3 → T2 → T1 → SendMessage 순서
+    // [T3] 최우선 — sub-agent caller 차단
+    this._enforceMainSubDirectionality(participantClevel);
+
+    // [T2] actor 화이트리스트
+    if (!this._validateActor(participantClevel)) {
+      // drop — undefined 반환 시 openReviewWindow 에서 null 포함되므로 빈 agree 로 대체
+      return {
+        actor: participantClevel,
+        eventType: EVENT_TYPES.AGREE,
+        topic: `[T2-drop] unknown actor dropped`,
+        mode: 'real',
+        messageHash: null,
+      };
     }
-    const promptText = `Review draft for ${this.feature}/${this.phase}. window N=${this.consensusTurns}. 이의 있으면 '반박'+topic, 없으면 '합의'.`;
+
+    if (!this.sendMessageFn) {
+      throw new Error('sendMessageFn required in real mode (simulationMode=false)');
+    }
+
+    // [T1] 시크릿 grep — 송신 직전
+    const promptText = this._buildReviewPrompt();
+    this._scanSecrets(promptText);
+
     let resp;
     try {
       resp = await this.sendMessageFn({
@@ -139,14 +274,21 @@ class ConversationSession {
         timeoutMs: this.turnTimeoutMs,
       });
     } catch (e) {
-      // 타임아웃 등 → timeout event
       return {
         actor: participantClevel,
         eventType: EVENT_TYPES.TIMEOUT,
         topic: `SendMessage timeout/error: ${e.message.slice(0, 100)}`,
+        mode: 'real',
+        messageHash: null,
       };
     }
-    return this._parseResponse(participantClevel, resp);
+
+    const hash = _sha256(JSON.stringify(resp));
+    return {
+      ...this._parseResponse(participantClevel, resp),
+      mode: 'real',
+      messageHash: hash,
+    };
   }
 
   _parseResponse(actor, resp) {

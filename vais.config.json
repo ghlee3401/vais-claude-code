@@ -1,5 +1,5 @@
 {
-  "version": "0.68.0",
+  "version": "0.69.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -426,7 +426,7 @@
     },
     "agentTeams": {
       "enabled": false,
-      "_enabled_description": "v2 대화-합성 모델 (Conversation Orchestrator + Lazy Consensus) opt-in 토글. false (기본) = 0.67.0 byte-level 동등 (sequential + 5섹션 인덱스). true = 본격 Agent Teams 모드 (피처 agent-teams-orchestration 도입).",
+      "_enabled_description": "v2 대화-합성 모델 (Conversation Orchestrator + Lazy Consensus) opt-in 토글. false (기본) = 0.67.0 byte-level 동등 (sequential + 5섹션 인덱스). true = 본격 Agent Teams 모드 (피처 agent-teams-orchestration 도입). 2026-05-16 vais-1-0-0-release plan dogfood 후 발견: SendMessage 도구 미구현 → 시뮬레이션만 가능. 2026-05-17 enabled=false 복귀 (PO 결정: SendMessage 실 구현 후 1.0.0 재진입).",
       "subagentSessions": false,
       "_subagentSessions_description": "패턴 D (sub-agent background sessions + worktree 격리) sub-toggle. enabled 와 독립적으로 제어 가능.",
       "consensusTurns": 2,

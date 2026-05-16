@@ -16,9 +16,13 @@ summary: "{phase} 의사결정 타임라인"
 
 ## Events Timeline
 
-| # | time (UTC ISO 8601) | actor | event-type | topic | ref |
-|---|--------------------|-------|-----------|-------|-----|
-| 1 | {2026-mm-ddT...} | {actor} | {제기|반박|합의|pivot|timeout} | {한 줄 요약} | {링크 또는 hash} |
+| # | time (UTC ISO 8601) | actor | event-type | topic | ref | mode | messageHash |
+|---|--------------------|-------|-----------|-------|-----|------|-------------|
+| 1 | {2026-mm-ddT...} | {actor} | {제기|반박|합의|pivot|timeout} | {한 줄 요약} | {링크 또는 hash} | {real\|simulated} | {sha256 또는 —} |
+
+> real 모드 = CC 내장 SendMessage 도구 사용 / simulated = CTO 일괄 합성.
+> event-type enum 정의는 동일. messageHash = SHA-256(response JSON), simulated 행은 `—`.
+> 하위 호환: 기존 v1.0 timeline 행은 mode/messageHash 컬럼 비워도 valid.
 
 **event-type enum**:
 - `제기` — 새 의견/draft 제기

@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.69.0] - 2026-05-17 — agent-teams-sendmessage-real: CC SendMessage 실 통합 (Real Mode)
+
+Claude Code 내장 SendMessage 도구를 vais-code Lazy Consensus orchestrator 에 통합. v0.68 의 시뮬레이션-only 모델 → **조건부 real 대화 모드** 도입. `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` 환경 변수 또는 `~/.claude/settings.json` 동명 키 활성 시 진짜 SendMessage 사용. 미활성 시 0.68.0 byte-level 동등 simulation graceful degradation.
+
+피처: `agent-teams-sendmessage-real`. 5 surface 변경 (+232 lines) + 4 신규 test 파일 (+1312 lines, 40 case) + 11 docs (~1544 lines). 288/288 tests pass + validate-plugin 0 err / 0 warn.
+
+### Added
+
+- **CC SendMessage 통합** — `skills/vais/utils/conversation-orchestrator.js` 의 `_sendReviewRequest` 가 `simulationMode=false` 일 때 real `sendMessageFn` 호출. event 객체 schema 에 `mode: 'real' | 'simulated'` + `messageHash: string | null` 필드 추가
+- **`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` flag 감지** — `lib/cc-version-detect.js` 의 `detectExperimentalAgentTeamsFlag()` 신규 export. 우선순위: `process.env` → `~/.claude/settings.json`. truthy 값 (`"1"`, `"true"`) 만 enable
+- **`simulationMode` 필드** — `checkAgentTeamsAllowed(enabledConfig)` 반환에 `simulationMode: boolean` 추가. enabled=true + version OK + flag missing → `allowed: true, simulationMode: true` (graceful degradation)
+- **T1 시크릿 grep** — `_scanSecrets()` 가 SendMessage body 송신 직전 4 regex (password/secret/api_key/token) 매치 시 throw
+- **T2 actor 화이트리스트** — `_validateActor()` 가 `parallelGroup + participants + ['main', synthesizer]` 외 actor 시 silent drop + log warn (파이프라인 중단 방지)
+- **T3 main→sub 일방향 정책** — `_enforceMainSubDirectionality()` 가 `callerContext='sub-agent'` 시 throw. review-window 진입 최선두 배치
+- **session-start hook 경고 4 조건** — `agentTeams.enabled=true` + env flag missing 시 stderr 1줄 + ONBOARDING 링크. CC < 2.1 시 별도 경고. hard fail 방지 try/catch
+- **ONBOARDING.md "Agent Teams 활성화 (선택)"** 섹션 — anchor `#agent-teams-activation`. 5 단계 (CC 버전 / env / settings.json / vais.config / 검증) + Graceful Degradation 표
+- **decisions-log template enhance** — events 표 헤더에 `mode` + `messageHash` 컬럼 추가. 하위호환 주석 (v1.0 timeline 의 빈 컬럼 허용)
+- **신규 4 test 파일** — `tests/cc-version-detect-flag.test.js` (11 case) + `conversation-orchestrator-sendmessage.test.js` (13 case) + `session-start-hook-warning.test.js` (6 case) + `agent-teams-sendmessage-integration.test.js` (7 case). 9/9 AC cover
+
+### Changed
+
+- `skills/vais/utils/conversation-orchestrator.js` — ConversationSession constructor 가 `simulationMode` capture + `dryRun` 하위호환. `log()` 가 5·6번째 파라미터 (mode + messageHash) 기본값으로 4파라미터 기존 호출 호환
+- `lib/cc-version-detect.js` — `checkAgentTeamsAllowed()` 가 4 분기 (enabled=false / version 부족 / flag set / flag missing) 정확 반환
+
+### Fixed
+
+- **회귀 fix** — design 명세 `allowedActors` 가 `participants` 누락. `_validateActor` whitelist 에 `participants` 1줄 추가로 기존 FSM 테스트 2건 (`lazy-consensus-fsm.test.js`) 복구. 288/288 tests pass 회복
+
+### Documentation
+
+- `docs/agent-teams-sendmessage-real/` 11 산출물 (~1544 줄) — ideation/plan/design/do/qa/report 전체 phase. Research 발견 (Issue #47021) + T1~T3 mitigation + Gate C 권고 + 5 Lessons Learned + 1.0.0 narrative 의존 해소 박제
+
+### Migration Guide
+
+- **기본 동작**: 0.68.0 byte-level 동등 (`agentTeams.enabled: false` default). 업그레이드 즉시 사용 가능.
+- **Real 모드 활성**: `export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` + `vais.config.json > orchestration.agentTeams.enabled: true` + Claude Code 2.1+
+- **검증**: `/vais status` 출력 또는 session-start 경고 부재 확인
+- **Rollback**: `agentTeams.enabled: false` 1줄 토글 (즉시 회귀)
+
+### Known Issues
+
+- AC-CSO-5 Gate C (code-reviewer 독립 리뷰) — 본 release 외 위임 권고. 1.0.0 release 직전 수행
+- design 명세 `flag-detection-design.md` §2-B 의 whitelist 명세 보강 candidate (별도 PR)
+
+---
+
 ## [0.68.0] - 2026-05-16 — agent-teams-orchestration: v2 대화-합성 모델 도입
 
 Claude Code 2.x Agent Teams (SendMessage + background sessions + worktree) 를 vais-code 오케스트레이션에 도입. **v1 (병렬-생산 후 머지) 에서 v2 (대화-합성) 로 pivot** — 사용자 직관 질문 "에이전트끼리 얘기해서 하나의 문서로 작성하는건가?" 가 트리거. opt-in 비파괴 토글 (`agentTeams.enabled` default false) 로 0.67.0 byte-level 동등 동작 보장.

@@ -52,6 +52,84 @@
 
 ---
 
+## Agent Teams 활성화 (선택) {#agent-teams-activation}
+
+> 기본값: simulation 모드 (flag 없이도 모든 기능 사용 가능). 실제 CC SendMessage 도구를 사용하려면 아래 5 단계를 따르세요.
+
+### 전제 조건
+
+Claude Code 2.1+ 가 필요합니다.
+
+```bash
+claude --version
+# 예상 출력: 2.1.xxx (Claude Code)
+```
+
+### 활성화 5 단계
+
+**Step 1 — CC 버전 확인**
+
+```bash
+claude --version
+# 2.1.x 이상이어야 합니다
+```
+
+**Step 2 — env 변수 설정 (즉시 적용)**
+
+```bash
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+```
+
+**Step 3 — settings.json 영구화 (선택)**
+
+세션 간 유지하려면 `~/.claude/settings.json` 에 추가:
+
+```json
+{
+  "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+}
+```
+
+> 주의: vais-code 는 settings.json 을 자동으로 수정하지 않습니다. 직접 편집하세요.
+
+**Step 4 — vais.config 활성화**
+
+`vais.config.json` 내 `orchestration.agentTeams.enabled` 를 `true` 로 변경:
+
+```json
+{
+  "orchestration": {
+    "agentTeams": {
+      "enabled": true
+    }
+  }
+}
+```
+
+**Step 5 — 검증**
+
+새 Claude Code 세션을 시작한 뒤 확인:
+
+```bash
+/vais status
+# 출력 예시:
+# Agent Teams: enabled
+# SendMessage: real (CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=env)
+```
+
+경고 메시지가 없으면 real SendMessage 모드가 활성화된 것입니다.
+
+### Graceful Degradation
+
+| 조건 | 동작 |
+|------|------|
+| `agentTeams.enabled=false` | 조용 — 기존 sequential 모드 |
+| `enabled=true` + flag 미설정 | stderr 경고 1줄 + simulation fallback (0.68.0 byte-compat) |
+| `enabled=true` + CC < 2.1.0 | stderr 경고 1줄 + sequential fallback |
+| `enabled=true` + CC 2.1+ + flag 설정 | real SendMessage 활성 (조용) |
+
+---
+
 ## 3. Architecture (1분, Mermaid)
 
 ```mermaid
