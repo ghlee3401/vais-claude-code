@@ -105,27 +105,6 @@ function judgeCPO(feature) {
  * CTO 판정: Gap Analysis ≥ 90%
  * 표준 메트릭: matchRate, criticalIssueCount
  */
-// v0.57: main.md → _tmp/{slug}.md fallback 으로 메트릭 파싱
-function _parseCriticalWithFallback(feature, role) {
-  const mainPath = resolveDocPath('qa', feature, role);
-  const tryParse = (p) => {
-    if (!p || !fs.existsSync(p)) return null;
-    const content = fs.readFileSync(p, 'utf8');
-    const m = content.match(/Critical[:\s]*(\d+)/i);
-    return m ? { value: parseInt(m[1], 10), source: p } : null;
-  };
-  const primary = tryParse(mainPath);
-  if (primary) return { ...primary, fallbackUsed: false };
-  // Fallback: _tmp/qa-engineer.md
-  if (mainPath) {
-    const phaseDir = path.dirname(mainPath);
-    const fbPath = path.join(phaseDir, '_tmp', 'qa-engineer.md');
-    const fb = tryParse(fbPath);
-    if (fb) return { ...fb, fallbackUsed: true };
-  }
-  return null;
-}
-
 function judgeCTO(feature) {
   const details = { matchRate: 0, issues: [] };
   let criticalIssueCount = 0;
@@ -141,20 +120,18 @@ function judgeCTO(feature) {
     details.issues.push('Gap Analysis 결과 없음');
   }
 
-  // 2. QA 문서 존재 확인 + v0.57 _tmp/qa-engineer.md fallback
+  // 2. QA 문서 존재 확인 + Critical 카운트 파싱
   const qaPath = resolveDocPath('qa', feature, 'cto');
   if (!qaPath || !fs.existsSync(qaPath)) {
     details.issues.push('CTO QA 문서 미존재');
-  }
-
-  const parsed = _parseCriticalWithFallback(feature, 'cto');
-  if (parsed) {
-    criticalIssueCount = parsed.value;
-    if (parsed.fallbackUsed) {
-      details.issues.push(`Critical 카운트 fallback 사용 (${path.relative(process.cwd(), parsed.source)})`);
-    }
-    if (criticalIssueCount > 0) {
-      details.issues.push(`Critical 이슈 ${criticalIssueCount}건 잔존`);
+  } else {
+    const content = fs.readFileSync(qaPath, 'utf8');
+    const m = content.match(/Critical[:\s]*(\d+)/i);
+    if (m) {
+      criticalIssueCount = parseInt(m[1], 10);
+      if (criticalIssueCount > 0) {
+        details.issues.push(`Critical 이슈 ${criticalIssueCount}건 잔존`);
+      }
     }
   }
 

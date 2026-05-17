@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.65.3-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-1.0.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -7,8 +7,8 @@
 <h1 align="center">VAIS Code</h1>
 
 <p align="center">
-  <strong>Virtual AI C-Suite for Software Development</strong><br/>
-  6 C-Level Executives · 47 Specialized Sub-agents · 7-Dimension Routing Algorithm
+  <strong>Virtual AI C-Suite for Software Development — v1.0.0 GA</strong><br/>
+  organization-in-a-box · 6 C-Level Executives · 47 Specialized Sub-agents · 7-Dimension Routing Algorithm
 </p>
 
 <p align="center">
@@ -40,6 +40,8 @@ python3 --version  # 3.8 이상
 /reload-plugins
 /vais help
 ```
+
+> **(선택) Real SendMessage 활성화**: `export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` + Claude Code 2.1+ + `vais.config.json > agentTeams.enabled=true`. 미활성 시 simulation graceful degradation 자동 fallback (작업 안 멈춤). 자세한 설명은 [ONBOARDING.md#agent-teams-activation](./ONBOARDING.md#agent-teams-activation)
 
 **3가지 사용법:**
 

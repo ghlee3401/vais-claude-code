@@ -28,6 +28,11 @@ EXCEPTIONS=(
   "CLAUDE.md"
   ".hooks/pre-commit"
   "scripts/check-legacy-paths.sh"
+  "docs/*/03-do/decisions-log.md"
+  "docs/*/04-qa/decisions-log.md"
+  "docs/*/05-report/decisions-log.md"
+  "docs/*/01-plan/decisions-log.md"
+  "docs/*/02-design/decisions-log.md"
 )
 
 # ── Mode parsing ────────────────────────────────────────────────────
@@ -60,9 +65,15 @@ is_excepted() {
 
 # ── File list ───────────────────────────────────────────────────────
 if [ "$MODE" = "staged" ]; then
-  mapfile -t FILES < <(git diff --cached --name-only --diff-filter=ACM 2>/dev/null || true)
+  FILES=()
+  while IFS= read -r line; do
+    FILES+=("$line")
+  done < <(git diff --cached --name-only --diff-filter=ACM 2>/dev/null || true)
 else
-  mapfile -t FILES < <(git ls-files 2>/dev/null || true)
+  FILES=()
+  while IFS= read -r line; do
+    FILES+=("$line")
+  done < <(git ls-files 2>/dev/null || true)
 fi
 
 # ── Scan ────────────────────────────────────────────────────────────

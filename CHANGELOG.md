@@ -1,5 +1,111 @@
 # Changelog
 
+## [1.0.0] - 2026-05-17 — organization-in-a-box GA
+
+vais-code 공식 1.0.0 GA. v0.x 실험 단계 졸업 → **organization-in-a-box** (PO 1명이
+부서장 OJT 매뉴얼로 가상 C-Suite 조직을 운영하는 도구) 정식 포지셔닝.
+agent-teams v2 대화-합성 모델 안정화 opt-in GA. CC SendMessage real 통합 (v0.69.0).
+status.json v4 스키마 확정. v0.5x 이후 누적 변경 정리.
+
+### Added
+
+- **organization-in-a-box GA narrative** — CLAUDE.md / ONBOARDING.md / marketplace
+  description 일관화. PO 1명 + 부서장 OJT 4요소(framework/실무단계/의사결정패턴/산출물양식) 정식 포지셔닝
+- **agent-teams v2 대화-합성 모델** — `conversation-orchestrator.js` + Lazy Consensus
+  5-state FSM (draft / review-window / objection-raised / revision / consensus-reached /
+  timeout). opt-in `agentTeams.enabled` (default false, 0.68.0)
+- **CC SendMessage real 통합** — `simulationMode=false` 시 real SendMessage 호출.
+  `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` 환경 변수 + CC 2.1+ 감지 (0.69.0)
+- **synthesizer 라우팅** — `lib/ceo-algorithm.js` SYNTHESIZER_MATRIX + selectSynthesizer /
+  selectParticipants / computeParallelGroup / detectDominantDomain (0.68.0)
+- **합성문 + decisions-log 템플릿** — `templates/synthesis.template.md` (9섹션) +
+  `templates/decisions-log.template.md`. mode + messageHash 컬럼 (0.69.0 enhance)
+- **Sub-agent worktree 병렬 (패턴 D)** — `lib/worktree-manager.js` +
+  `skills/vais/utils/subagent-dispatcher.js` (0.68.0)
+- **status.json v4 마이그레이션 스크립트** — `scripts/migrate-status-v3-to-v4.js`
+  (idempotent + .v3.bak 자동 백업 + atomic write, 0.68.0)
+- **design-system MCP + mui catalog** — `mcp/design-system-server-runner.js` +
+  `design-system/mui/` 토큰·컴포넌트 박제 (v0.61~0.62)
+- **Knowledge Pack Tier-1A** — CEO Rumelt / CPO PRD OJT / CTO Architecture Decision
+  (v0.66). `agents/{c-level}/knowledge/` lazy-load 패턴
+- **ONBOARDING `#agent-teams-activation` 섹션 강화** — README 에서 직접 link 노출.
+  Real SendMessage 활성 (env flag) + settings.json 경로 5 단계 안내. 강제 X, 안내 O
+
+### Changed
+
+- **organization-in-a-box 정체성** — v0.x "AI C-Suite 시뮬레이션" → 1.0.0
+  "PO 1명이 부서장 OJT 매뉴얼로 가상 C-Suite 조직을 운영하는 도구" (v0.66+ 누적 확정)
+- **CEO 진입 절차 v0.65.3** — `analyzeCEO()` 7차원 등급 표 출력 → activeCLevel 인용
+  → AskUserQuestion. LLM 자체 라우팅 금지 (lib/ceo-algorithm.js 박제)
+- **sub-agent 직접 박제 (v0.65+)** — `_tmp/` 폐기, 큐레이션 섹션 폐기
+  → `docs/{feature}/{NN-phase}/{artifact}.md` 직접 Write (subdoc-guard v2.2)
+- **frontmatter v2.1 슬림화** — 4 필수 필드 (owner/artifact/phase/feature). agent /
+  generated / source / summary 는 optional auto-hydrate
+- **clevel-main-guard v3.0** — v1 (5섹션 인덱스) + v2 (합성문 9섹션) 2모델 공존.
+  `model-version` frontmatter 필드로 분기 (0.68.0)
+- **CBO 통합 공식화** — CMO + CFO → CBO (v0.50 착수, v0.62 완료, 1.0.0 공식 기록)
+- **README.md narrative 1.0.0 GA 갱신** — badge `version-0.65.3` → `version-1.0.0`,
+  highlights/quickstart 표현을 1.0.0 GA + organization-in-a-box 기준으로 정렬
+- **package-lock.json version sync** — root + dep 모두 stale 0.61.1 → 1.0.0 동기화
+
+### Deprecated
+
+*(1.0.0 기준 신규 deprecate 항목 없음. 이전 버전 deprecated 항목은 Removed 참조.)*
+
+### Removed
+
+- **CMO / CFO alias** — v0.62 에 제거 완료. 1.0.0 에서 공식 제거 기록
+- **`_tmp/` 임시 폴더 모델** — v0.65 에 폐기 완료 (subdoc-guard v2.1 → v2.2)
+- **legacy guides `docs/_legacy/v1/`** — v0.65+ 정리 완료. git history 보존
+- **큐레이션 기록 섹션** (`✅ 채택 / ❌ 거절 / ✓ 병합`) — subdoc-guard 폐기 항목
+- **`_tmp` / scratchpad / topic runtime fallback** — `lib/status.js > registerSubDoc`
+  + `scripts/doc-validator.js` + `scripts/auto-judge.js` 의 legacy compatibility 제거.
+  v0.65 sub-agent 직접 박제 전환 후 외부 호출자 0 확인 (안전 제거).
+  Migration-only fixture 로 historical tests 격리
+- **CMO / CFO 사용자 노출 표기** — CLAUDE.md / README.md / templates/design.template.md /
+  agents/cbo/* 의 잔존 표기 제거. CBO 통합 완료 모델과 정합 (v0.50~v0.62 처리 + 1.0.0 표면 정리)
+
+### Fixed
+
+- **cross-model P0 alignment** — v0.66.1 hotfix (커밋 `6a4e7c4`). mandatory 규칙 cross-model 정합
+- **design-system MCP 12 minor 부채** — v0.61. Python 3.10→3.8 minimum, Hard fail 정책,
+  observation-D1 패턴
+- **workflow-contract v2.2 7단계 정렬** — v0.67.0. phase/owner/activation/artifact/path/
+  validator 계약 + mandatoryPhases backward-compat (cross-review 권고 2항 해소)
+- **conversation-orchestrator allowedActors 누락** — v0.69.0 회귀 fix.
+  `_validateActor` whitelist 에 `participants` 1줄 추가 (288/288 tests pass 회복)
+- **`scripts/check-legacy-paths.sh` macOS bash 3.x 호환** — `mapfile` 미지원으로 release
+  pre-commit 차단되던 issue. `while IFS= read -r` 패턴으로 교체 (line 63 / 65)
+
+### Security
+
+- **T1 SendMessage body 시크릿 grep** — `_scanSecrets()` 4 regex (password/secret/
+  api_key/token) 매치 시 throw. 송신 직전 검사 (v0.69.0)
+- **T2 actor 화이트리스트** — `_validateActor()` parallelGroup + participants 외 actor
+  silent drop + log warn (v0.69.0)
+- **T3 main→sub 일방향 정책** — `_enforceMainSubDirectionality()` sub-agent caller 시
+  throw (v0.69.0)
+- **T4 agentTeams.enabled=true 모르게 활성화 방지** — validate-plugin warning
+  (validateAgentTeamsConfig, v0.68.0)
+- **T6 Sub-agent merge race** — worktree-manager mergeBack AskUserQuestion + lint/test
+  게이트 (v0.68.0)
+- **T7 Stale worktree** — listStale + `/vais teams cleanup` 사용자 명시 호출만 (v0.68.0)
+- **T8 Sub→Sub SendMessage 금지** — work-rules.md v2.3 line 80 박제 (v0.68.0)
+
+### Migration Guide
+
+- **기본 동작**: 0.69.0 byte-level 동등 (`agentTeams.enabled: false` default).
+  업그레이드 즉시 사용 가능. 코드 변경 불필요.
+- **status.json v3 → v4**: `node scripts/migrate-status-v3-to-v4.js`
+  (idempotent, .v3.bak 자동 생성. v3 사용자만 필요)
+- **v2 대화-합성 활성**: `vais.config.json > orchestration.agentTeams.enabled: true`
+  + Claude Code 2.1+ + `export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
+- **기존 main.md**: frontmatter `model-version: v1` 1줄 추가 권장 (선택, 본문 변환 X)
+- **design-system MCP**: Python 3.8+ 필요. opt-out: `vais.config.json >
+  orchestration.mcp.enabled: false`
+
+---
+
 ## [0.69.0] - 2026-05-17 — agent-teams-sendmessage-real: CC SendMessage 실 통합 (Real Mode)
 
 Claude Code 내장 SendMessage 도구를 vais-code Lazy Consensus orchestrator 에 통합. v0.68 의 시뮬레이션-only 모델 → **조건부 real 대화 모드** 도입. `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` 환경 변수 또는 `~/.claude/settings.json` 동명 키 활성 시 진짜 SendMessage 사용. 미활성 시 0.68.0 byte-level 동등 simulation graceful degradation.

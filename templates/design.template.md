@@ -244,7 +244,7 @@ flowchart TD
 ---
 
 > ⛔ **다음 Part 4/5는 CTO 전용입니다.**
-> CTO 외 C-Level(CPO/CSO/CMO/COO/CFO)이 design.template를 사용할 때는 Part 4/5 두 섹션을 통째로 생략하거나 각 섹션을 `(N/A — CTO 전용)` 한 줄로 대체하세요.
+> CTO 외 C-Level(CPO/CSO/CBO/COO)이 design.template를 사용할 때는 Part 4/5 두 섹션을 통째로 생략하거나 각 섹션을 `(N/A — CTO 전용)` 한 줄로 대체하세요.
 
 ## Part 4: Tech Stack Lock (CTO 전용)
 

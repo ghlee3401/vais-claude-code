@@ -3,29 +3,20 @@ process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] d
 process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] doc-validator rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(0); });
 /**
  * VAIS Code - Document Validator
- * C-Level 에이전트 종료 시 필수 문서 존재 여부 + legacy sub-doc compatibility 검증.
+ * C-Level 에이전트 종료 시 필수 문서 존재 여부 검증.
  *
  * 사용: node scripts/doc-validator.js <role> <feature>
- * 반환: JSON { passed, missing, warnings, subDocWarnings }
+ * 반환: JSON { passed, missing, warnings, coexistenceWarnings, scopeWarnings, frontmatterWarnings }
  *   - passed: boolean (필수 main.md 모두 존재)
  *   - missing: [{ phase, path }]
  *   - warnings: [string] (일반 경고)
- *   - subDocWarnings: [{ code, path, message }] (legacy sub-doc 경고, enforcement=warn 시 exit에 영향 없음)
- *
- * legacy sub-doc compatibility 경고 코드:
- *   W-SCP-01: _tmp/{slug}.md Author 헤더 누락
- *   W-SCP-02: _tmp/{slug}.md Phase 헤더 누락
- *   W-SCP-03: _tmp/{slug}.md 크기 < scratchpadMinBytes
- *   W-TPC-01: {topic}.md "## 큐레이션 기록" 섹션 누락
- *   W-IDX-01: main.md 에 topic 문서 링크 누락
- *   W-MAIN-01: main.md 누락 (기존 missing 과 동일, 코드 부여)
  *
  * C-Level phase-index coexistence 경고 코드:
- *   W-OWN-01: topic.md frontmatter 에 owner 누락
- *   W-OWN-02: topic.md frontmatter owner 값이 C-Level enum 외
+ *   W-OWN-01: artifact.md frontmatter 에 owner 누락
+ *   W-OWN-02: artifact.md frontmatter owner 값이 C-Level enum 외
  *   W-MRG-02: main.md Decision Record 표에 Owner 컬럼 누락
  *   W-MRG-03: artifact ≥ 2 이지만 main.md 가 5섹션 index 도 legacy owner-H2 모델도 아님
- *   W-MAIN-SIZE: main.md 라인 수 > mainMdMaxLines AND artifact 0 AND legacy _tmp/ 0
+ *   W-MAIN-SIZE: main.md 라인 수 > mainMdMaxLines AND artifact 0
  *
  * v0.58.3 경고 코드 (plan-scope-contract):
  *   W-SCOPE-01: plan/main.md 에 "## 요청 원문" 섹션 누락 (CLAUDE.md Rule #9)
@@ -36,6 +27,10 @@ process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] 
  *   W-FRONT-01 누락 필드 집합이 vais.config.json > workflow.frontmatterMinimal.required 기반으로 축소.
  *   기본값 ['owner','artifact','phase','feature']. owner 누락은 W-OWN-01 으로 통합.
  *   agent / generated / summary 는 autoHydrate 대상 — 누락 시 검사 스킵.
+ *
+ * v1.0.0: legacy _tmp/scratchpad/topic compatibility 제거 (결정 #8).
+ *   W-SCP-01/02/03, W-TPC-01, W-IDX-01 경고 코드 폐기.
+ *   validateSubDocs() 제거. 1.0.0+ 는 sub-agent 직접 박제 모델만 지원.
  */
 const fs = require('fs');
 const path = require('path');
@@ -143,111 +138,6 @@ function validateDocs(role, feature) {
 }
 
 /**
- * v0.57 sub-doc 검증 — scratchpad (_tmp/) 및 topic 문서 품질 경고 생성.
- * enforcement=warn 기본이라 exit 에 영향 주지 않음. retry/fail 은 호출자가 해석.
- *
- * @param {string} feature
- * @param {Object} [options] - { phases?: string[] — 미지정 시 config phaseFolders 전체 }
- * @returns {Array<{ code, path, message }>}
- */
-function validateSubDocs(feature, options = {}) {
-  const out = [];
-  if (!feature) return out;
-
-  const cfg = loadConfig();
-  const policy = cfg.workflow?.subDocPolicy ?? {};
-  const minBytes = typeof policy.scratchpadMinBytes === 'number' ? policy.scratchpadMinBytes : 500;
-  const requireCuration = policy.requireCurationRecord !== false;
-
-  const phases = options.phases ?? Object.values(PHASE_FOLDERS);
-  const docsRoot = path.join(process.cwd(), 'docs', feature);
-  if (!fs.existsSync(docsRoot)) return out;
-
-  for (const phaseFolder of phases) {
-    const phaseDir = path.join(docsRoot, phaseFolder);
-    if (!fs.existsSync(phaseDir)) continue;
-
-    // 1. _tmp/ scratchpad 검증
-    const tmpDir = path.join(phaseDir, '_tmp');
-    if (fs.existsSync(tmpDir)) {
-      let tmpFiles;
-      try { tmpFiles = fs.readdirSync(tmpDir); }
-      catch (_) { tmpFiles = []; }
-
-      for (const f of tmpFiles) {
-        if (!f.endsWith('.md')) continue;
-        const p = path.join(tmpDir, f);
-        let content, size;
-        try {
-          content = fs.readFileSync(p, 'utf8');
-          size = fs.statSync(p).size;
-        } catch (_) { continue; }
-
-        if (!/^>\s*Author:/m.test(content)) {
-          out.push({ code: 'W-SCP-01', path: p, message: 'Author 헤더 누락' });
-        }
-        if (!/^>\s*Phase:/m.test(content)) {
-          out.push({ code: 'W-SCP-02', path: p, message: 'Phase 헤더 누락' });
-        }
-        if (size < minBytes) {
-          out.push({ code: 'W-SCP-03', path: p, message: `크기 ${size}B < ${minBytes}B (빈 스캐폴드 의심)` });
-        }
-      }
-    }
-
-    // 2. topic 문서 "## 큐레이션 기록" 섹션 검증
-    if (requireCuration) {
-      let files;
-      try { files = fs.readdirSync(phaseDir); }
-      catch (_) { files = []; }
-
-      for (const f of files) {
-        if (!f.endsWith('.md')) continue;
-        if (SYSTEM_ARTIFACT_NAMES.has(f)) continue;
-        // _tmp 는 디렉토리라 readdirSync 결과에 포함될 수도 있으나 .md 확장자 체크로 1차 걸러짐
-        const p = path.join(phaseDir, f);
-        let stat;
-        try { stat = fs.statSync(p); } catch (_) { continue; }
-        if (!stat.isFile()) continue;
-
-        let content;
-        try { content = fs.readFileSync(p, 'utf8'); } catch (_) { continue; }
-        // v0.58 TD-4: "## N. 큐레이션 기록" 같은 번호 접두도 허용
-        if (!/^##\s+(?:[\d.]+\s+)?큐레이션\s*기록/m.test(content)) {
-          out.push({ code: 'W-TPC-01', path: p, message: '"## 큐레이션 기록" 섹션 누락' });
-        }
-      }
-    }
-
-    // 3. main.md 에 topic 문서 링크 존재 여부
-    const mainPath = path.join(phaseDir, 'main.md');
-    if (fs.existsSync(mainPath)) {
-      let mainContent;
-      try { mainContent = fs.readFileSync(mainPath, 'utf8'); }
-      catch (_) { mainContent = ''; }
-
-      let files;
-      try { files = fs.readdirSync(phaseDir); }
-      catch (_) { files = []; }
-
-      for (const f of files) {
-        if (!f.endsWith('.md')) continue;
-        if (SYSTEM_ARTIFACT_NAMES.has(f)) continue;
-        const p = path.join(phaseDir, f);
-        try {
-          if (!fs.statSync(p).isFile()) continue;
-        } catch (_) { continue; }
-        if (!mainContent.includes(f)) {
-          out.push({ code: 'W-IDX-01', path: mainPath, message: `${f} 링크 누락 (Topic Documents 섹션에 추가 권장)` });
-        }
-      }
-    }
-  }
-
-  return out;
-}
-
-/**
  * C-Level coexistence 검증 — artifact frontmatter owner + main.md 5섹션 index/legacy 멀티-오너 구조 + size budget.
  * enforcement=warn 기본이라 exit 에 영향 주지 않음.
  *
@@ -344,11 +234,9 @@ function validateCoexistence(feature, options = {}) {
       out.push({ code: 'W-MRG-03', path: mainPath, message: `multiple artifacts present (${topicFiles.length}) but main.md is neither 5-section phase index nor legacy owner-H2 model` });
     }
 
-    // 2c. Size budget (W-MAIN-SIZE, F14) — main.md 가 threshold 초과 AND topic 0 AND _tmp/ 0
-    const tmpDir = path.join(phaseDir, '_tmp');
-    const hasTmp = fs.existsSync(tmpDir) && fs.readdirSync(tmpDir).some(f => f.endsWith('.md'));
+    // 2c. Size budget (W-MAIN-SIZE, F14) — main.md 가 threshold 초과 AND artifact 0
     const lines = mainContent.split(/\n/).length;
-    if (lines > maxLines && topicFiles.length === 0 && !hasTmp) {
+    if (lines > maxLines && topicFiles.length === 0) {
       out.push({
         code: 'W-MAIN-SIZE',
         path: mainPath,
@@ -552,19 +440,6 @@ function formatResult(role, feature, result) {
 }
 
 /**
- * v0.57 sub-doc 경고를 사람이 읽을 수 있는 형식으로 출력
- */
-function formatSubDocWarnings(warnings) {
-  if (!Array.isArray(warnings) || warnings.length === 0) return '';
-  const lines = [`ℹ️  [sub-doc v0.57] ${warnings.length}건 경고:`];
-  for (const w of warnings) {
-    const rel = path.relative(process.cwd(), w.path);
-    lines.push(`   ⚠️  [${w.code}] ${rel}: ${w.message}`);
-  }
-  return lines.join('\n');
-}
-
-/**
  * v0.58 coexistence 경고를 사람이 읽을 수 있는 형식으로 출력
  */
 function formatCoexistenceWarnings(warnings) {
@@ -600,23 +475,19 @@ if (require.main === module) {
   }
 
   const result = validateDocs(role, feature);
-  const subDocWarnings = feature ? validateSubDocs(feature) : [];
   const coexistenceWarnings = feature ? validateCoexistence(feature) : [];
   const scopeWarnings = feature ? validateScopeContract(feature) : [];
-  const frontmatterWarnings = feature ? validateArtifactFrontmatter(feature) : []; // v2.0
-  result.subDocWarnings = subDocWarnings;
+  const frontmatterWarnings = feature ? validateArtifactFrontmatter(feature) : [];
   result.coexistenceWarnings = coexistenceWarnings;
   result.scopeWarnings = scopeWarnings;
   result.frontmatterWarnings = frontmatterWarnings;
 
   const output = formatResult(role, feature, result);
-  const subDocOutput = formatSubDocWarnings(subDocWarnings);
   const coexistenceOutput = formatCoexistenceWarnings(coexistenceWarnings);
   const scopeOutput = formatScopeContractWarnings(scopeWarnings);
-  const frontmatterOutput = formatFrontmatterWarnings(frontmatterWarnings); // v2.0
+  const frontmatterOutput = formatFrontmatterWarnings(frontmatterWarnings);
 
   if (output) process.stderr.write(output + '\n');
-  if (subDocOutput) process.stderr.write(subDocOutput + '\n');
   if (coexistenceOutput) process.stderr.write(coexistenceOutput + '\n');
   if (scopeOutput) process.stderr.write(scopeOutput + '\n');
   if (frontmatterOutput) process.stderr.write(frontmatterOutput + '\n');
@@ -625,17 +496,15 @@ if (require.main === module) {
 
   // enforcement 정책
   const cfg = loadConfig();
-  const subDocEnforcement = cfg.workflow?.subDocPolicy?.enforcement ?? 'warn';
   const coexEnforcement = cfg.workflow?.cLevelCoexistencePolicy?.enforcement ?? 'warn';
   const scopeEnforcement = cfg.workflow?.scopeContractPolicy?.enforcement ?? 'warn';
   // v0.58.4: mainMdMaxLinesAction 은 coexistence enforcement 와 독립적으로 W-MAIN-SIZE 만 차단
   const mainSizeAction = cfg.workflow?.cLevelCoexistencePolicy?.mainMdMaxLinesAction ?? 'warn';
   if (!result.passed) process.exit(1);
-  if (subDocEnforcement === 'fail' && subDocWarnings.length > 0) process.exit(1);
   if (coexEnforcement === 'fail' && coexistenceWarnings.length > 0) process.exit(1);
   if (scopeEnforcement === 'fail' && scopeWarnings.length > 0) process.exit(1);
   if (mainSizeAction === 'refuse' && coexistenceWarnings.some(w => w.code === 'W-MAIN-SIZE')) process.exit(1);
   process.exit(0);
 }
 
-module.exports = { validateDocs, validateSubDocs, validateCoexistence, validateScopeContract, validateArtifactFrontmatter, formatResult, formatSubDocWarnings, formatCoexistenceWarnings, formatScopeContractWarnings, formatFrontmatterWarnings, C_LEVEL_ROLES, C_LEVEL_OWNERS, PHASE_FOLDERS };
+module.exports = { validateDocs, validateCoexistence, validateScopeContract, validateArtifactFrontmatter, formatResult, formatCoexistenceWarnings, formatScopeContractWarnings, formatFrontmatterWarnings, C_LEVEL_ROLES, C_LEVEL_OWNERS, PHASE_FOLDERS };

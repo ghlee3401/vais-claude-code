@@ -20,7 +20,7 @@
 | **Knowledge lazy-load** (v0.65) | `agents/{c-level}/knowledge/` 19 MD — phase + artifact 매칭 시만 Read. 메인 .md 의 "Knowledge Index" 표가 trigger |
 | **CEO 진입 절차 강제** (v0.65.3) | CEO 가 4 단계 순차 — `analyzeCEO()` Bash 호출 → 7 차원 등급 표 출력 → activeCLevel 인용 → AskUserQuestion. LLM 자체 라우팅 금지 |
 
-현재 버전: **v0.68.0** (0.66.0 organization-in-a-box → 0.66.1 cross-model P0 hotfix → 0.67.0 workflow contract alignment → 0.68.0 Agent Teams 대화-합성 모델 도입: Conversation Orchestrator + Lazy Consensus 5-state FSM + 합성문/decisions-log 템플릿 + 패턴 D sub-agent worktree + status.json v4 + clevel-doc-coexistence v3 — opt-in default false 로 0.67.0 byte-level 동등).
+현재 버전: **v1.0.0 GA** (0.66.0 organization-in-a-box → 0.66.1 cross-model P0 hotfix → 0.67.0 workflow contract alignment → 0.68.0 Agent Teams 대화-합성 모델 도입 (opt-in) → **1.0.0 GA**: organization-in-a-box 정체성 정식 GA + status.json v4 + git tag v1.0.0).
 
 ---
 
@@ -54,6 +54,8 @@
 
 ## Agent Teams 활성화 (선택) {#agent-teams-activation}
 
+> **1.0.0 GA 기본값: `agentTeams.enabled=false` (강제 X, 안내 O)** — 미활성 시에도 모든 기능이 simulation graceful degradation으로 정상 동작합니다. 실제 CC SendMessage 도구를 사용하려면 아래 5 단계를 따르세요.
+>
 > 기본값: simulation 모드 (flag 없이도 모든 기능 사용 가능). 실제 CC SendMessage 도구를 사용하려면 아래 5 단계를 따르세요.
 
 ### 전제 조건
@@ -218,3 +220,4 @@ flowchart TB
 | v1.0 | 2026-05-02 | 초기 작성 (5섹션 / Mermaid 그래프 / 진입점 표 / 워크플로우 예시) — `legacy-prune-and-agent-onboarding` 피처 산출물 |
 | v2.0 | 2026-05-02 | 0.64.0+ 모델 반영 — 4 Primary + 2 Secondary, CEO 7 차원 알고리즘, sub-agent 직접 박제, main.md 인덱스, AskUserQuestion 클릭 인터페이스. v0.62.0 → v0.63.0. |
 | v3.0 | 2026-05-07 | v0.65 시리즈 반영 — frontmatter 8→4 필수 (auto-hydrate), lean checkpoint, knowledge lazy-load 19 MD, auto-select-template 4-tier, CEO 진입 절차 박제 (v0.65.3). v0.63.0 → v0.65.3. agents 카운트 37 → 47 sub-agents. |
+| v4.0 | 2026-05-17 | v1.0.0 GA 반영 — organization-in-a-box 정체성 정식 GA. 버전 표기 v0.68.0 → v1.0.0 GA. |
