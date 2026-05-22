@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * VAIS Code - Advisor CLI 진입점 (v0.56 sub-plan 06 chunk 3)
+ * VAIS Code - Advisor CLI 진입점
  *
  * agent markdown에서 Bash 도구로 호출:
  *   node scripts/advisor-call.js \

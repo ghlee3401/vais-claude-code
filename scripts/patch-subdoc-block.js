@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * v0.57.0 Sub-doc Preservation — sub-agent 본문에 subdoc-guard 블록 일괄 삽입.
+ * Sub-doc Preservation — sub-agent 본문에 subdoc-guard 블록 일괄 삽입.
  *
  * 배경: Claude Code sub-agent 런타임이 frontmatter `includes:` 를 처리하지 않아
  *       `_shared/subdoc-guard.md` 의 규칙이 agent context 에 로드되지 않음.
  *       (v057 Batch A smoke test 로 확인 — 2026-04-19)
  *
- * v0.58 TD-5: 공통 로직을 `lib/patch-block.js` 로 추출. 본 스크립트는 thin wrapper.
+ * 공통 로직을 `lib/patch-block.js` 로 추출. 본 스크립트는 thin wrapper.
  *
  * Usage:
  *   node scripts/patch-subdoc-block.js                # 실제 적용

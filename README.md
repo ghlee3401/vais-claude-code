@@ -24,7 +24,7 @@
 | 의존성 | 버전 | 용도 |
 |--------|------|------|
 | Node.js | ≥ 18 | plugin runtime |
-| Python3 | ≥ 3.8 | `vendor/ui-ux-pro-max` 디자인 시스템 검색 — design phase MCP 자동 호출 (v0.61.0+ 기본 ON) |
+| Python3 | ≥ 3.8 | `vendor/ui-ux-pro-max` 디자인 시스템 검색 — design phase MCP 자동 호출 (기본 ON) |
 
 > ⚠️ **Python3 미설치 시** design phase 진입이 차단됩니다 (Hard fail). opt-out 원할 시 `vais.config.json > orchestration.mcp.enabled: false` 설정.
 
@@ -87,13 +87,13 @@ python3 --version  # 3.8 이상
 | **⑥** | **COO** (명시 호출) | CI/CD + 배포 전략 + 모니터링 + Runbook | Secondary — `/vais coo` 로 명시 호출만 |
 | **Final** | **CEO** | 전체 산출물 종합 리뷰 → 리포트 | — |
 
-**v0.65 핵심 변경**:
+**핵심 동작**:
 - **4 Primary 자동 라우팅 (CEO/CPO/CTO/CSO)** — CEO 알고리즘이 자동 결정
 - **2 Secondary 명시 호출 (CBO/COO)** — `/vais cbo|coo` 명시 시만 활성. 비즈니스/운영 영역은 옵션
 - **CTO 만 mandatory PDCA**, 비-CTO 는 CEO 알고리즘 결정으로 phase 활성화
 - **lean checkpoint (기본)**: CP-0/CP-Q 만 발동, 나머지는 자동 진행 + outro 한 줄. PO 클릭 ≤ 2회/피처
-- CEO 진입 시 algorithm 결과 (7 차원 등급 표) 를 응답에 직접 인용 — LLM 자체 라우팅 금지 (v0.65.3)
-- CSO ↔ CTO 보안 검토 루프 최대 2회 (`pipeline.reviewLoops.cso-cto.maxIterations`, v0.65 에서 3→2)
+- CEO 진입 시 algorithm 결과 (7 차원 등급 표) 를 응답에 직접 인용 — LLM 자체 라우팅 금지
+- CSO ↔ CTO 보안 검토 루프 최대 2회 (`pipeline.reviewLoops.cso-cto.maxIterations`)
 
 ---
 
@@ -194,7 +194,7 @@ python3 --version  # 3.8 이상
 </details>
 
 <details>
-<summary><strong>COO</strong> — 8 agents (v0.59 release-engineer 5 분해)</summary>
+<summary><strong>COO</strong> — 8 agents</summary>
 
 | Agent | Role |
 |-------|------|
@@ -213,7 +213,7 @@ python3 --version  # 3.8 이상
 
 ## Routing — 7 Dimension Algorithm
 
-v0.65 부터 고정 시나리오 표는 폐기되었고, CEO 가 `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` 로 7 차원 등급을 산출해 **활성 C-Level 을 동적 결정** 합니다. PO 가 자연어로 의도만 던지면 CEO 가 객관 알고리즘으로 매핑합니다.
+고정 시나리오 표 대신, CEO 가 `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` 로 7 차원 등급을 산출해 **활성 C-Level 을 동적 결정** 합니다. PO 가 자연어로 의도만 던지면 CEO 가 객관 알고리즘으로 매핑합니다.
 
 **7 차원** (`DIMENSIONS` 배열):
 
@@ -238,7 +238,7 @@ buildArtifactPlan()  → phase × artifact 매트릭스 (각 artifact 의 trigge
   ↓
 extractActiveCLevel() → ['ceo', 'cpo', 'cto', ...]   (Primary 만 자동 추천)
   ↓
-CEO 응답에 7 차원 등급 표 직접 출력 + AskUserQuestion 으로 사용자 승인 (v0.65.3)
+CEO 응답에 7 차원 등급 표 직접 출력 + AskUserQuestion 으로 사용자 승인
 ```
 
 **예시 매핑** (`PHASE_ARTIFACT_MAPPING` 발췌):
@@ -262,7 +262,7 @@ CEO 응답에 7 차원 등급 표 직접 출력 + AskUserQuestion 으로 사용�
 
 ## Workflow
 
-**v0.65: CTO 만 mandatory PDCA**, 비-CTO 는 CEO 7 차원 알고리즘 결정으로 phase 활성화.
+**CTO 만 mandatory PDCA**, 비-CTO 는 CEO 7 차원 알고리즘 결정으로 phase 활성화.
 
 | Phase | CTO mandatory? | 비-CTO 활성화 조건 | Description |
 |-------|:--------------:|--------------------|-------------|
@@ -270,10 +270,10 @@ CEO 응답에 7 차원 등급 표 직접 출력 + AskUserQuestion 으로 사용�
 | **Plan** | ✓ | CEO 알고리즘이 owner C-Level 추천 시 | 요구사항 정의, 범위 설정, 타임라인 |
 | **Design** | ✓ | CTO 가 cpo prereq 호출 시 | 아키텍처, 데이터 모델, API 계약, UI 흐름 |
 | **Do** | ✓ | CTO 가 sub-agent 병렬 위임 | 구현 (frontend + backend + test 병렬) |
-| **QA** | ✓ | CTO qa-engineer 위임 | Gap 분석. matchRate ≥ 90% (`gapAnalysis.maxIterations` v0.65 = 2, autoIterate `escalate-on-fail`) |
+| **QA** | ✓ | CTO qa-engineer 위임 | Gap 분석. matchRate ≥ 90% (`gapAnalysis.maxIterations` = 2, autoIterate `escalate-on-fail`) |
 | **Report** | Optional | 사용자 명시 호출 시 | 최종 리포트, 회고, KPI |
 
-**Lean checkpoint** (기본, v0.65): CP-0 (PRD missing) + CP-Q (Critical or matchRate<90) 만 발동. CP-1/CP-D/CP-G/CP-2 는 자동 진행 + outro 한 줄. PO 클릭 ≤ 2회/피처 추정.
+**Lean checkpoint** (기본): CP-0 (PRD missing) + CP-Q (Critical or matchRate<90) 만 발동. CP-1/CP-D/CP-G/CP-2 는 자동 진행 + outro 한 줄. PO 클릭 ≤ 2회/피처 추정.
 
 `vais.config.json > workflow.checkpointPolicy.mode = "lean"` (기본). `standard` / `strict` 토글 가능.
 
@@ -337,25 +337,25 @@ Sub-agent 종료 시 자동 실행되는 검증 파이프라인:
 
 ---
 
-## Document Structure (v0.65 — sub-agent 직접 박제)
+## Document Structure (sub-agent 직접 박제)
 
 ```
 docs/
-└── {feature}/                    # 피처 중심 구조 (v0.52+)
+└── {feature}/                    # 피처 중심 구조
     └── {NN-phase}/               # 00-ideation / 01-plan / 02-design / 03-do / 04-qa / 05-report
         ├── main.md               # C-Level 5섹션 인덱스 (Executive Summary / Decision Record /
         │                         #   Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X.
         │                         # 여러 C-Level 이 기여 시 ## [CEO] / ## [CTO] H2 append-only,
         │                         # 다른 C-Level 섹션·Decision Record 행 수정 금지
-        ├── {artifact}.md         # sub-agent 직접 박제 (frontmatter 4 필수 — v0.65)
+        ├── {artifact}.md         # sub-agent 직접 박제 (frontmatter 4 필수)
         │                         # 예: prd.md / persona.md / threat-model.md / architecture.md
         │                         # 1 sub-agent → N artifact = N MD (큐레이션 X)
         └── interface-contract.md # (02-design 만, 시스템 산출물)
 ```
 
-**v0.65 핵심 변경**:
+**핵심 원칙**:
 
-1. **sub-agent 직접 박제** — sub-agent 가 `_tmp/` 폐기 (v0.65.2 정리), `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 와 함께 직접 작성. C-Level 은 main.md 의 Artifacts 표에 frontmatter `summary` 만 인덱싱.
+1. **sub-agent 직접 박제** — sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 와 함께 직접 작성 (`_tmp/` 폐기). C-Level 은 main.md 의 Artifacts 표에 frontmatter `summary` 만 인덱싱.
 2. **frontmatter 4 필수** (`vais.config.json > workflow.frontmatterMinimal`):
    ```yaml
    ---
@@ -366,18 +366,16 @@ docs/
    # 선택 (auto-hydrate): agent / generated / source / summary / knowledge_refs
    ---
    ```
-3. **main.md = 5 섹션 인덱스만** — Executive Summary / Decision Record (multi-owner, append-only, Owner 컬럼 필수) / Artifacts 표 / CEO 판단 근거 (7 차원 등급 표 인용 — v0.65.3) / Next Phase. 본문 작성 X (200줄 자연 충족, `mainMdMaxLines` warn).
+3. **main.md = 5 섹션 인덱스만** — Executive Summary / Decision Record (multi-owner, append-only, Owner 컬럼 필수) / Artifacts 표 / CEO 판단 근거 (7 차원 등급 표 인용) / Next Phase. 본문 작성 X (200줄 자연 충족, `mainMdMaxLines` warn).
 4. **Knowledge lazy-load** (`agents/{c-level}/knowledge/*.md`, 19 MD) — phase + artifact 매칭 시만 Read. C-Level 메인의 "Knowledge Index" 표가 trigger 명시.
 5. **Templates 4-tier auto-select** (`scripts/auto-select-template.js`) — `git status` surface count + domain 분포 + PRD 상태로 stub/minimal/standard/extended 자동 선택. `confidence < 0.6` 시 fallback CP-1.
 
-**검증** (`scripts/doc-validator.js` v2.1):
+**검증** (`scripts/doc-validator.js`):
 - W-OWN-01 (owner 누락) = **warn**
 - W-FRONT-01 (artifact/phase/feature 누락) = warn
 - W-FRONT-02~05 (enum/stem mismatch/summary>200) = warn
 - W-SCOPE-01/02/03 (plan/main.md 필수 3섹션) = **fail** (exit 1)
 - 정본: `vais.config.json > workflow.frontmatterMinimal.required` (config 변경만으로 strict ↔ minimal 토글)
-
-**호환성**: v0.64 이전 8 필드 frontmatter 산출물 그대로 통과 (모든 필드 채워짐). v0.57 `_tmp/` 산출물은 v0.65.2 에서 패턴 폐기 — 신규 피처부터 sub-agent 직접 박제 모델 적용.
 
 ---
 
@@ -393,18 +391,18 @@ vais-claude-code/
 │                                      #   clevel-main-guard / subdoc-guard / advisor-guard
 ├── skills/vais/     /vais 스킬 진입점 + phase routers (ceo/cpo/cto/cso/cbo/coo/ideation) + utilities
 ├── lib/             ceo-algorithm (197줄, 7 차원), patch-block, status, paths, advisor, ...
-├── scripts/         vais-validate-plugin, doc-validator (v2.1), auto-judge (v0.65.1 신규),
-│                    auto-select-template (v0.65.1 신규), patch-clevel-guard, patch-subdoc-block, ...
+├── scripts/         vais-validate-plugin, doc-validator, auto-judge, auto-select-template,
+│                    patch-clevel-guard, patch-subdoc-block, ...
 ├── templates/       PDCA 문서 템플릿
 │   ├── plan-{stub,minimal,standard,extended}.template.md   # 4-tier auto-select
-│   ├── {ideation,design,do,qa,report}.template.md          # phase 별 (v0.65.2 v0.57 inject 정리)
+│   ├── {ideation,design,do,qa,report}.template.md          # phase 별
 │   ├── main-md.template.md                                 # 5 섹션 인덱스 정본
 │   └── {alignment,biz,core,how,what,why}/                  # 36 sub-agent artifact 템플릿
 ├── hooks/           SessionStart, PreToolUse (bash-guard, design-mcp-trigger, ideation-guard),
 │                    SubagentStart/Stop, Stop (doc-tracker, doc-validator)
-├── design-system/   v0.62.0+ DS 카탈로그 박제 (mui Material UI v6.5.0)
+├── design-system/   DS 카탈로그 박제 (mui Material UI v6.5.0)
 ├── mcp/             vais-design-system MCP 서버 (design_search / design_system_generate)
-├── ONBOARDING.md    5분 진입 가이드 (v0.62.0+)
+├── ONBOARDING.md    5분 진입 가이드
 ├── CLAUDE.md        Claude Code 전용 지침 (자동 로드)
 ├── AGENTS.md        Cursor/Copilot 등 범용 AI 호환 지침
 ├── vais.config.json 플러그인 전체 설정
@@ -415,48 +413,31 @@ vais-claude-code/
 
 ## Configuration
 
-핵심 키 (v0.65.x):
+핵심 키:
 
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `workflow.phases` | ideation ~ report | PDCA phases (ideation optional) |
-| **`workflow.checkpointPolicy.mode`** | `lean` | v0.65 신규 — `lean` (CP-0/CP-Q 만) / `standard` / `strict` (v0.64 회귀) |
-| **`workflow.template.autoSelect`** | `true` | v0.65 신규 — `scripts/auto-select-template.js` 휴리스틱으로 stub/minimal/standard/extended 자동 선택 |
-| **`workflow.frontmatterMinimal.required`** | `[owner, artifact, phase, feature]` | v0.65.1 — `doc-validator` 가 동적 로드. config 변경만으로 strict ↔ minimal 토글 |
-| **`cSuite.knowledgePath`** | `agents/{role}/knowledge/` | v0.65 신규 — C-Level 도메인 지식 lazy-load 경로 |
+| **`workflow.checkpointPolicy.mode`** | `lean` | `lean` (CP-0/CP-Q 만) / `standard` / `strict` |
+| **`workflow.template.autoSelect`** | `true` | `scripts/auto-select-template.js` 휴리스틱으로 stub/minimal/standard/extended 자동 선택 |
+| **`workflow.frontmatterMinimal.required`** | `[owner, artifact, phase, feature]` | `doc-validator` 가 동적 로드. config 변경만으로 strict ↔ minimal 토글 |
+| **`cSuite.knowledgePath`** | `agents/{role}/knowledge/` | C-Level 도메인 지식 lazy-load 경로 |
 | **`cSuite.primary`** | `[ceo, cpo, cto, cso]` | CEO 자동 라우팅 대상 |
 | **`cSuite.secondary`** | `[cbo, coo]` | 사용자 명시 호출만 |
-| **`gapAnalysis.maxIterations`** | `2` | v0.65 — 5→2 (무한루프 차단). `autoIterate = "escalate-on-fail"` |
-| **`pipeline.reviewLoops.cso-cto.maxIterations`** | `2` | v0.65 — 3→2 |
-| `gates.cto.plan.requirePrd` | `smart` | v0.65 — `missing` 만 CP-0 발동, `partial` 자동 강행 |
+| **`gapAnalysis.maxIterations`** | `2` | 무한루프 차단. `autoIterate = "escalate-on-fail"` |
+| **`pipeline.reviewLoops.cso-cto.maxIterations`** | `2` | CSO ↔ CTO 보안 검토 루프 |
+| `gates.cto.plan.requirePrd` | `smart` | `missing` 만 CP-0 발동, `partial` 자동 강행 |
 | `gapThreshold` | 0.90 | QA 통과 기준 (90%) |
 | `advisor.enabled` | true | Opus advisor 활성화 |
 | `advisor.monthly_budget_usd` | 200 | 월 advisor 비용 캡 |
-| `orchestration.mcp.enabled` | true | design-system MCP 자동 호출 (v0.61+ 기본 ON, Python3 ≥ 3.8 필수) |
-
----
-
-## Version Highlights
-
-| Version | Highlight |
-|---------|-----------|
-| **v0.65.3** (current) | CEO 진입 절차 박제 — `analyzeCEO()` 호출 → 7 차원 등급 표 출력 → `activeCLevel` 인용 → AskUserQuestion. LLM 자체 라우팅 차단 |
-| v0.65.2 | templates/ 정합성 정리 — v0.57 잔재 (subdoc/finance/ops 템플릿 + Topic Documents inject) 제거 |
-| v0.65.1 | v0.65.0 약속과 코드 정렬 — `doc-validator` v2.1 (4 필수 필드) + `auto-select-template.js` 신규 + CP-G 단일화 + knowledge cross-ref 컨벤션 |
-| v0.65.0 | PO 워크플로우 경량화 (Quiet by Default + Wisdom Split + Anti-Boilerplate) — CP 6→1~2, knowledge/ 19 MD lazy-load, frontmatter 8→4, plan-extended 헤딩 52→22 |
-| v0.64 | 4 Primary + 2 Secondary, sub-agent 직접 박제, main.md 인덱스, AskUserQuestion 클릭 |
-| v0.62 | mui Material UI v6 디자인 시스템 카탈로그 박제 |
-| v0.61 | design-system MCP 자동 호출 (Python3 ≥ 3.8 필수) |
-| v0.50 | CMO + CFO → **CBO** 통합 (7 → 6 C-Level), ideation phase 신설 |
-
-전체 이력: [CHANGELOG.md](./CHANGELOG.md)
+| `orchestration.mcp.enabled` | true | design-system MCP 자동 호출 (기본 ON, Python3 ≥ 3.8 필수) |
 
 ---
 
 ## Testing
 
 ```bash
-npm test    # design-system MCP integration tests 포함 (v0.63.0)
+npm test    # design-system MCP integration tests 포함
 ```
 
 ---

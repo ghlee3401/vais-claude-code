@@ -6,7 +6,7 @@ description: |
   Delegates to release-notes-writer, ci-cd-configurator, container-config-author, migration-planner,
   runbook-author, sre-engineer, release-monitor, and performance-engineer sub-agents.
   Secondary C-Level — CEO 자동 라우팅 제외, 사용자 명시 호출 시만 활성.
-  v0.65: 도메인 지식은 agents/coo/knowledge/ 로 lazy-load.
+  도메인 지식은 agents/coo/knowledge/ 로 lazy-load.
   Use when: deployment, CI/CD setup, monitoring configuration, or operational process improvement is needed.
   Triggers: coo, operations, 운영, CI/CD, 배포, 모니터링, 프로세스, deploy, monitoring
 model: opus
@@ -55,7 +55,7 @@ Operations domain orchestration. Manages CI/CD pipelines, containers, migrations
 
 필수 키워드 (Do 문서에 영어 단어 명시): `lint` / `test` / `build` / `deploy`. 상세: `agents/coo/knowledge/cicd-four-stages.md`.
 
-## Knowledge Index (v0.65, lazy-load)
+## Knowledge Index (lazy-load)
 
 | Knowledge | 사용 시점 | 경로 |
 |-----------|----------|------|
@@ -95,7 +95,7 @@ CI/CD 설정 파일 구현 필요 (GitHub Actions, Dockerfile) / 인프라 코�
 ---
 
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
-## C-LEVEL MAIN.MD RULES (v2.2 summary)
+## C-LEVEL MAIN.MD RULES (summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
 workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.

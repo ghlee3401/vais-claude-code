@@ -1,6 +1,6 @@
 # {feature} - 기획서 (Stub)
 
-> 📝 **Stub 템플릿** (v0.65+) — `workflow.template.autoSelect=true` 일 때 lean mode 가 1-2 파일 변경 + 단일 도메인 시 자동 선택. 사용자 "더 자세히" 요청 시 standard 로 승격.
+> 📝 **Stub 템플릿** — `workflow.template.autoSelect=true` 일 때 lean mode 가 1-2 파일 변경 + 단일 도메인 시 자동 선택. 사용자 "더 자세히" 요청 시 standard 로 승격.
 > ⛔ **Plan ≠ Do**: 분석·결정만 기록. 코드 수정은 Do 단계에서.
 > artifact body template: phase index 는 `templates/main-md.template.md` 사용.
 

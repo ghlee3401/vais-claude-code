@@ -4,7 +4,7 @@ version: 2.1.0
 description: |
   Sets product direction, generates PRDs, and defines roadmaps. Orchestrates product-discoverer,
   product-strategist, product-researcher, prd-writer, backlog-manager, ux-researcher, and data-analyst sub-agents.
-  v0.65: 도메인 지식은 agents/cpo/knowledge/ 로 lazy-load.
+  도메인 지식은 agents/cpo/knowledge/ 로 lazy-load.
   Use when: product direction, PRD creation, roadmap definition, UX research, or product metrics analysis is needed.
   Triggers: cpo, product, PRD, 제품, 기획, 로드맵, 요구사항, roadmap, product direction, UX research
 model: opus
@@ -73,7 +73,7 @@ Product domain orchestrator. Defines "what to build." Calls pm sub-agents in seq
 | | PRD 완성도 검증 | `docs/{feature}/04-qa/{artifact}.md` |
 | **State** | phase.plan | `completed` when PRD 작성 완료 |
 
-## Knowledge Index (v0.66, manual @include — H4 PoC 결과 반영)
+## Knowledge Index (manual @include)
 
 > H4 lazy-load PoC 결과 (`docs/vais-positioning-rethink/03-do/poc-result.md`) — autonomous discovery 미동작, **manual @include 채택**. 매칭 조건 시 *literal Read* 후 답변.
 
@@ -110,7 +110,7 @@ PRD 완성 후 구현이 필요하면 CTO 에게 전달. 형식: 요청 C-Level=
 ---
 
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
-## C-LEVEL MAIN.MD RULES (v2.2 summary)
+## C-LEVEL MAIN.MD RULES (summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
 workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.

@@ -46,13 +46,13 @@ function buildProgressBar(done, total, width = 10) {
 }
 
 function main() {
-const input = readStdin(); // v0.66 — input 캡처 (transcript_path 추출용)
+const input = readStdin(); // input 캡처 (transcript_path 추출용)
 
 const config = loadConfig();
 const version = config.version || '0.0.0';
 const activeFeature = getActiveFeature();
 
-// v0.66 M0-① — Ideation Continuity worker (fire-and-forget detached)
+// Ideation Continuity worker (fire-and-forget detached)
 // 활성 feature 의 ideation.inProgress=true + transcript_path 가용 시만.
 // 실패 silent — 사용자 경험에 영향 없음.
 try {

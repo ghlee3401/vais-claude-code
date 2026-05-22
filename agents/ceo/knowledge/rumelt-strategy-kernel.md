@@ -3,7 +3,7 @@
 > **박제 깊이**: framework 정의 + 실무 운영 단계 + 의사결정 패턴 + 산출물 양식 (OJT 4 요소).
 > **출처**: Richard Rumelt *Good Strategy Bad Strategy* (2011, Crown Business).
 > **사용 시점**: 신규 서비스 전략 / 재포지셔닝 / 위기 대응 / 정체성 재정의 결정 시.
-> **현재 상태**: 정식 박제 v2.0 (W1 D5, vais-positioning-rethink Sprint).
+> **현재 상태**: 정식 박제.
 
 ---
 
@@ -64,7 +64,7 @@
 3. narrative 작성: "우리는 *A* 에 집중한다. 왜냐하면 Diagnosis 가 *X* 이고 *A* 가 *Y* 를 직접 공격하기 때문. 대신 *B* 는 후순위로 미룬다."
 
 **Bad example**: "고객·매출·기술·운영 모두 강화." (trade-off 부재 — Bad Strategy 4)
-**Good example**: "Power user 의 일일 frequency 향상에 집중. 신규 user acquisition 은 v0.67 까지 보류. 이유: 60% 이탈 cohort 의 frequency 가 ARR 의 80% 결정."
+**Good example**: "Power user 의 일일 frequency 향상에 집중. 신규 user acquisition 은 다음 분기까지 보류. 이유: 60% 이탈 cohort 의 frequency 가 ARR 의 80% 결정."
 
 ### Step 3 — Coherent Actions 작성 (3 ~ 7 actions)
 
@@ -194,7 +194,7 @@ main.md 의 Decision Record 표에 1 줄로 박제:
 ### 5.1 자기 적용 결과
 
 - **Diagnosis**: 1 PO 가 부서장 7 영역 결정 시 다학제 도메인 지식 부재. CC native 진화로 코드 영역 redundancy + doc 폭증으로 화두 자체 위반.
-- **Guiding Policy**: vais-code = *부서장 매뉴얼 (organization-in-a-box)*. CTO 슬림화 + 비-코드 C-Level 박제 깊이로 차별화. **Tier-1B (CSO/CBO/COO) 는 사용자 도메인 부재 → v0.67+ 미룬다** (trade-off 명시).
+- **Guiding Policy**: vais-code = *부서장 매뉴얼 (organization-in-a-box)*. CTO 슬림화 + 비-코드 C-Level 박제 깊이로 차별화. **Tier-1B (CSO/CBO/COO) 는 사용자 도메인 부재 → 후속 단계로 미룬다** (trade-off 명시).
 - **Coherent Actions**: M0 4 메커니즘 + M1-A 3 framework + CLAUDE.md 정체성. *Not-doing*: Tier-1B 박제, README 대외화.
 
 ### 5.2 Lean Rewrite = Step 5 self-deception 체크의 실증

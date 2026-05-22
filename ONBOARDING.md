@@ -11,22 +11,22 @@
 
 | 핵심 컨셉 | 설명 |
 |----------|------|
-| **4 Primary + 2 Secondary** (v2.0) | Primary (CEO/CPO/CTO/CSO) — CEO 자동 라우팅 / Secondary (CBO/COO) — 사용자 명시 호출만 활성. 코드 개발 외 영역은 옵션. |
+| **4 Primary + 2 Secondary** | Primary (CEO/CPO/CTO/CSO) — CEO 자동 라우팅 / Secondary (CBO/COO) — 사용자 명시 호출만 활성. 코드 개발 외 영역은 옵션. |
 | **CEO 7 차원 알고리즘** | `lib/ceo-algorithm.js` — 보안/컴플라이언스/UX/데이터모델/외부통신/성능/제품정의 휴리스틱 + phase↔artifact 자동 매핑 |
 | **CTO 만 mandatory PDCA** | CTO: plan→design→do→qa 순차 mandatory. CEO ideation 만 mandatory. CPO/CSO/CBO/COO mandatory 미적용 (CEO 알고리즘 결정) |
-| **sub-agent 직접 박제** (v2.1, 0.65) | `_tmp/` 폐기. sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter **4 필수 필드** (owner/artifact/phase/feature) 직접 작성. agent/generated/source/summary 는 auto-hydrate optional. main.md = 5 섹션 인덱스만 |
+| **sub-agent 직접 박제** | `_tmp/` 폐기. sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter **4 필수 필드** (owner/artifact/phase/feature) 직접 작성. agent/generated/source/summary 는 auto-hydrate optional. main.md = 5 섹션 인덱스만 |
 | **AskUserQuestion 클릭 인터페이스** | 모든 결정 = 도구 호출. 자연어 명령어 안내 금지 |
-| **Lean checkpoint** (v0.65 기본) | CP-0 (PRD missing) + CP-Q (Critical or matchRate<90) 만 발동. 나머지 자동 진행 + outro 한 줄. PO 클릭 ≤ 2회/피처 |
-| **Knowledge lazy-load** (v0.65) | `agents/{c-level}/knowledge/` 19 MD — phase + artifact 매칭 시만 Read. 메인 .md 의 "Knowledge Index" 표가 trigger |
-| **CEO 진입 절차 강제** (v0.65.3) | CEO 가 4 단계 순차 — `analyzeCEO()` Bash 호출 → 7 차원 등급 표 출력 → activeCLevel 인용 → AskUserQuestion. LLM 자체 라우팅 금지 |
+| **Lean checkpoint** | CP-0 (PRD missing) + CP-Q (Critical or matchRate<90) 만 발동. 나머지 자동 진행 + outro 한 줄. PO 클릭 ≤ 2회/피처 |
+| **Knowledge lazy-load** | `agents/{c-level}/knowledge/` 19 MD — phase + artifact 매칭 시만 Read. 메인 .md 의 "Knowledge Index" 표가 trigger |
+| **CEO 진입 절차 강제** | CEO 가 4 단계 순차 — `analyzeCEO()` Bash 호출 → 7 차원 등급 표 출력 → activeCLevel 인용 → AskUserQuestion. LLM 자체 라우팅 금지 |
 
-현재 버전: **v1.0.0 GA** (0.66.0 organization-in-a-box → 0.66.1 cross-model P0 hotfix → 0.67.0 workflow contract alignment → 0.68.0 Agent Teams 대화-합성 모델 도입 (opt-in) → **1.0.0 GA**: organization-in-a-box 정체성 정식 GA + status.json v4 + git tag v1.0.0).
+현재 버전: **v1.0.0 GA** — organization-in-a-box 정체성 정식 GA.
 
 ---
 
 ## 2. Quick Start (1분)
 
-### 시나리오 A — 사용자가 새 피처를 만들고 싶을 때 (v2.0 권장)
+### 시나리오 A — 사용자가 새 피처를 만들고 싶을 때
 
 ```
 /vais ceo ideation 새-피처-아이디어    # 모호한 아이디어 → CEO 7 차원 분석 → 활성 C-Level 자동 결정
@@ -126,7 +126,7 @@ export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 | 조건 | 동작 |
 |------|------|
 | `agentTeams.enabled=false` | 조용 — 기존 sequential 모드 |
-| `enabled=true` + flag 미설정 | stderr 경고 1줄 + simulation fallback (0.68.0 byte-compat) |
+| `enabled=true` + flag 미설정 | stderr 경고 1줄 + simulation fallback (byte-compat) |
 | `enabled=true` + CC < 2.1.0 | stderr 경고 1줄 + sequential fallback |
 | `enabled=true` + CC 2.1+ + flag 설정 | real SendMessage 활성 (조용) |
 
@@ -145,14 +145,14 @@ flowchart TB
 
     PHASES --> AGENTSDIR[agents/<br/>6 C-Level + 47 sub-agents + knowledge/ 19 MD]
     AGENTSDIR --> HOOKS[hooks/<br/>session-start·design-mcp-trigger·ideation-guard]
-    AGENTSDIR --> SCRIPTS[scripts/<br/>doc-validator v2.1·auto-judge·auto-select-template·patch-*·import-mui-design-system]
+    AGENTSDIR --> SCRIPTS[scripts/<br/>doc-validator·auto-judge·auto-select-template·patch-*·import-mui-design-system]
 
     CLAUDE --> CONFIG[vais.config.json<br/>워크플로우·게이트·C-Suite 정의]
     PHASES --> CONFIG
     AGENTSDIR --> CONFIG
 
     AGENTSDIR --> DOCS[docs/{feature}/<br/>피처별 PDCA 산출물]
-    DOCS --> DS[design-system/<br/>DS 카탈로그 박제 v0.62.0+]
+    DOCS --> DS[design-system/<br/>DS 카탈로그 박제]
 ```
 
 부속 폴더 (그래프 외):
@@ -188,7 +188,7 @@ flowchart TB
 
 3. /vais cto design social-login-integration
    → ui-designer + infra-architect 위임 (병렬). CP-D (아키텍처 옵션) → docs/.../02-design/main.md
-   → ui-designer 가 design-system/mui/MASTER.md 자동 참조 (v0.62.0+)
+   → ui-designer 가 design-system/mui/MASTER.md 자동 참조
 
 4. /vais cto do social-login-integration
    → frontend-engineer + backend-engineer + test-engineer 위임 (병렬). 실제 구현. CP-2.
@@ -215,9 +215,4 @@ flowchart TB
 
 ---
 
-| version | date | change |
-|---------|------|--------|
-| v1.0 | 2026-05-02 | 초기 작성 (5섹션 / Mermaid 그래프 / 진입점 표 / 워크플로우 예시) — `legacy-prune-and-agent-onboarding` 피처 산출물 |
-| v2.0 | 2026-05-02 | 0.64.0+ 모델 반영 — 4 Primary + 2 Secondary, CEO 7 차원 알고리즘, sub-agent 직접 박제, main.md 인덱스, AskUserQuestion 클릭 인터페이스. v0.62.0 → v0.63.0. |
-| v3.0 | 2026-05-07 | v0.65 시리즈 반영 — frontmatter 8→4 필수 (auto-hydrate), lean checkpoint, knowledge lazy-load 19 MD, auto-select-template 4-tier, CEO 진입 절차 박제 (v0.65.3). v0.63.0 → v0.65.3. agents 카운트 37 → 47 sub-agents. |
-| v4.0 | 2026-05-17 | v1.0.0 GA 반영 — organization-in-a-box 정체성 정식 GA. 버전 표기 v0.68.0 → v1.0.0 GA. |
+> 변경 이력: 누적 변경 사항은 `CHANGELOG.md` 참조.

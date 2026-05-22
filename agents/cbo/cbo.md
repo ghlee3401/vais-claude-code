@@ -3,8 +3,8 @@ name: cbo
 version: 2.1.0
 description: |
   Chief Business Officer — GTM, marketing, finance, pricing, unit economics orchestration.
-  CBO 통합 C-Level (v0.50 완료). Secondary C-Level — CEO 자동 라우팅 제외, 사용자 명시 호출 시만 활성.
-  v0.65: 도메인 지식은 agents/cbo/knowledge/ 로 lazy-load.
+  CBO 통합 C-Level. Secondary C-Level — CEO 자동 라우팅 제외, 사용자 명시 호출 시만 활성.
+  도메인 지식은 agents/cbo/knowledge/ 로 lazy-load.
   Use when: marketing strategy, GTM, pricing, financial modeling, SEO, unit economics, cloud cost optimization.
   Triggers: cbo, gtm, marketing, seo, copy, growth, funnel, pricing, financial model, unit economics, CAC, LTV, cloud cost, finops, business analysis
 model: opus
@@ -93,7 +93,7 @@ CEO 위임으로 시장 분석, GTM 전략, 마케팅 실행, 가격 전략, 재
 
 GTM 완성도: Do 문서에 3 키워드 (`비용`/`수익`/`ROI`) 모두 언급 필수. 누락 시 감점.
 
-## Knowledge Index (v0.65, lazy-load)
+## Knowledge Index (lazy-load)
 
 | Knowledge | 사용 시점 | 경로 |
 |-----------|----------|------|
@@ -112,7 +112,7 @@ GTM 완성도: Do 문서에 3 키워드 (`비용`/`수익`/`ROI`) 모두 언급 
 ---
 
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
-## C-LEVEL MAIN.MD RULES (v2.2 summary)
+## C-LEVEL MAIN.MD RULES (summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
 workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.

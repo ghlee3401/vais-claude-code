@@ -1,7 +1,7 @@
 ---
 name: coo
 version: 2.0.0
-description: COO 에이전트 호출. 운영 프로세스, CI/CD 파이프라인, 모니터링. v2.0 Secondary — CEO 자동 라우팅 제외, 사용자 명시 호출만 활성. Mandatory phase 순서 미적용 (CTO PDCA 만 mandatory).
+description: COO 에이전트 호출. 운영 프로세스, CI/CD 파이프라인, 모니터링. Secondary — CEO 자동 라우팅 제외, 사용자 명시 호출만 활성. Mandatory phase 순서 미적용 (CTO PDCA 만 mandatory).
 ---
 
 # COO Phase
@@ -25,7 +25,7 @@ description: COO 에이전트 호출. 운영 프로세스, CI/CD 파이프라인
 - **Phase 명시**: `/vais coo plan my-feature` → phase=`plan`, feature=`my-feature`
 - **Phase 생략**: `/vais coo my-feature` → phase=미지정, feature=`my-feature`
 
-### Phase 미지정 시 동작 (v2.0 Secondary 정책)
+### Phase 미지정 시 동작 (Secondary 정책)
 
 COO 는 Secondary C-Level 입니다. CEO 자동 라우팅이 활성화하지 않으며, 사용자 명시 호출 시에만 실행합니다.
 

@@ -18,12 +18,12 @@ process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] 
  *   W-MRG-03: artifact ≥ 2 이지만 main.md 가 5섹션 index 도 legacy owner-H2 모델도 아님
  *   W-MAIN-SIZE: main.md 라인 수 > mainMdMaxLines AND artifact 0
  *
- * v0.58.3 경고 코드 (plan-scope-contract):
+ * 경고 코드 (plan-scope-contract):
  *   W-SCOPE-01: plan/main.md 에 "## 요청 원문" 섹션 누락 (CLAUDE.md Rule #9)
  *   W-SCOPE-02: plan/main.md 에 "## In-scope" 섹션 누락
  *   W-SCOPE-03: plan/main.md 에 "## Out-of-scope" 섹션 누락
  *
- * v0.65 변경 (frontmatter v2.1):
+ * Frontmatter 변경:
  *   W-FRONT-01 누락 필드 집합이 vais.config.json > workflow.frontmatterMinimal.required 기반으로 축소.
  *   기본값 ['owner','artifact','phase','feature']. owner 누락은 W-OWN-01 으로 통합.
  *   agent / generated / summary 는 autoHydrate 대상 — 누락 시 검사 스킵.
@@ -40,7 +40,7 @@ const { getActiveFeature, getMandatoryPhases } = require('../lib/status');
 // C-Level 역할 목록
 const C_LEVEL_ROLES = ['ceo', 'cpo', 'cto', 'cso', 'cbo', 'coo'];
 
-// v0.57: phase 폴더 매핑 (subDoc 스캔용)
+// Phase 폴더 매핑 (subDoc 스캔용)
 const PHASE_FOLDERS = {
   ideation: '00-ideation',
   plan: '01-plan',
@@ -50,10 +50,10 @@ const PHASE_FOLDERS = {
   report: '05-report',
 };
 
-// v0.57: 시스템 산출물 (topic 아님, curation 검증 제외)
+// 시스템 산출물 (topic 아님, curation 검증 제외)
 const SYSTEM_ARTIFACT_NAMES = new Set(['main.md', 'interface-contract.md']);
 
-// v0.58: C-Level 소유권 enum
+// C-Level 소유권 enum
 const C_LEVEL_OWNERS = new Set(['ceo', 'cpo', 'cto', 'cso', 'cbo', 'coo']);
 
 function hasPhaseIndexSections(content) {
@@ -86,8 +86,8 @@ function validateDocs(role, feature) {
     return result;
   }
 
-  // v0.66.2 — empty feature folder 자동 인식. docs/{feature}/ 폴더 하위에 어떤 .md 도
-  // 없으면 historical/empty (예: v0.57 시기 ideation 만 박제 후 본격 진행 X) → skip.
+  // Empty feature folder 자동 인식. docs/{feature}/ 폴더 하위에 어떤 .md 도
+  // 없으면 historical/empty (ideation 만 박제 후 본격 진행 X) → skip.
   const featureRoot = path.join(process.cwd(), 'docs', feature);
   if (fs.existsSync(featureRoot)) {
     const hasAnyMd = (function walk(dir) {
@@ -106,7 +106,7 @@ function validateDocs(role, feature) {
     }
   }
 
-  // v0.66.2 — ideation-only feature 자동 인식. 00-ideation/main.md 만 존재하고
+  // Ideation-only feature 자동 인식. 00-ideation/main.md 만 존재하고
   // mandatory phase 가 모두 부재면 (분석 인덱스 등 정식 PDCA 진행 의도 없는 폴더),
   // mandatoryPhases 검사를 skip 한다. backward-compat.
   const ideationMain = path.join(process.cwd(), 'docs', feature, '00-ideation', 'main.md');
@@ -249,7 +249,7 @@ function validateCoexistence(feature, options = {}) {
 }
 
 /**
- * v0.58.3 plan scope contract 검증 — plan/main.md 에 "## 요청 원문" / "## In-scope" / "## Out-of-scope" 섹션 존재 여부.
+ * Plan scope contract 검증 — plan/main.md 에 "## 요청 원문" / "## In-scope" / "## Out-of-scope" 섹션 존재 여부.
  * enforcement=warn 기본이라 exit 에 영향 주지 않음.
  *
  * @param {string} feature
@@ -268,7 +268,7 @@ function validateScopeContract(feature) {
   const planMain = path.join(planDir, 'main.md');
   if (!fs.existsSync(planMain)) return out;
 
-  // v0.66.2 — 5섹션 index 정책 대응. main.md 외에 같은 폴더의 plan body artifact
+  // 5섹션 index 정책 대응. main.md 외에 같은 폴더의 plan body artifact
   // (예: tech-plan.md, plan-rationale.md, plan.md) 도 fallback 검사.
   // workflow-contract-matrix §8 — main.md must remain an index. body 는 별도 artifact MD.
   let combined;
@@ -281,7 +281,7 @@ function validateScopeContract(feature) {
     }
   } catch (_) { return out; }
 
-  // v0.66.2 regex 완화 — numeric prefix (`## 0. `) 와 parenthetical suffix (`(synthesis 인용)`)
+  // Regex 완화 — numeric prefix (`## 0. `) 와 parenthetical suffix (`(synthesis 인용)`)
   // 모두 허용. 정책 의도는 "원문 인용 / scope 명시" 가 있어야 한다 이지 정확한 H2 텍스트 강제 X.
   // 끝부분 \b 제거 — 한글 글자(요청 원문)는 \w 에 포함되지 않아 word-boundary 가
   // 항상 false 가 되어 매치 실패하던 버그. 영어 In-scope/Out-of-scope 도 일관성 유지를 위해 동일.
@@ -306,7 +306,7 @@ function validateScopeContract(feature) {
  *   - autoHydrate: 3 옵션 필드 (agent / generated / summary) — 누락은 검사 스킵 (sub-agent 또는 hook 이 git log 등으로 hydrate)
  *   - optional: source / knowledge_refs — 누락 검사 안 함
  *
- * Backward-compat: v0.64 8 필드 산출물 그대로 통과.
+ * Backward-compat: 8 필드 산출물 그대로 통과.
  *
  * @param {string} feature
  * @param {Object} [options] - { phases?: string[] }
@@ -440,7 +440,7 @@ function formatResult(role, feature, result) {
 }
 
 /**
- * v0.58 coexistence 경고를 사람이 읽을 수 있는 형식으로 출력
+ * Coexistence 경고를 사람이 읽을 수 있는 형식으로 출력
  */
 function formatCoexistenceWarnings(warnings) {
   if (!Array.isArray(warnings) || warnings.length === 0) return '';
@@ -453,11 +453,11 @@ function formatCoexistenceWarnings(warnings) {
 }
 
 /**
- * v0.58.3 scope-contract 경고를 사람이 읽을 수 있는 형식으로 출력
+ * Scope-contract 경고를 사람이 읽을 수 있는 형식으로 출력
  */
 function formatScopeContractWarnings(warnings) {
   if (!Array.isArray(warnings) || warnings.length === 0) return '';
-  const lines = [`ℹ️  [scope-contract v0.58.3] ${warnings.length}건 경고:`];
+  const lines = [`ℹ️  [scope-contract] ${warnings.length}건 경고:`];
   for (const w of warnings) {
     const rel = path.relative(process.cwd(), w.path);
     lines.push(`   ⚠️  [${w.code}] ${rel}: ${w.message}`);
@@ -498,7 +498,7 @@ if (require.main === module) {
   const cfg = loadConfig();
   const coexEnforcement = cfg.workflow?.cLevelCoexistencePolicy?.enforcement ?? 'warn';
   const scopeEnforcement = cfg.workflow?.scopeContractPolicy?.enforcement ?? 'warn';
-  // v0.58.4: mainMdMaxLinesAction 은 coexistence enforcement 와 독립적으로 W-MAIN-SIZE 만 차단
+  // mainMdMaxLinesAction 은 coexistence enforcement 와 독립적으로 W-MAIN-SIZE 만 차단
   const mainSizeAction = cfg.workflow?.cLevelCoexistencePolicy?.mainMdMaxLinesAction ?? 'warn';
   if (!result.passed) process.exit(1);
   if (coexEnforcement === 'fail' && coexistenceWarnings.length > 0) process.exit(1);

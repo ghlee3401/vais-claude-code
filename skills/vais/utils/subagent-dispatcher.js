@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Sub-agent Dispatcher — 패턴 D 진입점 (v0.68+, agent-teams-orchestration).
+ * Sub-agent Dispatcher — 패턴 D 진입점 (agent-teams-orchestration).
  *
  * `agentTeams.subagentSessions=true` 시 CTO 가 호출.
  * 각 sub-agent 에 대해 worktree 생성 + lock 획득 → background session dispatch.

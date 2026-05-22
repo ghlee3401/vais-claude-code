@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * v0.58.0 C-Level Coexistence — 6 C-Level agent .md 본문에 clevel-main-guard 블록 주입.
+ * C-Level Coexistence — 6 C-Level agent .md 본문에 clevel-main-guard 블록 주입.
  *
- * v0.58 TD-5: 공통 로직을 `lib/patch-block.js` 로 추출. 본 스크립트는 thin wrapper.
+ * 공통 로직을 `lib/patch-block.js` 로 추출. 본 스크립트는 thin wrapper.
  *
  * Usage:
  *   node scripts/patch-clevel-guard.js                # 실제 적용

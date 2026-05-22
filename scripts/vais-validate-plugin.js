@@ -965,14 +965,14 @@ function validate(pluginRoot) {
   validateMcpJson(root, result);
   validateLspJson(root, result);
   validateReadme(root, result);
-  validateAgentTeamsConfig(root, result);   // v0.68+ — agent-teams-orchestration
-  validateStatusV4Schema(root, result);     // v0.68+ — status.json v4 호환
-  validateSynthesisConsistency(root, result); // v0.68+ — synthesizer 일관성
+  validateAgentTeamsConfig(root, result);   // agent-teams-orchestration
+  validateStatusV4Schema(root, result);     // status.json v4 호환
+  validateSynthesisConsistency(root, result); // synthesizer 일관성
 
   return result;
 }
 
-// ─── v0.68+ agent-teams-orchestration 검증 ─────────────────────────
+// ─── agent-teams-orchestration 검증 ─────────────────────────
 
 /**
  * vais.config.json > orchestration.agentTeams 검증.

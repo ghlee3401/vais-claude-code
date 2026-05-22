@@ -26,7 +26,7 @@ workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-m
 - CBO/COO 는 secondary 이며 사용자 명시 호출 시에만 실행한다. CEO primary routing 이 자동 활성화하지 않는다.
 - 실행 sub-agent 직접 호출 금지. C-Level 이 artifact 단위로 위임한다.
 
-## Knowledge Cross-Reference 표기 (v0.65)
+## Knowledge Cross-Reference 표기
 
 다른 C-Level 의 `knowledge/` 파일을 참조할 때:
 
@@ -35,7 +35,7 @@ workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-m
 - **자기 owner 의 knowledge 도** 풀 prefix 권장 (일관성). 예외: 같은 단락 내 반복 시 stem 만 사용 가능
 - **frontmatter `knowledge_refs`**: 항상 풀 prefix (`agents/cpo/knowledge/prd-eight-sections.md`)
 
-## CEO 알고리즘 인용 규칙 (v0.65.3)
+## CEO 알고리즘 인용 규칙
 
 CEO 가 라우팅 결정을 내릴 때 (그리고 다른 C-Level / sub-agent 가 그 결정을 받을 때):
 
@@ -68,7 +68,7 @@ Plan 단계에서 프로덕트 파일(skills/, agents/, lib/, src/, mcp/) 생성
 현재 phase 산출물을 반드시 작성. 문서 없이 종료 시 SubagentStop 훅이 `exit(1)` 차단.
 "대화로 합의했으니 문서 불필요" 판단 금지.
 
-## SendMessage 정책 (v0.68+ — agent-teams-orchestration 도입)
+## SendMessage 정책 (agent-teams-orchestration)
 
 `orchestration.agentTeams.enabled=true` 시 활성. false 일 때는 0.67.0 sequential 동작 (SendMessage 미사용).
 
@@ -83,9 +83,9 @@ Plan 단계에서 프로덕트 파일(skills/, agents/, lib/, src/, mcp/) 생성
 **Enforcement**:
 - v2 design `interface-contract.md` §10.2 ALLOWED/FORBIDDEN 표 박제
 - QA Gate CSO-G7: `grep -n "sub-agent → sub-agent" agents/_shared/work-rules.md` 매치 확인
-- 선택적 PreToolUse hook 으로 SendMessage `to:` 타깃 검증 (v2.1 후보)
+- 선택적 PreToolUse hook 으로 SendMessage `to:` 타깃 검증
 
-## Lazy Consensus 정책 (v0.68+ — agent-teams-orchestration)
+## Lazy Consensus 정책 (agent-teams-orchestration)
 
 `orchestration.agentTeams.enabled=true` 시 phase 진입마다 적용.
 

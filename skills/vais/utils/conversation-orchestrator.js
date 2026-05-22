@@ -9,7 +9,7 @@
  * **주의**: 본 모듈은 실제 SendMessage 도구 호출 wrapper. Claude Code 외부에서는 simulation 모드로만 동작.
  * Hook 또는 skill phase 진입 시 호출.
  *
- * v0.69.0 변경: simulationMode / real 분기 + T1~T3 security mitigation 추가.
+ * SimulationMode / real 분기 + T1~T3 security mitigation 지원.
  */
 
 const crypto = require('crypto');

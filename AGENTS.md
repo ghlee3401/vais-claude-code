@@ -6,13 +6,13 @@
 
 이 프로젝트는 VAIS Code 플러그인입니다. Claude Code에서 5단계 개발 워크플로우를 제공합니다.
 
-## 개발 워크플로우 (v2.0 — CTO 만 mandatory PDCA)
+## 개발 워크플로우 (CTO 만 mandatory PDCA)
 
 ```
 📋기획(plan) → 🎨설계(design) → 🔧구현(do) → ✅QA(qa) → 📊보고서(report)
 ```
 
-**v2.0 정책**:
+**정책**:
 - **CTO**: 위 5 phase mandatory + 순차. 코드 영역 phase 분리 의미 있음
 - **CEO**: ideation 만 mandatory. 라우팅·최종 리뷰는 phase 분리 안 함
 - **CPO/CSO**: CEO 7 차원 알고리즘이 활성화한 phase 만 실행 (mandatory 미적용)
@@ -30,7 +30,7 @@
 Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → QA → Report
 ```
 
-## 실행 방식 (v2.0 — 4 Primary + 2 Secondary)
+## 실행 방식 (4 Primary + 2 Secondary)
 
 ```
 # Primary (CEO 자동 라우팅)
@@ -47,7 +47,7 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 /vais help                   — 사용법 안내
 ```
 
-실행 에이전트(infra-architect, frontend-engineer, backend-engineer 등)는 직접 호출하지 않습니다. C-Level 에이전트가 필요에 따라 위임하고, sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 **frontmatter v2.1 (4 필수 필드 — owner/artifact/phase/feature)** 과 함께 직접 박제합니다. agent/generated/source/summary 는 auto-hydrate optional (v0.65).
+실행 에이전트(infra-architect, frontend-engineer, backend-engineer 등)는 직접 호출하지 않습니다. C-Level 에이전트가 필요에 따라 위임하고, sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 **frontmatter 4 필수 필드 — owner/artifact/phase/feature** 과 함께 직접 박제합니다. agent/generated/source/summary 는 auto-hydrate optional.
 
 ## 필수 규칙
 
@@ -57,14 +57,14 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 4. **문서 참조 투명성**: 구현 시 참조한 문서 목록을 산출물 상단에 기록합니다
 5. **위험 명령 금지**: `rm -rf`, `DROP TABLE`, `git push --force` 사용 금지
 6. **환경 변수**: 민감 정보는 반드시 환경 변수로 관리합니다
-7. **Sub-doc 직접 박제 (v2.1, 0.65)**: `_tmp/` 폐기. sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter **4 필수 필드** (owner/artifact/phase/feature) 직접 작성. agent/generated/source/summary 는 optional (auto-hydrate). 큐레이션 폐기. 정본: `agents/_shared/subdoc-guard.md` v2.1
-8. **C-Level 공존 — main.md 인덱스 (v2.1, 0.65)**: main.md = 5 섹션 인덱스 (Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). 본문 X. Decision Record append-only + Owner 컬럼 필수. enforcement: warn. 정본: `agents/_shared/clevel-main-guard.md` v2.1 (8줄 요약). full canonical: `clevel-main-guard.full.md`.
-9. **PO 워크플로우 경량화 (v0.65)**: Quiet by Default (CP 6→1~2, lean mode 기본 — `vais.config.json > workflow.checkpointPolicy.mode`) + Wisdom Split (도메인 지식 → `agents/{c-level}/knowledge/` lazy-load) + Anti-Boilerplate (plan-extended 헤딩 52→22, autoSelect 자동 선택, gapAnalysis maxIter 5→2). PO 클릭 -80%, 한 피처 토큰 -50~55% 추정.
-10. **CEO 진입 절차 (v0.65.3)**: CEO 가 사용자 입력을 받으면 반드시 4 단계 순차 — (1) `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` Bash 호출 → (2) 7 차원 등급 표 응답에 직접 출력 → (3) `activeCLevel` 결과를 baseline 으로 인용 → (4) AskUserQuestion 클릭. LLM 자체 라우팅 금지. 위임 받은 C-Level 은 main.md "CEO 판단 근거" 섹션에 7 차원 등급 표 인용 의무. 정본: `agents/ceo/ceo.md` "CEO 진입 절차" + `agents/_shared/work-rules.md` "CEO 알고리즘 인용 규칙".
+7. **Sub-doc 직접 박제**: `_tmp/` 폐기. sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter **4 필수 필드** (owner/artifact/phase/feature) 직접 작성. agent/generated/source/summary 는 optional (auto-hydrate). 큐레이션 폐기. 정본: `agents/_shared/subdoc-guard.md`
+8. **C-Level 공존 — main.md 인덱스**: main.md = 5 섹션 인덱스 (Executive/Decision Record/Artifacts/CEO 판단 근거/Next Phase). 본문 X. Decision Record append-only + Owner 컬럼 필수. enforcement: warn. 정본: `agents/_shared/clevel-main-guard.md` (8줄 요약). full canonical: `clevel-main-guard.full.md`.
+9. **PO 워크플로우 경량화**: Quiet by Default (CP 6→1~2, lean mode 기본 — `vais.config.json > workflow.checkpointPolicy.mode`) + Wisdom Split (도메인 지식 → `agents/{c-level}/knowledge/` lazy-load) + Anti-Boilerplate (plan-extended 헤딩 52→22, autoSelect 자동 선택, gapAnalysis maxIter 5→2). PO 클릭 -80%, 한 피처 토큰 -50~55% 추정.
+10. **CEO 진입 절차**: CEO 가 사용자 입력을 받으면 반드시 4 단계 순차 — (1) `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` Bash 호출 → (2) 7 차원 등급 표 응답에 직접 출력 → (3) `activeCLevel` 결과를 baseline 으로 인용 → (4) AskUserQuestion 클릭. LLM 자체 라우팅 금지. 위임 받은 C-Level 은 main.md "CEO 판단 근거" 섹션에 7 차원 등급 표 인용 의무. 정본: `agents/ceo/ceo.md` "CEO 진입 절차" + `agents/_shared/work-rules.md` "CEO 알고리즘 인용 규칙".
 
 ## 에이전트 역할
 
-### C-Suite (전략 레이어, Opus) — v2.0 분류
+### C-Suite (전략 레이어, Opus)
 
 | 에이전트 | 분류 | 역할 |
 |---------|:----:|------|
@@ -85,7 +85,7 @@ Plan → [Gate] → Design → [Gate] → Do (frontend+backend) → [Gate] → Q
 | backend-engineer | CTO | Backend API implementation |
 | qa-engineer | CTO | Gap analysis + code review + QA verification |
 | test-engineer | CTO | Test code generation (unit/integration/e2e) |
-| ci-cd-configurator | COO | CI/CD pipeline (GitHub Actions/GitLab CI/CircleCI) — scope-gated (v0.59 release-engineer 분해) |
+| ci-cd-configurator | COO | CI/CD pipeline (GitHub Actions/GitLab CI/CircleCI) — scope-gated |
 | container-config-author | COO | Dockerfile + docker-compose (multi-stage + non-root) — scope-gated |
 | migration-planner | COO | DB schema migration — forward + rollback + 데이터 손실 위험 평가 |
 | runbook-author | COO | Operations Runbook (Google SRE) + incident playbook |

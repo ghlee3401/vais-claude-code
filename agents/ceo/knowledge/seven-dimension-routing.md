@@ -44,5 +44,5 @@ CEO 가 컨텍스트에 따라 유연 판단. 사용자가 `/vais cbo|coo` 로 �
 ## CSO ↔ CTO 반복 루프
 
 CEO 가 CSO 추천 → CSO 가 CTO 구현물 검토 → (이슈 없음) CEO 통과 보고 / (이슈 있음) CEO → CTO 수정 지시 → CTO 수정 → CSO 재검토.
-- v0.65: `pipeline.reviewLoops.cso-cto.maxIterations = 2` (v0.64=3 에서 감소)
+- `pipeline.reviewLoops.cso-cto.maxIterations = 2`
 - 2회 후 미해결 → incident-responder 호출 → 사용자 에스컬레이션

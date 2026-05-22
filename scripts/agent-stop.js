@@ -2,7 +2,7 @@
 process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS hook] agent-stop crashed: ${e.message}\n`); } catch (_) {} process.exit(0); });
 process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS hook] agent-stop rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(0); });
 // Design Ref: §2.2 — SubagentStop 훅에서 호출되는 얇은 CLI 래퍼
-// v0.56 sub-plan 07: 4-step pipeline 구현
+// 4-step pipeline 구현
 //   Step 1: Document validation (doc-validator)
 //   Step 2: Checkpoint validation (cp-guard)
 //   Step 3: Gate judgment (auto-judge → gate-manager)
@@ -91,7 +91,7 @@ if (C_LEVEL_ROLES.includes(role)) {
     } catch (_) { /* observability failure should not block exit */ }
   }
 
-  // ── Step 3: Gate judgment (v0.56 sub-plan 07) ──────────────────
+  // ── Step 3: Gate judgment ──────────────────
   // gateMode='off' 이면 skip. auto-judge 결과 → gate-manager.checkGate → verdict
   if (feature && gateMode !== 'off' && phaseArg) {
     try {

@@ -1,7 +1,7 @@
 # {feature} - 기획서 (Minimal)
 
 > ⛔ **Plan 단계 범위**: 분석·결정만 기록. 프로덕트 파일 생성·수정은 Do 단계.
-> 📝 **Minimal 템플릿** (v0.58.4+) — CP-1 에서 "A. 최소" 선택 시 사용. 표준 템플릿은 `plan.template.md`.
+> 📝 **Minimal 템플릿** — CP-1 에서 "A. 최소" 선택 시 사용. 표준 템플릿은 `plan.template.md`.
 > 🎯 **CTO 전용**: mandatory PDCA 보유는 CTO 만. 비-CTO 는 CEO 7 차원 알고리즘이 활성화한 phase 만 실행.
 > <!-- artifact body template: phase index 는 templates/main-md.template.md 사용. -->
 

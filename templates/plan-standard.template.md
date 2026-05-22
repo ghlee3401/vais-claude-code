@@ -1,7 +1,7 @@
 # {feature} - 기획서 (Standard)
 
 > ⛔ **Plan 단계 범위**: 분석·결정만 기록. 프로덕트 파일 생성·수정은 Do 단계.
-> 📝 **Standard 템플릿** (v0.58.5+) — CP-1 "B. 표준" 선택 시 사용. PRD 있음 / CTO 단독 강행 양쪽 커버. 경량 템플릿은 `plan-minimal.template.md`, 전체는 `plan-extended.template.md`.
+> 📝 **Standard 템플릿** — CP-1 "B. 표준" 선택 시 사용. PRD 있음 / CTO 단독 강행 양쪽 커버. 경량 템플릿은 `plan-minimal.template.md`, 전체는 `plan-extended.template.md`.
 > 🎯 **CTO 전용**: mandatory PDCA 보유는 CTO 만. 비-CTO 는 CEO 7 차원 알고리즘 결정.
 > <!-- artifact body template: phase index 는 templates/main-md.template.md 사용. -->
 

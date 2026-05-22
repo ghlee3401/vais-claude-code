@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2] - 2026-05-23
+
+### Maintenance
+
+- 문서/코드 주석의 내부 버전 라벨 일괄 제거 — 외부 사용자에게 불필요한 v0.50~v0.69 / v2.0~v3.0 변천사·아키텍처 라벨 100여 파일에서 정리 (~370 치환). 정체성 라벨 `v1.0.x GA`, 외부 의존성 버전 (Python3 ≥ 3.8, Keep a Changelog v1.1.0, SemVer v2.0.0), 컴포넌트 자체 ver (frontmatter `version:`, HTML 블록 마커, OJT 예시) 는 보존
+- ONBOARDING.md 변경 이력 표 제거 — CHANGELOG.md 참조로 통합
+- README.md `Version Highlights` 섹션 제거 — CHANGELOG.md 단일 정본
+
 ## [1.0.1] - 2026-05-22
 
 ### Maintenance

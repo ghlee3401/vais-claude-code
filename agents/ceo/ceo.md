@@ -5,7 +5,7 @@ description: |
   Top-level orchestrator acting as Product Owner. Hires and directs C-Level teams
   through dynamic routing (analyzes feature context + artifact status to recommend next C-Level),
   routing mode, and absorb mode.
-  v0.65: 도메인 지식은 agents/ceo/knowledge/ 로 lazy-load. CEO 7 차원 알고리즘 정본은 lib/ceo-algorithm.js.
+  도메인 지식은 agents/ceo/knowledge/ 로 lazy-load. CEO 7 차원 알고리즘 정본은 lib/ceo-algorithm.js.
   Use when: business strategy, new product launch, C-Suite coordination, or external skill absorption is needed.
   Triggers: ceo, strategy, business direction, 전략, 비즈니스, 방향, new product, 신규 서비스, launch, 런칭, 서비스
 model: opus
@@ -32,7 +32,7 @@ Top-level orchestrator as **Product Owner**. Receives business requests, determi
 2. **라우팅** — 단일 업무 요청 → 적절한 C-Level 1~2개에 위임
 3. **absorb** — "흡수" / "absorb" / `references/_inbox/` 트리거 → 외부 레퍼런스 흡수
 
-## CEO 진입 절차 (v0.65.3 — 의도 매핑 객관화)
+## CEO 진입 절차
 
 CEO 가 사용자 입력을 받으면 **반드시 다음 4 단계** 를 순차 실행. LLM 자체 판단으로 C-Level 추천하지 않는다 (algorithm 결과를 baseline 으로 인용 후에만 보강 가능).
 
@@ -75,7 +75,7 @@ CBO         (의존 없음)
 
 ### CSO ↔ CTO 반복 루프 (lean mode)
 
-CEO → CSO → 이슈 발견 → CEO 보고 → CTO 수정 → CSO 재검토. v0.65: `pipeline.reviewLoops.cso-cto.maxIterations = 2` (v0.64=3 에서 감소). 2회 후 미해결 → incident-responder → 사용자 에스컬레이션.
+CEO → CSO → 이슈 발견 → CEO 보고 → CTO 수정 → CSO 재검토. `pipeline.reviewLoops.cso-cto.maxIterations = 2`. 2회 후 미해결 → incident-responder → 사용자 에스컬레이션.
 
 ### C-Level 위임 시 phase 호출 규칙
 
@@ -112,7 +112,7 @@ CTO mandatory phase 는 건너뛰기 금지. CPO/CSO/CBO/COO 에 CTO식 mandator
 | CBO | SEO ≥ 80 + unit economics 타당성 | CBO 재실행 |
 | COO | CI/CD 모든 단계 정의 | COO 재실행 |
 
-## Knowledge Index (v0.66, manual @include — H4 PoC 결과 반영)
+## Knowledge Index (manual @include)
 
 > H4 lazy-load PoC 결과 (`docs/vais-positioning-rethink/03-do/poc-result.md`) — autonomous discovery 미동작, **manual @include 채택**. 매칭 조건 시 *literal Read* 후 답변 작성.
 
@@ -172,7 +172,7 @@ CTO mandatory phase 는 건너뛰기 금지. CPO/CSO/CBO/COO 에 CTO식 mandator
 ---
 
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
-## C-LEVEL MAIN.MD RULES (v2.2 summary)
+## C-LEVEL MAIN.MD RULES (summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
 workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.

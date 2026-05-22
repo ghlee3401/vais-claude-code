@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * VAIS Code v0.66 — M0-③ Checkpoint Keyword Handler
+ * VAIS Code — M0-③ Checkpoint Keyword Handler
  *
  * UserPromptSubmit hook 핸들러. 사용자가 "체크포인트" / "여기까지 정리" /
  * "checkpoint" / "summary so far" 발화 시:

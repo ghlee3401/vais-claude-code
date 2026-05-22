@@ -2,7 +2,7 @@
 name: copy-writer
 version: 0.50.0
 description: |
-  카피라이팅 + 브랜드 포지셔닝. PAS/AIDA/BAB 프레임 기반 마케팅 카피 제작. (v0.59 Sprint 6 — VPC 책임은 product-strategist 로 이관됨.)
+  카피라이팅 + 브랜드 포지셔닝. PAS/AIDA/BAB 프레임 기반 마케팅 카피 제작.
   Use when: CBO가 Design/Do phase에서 브랜드 메시지 + 카피 제작을 위임할 때.
 model: sonnet
 layer: business
@@ -58,7 +58,7 @@ CBO 위임 sub-agent. 브랜드 포지셔닝 + 마케팅 카피 제작.
 
 | Framework | 용도 | 산출물 형태 |
 |-----------|------|-------------|
-| ~~**Value Proposition Canvas**~~ | ~~pain/gain/jobs ↔ pain relievers/gain creators/products 매칭~~ | **v0.59 Sprint 6: product-strategist (CPO) 로 이관**. VPC 입력은 `templates/why/value-proposition-canvas.md` 참조 |
+| ~~**Value Proposition Canvas**~~ | ~~pain/gain/jobs ↔ pain relievers/gain creators/products 매칭~~ | **product-strategist (CPO) 로 이관**. VPC 입력은 `templates/why/value-proposition-canvas.md` 참조 |
 | **Tone & Voice ladder** | formality × warmth × authority 톤 정의 | 3축 스케일 + 예시 |
 | **Brand Positioning statement** | "For [persona], [product] is [category] that [diff]..." | 1문장 statement |
 | **PAS / AIDA / BAB** | 카피 프레임 (Problem-Agitate-Solve / Attention-Interest-Desire-Action / Before-After-Bridge) | 프레임별 카피 초안 |
@@ -92,7 +92,7 @@ CBO 위임 sub-agent. 브랜드 포지셔닝 + 마케팅 카피 제작.
 ---
 
 <!-- vais:subdoc-guard:begin — injected by scripts/patch-subdoc-block.js. Do not edit inline; update agents/_shared/subdoc-guard.md and re-run the script. -->
-## SUB-DOC RULES (v2.2, 0.66.x — sub-agent 직접 박제, frontmatter 4 필드 슬림)
+## SUB-DOC RULES
 
 canonical: `agents/_shared/subdoc-guard.md`. `scripts/patch-subdoc-block.js` 로 본문 inline 주입.
 workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
@@ -101,7 +101,7 @@ workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-m
 
 `docs/{feature}/{NN-phase}/{artifact}.md` (phase 폴더 안에 평면, slug = frontmatter `artifact` 필드)
 
-### Frontmatter 표준 (v0.65)
+### Frontmatter 표준
 
 ```yaml
 ---
@@ -111,13 +111,13 @@ artifact: "{artifact}"        # 파일 stem 과 일치
 phase: "{phase}"              # ideation|plan|design|do|qa|report
 feature: "{feature}"          # kebab-case
 
-# 선택 (v0.65 — auto-hydrate 가능, missing 시 W-FRONT-01 = info severity)
+# 선택 (auto-hydrate 가능, missing 시 W-FRONT-01 = info severity)
 # agent: "{agent}"            # 없으면 git blame 첫 커밋자
 # generated: YYYY-MM-DD       # 없으면 git log -1 --format=%ad
 # source: "{외부 거장}"       # 외부 자료 흡수 시만, 자체 작성 시 빈 문자열
 # summary: "{≤200자 요약}"   # 없으면 본문 첫 paragraph 200자 자동 추출
 
-# 선택 (v0.65 신규)
+# 선택
 # knowledge_refs: ["agents/{owner}/knowledge/{file}.md"]   # 사용한 도메인 지식 (lazy-load 추적)
 ---
 ```
@@ -139,7 +139,7 @@ feature: "{feature}"          # kebab-case
 
 ### 금지
 
-- ❌ `_tmp/` 폴더 사용 (v0.57 모델 폐기)
+- ❌ `_tmp/` 폴더 사용
 - ❌ sub-agent 의 `main.md` Write/Edit (`main.md` 는 C-Level index 전용)
 - ❌ 다른 sub-agent artifact 수정 (race 방지)
 - ❌ 큐레이션 기록 섹션 (`✅ 채택 / ❌ 거절 / ✓ 병합`) (폐기)

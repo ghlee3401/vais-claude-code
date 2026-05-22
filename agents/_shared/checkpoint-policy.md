@@ -9,7 +9,7 @@ workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-m
 |------|---------|----------|
 | `lean` (0.65 기본) | CP-0(PRD missing) + CP-Q(critical or matchRate<90) + destructive 작업 | CP-1/CP-D/CP-G/CP-2 자동 (outro 한 줄 요약) |
 | `standard` | CP-0 + CP-2(Do destructive) + CP-Q | CP-1/CP-D/CP-G 자동 |
-| `strict` (v0.64 회귀) | 6 CP 모두 | — |
+| `strict` | 6 CP 모두 | — |
 
 ## 발동 조건 (lean 기본)
 

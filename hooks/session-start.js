@@ -77,7 +77,7 @@ function main() {
 
   let ctx = '';
 
-  // v0.66 M0-④ — Ideation 자동 복원 (in-progress 감지 시 5 줄 요약 prepend)
+  // Ideation 자동 복원 (in-progress 감지 시 5 줄 요약 prepend)
   try {
     const inProgressList = listInProgressIdeations();
     if (Array.isArray(inProgressList) && inProgressList.length > 0) {
@@ -186,7 +186,7 @@ function main() {
 }
 
 /**
- * v0.66 M0-④ — In-progress ideation 5 줄 요약 렌더.
+ * In-progress ideation 5 줄 요약 렌더.
  * @param {Array<{feature, ideation}>} list
  * @returns {string} 마크다운 블록
  */

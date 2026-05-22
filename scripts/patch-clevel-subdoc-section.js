@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * v0.57.0 — 6 C-Level agent md 에 "Sub-doc 인덱스 포맷 + 큐레이션 기록" 섹션을
+ * 6 C-Level agent md 에 "Sub-doc 인덱스 포맷 + 큐레이션 기록" 섹션을
  * doc-checklist 와 work-rules 사이에 삽입 (idempotent).
  *
  * Usage: node scripts/patch-clevel-subdoc-section.js [--dry-run]
@@ -17,7 +17,7 @@ const END_MARKER = '<!-- @refactor:end subdoc-index -->';
 const INSERT_AFTER = '<!-- @refactor:end doc-checklist -->';
 
 const SECTION = `${BEGIN_MARKER}
-## Sub-doc 인덱스 포맷 (v0.57+)
+## Sub-doc 인덱스 포맷
 
 **main.md 는 인덱스 + 의사결정만.** sub-agent 상세 분석은 \`_tmp/{agent-slug}.md\` scratchpad 에서 읽고, topic 별 합성은 \`{topic}.md\` 로 분리.
 
@@ -50,7 +50,7 @@ sub-agent 는 \`_tmp/{slug}.md\` 만 Write. main.md / topic 문서는 C-Level �
 |---------------------|:----:|:----:|:----:|:----:|------|
 
 - 필요성 / 누락 / 충돌 C-Level 판단 요약
-- \`scripts/doc-validator.js\` 가 \`W-TPC-01\` 경고로 누락 감지 (v0.57 은 warn only)
+- \`scripts/doc-validator.js\` 가 \`W-TPC-01\` 경고로 누락 감지
 
 ### topic 프리셋
 
@@ -74,7 +74,7 @@ for (const cl of C_LEVELS) {
 
   const content = fs.readFileSync(filePath, 'utf8');
 
-  // 이미 있으면 skip (v0.57 이 동일하므로 idempotent)
+  // 이미 있으면 skip (idempotent)
   if (content.includes(BEGIN_MARKER)) {
     skipped++;
     continue;

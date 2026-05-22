@@ -108,7 +108,7 @@ kubectl logs -f deployment/{service-name} --since=1h
 
 ## (작성된 sample)
 
-### Service: VAIS Code Plugin v0.59
+### Service: VAIS Code Plugin (sample)
 
 | 항목 | 내용 |
 |------|------|
@@ -179,4 +179,4 @@ kubectl logs -f deployment/{service-name} --since=1h
 
 | version | date | change |
 |---------|------|--------|
-| v1.0 | 2026-04-26 | 초기 작성 — Sprint 12. Google SRE Book + SRE Workbook 정전. Service Identity + Deploy + Rollback + Incident Severity + Handoff + Common Ops + sample (VAIS Code v0.59) + checklist 8 + anti-pattern 7 |
+| v1.0 | 2026-04-26 | 초기 작성 — Sprint 12. Google SRE Book + SRE Workbook 정전. Service Identity + Deploy + Rollback + Incident Severity + Handoff + Common Ops + sample + checklist 8 + anti-pattern 7 |

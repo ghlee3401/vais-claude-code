@@ -1,9 +1,9 @@
-## C-LEVEL MAIN.MD RULES (v3.0 summary)
+## C-LEVEL MAIN.MD RULES (summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
 workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
 
-v3.0 핵심 변경 (v0.68+, agent-teams-orchestration 도입): **2 모델 공존** — v1 (5섹션 인덱스, 기존) + v2 (합성문, 신규). frontmatter `model-version` 필드로 분기.
+핵심 변경: **2 모델 공존** — v1 (5섹션 인덱스, 기존) + v2 (합성문, 신규). frontmatter `model-version` 필드로 분기.
 
 ### v1 모드 (`model-version: v1` 또는 키 없음) — 기존 동작
 1. main.md = 5섹션 인덱스 (Executive Summary / Decision Record / Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X.

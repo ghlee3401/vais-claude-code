@@ -1,9 +1,9 @@
-## C-LEVEL MAIN.MD RULES (v3.0, active for all C-Level agents)
+## C-LEVEL MAIN.MD RULES (active for all C-Level agents)
 
 canonical: `agents/_shared/clevel-main-guard.md`. `scripts/patch-clevel-guard.js` 가 6 C-Level agent 본문에 inline 주입.
 workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
 
-> **v3.0 (0.68+) 핵심**: 2 모델 공존 — v1 (5섹션 인덱스, 기존) + v2 (합성문, 신규). frontmatter `model-version` 필드로 분기. `orchestration.agentTeams.enabled=true` 가 신규 피처 v2 트리거.
+> **핵심**: 2 모델 공존 — v1 (5섹션 인덱스, 기존) + v2 (합성문, 신규). frontmatter `model-version` 필드로 분기. `orchestration.agentTeams.enabled=true` 가 신규 피처 v2 트리거.
 
 ### 모델 선택 알고리즘
 
@@ -64,7 +64,7 @@ C-Level 이 자동 채움 (sub-agent artifact 의 frontmatter 추출). 다른 ph
 
 ## §v2 모드 규칙 (대화-합성, agent-teams-orchestration)
 
-### v2.1 진입 프로토콜
+### 진입 프로토콜
 
 phase 시작 시: CEO 알고리즘 `analyzeCEO()` 결과의 `synthesizer` + `participants` 확인. synthesizer 가 도메인 리드로서 phase 합성 책임.
 
@@ -121,7 +121,7 @@ docs/{feature}/{phase}/main.md            ← 합성문 (synthesizer 단독)
 
 1 artifact = 1 MD (통합 금지). 파일명 = frontmatter `artifact` 필드 값.
 
-### 2. enforcement (v3.0)
+### 2. enforcement
 
 - `cLevelCoexistencePolicy.enforcement = "warn"` — W-OWN/W-MRG/W-SYNTH-CONSISTENCY 모두 경고
 - `mainMdMaxLinesAction = "warn"` (refuse 아님)

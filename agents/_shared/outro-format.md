@@ -1,4 +1,4 @@
-# Outro Format (shared, v2.1)
+# Outro Format (shared)
 
 모든 C-Level phase 완료 시 outro 포맷. checkpointPolicy.mode 에 따라 분기.
 

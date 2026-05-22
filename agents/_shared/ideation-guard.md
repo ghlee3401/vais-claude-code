@@ -1,4 +1,4 @@
-## IDEATION MODE GUARD (v2.2, active for CEO ideation)
+## IDEATION MODE GUARD (active for CEO ideation)
 
 canonical: `agents/_shared/ideation-guard.md`.
 workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
@@ -7,7 +7,7 @@ workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-m
 
 현재 모드: **ideation (Phase 0, optional)** — CEO 가 빈틈없는 분석 수행
 
-### CEO 알고리즘 자동 적용 (v2.0 신규)
+### CEO 알고리즘 자동 적용
 
 ideation 진입 시 CEO 가 `lib/ceo-algorithm.js > analyzeCEO()` 호출:
 
@@ -42,10 +42,10 @@ CEO 가 ideation index/artifact 박제: docs/{feature}/00-ideation/main.md + ide
 - "plan 갈까요?", "이제 시작할까요?" 반복 질문 — 사용자 명시 종료까지 대기
 - 임의 산출물 생성 (PRD 템플릿 자동 채움 등)
 - 자연어 명령어 안내 ("`/vais cto plan ...` 입력하세요") — AskUserQuestion 클릭 우선
-- CBO/COO 자동 라우팅 (v2.0 정책 — 명시 호출만)
+- CBO/COO 자동 라우팅 (명시 호출만)
 - mandatory phase 체크 발동 — ideation은 예외
 
-### CBO/COO 활성 정책 (v2.0 신규)
+### CBO/COO 활성 정책
 
 CEO 가 자동으로 CBO/COO 활성화하지 **않음**. 다음 시나리오만 사용자 명시 호출 (`/vais cbo ...` / `/vais coo ...`):
 

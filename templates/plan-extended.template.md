@@ -1,9 +1,8 @@
 # {feature} - 기획서 (Extended)
 
-> 📝 **Extended 템플릿** (v0.65) — autoSelect 가 PRD 부재 + 신규 피처 + UI/API 모두 감지 시 사용. 일반 피처는 `plan-standard.template.md`, 간단 수정은 `plan-stub.template.md` 또는 `plan-minimal.template.md`.
+> 📝 **Extended 템플릿** — autoSelect 가 PRD 부재 + 신규 피처 + UI/API 모두 감지 시 사용. 일반 피처는 `plan-standard.template.md`, 간단 수정은 `plan-stub.template.md` 또는 `plan-minimal.template.md`.
 > ⛔ **Plan ≠ Do**: 분석·결정만 기록. 코드 수정은 Do 단계에서.
 > artifact body template: phase index 는 `templates/main-md.template.md` 사용.
-> v0.65 변경: Topic Documents/Scratchpads (v0.57 잔재) / 0.5 MVP / 0.6 경쟁 분석 / 7.1 UI 라이브러리 / 8 화면 목록 / 9 일정 섹션 삭제. 22 헤딩 (v0.64=52).
 
 ## 요청 원문
 

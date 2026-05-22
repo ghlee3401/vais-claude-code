@@ -1,7 +1,7 @@
 ---
 name: cso
 version: 2.0.0
-description: CSO 에이전트 호출. 보안 검토(Gate A) + 플러그인 검증(Gate B) + 독립 코드 리뷰(Gate C). v2.0 Primary — CEO 7 차원 알고리즘이 활성화한 phase 만 실행. main.md 인덱스 + sub-agent 직접 박제.
+description: CSO 에이전트 호출. 보안 검토(Gate A) + 플러그인 검증(Gate B) + 독립 코드 리뷰(Gate C). Primary — CEO 7 차원 알고리즘이 활성화한 phase 만 실행. main.md 인덱스 + sub-agent 직접 박제.
 ---
 
 # CSO Phase

@@ -29,7 +29,7 @@ description: VAIS 피처 진행 상황 HTML 대시보드 생성. 모든 피처�
 대시보드 HTML은 다음을 포함합니다:
 - 각 피처의 현재 phase + 진행 바
 - `docs/{feature}/{NN-phase}/main.md` 산출물 링크
-- gate 결과 요약 (v0.56 sub-plan 07 활성화 이후 표기 예정)
+- gate 결과 요약
 
 #### 주의
 

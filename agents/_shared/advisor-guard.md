@@ -31,7 +31,7 @@
   disable된다. 이때는 Sonnet 단독으로 정상 작업을 계속하라. advisor 없다고
   사용자에게 묻지 말 것.
 
-### Fallback 모드 CLI 호출 (v0.56+)
+### Fallback 모드 CLI 호출
 
 session-start hook이 `.vais/advisor-mode.json` 을 작성한다. `mode` 가:
 

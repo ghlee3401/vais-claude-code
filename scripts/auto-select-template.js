@@ -2,7 +2,7 @@
 process.on('uncaughtException', e => { try { process.stderr.write(`[VAIS] auto-select-template crashed: ${e.message}\n`); } catch (_) {} process.exit(0); });
 process.on('unhandledRejection', e => { try { process.stderr.write(`[VAIS] auto-select-template rejected: ${e && e.message || e}\n`); } catch (_) {} process.exit(0); });
 /**
- * VAIS Code v0.65 — Plan template auto-selector.
+ * VAIS Code — Plan template auto-selector.
  *
  * 정본: vais.config.json > workflow.template.{stub,minimal,standard,extended}
  * CTO Plan phase 진입 시 변경 surface + PRD 상태로 stub/minimal/standard/extended 추천.
@@ -93,7 +93,7 @@ function detectPrdQuality(feature) {
   if (!feature) return 'missing';
   const candidatePaths = [
     path.join(process.cwd(), 'docs', feature, '01-plan', 'prd.md'),
-    // Backward compatibility for pre-v0.64 integrated PRD documents.
+    // Backward compatibility for integrated PRD documents.
     path.join(process.cwd(), 'docs', feature, '03-do', 'main.md'),
   ];
   const prdPath = candidatePaths.find((p) => fs.existsSync(p));

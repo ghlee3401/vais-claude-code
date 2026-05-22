@@ -1,4 +1,4 @@
-# Gate System (CTO, v0.56+)
+# Gate System (CTO)
 
 4개 Gate 에서 바이너리 체크리스트 기반 판정. auto-judge 가 메트릭으로 판정.
 

@@ -1,6 +1,6 @@
 ---
 name: teams-status
-description: VAIS Agent Teams 활성 세션 + sub-agent worktree + 합성자 추적 표시. v0.68+ agent-teams-orchestration 부속. `agentTeams.enabled=false` 시 미활성 안내.
+description: VAIS Agent Teams 활성 세션 + sub-agent worktree + 합성자 추적 표시. agent-teams-orchestration 부속. `agentTeams.enabled=false` 시 미활성 안내.
 ---
 
 # `/vais teams status`

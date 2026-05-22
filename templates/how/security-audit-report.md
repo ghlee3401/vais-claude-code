@@ -93,7 +93,7 @@ project_context_reason: "How 단계 — 모든 프로젝트 보안 감사. OWASP
 
 ## (작성된 sample)
 
-### VAIS Code Plugin v0.59 — Security Audit (Sprint 1~3 시점)
+### VAIS Code Plugin — Security Audit (sample)
 
 | 항목 | 내용 |
 |------|------|
@@ -170,4 +170,4 @@ project_context_reason: "How 단계 — 모든 프로젝트 보안 감사. OWASP
 
 | version | date | change |
 |---------|------|--------|
-| v1.0 | 2026-04-26 | 초기 작성 — Sprint 12. OWASP Top 10 (2021) + CWE Top 25 + STRIDE + NIST 정전. Audit Scope + OWASP Checklist + STRIDE Threat Model + Findings + Compliance + Sign-off + sample (VAIS Code v0.59 감사 — Sprint 1~3 보안 측면) + checklist 7 + anti-pattern 7 |
+| v1.0 | 2026-04-26 | 초기 작성 — Sprint 12. OWASP Top 10 (2021) + CWE Top 25 + STRIDE + NIST 정전. Audit Scope + OWASP Checklist + STRIDE Threat Model + Findings + Compliance + Sign-off + sample + checklist 7 + anti-pattern 7 |

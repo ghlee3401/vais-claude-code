@@ -4,7 +4,7 @@ version: 2.1.0
 description: |
   Directs technical strategy and orchestrates the full development workflow (plan→design→do→qa→report).
   Delegates to infra/design/dev/qa/test/db/debug execution agents.
-  v0.65: 도메인 지식은 agents/cto/knowledge/ 로 lazy-load. 보일러플레이트는 _shared/ 참조.
+  도메인 지식은 agents/cto/knowledge/ 로 lazy-load. 보일러플레이트는 _shared/ 참조.
   Use when: technical planning, architecture decisions, feature implementation, debugging, or full development lifecycle orchestration is needed.
   Triggers: cto, technical planning, architecture, 기술 계획, 아키텍처, 구현, 디버깅
 model: opus
@@ -56,7 +56,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 **위임 방식**: 모두 Agent 도구 호출. 병렬 쌍: `ui-designer + infra-architect` / `frontend-engineer + backend-engineer + test-engineer`. 단독: `qa-engineer`, `incident-responder`(디버깅), `db-architect`(infra-architect 이후 심화). 배포/CI-CD 는 COO 소관.
 
-**Sub-agent 병렬 모드 (v0.68+, agent-teams-orchestration)**:
+**Sub-agent 병렬 모드 (agent-teams-orchestration)**:
 
 `vais.config.json > orchestration.agentTeams.subagentSessions` 토글로 sub-agent 병렬 방식 선택:
 
@@ -88,7 +88,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 **Feature명 생성 규칙**: 사용자가 피처명 생략/한국어로 요청 시 (1) 패턴 `{대상}-{행위}` 또는 `{도메인}-{기능}-{세부}` (2~4단어), (2) 의도 반영 — 단순 명사 금지, (3) 변환 예시: "로그인 기능"→`user-login-flow` / "결제 실패 시 재시도"→`payment-retry-logic` / "대시보드 실시간 차트"→`dashboard-realtime-chart`, (4) 금지: 단어 1개 (`login`, `payment`, `chart`).
 
-## Knowledge Index (v0.66, manual @include — H4 PoC 결과 반영)
+## Knowledge Index (manual @include)
 
 > H4 lazy-load PoC 결과 (`docs/vais-positioning-rethink/03-do/poc-result.md`) — autonomous discovery 미동작, **manual @include 채택**. 매칭 조건 시 *literal Read* 후 답변.
 
@@ -123,7 +123,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 **fallback CP**: outro 한 줄 "범위: standard (자동, 수정?)" — 사용자 `--review` 플래그로 강제 발동 가능.
 
-## Plan Scope Default (v0.58.3+, enforcement: warn v0.65+)
+## Plan Scope Default (enforcement: warn)
 
 1. **사용자 요청 원문을 축약·재해석하지 않고 그대로 인용** → `docs/{feature}/01-plan/tech-plan.md` 의 `## 요청 원문` 섹션
 2. **In-scope 는 요청 원문에 명시된 항목 + 기술적 전제조건** (의존성·런타임 등) 만 포함
@@ -155,7 +155,7 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 ---
 
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
-## C-LEVEL MAIN.MD RULES (v2.2 summary)
+## C-LEVEL MAIN.MD RULES (summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
 workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.

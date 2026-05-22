@@ -129,7 +129,7 @@ includes:
 
 qa-engineer 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
 
-## 디자인 시스템 (DS) 자동 선택 (v1.3.0+, mui-design-system-import 산출물)
+## 디자인 시스템 (DS) 자동 선택 (mui-design-system-import 산출물)
 
 design phase 시작 시 **반드시** 다음 절차로 사용할 DS 를 결정합니다:
 
@@ -165,7 +165,7 @@ design phase 시작 시 **반드시** 다음 절차로 사용할 DS 를 결정�
 - 카탈로그에 없는 토큰이 필요하면 → 산출물에 "카탈로그 외 토큰 필요" 섹션에 명시 + `_overrides.json` 추가 제안 (코드는 do phase)
 - MCP `design_search` 결과 중 `baseline` 필드(있으면)를 vendor 결과보다 우선
 
-> 본 절차는 mui-design-system-import 피처 (v1.0.1) 의 medium 강화 산출물입니다. 단일 DS 등록 환경에서는 사실상 자동, 다중 DS 환경에서는 사용자 선택형으로 동작합니다.
+> 본 절차는 mui-design-system-import 피처의 medium 강화 산출물입니다. 단일 DS 등록 환경에서는 사실상 자동, 다중 DS 환경에서는 사용자 선택형으로 동작합니다.
 
 ---
 
@@ -179,7 +179,7 @@ design phase 시작 시 **반드시** 다음 절차로 사용할 DS 를 결정�
 ---
 
 <!-- vais:subdoc-guard:begin — injected by scripts/patch-subdoc-block.js. Do not edit inline; update agents/_shared/subdoc-guard.md and re-run the script. -->
-## SUB-DOC RULES (v2.2, 0.66.x — sub-agent 직접 박제, frontmatter 4 필드 슬림)
+## SUB-DOC RULES
 
 canonical: `agents/_shared/subdoc-guard.md`. `scripts/patch-subdoc-block.js` 로 본문 inline 주입.
 workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
@@ -188,7 +188,7 @@ workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-m
 
 `docs/{feature}/{NN-phase}/{artifact}.md` (phase 폴더 안에 평면, slug = frontmatter `artifact` 필드)
 
-### Frontmatter 표준 (v0.65)
+### Frontmatter 표준
 
 ```yaml
 ---
@@ -198,13 +198,13 @@ artifact: "{artifact}"        # 파일 stem 과 일치
 phase: "{phase}"              # ideation|plan|design|do|qa|report
 feature: "{feature}"          # kebab-case
 
-# 선택 (v0.65 — auto-hydrate 가능, missing 시 W-FRONT-01 = info severity)
+# 선택 (auto-hydrate 가능, missing 시 W-FRONT-01 = info severity)
 # agent: "{agent}"            # 없으면 git blame 첫 커밋자
 # generated: YYYY-MM-DD       # 없으면 git log -1 --format=%ad
 # source: "{외부 거장}"       # 외부 자료 흡수 시만, 자체 작성 시 빈 문자열
 # summary: "{≤200자 요약}"   # 없으면 본문 첫 paragraph 200자 자동 추출
 
-# 선택 (v0.65 신규)
+# 선택
 # knowledge_refs: ["agents/{owner}/knowledge/{file}.md"]   # 사용한 도메인 지식 (lazy-load 추적)
 ---
 ```
@@ -226,7 +226,7 @@ feature: "{feature}"          # kebab-case
 
 ### 금지
 
-- ❌ `_tmp/` 폴더 사용 (v0.57 모델 폐기)
+- ❌ `_tmp/` 폴더 사용
 - ❌ sub-agent 의 `main.md` Write/Edit (`main.md` 는 C-Level index 전용)
 - ❌ 다른 sub-agent artifact 수정 (race 방지)
 - ❌ 큐레이션 기록 섹션 (`✅ 채택 / ❌ 거절 / ✓ 병합`) (폐기)

@@ -211,7 +211,7 @@ ADR 작성 전 답할 수 있어야 함:
 * **Decision**: Stop hook 에서 `child.unref()` 로 fire-and-forget worker 분리
 * **Considered**: ① 동기 처리 (hook 내 LLM 호출) ② detached worker ③ 큐 시스템
 * **Trade-off**: ①은 사용자 대기시간 폭증 (LLM 1~3s). ②는 BC + 무영향. ③은 over-engineering
-* **흔한 실수 회피**: #1 Over-engineering (큐 시스템은 v0.66 규모에 과도)
+* **흔한 실수 회피**: #1 Over-engineering (큐 시스템은 현재 규모에 과도)
 
 ### ADR-3: M1 OJT Budget 5000 → 7000자 재조정 (W1 D5)
 

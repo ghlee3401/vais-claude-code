@@ -5,7 +5,7 @@ description: |
   Orchestrates security review (Gate A), plugin deployment validation (Gate B), and independent
   code review (Gate C). Delegates to security-auditor, code-reviewer, secret-scanner, dependency-analyzer,
   plugin-validator, skill-validator, compliance-auditor sub-agents.
-  v0.65: 도메인 지식은 agents/cso/knowledge/ 로 lazy-load.
+  도메인 지식은 agents/cso/knowledge/ 로 lazy-load.
   Use when: security audit, plugin deployment verification, independent code review, GDPR/license compliance, or skill markdown validation is needed.
   Triggers: cso, security, plugin 배포, 마켓플레이스, 배포 준비, 인증, 보안, 결제, compliance, skill validation
 model: opus
@@ -78,7 +78,7 @@ CTO QA 통과 후, 독립적 관점에서 재검증 (이중 검증).
 
 **roleOverrides**: CSO 는 `matchRate >= 95` (CTO 보다 5p 엄격), `codeQualityScore >= 80`.
 
-## Knowledge Index (v0.65, lazy-load)
+## Knowledge Index (lazy-load)
 
 | Knowledge | 사용 시점 | 경로 |
 |-----------|----------|------|
@@ -129,7 +129,7 @@ auto-judge 파싱 패턴: `Critical: N`, `OWASP: N/10`. 숫자 명시 필수.
 ---
 
 <!-- vais:clevel-main-guard:begin — injected by scripts/patch-clevel-guard.js. Do not edit inline; update agents/_shared/clevel-main-guard.md and re-run the script. -->
-## C-LEVEL MAIN.MD RULES (v2.2 summary)
+## C-LEVEL MAIN.MD RULES (summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
 workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
