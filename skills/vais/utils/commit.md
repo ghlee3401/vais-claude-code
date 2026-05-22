@@ -20,7 +20,7 @@ git 변경사항을 분석하여 **한국어 한 줄** Conventional Commits 메�
    - 옵션: "patch (x.x.+1)", "minor (x.+1.0)", "major (+1.0.0)", "버전 변경 없음"
 7. **버전 일괄 반영** (버전 변경 선택 시):
    - 현재 버전 문자열로 프로젝트 전체를 Grep 도구로 탐색
-   - 제외 대상: `node_modules/`, `.git/`, `vendor/`, `basic/`, `docs/` 내 과거 CHANGELOG 엔트리
+   - 제외 대상: `node_modules/`, `.git/`, `vendor/`, `docs/` 내 과거 CHANGELOG 엔트리
    - false positive 필터: 버전 비교 연산자(`>=`, `<=`, `>`, `<`, `==`) 포함 행 제외
    - 탐색 결과를 사용자에게 테이블로 표시 (파일 경로 + 매칭 내용)
    - 사용자 확인 후 일괄 반영

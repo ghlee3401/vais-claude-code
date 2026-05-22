@@ -24,7 +24,6 @@ summary: "5개 파일 narrative diff 설계 — README.md·CLAUDE.md·ONBOARDING
 | 경로 | 결과 | 처리 |
 |------|------|------|
 | `/Users/ghlee/workspace/vais-claude-code/README.md` | **존재** (25KB, badge `version-0.65.3-blue` stale 4 minor) | narrative diff 대상 (§2) |
-| `basic/README.md` | 패턴 참고용 폴더 | 수정 X |
 | `vendor/README.md` | 외부 의존 폴더 | 수정 X |
 
 **결정**: 루트 README.md 의 (1) version badge stale 갱신 (2) ONBOARDING `#agent-teams-activation` 링크 노출 추가 (3) 6 C-Level / 47 sub-agent 문구 1.0.0 GA 기준 정합. Do phase 작업 파일 수 = **5개**.
