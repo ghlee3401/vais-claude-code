@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -425,7 +425,7 @@
       "_description": "design-system MCP 게이트. true = ON (기본 v0.61.0+, design phase 진입 시 design_system_generate 자동 호출). false = 명시적 opt-out. 키 누락 시 lib/mcp-validator.js fallback 도 true. Hard fail 정책: Python3 미설치 / vendor 손상 시 design phase exit(1)."
     },
     "agentTeams": {
-      "enabled": false,
+      "enabled": true,
       "_enabled_description": "v2 대화-합성 모델 (Conversation Orchestrator + Lazy Consensus) opt-in 토글. false (기본, 1.0.0 GA default) = byte-level 동등 (sequential + 5섹션 인덱스). true = 본격 Agent Teams 모드 (강제 X, 안내 O — ONBOARDING.md#agent-teams-activation 참조). CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 시 real SendMessage / 미활성 시 simulation graceful degradation.",
       "subagentSessions": false,
       "_subagentSessions_description": "패턴 D (sub-agent background sessions + worktree 격리) sub-toggle. enabled 와 독립적으로 제어 가능.",

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1] - 2026-05-22
+
+### Maintenance
+
+- `agentTeams.enabled` 프로젝트 default `true` 활성화 (1.0.0 GA opt-in 정책 자체 프로젝트 적용)
+- `basic/` 하네스 참조 폴더 제거 (1년+ stale, v0.47 scaffold). 메타-규칙 4곳 정리 — `CLAUDE.md` 구조 트리/Do-NOT 섹션, `skills/vais/utils/commit.md`, `docs/vais-1-0-0-release/02-design/narrative-realignment.md`
+
 ## [1.0.0] - 2026-05-17 — organization-in-a-box GA
 
 vais-code 공식 1.0.0 GA. v0.x 실험 단계 졸업 → **organization-in-a-box** (PO 1명이
