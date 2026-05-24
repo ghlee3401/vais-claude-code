@@ -56,6 +56,18 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 
 **위임 방식**: 모두 Agent 도구 호출. 병렬 쌍: `ui-designer + infra-architect` / `frontend-engineer + backend-engineer + test-engineer`. 단독: `qa-engineer`, `incident-responder`(디버깅), `db-architect`(infra-architect 이후 심화). 배포/CI-CD 는 COO 소관.
 
+**Design phase — Brand 선택 (Brand-First 모델, design-system-rethink 산출물)**:
+
+design phase 위임 (ui-designer Agent 호출) 직전에 brand 선택 상태를 검증해야 합니다.
+
+1. `lib/status.js > getBrand(feature)` 호출 — null/미설정 시 다음 단계
+2. fallback chain: `VAIS_DEFAULT_BRAND` env → `vais.config.json > designSystem.defaultBrand` → 둘 다 없으면 2-step AskUserQuestion
+3. **Step 1 AskUserQuestion** — `브랜드 선택 방식?` 옵션: 자주 쓰는 5 (claude/linear/stripe/vercel/notion) / 카테고리 검색 / 직접 입력 / default 사용
+4. **Step 2** (카테고리 선택 시) — 8 카테고리 → brand 페이지네이션
+5. 선택된 slug 저장 (`setBrand(feature, slug)`) → ui-designer 위임. hook (`hooks/design-mcp-trigger.js`) 이 자동 import + DESIGN.md 컨텍스트 검증
+
+> 정본: `agents/cto/ui-designer.md` "Brand 선택 + DESIGN.md 참조" 섹션. 정책: `vais.config.json > designSystem` (defaultBrand / preBakedBrands / blockOnMissingBrand 등).
+
 **Sub-agent 병렬 모드 (agent-teams-orchestration)**:
 
 `vais.config.json > orchestration.agentTeams.subagentSessions` 토글로 sub-agent 병렬 방식 선택:

@@ -9,7 +9,7 @@
 
 **vais-code 정체성 (v1.0.0 GA)**: *organization-in-a-box* — PO 1 명이 부서장 OJT 매뉴얼 (도메인 지식 박제) 을 통해 가상 C-Suite 조직을 운영하는 도구. 부서장 OJT 4 요소 (framework + 실무 단계 + 의사결정 패턴 + 산출물 양식) 가 grep 가능 영역에 박제되어 vanilla CC 와 차별화.
 
-AI C-Suite 조직 시뮬레이션 플러그인. CEO가 Product Owner로서 6 C-Level 팀(CPO, CTO, CSO, CBO, COO)을 고용·지휘하여 서비스 런칭 전체 라이프사이클을 자동 실행한다. 개별 C-Level 직접 호출도 가능. design-system MCP + mui 디자인 시스템 카탈로그 박제 (`design-system/mui/`) + ui-designer DS 자동 선택. PO 워크플로우 경량화 (Quiet by Default + Wisdom Split + Anti-Boilerplate). frontmatter 4 필수 + sub-agent 직접 박제 + main.md 인덱스. CEO 진입 절차 박제 (`analyzeCEO()` → 7 차원 등급 표 → activeCLevel 인용). Knowledge Pack lazy-load (CEO Rumelt + CPO PRD OJT + CTO Architecture Decision). Agent Teams 대화-합성 모델 (Conversation Orchestrator + Lazy Consensus 5-state FSM, opt-in).
+AI C-Suite 조직 시뮬레이션 플러그인. CEO가 Product Owner로서 6 C-Level 팀(CPO, CTO, CSO, CBO, COO)을 고용·지휘하여 서비스 런칭 전체 라이프사이클을 자동 실행한다. 개별 C-Level 직접 호출도 가능. **Brand-first 디자인 모델** — `design-system/brands/` 71 brand DESIGN.md (Google Stitch 포맷, VoltAgent/awesome-design-md MIT 박제, default 5 사전 박제 + 나머지 lazy import). ui-designer 가 design phase 진입 시 2-step AskUserQuestion (Hot 5 / Category / Manual / Default) 으로 brand 선택. PO 워크플로우 경량화 (Quiet by Default + Wisdom Split + Anti-Boilerplate). frontmatter 4 필수 + sub-agent 직접 박제 + main.md 인덱스. CEO 진입 절차 박제 (`analyzeCEO()` → 7 차원 등급 표 → activeCLevel 인용). Knowledge Pack lazy-load (CEO Rumelt + CPO PRD OJT + CTO Architecture Decision). Agent Teams 대화-합성 모델 (Conversation Orchestrator + Lazy Consensus 5-state FSM, opt-in).
 
 ## Project Structure
 
@@ -25,13 +25,13 @@ vais-claude-code/
 │   └── _shared/     #   공유 가드 (advisor-guard, ideation-guard, clevel-main-guard, subdoc-guard, checkpoint-policy, work-rules, outro-format)
 ├── skills/vais/     # SKILL.md + phases/ + utils/  (`/vais` 명령어 진입점)
 ├── hooks/           # hooks.json, events.json, session-start.js, design-mcp-trigger.js, ideation-guard.js
-├── lib/             # 핵심 라이브러리 (fs-utils, io, memory, paths, status, mcp-validator, ...)
-├── scripts/         # doc-validator, auto-judge, patch-*, import-mui-design-system 등
+├── lib/             # 핵심 라이브러리 (fs-utils, io, memory, paths, status, brand-validator, mcp-validator(deprecated), ...)
+├── scripts/         # doc-validator, auto-judge, patch-*, import-awesome-design-md 등
 ├── templates/       # PDCA 문서 템플릿 (4-tier plan: stub/minimal/standard/extended + design/do/qa/report/ideation + 6 서브디렉토리 alignment/biz/core/how/what/why)
 ├── mcp/             # MCP 서버 (vais-design-system — design_search / design_system_generate / design_stack_search)
 ├── output-styles/   # 출력 스타일 정의 (session-start hook이 로드)
 ├── docs/            # 피처별 산출물 (docs/{feature}/{phase}/main.md)
-├── design-system/   # DS 카탈로그 박제 (INDEX.md + mui/ 토큰·컴포넌트, scripts/import-mui-design-system.js 가 박제)
+├── design-system/   # Brand-first 카탈로그 (INDEX.md + brands/{slug}/DESIGN.md, scripts/import-awesome-design-md.js 가 박제, default 5 + lazy import)
 ├── references/      # 흡수 대기 inbox (gitignored, _inbox/만 유지 — 내부 공유 문서 저장 금지)
 ├── vendor/          # 외부 의존 (ui-ux-pro-max)
 ├── tests/           # 테스트

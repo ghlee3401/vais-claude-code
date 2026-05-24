@@ -145,21 +145,21 @@ flowchart TB
 
     PHASES --> AGENTSDIR[agents/<br/>6 C-Level + 47 sub-agents + knowledge/ 19 MD]
     AGENTSDIR --> HOOKS[hooks/<br/>session-start·design-mcp-trigger·ideation-guard]
-    AGENTSDIR --> SCRIPTS[scripts/<br/>doc-validator·auto-judge·auto-select-template·patch-*·import-mui-design-system]
+    AGENTSDIR --> SCRIPTS[scripts/<br/>doc-validator·auto-judge·auto-select-template·patch-*·import-awesome-design-md]
 
     CLAUDE --> CONFIG[vais.config.json<br/>워크플로우·게이트·C-Suite 정의]
     PHASES --> CONFIG
     AGENTSDIR --> CONFIG
 
     AGENTSDIR --> DOCS[docs/{feature}/<br/>피처별 PDCA 산출물]
-    DOCS --> DS[design-system/<br/>DS 카탈로그 박제]
+    DOCS --> DS[design-system/brands/<br/>71 brand DESIGN.md 박제]
 ```
 
 부속 폴더 (그래프 외):
-- `lib/` — fs-utils, io, status, mcp-validator 등 공유 helper
+- `lib/` — fs-utils, io, status, brand-validator, mcp-validator(deprecated) 등 공유 helper
 - `templates/` — PDCA 문서 템플릿 (4-tier plan: stub/minimal/standard/extended + design/do/qa/report/ideation + 6 서브디렉토리 alignment/biz/core/how/what/why)
 - `output-styles/` — 출력 스타일 (session-start hook 로드)
-- `mcp/` — `vais-design-system` MCP 서버 (design_search / design_system_generate / design_stack_search)
+- `mcp/` — `vais-design-system` MCP 서버 (design_search / design_stack_search — heuristics 가드레일 전용)
 - `vendor/ui-ux-pro-max` — BM25 검색 엔진 (직접 수정 금지)
 
 ---
@@ -188,7 +188,7 @@ flowchart TB
 
 3. /vais cto design social-login-integration
    → ui-designer + infra-architect 위임 (병렬). CP-D (아키텍처 옵션) → docs/.../02-design/main.md
-   → ui-designer 가 design-system/mui/MASTER.md 자동 참조
+   → 2-step AskUserQuestion 으로 brand 선택 (Hot 5 / Category / Manual / Default) → design-system/brands/{slug}/DESIGN.md 가 single source
 
 4. /vais cto do social-login-integration
    → frontend-engineer + backend-engineer + test-engineer 위임 (병렬). 실제 구현. CP-2.
@@ -210,7 +210,7 @@ flowchart TB
 | 6 C-Level 상세 책임 | `agents/{c-level}/{c-level}.md` |
 | Mandatory Rules (14개) | `CLAUDE.md` § Mandatory Rules |
 | Gate / Checkpoint 시스템 | `vais.config.json` + `agents/cto/cto.md` § Checkpoint |
-| 디자인 시스템 import | `scripts/import-mui-design-system.js` + `docs/mui-design-system-import/` |
+| 디자인 시스템 — brand 박제 | `scripts/import-awesome-design-md.js` + `docs/design-system-rethink/` + `design-system/brands/INDEX.md` |
 | Plugin 구조 검증 | `node scripts/vais-validate-plugin.js` |
 
 ---

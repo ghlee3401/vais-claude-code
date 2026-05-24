@@ -1,5 +1,50 @@
 # Changelog
 
+## [1.1.0] - 2026-05-23 — Brand-First Design Model
+
+vais-code 의 ui design flow 를 **brand-first** 로 재정립. MUI 종속 (Material Design 톤
+default → 모든 산출물 비슷한 미감) 해소. design phase 시작 시 사용자가 brand 를 선택하면
+해당 brand 의 DESIGN.md (Google Stitch 포맷) 가 ui-designer single source of truth 로 작동.
+71 brand 카탈로그 박제 (VoltAgent/awesome-design-md, MIT) — default 5 (claude / linear /
+stripe / vercel / notion) 사전 박제 + 나머지 사용자 선택 시 lazy import.
+
+### Added
+
+- **`scripts/import-awesome-design-md.js`** — VoltAgent/awesome-design-md → `design-system/brands/{slug}/DESIGN.md` 박제. CLI: `--source` / `--brands` / `--all` / `--pre-bake` / `--dry-run` / `--force` / `--regen-index`. Idempotent + attribution comment prepend + MIT LICENSE 박제
+- **`design-system/brands/`** — 71 brand DESIGN.md 카탈로그 (Google Stitch 포맷). default 5 (claude / linear / stripe / vercel / notion) 사전 박제 + INDEX.md 자동 생성 (8 카테고리 + Baked 컬럼) + LICENSE.md
+- **`lib/brand-validator.js`** — `brandDesignPath` / `brandExists` / `listBakedBrands` / `loadBrandDesign` / `isKnownBrand` / `listAllBrandSlugs` / `getBrandContext`. INDEX.md 화이트리스트 파싱
+- **`lib/status.js > getBrand / setBrand`** — `.vais/status.json > features.{feature}.brand` slug read/write. slug 패턴 검증 (`^[a-z0-9][a-z0-9-]{0,63}$`)
+- **`vais.config.json > designSystem` 섹션** — 7 키 (model / brandRoot / defaultBrand / preBakedBrands / categorySource / selectionStrategy / blockOnMissingBrand)
+- **2-step AskUserQuestion brand 선택** — Step 1: Hot 5 / Category 검색 / 직접 입력 / Default. Step 2: 카테고리 선택 시 8 카테고리 → brand 페이지네이션 (AskUserQuestion 4-option 제한 회피)
+- **Lazy import** — 미박제 brand 선택 시 hook 이 자동 import script 호출. R1 (4.7M repo size) 95% 절감 (~220KB 사전 박제)
+- **Slug 정규화** — `linear.app` → `linear`, `x.ai` → `xai` (≥3자 보장), `mistral.ai` → `mistral`. tld strip + concatenate 조합
+
+### Changed
+
+- **`hooks/design-mcp-trigger.js`** — `hasMasterDoc` (mui) → `hasBrandSelected` (brand). brand 미선택 시 block-soft + fallback chain (`VAIS_DEFAULT_BRAND` env → `vais.config.json > designSystem.defaultBrand`). 미박제 brand 선택 시 자동 import
+- **`agents/cto/ui-designer.md` → v2.0.0** — "DS 자동 선택 (mui-first)" 섹션 제거 → "Brand 선택 + DESIGN.md 참조" 섹션 신설. tools 필드에서 `design_system_generate` 제거, `design_search` (UX heuristics 가드레일) 만 유지
+- **`agents/cto/cto.md`** — design phase 위임 절차에 brand 선택 plot (5 step) 추가
+- **`design-system/INDEX.md`** — `## mui` 섹션 → `## brands` 섹션. brand-first 모델 안내 + lazy import 가이드
+- **CLAUDE.md / ONBOARDING.md / README.md** — design-system 언급 brand-first 모델로 갱신
+- **MCP `design_system_generate` deprecate** — `lib/mcp-validator.js > hasMasterDoc / runGenerate` 에 `@deprecated` 주석. 외부 호출자 0 (grep 검증)
+
+### Removed
+
+- **`design-system/mui/`** — Material Design 톤 default 종속 해소를 위해 전체 제거 (116K, 19 컴포넌트 + 94 토큰 박제본)
+- **`scripts/import-mui-design-system.js`** — mui 박제 importer 제거
+- **`scripts/import-mui-helpers/`** — 8 helper 파일 (env / fetch-figma / fetch-mui / normalize / resolve / emit / components-data) 제거
+
+### License Attribution
+
+- `design-system/brands/LICENSE.md` — MIT License (VoltAgent, 2026). awesome-design-md upstream 출처 명시
+
+### Migration Notes (Breaking)
+
+- 기존 mui-first 산출물 (`docs/{feature}/02-design/`) historical 유지. 신규 피처부터 brand 모델 적용
+- `features.{feature}.brand` 키 없는 legacy feature 는 다음 design 진입 시만 brand 선택 유도
+- CI/자동화 환경은 `VAIS_DEFAULT_BRAND=<slug>` 환경변수 또는 `vais.config.json > designSystem.defaultBrand` 지정 권장
+- `lib/mcp-validator.js > hasMasterDoc / runGenerate` 는 deprecated. 다음 major release 에서 삭제 예정 — 외부 호출자 없음 확인
+
 ## [1.0.2] - 2026-05-23
 
 ### Maintenance

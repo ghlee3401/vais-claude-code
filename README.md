@@ -400,8 +400,8 @@ vais-claude-code/
 │   └── {alignment,biz,core,how,what,why}/                  # 36 sub-agent artifact 템플릿
 ├── hooks/           SessionStart, PreToolUse (bash-guard, design-mcp-trigger, ideation-guard),
 │                    SubagentStart/Stop, Stop (doc-tracker, doc-validator)
-├── design-system/   DS 카탈로그 박제 (mui Material UI v6.5.0)
-├── mcp/             vais-design-system MCP 서버 (design_search / design_system_generate)
+├── design-system/   Brand-first 카탈로그 (brands/{slug}/DESIGN.md × 71 Google Stitch 포맷, default 5 pre-baked + lazy import)
+├── mcp/             vais-design-system MCP 서버 (design_search heuristics 가드레일)
 ├── ONBOARDING.md    5분 진입 가이드
 ├── CLAUDE.md        Claude Code 전용 지침 (자동 로드)
 ├── AGENTS.md        Cursor/Copilot 등 범용 AI 호환 지침
@@ -430,7 +430,11 @@ vais-claude-code/
 | `gapThreshold` | 0.90 | QA 통과 기준 (90%) |
 | `advisor.enabled` | true | Opus advisor 활성화 |
 | `advisor.monthly_budget_usd` | 200 | 월 advisor 비용 캡 |
-| `orchestration.mcp.enabled` | true | design-system MCP 자동 호출 (기본 ON, Python3 ≥ 3.8 필수) |
+| `orchestration.mcp.enabled` | true | design-system MCP heuristics 자동 호출 (기본 ON, Python3 ≥ 3.8 필수) |
+| **`designSystem.model`** | `brand-first` | Design system 모델 (brand-first only; mui-first deprecated) |
+| **`designSystem.defaultBrand`** | `null` | hook 미선택 fallback. CI 환경은 slug 지정 (예: `claude`). `VAIS_DEFAULT_BRAND` env 가 우선 |
+| **`designSystem.preBakedBrands`** | `[claude, linear, stripe, vercel, notion]` | repo 사전 박제 5 brand. 나머지는 사용자 선택 시 lazy import |
+| **`designSystem.blockOnMissingBrand`** | `true` | brand 미선택 + fallback 없으면 design phase 차단 (block-soft) |
 
 ---
 

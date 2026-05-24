@@ -1,13 +1,14 @@
 ---
 name: ui-designer
-version: 1.0.0
+version: 2.0.0
 description: |
-  Creates integrated UI/UX designs including information architecture, wireframes, and visual design.
-  Auto-generates design tokens via MCP (design_system_generate) and consumes them — design phase
-  진입 시 hooks/design-mcp-trigger.js 가 자동 호출하여 design-system/{feature}/MASTER.md 생성.
+  Creates integrated UI/UX designs grounded in a selected brand DESIGN.md (Google Stitch format)
+  from design-system/brands/. design phase 진입 시 hooks/design-mcp-trigger.js 가 brand 선택을
+  검증하고 미선택 시 차단 (또는 defaultBrand fallback). brand DESIGN.md 의 colors/typography/
+  components 를 single source of truth 로 사용.
   Use when: delegated by CTO for screen design, wireframing, or UI/UX specification.
 model: sonnet
-tools: [Read, Write, Edit, Glob, AskUserQuestion, mcp__vais-design-system__design_search, mcp__vais-design-system__design_system_generate]
+tools: [Read, Write, Edit, Glob, AskUserQuestion, mcp__vais-design-system__design_search]
 memory: none
 disallowedTools:
   - "Bash(rm -rf*)"
@@ -123,49 +124,70 @@ includes:
 ```markdown
 > 참조 문서:
 > - docs/{feature}/01-plan/main.md: 기능 요구사항, 코딩 규칙
-> - design-system/{feature}/MASTER.md: 디자인 토큰
+> - design-system/brands/{brand}/DESIGN.md: 선택된 brand 의 시각 사양 (single source of truth)
 > - docs/{feature}/02-design/main.md: IA, 와이어프레임, 화면별 상세 정의
 ```
 
 qa-engineer 단계에서 역추적이 가능하고, 빠진 참조가 있으면 바로 식별할 수 있습니다.
 
-## 디자인 시스템 (DS) 자동 선택 (mui-design-system-import 산출물)
+## Brand 선택 + DESIGN.md 참조 (Brand-First 디자인 모델)
 
-design phase 시작 시 **반드시** 다음 절차로 사용할 DS 를 결정합니다:
+design phase 시작 시 **반드시** 다음 절차로 사용할 brand 를 결정합니다.
+
+> 정책 정본: `vais.config.json > designSystem` 섹션.
+> Hook 정책: `hooks/design-mcp-trigger.js` 가 brand 미선택 시 design phase 진입을 차단합니다 (block-soft + defaultBrand fallback).
 
 ### 절차
 
-1. **`design-system/INDEX.md` 존재 확인** — Read 시도
-   - **부재** → DS 미등록 상태. 기존 vendor 동작(`design_system_generate` 호출)으로 진행
-   - **존재** → 다음 단계
-2. **등록 DS 목록 추출** — INDEX.md 의 H2 헤더 (`## {ds-name}`) 를 grep 또는 Read 로 파싱
-   - 0개 → 1번 부재 처리
-   - **1개** → 자동 선택 (예: mui 만 있으면 mui 자동) + 사용자에게 알림(`Active DS: mui (auto-selected, only one registered)`)
-   - **2개+** → AskUserQuestion 으로 사용자에게 선택받음 (옵션: 등록 DS 각각 + "none — vendor BM25 만")
-3. **선택된 DS 의 카탈로그 Read** — `design-system/{ds}/MASTER.md` + 필요한 토큰/컴포넌트 MD 를 컨텍스트에 로드
+1. **`.vais/status.json > features.{feature}.brand` 확인** — Read 또는 `lib/status.js > getBrand(feature)` 사용
+   - **값 있음** → 해당 brand DESIGN.md 사용 (3단계로)
+   - **null/미설정** → 다음 단계
+2. **fallback chain 적용**:
+   - 환경변수 `VAIS_DEFAULT_BRAND` 존재 → 그 brand 사용 + `setBrand(feature, slug)` 저장
+   - `vais.config.json > designSystem.defaultBrand` 존재 → 그 brand 사용 + 저장
+   - 둘 다 없음 → **2-step AskUserQuestion 발동** (3단계 건너뛰고 사용자 선택 받음)
+3. **선택된 brand 의 DESIGN.md Read** — `design-system/brands/{slug}/DESIGN.md`
+   - 미박제 (`⬜`) brand 면 hook 이 자동 import 시도 (`scripts/import-awesome-design-md.js --brands {slug}`)
+   - 박제 (`✅`) 이면 즉시 컨텍스트에 prepend
 4. **design 산출물 상단에 명시**:
    ```markdown
-   > Active Design System: {ds} (selected: auto|user)
-   > 참조 카탈로그: design-system/{ds}/MASTER.md
+   > Active Brand: {slug} (source: user-selected | env | config)
+   > 참조 DESIGN.md: design-system/brands/{slug}/DESIGN.md
    ```
 
-### AskUserQuestion 형식 (2개+ DS 등록 시)
+### 2-step AskUserQuestion 형식
 
-- **question**: `이 피처의 디자인 시스템을 선택해주세요.`
-- **options** (등록 DS 별):
-  - `mui` — Material UI v6 (description: 등록 DS 의 INDEX entry 요약)
-  - `nc` — (다른 DS 가 있으면)
-  - `none — vendor BM25 만 사용` — 카탈로그 무시, 기존 동작
-- 사용자 응답 → 그 DS 사용
+**Step 1** — brand 선택 방식:
+- **question**: `이 피처의 brand 를 어떻게 선택하시겠어요?`
+- **options**:
+  1. `자주 쓰는 5 (Recommended)` — claude / linear / stripe / vercel / notion 중 선택
+  2. `카테고리 검색` — 8 카테고리 → brand 2-step (AI/Devtools/Backend/Productivity/Design/Fintech/Ecom/Media)
+  3. `직접 입력` — slug 입력 (`design-system/brands/INDEX.md` 참조)
+  4. `default 사용` — `vais.config.json > designSystem.defaultBrand` 또는 첫 baked brand
 
-### 우선순위 — 카탈로그 사용
+**Step 2** (Category 선택 시) — 카테고리 → brand 2단계 페이지네이션 (AskUserQuestion 4-option 제한 회피).
 
-- **DS 카탈로그 토큰을 우선 사용**. 새 토큰 ID 발명 금지.
-- 토큰 ID(`color.primary.main` 등)로 참조. hex/px 인라인 금지.
-- 카탈로그에 없는 토큰이 필요하면 → 산출물에 "카탈로그 외 토큰 필요" 섹션에 명시 + `_overrides.json` 추가 제안 (코드는 do phase)
-- MCP `design_search` 결과 중 `baseline` 필드(있으면)를 vendor 결과보다 우선
+### DESIGN.md 토큰 사용 규칙
 
-> 본 절차는 mui-design-system-import 피처의 medium 강화 산출물입니다. 단일 DS 등록 환경에서는 사실상 자동, 다중 DS 환경에서는 사용자 선택형으로 동작합니다.
+- **brand DESIGN.md 의 colors / typography / components 를 single source of truth 로 사용**
+- 토큰 인용 형식: `{brand.color.primary}` / `{brand.typography.display-xl}` (mustache-like placeholder)
+- 산출물에서는 placeholder 만 표기. 실제 hex/px 인라인 금지 — frontend-engineer 가 do phase 에서 라이브러리에 매핑
+- DESIGN.md 에 없는 토큰이 필요하면 → 산출물 "Brand 외 추가 토큰" 섹션에 사유 + 새 키 후보 명시
+- MCP `design_search` (ui-ux-pro-max) 는 **UX heuristics 가드레일** 역할만 — brand DESIGN.md 와 충돌 시 brand 우선
+
+### 미선택 + fallback 모두 없는 경우
+
+Hook (`hooks/design-mcp-trigger.js`) 이 design phase 진입을 차단하고 stderr 에 안내 메시지를 출력합니다:
+
+```
+❌ design phase 차단 — brand 가 선택되지 않았습니다.
+해결 방법:
+  1. /vais cto design {feature} 재실행 시 2-step AskUserQuestion 표시
+  2. VAIS_DEFAULT_BRAND=<slug> 환경변수
+  3. vais.config.json > designSystem.defaultBrand
+```
+
+> 본 절차는 design-system-rethink 피처 (brand-first 모델 전환) 산출물입니다. mui-first DS 자동 선택은 deprecated.
 
 ---
 
@@ -175,6 +197,7 @@ design phase 시작 시 **반드시** 다음 절차로 사용할 DS 를 결정�
 | v1.1.0 | 2026-04-05 | 프론트엔드 미학 가이드라인 + 안티패턴 추가 (frontend-design absorb) |
 | v1.2.0 | 2026-05-02 | 디자인 시스템 카탈로그 참조 안내 1줄 추가 (light) — mui-design-system-import 피처 산출물 |
 | v1.3.0 | 2026-05-02 | DS 자동 선택 절차 추가 (medium) — design phase 시작 시 INDEX.md 검사 + 1개면 자동 / 2개+면 AskUserQuestion. mui-design-system-import 피처 v1.0.1 의 medium 강화 후속. |
+| v2.0.0 | 2026-05-23 | **Brand-first 모델 전환** — DS 자동 선택 (mui-first) → Brand 선택 + DESIGN.md 참조. design_system_generate MCP 제거, design_search 만 유지 (UX heuristics 가드레일). hook 정책 변경 (hasBrandSelected). design-system-rethink 피처 산출물. |
 
 ---
 

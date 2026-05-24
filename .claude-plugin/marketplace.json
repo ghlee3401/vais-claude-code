@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "VAIS Code — v1.0 GA: organization-in-a-box 정체성 정식 GA. PO 1명이 6 C-Suite 가상 조직 운영 — CEO 7 차원 알고리즘으로 활성 C-Level 자동 결정 + sub-agent 직접 박제 (frontmatter 4 필수 필드) + AskUserQuestion 클릭. Real SendMessage 또는 simulation graceful degradation (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` 토글).",
-    "version": "1.0.2"
+    "version": "1.1.0"
   },
   "plugins": [
     {
       "name": "vais-code",
       "source": "./",
       "description": "AI code-development assistant simulating a virtual C-Suite. v1.0 GA — organization-in-a-box: PO runs 6 virtual C-Suite agents (CEO 7-dimension algorithm auto-routing). 4 Primary (CEO/CPO/CTO/CSO) + 2 Secondary (CBO/COO explicit). Sub-agent direct stamping (frontmatter 4 fields). CTO mandatory PDCA. Real SendMessage or simulation graceful degradation.",
-      "version": "1.0.2",
+      "version": "1.1.0",
       "author": {
         "name": "VAIS Voice",
         "email": "ghlee0304@ncsoft.com"
