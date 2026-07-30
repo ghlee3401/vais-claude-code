@@ -103,9 +103,24 @@
         ]
       }
     },
-    "rolesList": ["ceo", "cpo", "cto", "cso", "cbo", "coo"],
-    "primary": ["ceo", "cpo", "cto", "cso"],
-    "secondary": ["cbo", "coo"],
+    "rolesList": [
+      "ceo",
+      "cpo",
+      "cto",
+      "cso",
+      "cbo",
+      "coo"
+    ],
+    "primary": [
+      "ceo",
+      "cpo",
+      "cto",
+      "cso"
+    ],
+    "secondary": [
+      "cbo",
+      "coo"
+    ],
     "knowledgePath": "agents/{role}/knowledge/",
     "_knowledgePath_description": "0.65.x — C-Level 도메인 지식 lazy-load 경로. C-Level 메인 .md 의 'Knowledge Index' 섹션이 이 경로 하위 MD 들을 참조. phase + artifact 매칭 시만 Read.",
     "_routing_comment": "0.66.x — 코드 개발 도우미 정체성. CEO 자동 라우팅 = primary 만. secondary (CBO/COO) 는 사용자 명시 phase 호출 (`/vais cbo plan|do|qa {feature}`, `/vais coo plan|do|qa {feature}`) 시만 활성. CEO 알고리즘 (lib/ceo-algorithm.js) 이 primary 안에서 7 차원 체크리스트로 활성 C-Level 결정.",
@@ -155,14 +170,33 @@
     }
   },
   "dependencies": {
-    "cto": ["cpo"],
-    "cso": ["cto"],
-    "coo": ["cto"],
+    "cto": [
+      "cpo"
+    ],
+    "cso": [
+      "cto"
+    ],
+    "coo": [
+      "cto"
+    ],
     "cbo": []
   },
   "pipeline": {
-    "launchDefault": ["cbo", "cpo", "cto", "cso", "cbo", "coo"],
-    "pipelineRoles": ["cbo", "cpo", "cto", "cso", "coo"],
+    "launchDefault": [
+      "cbo",
+      "cpo",
+      "cto",
+      "cso",
+      "cbo",
+      "coo"
+    ],
+    "pipelineRoles": [
+      "cbo",
+      "cpo",
+      "cto",
+      "cso",
+      "coo"
+    ],
     "routing": "dynamic",
     "reviewLoops": {
       "cso-cto": {
@@ -194,14 +228,26 @@
     "checkpointPolicy": {
       "_description": "0.65.x — Quiet by Default. CP는 위험/destructive/불명확 scope 일 때만 발동. 일반 흐름은 침묵 진행 + outro 한 줄 요약. PO 가 'strict' 모드로 토글하면 v0.64 동작으로 회귀.",
       "mode": "lean",
-      "_modeValues": ["lean", "standard", "strict"],
+      "_modeValues": [
+        "lean",
+        "standard",
+        "strict"
+      ],
       "_modeDescription": {
         "lean": "CP-0(PRD missing) + CP-Q(critical|matchRate<90) 만 발동. CP-1/CP-D/CP-G/CP-2 는 자동 + outro 표시.",
         "standard": "CP-0 + CP-2(Do 시작 destructive) + CP-Q 발동. CP-1/CP-D/CP-G 자동.",
         "strict": "v0.64 동작 (6 CP 모두 발동)."
       },
-      "confirmOn": ["risk", "destructive", "ambiguous-scope"],
-      "silentOn": ["scope-tier", "architecture-default", "gate-pass"]
+      "confirmOn": [
+        "risk",
+        "destructive",
+        "ambiguous-scope"
+      ],
+      "silentOn": [
+        "scope-tier",
+        "architecture-default",
+        "gate-pass"
+      ]
     },
     "template": {
       "_description": "0.65.x — autoSelect=true 시 변경 surface(Glob *.{js,ts,py} count + 사용자 요청 길이) 기반으로 minimal/standard/extended 자동 선택. plan outro 한 줄 '범위: standard (자동, 수정?)' 즉시 fallback CP.",
@@ -214,178 +260,129 @@
     },
     "frontmatterMinimal": {
       "_description": "0.65.x — sub-agent artifact frontmatter 4 필수 필드. agent/generated/source/summary 는 자동 hydrate (git log, 본문 추출). 기존 8필드 산출물은 backward-compat (W-FRONT-01 → info).",
-      "required": ["owner", "artifact", "phase", "feature"],
-      "autoHydrate": ["agent", "generated", "summary"],
-      "optional": ["source", "knowledge_refs"]
+      "required": [
+        "owner",
+        "artifact",
+        "phase",
+        "feature"
+      ],
+      "autoHydrate": [
+        "agent",
+        "generated",
+        "summary"
+      ],
+      "optional": [
+        "source",
+        "knowledge_refs"
+      ]
     },
     "phases": [
-      "ideation",
       "plan",
-      "design",
       "do",
-      "qa",
-      "report"
+      "review"
     ],
     "mandatoryPhases": [
       "plan",
-      "design",
       "do",
-      "qa",
-      "report"
+      "review"
     ],
-    "optionalPhases": [
-      "ideation"
-    ],
+    "optionalPhases": [],
     "phaseNames": {
-      "ideation": "아이디에이션",
       "plan": "기획",
-      "design": "설계",
       "do": "구현",
-      "qa": "QA",
-      "report": "보고서"
+      "review": "검증"
     },
     "phaseMeta": {
-      "ideation": { "optional": true,  "description": "자유 대화, 산출물 비강제" },
-      "plan":     { "optional": false, "description": "요구사항/범위 문서" },
-      "design":   { "optional": false, "description": "설계 문서" },
-      "do":       { "optional": false, "description": "구현" },
-      "qa":       { "optional": false, "description": "검증" },
-      "report":   { "optional": false, "description": "최종 리포트" }
-    },
-    "docPaths": {
-      "ideation": "docs/{feature}/00-ideation/main.md",
-      "plan": "docs/{feature}/01-plan/main.md",
-      "design": "docs/{feature}/02-design/main.md",
-      "do": "docs/{feature}/03-do/main.md",
-      "qa": "docs/{feature}/04-qa/main.md",
-      "report": "docs/{feature}/05-report/main.md",
-      "_subdocSince": "v0.57.0 — sub-doc preservation",
-      "topic": "docs/{feature}/{phase}/{topic}.md",
-      "scratchpad": "docs/{feature}/{phase}/_tmp/{slug}.md",
-      "scratchpadQualified": "docs/{feature}/{phase}/_tmp/{slug}.{qualifier}.md",
-      "systemArtifacts": [
-        "docs/{feature}/02-design/interface-contract.md"
-      ]
-    },
-    "topicPresets": {
-      "_description": "Phase별 권장 topic 프리셋. v0.58+ phase×c-level 계층 지원 (string[] 배열 형식도 backward-compat). C-Level이 확장 가능 (강제 아님).",
-      "_schemaVersion": 2,
-      "00-ideation": {
-        "_default": ["problem", "hypotheses", "exit-criteria"]
+      "ideation": {
+        "optional": true,
+        "description": "자유 대화, 산출물 비강제"
       },
-      "01-plan": {
-        "_default": ["requirements", "impact-analysis", "policy"],
-        "cbo": ["market-analysis", "gtm-plan", "unit-economics"],
-        "cpo": ["requirements", "user-stories", "acceptance-criteria"],
-        "cto": ["architecture-plan", "impact-analysis", "tech-risks"],
-        "cso": ["security-requirements", "compliance-checklist"],
-        "coo": ["deployment-plan", "monitoring-spec"]
+      "plan": {
+        "optional": false,
+        "description": "요구사항/범위 문서"
       },
-      "02-design": {
-        "_default": ["architecture", "data-model", "api-contract", "ui-flow", "security"],
-        "cbo": ["gtm-funnel", "pricing-tier", "financial-model"],
-        "cto": ["architecture", "data-model", "api-contract"],
-        "cso": ["threat-model", "security", "compliance"],
-        "coo": ["deployment-architecture", "monitoring-design"]
+      "design": {
+        "optional": false,
+        "description": "설계 문서"
       },
-      "03-do": {
-        "_default": ["implementation", "changes", "tests"]
+      "do": {
+        "optional": false,
+        "description": "구현"
       },
-      "04-qa": {
-        "_default": ["findings", "metrics", "issues"]
+      "qa": {
+        "optional": false,
+        "description": "검증"
       },
-      "05-report": {
-        "_default": []
+      "report": {
+        "optional": false,
+        "description": "최종 리포트"
       }
     },
-    "subDocPolicy": {
-      "_description": "0.64.x — sub-agent 직접 박제 모델. _tmp 폐기, 큐레이션 폐기. v0.57 모델은 orchestration.legacyV1.enabled=true 시만 활성.",
-      "enforcement": "warn",
-      "_enforcementValues": ["warn", "retry", "fail"],
-      "scratchpadPreserve": false,
-      "_v1_was_scratchpadPreserve": true,
-      "scratchpadMinBytes": 500,
-      "requireCurationRecord": false,
-      "_v1_was_requireCurationRecord": true,
-      "reportPhase": "single"
+    "docPaths": {
+      "plan": "docs/{feature}/plan.md",
+      "notes": "docs/{feature}/notes.md",
+      "review": "docs/{feature}/review.md",
+      "assets": "docs/{feature}/assets/"
     },
     "cLevelCoexistencePolicy": {
       "_description": "0.64.x — main.md = 인덱스만 (본문 X). Size budget 200 lines 자연 충족. mainMdMaxLinesAction 'refuse' → 'warn' 강등.",
       "enforcement": "warn",
-      "_enforcementValues": ["warn", "retry", "fail"],
+      "_enforcementValues": [
+        "warn",
+        "retry",
+        "fail"
+      ],
       "mainMergeRule": "append-only",
-      "_mainMergeRuleValues": ["append-only", "diff-merge"],
+      "_mainMergeRuleValues": [
+        "append-only",
+        "diff-merge"
+      ],
       "sectionMarkerStyle": "heading",
-      "_sectionMarkerStyleValues": ["heading", "html-comment"],
+      "_sectionMarkerStyleValues": [
+        "heading",
+        "html-comment"
+      ],
       "ownerRequired": true,
       "reentrySectionReplace": true,
       "reentryChangelogRequired": true,
       "mainMdMaxLines": 200,
       "mainMdMaxLinesAction": "warn",
       "_v1_was_mainMdMaxLinesAction": "refuse",
-      "_mainMdMaxLinesActionValues": ["warn", "refuse"]
+      "_mainMdMaxLinesActionValues": [
+        "warn",
+        "refuse"
+      ]
     },
     "scopeContractPolicy": {
       "_description": "0.64.x — CEO ideation 박제 (artifactPlan) 가 scope contract 자동 충족. v0.58 의 3섹션 강제 폐기. enforcement 'fail' → 'warn' 강등.",
       "enforcement": "warn",
       "_v1_was_enforcement": "fail",
-      "_enforcementValues": ["warn", "retry", "fail", "off"],
+      "_enforcementValues": [
+        "warn",
+        "retry",
+        "fail",
+        "off"
+      ],
       "targetPhase": "01-plan",
-      "requiredSections": ["요청 원문", "In-scope", "Out-of-scope"]
-    },
-    "phaseArtifactMapping": {
-      "_description": "0.64.x — CEO 알고리즘의 phase ↔ artifact 활성화 기본 매핑. lib/ceo-algorithm.js 가 사용. CBO/COO 는 secondary 라 자동 매핑에서 빠짐 (사용자 명시 호출 시 별도 처리).",
-      "00-ideation": {
-        "always": [{ "artifact": "ideation-decision", "owner": "ceo", "agent": "ceo-direct" }]
-      },
-      "01-plan": {
-        "conditional": [
-          { "artifact": "prd", "owner": "cpo", "agent": "prd-writer", "trigger": "productDefinition >= low" },
-          { "artifact": "persona", "owner": "cpo", "agent": "ux-researcher", "trigger": "ux >= medium" },
-          { "artifact": "jtbd", "owner": "cpo", "agent": "product-researcher", "trigger": "productDefinition == high" },
-          { "artifact": "tam-sam-som", "owner": "cpo", "agent": "product-researcher", "trigger": "productDefinition == high" },
-          { "artifact": "opportunity-solution-tree", "owner": "cpo", "agent": "product-discoverer", "trigger": "productDefinition == high" },
-          { "artifact": "threat-model", "owner": "cso", "agent": "security-auditor", "trigger": "security >= medium" }
-        ]
-      },
-      "02-design": {
-        "always": [{ "artifact": "architecture", "owner": "cto", "agent": "infra-architect" }],
-        "conditional": [
-          { "artifact": "data-model", "owner": "cto", "agent": "db-architect", "trigger": "dataModel >= medium" },
-          { "artifact": "api-contract", "owner": "cto", "agent": "backend-engineer", "trigger": "externalAPI >= medium" },
-          { "artifact": "ui-flow", "owner": "cto", "agent": "ui-designer", "trigger": "ux >= medium" },
-          { "artifact": "value-proposition-canvas", "owner": "cpo", "agent": "product-strategist", "trigger": "productDefinition == high" },
-          { "artifact": "lean-canvas", "owner": "cpo", "agent": "product-strategist", "trigger": "productDefinition == high" },
-          { "artifact": "product-strategy-canvas", "owner": "cpo", "agent": "product-strategist", "trigger": "productDefinition == high" }
-        ]
-      },
-      "03-do": {
-        "always": [{ "artifact": "implementation-log", "owner": "cto", "agent": "cto-direct" }],
-        "conditional": [
-          { "artifact": "secret-scan", "owner": "cso", "agent": "secret-scanner", "trigger": "security >= medium" },
-          { "artifact": "dependency-vulnerability", "owner": "cso", "agent": "dependency-analyzer", "trigger": "externalAPI >= medium" }
-        ]
-      },
-      "04-qa": {
-        "always": [{ "artifact": "gap-analysis", "owner": "cto", "agent": "qa-engineer" }],
-        "conditional": [
-          { "artifact": "security-audit", "owner": "cso", "agent": "security-auditor", "trigger": "security >= medium" },
-          { "artifact": "compliance-report", "owner": "cso", "agent": "compliance-auditor", "trigger": "compliance != none" }
-        ]
-      },
-      "05-report": {
-        "always": [{ "artifact": "completion-report", "owner": "cto", "agent": "cto-direct" }]
-      }
+      "requiredSections": [
+        "요청 원문",
+        "In-scope",
+        "Out-of-scope"
+      ]
     }
   },
-  "gapThreshold": 0.90,
+  "gapThreshold": 0.9,
   "gapAnalysis": {
     "matchThreshold": 90,
     "maxIterations": 2,
     "_v0_64_was_maxIterations": 5,
     "autoIterate": "escalate-on-fail",
     "_v0_64_was_autoIterate": true,
-    "_autoIterateValues": ["escalate-on-fail", true, false],
+    "_autoIterateValues": [
+      "escalate-on-fail",
+      true,
+      false
+    ],
     "_autoIterateDescription": {
       "escalate-on-fail": "1회 자동 재시도, 2회 실패 시 CP-Q 발동 (v0.65 기본). 무한루프 차단.",
       "true": "matchRate < threshold 시 maxIterations 까지 자동 반복 (v0.64 동작).",
@@ -449,18 +446,30 @@
   "designSystem": {
     "_description": "design-system-rethink (1.1.0) — Brand-first 디자인 모델. design phase 진입 시 hooks/design-mcp-trigger.js 가 brand 선택을 검증하고 미선택 시 차단/fallback 처리.",
     "model": "brand-first",
-    "_model_values": ["brand-first"],
+    "_model_values": [
+      "brand-first"
+    ],
     "_model_description": "brand-first = design-system/brands/{slug}/DESIGN.md 를 single source 로 사용. mui-first 는 deprecated.",
     "brandRoot": "design-system/brands",
     "defaultBrand": null,
     "_defaultBrand_description": "hook 미선택 fallback. null = 사용자 인터랙티브 선택 강제. CI/자동화 환경은 slug 지정 권장 (예: 'claude'). VAIS_DEFAULT_BRAND 환경변수가 우선.",
-    "preBakedBrands": ["claude", "linear", "stripe", "vercel", "notion"],
+    "preBakedBrands": [
+      "claude",
+      "linear",
+      "stripe",
+      "vercel",
+      "notion"
+    ],
     "_preBakedBrands_description": "repo 사전 박제 5 brand. 사용자가 다른 brand 선택 시 hook 이 자동으로 import script 호출 (lazy).",
     "categorySource": "upstream",
-    "_categorySource_values": ["upstream"],
+    "_categorySource_values": [
+      "upstream"
+    ],
     "_categorySource_description": "INDEX.md 카테고리 출처. upstream = references/awesome-design-md/README.md 파싱.",
     "selectionStrategy": "askuserquestion-2step",
-    "_selectionStrategy_values": ["askuserquestion-2step"],
+    "_selectionStrategy_values": [
+      "askuserquestion-2step"
+    ],
     "_selectionStrategy_description": "brand 선택 UI 패턴. 2-step = Hot 5 / Category / Manual / Default 옵션 + 카테고리 선택 시 brand 페이지네이션.",
     "blockOnMissingBrand": true,
     "_blockOnMissingBrand_description": "true (기본) = brand 미선택 + fallback 없으면 design phase 진입 차단 (block-soft). false = warn 후 진행 (brand 컨텍스트 없이 ui-designer 실행)."
@@ -478,14 +487,22 @@
       "opsReadiness": 70
     },
     "roleOverrides": {
-      "cso": { "matchRate": 95, "codeQualityScore": 80 },
+      "cso": {
+        "matchRate": 95,
+        "codeQualityScore": 80
+      },
       "cto": {}
     },
     "cto": {
       "plan": {
         "requirePrd": "smart",
         "_v0_64_was_requirePrd": "ask",
-        "_requirePrdValues": ["smart", "ask", "strict", "skip"],
+        "_requirePrdValues": [
+          "smart",
+          "ask",
+          "strict",
+          "skip"
+        ],
         "_requirePrdDescription": {
           "smart": "0.65.x 기본. PRD 부재(missing) 시만 CP-0 발동. partial 은 자동 강행 + plan 0.7 가정 명기. full 은 침묵 진행.",
           "ask": "v0.64 동작. PRD 부재/부실 시 CP-0 체크포인트로 사용자에게 4 옵션 제시.",
@@ -499,10 +516,17 @@
   },
   "advisor": {
     "enabled": true,
-    "executor": { "model": "claude-sonnet-4-6" },
-    "advisor": { "model": "claude-opus-4-6" },
+    "executor": {
+      "model": "claude-sonnet-4-6"
+    },
+    "advisor": {
+      "model": "claude-opus-4-6"
+    },
     "max_uses_per_request": 3,
-    "caching": { "type": "ephemeral", "ttl": "5m" },
+    "caching": {
+      "type": "ephemeral",
+      "ttl": "5m"
+    },
     "max_calls_per_session": 15,
     "monthly_budget_usd": 200,
     "beta_header": "advisor-tool-2026-03-01",

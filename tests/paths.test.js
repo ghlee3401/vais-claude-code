@@ -75,13 +75,18 @@ describe('resolveDocPath / findDoc', () => {
   it('피처명으로 문서 경로를 생성한다 (피처 중심 구조)', () => {
     const paths = loadPaths();
     const docPath = paths.resolveDocPath('plan', 'login-feature');
-    assert.ok(docPath.includes('login-feature/01-plan/main.md'));
+    assert.ok(docPath.includes(path.join('login-feature', 'plan.md')));
   });
 
-  it('role을 전달해도 피처 중심 경로를 반환한다', () => {
+  it('role을 전달해도 피처 중심 경로를 반환한다 (v2.0: review)', () => {
     const paths = loadPaths();
-    const docPath = paths.resolveDocPath('do', 'login', 'cso');
-    assert.ok(docPath.includes('login/03-do/main.md'));
+    const docPath = paths.resolveDocPath('review', 'login', 'cso');
+    assert.ok(docPath.includes(path.join('login', 'review.md')));
+  });
+
+  it('do phase 는 문서 경로가 없다 (코드 + notes 만)', () => {
+    const paths = loadPaths();
+    assert.equal(paths.resolveDocPath('do', 'login'), '');
   });
 
   it('findDoc은 파일이 없으면 빈 문자열 반환', () => {
@@ -91,22 +96,22 @@ describe('resolveDocPath / findDoc', () => {
 
   it('findDoc은 파일이 있으면 경로 반환 (피처 중심 구조)', () => {
     const paths = loadPaths();
-    const docDir = path.join(tmpDir, 'docs', '테스트', '01-plan');
+    const docDir = path.join(tmpDir, 'docs', '테스트');
     fs.mkdirSync(docDir, { recursive: true });
-    fs.writeFileSync(path.join(docDir, 'main.md'), '# test');
+    fs.writeFileSync(path.join(docDir, 'plan.md'), '# test');
 
     const found = paths.findDoc('plan', '테스트');
-    assert.ok(found.includes(path.join('테스트', '01-plan', 'main.md')));
+    assert.ok(found.includes(path.join('테스트', 'plan.md')));
   });
 
   it('findDoc은 role과 무관하게 피처 중심 경로를 찾는다', () => {
     const paths = loadPaths();
-    const docDir = path.join(tmpDir, 'docs', 'login', '03-do');
+    const docDir = path.join(tmpDir, 'docs', 'login');
     fs.mkdirSync(docDir, { recursive: true });
-    fs.writeFileSync(path.join(docDir, 'main.md'), '# login do');
+    fs.writeFileSync(path.join(docDir, 'notes.md'), '# login notes');
 
-    const found = paths.findDoc('do', 'login', 'cpo');
-    assert.ok(found.includes(path.join('login', '03-do', 'main.md')));
+    const found = paths.findDoc('notes', 'login', 'cpo');
+    assert.ok(found.includes(path.join('login', 'notes.md')));
   });
 
   it('레거시 경로(docs/01-plan/...)는 더 이상 findDoc에서 매치되지 않는다 (회귀 가드)', () => {
@@ -125,7 +130,7 @@ describe('loadOutputStyle', () => {
     const paths = loadPaths();
     const style = paths.loadOutputStyle();
     assert.ok(style.length > 0);
-    assert.ok(style.includes('VAIS Code'));
+    assert.ok(style.includes('VAIS'));
   });
 });
 

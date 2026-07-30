@@ -47,16 +47,10 @@ describe('createEmptyStatus', () => {
 });
 
 describe('getMandatoryPhases', () => {
-  it('CTO만 report 포함 mandatory PDCA를 가진다', () => {
+  it('v2.0 — config 의 3-phase 를 반환한다 (role 무관)', () => {
     const status = loadStatus();
-    assert.deepEqual(status.getMandatoryPhases('cto'), ['plan', 'design', 'do', 'qa', 'report']);
-    assert.deepEqual(status.getMandatoryPhases('cpo'), []);
-    assert.deepEqual(status.getMandatoryPhases('coo'), []);
-  });
-
-  it('CEO는 ideation만 mandatory로 취급한다', () => {
-    const status = loadStatus();
-    assert.deepEqual(status.getMandatoryPhases('ceo'), ['ideation']);
+    assert.deepEqual(status.getMandatoryPhases(), ['plan', 'do', 'review']);
+    assert.deepEqual(status.getMandatoryPhases('cto'), ['plan', 'do', 'review']);
   });
 });
 
@@ -96,8 +90,8 @@ describe('updatePhase', () => {
     status.initFeature('테스트');
     status.updatePhase('테스트', 'plan', 'completed');
     const result = status.getStatus();
-    // plan 다음은 design
-    assert.equal(result.features['테스트'].currentPhase, 'design');
+    // plan 다음은 do (v2.0 3-phase)
+    assert.equal(result.features['테스트'].currentPhase, 'do');
   });
 
   it('존재하지 않는 피처에 updatePhase 호출 시 자동 초기화', () => {
@@ -151,7 +145,6 @@ describe('setRunRange / getRunRange / completeRunRange', () => {
     const rangePhases = status.setRunRange('범위테스트', 'plan', 'do');
     assert.ok(Array.isArray(rangePhases));
     assert.ok(rangePhases.includes('plan'));
-    assert.ok(rangePhases.includes('design'));
     assert.ok(rangePhases.includes('do'));
 
     const range = status.getRunRange('범위테스트');
@@ -164,7 +157,7 @@ describe('setRunRange / getRunRange / completeRunRange', () => {
   it('범위 실행 완료를 표시한다', () => {
     const status = loadStatus();
     status.initFeature('완료테스트');
-    status.setRunRange('완료테스트', 'plan', 'qa');
+    status.setRunRange('완료테스트', 'plan', 'review');
     status.completeRunRange('완료테스트');
 
     const range = status.getRunRange('완료테스트');
@@ -184,12 +177,12 @@ describe('getProgressSummary', () => {
     const status = loadStatus();
     status.initFeature('요약테스트');
     status.updatePhase('요약테스트', 'plan', 'completed');
-    status.updatePhase('요약테스트', 'design', 'in-progress');
+    status.updatePhase('요약테스트', 'do', 'in-progress');
 
     const summary = status.getProgressSummary('요약테스트');
     assert.ok(summary);
     assert.equal(summary.feature, '요약테스트');
-    assert.equal(summary.currentPhase, 'design');
+    assert.equal(summary.currentPhase, 'do');
     assert.ok(summary.progressCompact.includes('✅'));
     assert.ok(summary.progressCompact.includes('🔄'));
   });
