@@ -23,9 +23,25 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 
 const { readStdin, outputAllow, outputBlock } = require('../lib/io');
-const { isMcpEnabled } = require('../lib/mcp-validator');
 const { brandExists, brandDesignPath, isKnownBrand } = require('../lib/brand-validator');
-const { PROJECT_DIR } = require('../lib/paths');
+const { PROJECT_DIR, loadConfig } = require('../lib/paths');
+
+// v2.0: lib/mcp-validator.js 삭제 — isMcpEnabled 만 인라인 (본 hook 은 Phase 3 에서 제거 예정)
+function isMcpEnabled() {
+  try {
+    const config = loadConfig();
+    const flag =
+      config?.orchestration?.mcp?.enabled ??
+      config?.mcp?.enabled;
+    if (flag === undefined || flag === null) return true;
+    if (typeof flag === 'boolean') return flag;
+    if (flag === 'true') return true;
+    if (flag === 'false') return false;
+    return Boolean(flag);
+  } catch (_) {
+    return true;
+  }
+}
 
 const STATUS_PATH = path.join(PROJECT_DIR, '.vais', 'status.json');
 const CONFIG_PATH = path.join(PROJECT_DIR, 'vais.config.json');
