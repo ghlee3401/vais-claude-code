@@ -25,12 +25,13 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQue
 | `init [feature]` | 기존 프로젝트에 VAIS 문서 구조 적용 |
 | `commit` | 변경 분석 → Conventional Commits 메시지 → 사용자 확인 후 커밋 |
 | `report {주제\|feature}` / `deck {주제\|feature}` | HTML 보고서 / 슬라이드 덱 생성 (`skills/report/SKILL.md`) |
+| `brand new` | 커스텀 브랜드 DESIGN.md 생성 (사내 CI·개인 스타일 — `skills/report/SKILL.md`) |
 | `help` | 사용법 |
 
 ## 실행
 
 1. `${CLAUDE_PLUGIN_ROOT}/skills/vais/phases/$0.md` 를 Read. 없으면 `utils/$0.md`. 둘 다 없으면 `/vais help` 안내.
-2. `report`/`deck` 은 `${CLAUDE_PLUGIN_ROOT}/skills/report/SKILL.md` 를 Read.
+2. `report`/`deck`/`brand` 는 `${CLAUDE_PLUGIN_ROOT}/skills/report/SKILL.md` 를 Read.
 
 ## 공통 규칙
 
