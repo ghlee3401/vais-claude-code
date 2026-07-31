@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-2.0.4-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-2.1.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT" />
 </p>
@@ -30,8 +30,9 @@ Node.js ≥ 18 만 있으면 된다.
 /vais do payment-retry-logic      # 구현 — sub-agent 병렬 위임, 결정은 notes.md 에 한 줄씩
 /vais review payment-retry-logic  # 검증 — 완료 조건 대조 + 지침 승격 루프
 
-/vais report q3-analysis          # brand 스타일 HTML 보고서 (인쇄 → PDF)
-/vais deck q3-analysis            # 16:9 HTML 슬라이드 (인쇄 → PPT 대체)
+/vais brief Q3 실험 결과          # VARCO 양식 임원/대외 보고 (--deck 으로 슬라이드)
+/vais report payment-retry-logic  # 피처 문서 기반 HTML 보고서 (인쇄 → PDF)
+/vais deck payment-retry-logic    # 피처 문서 기반 16:9 슬라이드 (인쇄 → PPT 대체)
 /vais brand new                   # 사내 CI·개인 스타일을 커스텀 브랜드로 등록
 
 /vais status · /vais init · /vais commit · /vais help

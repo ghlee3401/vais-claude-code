@@ -21,8 +21,9 @@ VAIS 는 피처마다 **plan → do → review** 를 돌며 문서 3개(계획/�
 | `/vais status` | 진행 상태 |
 | `/vais init` | 기존 프로젝트에 문서 구조 적용 |
 | `/vais commit` | 커밋 (메시지 생성 + 버전 범프 + 확인) |
-| `/vais report {주제}` | HTML 보고서 생성 (brand 스타일) |
-| `/vais deck {주제}` | HTML 슬라이드 덱 생성 (PDF 변환용) |
+| `/vais brief {주제}` | VARCO 양식 임원/대외 보고 (`--deck` 으로 슬라이드) |
+| `/vais report {feature}` | 피처 문서 기반 HTML 보고서 (brand 스타일) |
+| `/vais deck {feature}` | 피처 문서 기반 HTML 슬라이드 덱 (PDF 변환용) |
 
 - 문서는 피처당 3파일: plan.md / notes.md / review.md (`docs/{feature}/`)
 - 지침: `guidelines/` — 코드·문서 컨벤션, review 마다 승격 루프로 진화

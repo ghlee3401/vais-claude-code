@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "VAIS v2.0 — 이력·일관성 개발 워크플로우 (plan/do/review + 지침 승격 루프) + brand 스타일 HTML 보고서/덱 생성기. v1 C-Suite 시뮬레이션 제거.",
-    "version": "2.0.4"
+    "version": "2.1.0"
   },
   "plugins": [
     {
       "name": "vais-code",
       "source": "./",
       "description": "Development workflow plugin: plan→do→review with per-feature doc history (plan/notes/review), living guidelines with promotion loop, and brand-styled self-contained HTML report/deck generation (71 brand design tokens).",
-      "version": "2.0.4",
+      "version": "2.1.0",
       "author": {
         "name": "VAIS Voice",
         "email": "ghlee0304@ncsoft.com"

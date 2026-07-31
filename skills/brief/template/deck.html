@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>○○ 과제 보고 — VARCO 기술 보고 양식</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@font-face{font-family:"Pretendard";font-weight:400;font-style:normal;font-display:swap;src:url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Regular.woff2") format("woff2")}
+@font-face{font-family:"Pretendard";font-weight:500;font-style:normal;font-display:swap;src:url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Medium.woff2") format("woff2")}
+@font-face{font-family:"Pretendard";font-weight:600;font-style:normal;font-display:swap;src:url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-SemiBold.woff2") format("woff2")}
+@font-face{font-family:"Pretendard";font-weight:700;font-style:normal;font-display:swap;src:url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Bold.woff2") format("woff2")}
+@font-face{font-family:"Pretendard";font-weight:800;font-style:normal;font-display:swap;src:url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-ExtraBold.woff2") format("woff2")}
+html,body{margin:0;background:#0E1013;font-family:"Pretendard",-apple-system,sans-serif}
+a{color:#4339C7;text-decoration:none}a:hover{color:#F45980}
+</style>
+<script src="image-slot.js"></script>
+<script src="deck-stage.js"></script>
+
+<style>html,body{margin:0;background:#0E1013}deck-stage{display:block;width:100vw;height:100vh}</style>
+</head>
+<body>
+
+<deck-stage width="1920" height="1080">
+
+<section data-label="표지" data-screen-label="01" data-speaker-notes="표제 슬라이드. 과제명·보고 성격·보고일·수행 조직만 남기고 나머지는 비워 둡니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px">
+    <div style="font-size:26px;font-weight:600;letter-spacing:.22em;color:#547AF2">TECHNICAL REPORT</div>
+    <div style="font-size:88px;font-weight:800;letter-spacing:-0.03em;line-height:1.15;text-align:center;background:linear-gradient(90deg,#4339C7 0%,#9747FF 52%,#F34F7A 99%);-webkit-background-clip:text;background-clip:text;color:transparent">○○ 과제 수행 결과 보고</div>
+    <div style="font-size:30px;color:#6B7280;text-align:center;text-wrap:pretty">부제 — 과제의 한 줄 요약을 여기에 적습니다</div>
+    <div style="width:120px;height:3px;background:#64DEC7;margin-top:10px"></div>
+    <div style="display:flex;gap:56px;margin-top:14px;font-size:24px;color:#4B5563">
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="font-size:20px;letter-spacing:.12em;color:#9CA3AF">DATE</span><span>2026. 07. 31.</span></div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="font-size:20px;letter-spacing:.12em;color:#9CA3AF">DEPT.</span><span>NC AI ○○○팀</span></div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="font-size:20px;letter-spacing:.12em;color:#9CA3AF">AUTHOR</span><span>홍길동</span></div>
+    </div>
+  </div>
+</section>
+
+<section data-label="목차" data-screen-label="02" data-speaker-notes="30초. 보고 순서만 짚고 넘어갑니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">AGENDA</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">목차</div>
+  </div>
+  <div style="position:absolute;left:89px;top:280px;width:1742px;display:grid;grid-template-columns:1fr 1fr;column-gap:80px;row-gap:34px">
+    <div style="display:flex;gap:26px;align-items:baseline;padding-bottom:26px;border-bottom:1px solid #E3E6EC"><span style="font-size:26px;font-weight:700;color:#4339C7;min-width:44px">01</span><div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:32px;font-weight:600">과제 개요</span><span style="font-size:22px;color:#6B7280">배경 · 목표 · 범위</span></div></div>
+    <div style="display:flex;gap:26px;align-items:baseline;padding-bottom:26px;border-bottom:1px solid #E3E6EC"><span style="font-size:26px;font-weight:700;color:#4339C7;min-width:44px">04</span><div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:32px;font-weight:600">시스템 구성 및 프로세스</span><span style="font-size:22px;color:#6B7280">아키텍처 · 처리 흐름</span></div></div>
+    <div style="display:flex;gap:26px;align-items:baseline;padding-bottom:26px;border-bottom:1px solid #E3E6EC"><span style="font-size:26px;font-weight:700;color:#4339C7;min-width:44px">02</span><div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:32px;font-weight:600">추진 실적</span><span style="font-size:22px;color:#6B7280">정량 성과 지표 · 마일스톤</span></div></div>
+    <div style="display:flex;gap:26px;align-items:baseline;padding-bottom:26px;border-bottom:1px solid #E3E6EC"><span style="font-size:26px;font-weight:700;color:#4339C7;min-width:44px">05</span><div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:32px;font-weight:600">검증 결과</span><span style="font-size:22px;color:#6B7280">규격 비교 · 개선 전후 · 데모</span></div></div>
+    <div style="display:flex;gap:26px;align-items:baseline;padding-bottom:26px;border-bottom:1px solid #E3E6EC"><span style="font-size:26px;font-weight:700;color:#4339C7;min-width:44px">03</span><div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:32px;font-weight:600">일정 계획</span><span style="font-size:22px;color:#6B7280">연간 추진 일정</span></div></div>
+    <div style="display:flex;gap:26px;align-items:baseline;padding-bottom:26px;border-bottom:1px solid #E3E6EC"><span style="font-size:26px;font-weight:700;color:#4339C7;min-width:44px">06</span><div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:32px;font-weight:600">리스크 및 향후 계획</span><span style="font-size:22px;color:#6B7280">이슈 대응 · Next steps</span></div></div>
+  </div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">02</div>
+</section>
+
+<section data-label="간지 01" data-screen-label="03" data-speaker-notes="섹션 전환. 한 문장으로 이 섹션에서 무엇을 다루는지 말합니다." style="background:#F6F7F9;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:160px;top:0;height:1080px;display:flex;flex-direction:column;justify-content:center;gap:20px">
+    <div style="font-size:180px;font-weight:800;line-height:1;letter-spacing:-0.04em;background:linear-gradient(90deg,#4339C7 0%,#F34F7A 99%);-webkit-background-clip:text;background-clip:text;color:transparent">01</div>
+    <div style="font-size:72px;font-weight:700;letter-spacing:-0.02em">과제 개요</div>
+    <div style="font-size:28px;color:#6B7280;max-width:900px;text-wrap:pretty">과제를 왜 시작했고, 무엇을 어디까지 하기로 했는지 정리합니다.</div>
+  </div>
+  <div style="position:absolute;right:160px;bottom:120px;display:flex;flex-direction:column;gap:14px;font-size:24px;color:#9CA3AF;text-align:right">
+    <div style="color:#181A1C;font-weight:600">01 과제 개요</div>
+    <div>02 추진 실적</div>
+    <div>03 일정 계획</div>
+    <div>04 시스템 구성</div>
+    <div>05 검증 결과</div>
+    <div>06 리스크 · 향후 계획</div>
+  </div>
+</section>
+
+<section data-label="과제 개요" data-screen-label="04" data-speaker-notes="배경-목표-범위 3단. 하단 정보 스트립은 과제 기본 정보로 매 보고마다 그대로 갱신합니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">OVERVIEW</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">과제 개요</div>
+    <div style="margin-top:12px;font-size:26px;color:#6B7280">배경 · 목표 · 범위</div>
+  </div>
+  <div style="position:absolute;left:89px;top:330px;width:1742px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+    <div style="border:1px solid #E3E6EC;border-radius:16px;padding:38px 36px;display:flex;flex-direction:column;gap:18px">
+      <div style="font-size:22px;font-weight:600;letter-spacing:.1em;color:#547AF2">BACKGROUND</div>
+      <div style="font-size:32px;font-weight:600">배경</div>
+      <div style="font-size:24px;line-height:1.6;color:#4B5563;text-wrap:pretty">현재 상황과 문제 정의를 두 문장으로 적습니다. 수치가 있으면 함께 넣습니다.</div>
+    </div>
+    <div style="border:1px solid #C9CDF7;background:#F4F4FE;border-radius:16px;padding:38px 36px;display:flex;flex-direction:column;gap:18px">
+      <div style="font-size:22px;font-weight:600;letter-spacing:.1em;color:#4339C7">OBJECTIVE</div>
+      <div style="font-size:32px;font-weight:600">목표</div>
+      <div style="font-size:24px;line-height:1.6;color:#3A3F52;text-wrap:pretty">달성하려는 상태를 측정 가능한 형태로 적습니다. 예) 처리 시간 40% 단축.</div>
+    </div>
+    <div style="border:1px solid #E3E6EC;border-radius:16px;padding:38px 36px;display:flex;flex-direction:column;gap:18px">
+      <div style="font-size:22px;font-weight:600;letter-spacing:.1em;color:#1E9C84">SCOPE</div>
+      <div style="font-size:32px;font-weight:600">범위</div>
+      <div style="font-size:24px;line-height:1.6;color:#4B5563;text-wrap:pretty">포함 범위와 제외 범위를 나눠 적습니다. 제외 범위를 반드시 남깁니다.</div>
+    </div>
+  </div>
+  <div style="position:absolute;left:89px;top:730px;width:1742px;display:grid;grid-template-columns:repeat(4,1fr);background:#F6F7F9;border-radius:16px;padding:34px 40px;gap:24px">
+    <div style="display:flex;flex-direction:column;gap:10px"><span style="font-size:21px;color:#6B7280">수행 기간</span><span style="font-size:28px;font-weight:600">2026.01 – 2026.12</span></div>
+    <div style="display:flex;flex-direction:column;gap:10px"><span style="font-size:21px;color:#6B7280">투입 인력</span><span style="font-size:28px;font-weight:600">○명 (○ MM)</span></div>
+    <div style="display:flex;flex-direction:column;gap:10px"><span style="font-size:21px;color:#6B7280">협업 조직</span><span style="font-size:28px;font-weight:600">○○팀 · ○○팀</span></div>
+    <div style="display:flex;flex-direction:column;gap:10px"><span style="font-size:21px;color:#6B7280">진행률</span><span style="font-size:28px;font-weight:600;color:#4339C7">68%</span></div>
+  </div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">04</div>
+</section>
+
+<section data-label="정량 성과 지표" data-screen-label="05" data-speaker-notes="KPI 4개까지. 목표 대비 현재값과 증감을 함께 보여 주고, 하단에 산출 기준을 명시합니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">KEY RESULTS</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">정량 성과 지표</div>
+    <div style="margin-top:12px;font-size:26px;color:#6B7280">2026년 상반기 기준 · 목표 대비 달성률</div>
+  </div>
+  <div style="position:absolute;left:89px;top:330px;width:1742px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px">
+    <div style="border:1px solid #E3E6EC;border-radius:16px;padding:34px 32px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:23px;color:#6B7280">처리 정확도</div>
+      <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:76px;font-weight:700;line-height:1;letter-spacing:-0.03em">94.2</span><span style="font-size:30px;font-weight:600;color:#6B7280">%</span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span style="font-size:22px;font-weight:600;color:#1E9C84;background:#EEFBF7;border-radius:999px;padding:6px 14px">▲ 6.4%p</span><span style="font-size:21px;color:#9CA3AF">목표 90%</span></div>
+    </div>
+    <div style="border:1px solid #E3E6EC;border-radius:16px;padding:34px 32px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:23px;color:#6B7280">평균 응답 시간</div>
+      <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:76px;font-weight:700;line-height:1;letter-spacing:-0.03em">1.8</span><span style="font-size:30px;font-weight:600;color:#6B7280">초</span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span style="font-size:22px;font-weight:600;color:#1E9C84;background:#EEFBF7;border-radius:999px;padding:6px 14px">▼ 42%</span><span style="font-size:21px;color:#9CA3AF">목표 2.0초</span></div>
+    </div>
+    <div style="border:1px solid #E3E6EC;border-radius:16px;padding:34px 32px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:23px;color:#6B7280">적용 라인 수</div>
+      <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:76px;font-weight:700;line-height:1;letter-spacing:-0.03em">12</span><span style="font-size:30px;font-weight:600;color:#6B7280">개</span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span style="font-size:22px;font-weight:600;color:#4339C7;background:#F4F4FE;border-radius:999px;padding:6px 14px">+5개</span><span style="font-size:21px;color:#9CA3AF">목표 15개</span></div>
+    </div>
+    <div style="border:1px solid #E3E6EC;border-radius:16px;padding:34px 32px;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:23px;color:#6B7280">운영 비용 절감</div>
+      <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:76px;font-weight:700;line-height:1;letter-spacing:-0.03em">3.4</span><span style="font-size:30px;font-weight:600;color:#6B7280">억 원</span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span style="font-size:22px;font-weight:600;color:#9B1B36;background:#FFF1F4;border-radius:999px;padding:6px 14px">목표 미달</span><span style="font-size:21px;color:#9CA3AF">목표 5억 원</span></div>
+    </div>
+  </div>
+  <div style="position:absolute;left:89px;top:700px;width:1742px;border-top:1px solid #E3E6EC;padding-top:34px;display:flex;flex-direction:column;gap:14px">
+    <div style="font-size:26px;font-weight:600">해석</div>
+    <div style="font-size:24px;line-height:1.6;color:#4B5563;max-width:1500px;text-wrap:pretty">지표별로 한 줄씩, 숫자가 왜 그렇게 나왔는지 원인을 적습니다. 미달 지표는 반드시 원인과 대응을 함께 적습니다.</div>
+    <div style="font-size:21px;color:#9CA3AF">산출 기준 · 집계 기간 · 데이터 출처를 여기에 명시</div>
+  </div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">05</div>
+</section>
+
+<section data-label="마일스톤" data-screen-label="06" data-speaker-notes="완료·진행·예정을 색으로 구분합니다. 현재 위치를 반드시 표시합니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">MILESTONES</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">마일스톤 타임라인</div>
+    <div style="margin-top:12px;font-size:26px;color:#6B7280">5개 단계 · 현재 3단계 진행 중</div>
+  </div>
+  <div style="position:absolute;left:89px;top:470px;width:1742px;height:4px;background:#E3E6EC"></div>
+  <div style="position:absolute;left:89px;top:470px;width:870px;height:4px;background:linear-gradient(90deg,#4339C7,#F34F7A)"></div>
+  <div style="position:absolute;left:89px;top:340px;width:1742px;display:grid;grid-template-columns:repeat(5,1fr)">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:22px">
+      <div style="height:90px;display:flex;flex-direction:column;align-items:center;gap:8px;justify-content:flex-end"><span style="font-size:22px;color:#9CA3AF">2026.02</span><span style="font-size:28px;font-weight:600">기획 · 요구 정의</span></div>
+      <div style="width:26px;height:26px;border-radius:50%;background:#4339C7;box-shadow:0 0 0 8px #FFFFFF"></div>
+      <div style="font-size:22px;font-weight:600;color:#1E9C84;background:#EEFBF7;border-radius:999px;padding:6px 16px">완료</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:22px">
+      <div style="height:90px;display:flex;flex-direction:column;align-items:center;gap:8px;justify-content:flex-end"><span style="font-size:22px;color:#9CA3AF">2026.04</span><span style="font-size:28px;font-weight:600">프로토타입</span></div>
+      <div style="width:26px;height:26px;border-radius:50%;background:#7B4BD6;box-shadow:0 0 0 8px #FFFFFF"></div>
+      <div style="font-size:22px;font-weight:600;color:#1E9C84;background:#EEFBF7;border-radius:999px;padding:6px 16px">완료</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:22px">
+      <div style="height:90px;display:flex;flex-direction:column;align-items:center;gap:8px;justify-content:flex-end"><span style="font-size:22px;color:#9CA3AF">2026.07</span><span style="font-size:28px;font-weight:600">1차 현장 검증</span></div>
+      <div style="width:34px;height:34px;border-radius:50%;background:#FFFFFF;border:6px solid #F34F7A;box-shadow:0 0 0 6px #FFFFFF"></div>
+      <div style="font-size:22px;font-weight:600;color:#9B1B36;background:#FFF1F4;border-radius:999px;padding:6px 16px">진행 중</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:22px">
+      <div style="height:90px;display:flex;flex-direction:column;align-items:center;gap:8px;justify-content:flex-end"><span style="font-size:22px;color:#9CA3AF">2026.10</span><span style="font-size:28px;font-weight:600">양산 적용</span></div>
+      <div style="width:26px;height:26px;border-radius:50%;background:#FFFFFF;border:4px solid #D6D9DE;box-shadow:0 0 0 8px #FFFFFF"></div>
+      <div style="font-size:22px;font-weight:600;color:#6B7280;background:#F6F7F9;border-radius:999px;padding:6px 16px">예정</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:22px">
+      <div style="height:90px;display:flex;flex-direction:column;align-items:center;gap:8px;justify-content:flex-end"><span style="font-size:22px;color:#9CA3AF">2026.12</span><span style="font-size:28px;font-weight:600">과제 종료 보고</span></div>
+      <div style="width:26px;height:26px;border-radius:50%;background:#FFFFFF;border:4px solid #D6D9DE;box-shadow:0 0 0 8px #FFFFFF"></div>
+      <div style="font-size:22px;font-weight:600;color:#6B7280;background:#F6F7F9;border-radius:999px;padding:6px 16px">예정</div>
+    </div>
+  </div>
+  <div style="position:absolute;left:89px;top:700px;width:1742px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+    <div style="display:flex;flex-direction:column;gap:12px;padding-left:24px;border-left:3px solid #4339C7"><span style="font-size:24px;font-weight:600">직전 보고 이후 완료</span><span style="font-size:23px;line-height:1.55;color:#4B5563">프로토타입 검증 완료, 데이터 파이프라인 이관</span></div>
+    <div style="display:flex;flex-direction:column;gap:12px;padding-left:24px;border-left:3px solid #F34F7A"><span style="font-size:24px;font-weight:600">현재 집중 사항</span><span style="font-size:23px;line-height:1.55;color:#4B5563">현장 3개 라인 파일럿, 실사용 로그 수집</span></div>
+    <div style="display:flex;flex-direction:column;gap:12px;padding-left:24px;border-left:3px solid #D6D9DE"><span style="font-size:24px;font-weight:600">다음 보고까지</span><span style="font-size:23px;line-height:1.55;color:#4B5563">양산 적용 판단 기준 확정, 운영 인수 계획 수립</span></div>
+  </div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">06</div>
+</section>
+
+<section data-label="일정 계획" data-screen-label="07" data-speaker-notes="간트. 지연 구간은 분홍으로 표시하고 원인을 구두로 설명합니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">SCHEDULE</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">연간 추진 일정</div>
+    <div style="margin-top:12px;font-size:26px;color:#6B7280">2026년 · 굵은 선이 현재 시점</div>
+  </div>
+  <div style="position:absolute;left:89px;top:320px;width:1742px;display:grid;grid-template-columns:360px repeat(12,1fr);align-items:center;row-gap:0">
+    <div style="font-size:22px;color:#6B7280;padding-bottom:16px">과제 활동</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">1월</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">2월</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">3월</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">4월</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">5월</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">6월</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">7월</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">8월</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">9월</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">10월</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">11월</div>
+    <div style="font-size:22px;color:#6B7280;text-align:center;padding-bottom:16px">12월</div>
+
+    <div style="font-size:25px;font-weight:500;padding:22px 0;border-top:1px solid #E3E6EC">요구사항 정의</div>
+    <div style="grid-column:2 / 4;height:26px;border-radius:999px;background:#4339C7;margin:22px 6px;border-top:1px solid transparent"></div>
+    <div style="grid-column:4 / 14;border-top:1px solid #E3E6EC;height:100%"></div>
+
+    <div style="font-size:25px;font-weight:500;padding:22px 0;border-top:1px solid #E3E6EC">데이터 구축 · 전처리</div>
+    <div style="grid-column:2 / 3;border-top:1px solid #E3E6EC;height:100%"></div>
+    <div style="grid-column:3 / 7;height:26px;border-radius:999px;background:#4339C7;margin:22px 6px"></div>
+    <div style="grid-column:7 / 14;border-top:1px solid #E3E6EC;height:100%"></div>
+
+    <div style="font-size:25px;font-weight:500;padding:22px 0;border-top:1px solid #E3E6EC">모델 개발 · 튜닝</div>
+    <div style="grid-column:2 / 5;border-top:1px solid #E3E6EC;height:100%"></div>
+    <div style="grid-column:5 / 10;height:26px;border-radius:999px;background:#4339C7;margin:22px 6px"></div>
+    <div style="grid-column:10 / 14;border-top:1px solid #E3E6EC;height:100%"></div>
+
+    <div style="font-size:25px;font-weight:500;padding:22px 0;border-top:1px solid #E3E6EC">현장 파일럿 검증</div>
+    <div style="grid-column:2 / 8;border-top:1px solid #E3E6EC;height:100%"></div>
+    <div style="grid-column:8 / 11;height:26px;border-radius:999px;background:#F34F7A;margin:22px 6px"></div>
+    <div style="grid-column:11 / 14;border-top:1px solid #E3E6EC;height:100%"></div>
+
+    <div style="font-size:25px;font-weight:500;padding:22px 0;border-top:1px solid #E3E6EC">양산 적용 · 이관</div>
+    <div style="grid-column:2 / 11;border-top:1px solid #E3E6EC;height:100%"></div>
+    <div style="grid-column:11 / 13;height:26px;border-radius:999px;background:#D6D9DE;margin:22px 6px"></div>
+    <div style="grid-column:13 / 14;border-top:1px solid #E3E6EC;height:100%"></div>
+
+    <div style="font-size:25px;font-weight:500;padding:22px 0;border-top:1px solid #E3E6EC;border-bottom:1px solid #E3E6EC">결과 보고 · 문서화</div>
+    <div style="grid-column:2 / 13;border-top:1px solid #E3E6EC;border-bottom:1px solid #E3E6EC;height:100%"></div>
+    <div style="grid-column:13 / 14;height:26px;border-radius:999px;background:#D6D9DE;margin:22px 6px"></div>
+  </div>
+  <div style="position:absolute;left:1255px;top:380px;width:3px;height:488px;background:#F34F7A"></div>
+  <div style="position:absolute;left:1213px;top:874px;font-size:20px;font-weight:600;color:#F34F7A;background:#FFF1F4;border-radius:999px;padding:5px 14px">현재</div>
+  <div style="position:absolute;left:89px;top:880px;display:flex;gap:36px;align-items:center;font-size:22px;color:#4B5563">
+    <div style="display:flex;gap:12px;align-items:center"><span style="width:34px;height:14px;border-radius:999px;background:#4339C7"></span><span>완료</span></div>
+    <div style="display:flex;gap:12px;align-items:center"><span style="width:34px;height:14px;border-radius:999px;background:#F34F7A"></span><span>진행 중</span></div>
+    <div style="display:flex;gap:12px;align-items:center"><span style="width:34px;height:14px;border-radius:999px;background:#D6D9DE"></span><span>예정</span></div>
+  </div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">07</div>
+</section>
+
+<section data-label="간지 02" data-screen-label="08" data-speaker-notes="기술 섹션으로 전환. 청중이 엔지니어가 아니면 이 섹션은 결론부터 말합니다." style="background:#F6F7F9;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:160px;top:0;height:1080px;display:flex;flex-direction:column;justify-content:center;gap:20px">
+    <div style="font-size:180px;font-weight:800;line-height:1;letter-spacing:-0.04em;background:linear-gradient(90deg,#4339C7 0%,#F34F7A 99%);-webkit-background-clip:text;background-clip:text;color:transparent">04</div>
+    <div style="font-size:72px;font-weight:700;letter-spacing:-0.02em">시스템 구성 및 프로세스</div>
+    <div style="font-size:28px;color:#6B7280;max-width:900px;text-wrap:pretty">무엇을 어떻게 만들었는지, 구성도와 처리 흐름으로 설명합니다.</div>
+  </div>
+  <div style="position:absolute;right:160px;bottom:120px;display:flex;flex-direction:column;gap:14px;font-size:24px;color:#9CA3AF;text-align:right">
+    <div>01 과제 개요</div>
+    <div>02 추진 실적</div>
+    <div>03 일정 계획</div>
+    <div style="color:#181A1C;font-weight:600">04 시스템 구성</div>
+    <div>05 검증 결과</div>
+    <div>06 리스크 · 향후 계획</div>
+  </div>
+</section>
+
+<section data-label="시스템 구성도" data-screen-label="09" data-speaker-notes="계층별로 위에서 아래로 읽습니다. 이번 과제에서 새로 만든 블록만 강조색으로 둡니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">ARCHITECTURE</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">시스템 구성도</div>
+    <div style="margin-top:12px;font-size:26px;color:#6B7280">진한 블록이 이번 과제 개발 범위</div>
+  </div>
+  <div style="position:absolute;left:89px;top:320px;width:1742px;display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;align-items:stretch;gap:28px">
+      <div style="width:200px;display:flex;flex-direction:column;justify-content:center;gap:6px"><span style="font-size:22px;letter-spacing:.1em;color:#9CA3AF">LAYER 1</span><span style="font-size:28px;font-weight:600">사용자 접점</span></div>
+      <div style="flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+        <div style="border:1px solid #E3E6EC;border-radius:14px;padding:26px 22px;font-size:25px;font-weight:500;text-align:center">차량 단말</div>
+        <div style="border:1px solid #E3E6EC;border-radius:14px;padding:26px 22px;font-size:25px;font-weight:500;text-align:center">모바일 앱</div>
+        <div style="border:1px solid #E3E6EC;border-radius:14px;padding:26px 22px;font-size:25px;font-weight:500;text-align:center">관제 웹</div>
+        <div style="border:1px solid #E3E6EC;border-radius:14px;padding:26px 22px;font-size:25px;font-weight:500;text-align:center">외부 API</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:stretch;gap:28px">
+      <div style="width:200px;display:flex;flex-direction:column;justify-content:center;gap:6px"><span style="font-size:22px;letter-spacing:.1em;color:#9CA3AF">LAYER 2</span><span style="font-size:28px;font-weight:600">서비스 로직</span></div>
+      <div style="flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <div style="background:#4339C7;color:#FFFFFF;border-radius:14px;padding:30px 24px;display:flex;flex-direction:column;gap:10px"><span style="font-size:26px;font-weight:600">요청 오케스트레이터</span><span style="font-size:21px;color:#C9CDF7">라우팅 · 세션 관리</span></div>
+        <div style="background:#7B4BD6;color:#FFFFFF;border-radius:14px;padding:30px 24px;display:flex;flex-direction:column;gap:10px"><span style="font-size:26px;font-weight:600">추론 엔진</span><span style="font-size:21px;color:#E6D9F9">모델 서빙 · 후처리</span></div>
+        <div style="background:#F34F7A;color:#FFFFFF;border-radius:14px;padding:30px 24px;display:flex;flex-direction:column;gap:10px"><span style="font-size:26px;font-weight:600">콘텐츠 관리</span><span style="font-size:21px;color:#FFE0E8">규칙 · 템플릿 · 검수</span></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:stretch;gap:28px">
+      <div style="width:200px;display:flex;flex-direction:column;justify-content:center;gap:6px"><span style="font-size:22px;letter-spacing:.1em;color:#9CA3AF">LAYER 3</span><span style="font-size:28px;font-weight:600">데이터 · 인프라</span></div>
+      <div style="flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+        <div style="background:#F6F7F9;border:1px solid #E3E6EC;border-radius:14px;padding:26px 22px;font-size:25px;font-weight:500;text-align:center">운영 DB</div>
+        <div style="background:#F6F7F9;border:1px solid #E3E6EC;border-radius:14px;padding:26px 22px;font-size:25px;font-weight:500;text-align:center">로그 · 모니터링</div>
+        <div style="background:#F6F7F9;border:1px solid #E3E6EC;border-radius:14px;padding:26px 22px;font-size:25px;font-weight:500;text-align:center">학습 데이터셋</div>
+        <div style="background:#F6F7F9;border:1px solid #E3E6EC;border-radius:14px;padding:26px 22px;font-size:25px;font-weight:500;text-align:center">GPU 클러스터</div>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute;left:378px;top:840px;width:1453px;background:#EEFBF7;border:1px solid #4ECEB6;border-radius:14px;padding:26px 30px;font-size:24px;color:#0F6B59">구성도 아래 한 줄 — 이 구조에서 가장 중요한 설계 결정 하나를 적습니다.</div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">09</div>
+</section>
+
+<section data-label="프로세스 흐름도" data-screen-label="10" data-speaker-notes="5단계 흐름. 각 단계의 산출물과 소요 시간을 아래에 붙입니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">PROCESS FLOW</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">처리 프로세스</div>
+    <div style="margin-top:12px;font-size:26px;color:#6B7280">입력에서 결과 반영까지 5단계</div>
+  </div>
+  <div style="position:absolute;left:89px;top:340px;width:1742px;display:grid;grid-template-columns:1fr 44px 1fr 44px 1fr 44px 1fr 44px 1fr;align-items:center">
+    <div style="border:1px solid #C9CDF7;background:#F4F4FE;border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;gap:12px;min-height:200px"><span style="font-size:22px;font-weight:600;color:#4339C7">STEP 01</span><span style="font-size:29px;font-weight:600">입력 수집</span><span style="font-size:22px;line-height:1.5;color:#4B5563">센서 · 사용자 발화 · 외부 데이터</span></div>
+    <div style="text-align:center;font-size:30px;color:#B6BAC2">›</div>
+    <div style="border:1px solid #E3E6EC;border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;gap:12px;min-height:200px"><span style="font-size:22px;font-weight:600;color:#547AF2">STEP 02</span><span style="font-size:29px;font-weight:600">전처리 · 검증</span><span style="font-size:22px;line-height:1.5;color:#4B5563">정규화, 결측 처리, 유효성 검사</span></div>
+    <div style="text-align:center;font-size:30px;color:#B6BAC2">›</div>
+    <div style="border:1px solid #E3E6EC;border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;gap:12px;min-height:200px"><span style="font-size:22px;font-weight:600;color:#547AF2">STEP 03</span><span style="font-size:29px;font-weight:600">추론 · 판단</span><span style="font-size:22px;line-height:1.5;color:#4B5563">모델 추론 후 규칙 기반 보정</span></div>
+    <div style="text-align:center;font-size:30px;color:#B6BAC2">›</div>
+    <div style="border:1px solid #E3E6EC;border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;gap:12px;min-height:200px"><span style="font-size:22px;font-weight:600;color:#547AF2">STEP 04</span><span style="font-size:29px;font-weight:600">결과 생성</span><span style="font-size:22px;line-height:1.5;color:#4B5563">응답 조립, 안전 필터 통과</span></div>
+    <div style="text-align:center;font-size:30px;color:#B6BAC2">›</div>
+    <div style="border:1px solid #FBC7D5;background:#FFF1F4;border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;gap:12px;min-height:200px"><span style="font-size:22px;font-weight:600;color:#9B1B36">STEP 05</span><span style="font-size:29px;font-weight:600">반영 · 피드백</span><span style="font-size:22px;line-height:1.5;color:#4B5563">사용자 반응 로깅 후 재학습</span></div>
+  </div>
+  <div style="position:absolute;left:89px;top:620px;width:1742px;display:grid;grid-template-columns:1fr 44px 1fr 44px 1fr 44px 1fr 44px 1fr;align-items:start">
+    <div style="display:flex;flex-direction:column;gap:8px;padding-top:22px;border-top:2px solid #E3E6EC"><span style="font-size:21px;color:#9CA3AF">산출물</span><span style="font-size:23px">원천 데이터 로그</span></div><div></div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding-top:22px;border-top:2px solid #E3E6EC"><span style="font-size:21px;color:#9CA3AF">산출물</span><span style="font-size:23px">정제 데이터셋</span></div><div></div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding-top:22px;border-top:2px solid #E3E6EC"><span style="font-size:21px;color:#9CA3AF">산출물</span><span style="font-size:23px">판단 결과 · 신뢰도</span></div><div></div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding-top:22px;border-top:2px solid #E3E6EC"><span style="font-size:21px;color:#9CA3AF">산출물</span><span style="font-size:23px">최종 응답</span></div><div></div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding-top:22px;border-top:2px solid #E3E6EC"><span style="font-size:21px;color:#9CA3AF">산출물</span><span style="font-size:23px">개선 백로그</span></div>
+  </div>
+  <div style="position:absolute;left:89px;top:820px;width:1742px;font-size:24px;color:#4B5563">병목 구간과 실패 시 처리(fallback)를 여기에 한 줄로 적습니다.</div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">10</div>
+</section>
+
+<section data-label="규격 비교표" data-screen-label="11" data-speaker-notes="표는 6행 이내. 강조 열 하나만 배경을 줍니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">SPECIFICATION</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">규격 · 대안 비교</div>
+    <div style="margin-top:12px;font-size:26px;color:#6B7280">채택안은 가운데 열</div>
+  </div>
+  <div style="position:absolute;left:89px;top:330px;width:1742px;display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;font-size:25px">
+    <div style="padding:24px 26px;font-size:23px;color:#6B7280;border-bottom:2px solid #181A1C">항목</div>
+    <div style="padding:24px 26px;font-size:23px;color:#6B7280;border-bottom:2px solid #181A1C">대안 A</div>
+    <div style="padding:24px 26px;font-size:23px;font-weight:600;color:#4339C7;background:#F4F4FE;border-bottom:2px solid #4339C7">채택안 B</div>
+    <div style="padding:24px 26px;font-size:23px;color:#6B7280;border-bottom:2px solid #181A1C">대안 C</div>
+
+    <div style="padding:26px;font-weight:500;border-bottom:1px solid #E3E6EC">처리 성능</div>
+    <div style="padding:26px;color:#4B5563;border-bottom:1px solid #E3E6EC">1,200 req/s</div>
+    <div style="padding:26px;font-weight:600;background:#F4F4FE;border-bottom:1px solid #E3E6EC">2,400 req/s</div>
+    <div style="padding:26px;color:#4B5563;border-bottom:1px solid #E3E6EC">900 req/s</div>
+
+    <div style="padding:26px;font-weight:500;border-bottom:1px solid #E3E6EC">지연 시간</div>
+    <div style="padding:26px;color:#4B5563;border-bottom:1px solid #E3E6EC">평균 3.1초</div>
+    <div style="padding:26px;font-weight:600;background:#F4F4FE;border-bottom:1px solid #E3E6EC">평균 1.8초</div>
+    <div style="padding:26px;color:#4B5563;border-bottom:1px solid #E3E6EC">평균 2.6초</div>
+
+    <div style="padding:26px;font-weight:500;border-bottom:1px solid #E3E6EC">구축 비용</div>
+    <div style="padding:26px;color:#4B5563;border-bottom:1px solid #E3E6EC">낮음</div>
+    <div style="padding:26px;font-weight:600;background:#F4F4FE;border-bottom:1px solid #E3E6EC">중간</div>
+    <div style="padding:26px;color:#4B5563;border-bottom:1px solid #E3E6EC">높음</div>
+
+    <div style="padding:26px;font-weight:500;border-bottom:1px solid #E3E6EC">확장성</div>
+    <div style="padding:26px;color:#4B5563;border-bottom:1px solid #E3E6EC">제한적</div>
+    <div style="padding:26px;font-weight:600;background:#F4F4FE;border-bottom:1px solid #E3E6EC">수평 확장 가능</div>
+    <div style="padding:26px;color:#4B5563;border-bottom:1px solid #E3E6EC">수평 확장 가능</div>
+
+    <div style="padding:26px;font-weight:500;border-bottom:1px solid #E3E6EC">운영 난이도</div>
+    <div style="padding:26px;color:#4B5563;border-bottom:1px solid #E3E6EC">쉬움</div>
+    <div style="padding:26px;font-weight:600;background:#F4F4FE;border-bottom:1px solid #E3E6EC">보통</div>
+    <div style="padding:26px;color:#4B5563;border-bottom:1px solid #E3E6EC">어려움</div>
+  </div>
+  <div style="position:absolute;left:89px;top:880px;width:1742px;display:flex;gap:20px;align-items:center">
+    <div style="font-size:22px;font-weight:600;color:#4339C7;background:#F4F4FE;border-radius:999px;padding:8px 20px">채택 근거</div>
+    <div style="font-size:24px;color:#4B5563">비용 대비 성능이 가장 안정적이며, 기존 운영 체계를 그대로 쓸 수 있습니다.</div>
+  </div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">11</div>
+</section>
+
+<section data-label="개선 전후" data-screen-label="12" data-speaker-notes="같은 지표를 같은 순서로 좌우에 놓습니다. 개선 폭은 오른쪽에만 표시." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">BEFORE / AFTER</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">개선 전 · 후 비교</div>
+    <div style="margin-top:12px;font-size:26px;color:#6B7280">동일 조건 · 동일 지표 기준</div>
+  </div>
+  <div style="position:absolute;left:89px;top:330px;width:1742px;display:grid;grid-template-columns:1fr 1fr;gap:40px">
+    <div style="border:1px solid #E3E6EC;border-radius:18px;padding:40px;display:flex;flex-direction:column;gap:30px">
+      <div style="display:flex;align-items:center;gap:16px"><span style="font-size:22px;font-weight:600;color:#6B7280;background:#F6F7F9;border-radius:999px;padding:8px 18px">BEFORE</span><span style="font-size:30px;font-weight:600">기존 방식</span></div>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:20px;border-bottom:1px solid #EEF0F3"><span style="font-size:24px;color:#4B5563">작업 소요 시간</span><span style="font-size:36px;font-weight:600">120분</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:20px;border-bottom:1px solid #EEF0F3"><span style="font-size:24px;color:#4B5563">오류율</span><span style="font-size:36px;font-weight:600">7.8%</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:24px;color:#4B5563">투입 인력</span><span style="font-size:36px;font-weight:600">4명</span></div>
+      </div>
+      <div style="font-size:23px;line-height:1.55;color:#6B7280;text-wrap:pretty">수작업 검수에 의존해 담당자별 편차가 컸습니다.</div>
+    </div>
+    <div style="border:1px solid #C9CDF7;background:#F4F4FE;border-radius:18px;padding:40px;display:flex;flex-direction:column;gap:30px">
+      <div style="display:flex;align-items:center;gap:16px"><span style="font-size:22px;font-weight:600;color:#FFFFFF;background:#4339C7;border-radius:999px;padding:8px 18px">AFTER</span><span style="font-size:30px;font-weight:600">개선 후</span></div>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:20px;border-bottom:1px solid #DDDEF7"><span style="font-size:24px;color:#4B5563">작업 소요 시간</span><span style="display:flex;align-items:baseline;gap:12px"><span style="font-size:36px;font-weight:700;color:#4339C7">42분</span><span style="font-size:22px;font-weight:600;color:#1E9C84">−65%</span></span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:20px;border-bottom:1px solid #DDDEF7"><span style="font-size:24px;color:#4B5563">오류율</span><span style="display:flex;align-items:baseline;gap:12px"><span style="font-size:36px;font-weight:700;color:#4339C7">1.2%</span><span style="font-size:22px;font-weight:600;color:#1E9C84">−6.6%p</span></span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:24px;color:#4B5563">투입 인력</span><span style="display:flex;align-items:baseline;gap:12px"><span style="font-size:36px;font-weight:700;color:#4339C7">2명</span><span style="font-size:22px;font-weight:600;color:#1E9C84">−2명</span></span></div>
+      </div>
+      <div style="font-size:23px;line-height:1.55;color:#3A3F52;text-wrap:pretty">자동 분류 후 예외 건만 사람이 확인하는 구조로 바꿨습니다.</div>
+    </div>
+  </div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">12</div>
+</section>
+
+<section data-label="화면 · 데모" data-screen-label="13" data-speaker-notes="캡처는 원본 비율 그대로. 설명은 캡처 위에 올리지 않고 오른쪽에 붙입니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">DEMO</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">화면 · 데모 캡처</div>
+    <div style="margin-top:12px;font-size:26px;color:#6B7280">실제 동작 화면 · 2026.07 빌드</div>
+  </div>
+  <div style="position:absolute;left:89px;top:320px;width:1150px;height:620px;background:#F6F7F9;border:1px solid #E3E6EC;border-radius:18px;overflow:hidden">
+    <image-slot id="rpt-demo-main" shape="rect" fit="contain" placeholder="메인 화면 캡처를 끌어다 놓으세요"></image-slot>
+  </div>
+  <div style="position:absolute;left:1289px;top:320px;width:542px;display:flex;flex-direction:column;gap:24px">
+    <div style="height:250px;background:#F6F7F9;border:1px solid #E3E6EC;border-radius:18px;overflow:hidden"><image-slot id="rpt-demo-sub1" shape="rect" fit="contain" placeholder="세부 화면 1"></image-slot></div>
+    <div style="height:250px;background:#F6F7F9;border:1px solid #E3E6EC;border-radius:18px;overflow:hidden"><image-slot id="rpt-demo-sub2" shape="rect" fit="contain" placeholder="세부 화면 2"></image-slot></div>
+    <div style="display:flex;flex-direction:column;gap:10px"><span style="font-size:24px;font-weight:600">캡처 설명</span><span style="font-size:22px;line-height:1.55;color:#4B5563;text-wrap:pretty">무엇을 보여 주는 화면인지, 어디를 봐야 하는지 한 줄로 적습니다.</span></div>
+  </div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">13</div>
+</section>
+
+<section data-label="리스크 · 이슈" data-screen-label="14" data-speaker-notes="리스크는 4건까지. 대응 방안과 담당·기한이 없으면 리스크로 적지 않습니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">RISK &amp; ISSUE</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">리스크 및 대응 방안</div>
+    <div style="margin-top:12px;font-size:26px;color:#6B7280">영향도 순 · 담당과 기한 명시</div>
+  </div>
+  <div style="position:absolute;left:89px;top:330px;width:1742px;display:grid;grid-template-columns:150px 1fr 1.2fr 200px;font-size:24px">
+    <div style="padding:22px 24px;font-size:22px;color:#6B7280;border-bottom:2px solid #181A1C">영향도</div>
+    <div style="padding:22px 24px;font-size:22px;color:#6B7280;border-bottom:2px solid #181A1C">이슈 내용</div>
+    <div style="padding:22px 24px;font-size:22px;color:#6B7280;border-bottom:2px solid #181A1C">대응 방안</div>
+    <div style="padding:22px 24px;font-size:22px;color:#6B7280;border-bottom:2px solid #181A1C">담당 · 기한</div>
+
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC"><span style="font-size:21px;font-weight:600;color:#9B1B36;background:#FFF1F4;border-radius:999px;padding:6px 16px">높음</span></div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;line-height:1.5">현장 데이터 확보 지연으로 검증 일정 압박</div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;line-height:1.5;color:#4B5563">기존 로그로 선행 검증, 확보 즉시 재평가</div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;color:#4B5563">○○팀 · 8/15</div>
+
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC"><span style="font-size:21px;font-weight:600;color:#9B1B36;background:#FFF1F4;border-radius:999px;padding:6px 16px">높음</span></div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;line-height:1.5">GPU 자원 경합으로 학습 처리량 감소</div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;line-height:1.5;color:#4B5563">야간 배치 전환, 우선순위 큐 분리</div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;color:#4B5563">○○팀 · 8/30</div>
+
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC"><span style="font-size:21px;font-weight:600;color:#8A5A00;background:#FFF6E6;border-radius:999px;padding:6px 16px">중간</span></div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;line-height:1.5">운영 인수 인력 미확정</div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;line-height:1.5;color:#4B5563">인수 범위 문서화 후 인력 요청 상신</div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;color:#4B5563">○○팀 · 9/12</div>
+
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC"><span style="font-size:21px;font-weight:600;color:#0F6B59;background:#EEFBF7;border-radius:999px;padding:6px 16px">낮음</span></div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;line-height:1.5">외부 API 요금 정책 변경 가능성</div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;line-height:1.5;color:#4B5563">대체 공급사 후보 2곳 사전 검토</div>
+    <div style="padding:28px 24px;border-bottom:1px solid #E3E6EC;color:#4B5563">○○팀 · 10/04</div>
+  </div>
+  <div style="position:absolute;left:89px;top:880px;width:1742px;display:flex;gap:20px;align-items:center">
+    <div style="font-size:22px;font-weight:600;color:#9B1B36;background:#FFF1F4;border-radius:999px;padding:8px 20px">의사결정 요청</div>
+    <div style="font-size:24px;color:#4B5563">이번 보고에서 결정이 필요한 사항 한 건만 적습니다.</div>
+  </div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">14</div>
+</section>
+
+<section data-label="마무리" data-screen-label="15" data-speaker-notes="요약 3줄과 다음 단계. 요청 사항으로 끝냅니다." style="background:#FFFFFF;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:89px;top:52px;width:1660px">
+    <div style="font-size:24px;font-weight:600;letter-spacing:.12em;color:#547AF2">WRAP-UP</div>
+    <div style="margin-top:8px;font-size:56px;font-weight:700;letter-spacing:-0.02em">요약 및 향후 계획</div>
+  </div>
+  <div style="position:absolute;left:89px;top:300px;width:900px;display:flex;flex-direction:column;gap:34px">
+    <div style="font-size:26px;font-weight:600;color:#6B7280">요약</div>
+    <div style="display:flex;gap:24px;align-items:baseline"><span style="font-size:28px;font-weight:700;color:#4339C7">01</span><span style="font-size:30px;line-height:1.5;text-wrap:pretty">핵심 성과를 한 문장으로 적습니다.</span></div>
+    <div style="display:flex;gap:24px;align-items:baseline"><span style="font-size:28px;font-weight:700;color:#7B4BD6">02</span><span style="font-size:30px;line-height:1.5;text-wrap:pretty">목표 대비 진척과 남은 과제를 적습니다.</span></div>
+    <div style="display:flex;gap:24px;align-items:baseline"><span style="font-size:28px;font-weight:700;color:#F34F7A">03</span><span style="font-size:30px;line-height:1.5;text-wrap:pretty">확인된 리스크와 대응 방향을 적습니다.</span></div>
+  </div>
+  <div style="position:absolute;left:1089px;top:300px;width:742px;background:#F6F7F9;border-radius:18px;padding:44px 40px;display:flex;flex-direction:column;gap:26px">
+    <div style="font-size:26px;font-weight:600;color:#6B7280">Next steps</div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;justify-content:space-between;gap:20px;padding-bottom:18px;border-bottom:1px solid #E3E6EC"><span style="font-size:26px">현장 파일럿 확대 (3 → 6라인)</span><span style="font-size:23px;color:#6B7280">8월</span></div>
+      <div style="display:flex;justify-content:space-between;gap:20px;padding-bottom:18px;border-bottom:1px solid #E3E6EC"><span style="font-size:26px">양산 적용 기준 확정</span><span style="font-size:23px;color:#6B7280">9월</span></div>
+      <div style="display:flex;justify-content:space-between;gap:20px;padding-bottom:18px;border-bottom:1px solid #E3E6EC"><span style="font-size:26px">운영 인수 · 교육</span><span style="font-size:23px;color:#6B7280">10월</span></div>
+      <div style="display:flex;justify-content:space-between;gap:20px"><span style="font-size:26px">과제 종료 보고</span><span style="font-size:23px;color:#6B7280">12월</span></div>
+    </div>
+  </div>
+  <div style="position:absolute;left:89px;top:800px;width:1742px;border-top:1px solid #E3E6EC;padding-top:32px;display:flex;gap:20px;align-items:center">
+    <div style="font-size:22px;font-weight:600;color:#4339C7;background:#F4F4FE;border-radius:999px;padding:8px 20px">요청 사항</div>
+    <div style="font-size:26px;color:#4B5563">필요한 지원(인력 · 예산 · 의사결정)을 구체적으로 적습니다.</div>
+  </div>
+  <div style="position:absolute;left:89px;bottom:44px;font-size:20px;color:#9CA3AF">○○ 과제 · 2026. 07. 31.</div>
+  <div style="position:absolute;right:89px;bottom:44px;font-size:20px;color:#9CA3AF">15</div>
+</section>
+
+<section data-label="Q&amp;A" data-screen-label="16" data-speaker-notes="질의응답. 백업 슬라이드가 있으면 여기서 안내합니다." style="background:#F6F7F9;color:#181A1C;font-family:'Pretendard',sans-serif;overflow:hidden">
+  <div style="position:absolute;left:-90px;top:-52px;width:182px;height:182px;border:1px solid #DDE0E5;border-radius:50%;transform:rotate(9deg)"></div>
+  <div style="position:absolute;left:0;top:26px;width:53px;height:164px;overflow:hidden"><img src="assets/varco-chevron.png" alt="" style="position:absolute;left:-90px;top:21px;width:164px;height:122px;transform:rotate(90deg)"></div>
+  <div style="position:absolute;left:84px;top:33px;width:15px;height:15px;border-radius:50%;background:#64DEC7;border:1px solid #FFFFFF"></div>
+  <img src="assets/logo-ncai.png" alt="NC AI" style="position:absolute;left:1747px;top:78px;width:95px;height:27px">
+  <div style="position:absolute;left:0;top:0;width:1920px;height:1080px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px">
+    <div style="font-size:120px;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(90deg,#4339C7 0%,#F34F7A 99%);-webkit-background-clip:text;background-clip:text;color:transparent">Q &amp; A</div>
+    <div style="font-size:30px;color:#6B7280">감사합니다</div>
+    <div style="margin-top:20px;font-size:24px;color:#9CA3AF">문의 · 담당자 연락처를 적습니다</div>
+  </div>
+</section>
+
+</deck-stage>
+
+</body>
+</html>

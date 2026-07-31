@@ -6,7 +6,7 @@ description: >
   living guidelines, and brand-styled HTML report/deck generation.
   Use when: starting a feature (plan), implementing (do), verifying (review),
   checking status, committing, or generating an HTML report/slide deck.
-  Triggers: vais, /vais plan, /vais do, /vais review, /vais status, /vais commit, /vais report, /vais deck.
+  Triggers: vais, /vais plan, /vais do, /vais review, /vais status, /vais commit, /vais report, /vais deck, /vais brief.
   Do NOT use for: simple questions, casual conversation, tasks unrelated to this project's workflow.
 argument-hint: "[action] [feature]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
@@ -24,14 +24,15 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQue
 | `status` | 진행 상태 조회 |
 | `init [feature]` | 기존 프로젝트에 VAIS 문서 구조 적용 |
 | `commit` | 변경 분석 → Conventional Commits 메시지 → 사용자 확인 후 커밋 |
-| `report {주제\|feature}` / `deck {주제\|feature}` | HTML 보고서 / 슬라이드 덱 생성 (`skills/report/SKILL.md`) |
+| `brief {주제} [--deck]` | 임원/대외 보고용 HTML 보고서·슬라이드 — 소재는 대화·제공 자료 (`skills/brief/SKILL.md`) |
+| `report {feature}` / `deck {feature}` | 피처 문서 기반 HTML 보고서 / 슬라이드 덱 (`skills/report/SKILL.md`) |
 | `brand new` | 커스텀 브랜드 DESIGN.md 생성 (사내 CI·개인 스타일 — `skills/report/SKILL.md`) |
 | `help` | 사용법 |
 
 ## 실행
 
 1. `${CLAUDE_PLUGIN_ROOT}/skills/vais/phases/$0.md` 를 Read. 없으면 `utils/$0.md`. 둘 다 없으면 `/vais help` 안내.
-2. `report`/`deck`/`brand` 는 `${CLAUDE_PLUGIN_ROOT}/skills/report/SKILL.md` 를 Read.
+2. `report`/`deck`/`brand` 는 `${CLAUDE_PLUGIN_ROOT}/skills/report/SKILL.md`, `brief` 는 `${CLAUDE_PLUGIN_ROOT}/skills/brief/SKILL.md` 를 Read.
 
 ## 공통 규칙
 

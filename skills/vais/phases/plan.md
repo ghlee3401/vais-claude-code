@@ -17,7 +17,7 @@ description: 착수 phase — 범위 합의 + plan.md 작성. v2.0
    - 접근 — 변경 파일 목록 + 방법 요지
    - 완료 조건 — review에서 대조할 검증 가능한 항목 (테스트 통과, 동작 확인 등)
 5. `docs/{feature}/notes.md` 생성 (빈 템플릿).
-6. status 갱신: `node -e "require('./lib/status').setPhase('{feature}','plan','completed')"` 상당 (lib/status 사용).
+6. status 갱신: `node -e "const s=require('./lib/status'); s.initFeature('{feature}'); s.updatePhase('{feature}','plan','completed')"` 상당 (lib/status 사용).
 
 ## 규칙
 

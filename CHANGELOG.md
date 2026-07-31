@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.1.0] - 2026-07-31 — /vais brief 신설: VARCO 고정 양식 임원 보고 생성기
+
+report 의 피처/주제 이중 모드가 혼란을 낳아 분리 — report/deck 은 피처 문서 전용으로
+좁히고, 임원/대외 보고는 독립 커맨드 brief 로. 원칙: **내용 구성은 자유, 양식은 고정**.
+
+### Added
+
+- `skills/brief/` — `/vais brief {주제}` (문서형 기본, `--deck` 16:9 슬라이드)
+  - `template/deck.html` + deck-stage.js + image-slot.js + assets — VARCO 16장 슬라이드 양식 흡수
+  - `template/report.html` — 기술 보고서 문서형 양식 신규 (사이드바 목차·번호 섹션·콜아웃
+    4종·인라인 SVG figure 프레임, VARCO 토큰 재조색)
+  - `varco-deck.md` / `varco-report.md` — 양식 불변 규칙·토큰·구성 카탈로그·마무리 점검
+  - 브랜드 선택 단계 없음 — 양식이 스타일 고정. 산출: `reports/{date}-{slug}/`
+- `skills/vais/utils/help.md` — 처음이신가요 온보딩 섹션 (2.0.4 미배포분 포함)
+
+### Changed
+
+- `skills/report/SKILL.md` — 피처 전용으로 축소. 미등록 피처 인자는 오타 안내 후 brief 유도
+- `guidelines/doc-conventions.md` 승격 2건 — "코드·API 예시는 실제 export 와 대조",
+  "외부 자료 흡수는 구조·스타일만"
+- `skills/vais/phases/plan.md` — 존재하지 않는 setPhase 예시를 initFeature/updatePhase 로 교정
+
 ## [2.0.4] - 2026-07-31 — help 커맨드 첫 사용자 온보딩 섹션
 
 마켓플레이스 설치 사용자는 README/ONBOARDING.md 를 볼 일이 없어 세션 내 진입점이

@@ -6,7 +6,7 @@
 
 ## What This Project Is
 
-**개발 이력 + 일관성 도구.** `plan → do → review` 3단계 워크플로우로 피처마다 문서 3개(plan/notes/review)를 남기고, `guidelines/` 지침이 코드·문서 일관성을 잡는다. review 마다 교훈을 지침으로 승격하는 루프가 일관성의 엔진. 추가로 `design-system/brands/` 71종 브랜드 토큰 기반 **HTML 보고서/슬라이드 생성기** (`/vais report`, `/vais deck`)를 제공한다.
+**개발 이력 + 일관성 도구.** `plan → do → review` 3단계 워크플로우로 피처마다 문서 3개(plan/notes/review)를 남기고, `guidelines/` 지침이 코드·문서 일관성을 잡는다. review 마다 교훈을 지침으로 승격하는 루프가 일관성의 엔진. 추가로 `design-system/brands/` 71종 브랜드 토큰 기반 **HTML 보고서/슬라이드 생성기**를 제공한다 — 임원/대외 보고는 `/vais brief`, 피처 문서 기반은 `/vais report`·`/vais deck`.
 
 v1.x 의 C-Suite 조직 시뮬레이션(6 C-Level + sub-agent 47)은 v2.0 에서 제거됐다 — 근거: `docs/260730_vais_code_review/`.
 
@@ -15,7 +15,8 @@ v1.x 의 C-Suite 조직 시뮬레이션(6 C-Level + sub-agent 47)은 v2.0 에서
 ```
 vais-claude-code/
 ├── skills/vais/       # /vais 진입점 — SKILL.md + phases/(plan|do|review) + utils/(status|init|commit|help)
-├── skills/report/     # /vais report·deck·brand — SKILL.md + design-rules.md
+├── skills/report/     # /vais report·deck·brand (피처 전용) — SKILL.md + design-rules.md
+├── skills/brief/      # /vais brief — VARCO 고정 양식 임원/대외 보고 (template/ + varco-report·deck 규칙)
 ├── agents/            # 실행 sub-agent 7: frontend/backend/test/qa-engineer, ui-designer, incident-responder, security-auditor
 ├── guidelines/        # 살아있는 지침 — code-conventions(≤3KB) + doc-conventions(≤2KB), 크기 예산제
 ├── knowledge/         # lazy-load 지식 2: architecture-decision, owasp-top10-checklist
@@ -34,7 +35,8 @@ vais-claude-code/
 /vais plan {feature}   범위·접근·완료 조건 → docs/{feature}/plan.md (30분 내 작업이면 "바로 실행" 제안)
 /vais do {feature}     구현 — 필요 시 sub-agent 병렬 위임, 결정은 notes.md 한 줄 append (--design: UI 설계 선행)
 /vais review {feature} 완료 조건 대조 + review.md + 지침 승격 루프
-/vais report|deck      brand 스타일 자체 포함 HTML 보고서/슬라이드 (skills/report/design-rules.md 준수)
+/vais brief {주제}     VARCO 양식 임원/대외 보고 — 문서형 기본, --deck 슬라이드. 내용 자유·양식 고정
+/vais report|deck      피처 문서 기반 HTML 보고서/슬라이드 (skills/report/design-rules.md 준수)
 /vais status|init|commit|help
 ```
 
