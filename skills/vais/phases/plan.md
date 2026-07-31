@@ -10,6 +10,7 @@ description: 착수 phase — 범위 합의 + plan.md 작성. v2.0
 1. **scope probe** — 요청이 30분 내 직접 편집으로 끝나는 규모면: "문서 없이 바로 실행할까요?" AskUserQuestion (바로 실행 / plan 진행). 바로 실행 선택 시 plan 생략하고 작업 후 종료.
 2. 요구사항 파악 — 사용자 요청 원문을 축약·재해석 없이 확보. 불명확하면 이 시점에 질문 (작업 중간 질문 최소화).
 3. 관련 코드 탐색 — 변경 대상 파일·기존 패턴 확인. **탐색 우선**: 기존 솔루션/패턴 → 신규 작성 순.
+   - 신규 컴포넌트·라이브러리 도입 등 되돌리기 어려운 결정이 있으면 `knowledge/architecture-decision.md` Read 후 결정.
 4. `docs/{feature}/plan.md` 작성 (`templates/plan.template.md`, ≤80줄):
    - 요청 원문 (인용)
    - 범위 — In (원문 명시 + 기술적 전제조건만) / Out (자발 확장 금지 — 발견한 리스크는 notes.md에 기록만)

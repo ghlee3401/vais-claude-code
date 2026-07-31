@@ -9,59 +9,13 @@
       "skills/vais/SKILL.md"
     ],
     "agents": [
-      "agents/cbo/cbo.md",
-      "agents/cbo/copy-writer.md",
-      "agents/cbo/customer-segmentation-analyst.md",
-      "agents/cbo/financial-modeler.md",
-      "agents/cbo/finops-analyst.md",
-      "agents/cbo/growth-analyst.md",
-      "agents/cbo/market-researcher.md",
-      "agents/cbo/marketing-analytics-analyst.md",
-      "agents/cbo/pricing-analyst.md",
-      "agents/cbo/seo-analyst.md",
-      "agents/cbo/unit-economics-analyst.md",
-      "agents/ceo/absorb-analyzer.md",
-      "agents/ceo/ceo.md",
-      "agents/ceo/okr-author.md",
-      "agents/ceo/pr-faq-author.md",
-      "agents/ceo/skill-creator.md",
-      "agents/ceo/strategy-kernel-author.md",
-      "agents/ceo/vision-author.md",
-      "agents/coo/ci-cd-configurator.md",
-      "agents/coo/container-config-author.md",
-      "agents/coo/coo.md",
-      "agents/coo/migration-planner.md",
-      "agents/coo/performance-engineer.md",
-      "agents/coo/release-monitor.md",
-      "agents/coo/release-notes-writer.md",
-      "agents/coo/runbook-author.md",
-      "agents/coo/sre-engineer.md",
-      "agents/cpo/backlog-manager.md",
-      "agents/cpo/cpo.md",
-      "agents/cpo/data-analyst.md",
-      "agents/cpo/prd-writer.md",
-      "agents/cpo/product-discoverer.md",
-      "agents/cpo/product-researcher.md",
-      "agents/cpo/product-strategist.md",
-      "agents/cpo/roadmap-author.md",
-      "agents/cpo/ux-researcher.md",
-      "agents/cso/code-reviewer.md",
-      "agents/cso/compliance-auditor.md",
-      "agents/cso/cso.md",
-      "agents/cso/dependency-analyzer.md",
-      "agents/cso/plugin-validator.md",
-      "agents/cso/secret-scanner.md",
-      "agents/cso/security-auditor.md",
-      "agents/cso/skill-validator.md",
-      "agents/cto/backend-engineer.md",
-      "agents/cto/cto.md",
-      "agents/cto/db-architect.md",
-      "agents/cto/frontend-engineer.md",
-      "agents/cto/incident-responder.md",
-      "agents/cto/infra-architect.md",
-      "agents/cto/qa-engineer.md",
-      "agents/cto/test-engineer.md",
-      "agents/cto/ui-designer.md"
+      "agents/frontend-engineer.md",
+      "agents/backend-engineer.md",
+      "agents/test-engineer.md",
+      "agents/qa-engineer.md",
+      "agents/ui-designer.md",
+      "agents/incident-responder.md",
+      "agents/security-auditor.md"
     ],
     "hooks": [
       "hooks/hooks.json"
@@ -69,8 +23,7 @@
     "outputStyles": "output-styles/vais-default.md"
   },
   "scripts": {
-    "test": "node --test tests/*.test.js tests/integration/*.test.js",
-    "test:integration": "node --test tests/integration/*.test.js",
+    "test": "node --test tests/*.test.js",
     "lint": "eslint scripts/ lib/ hooks/ --max-warnings=0",
     "prepare-hooks": "git config core.hooksPath .hooks"
   },
@@ -79,14 +32,7 @@
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/material": "^6.1.7",
-    "eslint": "^9.0.0",
-    "react": "^19.2.5"
-  },
-  "optionalDependencies": {
-    "@anthropic-ai/sdk": "^0.30.0"
+    "eslint": "^9.0.0"
   },
   "engines": {
     "node": ">=18.0.0"

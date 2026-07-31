@@ -45,7 +45,7 @@ git 변경사항을 분석하여 **한국어 한 줄** Conventional Commits 메�
 11. "push" 선택 시에만 `git push origin {현재 브랜치}` 실행
 
 > **⚠️ push는 반드시 `/vais commit`을 통해서만**
-> C-Suite 에이전트는 `git push`가 차단되어 있습니다. 작업 완료 후 `/vais commit`을 실행하면
+> sub-agent 는 `git push`가 차단되어 있습니다. 작업 완료 후 `/vais commit`을 실행하면
 > 커밋 메시지 작성 + semver 버전 범프 + push(확인 후)가 처리됩니다.
 
 #### Conventional Commits 형식
