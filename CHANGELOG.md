@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.1] - 2026-07-31 — 미사용 vais-design-system MCP 서버 제거
+
+선언만 있고 어떤 skill/agent 프롬프트에서도 사용을 지시하지 않던 MCP 레이어 제거.
+brand 토큰은 기존대로 `design-system/brands/{slug}/DESIGN.md` 직접 Read 로 소비하며,
+`vendor/ui-ux-pro-max` 데이터·검색 스크립트는 유지 (필요 시 Bash 로 직접 호출).
+
+### Removed
+
+- `mcp/` (design-system-server-runner.js + design-system-server.json) 및 `.mcp.json`
+- `plugin.json > mcpServers` 등록, agent frontmatter 의 MCP 툴 2건
+  (frontend-engineer: design_stack_search, ui-designer: design_search)
+
 ## [2.0.0] - 2026-07-31 — v2.0 재편: 이력·일관성 코어만 남기고 조직 시뮬레이션 제거
 
 전체 리뷰 (`docs/260730_vais_code_review/`) 에 따라 C-Suite 시뮬레이션 레이어를 제거하고

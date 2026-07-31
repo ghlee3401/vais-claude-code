@@ -24,7 +24,6 @@ vais-claude-code/
 ├── scripts/           # bash-guard, stop-handler, vais-validate-plugin, import-awesome-design-md, check-legacy-paths
 ├── templates/         # plan / notes / review / design.slim / report.html / deck.html
 ├── design-system/     # brands/{slug}/DESIGN.md — 5 사전 박제 + 66 lazy import (MIT)
-├── mcp/               # vais-design-system MCP (design_search 등)
 ├── docs/              # docs/{feature}/plan.md + notes.md + review.md (+assets/) · 과거 산출물: docs/_archive/
 └── vais.config.json   # 워크플로우·지침 예산·designSystem 설정 (~50줄)
 ```

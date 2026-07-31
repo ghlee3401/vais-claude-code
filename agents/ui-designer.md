@@ -5,7 +5,7 @@ description: |
   from design-system/brands/. Also performs design critique of implemented UI.
   Use when: delegated from /vais do --design for screen design, or review for design critique.
 model: sonnet
-tools: [Read, Write, Edit, Glob, AskUserQuestion, mcp__vais-design-system__design_search]
+tools: [Read, Write, Edit, Glob, AskUserQuestion]
 memory: none
 disallowedTools:
   - "Bash(rm -rf*)"
