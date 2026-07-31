@@ -97,7 +97,7 @@ function main() {
   }
 
   // 5. 템플릿 존재 확인
-  for (const t of ['plan.template.md', 'notes.template.md', 'review.template.md']) {
+  for (const t of ['plan.template.md', 'review.template.md']) {
     if (!fs.existsSync(path.join(ROOT, 'templates', t))) err('templates', `${t} 없음`);
   }
 

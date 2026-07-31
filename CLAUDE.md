@@ -20,7 +20,7 @@ vais-claude-code/
 ├── guidelines/        # 살아있는 지침 — code-conventions(≤3KB) + doc-conventions(≤2KB), 크기 예산제
 ├── knowledge/         # lazy-load 지식 2: architecture-decision, owasp-top10-checklist
 ├── hooks/             # SessionStart(상태 요약) + PreToolUse Bash(위험 명령 차단) + Stop(1줄 힌트)
-├── lib/               # status / paths / io / fs-utils / memory / brand-validator / core(migration)
+├── lib/               # status / paths / io / fs-utils / core(migration)
 ├── scripts/           # bash-guard, stop-handler, vais-validate-plugin, import-awesome-design-md, check-legacy-paths
 ├── templates/         # plan / notes / review / design.slim / report.html / deck.html
 ├── design-system/     # brands/{slug}/DESIGN.md — 5 사전 박제 + 66 lazy import (MIT)
@@ -62,6 +62,5 @@ node scripts/vais-validate-plugin.js  # 구조 + 버전 동기화 + 지침 예�
 ## Do NOT
 
 - AGENTS.md 삭제·병합 금지 (Cursor/Copilot 호환)
-- `vendor/` 직접 수정 금지
 - `docs/_archive/` 는 읽기 전용 이력 — 수정·삭제 금지
 - 레거시 top-level `docs/NN-` 경로 금지 (`.hooks/pre-commit` 이 차단, `--no-verify` 금지)

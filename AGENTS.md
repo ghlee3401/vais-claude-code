@@ -14,4 +14,4 @@
 4. 코드 스타일은 `guidelines/code-conventions.md` — CJS, 에러 처리 2모드(hook fail-safe / CLI fail-loud), `node --test`
 5. `rm -rf` · `git push --force` · `DROP TABLE` 금지, 시크릿은 환경 변수로만
 6. 커밋 전 `npm test` + `node scripts/vais-validate-plugin.js`. 버전 동기화 5곳: package.json / vais.config.json / .claude-plugin/plugin.json / .claude-plugin/marketplace.json ×2 / CHANGELOG.md
-7. `docs/_archive/` 읽기 전용, `vendor/` 수정 금지, top-level `docs/NN-` 경로 금지
+7. `docs/_archive/` 읽기 전용, top-level `docs/NN-` 경로 금지

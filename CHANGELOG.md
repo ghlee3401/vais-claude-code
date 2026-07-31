@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.0.2] - 2026-07-31 — 죽은 코드 정리: 미사용 lib/vendor/설정/템플릿 제거
+
+사용처 추적 (require 그래프 + skill/agent 프롬프트 grep) 으로 참조 0 인 파일을 일괄 제거.
+플러그인 동작 검증: 테스트 76개 통과, validator 통과, 훅 3종 스모크 정상.
+
+### Removed
+
+- `lib/memory.js` + `tests/memory.test.js` — v1.x Manager 에이전트용 메모리 시스템 (v2.0 에서 Manager 제거됨)
+- `lib/brand-validator.js` — export 7개 전부 미사용
+- `vendor/ui-ux-pro-max/` — brand import 소스는 `references/awesome-design-md`, vendor 는 참조용 잔재
+- `.eslintrc.json` (ESLint 9 flat config 와 중복), `.env.example` (archived 피처용 Figma/MUI 변수)
+- `templates/notes.template.md` — doc-conventions 가 "notes 는 템플릿 없음" 명시
+- `lib/paths.js > STATE` — v1.x state-machine 경로 9개 제거 (root/status 만 유지)
+
+### Changed
+
+- `NOTICE` — 삭제된 skill-creator 흡수분 고지를 실재하는 awesome-design-md 출처 표기로 재작성
+- `CLAUDE.md`/`AGENTS.md`/`.gitignore`/`skills/vais/utils/commit.md` — vendor 등 잔존 언급 정리
+- `package-lock.json` 루트 버전 동기화 (1.1.0 에 정체돼 있던 것 교정)
+
 ## [2.0.1] - 2026-07-31 — 미사용 vais-design-system MCP 서버 제거
 
 선언만 있고 어떤 skill/agent 프롬프트에서도 사용을 지시하지 않던 MCP 레이어 제거.

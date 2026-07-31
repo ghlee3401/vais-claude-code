@@ -1,6 +1,6 @@
 {
   "name": "vais-code",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "VAIS — 이력·일관성 개발 워크플로우 (plan/do/review) + brand 스타일 HTML 보고서 생성 — Claude Code Plugin",
   "author": "ghlee3401",
   "license": "MIT",
