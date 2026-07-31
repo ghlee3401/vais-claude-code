@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.0.4] - 2026-07-31 — help 커맨드 첫 사용자 온보딩 섹션
+
+마켓플레이스 설치 사용자는 README/ONBOARDING.md 를 볼 일이 없어 세션 내 진입점이
+SessionStart 힌트와 `/vais help` 뿐 — help 에 개념 안내를 보강.
+
+### Added
+
+- `skills/vais/utils/help.md` — "처음이신가요?" 섹션: 워크플로우 철학 요약 + 첫 커맨드
+  예시 + 자연어로 말해도 된다는 안내
+
+### Changed
+
+- help 하단 불릿의 "30분 내 바로 실행" 중복 제거 (인트로로 이동), 문서 3파일 규칙로 교체
+
 ## [2.0.3] - 2026-07-31 — AGENTS.md 제거
 
 Claude Code 단독 사용 환경이라 Cursor/Copilot 등 범용 AI 지침 파일이 불필요.
