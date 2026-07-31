@@ -1,7 +1,7 @@
 {
   "name": "vais-code",
   "description": "VAIS v2.0 — 이력을 남기는 일관성 있는 개발 (plan→do→review 3단계 + 피처당 문서 3개 + guidelines 승격 루프) + brand 토큰 기반 HTML 보고서/슬라이드 생성기.",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "author": {
     "name": "VAIS Voice",
     "email": "ghlee0304@ncsoft.com"

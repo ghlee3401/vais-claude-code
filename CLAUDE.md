@@ -1,6 +1,6 @@
 # VAIS - Claude Code Plugin
 
-> **이 파일의 책임**: Claude Code 전용 프로젝트 지침 (세션 시작 시 자동 로드). 처음이면 `ONBOARDING.md` 5분 가이드 먼저. 다른 AI 도구는 `AGENTS.md`.
+> **이 파일의 책임**: Claude Code 전용 프로젝트 지침 (세션 시작 시 자동 로드). 처음이면 `ONBOARDING.md` 5분 가이드 먼저.
 >
 > v2.0.0 — Claude Code marketplace plugin: `vais-code`
 
@@ -61,6 +61,5 @@ node scripts/vais-validate-plugin.js  # 구조 + 버전 동기화 + 지침 예�
 
 ## Do NOT
 
-- AGENTS.md 삭제·병합 금지 (Cursor/Copilot 호환)
 - `docs/_archive/` 는 읽기 전용 이력 — 수정·삭제 금지
 - 레거시 top-level `docs/NN-` 경로 금지 (`.hooks/pre-commit` 이 차단, `--no-verify` 금지)

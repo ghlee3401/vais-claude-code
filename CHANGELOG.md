@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.3] - 2026-07-31 — AGENTS.md 제거
+
+Claude Code 단독 사용 환경이라 Cursor/Copilot 등 범용 AI 지침 파일이 불필요.
+
+### Removed
+
+- `AGENTS.md` 및 CLAUDE.md/README.md 의 관련 참조 ("삭제·병합 금지" 규칙 포함)
+
 ## [2.0.2] - 2026-07-31 — 죽은 코드 정리: 미사용 lib/vendor/설정/템플릿 제거
 
 사용처 추적 (require 그래프 + skill/agent 프롬프트 grep) 으로 참조 0 인 파일을 일괄 제거.

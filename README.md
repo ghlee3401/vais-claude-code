@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-2.0.2-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-2.0.3-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT" />
 </p>
@@ -61,7 +61,6 @@ v1.x 는 6 C-Level + sub-agent 47 의 가상 조직 시뮬레이션이었다. �
 
 - [ONBOARDING.md](./ONBOARDING.md) — 5분 진입 가이드
 - [CLAUDE.md](./CLAUDE.md) — Claude Code 지침 (규칙 7개, 정본)
-- [AGENTS.md](./AGENTS.md) — Cursor/Copilot 등 범용 AI 지침
 - [CHANGELOG.md](./CHANGELOG.md)
 
 ## License
