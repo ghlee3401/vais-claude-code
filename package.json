@@ -1,7 +1,7 @@
 {
   "name": "vais-code",
-  "version": "1.1.0",
-  "description": "Virtual AI C-Suite for software development — Claude Code Plugin",
+  "version": "2.0.0",
+  "description": "VAIS — 이력·일관성 개발 워크플로우 (plan/do/review) + brand 스타일 HTML 보고서 생성 — Claude Code Plugin",
   "author": "ghlee3401",
   "license": "MIT",
   "claude-plugin": {
@@ -40,8 +40,9 @@
   "keywords": [
     "claude-code",
     "claude-plugin",
-    "ai-agents",
-    "c-suite",
+    "workflow",
+    "development",
+    "report",
     "vais"
   ]
 }

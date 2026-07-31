@@ -1,7 +1,7 @@
 {
   "name": "vais-code",
-  "description": "VAIS Code — v1.0 GA organization-in-a-box. PO 1명이 6 C-Suite 가상 조직 운영. 4 Primary (CEO/CPO/CTO/CSO) + 2 Secondary (CBO/COO 명시 호출). CEO 7 차원 알고리즘 + sub-agent 직접 박제 + AskUserQuestion 클릭 인터페이스.",
-  "version": "1.1.0",
+  "description": "VAIS v2.0 — 이력을 남기는 일관성 있는 개발 (plan→do→review 3단계 + 피처당 문서 3개 + guidelines 승격 루프) + brand 토큰 기반 HTML 보고서/슬라이드 생성기.",
+  "version": "2.0.0",
   "author": {
     "name": "VAIS Voice",
     "email": "ghlee0304@ncsoft.com"
@@ -19,7 +19,9 @@
     "vais-design-system": {
       "type": "stdio",
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/design-system-server-runner.js"]
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/mcp/design-system-server-runner.js"
+      ]
     }
   },
   "keywords": [

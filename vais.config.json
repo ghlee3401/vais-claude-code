@@ -1,13 +1,21 @@
 {
-  "version": "1.1.0",
+  "version": "2.0.0",
   "plugin": {
     "name": "vais-code",
     "description": "VAIS v2.0 — plan/do/review 경량 워크플로우 + 피처 문서 이력 + 지침 승격 루프 + brand 스타일 보고서 생성",
     "distributionUrl": "https://github.com/ghlee3401/vais-claude-code"
   },
   "workflow": {
-    "phases": ["plan", "do", "review"],
-    "mandatoryPhases": ["plan", "do", "review"],
+    "phases": [
+      "plan",
+      "do",
+      "review"
+    ],
+    "mandatoryPhases": [
+      "plan",
+      "do",
+      "review"
+    ],
     "phaseNames": {
       "plan": "기획",
       "do": "구현",
@@ -26,8 +34,14 @@
   },
   "guidelines": {
     "root": "guidelines/",
-    "files": ["code-conventions.md", "doc-conventions.md"],
-    "sizeBudgetKB": { "code-conventions.md": 3, "doc-conventions.md": 2 }
+    "files": [
+      "code-conventions.md",
+      "doc-conventions.md"
+    ],
+    "sizeBudgetKB": {
+      "code-conventions.md": 3,
+      "doc-conventions.md": 2
+    }
   },
   "gapAnalysis": {
     "matchThreshold": 90,
@@ -37,7 +51,13 @@
     "model": "brand-first",
     "brandRoot": "design-system/brands",
     "defaultBrand": null,
-    "preBakedBrands": ["claude", "linear", "stripe", "vercel", "notion"],
+    "preBakedBrands": [
+      "claude",
+      "linear",
+      "stripe",
+      "vercel",
+      "notion"
+    ],
     "_note": "brand DESIGN.md = 시각 사양 single source. 미박제 brand 는 scripts/import-awesome-design-md.js --brands {slug} 로 lazy import. VAIS_DEFAULT_BRAND env 가 defaultBrand 보다 우선."
   },
   "featureNaming": {
@@ -45,6 +65,11 @@
     "_note": "영문 kebab-case 2~4단어, 의도가 드러나게"
   },
   "safety": {
-    "forbiddenCommands": ["rm -rf", "git push --force", "git reset --hard", "DROP TABLE"]
+    "forbiddenCommands": [
+      "rm -rf",
+      "git push --force",
+      "git reset --hard",
+      "DROP TABLE"
+    ]
   }
 }

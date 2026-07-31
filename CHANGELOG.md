@@ -1,5 +1,37 @@
 # Changelog
 
+## [2.0.0] - 2026-07-31 — v2.0 재편: 이력·일관성 코어만 남기고 조직 시뮬레이션 제거
+
+전체 리뷰 (`docs/260730_vais_code_review/`) 에 따라 C-Suite 시뮬레이션 레이어를 제거하고
+원래 목적 (이력 + 일관성 + 완성도) 을 최소 구조로 재구축. 소스 ~1.5MB → ~305KB (−80%),
+세션 고정 오버헤드 −73%, phase 당 프레임워크 로드 −85%, 피처당 문서 17 → 3.
+
+### Removed (breaking)
+
+- C-Suite 6 C-Level (CEO/CPO/CTO/CSO/CBO/COO) + sub-agent 40 종 + `_shared/` 가드 8 종
+- CEO 7 차원 알고리즘 (`lib/ceo-algorithm.js`), Agent Teams v2 (conversation-orchestrator, worktree-manager, lock)
+- 6-phase PDCA (ideation/plan/design/do/qa/report) 및 main.md 인덱스 / Decision Record / frontmatter 8 필드 / 변경 이력 표 의식
+- 템플릿 47 종 (why/what/how/core/biz/alignment 계층), scripts 29 종 (patch-*/validator/auditor/judge/seo), lib 21 모듈
+- hook 5 이벤트 (PostToolUse ×2, UserPromptSubmit, SubagentStart/Stop), catalog.json 시스템
+- 아웃트로 강제 체인 + 매 응답 박스 리포트 (output-style 6KB → 0.5KB)
+- 과거 피처 산출물은 `docs/_archive/` 로 이동 (읽기 전용 보존)
+
+### Added
+
+- **3-phase 워크플로우**: `/vais plan → do → review` — 피처당 문서 3 파일 (plan.md ≤80줄 / notes.md 한 줄 append / review.md ≤60줄)
+- **guidelines/**: code-conventions (≤3KB) + doc-conventions (≤2KB) — 크기 예산제 (validator 가 기계 강제) + review 승격 루프
+- **보고서/덱 생성기**: `/vais report`·`/vais deck` — brand DESIGN.md 토큰 기반 자체 포함 HTML, 금지 패턴 8 + self-critique QA, `templates/report.html`·`deck.html`
+- **`/vais brand new`**: 커스텀 브랜드 DESIGN.md 생성 (사내 CI·개인 스타일)
+- scope probe: 30분 내 소규모 작업은 "문서 없이 바로 실행" 제안
+
+### Changed
+
+- 에이전트 등록 80 → 7 (knowledge/가드 문서의 에이전트 오염 해소 — 매 세션 ~2.5k 토큰 회수)
+- session-start 주입 5,976 → ~150 bytes, stop-handler 박스 → 1줄 힌트
+- `vais.config.json` 541 → 67줄, `lib/status.js` 29.5KB → 8.6KB (죽은 함수 26 개 제거)
+- `vais-validate-plugin.js` 재작성: 구조 + 버전 동기화 5곳 + 지침 크기 예산 검증
+- CLAUDE.md Mandatory Rules 15 → 7, README/AGENTS/ONBOARDING v2.0 재작성
+
 ## [1.1.0] - 2026-05-23 — Brand-First Design Model
 
 vais-code 의 ui design flow 를 **brand-first** 로 재정립. MUI 종속 (Material Design 톤
