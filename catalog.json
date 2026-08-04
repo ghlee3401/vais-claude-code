@@ -1,0 +1,1276 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-04-25T22:34:31.585Z",
+  "total_artifacts": 38,
+  "policy_distribution": {
+    "always": 23,
+    "scope": 14,
+    "user-select": 0,
+    "triggered": 1
+  },
+  "artifacts": [
+    {
+      "id": "3-horizon",
+      "phase": "core",
+      "owner_agent": "roadmap-author",
+      "canon_source": "Baghai, Coley, White 'The Alchemy of Growth' (1999), Perseus + McKinsey 'Three Horizons of Growth' framework",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "portfolio-balance",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "strategy-kernel"
+        ],
+        "required_after": [
+          "okr",
+          "roadmap"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/core/3-horizon.md",
+      "project_context_reason": "Core 단계 다섯 번째 산출물 — 단일 OKR/Roadmap 으로는 단기 (H1) 만 다뤄 장기 성장 (H2/H3) 이 invisible. 3-Horizon 은 portfolio 차원 자원 배분 (70:20:10) 을 명시화.",
+      "review_recommended": false
+    },
+    {
+      "id": "okr",
+      "phase": "core",
+      "owner_agent": "okr-author",
+      "canon_source": "Grove 'High Output Management' (1983), Random House + Doerr 'Measure What Matters' (2018), Portfolio",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "goal-setting",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "strategy-kernel"
+        ],
+        "required_after": [
+          "roadmap"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/core/okr.md",
+      "project_context_reason": "Core 단계 세 번째 산출물 — 전략을 분기·반기 단위 측정 가능한 목표로 변환. Strategy Kernel 의 Guiding Policy 가 OKR 의 Objective 로, Coherent Actions 가 Key Results 로 흘러야 함.",
+      "review_recommended": false
+    },
+    {
+      "id": "pr-faq",
+      "phase": "core",
+      "owner_agent": "pr-faq-author",
+      "canon_source": "Amazon Working Backwards methodology — Bryar & Carr 'Working Backwards' (2021), St. Martin's Press",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "launch-narrative",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement"
+        ],
+        "required_after": [
+          "strategy-kernel",
+          "okr"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/core/pr-faq.md",
+      "project_context_reason": "Core 단계 네 번째 산출물 — 출시 1 일차 고객 입장에서 역산 (Working Backwards). 명확한 customer benefit 이 없으면 PR 작성 자체가 막힘 → product-market fit 결여 조기 발견. review_recommended=true: 1 인 작성 시 자기 만족적 PR 위험.",
+      "review_recommended": true
+    },
+    {
+      "id": "strategy-kernel",
+      "phase": "core",
+      "owner_agent": "strategy-kernel-author",
+      "canon_source": "Rumelt 'Good Strategy / Bad Strategy' (2011), Crown Business",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "strategy-definition",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement"
+        ],
+        "required_after": [
+          "okr",
+          "roadmap"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/core/strategy-kernel.md",
+      "project_context_reason": "Core 단계 두 번째 산출물 — Vision 을 실행 가능한 전략으로 변환. review_recommended=true: 진단(Diagnosis)이 자기기만적이거나 Guiding Policy 가 trade-off 를 회피하면 전체 OKR/Roadmap 이 무너짐.",
+      "review_recommended": true
+    },
+    {
+      "id": "vision-statement",
+      "phase": "core",
+      "owner_agent": "vision-author",
+      "canon_source": "Collins & Porras 'Built to Last' (1994), HarperBusiness",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "vision-definition",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "strategy-kernel",
+          "okr"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/core/vision-statement.md",
+      "project_context_reason": "Core 단계 첫 번째 산출물 — 모든 전략·결정의 북극성. 부재 시 Strategy Kernel/OKR/Roadmap이 표류.",
+      "review_recommended": false
+    },
+    {
+      "id": "jobs-to-be-done",
+      "phase": "why",
+      "owner_agent": "customer-segmentation-analyst",
+      "canon_source": "Clayton Christensen 'The Innovator's Solution' (2003), Harvard Business School Press + Christensen et al. 'Competing Against Luck' (2016), HarperBusiness — Anthony Ulwick 'Outcome-Driven Innovation' (1990s)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "customer-job-mapping",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "persona",
+          "strategy-kernel",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/jtbd.md",
+      "project_context_reason": "Why 단계 — 고객이 **무엇을 사는지** 보다 **어떤 일을 시키려고 사는지** (Job) 에 초점. Always 정책: 모든 프로젝트가 작성 (B2B/B2C/사내 도구 무관). Persona 보다 선행 — 'Job 이 정의되어야 그 Job 을 의뢰하는 Persona 가 정의됨'.",
+      "review_recommended": false
+    },
+    {
+      "id": "persona",
+      "phase": "why",
+      "owner_agent": "customer-segmentation-analyst",
+      "canon_source": "Alan Cooper 'The Inmates Are Running the Asylum' (1999), Sams + Cooper 'About Face' (1995/2014) — Goal-Directed Design + Cagan 'Inspired' (2008/2017) modern persona spec",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "user-archetype",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "jobs-to-be-done"
+        ],
+        "required_after": [
+          "strategy-kernel",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/persona.md",
+      "project_context_reason": "Why 단계 — JTBD 가 'Job (해결할 일)' 정의 후, Persona 는 'Job 을 의뢰하는 인물 archetype' 정의. JTBD 의 Functional/Emotional/Social Job 이 Persona 의 Goals 로 구체화. Always 정책: 모든 프로젝트가 1 차 페르소나 명시.",
+      "review_recommended": false
+    },
+    {
+      "id": "swot-analysis",
+      "phase": "why",
+      "owner_agent": "market-researcher",
+      "canon_source": "Albert Humphrey, Stanford Research Institute (SRI), 1960s 'TAM' (Team Action Model) → SWOT 명명 (Heinz Weihrich 1982 'TOWS Matrix' 확장)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "position-assessment",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "strategy-kernel"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/swot.md",
+      "project_context_reason": "Why 단계 — 회사·제품의 내부 (S/W) + 외부 (O/T) 통합 평가. Always 정책: 모든 프로젝트가 작성. review_recommended=true: 자기기만 (내부 약점 회피 / 외부 위협 부정) 위험.",
+      "review_recommended": true
+    },
+    {
+      "id": "value-proposition-canvas",
+      "phase": "why",
+      "owner_agent": "product-strategist",
+      "canon_source": "Osterwalder, Pigneur, Bernarda, Smith, Papadakos 'Value Proposition Design' (2014), Wiley + Osterwalder & Pigneur 'Business Model Generation' (2010), Wiley",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "product-market-fit",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "jobs-to-be-done",
+          "persona"
+        ],
+        "required_after": [
+          "strategy-kernel",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/value-proposition-canvas.md",
+      "project_context_reason": "Why 단계 — Customer Profile (JTBD/Persona 기반) 과 Value Map (제품·서비스) 의 명시적 fit 검증. 본 템플릿이 곧 product-market fit 의 Osterwalder 형태. F8 재매핑: 기존 copy-writer (CBO) 에 위치했으나 PMF 분석은 product 영역 → product-strategist (CPO) 가 owner.",
+      "review_recommended": true
+    },
+    {
+      "id": "five-forces-analysis",
+      "phase": "why",
+      "owner_agent": "market-researcher",
+      "canon_source": "Michael Porter 'How Competitive Forces Shape Strategy' Harvard Business Review (1979) + Porter 'Competitive Strategy' (1980), Free Press",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "market_position",
+            "operator": "IN",
+            "value": [
+              "new-entry",
+              "expansion",
+              "competitive-pressure"
+            ]
+          },
+          {
+            "field": "target_market",
+            "operator": "NOT_IN",
+            "value": [
+              "internal-tool-only"
+            ]
+          }
+        ],
+        "intent": "industry-attractiveness",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "strategy-kernel"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/five-forces.md",
+      "project_context_reason": "Why 단계 — 진입 산업의 구조적 매력도 평가. scope: 신규 시장 진입 / 확장 / 경쟁 심화 상황에서만. 사내 도구는 skip. 1 회 분석 후 산업 변화 시 재작성.",
+      "review_recommended": false
+    },
+    {
+      "id": "pest-analysis",
+      "phase": "why",
+      "owner_agent": "market-researcher",
+      "canon_source": "Francis Aguilar 'Scanning the Business Environment' (1967), Macmillan — 원래 ETPS, 후일 PEST/PESTLE 로 확장",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "target_market",
+            "operator": "IN",
+            "value": [
+              "global",
+              "multi-country",
+              "regulated-industry"
+            ]
+          },
+          {
+            "field": "timeline",
+            "operator": ">=",
+            "value": "12-months"
+          }
+        ],
+        "intent": "macro-environment-scan",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "strategy-kernel"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/why/pest.md",
+      "project_context_reason": "Why 단계 — 거시환경 변화 (정치·경제·사회·기술) 가 사업 가설에 영향. scope: 글로벌·다국가·규제 산업·12개월+ 장기 기획에서만 의미. 1인 OSS 플러그인은 skip.",
+      "review_recommended": false
+    },
+    {
+      "id": "hypothesis",
+      "phase": "what",
+      "owner_agent": "product-discoverer",
+      "canon_source": "Marty Cagan 'Inspired' (2017), Wiley Ch.8 — 8 Risk Categories framework + Cagan & Jones 'Empowered' (2020) — Product Risks",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "risk-hypothesis",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [],
+        "required_after": [
+          "experiment-design",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/hypothesis.md",
+      "project_context_reason": "What 단계 — Cagan 의 8 risk categories 기반 가설 분류. PRD 작성 전 risks 사전 식별 + experiment-design.md 의 입력. opportunity-solution-tree 와 병렬 작성.",
+      "review_recommended": false
+    },
+    {
+      "id": "opportunity-solution-tree",
+      "phase": "what",
+      "owner_agent": "product-discoverer",
+      "canon_source": "Teresa Torres 'Continuous Discovery Habits' (2021), Product Talk + Torres OST framework (producttalk.org/opportunity-solution-tree)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "discovery-tree",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement",
+          "persona"
+        ],
+        "required_after": [
+          "experiment-design",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/opportunity-solution-tree.md",
+      "project_context_reason": "What 단계 — Discovery 단계의 핵심 visualization. Outcome (북극성) → Opportunities → Solutions → Experiments 트리 구조로 의사결정 추적성 확보.",
+      "review_recommended": false
+    },
+    {
+      "id": "prd",
+      "phase": "what",
+      "owner_agent": "prd-writer",
+      "canon_source": "Marty Cagan 'Inspired' (2017), Wiley + Lenny Rachitsky PRD Template (lennysnewsletter.com) + Wagenaar PRD Best Practices",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "product-requirement-document",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement",
+          "persona",
+          "jobs-to-be-done"
+        ],
+        "required_after": [
+          "backlog",
+          "roadmap"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/prd.md",
+      "project_context_reason": "What 단계 — Vision/Strategy/Persona/JTBD 입력을 실행 가능한 요구사항으로 변환. 모든 product feature 는 PRD 1개 작성. backlog/roadmap 의 prereq.",
+      "review_recommended": false
+    },
+    {
+      "id": "product-strategy-canvas",
+      "phase": "what",
+      "owner_agent": "product-strategist",
+      "canon_source": "Marty Cagan 'Inspired' (2017), Wiley + 'Empowered' (Cagan & Jones, 2020) — Product Strategy Canvas 9 sections framework",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "product-strategy-articulation",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement",
+          "strategy-kernel"
+        ],
+        "required_after": [
+          "prd",
+          "roadmap"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/product-strategy-canvas.md",
+      "project_context_reason": "What 단계 — Vision/Strategy Kernel 입력을 product 차원의 9 섹션으로 구체화. PRD 와 다름: PRD 는 단일 feature, Product Strategy Canvas 는 product 전체.",
+      "review_recommended": false
+    },
+    {
+      "id": "roadmap",
+      "phase": "what",
+      "owner_agent": "roadmap-author",
+      "canon_source": "ProductPlan 'Now-Next-Later Roadmap' (2019), productplan.com + Bruce McCarthy 'Product Roadmaps Relaunched' (2017), O'Reilly + Cagan 'Inspired' (2017) outcome-based roadmap",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "outcome-roadmap",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "okr",
+          "strategy-kernel"
+        ],
+        "required_after": [
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/roadmap.md",
+      "project_context_reason": "What 단계 — OKR + Strategy Kernel 을 product 시간축으로 변환. 기능 목록이 아닌 **결과 (outcome) 중심**. Backlog 의 prereq.",
+      "review_recommended": false
+    },
+    {
+      "id": "experiment-design",
+      "phase": "what",
+      "owner_agent": "product-discoverer",
+      "canon_source": "Teresa Torres 'Continuous Discovery Habits' (2021) + Eric Ries 'The Lean Startup' (2011), Crown Business — Build-Measure-Learn loop + Riskiest Assumption testing",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "discovery_required",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "hypothesis-experiment",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "opportunity-solution-tree"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/experiment-design.md",
+      "project_context_reason": "What 단계 — OST 의 각 Solution 별 검증 실험. Build-Measure-Learn 루프의 Build 전 단계. Riskiest Assumption 우선 검증.",
+      "review_recommended": false
+    },
+    {
+      "id": "lean-canvas",
+      "phase": "what",
+      "owner_agent": "product-strategist",
+      "canon_source": "Ash Maurya 'Running Lean' (2012), O'Reilly + 'Scaling Lean' (2016) — 9-block Business Model Canvas adaptation for early-stage products",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "timeline",
+            "operator": "IN",
+            "value": [
+              "pre-pmf",
+              "mvp",
+              "early-stage",
+              "validation"
+            ]
+          }
+        ],
+        "intent": "business-model-validation",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement"
+        ],
+        "required_after": [
+          "strategy-kernel",
+          "prd"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/what/lean-canvas.md",
+      "project_context_reason": "What 단계 — pre-PMF 단계의 가설 정렬. 기존 사업이거나 PMF 검증 완료 시 Strategy Kernel + PRD 가 더 적합. 1 페이지 9 블록 형태로 빠른 가설 visualization.",
+      "review_recommended": false
+    },
+    {
+      "id": "api-implementation",
+      "phase": "how",
+      "owner_agent": "backend-engineer",
+      "canon_source": "Roy Fielding 'Architectural Styles and the Design of Network-based Software Architectures' (2000) PhD dissertation — REST + Kleppmann 'Designing Data-Intensive Applications' (2017) + OpenAPI Specification 3.1 (openapis.org)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "api-implementation",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/api-implementation.md",
+      "project_context_reason": "How 단계 — Architecture Design 입력 후 API 표면 정의. REST / GraphQL / gRPC 선택 + endpoint spec + error handling + idempotency.",
+      "review_recommended": false
+    },
+    {
+      "id": "architecture-design",
+      "phase": "how",
+      "owner_agent": "infra-architect",
+      "canon_source": "Martin Fowler 'Patterns of Enterprise Application Architecture' (2003), Addison-Wesley + Sam Newman 'Building Microservices' (2021, 2nd ed.) + Eric Evans 'Domain-Driven Design' (2003)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "architecture-design",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "prd",
+          "strategy-kernel"
+        ],
+        "required_after": [
+          "api-implementation",
+          "db-schema"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/architecture-design.md",
+      "project_context_reason": "How 단계 — PRD 의 요구사항을 기술 아키텍처로 변환. 시스템 구조·계층·통합 결정. review_recommended=true: 잘못된 아키텍처는 후행 비용 100x.",
+      "review_recommended": true
+    },
+    {
+      "id": "code-review-report",
+      "phase": "how",
+      "owner_agent": "code-reviewer",
+      "canon_source": "Robert Martin 'Clean Code' (2008), Prentice Hall + Martin Fowler 'Refactoring' (2018, 2nd ed.), Addison-Wesley + Google Engineering Practices: Code Review (google.github.io/eng-practices/review)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "code-quality-review",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "api-implementation"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/code-review-report.md",
+      "project_context_reason": "How 단계 — CTO QA 통과 후 독립 code review. 시각 fresh 한 reviewer 가 readability + maintainability + 잠재 버그 평가. CSO Gate C 의 핵심 산출물.",
+      "review_recommended": false
+    },
+    {
+      "id": "security-audit-report",
+      "phase": "how",
+      "owner_agent": "security-auditor",
+      "canon_source": "OWASP Top 10 (2021), owasp.org + CWE/SANS Top 25 Most Dangerous Software Errors + STRIDE Threat Modeling (Microsoft) + NIST SP 800-53 Security Controls",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "security-audit",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design",
+          "api-implementation"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/security-audit-report.md",
+      "project_context_reason": "How 단계 — 모든 프로젝트 보안 감사. OWASP Top 10 (2021) 기준 + STRIDE threat model + 발견 + 우선순위 + remediation.",
+      "review_recommended": false
+    },
+    {
+      "id": "unit-test",
+      "phase": "how",
+      "owner_agent": "test-engineer",
+      "canon_source": "Kent Beck 'Test-Driven Development: By Example' (2002), Addison-Wesley + Gerard Meszaros 'xUnit Test Patterns' (2007), Addison-Wesley + Martin Fowler 'Test Pyramid' (2012, martinfowler.com)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "unit-test-implementation",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "api-implementation"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/unit-test.md",
+      "project_context_reason": "How 단계 — 모든 production 코드는 unit test cover. Beck TDD 의 Red-Green-Refactor 루프. 가장 많은 tests + 가장 빠름 (Test Pyramid 의 base).",
+      "review_recommended": false
+    },
+    {
+      "id": "ci-cd-pipeline",
+      "phase": "how",
+      "owner_agent": "ci-cd-configurator",
+      "canon_source": "Forsgren, Humble, Kim 'Accelerate' (2018), IT Revolution Press — DORA Four Key Metrics + Humble & Farley 'Continuous Delivery' (2010), Addison-Wesley + GitHub Actions Documentation (docs.github.com/actions)",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "deployment.target",
+            "operator": "IN",
+            "value": [
+              "cloud",
+              "hybrid"
+            ]
+          },
+          {
+            "field": "users.target_scale",
+            "operator": ">=",
+            "value": "pilot"
+          }
+        ],
+        "intent": "ci-cd-automation",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/ci-cd-pipeline.md",
+      "project_context_reason": "How 단계 — cloud/hybrid 배포 + scale ≥ pilot 일 때만. 1 인 OSS plugin / pre-PMF 는 skip (default-execute anti-pattern 회피).",
+      "review_recommended": false
+    },
+    {
+      "id": "db-schema",
+      "phase": "how",
+      "owner_agent": "db-architect",
+      "canon_source": "Martin Kleppmann 'Designing Data-Intensive Applications' (2017), O'Reilly + C.J. Date 'An Introduction to Database Systems' (2003, 8th ed.) + Bill Karwin 'SQL Antipatterns' (2010), Pragmatic Bookshelf",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "persistent_storage_required",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "db-schema-design",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [
+          "migration-plan"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/db-schema.md",
+      "project_context_reason": "How 단계 — Architecture 결정 후 데이터 모델링. Normalization / Index 전략 / Concurrency 결정. review_recommended=true: schema 변경 비용 후행 100x.",
+      "review_recommended": true
+    },
+    {
+      "id": "dockerfile",
+      "phase": "how",
+      "owner_agent": "container-config-author",
+      "canon_source": "Docker Documentation 'Dockerfile Best Practices' (docs.docker.com/develop/dev-best-practices) + 'Docker in Action' (Nickoloff & Kuenzli, 2019, 2nd ed.) + Distroless / Wolfi minimal base image patterns",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "deployment.target",
+            "operator": "IN",
+            "value": [
+              "cloud",
+              "hybrid",
+              "on-prem"
+            ]
+          }
+        ],
+        "intent": "containerization",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/dockerfile.md",
+      "project_context_reason": "How 단계 — Architecture 결정 후 컨테이너화. multi-stage build + 보안 (non-root + minimal base) + reproducibility (pinned versions).",
+      "review_recommended": false
+    },
+    {
+      "id": "monitoring-config",
+      "phase": "how",
+      "owner_agent": "sre-engineer",
+      "canon_source": "Beyer et al. 'Site Reliability Engineering' (Google, 2016) Ch.6 'Monitoring' + 'SRE Workbook' (2018) Ch.5 'Alerting on SLOs' + OpenTelemetry Specification (opentelemetry.io) + Brendan Gregg 'Systems Performance' (2020)",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "deployment.sla_required",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "observability",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [
+          "alert-rules"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/monitoring-config.md",
+      "project_context_reason": "How 단계 — SLA 가 필요한 시스템의 observability 인프라. Metrics + Logs + Traces 3 pillars + SLO/SLI 정의.",
+      "review_recommended": false
+    },
+    {
+      "id": "runbook",
+      "phase": "how",
+      "owner_agent": "runbook-author",
+      "canon_source": "Beyer, Jones, Petoff, Murphy 'Site Reliability Engineering' (Google, 2016), O'Reilly + 'The Site Reliability Workbook' (2018) Ch.3 'Risk' + Ch.9 'Implementing SLOs'",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "deployment.sla_required",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "operational-runbook",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "architecture-design"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/runbook.md",
+      "project_context_reason": "How 단계 — 배포 절차 + 인시던트 대응 절차의 living document. SLA 가 필요한 시스템에서만 작성 (1인 OSS plugin skip).",
+      "review_recommended": false
+    },
+    {
+      "id": "migration-plan",
+      "phase": "how",
+      "owner_agent": "migration-planner",
+      "canon_source": "Pramod Sadalage & Scott Ambler 'Refactoring Databases' (2006), Addison-Wesley + Flyway / Liquibase migration best practices + Martin Fowler 'Evolutionary Database Design' (2006)",
+      "execution": {
+        "policy": "triggered",
+        "scope_conditions": [],
+        "intent": "schema-migration",
+        "alternates": [],
+        "trigger_events": [
+          "db-schema-change",
+          "migration-requested"
+        ],
+        "prereq": [
+          "db-schema"
+        ],
+        "required_after": [
+          "rollback-script"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/how/migration-plan.md",
+      "project_context_reason": "How 단계 — DB schema 변경 시 절차 + 위험 평가 + 롤백 스크립트. review_recommended=true: data loss 위험.",
+      "review_recommended": true
+    },
+    {
+      "id": "gtm-strategy",
+      "phase": "biz",
+      "owner_agent": "growth-analyst",
+      "canon_source": "Sean Ellis & Morgan Brown 'Hacking Growth' (2017), Crown Business + Brian Balfour 'Four Fits' framework (brianbalfour.com) + Dave McClure AARRR Pirate Metrics + Reichheld NPS",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "gtm-strategy",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "persona",
+          "strategy-kernel",
+          "prd"
+        ],
+        "required_after": [
+          "pricing-strategy"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/biz/gtm-strategy.md",
+      "project_context_reason": "Biz 단계 — 모든 product 이 GTM (Go-To-Market) 전략 필요. North Star Metric + Growth Loop + 채널 + 메시징.",
+      "review_recommended": false
+    },
+    {
+      "id": "attribution-report",
+      "phase": "biz",
+      "owner_agent": "marketing-analytics-analyst",
+      "canon_source": "Multi-Touch Attribution Framework + Google Analytics 4 spec (developers.google.com/analytics) + Don Schultz 'Marketing Mix Modeling' + Avinash Kaushik 'Web Analytics 2.0' (2009)",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "marketing_channels_active",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "marketing-attribution",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "gtm-strategy"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/biz/attribution-report.md",
+      "project_context_reason": "Biz 단계 — 다채널 마케팅 환경에서 conversion 기여도 분석. last-click 만으로는 부정확 → Multi-Touch Attribution + MMM.",
+      "review_recommended": false
+    },
+    {
+      "id": "financial-model",
+      "phase": "biz",
+      "owner_agent": "financial-modeler",
+      "canon_source": "Aswath Damodaran 'Investment Valuation' (2012, 3rd ed.), Wiley + Paul Pignataro 'Financial Modeling and Valuation' (2013), Wiley + Wall Street Prep 3-Statement Model best practices",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "revenue_model",
+            "operator": "NOT_IN",
+            "value": [
+              "none"
+            ]
+          }
+        ],
+        "intent": "financial-modeling",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "strategy-kernel",
+          "prd"
+        ],
+        "required_after": [
+          "pricing-strategy"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/biz/financial-model.md",
+      "project_context_reason": "Biz 단계 — 3-Statement (P&L / Balance Sheet / Cash Flow) + DCF + 시나리오 분석. 투자유치/M&A/예산 결정 시 필수. review_recommended=true: 가정 (assumption) 의 자기기만 위험.",
+      "review_recommended": true
+    },
+    {
+      "id": "pricing-strategy",
+      "phase": "biz",
+      "owner_agent": "pricing-analyst",
+      "canon_source": "Thomas Nagle, John Hogan, Joseph Zale 'The Strategy and Tactics of Pricing' (2017, 6th ed.), Routledge + Madhavan Ramanujam 'Monetizing Innovation' (2016), Wiley + Van Westendorp Price Sensitivity Meter (1976)",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "revenue_model",
+            "operator": "NOT_IN",
+            "value": [
+              "none",
+              "free-only"
+            ]
+          }
+        ],
+        "intent": "pricing-strategy",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "persona",
+          "jobs-to-be-done",
+          "financial-model"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/biz/pricing-strategy.md",
+      "project_context_reason": "Biz 단계 — value-based pricing + tier 설계 + 매출 시뮬레이션. revenue model 결정 후 작성. review_recommended=true: 잘못된 가격은 PMF 후 반전 비용 폭증.",
+      "review_recommended": true
+    },
+    {
+      "id": "unit-economics-analysis",
+      "phase": "biz",
+      "owner_agent": "unit-economics-analyst",
+      "canon_source": "David Skok 'SaaS Metrics 2.0' (forEntrepreneurs.com) + Croll & Yoskovitz 'Lean Analytics' (2013), O'Reilly + Bessemer Cloud Index + Klipfolio CAC/LTV best practices",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "revenue_model",
+            "operator": "IN",
+            "value": [
+              "saas",
+              "subscription",
+              "marketplace",
+              "b2b-saas",
+              "b2c-saas"
+            ]
+          }
+        ],
+        "intent": "unit-economics",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "pricing-strategy"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/biz/unit-economics-analysis.md",
+      "project_context_reason": "Biz 단계 — per-customer 수익성 평가. SaaS / subscription / marketplace 에서만 의미. CAC / LTV / Payback / NRR / GRR 표준.",
+      "review_recommended": false
+    },
+    {
+      "id": "alignment-core-why",
+      "phase": "alignment",
+      "owner_agent": "strategy-kernel-author",
+      "canon_source": "Cagan 'Empowered' (2020) — Strategy Alignment + Marty Cagan 'Inspired' (2017) Ch.6 Vision Coherence + Christensen JTBD Theory",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "alignment-core-why",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "vision-statement",
+          "strategy-kernel",
+          "jobs-to-be-done",
+          "persona"
+        ],
+        "required_after": [
+          "alignment-why-what"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/alignment/alignment-core-why.md",
+      "project_context_reason": "Alignment 단계 — Core (Vision/Strategy) ↔ Why (PEST/Five Forces/SWOT/JTBD/Persona/VPC) 정합성 매트릭스. 두 phase 의 결정이 일치하는지 체크. review_recommended=true: alignment 부재 시 후행 PRD/Roadmap 표류.",
+      "review_recommended": true
+    },
+    {
+      "id": "alignment-what-how",
+      "phase": "alignment",
+      "owner_agent": "infra-architect",
+      "canon_source": "Cagan 'Inspired' Ch.13~16 — Engineering Spec + 'Empowered' product engineering alignment + Fowler 'Patterns of Enterprise Application Architecture' (2003) + Forsgren DORA",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "alignment-what-how",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "prd",
+          "roadmap",
+          "architecture-design",
+          "api-implementation",
+          "db-schema"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/alignment/alignment-what-how.md",
+      "project_context_reason": "Alignment 단계 — What (PRD/Roadmap) ↔ How (Architecture/Implementation/Test/Operations) 정합성 매트릭스. 구현이 PRD 에 정확히 대응하는지 + 비기능 요구사항 (NFR) 충족하는지 검증.",
+      "review_recommended": true
+    },
+    {
+      "id": "alignment-why-what",
+      "phase": "alignment",
+      "owner_agent": "prd-writer",
+      "canon_source": "Cagan 'Inspired' (2017) — outcome-based product spec + Torres OST + 'Empowered' product alignment + Marty Cagan four pillars (vision/objectives/teams/discovery)",
+      "execution": {
+        "policy": "always",
+        "scope_conditions": [],
+        "intent": "alignment-why-what",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "jobs-to-be-done",
+          "persona",
+          "prd",
+          "roadmap",
+          "opportunity-solution-tree"
+        ],
+        "required_after": [
+          "alignment-what-how"
+        ],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/alignment/alignment-why-what.md",
+      "project_context_reason": "Alignment 단계 — Why (JTBD/Persona/VPC) ↔ What (PRD/Roadmap/OST) 정합성 매트릭스. PRD 가 Persona Pain/Gain 해소에 정확히 매핑되는지 검증.",
+      "review_recommended": true
+    },
+    {
+      "id": "interview-guide",
+      "phase": "alignment",
+      "owner_agent": "ux-researcher",
+      "canon_source": "Steve Portigal 'Interviewing Users' (2013), Rosenfeld Media + Teresa Torres 'Continuous Discovery Habits' (2021) Ch.5 Interview Method + Erika Hall 'Just Enough Research' (2019, 2nd ed.)",
+      "execution": {
+        "policy": "scope",
+        "scope_conditions": [
+          {
+            "field": "external_validation_required",
+            "operator": "==",
+            "value": true
+          }
+        ],
+        "intent": "external-user-interview",
+        "alternates": [],
+        "trigger_events": [],
+        "prereq": [
+          "persona",
+          "jobs-to-be-done"
+        ],
+        "required_after": [],
+        "review_recommended": false
+      },
+      "template_depth": "filled-sample-with-checklist",
+      "template_path": "templates/alignment/interview-guide.md",
+      "project_context_reason": "Alignment 단계 — RA-1 (User Value 검증) 100% 충족 위한 외부 인터뷰 5~7명 가이드. AI/internal 검증의 한계를 외부 user voice 로 보완.",
+      "review_recommended": false
+    }
+  ],
+  "by_phase": {
+    "core": [
+      "3-horizon",
+      "okr",
+      "pr-faq",
+      "strategy-kernel",
+      "vision-statement"
+    ],
+    "why": [
+      "jobs-to-be-done",
+      "persona",
+      "swot-analysis",
+      "value-proposition-canvas",
+      "five-forces-analysis",
+      "pest-analysis"
+    ],
+    "what": [
+      "hypothesis",
+      "opportunity-solution-tree",
+      "prd",
+      "product-strategy-canvas",
+      "roadmap",
+      "experiment-design",
+      "lean-canvas"
+    ],
+    "how": [
+      "api-implementation",
+      "architecture-design",
+      "code-review-report",
+      "security-audit-report",
+      "unit-test",
+      "ci-cd-pipeline",
+      "db-schema",
+      "dockerfile",
+      "monitoring-config",
+      "runbook",
+      "migration-plan"
+    ],
+    "biz": [
+      "gtm-strategy",
+      "attribution-report",
+      "financial-model",
+      "pricing-strategy",
+      "unit-economics-analysis"
+    ],
+    "alignment": [
+      "alignment-core-why",
+      "alignment-what-how",
+      "alignment-why-what",
+      "interview-guide"
+    ]
+  },
+  "by_policy": {
+    "always": [
+      "3-horizon",
+      "okr",
+      "pr-faq",
+      "strategy-kernel",
+      "vision-statement",
+      "jobs-to-be-done",
+      "persona",
+      "swot-analysis",
+      "value-proposition-canvas",
+      "hypothesis",
+      "opportunity-solution-tree",
+      "prd",
+      "product-strategy-canvas",
+      "roadmap",
+      "api-implementation",
+      "architecture-design",
+      "code-review-report",
+      "security-audit-report",
+      "unit-test",
+      "gtm-strategy",
+      "alignment-core-why",
+      "alignment-what-how",
+      "alignment-why-what"
+    ],
+    "scope": [
+      "five-forces-analysis",
+      "pest-analysis",
+      "experiment-design",
+      "lean-canvas",
+      "ci-cd-pipeline",
+      "db-schema",
+      "dockerfile",
+      "monitoring-config",
+      "runbook",
+      "attribution-report",
+      "financial-model",
+      "pricing-strategy",
+      "unit-economics-analysis",
+      "interview-guide"
+    ],
+    "user-select": [],
+    "triggered": [
+      "migration-plan"
+    ]
+  },
+  "by_intent": {
+    "portfolio-balance": [
+      "3-horizon"
+    ],
+    "goal-setting": [
+      "okr"
+    ],
+    "launch-narrative": [
+      "pr-faq"
+    ],
+    "strategy-definition": [
+      "strategy-kernel"
+    ],
+    "vision-definition": [
+      "vision-statement"
+    ],
+    "customer-job-mapping": [
+      "jobs-to-be-done"
+    ],
+    "user-archetype": [
+      "persona"
+    ],
+    "position-assessment": [
+      "swot-analysis"
+    ],
+    "product-market-fit": [
+      "value-proposition-canvas"
+    ],
+    "industry-attractiveness": [
+      "five-forces-analysis"
+    ],
+    "macro-environment-scan": [
+      "pest-analysis"
+    ],
+    "risk-hypothesis": [
+      "hypothesis"
+    ],
+    "discovery-tree": [
+      "opportunity-solution-tree"
+    ],
+    "product-requirement-document": [
+      "prd"
+    ],
+    "product-strategy-articulation": [
+      "product-strategy-canvas"
+    ],
+    "outcome-roadmap": [
+      "roadmap"
+    ],
+    "hypothesis-experiment": [
+      "experiment-design"
+    ],
+    "business-model-validation": [
+      "lean-canvas"
+    ],
+    "api-implementation": [
+      "api-implementation"
+    ],
+    "architecture-design": [
+      "architecture-design"
+    ],
+    "code-quality-review": [
+      "code-review-report"
+    ],
+    "security-audit": [
+      "security-audit-report"
+    ],
+    "unit-test-implementation": [
+      "unit-test"
+    ],
+    "ci-cd-automation": [
+      "ci-cd-pipeline"
+    ],
+    "db-schema-design": [
+      "db-schema"
+    ],
+    "containerization": [
+      "dockerfile"
+    ],
+    "observability": [
+      "monitoring-config"
+    ],
+    "operational-runbook": [
+      "runbook"
+    ],
+    "schema-migration": [
+      "migration-plan"
+    ],
+    "gtm-strategy": [
+      "gtm-strategy"
+    ],
+    "marketing-attribution": [
+      "attribution-report"
+    ],
+    "financial-modeling": [
+      "financial-model"
+    ],
+    "pricing-strategy": [
+      "pricing-strategy"
+    ],
+    "unit-economics": [
+      "unit-economics-analysis"
+    ],
+    "alignment-core-why": [
+      "alignment-core-why"
+    ],
+    "alignment-what-how": [
+      "alignment-what-how"
+    ],
+    "alignment-why-what": [
+      "alignment-why-what"
+    ],
+    "external-user-interview": [
+      "interview-guide"
+    ]
+  }
+}

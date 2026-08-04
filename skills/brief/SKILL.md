@@ -5,7 +5,7 @@ description: >
   Generates executive-facing reports in the fixed VARCO house style: a technical-report
   HTML document (default) or a 16:9 slide deck (--deck). Content structure is composed
   freely from conversation context and user-provided material; layout, colors, and
-  typography are locked by the template. Independent of the plan/do/review workflow.
+  typography are locked by the template. Independent of the development workflow.
   Use when: /vais brief is invoked, or the user asks for an executive report,
   기술 보고서, 과제 보고, or 보고용 슬라이드 on an arbitrary topic.
 ---
@@ -14,7 +14,7 @@ description: >
 
 `/vais brief {주제}` — 기술 보고서 문서형 (기본) · `/vais brief {주제} --deck` — 16:9 슬라이드 덱.
 
-개발 워크플로우(plan→do→review)와 무관한 독립 커맨드다. **피처 완료 보고는 `/vais report {feature}`** (brand 토큰 기반 별도 스킬).
+개발 워크플로우와 무관한 독립 커맨드다.
 
 **원칙: 내용 구성은 자유, 양식은 고정.** 스토리라인·섹션 선택·figure 구성은 소재에 맞게 Claude 가 판단한다. 대신 레이아웃·색·타입은 VARCO 양식 규칙을 그대로 지킨다 — 양식을 새로 그리지 않는다.
 

@@ -20,7 +20,7 @@ git 변경사항을 분석하여 **한국어 한 줄** Conventional Commits 메�
    - 옵션: "patch (x.x.+1)", "minor (x.+1.0)", "major (+1.0.0)", "버전 변경 없음"
 7. **버전 일괄 반영** (버전 변경 선택 시):
    - 현재 버전 문자열로 프로젝트 전체를 Grep 도구로 탐색
-   - 제외 대상: `node_modules/`, `.git/`, `docs/` 내 과거 CHANGELOG 엔트리
+   - 제외 대상: `node_modules/`, `.git/`, `vendor/`, `docs/` 내 과거 CHANGELOG 엔트리
    - false positive 필터: 버전 비교 연산자(`>=`, `<=`, `>`, `<`, `==`) 포함 행 제외
    - 탐색 결과를 사용자에게 테이블로 표시 (파일 경로 + 매칭 내용)
    - 사용자 확인 후 일괄 반영
@@ -45,7 +45,7 @@ git 변경사항을 분석하여 **한국어 한 줄** Conventional Commits 메�
 11. "push" 선택 시에만 `git push origin {현재 브랜치}` 실행
 
 > **⚠️ push는 반드시 `/vais commit`을 통해서만**
-> sub-agent 는 `git push`가 차단되어 있습니다. 작업 완료 후 `/vais commit`을 실행하면
+> C-Suite 에이전트는 `git push`가 차단되어 있습니다. 작업 완료 후 `/vais commit`을 실행하면
 > 커밋 메시지 작성 + semver 버전 범프 + push(확인 후)가 처리됩니다.
 
 #### Conventional Commits 형식
