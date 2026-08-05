@@ -1,112 +1,23 @@
 # Changelog
 
-## [2.1.0] - 2026-07-31 — /vais brief 신설: VARCO 고정 양식 임원 보고 생성기
+## [1.2.0] - 2026-08-04 — v2.0 Rollback + Brief 이식
 
-report 의 피처/주제 이중 모드가 혼란을 낳아 분리 — report/deck 은 피처 문서 전용으로
-좁히고, 임원/대외 보고는 독립 커맨드 brief 로. 원칙: **내용 구성은 자유, 양식은 고정**.
-
-### Added
-
-- `skills/brief/` — `/vais brief {주제}` (문서형 기본, `--deck` 16:9 슬라이드)
-  - `template/deck.html` + deck-stage.js + image-slot.js + assets — VARCO 16장 슬라이드 양식 흡수
-  - `template/report.html` — 기술 보고서 문서형 양식 신규 (사이드바 목차·번호 섹션·콜아웃
-    4종·인라인 SVG figure 프레임, VARCO 토큰 재조색)
-  - `varco-deck.md` / `varco-report.md` — 양식 불변 규칙·토큰·구성 카탈로그·마무리 점검
-  - 브랜드 선택 단계 없음 — 양식이 스타일 고정. 산출: `reports/{date}-{slug}/`
-- `skills/vais/utils/help.md` — 처음이신가요 온보딩 섹션 (2.0.4 미배포분 포함)
-
-### Changed
-
-- `skills/report/SKILL.md` — 피처 전용으로 축소. 미등록 피처 인자는 오타 안내 후 brief 유도
-- `guidelines/doc-conventions.md` 승격 2건 — "코드·API 예시는 실제 export 와 대조",
-  "외부 자료 흡수는 구조·스타일만"
-- `skills/vais/phases/plan.md` — 존재하지 않는 setPhase 예시를 initFeature/updatePhase 로 교정
-
-## [2.0.4] - 2026-07-31 — help 커맨드 첫 사용자 온보딩 섹션
-
-마켓플레이스 설치 사용자는 README/ONBOARDING.md 를 볼 일이 없어 세션 내 진입점이
-SessionStart 힌트와 `/vais help` 뿐 — help 에 개념 안내를 보강.
+v2.0.0 전면 개편(조직 시뮬레이션 제거 + 3-phase 재작성)을 롤백하고 v1.1.0 (`1f055cc`) 기준으로 복원.
+근거: v2.0 이 문서 의식(부피)과 함께 PRD·UI 설계·인프라 결정을 매 피처마다 심도 있게
+다루게 하는 구조(깊이)까지 제거하여, 개발 산출물의 일관성이 무너짐. v2.0 이력은 git 히스토리에
+보존 (`2651c7c`..`3baedb4`), 진단 문서는 `docs/260730_vais_code_review/` (해당 커밋 범위) 참조.
 
 ### Added
 
-- `skills/vais/utils/help.md` — "처음이신가요?" 섹션: 워크플로우 철학 요약 + 첫 커맨드
-  예시 + 자연어로 말해도 된다는 안내
+- **`skills/brief/`** — v2.0 에서 신설된 `/vais brief` 를 유일하게 존치·이식. VARCO 고정 양식
+  임원/대외 보고 HTML 생성기 (문서형 기본 · `--deck` 16:9 슬라이드). `template/` (report.html /
+  deck.html / deck-stage.js / image-slot.js / assets) + varco-report.md / varco-deck.md 규칙.
+  개발 워크플로우와 독립 — `package.json > claude-plugin.skills` 에 등록, `/vais` 유틸리티
+  표에 라우팅 추가
 
 ### Changed
 
-- help 하단 불릿의 "30분 내 바로 실행" 중복 제거 (인트로로 이동), 문서 3파일 규칙로 교체
-
-## [2.0.3] - 2026-07-31 — AGENTS.md 제거
-
-Claude Code 단독 사용 환경이라 Cursor/Copilot 등 범용 AI 지침 파일이 불필요.
-
-### Removed
-
-- `AGENTS.md` 및 CLAUDE.md/README.md 의 관련 참조 ("삭제·병합 금지" 규칙 포함)
-
-## [2.0.2] - 2026-07-31 — 죽은 코드 정리: 미사용 lib/vendor/설정/템플릿 제거
-
-사용처 추적 (require 그래프 + skill/agent 프롬프트 grep) 으로 참조 0 인 파일을 일괄 제거.
-플러그인 동작 검증: 테스트 76개 통과, validator 통과, 훅 3종 스모크 정상.
-
-### Removed
-
-- `lib/memory.js` + `tests/memory.test.js` — v1.x Manager 에이전트용 메모리 시스템 (v2.0 에서 Manager 제거됨)
-- `lib/brand-validator.js` — export 7개 전부 미사용
-- `vendor/ui-ux-pro-max/` — brand import 소스는 `references/awesome-design-md`, vendor 는 참조용 잔재
-- `.eslintrc.json` (ESLint 9 flat config 와 중복), `.env.example` (archived 피처용 Figma/MUI 변수)
-- `templates/notes.template.md` — doc-conventions 가 "notes 는 템플릿 없음" 명시
-- `lib/paths.js > STATE` — v1.x state-machine 경로 9개 제거 (root/status 만 유지)
-
-### Changed
-
-- `NOTICE` — 삭제된 skill-creator 흡수분 고지를 실재하는 awesome-design-md 출처 표기로 재작성
-- `CLAUDE.md`/`AGENTS.md`/`.gitignore`/`skills/vais/utils/commit.md` — vendor 등 잔존 언급 정리
-- `package-lock.json` 루트 버전 동기화 (1.1.0 에 정체돼 있던 것 교정)
-
-## [2.0.1] - 2026-07-31 — 미사용 vais-design-system MCP 서버 제거
-
-선언만 있고 어떤 skill/agent 프롬프트에서도 사용을 지시하지 않던 MCP 레이어 제거.
-brand 토큰은 기존대로 `design-system/brands/{slug}/DESIGN.md` 직접 Read 로 소비하며,
-`vendor/ui-ux-pro-max` 데이터·검색 스크립트는 유지 (필요 시 Bash 로 직접 호출).
-
-### Removed
-
-- `mcp/` (design-system-server-runner.js + design-system-server.json) 및 `.mcp.json`
-- `plugin.json > mcpServers` 등록, agent frontmatter 의 MCP 툴 2건
-  (frontend-engineer: design_stack_search, ui-designer: design_search)
-
-## [2.0.0] - 2026-07-31 — v2.0 재편: 이력·일관성 코어만 남기고 조직 시뮬레이션 제거
-
-전체 리뷰 (`docs/260730_vais_code_review/`) 에 따라 C-Suite 시뮬레이션 레이어를 제거하고
-원래 목적 (이력 + 일관성 + 완성도) 을 최소 구조로 재구축. 소스 ~1.5MB → ~305KB (−80%),
-세션 고정 오버헤드 −73%, phase 당 프레임워크 로드 −85%, 피처당 문서 17 → 3.
-
-### Removed (breaking)
-
-- C-Suite 6 C-Level (CEO/CPO/CTO/CSO/CBO/COO) + sub-agent 40 종 + `_shared/` 가드 8 종
-- CEO 7 차원 알고리즘 (`lib/ceo-algorithm.js`), Agent Teams v2 (conversation-orchestrator, worktree-manager, lock)
-- 6-phase PDCA (ideation/plan/design/do/qa/report) 및 main.md 인덱스 / Decision Record / frontmatter 8 필드 / 변경 이력 표 의식
-- 템플릿 47 종 (why/what/how/core/biz/alignment 계층), scripts 29 종 (patch-*/validator/auditor/judge/seo), lib 21 모듈
-- hook 5 이벤트 (PostToolUse ×2, UserPromptSubmit, SubagentStart/Stop), catalog.json 시스템
-- 아웃트로 강제 체인 + 매 응답 박스 리포트 (output-style 6KB → 0.5KB)
-- 과거 피처 산출물은 `docs/_archive/` 로 이동 (읽기 전용 보존)
-
-### Added
-
-- **3-phase 워크플로우**: `/vais plan → do → review` — 피처당 문서 3 파일 (plan.md ≤80줄 / notes.md 한 줄 append / review.md ≤60줄)
-- **guidelines/**: code-conventions (≤3KB) + doc-conventions (≤2KB) — 크기 예산제 (validator 가 기계 강제) + review 승격 루프
-- **보고서/덱 생성기**: `/vais report`·`/vais deck` — brand DESIGN.md 토큰 기반 자체 포함 HTML, 금지 패턴 8 + self-critique QA, `templates/report.html`·`deck.html`
-- **`/vais brand new`**: 커스텀 브랜드 DESIGN.md 생성 (사내 CI·개인 스타일)
-- scope probe: 30분 내 소규모 작업은 "문서 없이 바로 실행" 제안
-
-### Changed
-
-- 에이전트 등록 80 → 7 (knowledge/가드 문서의 에이전트 오염 해소 — 매 세션 ~2.5k 토큰 회수)
-- session-start 주입 5,976 → ~150 bytes, stop-handler 박스 → 1줄 힌트
-- `vais.config.json` 541 → 67줄, `lib/status.js` 29.5KB → 8.6KB (죽은 함수 26 개 제거)
-- `vais-validate-plugin.js` 재작성: 구조 + 버전 동기화 5곳 + 지침 크기 예산 검증
-- CLAUDE.md Mandatory Rules 15 → 7, README/AGENTS/ONBOARDING v2.0 재작성
+- 버전 동기화 1.2.0 — package.json / vais.config.json / plugin.json / marketplace.json (2곳) / CHANGELOG
 
 ## [1.1.0] - 2026-05-23 — Brand-First Design Model
 

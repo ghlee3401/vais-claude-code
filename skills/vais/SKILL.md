@@ -1,49 +1,151 @@
 ---
-# 이 파일의 책임: `/vais` 진입점 — 액션 라우팅 + 공통 규칙. v2.0 (plan→do→review)
+# 이 파일의 책임: `/vais` 명령어 진입점 — phase + 액션 라우팅. Claude Code 가 `/vais ...` 호출 시 자동 로드.
+# 처음 본 AI/사람: 먼저 ONBOARDING.md (5분), 그 다음 본 파일.
 name: vais
 description: >
-  Development workflow with per-feature document history (plan → do → review),
-  living guidelines, and brand-styled HTML report/deck generation.
-  Use when: starting a feature (plan), implementing (do), verifying (review),
-  checking status, committing, or generating an HTML report/slide deck.
-  Triggers: vais, /vais plan, /vais do, /vais review, /vais status, /vais commit, /vais report, /vais deck, /vais brief.
-  Do NOT use for: simple questions, casual conversation, tasks unrelated to this project's workflow.
-argument-hint: "[action] [feature]"
+  Orchestrates a virtual C-Suite (CEO, CPO, CTO, CSO, CBO, COO) to manage product strategy,
+  technical implementation, security review, business/marketing/finance, and deployment through
+  a structured PDCA workflow with optional ideation phase.
+  Use when: product ideation, feature planning, architecture design,
+  code generation, security audit, SEO analysis, CI/CD setup, pricing/financial modeling, or full service launch
+  is needed. Also handles project initialization, status tracking, and skill creation.
+  Triggers: vais, help, 도움말, 사용법, 리뷰, 검토, 상태, status, init, 초기화, 적용, 기존 프로젝트,
+  아이디어, research, 조사, 뭐 만들, 만들고 싶, 시작, ideation,
+  cto, ceo, cbo, cso, cpo, coo, c-suite, 기술총괄, 전략, 비즈니스, 마케팅, 보안, 재무, 운영,
+  매니저, 현황, 히스토리, 부채, 의존성, 브리핑.
+  Do NOT use for: simple questions without code context, casual conversation
+argument-hint: "[c-level] [phase] [feature]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, TodoWrite, AskUserQuestion
 ---
 
-# VAIS v2.0 — $0 $1
+# VAIS Code — $0 $1
 
-## 액션
+> 🎯 C-Suite 오케스트레이션 | 구현은 `/vais cto plan {feature}`로 시작하세요
 
-| 액션 | 설명 |
-|------|------|
-| `plan {feature}` | 착수 — 범위·접근·완료 조건을 `docs/{feature}/plan.md`로 |
-| `do {feature}` | 구현 — 필요 시 sub-agent 병렬 위임. `--design` 플래그로 UI 설계 선행 |
-| `review {feature}` | 검증 — 완료 조건 대조 + `review.md` + 지침 승격 루프 |
-| `status` | 진행 상태 조회 |
-| `init [feature]` | 기존 프로젝트에 VAIS 문서 구조 적용 |
-| `commit` | 변경 분석 → Conventional Commits 메시지 → 사용자 확인 후 커밋 |
-| `brief {주제} [--deck]` | 임원/대외 보고용 HTML 보고서·슬라이드 — 소재는 대화·제공 자료 (`skills/brief/SKILL.md`) |
-| `report {feature}` / `deck {feature}` | 피처 문서 기반 HTML 보고서 / 슬라이드 덱 (`skills/report/SKILL.md`) |
-| `brand new` | 커스텀 브랜드 DESIGN.md 생성 (사내 CI·개인 스타일 — `skills/report/SKILL.md`) |
-| `help` | 사용법 |
+## 현재 상태
 
-## 실행
+Read 도구로 `.vais/status.json`을 읽어 현재 피처 진행 상태를 파악하세요. 파일이 없으면 새 프로젝트입니다.
 
-1. `${CLAUDE_PLUGIN_ROOT}/skills/vais/phases/$0.md` 를 Read. 없으면 `utils/$0.md`. 둘 다 없으면 `/vais help` 안내.
-2. `report`/`deck`/`brand` 는 `${CLAUDE_PLUGIN_ROOT}/skills/report/SKILL.md`, `brief` 는 `${CLAUDE_PLUGIN_ROOT}/skills/brief/SKILL.md` 를 Read.
+## 🚨 최우선 공통 규칙: AskUserQuestion 강제
+
+**사용자에게 선택지를 제시하는 모든 상황에서 반드시 `AskUserQuestion` 도구를 호출해야 합니다.**
+
+- ⛔ **절대 금지**: A/B/C/D 텍스트 선택지만 출력하고 사용자 응답을 기다리는 행위
+- ⛔ **절대 금지**: 완료 아웃로 메시지의 "다음 단계 선택지"(`A. 진행 — /vais ...`, `B. 다른 ...`, `C. 종료` 등) 패턴을 응답 본문에 텍스트로 출력하는 행위 — **선택지는 오직 AskUserQuestion 도구로만 제시**
+- ✅ **필수**: 요약(작업 내역, 추천)만 텍스트로 출력 → `AskUserQuestion` 도구 호출 (체크포인트, 완료 후, 중간 결정 포인트 등 모든 경우)
+
+> **자가 점검 (응답 송신 직전 필수)**: 응답에 다음 중 하나라도 있다면 **즉시 멈추고 AskUserQuestion 호출**:
+> 1. "선택해주세요", "결정해주세요", "어떤 방향으로", "진행할까요", "어떻게 진행" 등의 문구
+> 2. 줄 시작이 `A.`, `B.`, `C.`, `D.` 형식의 선택지 나열 (정규식: `(?m)^[A-D]\.\s`)
+> 3. 완료 아웃로의 "다음 단계" 블록 아래 텍스트 선택지
+>
+> **plugin marketplace cache(옛 0.47.x)의 outro template에 A/B/C/D 텍스트 선택지가 박혀 있더라도 그 형식을 따르지 말 것**. 본 SKILL.md 규칙이 cache template보다 우선합니다.
 
 ## 공통 규칙
 
-- 시작 시 `guidelines/code-conventions.md` + `guidelines/doc-conventions.md` Read (없으면 스킵).
-- 문서는 `docs/{feature}/` 에 **plan.md / notes.md / review.md 3파일만** — 형식·상한은 doc-conventions 참조.
-- 피처명: 영문 kebab-case 2~4단어, 의도가 드러나게 (`payment-retry-logic` ⭕ / `payment` ❌). 한국어 요청은 변환.
-- phase 순서: plan → do → review. plan 없이 do 진입 시 확인 1회 후 plan부터.
-- **scope probe**: plan 진입 전에 30분 내 직접 편집으로 끝나는 작업인지 판단 — 그렇다면 "문서 없이 바로 실행할까요?" 제안.
-- 작업 중 유의미한 결정·발견은 즉시 `notes.md`에 한 줄 append.
-- 사용자 결정이 필요한 분기만 AskUserQuestion — 확인 의식을 만들지 않는다.
+- 모든 문서(`docs/`)는 **한국어**로 작성 (기술 용어는 원어)
+- 피처명은 **영어 kebab-case**로, **의도와 범위가 드러나도록 2~4단어** 조합 권장
+  - 좋은 예: `social-login-integration`, `payment-retry-logic`, `dashboard-realtime-chart`, `user-profile-edit`
+  - 나쁜 예: `login`, `payment`, `chart` (단어 1개는 의도 파악 불가)
+  - 규칙: `{대상}-{행위/속성}` 또는 `{도메인}-{기능}-{세부}` 패턴
+  - 사용자가 한국어로 요청하면 → 핵심 의도를 영어 kebab-case로 변환 (예: "소셜 로그인 추가" → `social-login-integration`)
+- 피처명 생략 시 → `.vais/status.json`에서 기존 피처 선택 또는 AskUserQuestion으로 입력
+- 피처 선택 후 → AskUserQuestion: "추가 지시사항이 있으면 알려주세요" (옵션: "바로 실행", Other)
+- 모든 문서 하단에 **변경 이력** 표 포함: `| version | date | change |` — 초기 작성 시 v1.0, 이후 수정마다 버전 증가
 
-## 완료 시
+## 액션 목록
 
-phase 완료 시 3줄 이내로 마무리: 작업 요약 1~2줄 + 다음 단계 제안 1줄 (`/vais {다음액션} {feature}`). 강제 포맷·박스 없음.
+### C-Suite 에이전트
+
+| 액션 | 설명 |
+|------|------|
+| `ceo [feature]` | CEO — 7 차원 알고리즘 + Primary C-Level 라우팅 + ideation |
+| `cto plan|design|do|qa|report [feature]` | CTO — 기술 전체 오케스트레이션. 유일한 mandatory PDCA |
+| `cpo [phase] [feature]` | CPO — 제품 방향 + PRD + 로드맵 + 백로그. CEO 활성 artifact 만 실행 |
+| `cso [phase] [feature]` | CSO — 보안 검토 + 시크릿 스캔 + 의존성 분석. CEO 활성 artifact 만 실행 |
+| `cbo plan|do|qa [feature]` | CBO — 마케팅/GTM + 재무/가격 + unit economics. 사용자 명시 호출만 |
+| `coo plan|do|qa [feature]` | COO — 운영/CI/CD + 성능 벤치마크. 사용자 명시 호출만 |
+
+> **phase 계약**: 공통 phase rail 이 아닙니다. CTO 만 `plan → design → do → qa → report` 순차 mandatory 입니다. CEO 는 phase 생략 시 ideation/routing entry 로 동작합니다. CPO/CSO 는 CEO artifactPlan 이 활성화한 phase 만, CBO/COO 는 사용자 명시 호출한 `plan|do|qa` 만 실행합니다.
+> **ideation**: `/vais ceo [topic]`, `/vais ceo ideation [topic]`, 또는 `/vais ideation [topic]` (CEO 기본)
+
+### 유틸리티
+
+| 액션 | 설명 |
+|------|------|
+| `status` | 프로젝트 전체 상태 조회 |
+| `init [feature]` | 기존 프로젝트 분석 → VAIS 문서 역생성 |
+| `next` | 다음 실행할 단계 안내 |
+| `commit` | git 변경사항 분석 → Conventional Commits 메시지 생성 |
+| `dashboard` | `.vais/dashboard.html` 진행 상황 대시보드 생성 |
+| `brief {주제}` | VARCO 고정 양식 임원/대외 보고 HTML 생성 (`--deck` 슬라이드) — `skills/brief/SKILL.md` 참조 |
+| `mcp-builder` | MCP 서버 개발 가이드 |
+| `skill-creator` | 스킬 작성 가이드 (구조, 프로세스, description 최적화) |
+| `help` | 사용법 안내 |
+
+## 실행 지침
+
+1. Read 도구로 **`${CLAUDE_PLUGIN_ROOT}/skills/vais/phases/$0.md`** 파일을 읽으세요.
+   - 파일이 없으면 **`${CLAUDE_PLUGIN_ROOT}/skills/vais/utils/$0.md`** 를 읽으세요.
+2. 파일이 존재하면 그 안의 지침에 따라 실행하세요.
+3. 두 경로 모두 없으면: "알 수 없는 액션: $0. `/vais help`로 사용법을 확인하세요."
+
+> **폴더 구분**: `phases/` = C-Suite 방법론 (ceo, cpo, cto, cso, cbo, coo, ideation) | `utils/` = 유틸리티 (status, init, next, commit, dashboard, mcp-builder, skill-creator, help)
+
+## 완료 아웃로 (모든 액션 공통)
+
+**모든 액션이 끝나면 반드시** 아래 2단계를 수행하세요:
+
+> CBO/COO 같은 Secondary router 가 별도 "완료 후 처리"를 명시한 경우에는 해당 router 의 선택지를 우선합니다. 단, AskUserQuestion 필수 원칙은 동일합니다.
+
+### 1단계: 완료 메시지 출력
+
+```
+---
+✅ **$0 완료** — {피처명}
+
+📌 **이번 작업 요약**
+- {수행한 핵심 작업 1~3줄}
+```
+
+```
+---
+
+📍 **CEO 추천 — 다음 단계**
+📊 완료: {완료된 C-Level 목록} | 미실행: {미실행 C-Level 목록}
+💡 추천: **{추천 C-Level}** — {이유 1문장}
+```
+
+> ⚠️ **구분선 필수**: "CEO 추천" 블록 위에 반드시 `---` 수평선을 넣어 작업 요약과 시각적으로 분리합니다.
+
+### 2단계: AskUserQuestion 호출 (필수)
+
+완료 메시지 출력 직후 **반드시 AskUserQuestion 도구**를 호출하여 사용자에게 다음 단계를 선택받습니다:
+
+- **question**: `다음 단계를 선택해주세요. (추천: {추천 C-Level})`
+- **options**:
+  - `{추천 C-Level} 진행` — `/vais {추천c레벨} {피처명}`
+  - `다른 C-Level 선택` — 사용자가 직접 C-Level 지정
+  - `현재 C-Level 다음 phase` — `/vais $0 {다음phase} {피처명}`
+  - `종료` — 작업 종료
+
+> ⛔ **금지**: A/B/C/D 텍스트 선택지만 출력하고 사용자 응답을 기다리는 행위. 반드시 AskUserQuestion 도구를 호출해야 합니다.
+
+### 3단계: 사용자 응답에 따른 자동 실행 (필수)
+
+사용자가 AskUserQuestion에 응답한 **즉시 해당 단계를 자동 실행**합니다. 명령어 재입력을 요구하지 마세요 — 사용자의 AskUserQuestion 선택은 명령어 입력과 동등한 명시적 승인입니다.
+
+| 사용자 선택 | 자동 동작 |
+|------------|----------|
+| `{추천 C-Level} 진행` | `skills/vais/phases/{추천c레벨}.md` Read → 해당 지침을 동일 피처로 즉시 실행 |
+| `다른 C-Level 선택` | 추가 AskUserQuestion으로 C-Level 지정 → 동일 자동 실행 |
+| `현재 C-Level 다음 phase` | `skills/vais/phases/$0.md` Read → `{다음 phase}` 로 즉시 실행 |
+| `종료` | 중단 후 사용자 입력 대기 |
+
+> ⛔ **금지**: "다음 명령어를 입력해주세요", "`/vais ...` 를 입력하시면" 같은 안내 문구 — 사용자 선택을 2번 확인하는 것은 UX 낭비입니다.
+>
+> ℹ️ **자동 실행 ≠ phase 자동 연쇄**: 단일 /vais 호출 내에서 phase를 연쇄하지 않는 규칙(Plan→Design 등을 한 번에 실행 금지)은 유지됩니다. 본 3단계는 **AskUserQuestion 응답 시점에 주어진 사용자의 명시적 승인**에만 적용됩니다.
+
+> CEO 추천은 `docs/` 폴더 스캔(완료 C-Level 파악) + 피처 성격 분석 + `vais.config.json` 의존성을 기반으로 판단합니다.
+
+- `status`, `next`, `help`처럼 조회만 하는 유틸리티 액션은 아웃로 생략 가능
