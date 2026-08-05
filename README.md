@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-1.2.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -7,7 +7,7 @@
 <h1 align="center">VAIS Code</h1>
 
 <p align="center">
-  <strong>Virtual AI C-Suite for Software Development — v1.0.0 GA</strong><br/>
+  <strong>Virtual AI C-Suite for Software Development — v1.2.0</strong><br/>
   organization-in-a-box · 6 C-Level Executives · 47 Specialized Sub-agents · 7-Dimension Routing Algorithm
 </p>
 
@@ -68,6 +68,15 @@ python3 --version  # 3.8 이상
 /vais cto qa my-feature        # QA
 /vais cto report my-feature    # 리포트
 ```
+
+**임원/대외 보고 (독립 커맨드):**
+
+```bash
+/vais brief {주제}          # VARCO 고정 양식 기술 보고서 (HTML)
+/vais brief {주제} --deck   # 16:9 슬라이드 덱
+```
+
+> 개발 워크플로우와 무관하게 대화 맥락·제공 자료로 보고서를 생성합니다. 정본: `skills/brief/SKILL.md`
 
 ---
 

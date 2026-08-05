@@ -20,7 +20,7 @@
 | **Knowledge lazy-load** | `agents/{c-level}/knowledge/` 19 MD — phase + artifact 매칭 시만 Read. 메인 .md 의 "Knowledge Index" 표가 trigger |
 | **CEO 진입 절차 강제** | CEO 가 4 단계 순차 — `analyzeCEO()` Bash 호출 → 7 차원 등급 표 출력 → activeCLevel 인용 → AskUserQuestion. LLM 자체 라우팅 금지 |
 
-현재 버전: **v1.0.0 GA** — organization-in-a-box 정체성 정식 GA.
+현재 버전: **v1.2.0** — v2.0 롤백 후 v1.1.0 기반 복원 + `/vais brief` (VARCO 양식 임원 보고 생성기) 이식. 상세: `CHANGELOG.md`.
 
 ---
 
@@ -48,13 +48,13 @@
 
 ### 시나리오 C — 디자인 시스템 사용
 
-`design-system/INDEX.md` 에 등록된 DS 확인. 현재 `mui` (Material UI v6.5.0). ui-designer agent 가 design phase 시작 시 자동으로 카탈로그 참조.
+`design-system/INDEX.md` 에 등록된 brand 카탈로그 확인 (brand-first — 71 brand DESIGN.md, default 5 사전 박제 + lazy import). ui-designer agent 가 design phase 시작 시 brand 선택 후 해당 `brands/{slug}/DESIGN.md` 를 정본으로 참조.
 
 ---
 
 ## Agent Teams 활성화 (선택) {#agent-teams-activation}
 
-> **1.0.0 GA 기본값: `agentTeams.enabled=false` (강제 X, 안내 O)** — 미활성 시에도 모든 기능이 simulation graceful degradation으로 정상 동작합니다. 실제 CC SendMessage 도구를 사용하려면 아래 5 단계를 따르세요.
+> **기본값: `agentTeams.enabled=false` (강제 X, 안내 O)** — 미활성 시에도 모든 기능이 simulation graceful degradation으로 정상 동작합니다. 실제 CC SendMessage 도구를 사용하려면 아래 5 단계를 따르세요.
 >
 > 기본값: simulation 모드 (flag 없이도 모든 기능 사용 가능). 실제 CC SendMessage 도구를 사용하려면 아래 5 단계를 따르세요.
 
