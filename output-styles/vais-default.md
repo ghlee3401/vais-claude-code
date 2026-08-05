@@ -25,33 +25,15 @@ keep-coding-instructions: true
 - ⚙️ 백엔드 (backend-engineer)
 - ✅ QA (qa-engineer)
 
-## 완료 아웃로 (CEO 추천 블록)
+## 워크플로우 상호작용 경계
 
-모든 phase 완료 시 아웃로를 출력할 때, **"CEO 추천 — 다음 단계" 블록 위에 반드시 `---` 수평선**을 넣어 작업 요약과 시각적으로 분리합니다.
-
-```
----
-✅ **{c-level} 완료** — {피처명}
-
-📌 **이번 작업 요약**
-- {수행한 핵심 작업 1~3줄}
-```
-
-```
----
-
-📍 **CEO 추천 — 다음 단계**
-📊 완료: {완료된 C-Level 목록} | 미실행: {미실행 C-Level 목록}
-💡 추천: **{추천 C-Level}** — {이유 1문장}
-```
-
-위 두 블록 사이의 `---`는 절대 생략하지 않습니다.
+이 파일은 응답의 표현 형식만 담당합니다. `/vais` 완료 아웃로, 다음 단계 추천,
+AskUserQuestion 및 승인 후 자동 실행 규칙은 현재 로드된 `skills/vais/SKILL.md`를 따릅니다.
+사용자에게 명령 재입력을 요구하거나 텍스트 선택지만 출력하지 않습니다.
 
 ## 하단 리포트
 
-**⚠️ 반드시 마크다운 코드 블록(```)으로 감싸서 출력합니다.**
-
-매 응답 마지막에 아래 형식을 **그대로** 복사하되, 값만 교체합니다:
+매 응답 마지막에 아래 상태 요약을 코드 블록으로 출력합니다. 값만 교체합니다.
 
 ```
 ────────────────────────────────────────────────────────────────
@@ -64,21 +46,11 @@ keep-coding-instructions: true
 ────────────────────────────────────────────────────────────────
 ```
 
-✅=완료, 🔄=현재, ⬜=대기 (항상 6칸).
+✅=완료, 🔄=현재, ⬜=대기 (항상 6칸 — ideation/plan/design/do/qa/report).
 
-### 💡 다음 명령 포맷 (엄격)
-
-**반드시** `/vais {c-level} {phase} {feature}` 4-토큰 형식을 지킨다. C-Level을 생략하면 안 된다.
-
-- ✅ 올바름: `/vais cto plan login`, `/vais cpo plan docs-restructure`, `/vais cso qa payment`
-- ❌ 금지: `/vais plan login` (C-Level 누락), `/vais cto login` (phase 누락)
-
-**C-Level 선택 규칙**:
-- `plan/design/do/qa/report` 단계 → 현재 담당 C-Level (기본 CTO, 기획 단계면 CPO, 보안이면 CSO 등)
-- 아직 C-Level이 확정되지 않은 신규 피처 → CEO가 라우팅하므로 `/vais ceo plan {feature}`
-- A/B/C 선택지(라우팅)를 기다리는 상태여도 **다음 명령 기본값**은 `/vais ceo plan {feature}` 또는 직전 C-Level로 명시
-
-절대 `/vais plan {feature}` 같은 3-토큰 형태로 출력하지 말 것.
+`💡 다음`은 현재 위치를 알려주는 **표시**입니다. 사용자에게 이 명령을 다시 입력하라고 요구하지 않으며,
+실제 진행은 `SKILL.md`의 AskUserQuestion + 승인 후 자동 실행 계약을 따릅니다.
+값을 적을 때는 `/vais {c-level} {phase} {feature}` 형식으로 C-Level과 phase를 모두 채웁니다.
 
 ## Gap 분석 결과 표시
 

@@ -85,7 +85,7 @@ CEO는 사용자 입력을 분석하여 아래 시나리오 중 가장 적합한
 
 1. `docs/{feature}/**/*.md` 를 Glob으로 스캔하여 완료된 C-Level/artifact 파악
 2. 현재 피처의 성격 분석 (피처명 + 사용자 컨텍스트)
-3. `vais.config.json`의 `dependencies`에서 의존성 확인
+3. `node "${CLAUDE_PLUGIN_ROOT}/scripts/phase-context.js" ceo {phase}` 결과의 `dependencies`에서 의존성 확인
 4. 아직 실행되지 않은 C-Level 중 다음으로 적합한 것을 추천
 5. **추천 요약을 응답에 직접 출력**한 뒤, **반드시 AskUserQuestion 도구로 사용자 응답을 받습니다** (텍스트 선택지로만 표시 금지).
 

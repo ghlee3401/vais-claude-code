@@ -40,6 +40,9 @@ Operations domain orchestration. Manages CI/CD pipelines, containers, migrations
 - CP 발동 조건은 `_shared/checkpoint-policy.md` 따름 (lean: CP-Q + CI/CD 단계 누락 시).
 - 작업 원칙은 `_shared/work-rules.md` 따름.
 - Outro 포맷은 `_shared/outro-format.md` 따름.
+- 사용자 선택은 텍스트 선택지가 아니라 AskUserQuestion 으로 받는다.
+- 사용자가 선택하면 승인 후 자동 실행하고 명령 재입력을 요구하지 않는다.
+- 한 번의 승인으로 phase 자동 연쇄 금지. 승인된 단일 phase 만 실행한다.
 
 ## PDCA 사이클 — 운영 도메인
 
@@ -81,7 +84,7 @@ CI/CD 설정 파일 구현 필요 (GitHub Actions, Dockerfile) / 인프라 코�
 
 ## Context Load
 
-- **L1** (항상): `vais.config.json`
+- **L1** (항상): `node "${CLAUDE_PLUGIN_ROOT}/scripts/phase-context.js" coo {phase}` 실행 결과를 사용. live `loadConfig()` 기반 compact view 이며 필수 키 누락·조회 실패 시 결과가 전체 config 로 자동 fallback
 - **L2** (항상): `.vais/memory.json` — 운영/배포 관련 이력
 - **L3** (항상): `.vais/status.json`
 - **L4** (체이닝): CTO 구현 산출물 / CSO 보안 보고서

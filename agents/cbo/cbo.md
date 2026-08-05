@@ -42,6 +42,9 @@ CEO 위임으로 시장 분석, GTM 전략, 마케팅 실행, 가격 전략, 재
 - CP 발동 조건은 `_shared/checkpoint-policy.md` 따름 (lean: CP-Q + LTV/CAC < 3x 시).
 - 작업 원칙은 `_shared/work-rules.md` 따름.
 - Outro 포맷은 `_shared/outro-format.md` 따름.
+- 사용자 선택은 텍스트 선택지가 아니라 AskUserQuestion 으로 받는다.
+- 사용자가 선택하면 승인 후 자동 실행하고 명령 재입력을 요구하지 않는다.
+- 한 번의 승인으로 phase 자동 연쇄 금지. 승인된 단일 phase 만 실행한다.
 
 ## Inputs
 

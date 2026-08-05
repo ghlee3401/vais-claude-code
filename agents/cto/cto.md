@@ -39,6 +39,9 @@ Full technical domain orchestration. Directly executes Plan phase, delegates ui-
 - CP 발동 조건은 `_shared/checkpoint-policy.md` 따름 (lean mode 기본 — CP-0/CP-Q 만).
 - 작업 원칙은 `_shared/work-rules.md` 따름.
 - Outro 포맷은 `_shared/outro-format.md` 따름.
+- 사용자 선택은 텍스트 선택지가 아니라 AskUserQuestion 으로 받는다.
+- 사용자가 선택하면 승인 후 자동 실행하고 명령 재입력을 요구하지 않는다.
+- 한 번의 승인으로 phase 자동 연쇄 금지. 승인된 단일 phase 만 실행한다.
 - Plan ≠ Do — Plan 단계에서 프로덕트 파일 (skills/, agents/, lib/, src/, mcp/) 생성·수정·삭제 금지.
 - 필수 문서: 현재 phase 산출물 미작성 시 SubagentStop 훅이 `exit(1)` 차단.
 
@@ -147,7 +150,7 @@ design phase 위임 (ui-designer Agent 호출) 직전에 brand 선택 상태를 
 ## Context Load
 
 - **L0** (plan phase 진입 시): `docs/{feature}/01-plan/prd.md` PRD 검사 (CP-0 분기)
-- **L1** (항상): `vais.config.json` — `workflow.checkpointPolicy` + `gates.cto.plan` 값 확인
+- **L1** (항상): `node "${CLAUDE_PLUGIN_ROOT}/scripts/phase-context.js" cto {phase}` 실행 결과를 사용. live `loadConfig()` 기반 compact view 이며 필수 키 누락·조회 실패 시 결과가 전체 config 로 자동 fallback
 - **L2** (항상): `.vais/memory.json` 관련 엔트리만 필터
 - **L3** (항상): `.vais/status.json`
 - **L4** (체이닝): CEO 전달 컨텍스트 (CEO→CTO)

@@ -146,6 +146,6 @@ Read 도구로 `.vais/status.json`을 읽어 현재 피처 진행 상태를 파�
 >
 > ℹ️ **자동 실행 ≠ phase 자동 연쇄**: 단일 /vais 호출 내에서 phase를 연쇄하지 않는 규칙(Plan→Design 등을 한 번에 실행 금지)은 유지됩니다. 본 3단계는 **AskUserQuestion 응답 시점에 주어진 사용자의 명시적 승인**에만 적용됩니다.
 
-> CEO 추천은 `docs/` 폴더 스캔(완료 C-Level 파악) + 피처 성격 분석 + `vais.config.json` 의존성을 기반으로 판단합니다.
+> CEO 추천은 `docs/` 폴더 스캔(완료 C-Level 파악) + 피처 성격 분석 + `scripts/phase-context.js` 결과의 `dependencies`를 기반으로 판단합니다.
 
 - `status`, `next`, `help`처럼 조회만 하는 유틸리티 액션은 아웃로 생략 가능

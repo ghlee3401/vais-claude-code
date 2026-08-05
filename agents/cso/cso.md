@@ -38,6 +38,9 @@ Security and quality domain orchestrator. Manages Gate A (security review), Gate
 - CP 발동 조건은 `_shared/checkpoint-policy.md` 따름 (lean: CP-Q + CP-C(Critical 발견 즉시 차단 여부)).
 - 작업 원칙은 `_shared/work-rules.md` 따름.
 - Outro 포맷은 `_shared/outro-format.md` 따름.
+- 사용자 선택은 텍스트 선택지가 아니라 AskUserQuestion 으로 받는다.
+- 사용자가 선택하면 승인 후 자동 실행하고 명령 재입력을 요구하지 않는다.
+- 한 번의 승인으로 phase 자동 연쇄 금지. 승인된 단일 phase 만 실행한다.
 
 ## PDCA — Gate A/B/C
 
@@ -121,7 +124,7 @@ auto-judge 파싱 패턴: `Critical: N`, `OWASP: N/10`. 숫자 명시 필수.
 
 ## Context Load
 
-- **L1** (항상): `vais.config.json`
+- **L1** (항상): `node "${CLAUDE_PLUGIN_ROOT}/scripts/phase-context.js" cso {phase}` 실행 결과를 사용. live `loadConfig()` 기반 compact view 이며 필수 키 누락·조회 실패 시 결과가 전체 config 로 자동 fallback
 - **L2** (항상): `.vais/memory.json` — 보안 관련 이력
 - **L3** (항상): `.vais/status.json`
 - **L4** (체이닝): CTO 구현 산출물

@@ -20,7 +20,7 @@
 | **Knowledge lazy-load** | `agents/{c-level}/knowledge/` 19 MD — phase + artifact 매칭 시만 Read. 메인 .md 의 "Knowledge Index" 표가 trigger |
 | **CEO 진입 절차 강제** | CEO 가 4 단계 순차 — `analyzeCEO()` Bash 호출 → 7 차원 등급 표 출력 → activeCLevel 인용 → AskUserQuestion. LLM 자체 라우팅 금지 |
 
-현재 버전: **v1.2.0** — v2.0 롤백 후 v1.1.0 기반 복원 + `/vais brief` (VARCO 양식 임원 보고 생성기) 이식. 상세: `CHANGELOG.md`.
+현재 버전: **v1.3.0** — phase별 compact config 뷰 (lean context) + 상호작용 계약 SKILL.md 일원화. 상세: `CHANGELOG.md`.
 
 ---
 
@@ -54,9 +54,9 @@
 
 ## Agent Teams 활성화 (선택) {#agent-teams-activation}
 
-> **기본값: `agentTeams.enabled=false` (강제 X, 안내 O)** — 미활성 시에도 모든 기능이 simulation graceful degradation으로 정상 동작합니다. 실제 CC SendMessage 도구를 사용하려면 아래 5 단계를 따르세요.
+> **기본값: `agentTeams.enabled=false` (강제 X, 안내 O)** — 미활성 시 sequential 모드로 정상 동작합니다. 실제 CC SendMessage 도구를 사용하려면 아래 5 단계를 따르세요.
 >
-> 기본값: simulation 모드 (flag 없이도 모든 기능 사용 가능). 실제 CC SendMessage 도구를 사용하려면 아래 5 단계를 따르세요.
+> `enabled=false` 는 sequential 모드입니다. `enabled=true` 이지만 env flag 가 없을 때만 simulation fallback 이 동작합니다.
 
 ### 전제 조건
 

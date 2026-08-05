@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.0] - 2026-08-05
+
+### Added
+
+- **phase별 compact config 뷰 (lean context)** — `lib/paths.js > buildPhaseContext/getPhaseContext` + `scripts/phase-context.js` CLI. phase 진입 시 전체 `vais.config.json` 대신 role×phase 필요 키만 추출 (`_` 주석 키 stripAnnotations 제거 포함, 약 80% 절감). 필수 키 누락·미지원 role/phase 시 전체 config 자동 fallback. 6 C-Level Context Load L1 전환
+- **컨텍스트 측정 도구** — `lib/context-metrics.js` + `scripts/context-baseline.js` (`npm run context:baseline`). UTF-8 byte 기반 토큰 추정 + phase 실행 요약
+- **계약 테스트** — `tests/phase-context.test.js` + `tests/lean-context-contract.test.js` (CEO 7차원 라우팅·QA 게이트·상호작용 불변식 golden contract)
+
+### Changed
+
+- **상호작용 계약 SKILL.md 일원화** — output-styles/phases에 중복 박제된 아웃로·AskUserQuestion·승인 후 자동 실행 규칙을 `skills/vais/SKILL.md` 정본으로 위임. 6 C-Level에 상호작용 불변식 3줄 추가 (AskUserQuestion 강제 / 승인 후 자동 실행 / phase 자동 연쇄 금지)
+- **agentTeams.enabled 기본값 정합화** — config `true` → `false` (CLAUDE.md 규칙 18 문서 기본값과 일치). sequential/simulation 구분 문구 README·ONBOARDING 명확화
+- **brief 디자인 규칙 강화** — varco-report/deck 그라디언트·짙은 채움 블록 문서 전체 1곳 제한 + 체크리스트 항목 추가
+
 ## [1.2.0] - 2026-08-04 — v2.0 Rollback + Brief 이식
 
 v2.0.0 전면 개편(조직 시뮬레이션 제거 + 3-phase 재작성)을 롤백하고 v1.1.0 (`1f055cc`) 기준으로 복원.

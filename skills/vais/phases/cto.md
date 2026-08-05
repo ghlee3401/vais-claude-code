@@ -53,40 +53,10 @@ description: CTO 에이전트 호출. 기술 도메인 전체 오케스트레이
 
 ## 완료 후 CEO 추천
 
-에이전트가 phase를 완료한 뒤, SKILL.md 아웃로의 **"다음 스텝"** 섹션에서 CEO 추천을 수행합니다:
+phase 완료 후 `SKILL.md`의 공통 아웃로·AskUserQuestion·자동 실행 계약을 적용합니다.
 
-1. `docs/{feature}/**/*.md` 를 Glob으로 스캔하여 완료된 C-Level/artifact 파악
-2. 현재 피처의 성격 분석 (피처명 + 사용자 컨텍스트)
-3. `vais.config.json`의 `dependencies`에서 의존성 확인
-4. 아직 실행되지 않은 C-Level 중 다음으로 적합한 것을 추천
-5. **추천 요약을 응답에 직접 출력**한 뒤, **반드시 AskUserQuestion 도구로 사용자 응답을 받습니다** (텍스트 선택지로만 표시 금지).
-
-### 출력 형식 (요약 블록)
-
-```
-📍 **CEO 추천 — 다음 단계**
-📊 완료: {완료된 C-Level 목록} | 미실행: {미실행 C-Level 목록}
-💡 추천: **{추천 C-Level}** — {이유 1문장}
-```
-
-### AskUserQuestion 호출 (필수)
-
-요약 출력 직후 아래 형식으로 AskUserQuestion을 호출합니다:
-
-- **question**: `다음 단계를 선택해주세요. (추천: {추천 C-Level})`
-- **options**:
-  - `{추천 C-Level} 진행` — `/vais {추천c레벨} {feature}`
-  - `다른 C-Level 선택` — 사용자가 직접 C-Level 지정
-  - `현재 C-Level 다음 phase` — `/vais cto {다음phase} {feature}`
-  - `종료` — 작업 종료
-
-> ⛔ **금지**: A/B/C/D 텍스트 선택지만 출력하고 사용자 응답을 기다리는 행위. 반드시 AskUserQuestion 도구를 호출해야 합니다.
-
-### 사용자 응답 후 자동 실행 (필수)
-
-사용자가 AskUserQuestion에 응답하면 **즉시 해당 단계를 자동 실행**합니다. 명령어 재입력 요구 금지 — 사용자 선택 = 실행 승인.
-
-- `{추천 C-Level} 진행` → `skills/vais/phases/{추천c레벨}.md` Read → 동일 피처로 실행
-- `현재 C-Level 다음 phase` → `skills/vais/phases/cto.md` Read → `{다음phase}` 로 실행
-- `다른 C-Level 선택` → 추가 AskUserQuestion → 자동 실행
-- `종료` → 중단
+1. `docs/{feature}/**/*.md`에서 완료 C-Level/artifact를 파악합니다.
+2. `node "${CLAUDE_PLUGIN_ROOT}/scripts/phase-context.js" cto {phase}`의 `dependencies`와 사용자 컨텍스트로 다음 C-Level을 추천합니다.
+3. 완료/미실행/추천 이유를 응답에 직접 요약하고 AskUserQuestion을 호출합니다.
+4. 옵션은 추천 C-Level / 다른 C-Level / CTO 다음 phase / 종료로 구성합니다.
+5. 선택은 승인 후 자동 실행합니다. 명령 재입력을 요구하거나 여러 phase를 자동 연쇄하지 않습니다.
