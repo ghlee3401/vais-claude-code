@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vais.local/schemas/audit-event.schema.json",
+  "title": "VAIS Audit Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "eventId", "runId", "sequence", "timestamp", "host", "sessionId", "actor", "eventType", "outcome", "source", "payload", "redaction", "integrity"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "eventId": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{7,127}$" },
+    "runId": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{7,127}$" },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "host": { "enum": ["claude-code", "codex", "unknown"] },
+    "sessionId": { "type": ["string", "null"] },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {
+        "type": { "enum": ["user", "root-agent", "subagent", "hook", "system"] },
+        "id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "eventType": {
+      "enum": [
+        "request.received",
+        "classification.completed",
+        "preview.created",
+        "approval.recorded",
+        "security.review.started",
+        "security.review.completed",
+        "context.selected",
+        "context.read",
+        "agent.started",
+        "agent.completed",
+        "tool.started",
+        "tool.completed",
+        "tool.failed",
+        "tool.denied",
+        "file.changed",
+        "check.started",
+        "check.completed",
+        "gate.evaluated",
+        "scope.changed",
+        "retry.scheduled",
+        "artifact.created",
+        "run.completed",
+        "run.failed",
+        "audit.warning"
+      ]
+    },
+    "outcome": { "enum": ["started", "succeeded", "failed", "blocked", "approved", "rejected", "modified", "observed", "warned"] },
+    "target": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {
+        "type": { "enum": ["request", "preview", "approval", "security-review", "context", "agent", "tool", "file", "check", "gate", "scope", "artifact", "run"] },
+        "id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channel", "hostEvent", "toolName"],
+      "properties": {
+        "channel": { "enum": ["kernel", "hook", "agent-result", "reconciler"] },
+        "hostEvent": { "type": ["string", "null"] },
+        "toolName": { "type": ["string", "null"] }
+      }
+    },
+    "payload": { "type": "object", "additionalProperties": true },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applied", "fields", "contentHash"],
+      "properties": {
+        "applied": { "type": "boolean" },
+        "fields": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "contentHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "previousEventHash", "eventHash"],
+      "properties": {
+        "algorithm": { "const": "sha256" },
+        "previousEventHash": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+        "eventHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "durationMs": { "type": "integer", "minimum": 0 },
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "accuracy", "inputTokens", "outputTokens", "estimatedTokens"],
+      "properties": {
+        "source": { "enum": ["provider", "host", "proxy", "unavailable"] },
+        "accuracy": { "enum": ["actual", "host-reported", "estimated", "unknown"] },
+        "inputTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "outputTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "estimatedTokens": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    }
+  }
+}

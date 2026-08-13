@@ -1,0 +1,255 @@
+{
+  "previews": [
+    {
+      "schemaVersion": "1.0",
+      "runId": "run.patch-normal.001",
+      "feature": "login-button-copy",
+      "approvalState": "preview-required",
+      "profile": {
+        "recommended": "patch",
+        "selected": "patch",
+        "confidence": 0.95,
+        "reasons": ["단일 UI 문구 변경", "public contract 변화 없음"]
+      },
+      "assurance": { "level": "normal", "triggers": [] },
+      "changes": [
+        { "action": "update", "target": "로그인 버튼", "summary": "문구를 로그인에서 계속으로 변경" }
+      ],
+      "resultPreview": {
+        "mode": "before-after",
+        "items": [
+          { "label": "버튼 문구", "current": "로그인", "expected": "계속" }
+        ]
+      },
+      "estimatedTargets": [
+        { "pathOrArea": "src/components/LoginButton.*", "certainty": "predicted" }
+      ],
+      "scope": {
+        "in": ["로그인 버튼 표시 문구"],
+        "out": ["인증 로직", "API"]
+      },
+      "checks": [
+        { "id": "login-button-test", "kind": "unit", "reason": "표시 문구 회귀 확인" },
+        { "id": "lint", "kind": "lint", "reason": "관련 파일 정적 검사" }
+      ],
+      "automationBoundary": {
+        "allowedActions": ["UI 문구 수정", "관련 테스트 수정"],
+        "allowedPaths": ["src/components/", "tests/"],
+        "forbiddenActions": ["인증 로직 변경", "API 변경"],
+        "reapprovalTriggers": ["scope-expansion", "risk-escalation", "check-failure", "unknown-target"]
+      },
+      "availableChoices": ["execute", "revise", "cancel"],
+      "securityReview": {
+        "required": false,
+        "status": "not-required",
+        "topics": [],
+        "residualRisks": []
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "runId": "run.patch-high.001",
+      "feature": "session-expiry-fix",
+      "approvalState": "security-review-required",
+      "profile": {
+        "recommended": "patch",
+        "selected": "patch",
+        "confidence": 0.88,
+        "reasons": ["세션 만료 조건의 국소 수정"]
+      },
+      "assurance": { "level": "high", "triggers": ["authentication", "session"] },
+      "changes": [
+        { "action": "update", "target": "세션 만료 검사", "summary": "만료 경계 조건 수정" }
+      ],
+      "resultPreview": {
+        "mode": "outcome",
+        "items": [
+          { "label": "만료 세션", "expected": "보호 API 접근 전에 일관되게 거부" }
+        ]
+      },
+      "estimatedTargets": [
+        { "pathOrArea": "server/auth/session.*", "certainty": "predicted" }
+      ],
+      "scope": {
+        "in": ["세션 만료 경계 조건", "관련 인증 테스트"],
+        "out": ["토큰 발급 방식", "사용자 권한 모델"]
+      },
+      "checks": [
+        { "id": "auth-regression", "kind": "integration", "reason": "인증 경계 회귀 확인" },
+        { "id": "secret-scan", "kind": "security", "reason": "인증 변경 보안 검사" }
+      ],
+      "automationBoundary": {
+        "allowedActions": ["세션 만료 조건 수정", "관련 테스트 수정"],
+        "allowedPaths": ["server/auth/", "tests/auth/"],
+        "forbiddenActions": ["토큰 발급 정책 변경", "DB migration"],
+        "reapprovalTriggers": ["scope-expansion", "risk-escalation", "destructive-action", "check-failure", "gate-failure"]
+      },
+      "availableChoices": ["execute", "revise", "cancel"],
+      "securityReview": {
+        "required": true,
+        "status": "required",
+        "topics": ["permission", "failure-impact", "rollback"],
+        "residualRisks": ["활성 세션 강제 종료 가능성 확인 필요"]
+      }
+    }
+  ],
+  "envelopes": [
+    {
+      "schemaVersion": "1.0",
+      "policyVersion": "1.0",
+      "runId": "run.patch-normal.001",
+      "feature": "login-button-copy",
+      "host": "claude-code",
+      "request": {
+        "summary": "로그인 버튼 문구를 계속으로 변경",
+        "hash": "1111111111111111111111111111111111111111111111111111111111111111",
+        "rawPersistence": "none"
+      },
+      "repoSnapshot": {
+        "headSha": "1111111111111111111111111111111111111111",
+        "dirtyPaths": []
+      },
+      "profile": {
+        "recommended": "patch",
+        "selected": "patch",
+        "confidence": 0.95,
+        "reasons": ["단일 UI 문구 변경"]
+      },
+      "assurance": { "level": "normal", "triggers": [] },
+      "phaseGraph": {
+        "required": ["plan", "do", "qa"],
+        "optional": [],
+        "notRequired": ["design", "report"]
+      },
+      "phaseStates": {
+        "plan": "completed",
+        "design": "not-required",
+        "do": "pending",
+        "qa": "pending",
+        "report": "not-required"
+      },
+      "scope": {
+        "in": ["로그인 버튼 문구"],
+        "out": ["인증 로직"],
+        "allowedPaths": ["src/components/", "tests/"],
+        "forbiddenActions": ["API 변경"]
+      },
+      "checks": { "required": ["login-button-test", "lint"] },
+      "artifacts": {
+        "required": ["qa-evidence"],
+        "conditional": [],
+        "generated": ["completion-view"]
+      },
+      "context": {
+        "refs": [
+          {
+            "path": "src/components/LoginButton.tsx",
+            "reason": "변경 대상 확인",
+            "hash": "2222222222222222222222222222222222222222222222222222222222222222",
+            "class": "working"
+          }
+        ],
+        "instructionBudgetBytes": 8000,
+        "workingBudgetBytes": 16000
+      },
+      "approval": {
+        "state": "approved",
+        "previewHash": "3333333333333333333333333333333333333333333333333333333333333333",
+        "approvedBoundaryHash": "4444444444444444444444444444444444444444444444444444444444444444",
+        "securityReviewId": null
+      },
+      "audit": {
+        "ledgerPath": ".vais/runs/run.patch-normal.001/audit.jsonl",
+        "requiredCoverage": 1,
+        "auditIncomplete": false,
+        "lastSequence": 2
+      },
+      "stopConditions": ["scope-expansion", "risk-escalation", "check-failure", "gate-failure", "audit-incomplete"]
+    }
+  ],
+  "auditEvents": [
+    {
+      "schemaVersion": "1.0",
+      "eventId": "event.patch.000",
+      "runId": "run.patch-normal.001",
+      "sequence": 0,
+      "timestamp": "2026-08-13T00:00:00.000Z",
+      "host": "claude-code",
+      "sessionId": "session-001",
+      "actor": { "type": "user", "id": "workspace-user" },
+      "eventType": "request.received",
+      "outcome": "observed",
+      "target": { "type": "request", "id": "request-hash-111" },
+      "source": { "channel": "kernel", "hostEvent": "UserPromptSubmit", "toolName": null },
+      "payload": { "summary": "로그인 버튼 문구 변경", "requestHash": "111111" },
+      "redaction": {
+        "applied": false,
+        "fields": [],
+        "contentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "integrity": {
+        "algorithm": "sha256",
+        "previousEventHash": null,
+        "eventHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "eventId": "event.patch.001",
+      "runId": "run.patch-normal.001",
+      "sequence": 1,
+      "timestamp": "2026-08-13T00:00:01.000Z",
+      "host": "claude-code",
+      "sessionId": "session-001",
+      "actor": { "type": "system", "id": "workflow-compiler" },
+      "eventType": "preview.created",
+      "outcome": "succeeded",
+      "target": { "type": "preview", "id": "preview-001" },
+      "source": { "channel": "kernel", "hostEvent": null, "toolName": null },
+      "payload": { "profile": "patch", "assurance": "normal" },
+      "redaction": {
+        "applied": false,
+        "fields": [],
+        "contentHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "integrity": {
+        "algorithm": "sha256",
+        "previousEventHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "eventHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "eventId": "event.patch.002",
+      "runId": "run.patch-normal.001",
+      "sequence": 2,
+      "timestamp": "2026-08-13T00:00:02.000Z",
+      "host": "claude-code",
+      "sessionId": "session-001",
+      "actor": { "type": "user", "id": "workspace-user" },
+      "eventType": "approval.recorded",
+      "outcome": "approved",
+      "target": { "type": "approval", "id": "approval-001" },
+      "source": { "channel": "kernel", "hostEvent": "AskUserQuestion", "toolName": "AskUserQuestion" },
+      "payload": { "choice": "execute", "boundaryHash": "444444" },
+      "redaction": {
+        "applied": false,
+        "fields": [],
+        "contentHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      "integrity": {
+        "algorithm": "sha256",
+        "previousEventHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "eventHash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      },
+      "durationMs": 0,
+      "cost": {
+        "source": "proxy",
+        "accuracy": "estimated",
+        "inputTokens": null,
+        "outputTokens": null,
+        "estimatedTokens": 320
+      }
+    }
+  ]
+}
