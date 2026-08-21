@@ -19,11 +19,11 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 
 | 현재 상태 | 값 |
 |---|---|
-| Plan | Phase 0A/0B Gate 1 승인, Phase 1 shadow 활성 hook 연결 완료, 실제 요청 20건 검토 대기 |
-| 평가 | 90건 corpus와 held-out 50건 macro F1 `1.0`, unsafe miss `0`, 전체 396 tests / 393 pass / 3 skip |
-| 구현 | classifier/compiler/shadow runner와 silent `UserPromptSubmit` hook 연결, legacy/checkpoint 출력 불변 |
-| 다음 작업 | 실제 shadow 요청 20건 검토와 live legacy E2E evidence 수집 |
-| 전환 정책 | legacy 유지 + shadow mode 우선 |
+| Plan | Phase 1 shadow 첫 실검토 finding F1~F6 remediation 완료, post-fix 실제 요청 20건 재수집 대기 |
+| 평가 | 90건 corpus와 held-out 50건 macro F1 `1.0`, unsafe miss `0`, 전체 405 tests / 402 pass / 3 skip |
+| 구현 | structural summary + keyed digest + opt-in 강제 + 무출력 보장 + project root/rotation 정합, legacy/checkpoint 출력 불변 |
+| 다음 작업 | 기존 event-log 정리 방안 사용자 선택, post-fix shadow 요청 20건 재수집·검토, live legacy E2E evidence 수집 |
+| 전환 정책 | legacy 유지 + shadow mode 우선 (프로젝트 명시 opt-in 시만) |
 
 새 세션에서는 본 문서를 먼저 읽고, 현재 작업에 필요한 경우에만 `development-plan.md`의 해당 phase를 읽는다. 과거 대화 전체를 다시 로드하지 않는다.
 
@@ -64,6 +64,10 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | 31 | 구현 전 held-out 13건을 anchor로 보존하고 신규 사례는 held-out 우선으로 추가하되, 규칙 보정에 사용한 사례는 review로 이동한다 | cto | 평가 중 발견한 사례로 classifier를 보정한 뒤에도 순수 held-out 성능을 과장하지 않는다 | `session-handoff-2026-08-21.md` |
 | 32 | 활성 `UserPromptSubmit` 연결과 실제 shadow 요청 검토 전에는 Phase 1을 완료 처리하지 않는다 | cto | 비활성 `prompt-handler.js`의 단위 테스트만으로 실제 host 연결을 증명할 수 없다 | `session-handoff-2026-08-21.md` |
 | 33 | 실제 UserPromptSubmit shadow는 안내·additional context 없이 별도 hook에서 실행하고 모든 오류를 fail-open한다 | cto | 오분류·감사 로그 실패가 legacy 요청 처리와 checkpoint 출력을 바꾸지 않게 한다 | `hooks/workflow-shadow.js` |
+| 34 | event log에는 원문·절단 원문을 저장하지 않고 classifier 산출 + 구조 메타데이터의 비가역 structural summary만 남긴다 | cto | secret 유무와 무관하게 프롬프트 원문이 영속되면 `rawPersisted:false` 계약이 깨진다 | `phase-1-shadow-remediation.md` |
+| 35 | requestHash는 unsalted SHA-256 대신 프로젝트별 key 파일 기반 HMAC keyed digest를 사용하고 key는 로그에 저장하지 않는다 | cto | 짧은 프롬프트의 사전 공격 복원을 막되 프로젝트 내 중복 요청 상관관계는 유지한다 | `phase-1-shadow-remediation.md` |
+| 36 | shadow는 사용자 프로젝트의 명시적 `vais.config.json` 설정이 있을 때만 활성하며 플러그인 번들 config 폴백을 두지 않는다 | cto | 플러그인 설치만으로 사용자 프롬프트 로깅이 켜지는 opt-out 없는 수집을 금지한다 | `phase-1-shadow-remediation.md` |
+| 37 | remediation 이후 Phase 1 acceptance는 post-fix 실제 요청 20건으로 다시 수집한다 | cto | 수정 전 hook이 남긴 이벤트는 원문 영속·unsalted hash를 포함해 acceptance 표본으로 부적합하다 | `phase-1-shadow-remediation.md` |
 
 ### 변경 이력
 
@@ -80,6 +84,7 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | v1.8 | 2026-08-21 | commit 9698816 clean-commit baseline 전환 완료, Phase 1 shadow 착수 상태로 이동 |
 | v1.9 | 2026-08-21 | Phase 1 classifier와 90건 corpus 검증 상태, 실제 UserPromptSubmit hook 연결 중단점 박제 |
 | v1.10 | 2026-08-21 | silent UserPromptSubmit shadow hook 연결과 redaction·disabled·fail-open·legacy 불변 회귀 검증 완료 |
+| v1.11 | 2026-08-21 | 첫 실검토 finding F1~F6 remediation — structural summary, keyed digest, opt-in 강제, 무출력 보장, project root/rotation 정합, post-fix 20건 재수집으로 전환 |
 
 ## Artifacts
 
@@ -96,6 +101,7 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | gate-1-claude-rereview | cto | cto-direct | Gate 1 remediation 결과 | Claude 독립 재검토 입력, 질문, 명령, 출력 형식 | `gate-1-claude-rereview.md` |
 | gate-1-claude-rereview-result | cto | claude | Gate 1 재검토 입력 17개 파일과 독립 probe | 승인 판정, label correction, clean-commit baseline 조건, Phase 1 완료 기준 | `gate-1-claude-rereview-result.md` |
 | session-handoff-2026-08-21 | cto | cto-direct | Git 상태, 검증 재실행, 직전 세션 가시 로그 | Phase 1 완료 상태, 미커밋 변경, hook 연결 중단점, 새 세션 재개 지시문 | `session-handoff-2026-08-21.md` |
+| phase-1-shadow-remediation | cto | cto-direct | 첫 실검토 finding F1~F6 | remediation 내역, digest trade-off, opt-in 정책, 민감 로그 정리 방안, 검증 결과 | `phase-1-shadow-remediation.md` |
 
 ## CEO 판단 근거
 
@@ -103,9 +109,10 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 
 ## Next Phase
 
-1. 활성 hook의 `classification.completed` 실제 요청 20건을 수집하고 profile, assurance, phase graph를 검토한다.
-2. 실제 표본에서 unsafe assurance miss가 0건이고 잘못된 shadow 결과도 legacy 실행을 변경하지 않는지 확인한다.
-3. Phase 2 enforce 전 hard gate인 live legacy E2E 3종 x 2회의 approval, elapsed, quality를 같은 runId로 연결한다.
-4. 위 evidence를 남기기 전에는 Phase 1을 완료하거나 Phase 2 adaptive enforce로 이동하지 않는다.
+1. 기존 `.vais/event-log.jsonl` 민감 로그 정리 방안(`phase-1-shadow-remediation.md` 3안) 중 하나를 사용자가 선택하면 실행한다.
+2. remediation 이후 활성 hook의 `classification.completed` 실제 요청 20건을 post-fix 상태에서 다시 수집하고 profile, assurance, phase graph를 검토한다.
+3. 실제 표본에서 unsafe assurance miss가 0건이고 잘못된 shadow 결과도 legacy 실행을 변경하지 않는지 확인한다.
+4. Phase 2 enforce 전 hard gate인 live legacy E2E 3종 x 2회의 approval, elapsed, quality를 같은 runId로 연결한다.
+5. 위 evidence를 남기기 전에는 Phase 1을 완료하거나 Phase 2 adaptive enforce로 이동하지 않는다.
 
 구현 중 상태가 바뀌면 본 문서의 현재 상태와 Next Phase를 갱신하고, Decision Record는 기존 행을 수정하지 않고 append한다.

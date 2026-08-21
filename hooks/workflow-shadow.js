@@ -16,8 +16,20 @@ const fs = require('fs');
 const path = require('path');
 const { runShadowAnalysis } = require('../lib/workflow/shadow-runner');
 
-const PLUGIN_ROOT = path.resolve(__dirname, '..');
 const MAX_CONTEXT_VALUE_LENGTH = 200;
+const MAX_ROOT_WALK_DEPTH = 64;
+
+// Guarantee the output-free contract even for writes made by shared libraries
+// (e.g. EventLogger's validation console.error): nothing may reach the host.
+function silenceHookOutput() {
+  const noop = () => {};
+  process.stdout.write = () => true;
+  process.stderr.write = () => true;
+  console.log = noop;
+  console.info = noop;
+  console.warn = noop;
+  console.error = noop;
+}
 
 function normalizeString(value, maxLength = MAX_CONTEXT_VALUE_LENGTH) {
   if (typeof value !== 'string') return '';
@@ -35,7 +47,7 @@ function readHookInput() {
   }
 }
 
-function resolveProjectDir(input) {
+function resolveStartDir(input) {
   const inputCwd = normalizeString(input?.cwd, 4096);
   if (inputCwd && path.isAbsolute(inputCwd)) {
     try {
@@ -47,21 +59,37 @@ function resolveProjectDir(input) {
   return process.cwd();
 }
 
-function loadShadowConfig(projectDir) {
-  const candidates = [
-    path.join(projectDir, 'vais.config.json'),
-    path.join(PLUGIN_ROOT, 'vais.config.json'),
-  ];
-
-  for (const candidate of [...new Set(candidates)]) {
+// The session may start in a subdirectory; the project root is the nearest
+// ancestor that carries an explicit VAIS footprint. No footprint → no root.
+function resolveProjectRoot(startDir) {
+  let dir = startDir;
+  for (let depth = 0; depth < MAX_ROOT_WALK_DEPTH; depth += 1) {
     try {
-      if (!fs.existsSync(candidate)) continue;
-      return JSON.parse(fs.readFileSync(candidate, 'utf8'));
+      if (fs.existsSync(path.join(dir, 'vais.config.json'))
+        || fs.existsSync(path.join(dir, '.vais', 'status.json'))) {
+        return dir;
+      }
     } catch (_) {
-      return {};
+      return null;
     }
+    const parent = path.dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
   }
-  return {};
+  return null;
+}
+
+// Opt-in only: shadow runs solely on the project's own vais.config.json.
+// There is deliberately no fallback to the plugin's bundled config — that
+// would silently enable prompt logging for every user of the plugin.
+function loadShadowConfig(projectRoot) {
+  try {
+    const configPath = path.join(projectRoot, 'vais.config.json');
+    if (!fs.existsSync(configPath)) return {};
+    return JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  } catch (_) {
+    return {};
+  }
 }
 
 function readActiveFeature(projectDir) {
@@ -131,16 +159,17 @@ function main() {
     const rawText = extractPrompt(input);
     if (!rawText.trim()) return;
 
-    const projectDir = resolveProjectDir(input);
-    const config = loadShadowConfig(projectDir);
+    const projectRoot = resolveProjectRoot(resolveStartDir(input));
+    if (!projectRoot) return;
+    const config = loadShadowConfig(projectRoot);
     runShadowAnalysis({
       rawText,
-      feature: extractFeature(input, projectDir),
+      feature: extractFeature(input, projectRoot),
       host: 'claude-code',
       sessionId: normalizeString(input?.session_id || input?.sessionId) || null,
       context: extractClassifierContext(input),
       config,
-      baseDir: projectDir,
+      baseDir: projectRoot,
     });
   } catch (_) {
     // Shadow analysis must never block or alter the legacy request path.
@@ -149,9 +178,11 @@ function main() {
 
 module.exports = {
   main,
+  silenceHookOutput,
   normalizeString,
   readHookInput,
-  resolveProjectDir,
+  resolveStartDir,
+  resolveProjectRoot,
   loadShadowConfig,
   readActiveFeature,
   extractPrompt,
@@ -160,5 +191,6 @@ module.exports = {
 };
 
 if (require.main === module) {
+  silenceHookOutput();
   main();
 }

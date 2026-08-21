@@ -20,7 +20,7 @@
 | **Knowledge lazy-load** | `agents/{c-level}/knowledge/` 19 MD — phase + artifact 매칭 시만 Read. 메인 .md 의 "Knowledge Index" 표가 trigger |
 | **CEO 진입 절차 강제** | CEO 가 4 단계 순차 — `analyzeCEO()` Bash 호출 → 7 차원 등급 표 출력 → activeCLevel 인용 → AskUserQuestion. LLM 자체 라우팅 금지 |
 
-현재 버전: **v2.2.0** — adaptive-workflow-kernel Phase 1 shadow (silent UserPromptSubmit hook + classifier). 상세: `CHANGELOG.md`.
+현재 버전: **v2.2.1** — adaptive-workflow-kernel Phase 1 shadow (silent UserPromptSubmit hook + classifier). 상세: `CHANGELOG.md`.
 
 ---
 

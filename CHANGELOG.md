@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.2.1] - 2026-08-21
+
+### Fixed
+
+- **Phase 1 shadow F1~F6 remediation** — `requestSummary` 원문 영속 제거 (`[structural]` 비가역 요약), unsalted SHA-256 → 프로젝트별 HMAC keyed digest, PLUGIN_ROOT config 폴백 제거 (프로젝트 명시 opt-in 시만 shadow 활성), hook 무출력 보장 (`silenceHookOutput`), project root 탐색·rotation 설정 정합, payment-card Luhn 검증. post-fix 실제 요청 20건 재수집 전 Phase 1 미완료 (Decision Record #34~#37)
+
+### Added
+
+- **adaptive-workflow-kernel-v2 plan** — v2 리셋 plan 문서 (`docs/adaptive-workflow-kernel-v2/01-plan/`): Claude Code `patch` profile vertical slice, raw-derived digest 저장 금지, legacy 기본 + 명시적 opt-in
+
 ## [2.2.0] - 2026-08-21
 
 > 버전 표기: 마켓플레이스에 설치된 v2.1.0 캐시(구 v2.0 라인)보다 높은 버전이어야 플러그인 업데이트가 반영되므로, v1.3.0 코드베이스에서 v2.2.0 으로 점프. 코드 계보는 v1.3.0 직계.

@@ -16,14 +16,18 @@ const {
 const { loadEvaluationCorpora } = require('../lib/evaluation/corpus');
 const {
   classifyRequest,
-  redactRequestSummary,
+  createRequestDigest,
+  detectSensitiveFields,
+  buildStructuralSummary,
 } = require('../lib/workflow/profile-classifier');
 const {
   compilePhaseGraph,
   selectProfile,
 } = require('../lib/workflow/workflow-compiler');
 const {
+  DIGEST_KEY_FILE,
   isShadowEnabled,
+  loadOrCreateDigestKey,
   runShadowAnalysis,
 } = require('../lib/workflow/shadow-runner');
 
@@ -132,15 +136,61 @@ test('reference-only examples do not raise production security assurance', () =>
   assert.deepEqual(result.assurance.triggers, []);
 });
 
-test('redaction removes credentials and direct identifiers from persisted summary', () => {
+test('sensitive-field detection reports secret kinds without producing text', () => {
   const raw = 'Add login for owner@example.com with token=super-secret-value-12345';
-  const redacted = redactRequestSummary(raw);
+  const detected = detectSensitiveFields(raw);
 
-  assert.equal(redacted.applied, true);
-  assert.ok(redacted.fields.includes('credential-assignment'));
-  assert.ok(redacted.fields.includes('email'));
-  assert.ok(!redacted.summary.includes('owner@example.com'));
-  assert.ok(!redacted.summary.includes('super-secret-value-12345'));
+  assert.equal(detected.applied, true);
+  assert.ok(detected.fields.includes('credential-assignment'));
+  assert.ok(detected.fields.includes('email'));
+  assert.equal('summary' in detected, false);
+});
+
+test('payment-card detection requires Luhn validity, ignoring timestamps', () => {
+  const timestamp = detectSensitiveFields('Retry the job stuck since 1755771019228 please');
+  assert.ok(!timestamp.fields.includes('payment-card'));
+
+  const card = detectSensitiveFields('Charge card 4111 1111 1111 1111 for the order');
+  assert.ok(card.fields.includes('payment-card'));
+});
+
+test('structural summary never contains or truncates verbatim prompt text', () => {
+  const raw = 'Fix the wobbly button alignment tweak in the sidebar dropdown';
+  const classification = classifyRequest(raw);
+  const summary = buildStructuralSummary(classification, raw);
+
+  assert.ok(summary.startsWith('[structural]'));
+  assert.notEqual(summary, raw);
+  assert.ok(!raw.includes(summary));
+  for (const word of ['wobbly', 'button', 'alignment', 'tweak', 'sidebar', 'dropdown']) {
+    assert.ok(!summary.includes(word), `summary leaked raw token: ${word}`);
+  }
+  assert.ok(summary.length <= 240);
+});
+
+test('request digest is keyed: never equal to unsalted sha256 and key-dependent', () => {
+  const raw = 'short prompt';
+  const unsalted = crypto.createHash('sha256').update(raw, 'utf8').digest('hex');
+  const digestA = createRequestDigest(raw, 'key-a');
+  const digestB = createRequestDigest(raw, 'key-b');
+
+  assert.match(digestA, /^[a-f0-9]{64}$/);
+  assert.notEqual(digestA, unsalted);
+  assert.notEqual(digestA, digestB);
+  assert.equal(digestA, createRequestDigest(raw, 'key-a'));
+  assert.throws(() => createRequestDigest(raw, ''));
+});
+
+test('digest key persists per project and is excluded from the event log', () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-shadow-key-'));
+  try {
+    const first = loadOrCreateDigestKey(tempDir);
+    const second = loadOrCreateDigestKey(tempDir);
+    assert.deepEqual(first, second);
+    assert.ok(fs.existsSync(path.join(tempDir, DIGEST_KEY_FILE)));
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
 });
 
 test('shadow runner logs one redacted result without changing legacy execution', () => {
@@ -160,6 +210,7 @@ test('shadow runner logs one redacted result without changing legacy execution',
       sessionId: 'session-1',
       runId: 'shadow-test-run-1',
       config,
+      baseDir: tempDir,
     });
     const persisted = fs.readFileSync(eventLog, 'utf8');
 
@@ -169,6 +220,8 @@ test('shadow runner logs one redacted result without changing legacy execution',
     assert.ok(!persisted.includes(raw));
     assert.ok(!persisted.includes('owner@example.com'));
     assert.ok(!persisted.includes('super-secret-value-12345'));
+    assert.ok(!persisted.includes(crypto.createHash('sha256').update(raw, 'utf8').digest('hex')));
+    assert.match(result.request.hash, /^[a-f0-9]{64}$/);
 
     const events = persisted.trim().split('\n').map(line => JSON.parse(line));
     assert.equal(events.length, 1);
@@ -195,6 +248,7 @@ test('shadow result conforms to schema and rejects an empty required phase list'
     runId: 'shadow-schema-run-1',
     config: { workflow: { engine: 'legacy', profile: { mode: 'shadow' } } },
     eventLogger: { log() {} },
+    digestKey: 'unit-test-key',
   });
 
   assert.equal(validate(result), true, JSON.stringify(validate.errors));
@@ -256,8 +310,10 @@ test('UserPromptSubmit shadow hook logs a redacted event and produces no output'
     assert.equal(events[0].feature, 'login-feature');
     assert.equal(events[0].host, 'claude-code');
     assert.equal(events[0].sessionId, 'session-hook-1');
-    assert.equal(events[0].requestHash, crypto.createHash('sha256').update(raw).digest('hex'));
+    assert.match(events[0].requestHash, /^[a-f0-9]{64}$/);
+    assert.notEqual(events[0].requestHash, crypto.createHash('sha256').update(raw).digest('hex'));
     assert.equal(events[0].redactionApplied, true);
+    assert.ok(events[0].requestSummary.startsWith('[structural]'));
     assert.equal(events[0].legacyExecutionChanged, false);
   } finally {
     fs.rmSync(tempDir, { recursive: true, force: true });
@@ -315,6 +371,144 @@ test('hook manifest keeps checkpoint output behavior and adds shadow as a separa
     const checkpointResult = runHook(CHECKPOINT_HOOK, tempDir, { prompt: 'ordinary request' });
     assert.equal(checkpointResult.status, 0);
     assert.equal(checkpointResult.stdout, '{}\n');
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test('secret-free short prompt is never persisted verbatim or as unsalted sha256', () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-shadow-plain-'));
+  const eventLog = path.join(tempDir, '.vais', 'event-log.jsonl');
+  const raw = 'Fix the wobbly button alignment tweak in the sidebar dropdown';
+
+  try {
+    writeShadowConfig(tempDir);
+    const result = runHook(SHADOW_HOOK, tempDir, {
+      hook_event_name: 'UserPromptSubmit',
+      cwd: tempDir,
+      prompt: raw,
+    });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stdout, '');
+    assert.equal(result.stderr, '');
+
+    const persisted = fs.readFileSync(eventLog, 'utf8');
+    assert.ok(!persisted.includes(raw));
+    for (const word of ['wobbly', 'button', 'alignment', 'tweak', 'sidebar', 'dropdown']) {
+      assert.ok(!persisted.includes(word), `event log leaked raw token: ${word}`);
+    }
+    assert.ok(!persisted.includes(crypto.createHash('sha256').update(raw, 'utf8').digest('hex')));
+
+    const [event] = persisted.trim().split('\n').map(line => JSON.parse(line));
+    assert.ok(event.requestSummary.startsWith('[structural]'));
+    assert.equal(event.redactionApplied, false);
+    assert.ok(!fs.readFileSync(path.join(tempDir, DIGEST_KEY_FILE), 'utf8').includes(event.requestHash));
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test('shadow stays disabled without an explicit project vais.config.json', () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-shadow-optin-'));
+  try {
+    fs.mkdirSync(path.join(tempDir, '.vais'), { recursive: true });
+    fs.writeFileSync(path.join(tempDir, '.vais', 'status.json'), JSON.stringify({
+      version: 3,
+      activeFeature: 'some-feature',
+      features: {},
+    }));
+
+    const result = runHook(SHADOW_HOOK, tempDir, { cwd: tempDir, prompt: 'Add a profile selector' });
+    assert.equal(result.status, 0);
+    assert.equal(result.stdout, '');
+    assert.equal(result.stderr, '');
+    assert.equal(fs.existsSync(path.join(tempDir, '.vais', 'event-log.jsonl')), false);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test('hook output stays empty even when EventLogger rejects an invalid payload', () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-shadow-invalid-'));
+  try {
+    const script = [
+      `const hook = require(${JSON.stringify(SHADOW_HOOK)});`,
+      'hook.silenceHookOutput();',
+      `const { EventLogger } = require(${JSON.stringify(path.join(ROOT, 'lib', 'observability', 'event-logger.js'))});`,
+      `const logger = new EventLogger(${JSON.stringify(path.join(tempDir, 'event-log.jsonl'))});`,
+      "logger.log('classification.completed', { runId: 'invalid-only' });",
+      "console.error('must-not-escape');",
+    ].join('\n');
+    const result = spawnSync(process.execPath, ['-e', script], { encoding: 'utf8' });
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stdout, '');
+    assert.equal(result.stderr, '');
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test('nested cwd resolves the project root for config, event log, and feature', () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-shadow-nested-'));
+  const nested = path.join(tempDir, 'packages', 'web', 'src');
+  try {
+    writeShadowConfig(tempDir);
+    fs.mkdirSync(nested, { recursive: true });
+    fs.mkdirSync(path.join(tempDir, '.vais'), { recursive: true });
+    fs.writeFileSync(path.join(tempDir, '.vais', 'status.json'), JSON.stringify({
+      version: 3,
+      activeFeature: 'root-feature',
+      features: {},
+    }));
+
+    const result = runHook(SHADOW_HOOK, nested, {
+      cwd: nested,
+      prompt: 'Fix the missing retry guard',
+    });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stdout, '');
+    assert.equal(result.stderr, '');
+    assert.equal(fs.existsSync(path.join(nested, '.vais')), false);
+
+    const persisted = fs.readFileSync(path.join(tempDir, '.vais', 'event-log.jsonl'), 'utf8');
+    const [event] = persisted.trim().split('\n').map(line => JSON.parse(line));
+    assert.equal(event.feature, 'root-feature');
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test('observability rotation config is honored relative to the project root', () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-shadow-rotate-'));
+  const eventLog = path.join(tempDir, '.vais', 'event-log.jsonl');
+  const archiveDir = path.join(tempDir, '.vais', 'archive');
+  try {
+    fs.mkdirSync(path.join(tempDir, '.vais'), { recursive: true });
+    fs.writeFileSync(eventLog, 'x'.repeat(4096));
+
+    const result = runShadowAnalysis({
+      rawText: 'Fix the missing retry guard',
+      feature: 'retry-guard',
+      config: {
+        workflow: { engine: 'legacy', profile: { mode: 'shadow' } },
+        observability: {
+          eventLog: '.vais/event-log.jsonl',
+          maxEventLogSizeMB: 0.000001,
+          rotateAfterDays: 30,
+          archivePath: '.vais/archive/',
+        },
+      },
+      baseDir: tempDir,
+      digestKey: 'rotation-test-key',
+    });
+
+    assert.equal(result.skipped, undefined);
+    const archived = fs.readdirSync(archiveDir);
+    assert.equal(archived.length, 1);
+    const events = fs.readFileSync(eventLog, 'utf8').trim().split('\n');
+    assert.equal(events.length, 1);
+    assert.equal(JSON.parse(events[0]).event, 'classification.completed');
   } finally {
     fs.rmSync(tempDir, { recursive: true, force: true });
   }

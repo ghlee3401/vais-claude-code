@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-2.2.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-2.2.1-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -7,7 +7,7 @@
 <h1 align="center">VAIS Code</h1>
 
 <p align="center">
-  <strong>Virtual AI C-Suite for Software Development — v2.2.0</strong><br/>
+  <strong>Virtual AI C-Suite for Software Development — v2.2.1</strong><br/>
   organization-in-a-box · 6 C-Level Executives · 47 Specialized Sub-agents · 7-Dimension Routing Algorithm
 </p>
 
