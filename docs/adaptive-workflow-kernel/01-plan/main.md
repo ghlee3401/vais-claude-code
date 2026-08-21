@@ -20,9 +20,9 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | 현재 상태 | 값 |
 |---|---|
 | Plan | Phase 0A/0B Gate 1 승인 - taxonomy와 audit canonicalization까지 계약화 |
-| 평가 | label correction 반영 및 49+26 corpus 재검증 완료, clean commit baseline 전환 대기 |
-| 구현 | production runtime 변경 전 |
-| 다음 작업 | Phase 0 커밋 후 clean-commit baseline 재생성·커밋, 이어서 Phase 1 shadow 구현 |
+| 평가 | Gate 1 승인 및 commit `9698816` clean-commit baseline 전환 완료 |
+| 구현 | production runtime 변경 전, Phase 1 shadow 착수 준비 |
+| 다음 작업 | legacy 실행을 유지하는 Phase 1 shadow classifier/compiler 구현 |
 | 전환 정책 | legacy 유지 + shadow mode 우선 |
 
 새 세션에서는 본 문서를 먼저 읽고, 현재 작업에 필요한 경우에만 `development-plan.md`의 해당 phase를 읽는다. 과거 대화 전체를 다시 로드하지 않는다.
@@ -59,6 +59,7 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | 26 | audit event hash는 eventHash만 제외한 canonical UTF-8 JSON의 SHA-256으로 계산한다 | cto | 링크 placeholder가 아니라 본문 변조를 검출한다 | `phase-0a-contracts.md` |
 | 27 | Gate 1은 승인하며 working-tree manifest는 clean commit baseline 재생성을 조건으로 임시 수용한다 | cto | 32개 파일 hash와 scopeDigest가 재현됐고 Phase 1 shadow 착수 위험을 충분히 제한한다 | `gate-1-claude-rereview-result.md` |
 | 28 | classifier 구현 전 held-out 13건과 hash를 고정하고 label correction 후에도 review 상태는 pending-external로 유지한다 | cto | 평가 정답 사후 변경과 자체 승인 순환을 막는다 | `gate-1-claude-rereview-result.md` |
+| 29 | Phase 0 baseline은 commit `9698816`의 clean tree와 32개 scope file hash로 고정한다 | cto | Phase 1 이후 비용 비교 기준이 구현 변경과 섞이지 않게 한다 | `phase-0b-evaluation.md` |
 
 ### 변경 이력
 
@@ -72,6 +73,7 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | v1.5 | 2026-08-13 | Phase 0B 평가 corpus와 legacy repository proxy를 구축하고 Claude Gate 1 검토 대기 상태로 전환 |
 | v1.6 | 2026-08-20 | Claude Gate 1 수정 후 승인 판정 반영, taxonomy/corpus/baseline/audit 보완 후 재검토 대기 |
 | v1.7 | 2026-08-21 | Claude Gate 1 승인 및 label correction 반영, clean-commit baseline 전환 대기 |
+| v1.8 | 2026-08-21 | commit 9698816 clean-commit baseline 전환 완료, Phase 1 shadow 착수 상태로 이동 |
 
 ## Artifacts
 
@@ -94,8 +96,8 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 
 ## Next Phase
 
-1. Phase 0A/0B 산출물과 승인된 repository cleanup을 커밋한다.
-2. clean tree에서 baseline을 `captureMode=clean-commit`으로 재생성하고 테스트 후 별도 커밋한다.
-3. held-out 13건과 hash, `pending-external` review 상태를 유지한 채 Phase 1 shadow classifier/compiler 구현을 시작한다.
+1. legacy 실행 결과는 바꾸지 않고 classifier/compiler의 shadow 결과만 event log에 기록한다.
+2. 고정 held-out 13건을 보존하며 corpus를 90+로 확장하고 redacted 실요청 10건, unknown 5건 이상을 포함한다.
+3. held-out macro F1 0.85 이상과 critical-risk 26건 unsafe miss 0건을 검증한다.
 
 구현 중 상태가 바뀌면 본 문서의 현재 상태와 Next Phase를 갱신하고, Decision Record는 기존 행을 수정하지 않고 append한다.

@@ -20,7 +20,7 @@ summary: "Claude Gate 1 수정 후 승인 판정에 대한 코드·schema·corpu
 | 1 | feature phase graph가 profile 템플릿 복사 | 해결 | 49건에 `compileSignals`와 `expectedCompiledPhaseGraph` 추가, `compileExpectedPhaseGraph()`와 schema conditional로 재계산 |
 | 2 | trigger/check 자유 문자열 | 해결 | `contracts/workflow-taxonomy.json` 단일 정본, Phase 0A schema 2종과 corpus schema 2종 enum 일치 테스트 |
 | 3 | malformed corpus가 validator/schema 통과 | 해결 | phase graph, promotion, assurance-trigger, category-trigger, category당 2건, secret/PII 규칙 및 runtime/Ajv negative probe |
-| 4 | dirty snapshot을 head SHA로 재현 가능하게 표현 | 부분 해결 | `working-tree-manifest`와 파일별 SHA-256/`scopeDigest` 추가, false clean claim 거부. clean commit snapshot은 미생성 |
+| 4 | dirty snapshot을 head SHA로 재현 가능하게 표현 | 해결 | manifest 검증 후 commit `9698816` clean tree에서 `clean-commit` snapshot 재생성 |
 | 5 | live metric을 captured로 기록 불가 | 해결 | observed metric `oneOf[unavailable,captured]`, live quality/check 결과, 단위·시간, captured sample 수 교차 검증 |
 | 6 | quality-cost 동일 runId 누락, 6회 과장 | 부분 해결 | sample 안에 quality와 metrics를 함께 저장. repository replay는 3 scenario x 2 동일 inventory로 정정. 실제 live quality-cost는 0/6 |
 | 7 | baseline inventory 선정 규칙이 hand-picked | 해결 | `declared-entrypoint-and-mandatory-reference-v1` 명문화, shared/config/output style/design execution agent 포함 |
@@ -53,6 +53,7 @@ repository replay는 독립적인 실제 실행 6건이 아니다. 세 scenario�
 - live-host captured metric과 quality 저장 가능
 - `liveHostRuns.captured`와 실제 live sample 수 일치
 
+- commit `9698816` 하나로 baseline scope 복원
 현재 snapshot이 보장하지 않는 것:
 
 - clean commit 하나로 전체 상태 복원

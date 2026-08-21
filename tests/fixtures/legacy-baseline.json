@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
   "kind": "legacy-baseline",
-  "generatedAt": "2026-08-20T08:37:13.949Z",
+  "generatedAt": "2026-08-21T00:42:52.147Z",
   "repository": {
-    "headSha": "653074b7d9076ae2b6fee2bba109dfe9ecf717da",
-    "dirty": true,
-    "captureMode": "working-tree-manifest",
+    "headSha": "9698816bfd602dd8e0c5ba2d9d2c1eaf2625324e",
+    "dirty": false,
+    "captureMode": "clean-commit",
     "scopeDigest": "0c340a1ff819829579d825b7580d9eb5662543372150b796f1701c667614962a",
     "scopeFiles": [
       {
@@ -405,7 +405,7 @@
             "measurementElapsedMs": {
               "source": "local-clock",
               "accuracy": "C",
-              "value": 3.083
+              "value": 3.228
             }
           }
         },
@@ -628,7 +628,7 @@
             "measurementElapsedMs": {
               "source": "local-clock",
               "accuracy": "C",
-              "value": 2.641
+              "value": 2.276
             }
           }
         }
@@ -865,7 +865,7 @@
             "measurementElapsedMs": {
               "source": "local-clock",
               "accuracy": "C",
-              "value": 1.6
+              "value": 1.979
             }
           }
         },
@@ -1088,7 +1088,7 @@
             "measurementElapsedMs": {
               "source": "local-clock",
               "accuracy": "C",
-              "value": 1.532
+              "value": 1.69
             }
           }
         }
@@ -1355,7 +1355,7 @@
             "measurementElapsedMs": {
               "source": "local-clock",
               "accuracy": "C",
-              "value": 1.82
+              "value": 1.854
             }
           }
         },
@@ -1608,7 +1608,7 @@
             "measurementElapsedMs": {
               "source": "local-clock",
               "accuracy": "C",
-              "value": 1.821
+              "value": 1.959
             }
           }
         }

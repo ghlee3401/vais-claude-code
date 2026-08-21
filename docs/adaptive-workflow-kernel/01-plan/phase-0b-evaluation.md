@@ -92,7 +92,7 @@ Phase 0B는 adaptive workflow가 기존 VAIS보다 비용을 줄이면서 품질
 - B: host event/session usage
 - C: repository 또는 transcript proxy
 
-현재 snapshot은 dirty working tree를 clean commit으로 위장하지 않는다. `captureMode=working-tree-manifest`, `dirty=true`, 측정 파일별 SHA-256과 전체 `scopeDigest`를 저장한다. 이 manifest는 현재 상태의 재현 근거지만, Claude가 요청한 clean commit 기준선은 아직 아니다.
+현재 snapshot은 commit `9698816bfd602dd8e0c5ba2d9d2c1eaf2625324e`의 clean tree에서 생성했다. `captureMode=clean-commit`, `dirty=false`, 측정 파일 32개의 SHA-256과 `scopeDigest=0c340a1ff819829579d825b7580d9eb5662543372150b796f1701c667614962a`를 저장한다.
 
 schema는 observed metric을 `unavailable | captured`로 표현하며, live sample의 host approval과 elapsed 및 quality 결과는 같은 `runId` sample에 저장한다. runtime validator는 `liveHostRuns.captured`와 실제 `live-host` sample 수를 대조한다.
 
@@ -113,16 +113,16 @@ node scripts/vais-validate-plugin.js
 |---|---|---|
 | profile별 15개 이상 fixture | 통과 | 18 / 15 / 16, 총 49 |
 | case별 label·compile 근거 | 통과 | rationale + compileSignals + expectedCompiledPhaseGraph + checks |
-| 외부 reviewer 기록 | 재검토 대기 | 1차 판정 `수정 후 승인`, label은 `pending-external` 유지 |
+| 외부 reviewer 기록 | 통과 | Gate 1 재검토 승인, label은 지시대로 `pending-external` 유지 |
 | critical-risk coverage | 통과 | 13 category x 2 = 26, 전부 held-out |
 | taxonomy·validator·schema 정합 | 통과 | canonical enum + runtime/Ajv + malformed negative probes |
 | proxy metric 100% | 통과 | 3 scenario x 2 반복이며 각 쌍의 inventory 값은 동일 |
 | actual token 지원 여부와 누락 이유 | 통과 | A/B `unavailable.reason` 명시 |
 | baseline quality와 cost가 같은 runId로 연결 | 미충족 | 저장 형식과 회귀 테스트만 준비, live 결과 없음 |
-| clean commit 기준선 | 미충족 | 현재는 exact working-tree manifest |
+| clean commit 기준선 | 통과 | commit `9698816`에서 `captureMode=clean-commit` snapshot 생성 |
 | live legacy E2E 3종 x 2회 | 미실행 | Claude Code host에서 0/6 |
 
-Phase 0B는 **Gate 1 재검토 대기**다. clean commit 요구에 working-tree manifest가 충분한지 Claude에게 다시 판정받고, 불충분하면 사용자 승인 후 commit에서 snapshot을 재생성한다.
+Phase 0B는 **Gate 1 승인 및 clean baseline 전환 완료**다. Phase 1은 legacy 실행을 유지하면서 classifier/compiler 결과만 shadow event로 기록한다.
 
 live host 6회는 Phase 1 shadow 진입의 blocker가 아니다. shadow 중 legacy 실행과 같은 `runId`로 수집하며, **Phase 2에서 adaptive 실행을 enforce하기 전 hard blocker**다. provider/host token을 끝내 얻지 못하면 해당 A/B metric은 unavailable로 유지하되, elapsed, approval count, quality는 반드시 수집한다.
 
@@ -132,3 +132,4 @@ live host 6회는 Phase 1 shadow 진입의 blocker가 아니다. shadow 중 lega
 |---|---|---|
 | v1.0 | 2026-08-13 | corpus 45+18, repository baseline 6 sample, 측정 정확도와 외부 검토 상태 기록 |
 | v1.1 | 2026-08-20 | Gate 1 수정 반영: case별 compile, taxonomy, 49+26 corpus, held-out hash, manifest baseline, captured/live schema, 미충족 gate 명시 |
+| v1.2 | 2026-08-21 | Gate 1 승인 label correction 및 commit 9698816 clean-commit baseline 반영 |

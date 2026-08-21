@@ -317,20 +317,25 @@ describe('Phase 0B legacy baseline', () => {
     assert.ok(mismatched.errors.some(error => error.includes('number of live-host samples')));
   });
 
-  it('snapshot이 manifest로 dirty 상태를 정직하게 고정하고 clean claim 위장을 거부한다', () => {
+  it('snapshot이 clean commit을 고정하고 capture mode 위장을 거부한다', () => {
     const snapshot = readJson('tests/fixtures/legacy-baseline.json');
     const validation = validateLegacyBaseline(snapshot);
     assert.equal(validation.valid, true, validation.errors.join('\n'));
     assert.equal(validateBaselineSchema(snapshot), true, JSON.stringify(validateBaselineSchema.errors));
-    assert.equal(snapshot.repository.captureMode, 'working-tree-manifest');
-    assert.equal(snapshot.repository.dirty, true);
+    assert.equal(snapshot.repository.captureMode, 'clean-commit');
+    assert.equal(snapshot.repository.dirty, false);
     assert.match(snapshot.repository.scopeDigest, /^[a-f0-9]{64}$/);
     assert.ok(snapshot.repository.scopeFiles.length > 0);
 
-    const falseClean = structuredClone(snapshot);
-    falseClean.repository.captureMode = 'clean-commit';
-    assert.equal(validateLegacyBaseline(falseClean).valid, false);
-    assert.equal(validateBaselineSchema(falseClean), false);
+    const falseDirty = structuredClone(snapshot);
+    falseDirty.repository.dirty = true;
+    assert.equal(validateLegacyBaseline(falseDirty).valid, false);
+    assert.equal(validateBaselineSchema(falseDirty), false);
+
+    const falseManifest = structuredClone(snapshot);
+    falseManifest.repository.captureMode = 'working-tree-manifest';
+    assert.equal(validateLegacyBaseline(falseManifest).valid, false);
+    assert.equal(validateBaselineSchema(falseManifest), false);
   });
 
   it('필수 metric 누락과 actual 위장을 runtime 및 schema가 거부한다', () => {
