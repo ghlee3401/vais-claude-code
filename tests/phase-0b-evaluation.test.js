@@ -45,20 +45,23 @@ describe('Phase 0B evaluation corpus', () => {
   const validateClassificationSchema = compileSchema('schemas/evaluation-corpus.schema.json');
   const validateCriticalSchema = compileSchema('schemas/critical-risk-corpus.schema.json');
 
-  it('profile별 최소 15개와 고정 split을 가진 49개 label fixture가 유효하다', () => {
+  it('profile별 30개와 신규 held-out 우선 split을 가진 90개 label fixture가 유효하다', () => {
     const result = validateClassificationCorpus(corpora.classification);
     assert.deepEqual(result.errors, []);
     assert.equal(result.valid, true);
-    assert.deepEqual(result.counts, { patch: 18, feature: 15, initiative: 16 });
+    assert.deepEqual(result.counts, { patch: 30, feature: 30, initiative: 30 });
+    assert.deepEqual(result.provenance, { redactedActual: 13 });
+    assert.equal(result.unknown, 5);
 
     const summary = summarizeClassificationCorpus(corpora.classification);
-    assert.equal(summary.total, 49);
-    assert.deepEqual(summary.bySplit, { train: 27, review: 9, 'held-out': 13 });
+    assert.equal(summary.total, 90);
+    assert.deepEqual(summary.bySplit, { train: 27, review: 13, 'held-out': 50 });
     assert.equal(corpora.classification.splitPolicy.heldOutImmutableBeforeClassifier, true);
-    assert.equal(
-      corpora.classification.splitPolicy.heldOutIdsHash,
-      '10fff5bd0fe1fcecb44d5a4d6ed8a2fb159d484188604f6f44bf3739b9d1e9eb',
-    );
+    assert.equal(corpora.classification.splitPolicy.anchorHeldOutIdsHash,
+      '10fff5bd0fe1fcecb44d5a4d6ed8a2fb159d484188604f6f44bf3739b9d1e9eb');
+    assert.equal(corpora.classification.splitPolicy.classifierImplementationCommit, '844ac62');
+    assert.equal(corpora.classification.splitPolicy.postClassifierPolicy, 'new-cases-held-out-first');
+    assert.match(corpora.classification.splitPolicy.heldOutIdsHash, /^[a-f0-9]{64}$/);
   });
 
   it('held-out ID 목록 변경을 hash 불일치로 거부한다', () => {
@@ -74,7 +77,7 @@ describe('Phase 0B evaluation corpus', () => {
     assert.ok(corpora.classification.cases.some(item => item.profile === 'patch' && item.assurance === 'regulated'));
     assert.ok(corpora.classification.cases.some(item => item.profile === 'initiative' && item.assurance === 'normal'));
     assert.ok(corpora.classification.cases.some(item => item.profile === 'feature' && item.assurance === 'high'));
-    assert.equal(summary.byRecommendation.unknown, 1);
+    assert.equal(summary.byRecommendation.unknown, 5);
   });
 
   it('case별 compile signal에서 expected phase graph를 다시 계산할 수 있다', () => {
@@ -113,6 +116,15 @@ describe('Phase 0B evaluation corpus', () => {
     for (const item of corpora.classification.cases) {
       assert.equal(item.review.status, 'pending-external');
       assert.ok(item.review.labeler);
+    }
+
+    const actualReplays = corpora.classification.cases
+      .filter(item => item.provenance?.kind === 'redacted-actual');
+    assert.equal(actualReplays.length, 13);
+    for (const item of actualReplays) {
+      assert.equal(item.provenance.rawPersisted, false);
+      assert.equal(item.provenance.source, 'current-development-conversation');
+      assert.match(item.provenance.referenceHash, /^[a-f0-9]{64}$/);
     }
   });
 
@@ -215,7 +227,7 @@ describe('Phase 0B evaluation corpus', () => {
   it('corpus schema가 fixture 종류와 최소 수량을 고정한다', () => {
     const classificationSchema = readJson('schemas/evaluation-corpus.schema.json');
     const riskSchema = readJson('schemas/critical-risk-corpus.schema.json');
-    assert.equal(classificationSchema.properties.cases.minItems, 45);
+    assert.equal(classificationSchema.properties.cases.minItems, 90);
     assert.equal(riskSchema.properties.cases.minItems, 26);
     assert.equal(riskSchema.properties.cases.items.properties.requiresSecurityDialogue.const, true);
   });
@@ -357,5 +369,6 @@ describe('Phase 0B legacy baseline', () => {
       command: 'baseline',
       output: 'result.json',
     });
+    assert.deepEqual(parseArgs(['classifier']), { command: 'classifier', output: null });
   });
 });

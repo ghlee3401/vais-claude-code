@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.2.0] - 2026-08-21
+
+> 버전 표기: 마켓플레이스에 설치된 v2.1.0 캐시(구 v2.0 라인)보다 높은 버전이어야 플러그인 업데이트가 반영되므로, v1.3.0 코드베이스에서 v2.2.0 으로 점프. 코드 계보는 v1.3.0 직계.
+
+### Added
+
+- **adaptive-workflow-kernel Phase 0** — `patch/feature/initiative` profile × `normal/high/regulated` assurance 계약 schema 3종 (TaskEnvelope/ExecutionPreview/AuditEvent) + 90건 classification corpus (held-out 50건 macro F1 1.0, unsafe miss 0) + clean-commit baseline (`9698816`)
+- **adaptive-workflow-kernel Phase 1 shadow** — `lib/workflow/profile-classifier.js` + `shadow-runner.js` + `hooks/workflow-shadow.js` (silent UserPromptSubmit hook). 출력·legacy 실행·checkpoint 동작 불변, raw prompt 미저장 (redacted summary + hash), 오류 시 fail-open
+- **평가 인프라** — `lib/evaluation/corpus.js` + `npm run workflow:evaluate` / `workflow:classify` + provenance·held-out 불변 계약
+
+### Changed
+
+- Phase 1 shadow 수집 대기 상태 — 실제 요청 20건 검토 및 live legacy E2E evidence 수집 전에는 Phase 2 adaptive enforce 미진입 (Decision Record #25, #32)
+
 ## [1.3.0] - 2026-08-05
 
 ### Added

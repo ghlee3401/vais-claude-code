@@ -2373,12 +2373,2040 @@
         "status": "pending-external",
         "labeler": "claude-gate-1"
       }
+    },
+    {
+      "id": "p-19",
+      "summary": "Correct seven risk-check labels in the evaluation fixture only",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected patch scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "9a321597ee32c4faf4cd6b853da88a70a5891037516cb9e7746cd3ad871cf794",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "p-20",
+      "summary": "Phase 1 진행 인덱스의 상태 문구만 수정해줘",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected patch scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "9fda2937c1a0399390328fedc0efe76187ff3864e94ede7fc74843202b15d03f",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "p-21",
+      "summary": "Fix a duplicate configuration declaration without changing behavior",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected patch scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "e958d7e5f8329752042edaea7db1919d0c00d1744b28f8c61baf2ff75ffdab06",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "p-22",
+      "summary": "Rename the legacy baseline capture status in documentation only",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected patch scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "1bac85ee54aea49d79bf1020e149efc4655588c19678393ca5cd463a9c18c7b8",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "p-23",
+      "summary": "Fix the retry backoff constant in the existing worker",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected patch scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "p-24",
+      "summary": "Correct the stale cache key prefix without changing its contract",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected patch scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "p-25",
+      "summary": "Fix the missing null guard in the current status parser",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected patch scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "p-26",
+      "summary": "Rename an internal test helper and update its references",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected patch scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "p-27",
+      "summary": "Fix the payment wording in a mock fixture example only",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected patch scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "p-28",
+      "summary": "Correct the login spelling in the README example only",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected patch scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "p-29",
+      "summary": "Fix the dependency version label in the package audit output",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "high",
+      "riskTriggers": [
+        "dependency"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected patch scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "dependency-scan",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "p-30",
+      "summary": "Fix the authorization fallback bug in the existing middleware",
+      "profile": "patch",
+      "profileRecommendation": "patch",
+      "assurance": "high",
+      "riskTriggers": [
+        "authorization"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected patch scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "design",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "authorization-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "f-16",
+      "summary": "작은 개발 작업에 자동 실행 로그를 추가해줘",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected feature scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [
+          "design"
+        ],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "597658cccb833d093a4d92fa6be956dae43180120f12dc5a5acefec4f0e72f08",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "f-17",
+      "summary": "patch feature initiative 개발 크기 선택 기능을 추가해줘",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected feature scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [
+          "design"
+        ],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "63fad7eda80ffcb8068d6ac24266759e86606c27534fd83bc39500c40c73f4de",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "f-18",
+      "summary": "고위험 AI 에이전트 도구 권한 전에 필수 확인 대화를 추가해줘",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "high",
+      "riskTriggers": [
+        "agent-capability"
+      ],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected feature scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [
+          "design"
+        ],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "tool-allowlist-test",
+        "security-review"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "6cf270cabb462e43489915b2784e2b278e443d6827a78305dc5264824e5c29a6",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "f-19",
+      "summary": "모든 AI 에이전트 실행을 append-only 감사 로그에 기록하는 기능을 추가해줘",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "high",
+      "riskTriggers": [
+        "agent-capability"
+      ],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected feature scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [
+          "design"
+        ],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "tamper-test",
+        "security-review"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "e7badfa5f4ce9472f2f260817a6ceb3639f6fd983436b84143054d1346828a53",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "f-20",
+      "summary": "분류 코퍼스에 비식별 요청 replay 메타데이터를 추가해줘",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected feature scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [
+          "design"
+        ],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "8716f3b7ade930998cf5350109c2d487f0173a3fd6a852f9e40addd7ea9c8dca",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "f-21",
+      "summary": "Implement a CSV export endpoint for the existing report",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected feature scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": true,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "design",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "contract-test",
+        "integration-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "f-22",
+      "summary": "Add an account preferences page to the existing settings area",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected feature scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": true,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "design",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "ui-test",
+        "accessibility-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "f-23",
+      "summary": "Add an outbound webhook endpoint for support tickets",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "high",
+      "riskTriggers": [
+        "external-write"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected feature scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": true,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": true,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "design",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "contract-test",
+        "idempotency-test",
+        "security-review"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "f-24",
+      "summary": "Add file upload validation to the existing document endpoint",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "high",
+      "riskTriggers": [
+        "untrusted-input"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected feature scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": true,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "design",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "input-validation-test",
+        "size-type-limit-test",
+        "security-review"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "f-25",
+      "summary": "Track a checkout analytics event in the current purchase flow",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "high",
+      "riskTriggers": [
+        "payment"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected feature scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [
+          "design"
+        ],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "analytics-test",
+        "payment-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "f-26",
+      "summary": "Implement role-based access settings for the current workspace",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "high",
+      "riskTriggers": [
+        "authorization"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected feature scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [
+          "design"
+        ],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "authorization-test",
+        "tenant-isolation-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "f-27",
+      "summary": "Add a schema migration dry-run command for the current database",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "high",
+      "riskTriggers": [
+        "migration"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected feature scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": true,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "design",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "migration-dry-run",
+        "rollback-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "f-28",
+      "summary": "Support package upgrade checks in the existing QA command",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "high",
+      "riskTriggers": [
+        "dependency"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected feature scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "do",
+          "qa"
+        ],
+        "conditional": [
+          "design"
+        ],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "dependency-scan",
+        "supply-chain-scan"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "f-29",
+      "summary": "Add an email notification template preview page",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected feature scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": true,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "design",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "ui-test",
+        "visual-regression"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "f-30",
+      "summary": "Implement partner API read-only sync as an external integration",
+      "profile": "feature",
+      "profileRecommendation": "feature",
+      "assurance": "high",
+      "riskTriggers": [
+        "external-write"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected feature scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": true,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "plan",
+          "design",
+          "do",
+          "qa"
+        ],
+        "conditional": [],
+        "notRequired": [
+          "ideation",
+          "report"
+        ]
+      },
+      "expectedChecks": [
+        "integration-test",
+        "security-review"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "i-17",
+      "summary": "문서 토큰 비용을 줄이는 adaptive workflow 새 플랫폼을 구축해줘",
+      "profile": "initiative",
+      "profileRecommendation": "initiative",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected initiative scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": true,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": true,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "architecture-review",
+        "acceptance-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "9ed995e9ef105828475dcc99c90ebc39799e24b3ee9f6ea3b5e29df888b6b48a",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "i-18",
+      "summary": "Create a new plugin platform shared by Claude Code and Codex",
+      "profile": "initiative",
+      "profileRecommendation": "initiative",
+      "assurance": "high",
+      "riskTriggers": [
+        "dependency"
+      ],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected initiative scope with high assurance",
+        "moved to review after exposing a compound new-product modifier gap"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": true,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": true,
+        "highUncertainty": false,
+        "newProduct": true,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "architecture-review",
+        "dependency-scan",
+        "compatibility-test"
+      ],
+      "split": "review",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "ae37477e4ddd6e485d04e1b22c4ef05e382bd013b51d0171f187fe3b3d655105",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "i-19",
+      "summary": "작업 크기와 위험을 기준으로 제품 전체 workflow와 제품 전략을 재설계해줘",
+      "profile": "initiative",
+      "profileRecommendation": "initiative",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected initiative scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": true,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": true,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "architecture-review",
+        "acceptance-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "e345051d6e3c790d5e5e274d865b1a95bcd39038aba1e1b0349773675e1de3a5",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "i-20",
+      "summary": "비개발자를 위한 새 제품 플랫폼으로 AI 개발 assistant를 만들어줘",
+      "profile": "initiative",
+      "profileRecommendation": "initiative",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "redacted replay labeled from the current development conversation",
+        "expected initiative scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": true,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": true,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "architecture-review",
+        "acceptance-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      },
+      "provenance": {
+        "kind": "redacted-actual",
+        "source": "current-development-conversation",
+        "referenceHash": "c51b4eccc3b8410fc8c6f336090c0498ccc29b2a8f2ca727df6740974a3b977f",
+        "rawPersisted": false
+      }
+    },
+    {
+      "id": "i-21",
+      "summary": "Launch a new payment platform for international merchants",
+      "profile": "initiative",
+      "profileRecommendation": "initiative",
+      "assurance": "high",
+      "riskTriggers": [
+        "payment"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected initiative scope with high assurance",
+        "moved to review after exposing a compound new-product modifier gap"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": true,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": true,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "architecture-review",
+        "payment-test",
+        "financial-control-test"
+      ],
+      "split": "review",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "i-22",
+      "summary": "Replatform organization-wide authentication across every service",
+      "profile": "initiative",
+      "profileRecommendation": "initiative",
+      "assurance": "high",
+      "riskTriggers": [
+        "auth"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected initiative scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": true,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": true,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "architecture-review",
+        "auth-test",
+        "compatibility-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "i-23",
+      "summary": "Build a new health service for patient clinical records",
+      "profile": "initiative",
+      "profileRecommendation": "initiative",
+      "assurance": "regulated",
+      "riskTriggers": [
+        "pii",
+        "health",
+        "regulated"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected initiative scope with regulated assurance",
+        "moved to review after exposing a compound new-product modifier gap"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": true,
+        "architecture": true,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": false,
+        "newProduct": true,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "compliance-review",
+        "pii-scan",
+        "data-flow-review"
+      ],
+      "split": "review",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "i-24",
+      "summary": "Create a new multi-service data residency platform",
+      "profile": "initiative",
+      "profileRecommendation": "initiative",
+      "assurance": "regulated",
+      "riskTriggers": [
+        "regulated",
+        "cross-border"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected initiative scope with regulated assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": true,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": true,
+        "highUncertainty": false,
+        "newProduct": true,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "data-residency-review",
+        "compliance-review"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "i-25",
+      "summary": "Establish an extension ecosystem across all repositories",
+      "profile": "initiative",
+      "profileRecommendation": "initiative",
+      "assurance": "high",
+      "riskTriggers": [
+        "dependency",
+        "untrusted-input"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected initiative scope with high assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": true,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": true,
+        "highUncertainty": false,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "architecture-review",
+        "supply-chain-scan",
+        "sandbox-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "i-26",
+      "summary": "Launch a new infrastructure deployment platform for the company",
+      "profile": "initiative",
+      "profileRecommendation": "initiative",
+      "assurance": "high",
+      "riskTriggers": [
+        "infrastructure"
+      ],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected initiative scope with high assurance",
+        "moved to review after exposing a compound new-product modifier gap"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": true,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": true,
+        "highUncertainty": false,
+        "newProduct": true,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "architecture-review",
+        "pipeline-test",
+        "rollback-test"
+      ],
+      "split": "review",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "i-27",
+      "summary": "전반적으로 더 좋게 개선해줘",
+      "profile": "initiative",
+      "profileRecommendation": "unknown",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected initiative scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": true,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "i-28",
+      "summary": "Figure out the unknown scope and make it better",
+      "profile": "initiative",
+      "profileRecommendation": "unknown",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected initiative scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": true,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "i-29",
+      "summary": "제품 전체를 알아서 정리해줘",
+      "profile": "initiative",
+      "profileRecommendation": "unknown",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected initiative scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": true,
+        "highUncertainty": true,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
+    },
+    {
+      "id": "i-30",
+      "summary": "탐색해서 전반적인 방향을 정해줘",
+      "profile": "initiative",
+      "profileRecommendation": "unknown",
+      "assurance": "normal",
+      "riskTriggers": [],
+      "rationale": [
+        "independently labeled post-classifier evaluation case",
+        "expected initiative scope with normal assurance"
+      ],
+      "compileSignals": {
+        "uiFlow": false,
+        "apiContract": false,
+        "dataModel": false,
+        "architecture": false,
+        "externalIntegration": false,
+        "publicContract": false,
+        "multiArea": false,
+        "highUncertainty": true,
+        "newProduct": false,
+        "ceoAnalysisAvailable": false
+      },
+      "expectedCompiledPhaseGraph": {
+        "required": [
+          "ideation",
+          "plan",
+          "design",
+          "do",
+          "qa",
+          "report"
+        ],
+        "conditional": [],
+        "notRequired": []
+      },
+      "expectedChecks": [
+        "unit-test",
+        "regression-test"
+      ],
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex-phase1-labeler"
+      }
     }
   ],
   "splitPolicy": {
     "strategy": "profile-stratified-sequential-v1",
     "seed": "phase0b-gate1-20260819",
     "heldOutImmutableBeforeClassifier": true,
-    "heldOutIdsHash": "10fff5bd0fe1fcecb44d5a4d6ed8a2fb159d484188604f6f44bf3739b9d1e9eb"
+    "heldOutIdsHash": "46f5dc82bc5970322f2e036dea14670b9d34cd4458529414ccd855047d92d7b2",
+    "anchorHeldOutIds": [
+      "f-13",
+      "f-14",
+      "f-15",
+      "i-13",
+      "i-14",
+      "i-15",
+      "i-16",
+      "p-13",
+      "p-14",
+      "p-15",
+      "p-16",
+      "p-17",
+      "p-18"
+    ],
+    "anchorHeldOutIdsHash": "10fff5bd0fe1fcecb44d5a4d6ed8a2fb159d484188604f6f44bf3739b9d1e9eb",
+    "classifierImplementationCommit": "844ac62",
+    "postClassifierPolicy": "new-cases-held-out-first"
   }
 }

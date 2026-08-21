@@ -19,10 +19,10 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 
 | 현재 상태 | 값 |
 |---|---|
-| Plan | Phase 0A/0B Gate 1 승인 - taxonomy와 audit canonicalization까지 계약화 |
-| 평가 | Gate 1 승인 및 commit `9698816` clean-commit baseline 전환 완료 |
-| 구현 | production runtime 변경 전, Phase 1 shadow 착수 준비 |
-| 다음 작업 | legacy 실행을 유지하는 Phase 1 shadow classifier/compiler 구현 |
+| Plan | Phase 0A/0B Gate 1 승인, Phase 1 shadow 활성 hook 연결 완료, 실제 요청 20건 검토 대기 |
+| 평가 | 90건 corpus와 held-out 50건 macro F1 `1.0`, unsafe miss `0`, 전체 396 tests / 393 pass / 3 skip |
+| 구현 | classifier/compiler/shadow runner와 silent `UserPromptSubmit` hook 연결, legacy/checkpoint 출력 불변 |
+| 다음 작업 | 실제 shadow 요청 20건 검토와 live legacy E2E evidence 수집 |
 | 전환 정책 | legacy 유지 + shadow mode 우선 |
 
 새 세션에서는 본 문서를 먼저 읽고, 현재 작업에 필요한 경우에만 `development-plan.md`의 해당 phase를 읽는다. 과거 대화 전체를 다시 로드하지 않는다.
@@ -60,6 +60,10 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | 27 | Gate 1은 승인하며 working-tree manifest는 clean commit baseline 재생성을 조건으로 임시 수용한다 | cto | 32개 파일 hash와 scopeDigest가 재현됐고 Phase 1 shadow 착수 위험을 충분히 제한한다 | `gate-1-claude-rereview-result.md` |
 | 28 | classifier 구현 전 held-out 13건과 hash를 고정하고 label correction 후에도 review 상태는 pending-external로 유지한다 | cto | 평가 정답 사후 변경과 자체 승인 순환을 막는다 | `gate-1-claude-rereview-result.md` |
 | 29 | Phase 0 baseline은 commit `9698816`의 clean tree와 32개 scope file hash로 고정한다 | cto | Phase 1 이후 비용 비교 기준이 구현 변경과 섞이지 않게 한다 | `phase-0b-evaluation.md` |
+| 30 | Phase 1 classifier/compiler는 legacy 결과를 변경하지 않는 shadow 경로로 먼저 구현한다 | cto | profile과 assurance 품질을 실데이터에서 검증한 뒤 enforce해야 한다 | `session-handoff-2026-08-21.md` |
+| 31 | 구현 전 held-out 13건을 anchor로 보존하고 신규 사례는 held-out 우선으로 추가하되, 규칙 보정에 사용한 사례는 review로 이동한다 | cto | 평가 중 발견한 사례로 classifier를 보정한 뒤에도 순수 held-out 성능을 과장하지 않는다 | `session-handoff-2026-08-21.md` |
+| 32 | 활성 `UserPromptSubmit` 연결과 실제 shadow 요청 검토 전에는 Phase 1을 완료 처리하지 않는다 | cto | 비활성 `prompt-handler.js`의 단위 테스트만으로 실제 host 연결을 증명할 수 없다 | `session-handoff-2026-08-21.md` |
+| 33 | 실제 UserPromptSubmit shadow는 안내·additional context 없이 별도 hook에서 실행하고 모든 오류를 fail-open한다 | cto | 오분류·감사 로그 실패가 legacy 요청 처리와 checkpoint 출력을 바꾸지 않게 한다 | `hooks/workflow-shadow.js` |
 
 ### 변경 이력
 
@@ -74,6 +78,8 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | v1.6 | 2026-08-20 | Claude Gate 1 수정 후 승인 판정 반영, taxonomy/corpus/baseline/audit 보완 후 재검토 대기 |
 | v1.7 | 2026-08-21 | Claude Gate 1 승인 및 label correction 반영, clean-commit baseline 전환 대기 |
 | v1.8 | 2026-08-21 | commit 9698816 clean-commit baseline 전환 완료, Phase 1 shadow 착수 상태로 이동 |
+| v1.9 | 2026-08-21 | Phase 1 classifier와 90건 corpus 검증 상태, 실제 UserPromptSubmit hook 연결 중단점 박제 |
+| v1.10 | 2026-08-21 | silent UserPromptSubmit shadow hook 연결과 redaction·disabled·fail-open·legacy 불변 회귀 검증 완료 |
 
 ## Artifacts
 
@@ -89,6 +95,7 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | gate-1-remediation | cto | cto-direct | Claude 1차 검토 finding | finding별 해결 근거, 부분 해결, 외부 실행 blocker | `gate-1-remediation.md` |
 | gate-1-claude-rereview | cto | cto-direct | Gate 1 remediation 결과 | Claude 독립 재검토 입력, 질문, 명령, 출력 형식 | `gate-1-claude-rereview.md` |
 | gate-1-claude-rereview-result | cto | claude | Gate 1 재검토 입력 17개 파일과 독립 probe | 승인 판정, label correction, clean-commit baseline 조건, Phase 1 완료 기준 | `gate-1-claude-rereview-result.md` |
+| session-handoff-2026-08-21 | cto | cto-direct | Git 상태, 검증 재실행, 직전 세션 가시 로그 | Phase 1 완료 상태, 미커밋 변경, hook 연결 중단점, 새 세션 재개 지시문 | `session-handoff-2026-08-21.md` |
 
 ## CEO 판단 근거
 
@@ -96,8 +103,9 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 
 ## Next Phase
 
-1. legacy 실행 결과는 바꾸지 않고 classifier/compiler의 shadow 결과만 event log에 기록한다.
-2. 고정 held-out 13건을 보존하며 corpus를 90+로 확장하고 redacted 실요청 10건, unknown 5건 이상을 포함한다.
-3. held-out macro F1 0.85 이상과 critical-risk 26건 unsafe miss 0건을 검증한다.
+1. 활성 hook의 `classification.completed` 실제 요청 20건을 수집하고 profile, assurance, phase graph를 검토한다.
+2. 실제 표본에서 unsafe assurance miss가 0건이고 잘못된 shadow 결과도 legacy 실행을 변경하지 않는지 확인한다.
+3. Phase 2 enforce 전 hard gate인 live legacy E2E 3종 x 2회의 approval, elapsed, quality를 같은 runId로 연결한다.
+4. 위 evidence를 남기기 전에는 Phase 1을 완료하거나 Phase 2 adaptive enforce로 이동하지 않는다.
 
 구현 중 상태가 바뀌면 본 문서의 현재 상태와 Next Phase를 갱신하고, Decision Record는 기존 행을 수정하지 않고 append한다.
