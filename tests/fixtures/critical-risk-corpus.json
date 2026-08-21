@@ -1,0 +1,458 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "critical-risk",
+  "cases": [
+    {
+      "id": "risk-01",
+      "summary": "Change password reset token validation",
+      "category": "auth",
+      "minimumAssurance": "high",
+      "requiredTrigger": "auth",
+      "requiredChecks": [
+        "security-review",
+        "auth-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-02",
+      "summary": "Add service account impersonation support",
+      "category": "auth",
+      "minimumAssurance": "high",
+      "requiredTrigger": "auth",
+      "requiredChecks": [
+        "credential-test",
+        "authorization-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-03",
+      "summary": "Change card charge retry behavior",
+      "category": "payment",
+      "minimumAssurance": "high",
+      "requiredTrigger": "payment",
+      "requiredChecks": [
+        "payment-test",
+        "idempotency-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-04",
+      "summary": "Introduce seller payout reconciliation",
+      "category": "payment",
+      "minimumAssurance": "high",
+      "requiredTrigger": "payment",
+      "requiredChecks": [
+        "financial-control-test",
+        "rollback-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-05",
+      "summary": "Store customer addresses for fulfillment",
+      "category": "pii",
+      "minimumAssurance": "high",
+      "requiredTrigger": "pii",
+      "requiredChecks": [
+        "privacy-review",
+        "retention-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-06",
+      "summary": "Export user emails to an analytics store",
+      "category": "pii",
+      "minimumAssurance": "high",
+      "requiredTrigger": "pii",
+      "requiredChecks": [
+        "data-flow-review",
+        "authorization-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-07",
+      "summary": "Backfill a new non-null database column",
+      "category": "migration",
+      "minimumAssurance": "high",
+      "requiredTrigger": "migration",
+      "requiredChecks": [
+        "migration-dry-run",
+        "rollback-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-08",
+      "summary": "Split a production table into two schemas",
+      "category": "migration",
+      "minimumAssurance": "high",
+      "requiredTrigger": "migration",
+      "requiredChecks": [
+        "data-integrity-test",
+        "rollback-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-09",
+      "summary": "Delete expired customer records in bulk",
+      "category": "destructive",
+      "minimumAssurance": "high",
+      "requiredTrigger": "destructive",
+      "requiredChecks": [
+        "dry-run",
+        "backup-restore-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-10",
+      "summary": "Remove production storage resources",
+      "category": "destructive",
+      "minimumAssurance": "high",
+      "requiredTrigger": "destructive",
+      "requiredChecks": [
+        "dependency-scan",
+        "backup-restore-test",
+        "rollback-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-11",
+      "summary": "Retain health records for statutory periods",
+      "category": "regulated",
+      "minimumAssurance": "regulated",
+      "requiredTrigger": "regulated",
+      "requiredChecks": [
+        "compliance-review",
+        "retention-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-12",
+      "summary": "Process European privacy deletion requests",
+      "category": "regulated",
+      "minimumAssurance": "regulated",
+      "requiredTrigger": "regulated",
+      "requiredChecks": [
+        "privacy-review",
+        "e2e-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-13",
+      "summary": "Send customer status changes to a partner API",
+      "category": "external-write",
+      "minimumAssurance": "high",
+      "requiredTrigger": "external-write",
+      "requiredChecks": [
+        "data-flow-review",
+        "integration-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-14",
+      "summary": "Create tickets automatically in an external system",
+      "category": "external-write",
+      "minimumAssurance": "high",
+      "requiredTrigger": "external-write",
+      "requiredChecks": [
+        "authorization-test",
+        "idempotency-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-15",
+      "summary": "Upgrade a cryptography dependency across services",
+      "category": "dependency",
+      "minimumAssurance": "high",
+      "requiredTrigger": "dependency",
+      "requiredChecks": [
+        "dependency-scan",
+        "compatibility-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-16",
+      "summary": "Install a build plugin from a new publisher",
+      "category": "dependency",
+      "minimumAssurance": "high",
+      "requiredTrigger": "dependency",
+      "requiredChecks": [
+        "publisher-review",
+        "supply-chain-scan"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-17",
+      "summary": "Replace the production ingress controller",
+      "category": "infrastructure",
+      "minimumAssurance": "high",
+      "requiredTrigger": "infrastructure",
+      "requiredChecks": [
+        "integration-test",
+        "rollback-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-18",
+      "summary": "Move workloads to a new cloud region",
+      "category": "infrastructure",
+      "minimumAssurance": "high",
+      "requiredTrigger": "infrastructure",
+      "requiredChecks": [
+        "capacity-test",
+        "failover-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "review": {
+        "status": "pending-external",
+        "labeler": "codex"
+      },
+      "split": "held-out"
+    },
+    {
+      "id": "risk-19",
+      "summary": "Change project administrator role inheritance",
+      "category": "authorization",
+      "minimumAssurance": "high",
+      "requiredTrigger": "authorization",
+      "requiredChecks": [
+        "authorization-test",
+        "negative-test",
+        "security-review"
+      ],
+      "requiresSecurityDialogue": true,
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "claude-gate-1"
+      }
+    },
+    {
+      "id": "risk-20",
+      "summary": "Add administrator impersonation for support staff",
+      "category": "authorization",
+      "minimumAssurance": "high",
+      "requiredTrigger": "authorization",
+      "requiredChecks": [
+        "authorization-test",
+        "security-review",
+        "tamper-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "claude-gate-1"
+      }
+    },
+    {
+      "id": "risk-21",
+      "summary": "Rotate the production webhook signing key",
+      "category": "secret",
+      "minimumAssurance": "high",
+      "requiredTrigger": "secret",
+      "requiredChecks": [
+        "secret-scan",
+        "rotation-check",
+        "security-review"
+      ],
+      "requiresSecurityDialogue": true,
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "claude-gate-1"
+      }
+    },
+    {
+      "id": "risk-22",
+      "summary": "Replace the password hashing configuration",
+      "category": "secret",
+      "minimumAssurance": "high",
+      "requiredTrigger": "secret",
+      "requiredChecks": [
+        "secret-scan",
+        "auth-test",
+        "security-review"
+      ],
+      "requiresSecurityDialogue": true,
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "claude-gate-1"
+      }
+    },
+    {
+      "id": "risk-23",
+      "summary": "Accept uploaded archives and extract their contents",
+      "category": "untrusted-input",
+      "minimumAssurance": "high",
+      "requiredTrigger": "untrusted-input",
+      "requiredChecks": [
+        "input-validation-test",
+        "injection-test",
+        "size-type-limit-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "claude-gate-1"
+      }
+    },
+    {
+      "id": "risk-24",
+      "summary": "Render customer supplied templates on the server",
+      "category": "untrusted-input",
+      "minimumAssurance": "high",
+      "requiredTrigger": "untrusted-input",
+      "requiredChecks": [
+        "input-validation-test",
+        "injection-test",
+        "security-review"
+      ],
+      "requiresSecurityDialogue": true,
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "claude-gate-1"
+      }
+    },
+    {
+      "id": "risk-25",
+      "summary": "Expand agent tool permissions for repository writes",
+      "category": "agent-capability",
+      "minimumAssurance": "high",
+      "requiredTrigger": "agent-capability",
+      "requiredChecks": [
+        "tool-allowlist-test",
+        "sandbox-test",
+        "security-review"
+      ],
+      "requiresSecurityDialogue": true,
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "claude-gate-1"
+      }
+    },
+    {
+      "id": "risk-26",
+      "summary": "Register a new MCP server and lifecycle hooks",
+      "category": "agent-capability",
+      "minimumAssurance": "high",
+      "requiredTrigger": "agent-capability",
+      "requiredChecks": [
+        "hook-diff-review",
+        "tool-allowlist-test",
+        "sandbox-test"
+      ],
+      "requiresSecurityDialogue": true,
+      "split": "held-out",
+      "review": {
+        "status": "pending-external",
+        "labeler": "claude-gate-1"
+      }
+    }
+  ],
+  "labelPolicy": "Critical categories are deterministic held-out overrides; every category requires at least two redacted cases"
+}

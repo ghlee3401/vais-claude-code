@@ -17,6 +17,7 @@ Phase 0A는 대표가 확정한 운영 정책을 구현 가능한 계약으로 �
 - `schemas/execution-preview.schema.json`
 - `schemas/task-envelope.schema.json`
 - `schemas/audit-event.schema.json`
+- `contracts/workflow-taxonomy.json`
 
 ## 2. 상태 저장 결정
 
@@ -36,11 +37,13 @@ Phase 2 통합 시 다음 구조를 적용한다.
 
 | Profile | Required | Conditional | Not required | 승격 조건 |
 |---|---|---|---|---|
-| `patch` | plan, do, qa | 없음 | design, report | public contract, DB, 다중 영역, 높은 불확실성 |
-| `feature` | plan, do, qa | design | report | 신규 제품, 다중 도메인, 목표 불확실 |
-| `initiative` | plan, design, do, qa, report | ideation | 없음 | 해당 없음 |
+| `patch` | plan, do, qa | 없음 | ideation, design, report | public contract, data model/schema shape, 다중 영역, 높은 불확실성, 신규 제품 |
+| `feature` | plan, do, qa | design | ideation, report | 다중 영역, 높은 불확실성, 신규 제품 |
+| `initiative` | plan, design, do, qa, report + 조건부 ideation | CEO 분석이 이미 있을 때 ideation | 없음 | 해당 없음 |
 
-`feature`의 design은 UI flow, API contract, data model, architecture, 외부 integration 중 하나가 바뀌면 required로 compile한다. `patch/feature`의 report는 별도 LLM phase가 아니라 evidence view로 생성한다.
+`feature`의 design은 UI flow, API contract, data model, architecture, 외부 integration 중 하나가 바뀌면 required로 compile한다. `initiative`의 ideation은 CEO 7차원 분석 결과가 없으면 required이며, 유효한 CEO 분석이 TaskEnvelope 입력에 이미 있을 때만 conditional이다. `patch/feature`의 report는 별도 LLM phase가 아니라 evidence view로 생성한다.
+
+patch 승격의 DB 조건은 **data model 또는 schema shape 변화**를 뜻한다. 기존 contract와 data shape를 바꾸지 않는 reversible index-only DDL은 migration 검증과 rollback check를 추가한 patch로 유지할 수 있다.
 
 Assurance는 phase 규모를 바꾸지 않는다. 대신 보안 대화와 required check를 추가한다.
 
@@ -64,14 +67,20 @@ Assurance는 phase 규모를 바꾸지 않는다. 대신 보안 대화와 requir
 
 다음 deterministic trigger 중 하나라도 있으면 최소 `high`다.
 
-- 인증, 세션, 비밀번호, OAuth
-- 역할과 권한
-- 결제와 금전
-- PII, health, 규제 데이터
-- schema/data migration
-- 외부 write 또는 고객 데이터 전송
-- secret, dependency, infrastructure
-- destructive 또는 rollback이 어려운 변경
+canonical trigger 정본은 `contracts/workflow-taxonomy.json`이다.
+
+- `auth`: 인증, 세션, 비밀번호, OAuth
+- `authorization`: 역할, 권한, tenant 경계
+- `payment`: 결제와 금전
+- `pii`, `health`, `regulated`, `cross-border`: 개인정보, 건강, 규제 및 국경 간 데이터
+- `migration`: schema/data migration
+- `external-write`: 외부 write 또는 고객 데이터 전송
+- `secret`, `dependency`, `infrastructure`: credential, 공급망, 운영 기반 변경
+- `destructive`: 파괴적이거나 rollback이 어려운 변경
+- `untrusted-input`: 파일, network, prompt 등 신뢰하지 않는 입력 처리
+- `agent-capability`: hook, tool allowlist, MCP, permission mode 등 AI 실행 권한 확대
+
+`health`, `regulated`, `cross-border`는 최소 `regulated`이며 나머지 trigger는 최소 `high`다. canonical check ID와 실행 kind 매핑도 같은 taxonomy 파일을 사용한다.
 
 대화는 관련 항목만 묻는다: 데이터, 권한, 외부 전송, 실패 영향, rollback, 규제와 보존 기간. 답변 후 최종 scope, 검사, rollback, 잔여 위험을 다시 표시하고 명시적 승인을 받는다.
 
@@ -90,6 +99,16 @@ Assurance는 phase 규모를 바꾸지 않는다. 대신 보안 대화와 requir
 - artifact와 run 완료·실패
 
 모든 event는 `runId`, `sequence`, `timestamp`, `host`, `actor`, `eventType`, `outcome`, `source`, `redaction`, `integrity`를 가진다. hash chain으로 순서와 변조 여부를 확인한다.
+
+hash 계산의 canonical form:
+
+1. redaction을 먼저 완료한다.
+2. event를 복제하고 `integrity.eventHash`만 제외한다. `algorithm`과 `previousEventHash`는 hash 입력에 포함한다.
+3. object key는 각 깊이에서 사전순으로 정렬하고 array 순서는 유지한다.
+4. JSON primitive 규칙과 공백 없는 UTF-8 JSON으로 직렬화한다. JSON으로 표현할 수 없는 값과 non-finite number는 거부한다.
+5. SHA-256 lowercase hex를 `eventHash`로 기록한다. 첫 event의 `previousEventHash`는 `null`이고 이후 event는 직전 `eventHash`를 사용한다.
+
+`lib/observability/audit-integrity.js`가 seal과 재검산을 담당한다. 테스트는 링크 비교뿐 아니라 event 본문을 변조한 뒤 hash 재계산 실패를 확인한다.
 
 감사 원칙:
 
@@ -154,3 +173,4 @@ Hook JSON의 형태가 비슷해도 raw 파일을 하나로 공유하지 않는�
 | version | date | change |
 |---|---|---|
 | v1.0 | 2026-08-13 | Phase 0A 구현 계약과 host capability 결정 확정 |
+| v1.1 | 2026-08-20 | Gate 1 수정 반영: case별 phase compile, canonical taxonomy, initiative ideation 조건, audit canonical SHA-256 계약 |

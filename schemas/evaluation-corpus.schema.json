@@ -1,0 +1,705 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vais.local/schemas/evaluation-corpus.schema.json",
+  "title": "VAIS Workflow Classification Corpus",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "labelPolicy",
+    "splitPolicy",
+    "cases"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "kind": {
+      "const": "workflow-classification"
+    },
+    "labelPolicy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 45,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "summary",
+          "profile",
+          "profileRecommendation",
+          "assurance",
+          "riskTriggers",
+          "rationale",
+          "compileSignals",
+          "expectedCompiledPhaseGraph",
+          "expectedChecks",
+          "split",
+          "review"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[pfi]-[0-9]{2}$"
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 8,
+            "pattern": "^(?!.*(?:AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,})).*$"
+          },
+          "profile": {
+            "enum": [
+              "patch",
+              "feature",
+              "initiative"
+            ]
+          },
+          "profileRecommendation": {
+            "enum": [
+              "patch",
+              "feature",
+              "initiative",
+              "unknown"
+            ]
+          },
+          "assurance": {
+            "enum": [
+              "normal",
+              "high",
+              "regulated"
+            ]
+          },
+          "riskTriggers": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "auth",
+                "authorization",
+                "payment",
+                "pii",
+                "health",
+                "regulated",
+                "cross-border",
+                "migration",
+                "external-write",
+                "secret",
+                "dependency",
+                "infrastructure",
+                "destructive",
+                "untrusted-input",
+                "agent-capability"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "rationale": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "compileSignals": {
+            "$ref": "#/definitions/compileSignals"
+          },
+          "expectedCompiledPhaseGraph": {
+            "$ref": "#/definitions/phaseGraph"
+          },
+          "expectedChecks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "enum": [
+                "acceptance-test",
+                "accessibility-test",
+                "analytics-test",
+                "architecture-review",
+                "auth-test",
+                "authorization-test",
+                "backup-restore-test",
+                "build",
+                "capacity-test",
+                "compatibility-test",
+                "compliance-review",
+                "configuration-test",
+                "contract-test",
+                "credential-test",
+                "data-flow-review",
+                "data-integrity-test",
+                "data-residency-review",
+                "dependency-scan",
+                "dry-run",
+                "e2e-test",
+                "event-contract-test",
+                "failover-test",
+                "failure-recovery-test",
+                "financial-control-test",
+                "hook-diff-review",
+                "idempotency-test",
+                "injection-test",
+                "input-validation-test",
+                "integration-test",
+                "lint",
+                "migration-dry-run",
+                "negative-test",
+                "path-safety-test",
+                "payment-test",
+                "performance-test",
+                "pii-scan",
+                "pipeline-test",
+                "privacy-review",
+                "prompt-injection-test",
+                "publisher-review",
+                "rate-limit-test",
+                "recovery-drill",
+                "regression-test",
+                "retention-test",
+                "rollback-test",
+                "rotation-check",
+                "rto-rpo-test",
+                "sandbox-test",
+                "secret-scan",
+                "security-review",
+                "size-type-limit-test",
+                "supply-chain-scan",
+                "tamper-test",
+                "tenant-isolation-test",
+                "tool-allowlist-test",
+                "ui-test",
+                "unit-test",
+                "visual-regression"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "split": {
+            "enum": [
+              "train",
+              "review",
+              "held-out"
+            ]
+          },
+          "review": {
+            "$ref": "#/definitions/review"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "assurance": {
+                  "const": "normal"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "riskTriggers": {
+                  "maxItems": 0
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "assurance": {
+                  "enum": [
+                    "high",
+                    "regulated"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "riskTriggers": {
+                  "minItems": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "assurance": {
+                  "const": "high"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "riskTriggers": {
+                  "not": {
+                    "contains": {
+                      "enum": [
+                        "health",
+                        "regulated",
+                        "cross-border"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "assurance": {
+                  "const": "regulated"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "riskTriggers": {
+                  "contains": {
+                    "enum": [
+                      "health",
+                      "regulated",
+                      "cross-border"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "patch"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "compileSignals": {
+                  "properties": {
+                    "publicContract": {
+                      "const": false
+                    },
+                    "dataModel": {
+                      "const": false
+                    },
+                    "multiArea": {
+                      "const": false
+                    },
+                    "highUncertainty": {
+                      "const": false
+                    },
+                    "newProduct": {
+                      "const": false
+                    }
+                  }
+                },
+                "expectedCompiledPhaseGraph": {
+                  "const": {
+                    "required": [
+                      "plan",
+                      "do",
+                      "qa"
+                    ],
+                    "conditional": [],
+                    "notRequired": [
+                      "ideation",
+                      "design",
+                      "report"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "feature"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "compileSignals": {
+                  "properties": {
+                    "multiArea": {
+                      "const": false
+                    },
+                    "highUncertainty": {
+                      "const": false
+                    },
+                    "newProduct": {
+                      "const": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "feature"
+                },
+                "compileSignals": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "uiFlow": {
+                          "const": true
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "apiContract": {
+                          "const": true
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "dataModel": {
+                          "const": true
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "architecture": {
+                          "const": true
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "externalIntegration": {
+                          "const": true
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "expectedCompiledPhaseGraph": {
+                  "const": {
+                    "required": [
+                      "plan",
+                      "design",
+                      "do",
+                      "qa"
+                    ],
+                    "conditional": [],
+                    "notRequired": [
+                      "ideation",
+                      "report"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "feature"
+                },
+                "compileSignals": {
+                  "not": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "uiFlow": {
+                            "const": true
+                          }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "apiContract": {
+                            "const": true
+                          }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "dataModel": {
+                            "const": true
+                          }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "architecture": {
+                            "const": true
+                          }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "externalIntegration": {
+                            "const": true
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "expectedCompiledPhaseGraph": {
+                  "const": {
+                    "required": [
+                      "plan",
+                      "do",
+                      "qa"
+                    ],
+                    "conditional": [
+                      "design"
+                    ],
+                    "notRequired": [
+                      "ideation",
+                      "report"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "initiative"
+                },
+                "compileSignals": {
+                  "properties": {
+                    "ceoAnalysisAvailable": {
+                      "const": false
+                    }
+                  }
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "expectedCompiledPhaseGraph": {
+                  "const": {
+                    "required": [
+                      "ideation",
+                      "plan",
+                      "design",
+                      "do",
+                      "qa",
+                      "report"
+                    ],
+                    "conditional": [],
+                    "notRequired": []
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "initiative"
+                },
+                "compileSignals": {
+                  "properties": {
+                    "ceoAnalysisAvailable": {
+                      "const": true
+                    }
+                  }
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "expectedCompiledPhaseGraph": {
+                  "const": {
+                    "required": [
+                      "plan",
+                      "design",
+                      "do",
+                      "qa",
+                      "report"
+                    ],
+                    "conditional": [
+                      "ideation"
+                    ],
+                    "notRequired": []
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "splitPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "seed",
+        "heldOutImmutableBeforeClassifier",
+        "heldOutIdsHash"
+      ],
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "heldOutImmutableBeforeClassifier": {
+          "const": true
+        },
+        "heldOutIdsHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "phase": {
+      "enum": [
+        "ideation",
+        "plan",
+        "design",
+        "do",
+        "qa",
+        "report"
+      ]
+    },
+    "phaseGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "conditional",
+        "notRequired"
+      ],
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/phase"
+          },
+          "uniqueItems": true
+        },
+        "conditional": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/phase"
+          },
+          "uniqueItems": true
+        },
+        "notRequired": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/phase"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "labeler"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending-external",
+            "approved",
+            "changes-requested"
+          ]
+        },
+        "labeler": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "compileSignals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "uiFlow",
+        "apiContract",
+        "dataModel",
+        "architecture",
+        "externalIntegration",
+        "publicContract",
+        "multiArea",
+        "highUncertainty",
+        "newProduct",
+        "ceoAnalysisAvailable"
+      ],
+      "properties": {
+        "uiFlow": {
+          "type": "boolean"
+        },
+        "apiContract": {
+          "type": "boolean"
+        },
+        "dataModel": {
+          "type": "boolean"
+        },
+        "architecture": {
+          "type": "boolean"
+        },
+        "externalIntegration": {
+          "type": "boolean"
+        },
+        "publicContract": {
+          "type": "boolean"
+        },
+        "multiArea": {
+          "type": "boolean"
+        },
+        "highUncertainty": {
+          "type": "boolean"
+        },
+        "newProduct": {
+          "type": "boolean"
+        },
+        "ceoAnalysisAvailable": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

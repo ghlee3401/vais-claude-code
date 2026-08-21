@@ -28,7 +28,7 @@ ui-designer Agent 호출 직전 `hooks/design-mcp-trigger.js` 가:
 4. 박제된 brand → DESIGN.md 컨텍스트 prepend
 5. 미박제 brand → `scripts/import-awesome-design-md.js --brands <slug>` 자동 실행
 
-상세: `docs/design-system-rethink/02-design/architecture.md`.
+상세: `design-system/specs/architecture.md`.
 
 ## 신규 brand 추가 패턴
 

@@ -14,7 +14,7 @@
  *   4. 박제된 brand → DESIGN.md 경로를 reason 으로 allow (실제 prepend 는 ui-designer)
  *   5. 미박제 brand → import script 실행 → 다시 검증 → allow
  *
- * @see docs/design-system-rethink/02-design/architecture.md (Hook 재설계)
+ * @see design-system/specs/architecture.md (Hook 재설계)
  * @see lib/brand-validator.js
  */
 

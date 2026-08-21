@@ -1,7 +1,7 @@
 # Checkpoint Policy (v2.2, 0.66.x)
 
 canonical for all C-Level CP behavior. C-Level main .md 는 자기 phase 트리거만 짧게 명시하고 본 정책을 참조한다.
-workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
+workflow contract: `contracts/workflow-contract.md`.
 
 ## 모드 (vais.config.json > workflow.checkpointPolicy.mode)
 

@@ -210,7 +210,7 @@ flowchart TB
 | 6 C-Level 상세 책임 | `agents/{c-level}/{c-level}.md` |
 | Mandatory Rules (14개) | `CLAUDE.md` § Mandatory Rules |
 | Gate / Checkpoint 시스템 | `vais.config.json` + `agents/cto/cto.md` § Checkpoint |
-| 디자인 시스템 — brand 박제 | `scripts/import-awesome-design-md.js` + `docs/design-system-rethink/` + `design-system/brands/INDEX.md` |
+| 디자인 시스템 — brand 박제 | `scripts/import-awesome-design-md.js` + `design-system/specs/` + `design-system/brands/INDEX.md` |
 | Plugin 구조 검증 | `node scripts/vais-validate-plugin.js` |
 
 ---

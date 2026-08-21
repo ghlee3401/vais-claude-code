@@ -22,6 +22,8 @@
     "test:integration": "node --test tests/integration/*.test.js",
     "lint": "eslint scripts/ lib/ hooks/ --max-warnings=0",
     "context:baseline": "node scripts/context-baseline.js",
+    "workflow:evaluate": "node scripts/workflow-evaluation.js validate",
+    "workflow:baseline": "node scripts/workflow-evaluation.js baseline",
     "prepare-hooks": "git config core.hooksPath .hooks"
   },
   "dependencies": {
@@ -32,6 +34,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^6.1.7",
+    "ajv": "^6.14.0",
     "eslint": "^9.0.0",
     "react": "^19.2.5"
   },

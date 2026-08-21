@@ -4,6 +4,7 @@ const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
+const { validateAuditChain } = require('../lib/observability/audit-integrity');
 
 const ROOT = path.join(__dirname, '..');
 const readJson = relative => JSON.parse(fs.readFileSync(path.join(ROOT, relative), 'utf8'));
@@ -87,7 +88,8 @@ describe('adaptive workflow Phase 0A contracts', () => {
   it('patch phase graph는 design/report를 not-required로 기록한다', () => {
     const patch = fixtures.envelopes.find(item => item.profile.selected === 'patch');
     assert.deepEqual(patch.phaseGraph.required, ['plan', 'do', 'qa']);
-    assert.deepEqual(patch.phaseGraph.notRequired, ['design', 'report']);
+    assert.deepEqual(patch.phaseGraph.notRequired, ['ideation', 'design', 'report']);
+    assert.equal(patch.phaseStates.ideation, 'not-required');
     assert.equal(patch.phaseStates.design, 'not-required');
     assert.equal(patch.phaseStates.report, 'not-required');
   });
@@ -105,13 +107,17 @@ describe('adaptive workflow Phase 0A contracts', () => {
   });
 
   it('audit fixture가 schema와 append-only hash chain을 충족한다', () => {
-    let previous = null;
-    fixtures.auditEvents.forEach((event, index) => {
-      validate(auditSchema, event);
-      assert.equal(event.sequence, index);
-      assert.equal(event.integrity.previousEventHash, previous);
-      previous = event.integrity.eventHash;
-    });
+    fixtures.auditEvents.forEach(event => validate(auditSchema, event));
+    const result = validateAuditChain(fixtures.auditEvents);
+    assert.equal(result.valid, true, result.errors.join('\n'));
+  });
+
+  it('audit event 본문 변조를 hash 재계산으로 거부한다', () => {
+    const tampered = structuredClone(fixtures.auditEvents);
+    tampered[1].payload.profile = 'initiative';
+    const result = validateAuditChain(tampered);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.some(error => error.includes('canonical event content')));
   });
 
   it('감사 event taxonomy가 실행 전후 핵심 행동을 모두 포함한다', () => {

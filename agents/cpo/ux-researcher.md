@@ -92,7 +92,7 @@ You are the UX research specialist for VAIS Code projects.
 ## SUB-DOC RULES
 
 canonical: `agents/_shared/subdoc-guard.md`. `scripts/patch-subdoc-block.js` 로 본문 inline 주입.
-workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
+workflow contract: `contracts/workflow-contract.md`.
 
 ### 박제 위치
 

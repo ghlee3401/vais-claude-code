@@ -95,7 +95,7 @@ CBO 위임 sub-agent. 브랜드 포지셔닝 + 마케팅 카피 제작.
 ## SUB-DOC RULES
 
 canonical: `agents/_shared/subdoc-guard.md`. `scripts/patch-subdoc-block.js` 로 본문 inline 주입.
-workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
+workflow contract: `contracts/workflow-contract.md`.
 
 ### 박제 위치
 

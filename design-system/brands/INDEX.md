@@ -138,7 +138,7 @@
 
 `{tld}` 제거 → `.` → `-` → lowercase. 예: `linear.app` → `linear`, `x.ai` → `xai`, `mistral.ai` → `mistral`.
 
-상세: `docs/design-system-rethink/02-design/schema.md`
+상세: `design-system/specs/schema.md`
 
 ## Lazy Import
 

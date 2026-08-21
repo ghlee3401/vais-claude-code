@@ -135,7 +135,7 @@ auto-judge 파싱 패턴: `Critical: N`, `OWASP: N/10`. 숫자 명시 필수.
 ## C-LEVEL MAIN.MD RULES (summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
-workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
+workflow contract: `contracts/workflow-contract.md`.
 
 1. main.md = 5섹션 인덱스 (Executive Summary / Decision Record / Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X.
 2. 다른 C-Level 의 Decision Record 행·Artifacts 표 엔트리 수정·삭제 금지. legacy owner H2 섹션이 있으면 보존.

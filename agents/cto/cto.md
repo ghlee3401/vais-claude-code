@@ -105,7 +105,7 @@ design phase 위임 (ui-designer Agent 호출) 직전에 brand 선택 상태를 
 
 ## Knowledge Index (manual @include)
 
-> H4 lazy-load PoC 결과 (`docs/vais-positioning-rethink/03-do/poc-result.md`) — autonomous discovery 미동작, **manual @include 채택**. 매칭 조건 시 *literal Read* 후 답변.
+> Context loading 정본 (`agents/_shared/context-loading.md`) — 자동 탐색 대신 필요한 지식 파일만 명시적으로 선택해 Read한다.
 
 | Knowledge | 사용 조건 | 명시 행동 |
 |-----------|---------|---------|
@@ -173,7 +173,7 @@ design phase 위임 (ui-designer Agent 호출) 직전에 brand 선택 상태를 
 ## C-LEVEL MAIN.MD RULES (summary)
 
 canonical full: `agents/_shared/clevel-main-guard.full.md` — 위반 의심·재진입 충돌 시 read.
-workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
+workflow contract: `contracts/workflow-contract.md`.
 
 1. main.md = 5섹션 인덱스 (Executive Summary / Decision Record / Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X.
 2. 다른 C-Level 의 Decision Record 행·Artifacts 표 엔트리 수정·삭제 금지. legacy owner H2 섹션이 있으면 보존.

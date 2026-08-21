@@ -56,6 +56,25 @@ summary: "기존 core를 확장해 작업 규모·위험도 기반 adaptive work
 
 원래 대화, 전체 CHANGELOG, 모든 agent/knowledge 파일은 기본 재진입 컨텍스트에 포함하지 않는다.
 
+## 요청 원문
+
+보안 정책에 따라 사용자 요청 원문은 영구 박제하지 않는다. redacted intent는 다음과 같다: 비개발자도 상용화 가능한 제품을 만들 수 있는 품질 통제는 유지하면서, 반복 Markdown·template 로딩과 과도한 승인을 줄이고 동일한 실행 원칙을 Claude Code와 Codex에서 사용한다.
+
+## In-scope
+
+- 작업 규모 `patch / feature / initiative`와 위험도 `normal / high / regulated`의 독립 분류
+- 작업 예고와 결과 예시, 승인 경계, 고위험 보안 대화
+- 공통 workflow kernel, 감사 ledger, 비용·품질 계측
+- 필요한 결정과 증거만 생성하는 Markdown projection
+- Claude Code와 Codex host adapter 및 점진적 전환
+
+## Out-of-scope
+
+- 검증 전 legacy workflow 즉시 제거
+- provider가 제공하지 않는 billing token을 proxy로 추정해 actual로 표시
+- 사용자 승인 없는 고위험 작업 또는 외부 시스템 write
+- 공통 kernel 확정 전에 Claude/Codex별 workflow를 별도 구현
+
 ## 1. 문제 진단
 
 ### 1.1 비용을 정확히 측정하지 못한다
@@ -156,11 +175,11 @@ summary: "기존 core를 확장해 작업 규모·위험도 기반 adaptive work
 
 | 내부 코드 | 사용자 표시 | 조건 | 실행 phase | 기본 artifact |
 |---|---|---|---|---|
-| `patch` | 작게 | 국소 수정, public contract 변화 없음, 단일 도메인, 낮은 불확실성 | Plan -> Do -> QA | change contract, QA evidence |
-| `feature` | 표준 | 명확한 기능 하나, bounded scope, 1~3 도메인 | Plan -> 조건부 Design -> Do -> QA | feature spec, 조건부 contract/design, QA evidence |
-| `initiative` | 전체 | 신규 제품/서비스, 다중 도메인, 높은 불확실성 | 전체 PDCA | PRD, design, QA, report |
+| `patch` | 작게 | 국소 수정, public contract/data shape 변화 없음, 단일 영역, 낮은 불확실성 | Plan -> Do -> QA | change contract, QA evidence |
+| `feature` | 표준 | 명확한 기능 하나, bounded scope, 다중 영역·신규 제품 아님 | Plan -> 조건부 Design -> Do -> QA | feature spec, 조건부 contract/design, QA evidence |
+| `initiative` | 전체 | 신규 제품/서비스, 다중 도메인, 높은 불확실성 | Ideation 조건부 + 전체 PDCA | PRD, design, QA, report |
 
-`report`는 patch/feature에서 evidence projection으로 자동 생성한다. initiative에서만 별도 synthesis phase를 기본 허용한다.
+`report`는 patch/feature에서 evidence projection으로 자동 생성한다. initiative에서만 별도 synthesis phase를 기본 허용한다. initiative의 ideation은 CEO 분석이 없으면 required이고 유효한 CEO 7차원 결과가 이미 있으면 conditional이다. data model/schema shape를 바꾸지 않는 reversible index-only DDL은 patch로 유지할 수 있다.
 
 profile별 phase는 전역 phase 배열을 수정해 계산하지 않는다. compiler가 아래 값을 명시적으로 만든다.
 
@@ -390,7 +409,7 @@ raw 요청은 실행 중 memory에만 유지한다. persistence opt-in이 있을
 작업:
 
 - 최소 45개 label fixture를 만든다: profile별 15개 이상.
-- 별도 critical-risk corpus를 auth, payment, PII, migration, destructive, regulated 중심으로 만든다.
+- 별도 critical-risk corpus를 canonical 13 category별 최소 2건으로 만들고 학습에서 제외한다.
 - 기존 요청/산출물은 secret과 식별 정보를 제거한 뒤 offline replay 입력으로 사용한다.
 - live legacy E2E는 patch, feature, high-assurance 대표 3종을 각 2회 실행한다.
 - context bytes, artifact bytes, agent 수, workflow 승인, host 승인, elapsed, gate/quality를 같은 runId로 기록한다.
@@ -411,13 +430,15 @@ raw 요청은 실행 중 memory에만 유지한다. persistence opt-in이 있을
 - 1단계 deterministic assurance override와 2단계 profile 추천을 분리한다.
 - project profile, CEO 7차원 결과, 요청 의미, 예상 contract, repo inventory를 feature로 사용한다.
 - `unknown`과 conservative promotion을 지원한다.
+- train/review로만 classifier를 조정하고 held-out ID hash는 구현 전에 고정한다.
+- Phase 1 acceptance 전 profile별 30개 이상, 총 90개 이상으로 corpus를 확장하고 한국어·실요청 redaction 표본을 우선 추가한다.
 - `profile + assurance + reasons + confidence + phaseGraph`를 출력한다.
 - 실행은 legacy로 유지하고 shadow 결과만 event log에 기록한다.
 - raw prompt는 event log에 쓰지 않는다.
 
 완료 기준:
 
-- held-out profile macro F1 0.85 이상
+- profile별 30개 이상 corpus에서 고정 held-out profile macro F1 0.85 이상
 - critical-risk corpus와 shadow 표본에서 unsafe assurance miss 0건
 - 단순 bug에서 CPO/business canvas가 기본 활성화되지 않음
 - shadow 실제 요청 20건 검토
@@ -442,6 +463,7 @@ raw 요청은 실행 중 memory에만 유지한다. persistence opt-in이 있을
 - old/new status migration과 rollback fixture 통과
 - 모든 기존 회귀 테스트 통과
 - config 한 줄로 legacy fallback 가능
+- adaptive 실행을 enforce하기 전 live legacy E2E 3종 x 2회의 approval, elapsed, quality가 같은 runId로 연결됨
 
 ### Phase 3 - Context, Approval, Evidence, Document Views
 
@@ -640,7 +662,7 @@ LLM judge는 보조 지표다. deterministic acceptance, 실행 evidence, 사람
 첫 구현 단위는 runtime을 바꾸지 않는 `analyze shadow` vertical slice다.
 
 1. profile phase graph, privacy, evidence, metric ADR을 작성한다.
-2. 최소 45개 fixture와 critical-risk corpus를 준비한다.
+2. 초기 49개 fixture와 26개 critical-risk corpus를 준비하고 held-out ID hash를 고정한다.
 3. `profile + assurance + reasons + confidence + phaseGraph`를 출력한다.
 4. request hash와 shadow result만 runId event로 남긴다.
 5. legacy 실행 결과와 비교하되 어떤 phase도 자동 변경하지 않는다.
@@ -655,3 +677,4 @@ LLM judge는 보조 지표다. deterministic acceptance, 실행 evidence, 사람
 | v1.0 | 2026-08-11 | repo 분석, WorkProfile, 공통 kernel/adapter, 측정·rollout 초안 |
 | v1.1 | 2026-08-12 | profile phase 충돌, 기존 core 재사용, 계측 가능성, privacy/evidence, Codex 선행 spike를 반영해 재작성 |
 | v1.2 | 2026-08-12 | 대표 확정 정책: 실행 예고 후 자동 진행, 고위험 보안 대화, 전체 실행 Audit Ledger, 위험 기반 검증 |
+| v1.3 | 2026-08-20 | Gate 1 수정 반영: profile compile 경계, held-out/90+ corpus 계획, live 6회 Phase 2 enforce hard gate |

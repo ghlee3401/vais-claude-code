@@ -1,7 +1,7 @@
 ## C-LEVEL MAIN.MD RULES (active for all C-Level agents)
 
 canonical: `agents/_shared/clevel-main-guard.md`. `scripts/patch-clevel-guard.js` 가 6 C-Level agent 본문에 inline 주입.
-workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
+workflow contract: `contracts/workflow-contract.md`.
 
 > **핵심**: 2 모델 공존 — v1 (5섹션 인덱스, 기존) + v2 (합성문, 신규). frontmatter `model-version` 필드로 분기. `orchestration.agentTeams.enabled=true` 가 신규 피처 v2 트리거.
 

@@ -21,30 +21,101 @@
     "securityReview"
   ],
   "properties": {
-    "schemaVersion": { "const": "1.0" },
-    "runId": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{7,127}$" },
-    "feature": { "type": "string", "pattern": "^[a-zA-Z0-9가-힣_-]{1,100}$" },
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{7,127}$"
+    },
+    "feature": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9가-힣_-]{1,100}$"
+    },
     "approvalState": {
-      "enum": ["preview-required", "security-review-required"]
+      "enum": [
+        "preview-required",
+        "security-review-required"
+      ]
     },
     "profile": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["recommended", "selected", "confidence", "reasons"],
+      "required": [
+        "recommended",
+        "selected",
+        "confidence",
+        "reasons"
+      ],
       "properties": {
-        "recommended": { "enum": ["patch", "feature", "initiative", "unknown"] },
-        "selected": { "enum": ["patch", "feature", "initiative"] },
-        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
-        "reasons": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+        "recommended": {
+          "enum": [
+            "patch",
+            "feature",
+            "initiative",
+            "unknown"
+          ]
+        },
+        "selected": {
+          "enum": [
+            "patch",
+            "feature",
+            "initiative"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     },
     "assurance": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["level", "triggers"],
+      "required": [
+        "level",
+        "triggers"
+      ],
       "properties": {
-        "level": { "enum": ["normal", "high", "regulated"] },
-        "triggers": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        "level": {
+          "enum": [
+            "normal",
+            "high",
+            "regulated"
+          ]
+        },
+        "triggers": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "auth",
+              "authorization",
+              "payment",
+              "pii",
+              "health",
+              "regulated",
+              "cross-border",
+              "migration",
+              "external-write",
+              "secret",
+              "dependency",
+              "infrastructure",
+              "destructive",
+              "untrusted-input",
+              "agent-capability"
+            ]
+          },
+          "uniqueItems": true
+        }
       }
     },
     "changes": {
@@ -53,31 +124,68 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["action", "target", "summary"],
+        "required": [
+          "action",
+          "target",
+          "summary"
+        ],
         "properties": {
-          "action": { "enum": ["create", "update", "delete", "inspect"] },
-          "target": { "type": "string", "minLength": 1 },
-          "summary": { "type": "string", "minLength": 1 }
+          "action": {
+            "enum": [
+              "create",
+              "update",
+              "delete",
+              "inspect"
+            ]
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
     "resultPreview": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["mode", "items"],
+      "required": [
+        "mode",
+        "items"
+      ],
       "properties": {
-        "mode": { "enum": ["before-after", "outcome", "structural"] },
+        "mode": {
+          "enum": [
+            "before-after",
+            "outcome",
+            "structural"
+          ]
+        },
         "items": {
           "type": "array",
           "minItems": 1,
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["label", "expected"],
+            "required": [
+              "label",
+              "expected"
+            ],
             "properties": {
-              "label": { "type": "string", "minLength": 1 },
-              "current": { "type": "string" },
-              "expected": { "type": "string", "minLength": 1 }
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "current": {
+                "type": "string"
+              },
+              "expected": {
+                "type": "string",
+                "minLength": 1
+              }
             }
           }
         }
@@ -89,20 +197,47 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["pathOrArea", "certainty"],
+        "required": [
+          "pathOrArea",
+          "certainty"
+        ],
         "properties": {
-          "pathOrArea": { "type": "string", "minLength": 1 },
-          "certainty": { "enum": ["predicted", "confirmed"] }
+          "pathOrArea": {
+            "type": "string",
+            "minLength": 1
+          },
+          "certainty": {
+            "enum": [
+              "predicted",
+              "confirmed"
+            ]
+          }
         }
       }
     },
     "scope": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["in", "out"],
+      "required": [
+        "in",
+        "out"
+      ],
       "properties": {
-        "in": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
-        "out": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        "in": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "out": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     },
     "checks": {
@@ -111,27 +246,141 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "kind", "reason"],
+        "required": [
+          "id",
+          "kind",
+          "reason"
+        ],
         "properties": {
-          "id": { "type": "string", "minLength": 1 },
-          "kind": { "enum": ["lint", "unit", "integration", "e2e", "build", "security", "compliance", "manual"] },
-          "reason": { "type": "string", "minLength": 1 }
+          "id": {
+            "enum": [
+              "acceptance-test",
+              "accessibility-test",
+              "analytics-test",
+              "architecture-review",
+              "auth-test",
+              "authorization-test",
+              "backup-restore-test",
+              "build",
+              "capacity-test",
+              "compatibility-test",
+              "compliance-review",
+              "configuration-test",
+              "contract-test",
+              "credential-test",
+              "data-flow-review",
+              "data-integrity-test",
+              "data-residency-review",
+              "dependency-scan",
+              "dry-run",
+              "e2e-test",
+              "event-contract-test",
+              "failover-test",
+              "failure-recovery-test",
+              "financial-control-test",
+              "hook-diff-review",
+              "idempotency-test",
+              "injection-test",
+              "input-validation-test",
+              "integration-test",
+              "lint",
+              "migration-dry-run",
+              "negative-test",
+              "path-safety-test",
+              "payment-test",
+              "performance-test",
+              "pii-scan",
+              "pipeline-test",
+              "privacy-review",
+              "prompt-injection-test",
+              "publisher-review",
+              "rate-limit-test",
+              "recovery-drill",
+              "regression-test",
+              "retention-test",
+              "rollback-test",
+              "rotation-check",
+              "rto-rpo-test",
+              "sandbox-test",
+              "secret-scan",
+              "security-review",
+              "size-type-limit-test",
+              "supply-chain-scan",
+              "tamper-test",
+              "tenant-isolation-test",
+              "tool-allowlist-test",
+              "ui-test",
+              "unit-test",
+              "visual-regression"
+            ]
+          },
+          "kind": {
+            "enum": [
+              "lint",
+              "unit",
+              "integration",
+              "e2e",
+              "build",
+              "security",
+              "compliance",
+              "manual"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
     "automationBoundary": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["allowedActions", "allowedPaths", "forbiddenActions", "reapprovalTriggers"],
+      "required": [
+        "allowedActions",
+        "allowedPaths",
+        "forbiddenActions",
+        "reapprovalTriggers"
+      ],
       "properties": {
-        "allowedActions": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
-        "allowedPaths": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
-        "forbiddenActions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "allowedActions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "allowedPaths": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "forbiddenActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
         "reapprovalTriggers": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": { "enum": ["scope-expansion", "risk-escalation", "destructive-action", "check-failure", "gate-failure", "requirement-conflict", "unknown-target"] }
+          "items": {
+            "enum": [
+              "scope-expansion",
+              "risk-escalation",
+              "destructive-action",
+              "check-failure",
+              "gate-failure",
+              "requirement-conflict",
+              "unknown-target"
+            ]
+          }
         }
       }
     },
@@ -139,17 +388,56 @@
       "type": "array",
       "minItems": 3,
       "uniqueItems": true,
-      "items": { "enum": ["execute", "revise", "cancel"] }
+      "items": {
+        "enum": [
+          "execute",
+          "revise",
+          "cancel"
+        ]
+      }
     },
     "securityReview": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["required", "status", "topics", "residualRisks"],
+      "required": [
+        "required",
+        "status",
+        "topics",
+        "residualRisks"
+      ],
       "properties": {
-        "required": { "type": "boolean" },
-        "status": { "enum": ["not-required", "required", "in-progress", "completed"] },
-        "topics": { "type": "array", "items": { "enum": ["data", "permission", "external-transfer", "failure-impact", "rollback", "regulation", "retention"] } },
-        "residualRisks": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        "required": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "not-required",
+            "required",
+            "in-progress",
+            "completed"
+          ]
+        },
+        "topics": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "data",
+              "permission",
+              "external-transfer",
+              "failure-impact",
+              "rollback",
+              "regulation",
+              "retention"
+            ]
+          }
+        },
+        "residualRisks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     }
   }

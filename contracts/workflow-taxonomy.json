@@ -1,0 +1,314 @@
+{
+  "schemaVersion": "1.0",
+  "riskTriggers": [
+    {
+      "id": "auth",
+      "minimumAssurance": "high"
+    },
+    {
+      "id": "authorization",
+      "minimumAssurance": "high"
+    },
+    {
+      "id": "payment",
+      "minimumAssurance": "high"
+    },
+    {
+      "id": "pii",
+      "minimumAssurance": "high"
+    },
+    {
+      "id": "health",
+      "minimumAssurance": "regulated"
+    },
+    {
+      "id": "regulated",
+      "minimumAssurance": "regulated"
+    },
+    {
+      "id": "cross-border",
+      "minimumAssurance": "regulated"
+    },
+    {
+      "id": "migration",
+      "minimumAssurance": "high"
+    },
+    {
+      "id": "external-write",
+      "minimumAssurance": "high"
+    },
+    {
+      "id": "secret",
+      "minimumAssurance": "high"
+    },
+    {
+      "id": "dependency",
+      "minimumAssurance": "high"
+    },
+    {
+      "id": "infrastructure",
+      "minimumAssurance": "high"
+    },
+    {
+      "id": "destructive",
+      "minimumAssurance": "high"
+    },
+    {
+      "id": "untrusted-input",
+      "minimumAssurance": "high"
+    },
+    {
+      "id": "agent-capability",
+      "minimumAssurance": "high"
+    }
+  ],
+  "criticalCategories": [
+    "auth",
+    "authorization",
+    "payment",
+    "pii",
+    "migration",
+    "destructive",
+    "regulated",
+    "external-write",
+    "secret",
+    "dependency",
+    "infrastructure",
+    "untrusted-input",
+    "agent-capability"
+  ],
+  "checks": [
+    {
+      "id": "acceptance-test",
+      "kind": "e2e"
+    },
+    {
+      "id": "accessibility-test",
+      "kind": "e2e"
+    },
+    {
+      "id": "analytics-test",
+      "kind": "integration"
+    },
+    {
+      "id": "architecture-review",
+      "kind": "manual"
+    },
+    {
+      "id": "auth-test",
+      "kind": "security"
+    },
+    {
+      "id": "authorization-test",
+      "kind": "security"
+    },
+    {
+      "id": "backup-restore-test",
+      "kind": "manual"
+    },
+    {
+      "id": "build",
+      "kind": "build"
+    },
+    {
+      "id": "capacity-test",
+      "kind": "integration"
+    },
+    {
+      "id": "compatibility-test",
+      "kind": "integration"
+    },
+    {
+      "id": "compliance-review",
+      "kind": "compliance"
+    },
+    {
+      "id": "configuration-test",
+      "kind": "integration"
+    },
+    {
+      "id": "contract-test",
+      "kind": "integration"
+    },
+    {
+      "id": "credential-test",
+      "kind": "security"
+    },
+    {
+      "id": "data-flow-review",
+      "kind": "compliance"
+    },
+    {
+      "id": "data-integrity-test",
+      "kind": "integration"
+    },
+    {
+      "id": "data-residency-review",
+      "kind": "compliance"
+    },
+    {
+      "id": "dependency-scan",
+      "kind": "security"
+    },
+    {
+      "id": "dry-run",
+      "kind": "integration"
+    },
+    {
+      "id": "e2e-test",
+      "kind": "e2e"
+    },
+    {
+      "id": "event-contract-test",
+      "kind": "integration"
+    },
+    {
+      "id": "failover-test",
+      "kind": "integration"
+    },
+    {
+      "id": "failure-recovery-test",
+      "kind": "integration"
+    },
+    {
+      "id": "financial-control-test",
+      "kind": "compliance"
+    },
+    {
+      "id": "hook-diff-review",
+      "kind": "security"
+    },
+    {
+      "id": "idempotency-test",
+      "kind": "integration"
+    },
+    {
+      "id": "injection-test",
+      "kind": "security"
+    },
+    {
+      "id": "input-validation-test",
+      "kind": "security"
+    },
+    {
+      "id": "integration-test",
+      "kind": "integration"
+    },
+    {
+      "id": "lint",
+      "kind": "lint"
+    },
+    {
+      "id": "migration-dry-run",
+      "kind": "integration"
+    },
+    {
+      "id": "negative-test",
+      "kind": "unit"
+    },
+    {
+      "id": "path-safety-test",
+      "kind": "security"
+    },
+    {
+      "id": "payment-test",
+      "kind": "integration"
+    },
+    {
+      "id": "performance-test",
+      "kind": "integration"
+    },
+    {
+      "id": "pii-scan",
+      "kind": "security"
+    },
+    {
+      "id": "pipeline-test",
+      "kind": "integration"
+    },
+    {
+      "id": "privacy-review",
+      "kind": "compliance"
+    },
+    {
+      "id": "prompt-injection-test",
+      "kind": "security"
+    },
+    {
+      "id": "publisher-review",
+      "kind": "security"
+    },
+    {
+      "id": "rate-limit-test",
+      "kind": "security"
+    },
+    {
+      "id": "recovery-drill",
+      "kind": "manual"
+    },
+    {
+      "id": "regression-test",
+      "kind": "unit"
+    },
+    {
+      "id": "retention-test",
+      "kind": "compliance"
+    },
+    {
+      "id": "rollback-test",
+      "kind": "integration"
+    },
+    {
+      "id": "rotation-check",
+      "kind": "security"
+    },
+    {
+      "id": "rto-rpo-test",
+      "kind": "manual"
+    },
+    {
+      "id": "sandbox-test",
+      "kind": "security"
+    },
+    {
+      "id": "secret-scan",
+      "kind": "security"
+    },
+    {
+      "id": "security-review",
+      "kind": "security"
+    },
+    {
+      "id": "size-type-limit-test",
+      "kind": "security"
+    },
+    {
+      "id": "supply-chain-scan",
+      "kind": "security"
+    },
+    {
+      "id": "tamper-test",
+      "kind": "security"
+    },
+    {
+      "id": "tenant-isolation-test",
+      "kind": "security"
+    },
+    {
+      "id": "tool-allowlist-test",
+      "kind": "security"
+    },
+    {
+      "id": "ui-test",
+      "kind": "e2e"
+    },
+    {
+      "id": "unit-test",
+      "kind": "unit"
+    },
+    {
+      "id": "visual-regression",
+      "kind": "e2e"
+    }
+  ]
+}

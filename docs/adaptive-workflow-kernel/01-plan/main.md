@@ -19,9 +19,10 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 
 | 현재 상태 | 값 |
 |---|---|
-| Plan | Phase 0A 완료 - 정책과 실행 계약을 schema로 고정 |
-| 구현 | 시작 전 |
-| 다음 작업 | Phase 0B legacy 기준선과 분류 평가 corpus 구축 |
+| Plan | Phase 0A/0B Gate 1 승인 - taxonomy와 audit canonicalization까지 계약화 |
+| 평가 | label correction 반영 및 49+26 corpus 재검증 완료, clean commit baseline 전환 대기 |
+| 구현 | production runtime 변경 전 |
+| 다음 작업 | Phase 0 커밋 후 clean-commit baseline 재생성·커밋, 이어서 Phase 1 shadow 구현 |
 | 전환 정책 | legacy 유지 + shadow mode 우선 |
 
 새 세션에서는 본 문서를 먼저 읽고, 현재 작업에 필요한 경우에만 `development-plan.md`의 해당 phase를 읽는다. 과거 대화 전체를 다시 로드하지 않는다.
@@ -48,6 +49,16 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | 16 | Phase 0A에서는 기존 status runtime을 변경하지 않고 adaptive run 상세를 별도 계약으로 정의한다 | cto | v2/v3/v4 상태가 공존하는 상황에서 조기 migration으로 기존 실행을 깨뜨리지 않는다 | `phase-0a-contracts.md` |
 | 17 | 감사 완전성은 kernel, host hook, structured agent result를 합쳐 계산하고 누락을 명시한다 | cto | host별 관찰 불가 영역을 성공으로 추정하지 않고 추적성의 한계를 드러낸다 | `phase-0a-contracts.md` |
 | 18 | 공통 event policy에서 Claude/Codex별 hook 설정을 생성하고 raw hook 파일은 공유하지 않는다 | cto | 유사한 hook 형식 뒤에 있는 event coverage와 trust 차이를 adapter 경계에 가둔다 | `phase-0a-contracts.md` |
+| 19 | `docs/`에는 현재 개발 산출물만 두고 runtime 정본은 소유 디렉터리의 `contracts/`, `design-system/specs/`, `agents/_shared/`로 분리한다 | ceo | 과거 문서 스캔과 잘못된 정본 선택을 줄이고 이력은 Git으로 보존한다 | 사용자 승인에 따른 repository cleanup |
+| 20 | Phase 0B baseline은 A/B actual 부재를 C등급 고유 파일 inventory 하한으로 대체하되 actual token으로 표시하지 않는다 | cto | 반복 입력과 실제 생성 산출물을 관찰하지 못한 수치를 비용 실측으로 오해하지 않는다 | `phase-0b-evaluation.md` |
+| 21 | 모든 classification label은 외부 reviewer가 승인하기 전 `pending-external`로 유지한다 | ceo | classifier가 자기 생성 label만으로 평가되는 순환 검증을 막는다 | `gate-1-claude-review.md` |
+| 22 | risk trigger와 check ID는 `contracts/workflow-taxonomy.json`을 단일 정본으로 사용한다 | cto | 자유 문자열과 동의어 drift로 unsafe miss 판정이 불가능해지는 문제를 막는다 | `gate-1-remediation.md` |
+| 23 | classification case는 compile signal과 기대 phase graph를 함께 저장하고 held-out ID hash를 classifier 전에 고정한다 | cto | profile 템플릿 암기와 평가 정답 사후 변경을 막는다 | `gate-1-remediation.md` |
+| 24 | dirty baseline은 clean commit으로 표시하지 않고 파일별 SHA-256 manifest로 재현 범위를 명시한다 | cto | base head SHA와 working tree 측정치를 혼동하지 않는다 | `phase-0b-evaluation.md` |
+| 25 | live legacy 6회는 Phase 1 shadow 진입을 막지 않지만 Phase 2 adaptive enforce 전 hard gate로 둔다 | cto | shadow 중 실제 legacy run으로 approval, elapsed, quality를 같은 runId에 수집한다 | `gate-1-remediation.md` |
+| 26 | audit event hash는 eventHash만 제외한 canonical UTF-8 JSON의 SHA-256으로 계산한다 | cto | 링크 placeholder가 아니라 본문 변조를 검출한다 | `phase-0a-contracts.md` |
+| 27 | Gate 1은 승인하며 working-tree manifest는 clean commit baseline 재생성을 조건으로 임시 수용한다 | cto | 32개 파일 hash와 scopeDigest가 재현됐고 Phase 1 shadow 착수 위험을 충분히 제한한다 | `gate-1-claude-rereview-result.md` |
+| 28 | classifier 구현 전 held-out 13건과 hash를 고정하고 label correction 후에도 review 상태는 pending-external로 유지한다 | cto | 평가 정답 사후 변경과 자체 승인 순환을 막는다 | `gate-1-claude-rereview-result.md` |
 
 ### 변경 이력
 
@@ -57,6 +68,10 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | v1.1 | 2026-08-12 | 상태 머신, 계측, 개인정보, evidence attribution, Codex 선행 spike 관점 재검토 |
 | v1.2 | 2026-08-12 | 작은 작업 실행 예고 후 자동 진행, 고위험 보안 대화, 전체 감사 로그 정책 확정 |
 | v1.3 | 2026-08-13 | Phase 0A 실행 계약, schema, host capability, 감사 완전성 규칙 확정 |
+| v1.4 | 2026-08-13 | 과거 feature 문서를 제거하고 현재 runtime 계약을 소유 디렉터리로 분리 |
+| v1.5 | 2026-08-13 | Phase 0B 평가 corpus와 legacy repository proxy를 구축하고 Claude Gate 1 검토 대기 상태로 전환 |
+| v1.6 | 2026-08-20 | Claude Gate 1 수정 후 승인 판정 반영, taxonomy/corpus/baseline/audit 보완 후 재검토 대기 |
+| v1.7 | 2026-08-21 | Claude Gate 1 승인 및 label correction 반영, clean-commit baseline 전환 대기 |
 
 ## Artifacts
 
@@ -66,6 +81,12 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 | plan-review | cto | cto-direct | v1.0 계획 + 실제 core/hook/config 재대조 | 구현 전 차단 이슈와 v1.1 보정 결정 | `plan-review.md` |
 | workflow-policy-decisions | cto | cto-direct | 대표 확정 정책 | 승인, 보안 재확인, 감사 로그, 위험 기반 검증의 운영 계약 | `workflow-policy-decisions.md` |
 | phase-0a-contracts | cto | cto-direct | 대표 확정 정책 + repository/runtime 분석 + 공식 host 문서 | profile phase graph, 승인·보안 state, audit·계측 schema, Claude/Codex adapter 계약 | `phase-0a-contracts.md` |
+| phase-0b-evaluation | cto | cto-direct | Phase 0A 계약 + Gate 1 findings | 49개 classification, 26개 critical-risk, manifest/captured 지원 baseline | `phase-0b-evaluation.md` |
+| gate-1-claude-review | cto | cto-direct | Phase 0B 구현과 검증 결과 | 1차 외부 label 독립 검토 전달 패킷 | `gate-1-claude-review.md` |
+| gate-1-claude-review-result | cto | claude | 1차 Gate 1 입력 15개 파일과 재현 명령 | 수정 후 승인 판정, Critical/Major finding과 최소 수정 항목 | `gate-1-claude-review-result.md` |
+| gate-1-remediation | cto | cto-direct | Claude 1차 검토 finding | finding별 해결 근거, 부분 해결, 외부 실행 blocker | `gate-1-remediation.md` |
+| gate-1-claude-rereview | cto | cto-direct | Gate 1 remediation 결과 | Claude 독립 재검토 입력, 질문, 명령, 출력 형식 | `gate-1-claude-rereview.md` |
+| gate-1-claude-rereview-result | cto | claude | Gate 1 재검토 입력 17개 파일과 독립 probe | 승인 판정, label correction, clean-commit baseline 조건, Phase 1 완료 기준 | `gate-1-claude-rereview-result.md` |
 
 ## CEO 판단 근거
 
@@ -73,9 +94,8 @@ VAIS Code의 문서 기반 오케스트레이션을 플랫폼 중립 실행 코�
 
 ## Next Phase
 
-1. Phase 0B: 최소 45개 labeled request fixture로 profile/assurance 기대값 corpus를 만든다.
-2. Phase 0B: 인증, 결제, PII, migration, 외부 write를 포함한 critical risk fixture를 구축한다.
-3. Phase 0B: legacy 대표 E2E에서 시간, agent 수, 승인 수, 산출물 bytes, 품질 proxy 기준선을 수집한다.
-4. 기준선과 분류 acceptance가 통과한 뒤 classifier/compiler shadow mode를 구현한다.
+1. Phase 0A/0B 산출물과 승인된 repository cleanup을 커밋한다.
+2. clean tree에서 baseline을 `captureMode=clean-commit`으로 재생성하고 테스트 후 별도 커밋한다.
+3. held-out 13건과 hash, `pending-external` review 상태를 유지한 채 Phase 1 shadow classifier/compiler 구현을 시작한다.
 
 구현 중 상태가 바뀌면 본 문서의 현재 상태와 Next Phase를 갱신하고, Decision Record는 기존 행을 수정하지 않고 append한다.

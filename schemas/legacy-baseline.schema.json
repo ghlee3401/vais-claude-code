@@ -1,0 +1,952 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vais.local/schemas/legacy-baseline.schema.json",
+  "title": "VAIS Legacy Baseline Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "generatedAt",
+    "repository",
+    "methodology",
+    "scenarios"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "kind": {
+      "const": "legacy-baseline"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "repository": {
+      "$ref": "#/definitions/repository"
+    },
+    "methodology": {
+      "$ref": "#/definitions/methodology"
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "targetProfile",
+          "targetAssurance",
+          "legacyPhases",
+          "samples"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "legacy-patch-normal",
+              "legacy-feature-normal",
+              "legacy-feature-high"
+            ]
+          },
+          "targetProfile": {
+            "enum": [
+              "patch",
+              "feature",
+              "initiative"
+            ]
+          },
+          "targetAssurance": {
+            "enum": [
+              "normal",
+              "high",
+              "regulated"
+            ]
+          },
+          "legacyPhases": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "samples": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "$ref": "#/definitions/sample"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "headSha",
+        "dirty",
+        "captureMode",
+        "scopeDigest",
+        "scopeFiles"
+      ],
+      "properties": {
+        "headSha": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{40,64}$"
+        },
+        "dirty": {
+          "type": "boolean"
+        },
+        "captureMode": {
+          "enum": [
+            "clean-commit",
+            "working-tree-manifest"
+          ]
+        },
+        "scopeDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "scopeFiles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/scopeFile"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "captureMode": {
+                "const": "clean-commit"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dirty": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "captureMode": {
+                "const": "working-tree-manifest"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "dirty": {
+                "const": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scopeFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "methodology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "metricPolicy",
+        "proxyLimitation",
+        "inventorySelectionRule",
+        "liveHostRuns",
+        "qualityCommands"
+      ],
+      "properties": {
+        "mode": {
+          "const": "repository-replay-with-live-host-extension"
+        },
+        "metricPolicy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "proxyLimitation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inventorySelectionRule": {
+          "$ref": "#/definitions/inventorySelectionRule"
+        },
+        "liveHostRuns": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "captured",
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "required": {
+              "const": 6
+            },
+            "captured": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 6
+            },
+            "status": {
+              "enum": [
+                "pending-external-host",
+                "complete"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "qualityCommands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "inventorySelectionRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "description",
+        "includedClasses",
+        "excludedClasses"
+      ],
+      "properties": {
+        "id": {
+          "const": "declared-entrypoint-and-mandatory-reference-v1"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "includedClasses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludedClasses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runId",
+        "repetition",
+        "mode",
+        "quality",
+        "metrics"
+      ],
+      "properties": {
+        "runId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repetition": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "mode": {
+          "enum": [
+            "repository-replay",
+            "live-host"
+          ]
+        },
+        "quality": {
+          "$ref": "#/definitions/quality"
+        },
+        "metrics": {
+          "$ref": "#/definitions/metrics"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "repository-replay"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "quality": {
+                "$ref": "#/definitions/unavailableQuality"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "live-host"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "quality": {
+                "$ref": "#/definitions/capturedQuality"
+              },
+              "metrics": {
+                "properties": {
+                  "hostApprovals": {
+                    "$ref": "#/definitions/capturedHostCount"
+                  },
+                  "workflowElapsedMs": {
+                    "$ref": "#/definitions/capturedHostMilliseconds"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "quality": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/unavailableQuality"
+        },
+        {
+          "$ref": "#/definitions/capturedQuality"
+        }
+      ]
+    },
+    "unavailableQuality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "status": {
+          "const": "unavailable"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "capturedQuality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "capturedAt",
+        "checks"
+      ],
+      "properties": {
+        "status": {
+          "const": "captured"
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/qualityCheck"
+          }
+        }
+      }
+    },
+    "qualityCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "status",
+        "exitCode",
+        "durationMs"
+      ],
+      "properties": {
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed"
+          ]
+        },
+        "exitCode": {
+          "type": "integer"
+        },
+        "durationMs": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fixedContext",
+        "artifactTemplates",
+        "agentCount",
+        "workflowApprovals",
+        "hostApprovals",
+        "providerTokens",
+        "hostTokens",
+        "workflowElapsedMs",
+        "measurementElapsedMs"
+      ],
+      "properties": {
+        "fixedContext": {
+          "$ref": "#/definitions/inventoryMetric"
+        },
+        "artifactTemplates": {
+          "$ref": "#/definitions/inventoryMetric"
+        },
+        "agentCount": {
+          "$ref": "#/definitions/countMetric"
+        },
+        "workflowApprovals": {
+          "$ref": "#/definitions/rangeMetric"
+        },
+        "hostApprovals": {
+          "$ref": "#/definitions/observedHostCount"
+        },
+        "providerTokens": {
+          "$ref": "#/definitions/observedProviderTokens"
+        },
+        "hostTokens": {
+          "$ref": "#/definitions/observedHostTokens"
+        },
+        "workflowElapsedMs": {
+          "$ref": "#/definitions/observedHostMilliseconds"
+        },
+        "measurementElapsedMs": {
+          "$ref": "#/definitions/timingMetric"
+        }
+      }
+    },
+    "inventoryMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "accuracy",
+        "aggregation",
+        "limitation",
+        "files",
+        "totalBytes",
+        "totalLines",
+        "estimatedTokens"
+      ],
+      "properties": {
+        "source": {
+          "const": "repository-files"
+        },
+        "accuracy": {
+          "const": "C"
+        },
+        "aggregation": {
+          "const": "unique-file-inventory"
+        },
+        "limitation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/fileMetric"
+          }
+        },
+        "totalBytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "totalLines": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "estimatedTokens": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "fileMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "bytes",
+        "lines",
+        "estimatedTokens"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "lines": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "estimatedTokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "missing": {
+          "const": false
+        }
+      }
+    },
+    "countMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "accuracy",
+        "value"
+      ],
+      "properties": {
+        "source": {
+          "const": "legacy-policy-proxy"
+        },
+        "accuracy": {
+          "const": "C"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "rangeMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "accuracy",
+        "minimum",
+        "maximum"
+      ],
+      "properties": {
+        "source": {
+          "const": "legacy-policy-range"
+        },
+        "accuracy": {
+          "const": "C"
+        },
+        "minimum": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "timingMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "accuracy",
+        "value"
+      ],
+      "properties": {
+        "source": {
+          "const": "local-clock"
+        },
+        "accuracy": {
+          "const": "C"
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "observedHostCount": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "accuracy",
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "source": {
+              "const": "host"
+            },
+            "accuracy": {
+              "const": "B"
+            },
+            "status": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "accuracy",
+            "status",
+            "value",
+            "unit",
+            "capturedAt"
+          ],
+          "properties": {
+            "source": {
+              "const": "host"
+            },
+            "accuracy": {
+              "const": "B"
+            },
+            "status": {
+              "const": "captured"
+            },
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "const": "count"
+            },
+            "capturedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    },
+    "observedProviderTokens": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "accuracy",
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "source": {
+              "const": "provider"
+            },
+            "accuracy": {
+              "const": "A"
+            },
+            "status": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "accuracy",
+            "status",
+            "value",
+            "unit",
+            "capturedAt"
+          ],
+          "properties": {
+            "source": {
+              "const": "provider"
+            },
+            "accuracy": {
+              "const": "A"
+            },
+            "status": {
+              "const": "captured"
+            },
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "const": "tokens"
+            },
+            "capturedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    },
+    "observedHostTokens": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "accuracy",
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "source": {
+              "const": "host"
+            },
+            "accuracy": {
+              "const": "B"
+            },
+            "status": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "accuracy",
+            "status",
+            "value",
+            "unit",
+            "capturedAt"
+          ],
+          "properties": {
+            "source": {
+              "const": "host"
+            },
+            "accuracy": {
+              "const": "B"
+            },
+            "status": {
+              "const": "captured"
+            },
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "const": "tokens"
+            },
+            "capturedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    },
+    "observedHostMilliseconds": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "accuracy",
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "source": {
+              "const": "host"
+            },
+            "accuracy": {
+              "const": "B"
+            },
+            "status": {
+              "const": "unavailable"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "accuracy",
+            "status",
+            "value",
+            "unit",
+            "capturedAt"
+          ],
+          "properties": {
+            "source": {
+              "const": "host"
+            },
+            "accuracy": {
+              "const": "B"
+            },
+            "status": {
+              "const": "captured"
+            },
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "const": "milliseconds"
+            },
+            "capturedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    },
+    "capturedHostCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "accuracy",
+        "status",
+        "value",
+        "unit",
+        "capturedAt"
+      ],
+      "properties": {
+        "source": {
+          "const": "host"
+        },
+        "accuracy": {
+          "const": "B"
+        },
+        "status": {
+          "const": "captured"
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "const": "count"
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "capturedHostMilliseconds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "accuracy",
+        "status",
+        "value",
+        "unit",
+        "capturedAt"
+      ],
+      "properties": {
+        "source": {
+          "const": "host"
+        },
+        "accuracy": {
+          "const": "B"
+        },
+        "status": {
+          "const": "captured"
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "const": "milliseconds"
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

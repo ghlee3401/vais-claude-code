@@ -13,7 +13,7 @@ const assert = require('node:assert');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const FEATURE_DIR = path.join(__dirname, '..', 'docs', 'agent-teams-orchestration');
+const FEATURE_DIR = path.join(__dirname, 'fixtures', 'agent-teams');
 
 function parseFrontmatter(content) {
   const m = content.match(/^---\s*\n([\s\S]*?)\n---/);

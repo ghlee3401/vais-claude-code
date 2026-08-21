@@ -5,7 +5,7 @@
  * VAIS Code — Awesome DESIGN.md Importer
  *
  * Source: VoltAgent/awesome-design-md (MIT, 2026)
- * Spec: docs/design-system-rethink/02-design/import-script-spec.md
+ * Spec: design-system/specs/import-script.md
  *
  * Bakes brand DESIGN.md files from upstream awesome-design-md repo into
  * design-system/brands/{slug}/DESIGN.md with attribution headers + LICENSE.
@@ -68,7 +68,7 @@ Options:
   --help, -h          Show this help
 
 Source: VoltAgent/awesome-design-md (MIT License, 2026)
-Spec:   docs/design-system-rethink/02-design/import-script-spec.md
+Spec:   design-system/specs/import-script.md
 `);
 }
 
@@ -244,7 +244,7 @@ function renderIndex({ categories, designMdFolders, log }) {
 
   md += `---\n\n## Slug 정규화 규칙\n\n`;
   md += `\`{tld}\` 제거 → \`.\` → \`-\` → lowercase. 예: \`linear.app\` → \`linear\`, \`x.ai\` → \`xai\`, \`mistral.ai\` → \`mistral\`.\n\n`;
-  md += `상세: \`docs/design-system-rethink/02-design/schema.md\`\n\n`;
+  md += `상세: \`design-system/specs/schema.md\`\n\n`;
 
   md += `## Lazy Import\n\n`;
   md += `미박제 brand (⬜) 가 선택되면 hook 이 자동으로 import 를 트리거합니다. 또는 수동으로:\n\n`;

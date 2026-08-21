@@ -1,0 +1,1618 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "legacy-baseline",
+  "generatedAt": "2026-08-20T08:37:13.949Z",
+  "repository": {
+    "headSha": "653074b7d9076ae2b6fee2bba109dfe9ecf717da",
+    "dirty": true,
+    "captureMode": "working-tree-manifest",
+    "scopeDigest": "0c340a1ff819829579d825b7580d9eb5662543372150b796f1701c667614962a",
+    "scopeFiles": [
+      {
+        "path": "CLAUDE.md",
+        "sha256": "73a8ff0f8703abe2d0adde279bd652b290527a8aa1a98abba294c54642a09516"
+      },
+      {
+        "path": "agents/_shared/checkpoint-policy.md",
+        "sha256": "2b1ceb508ae2d0d29604aa8af35357f5be897bde12aa653edca6de68011147e8"
+      },
+      {
+        "path": "agents/_shared/clevel-main-guard.md",
+        "sha256": "4c544b2aaebb4ca53bc6e42da525dcd94bc829921e0f7989b7640f3ffebe68e9"
+      },
+      {
+        "path": "agents/_shared/context-loading.md",
+        "sha256": "8f46b0ad9951ef76241577f8eb46b6866d102f83b775d5fa11aaaf88cf906844"
+      },
+      {
+        "path": "agents/_shared/outro-format.md",
+        "sha256": "603e6dd41cc6ab14f421fa177086470653ca36eaf9d6430f4c4893fa840a0217"
+      },
+      {
+        "path": "agents/_shared/subdoc-guard.md",
+        "sha256": "588e84c5b22ea9fa61841e96ea6449a84e2fc28f1be80c48ab3b89dcee84594d"
+      },
+      {
+        "path": "agents/_shared/work-rules.md",
+        "sha256": "52387dfce007348d858bc5209f56dd9be614302dccbd40382429c698612720d3"
+      },
+      {
+        "path": "agents/cso/cso.md",
+        "sha256": "f59f13bb57baa9cb34481b8d954ac1d7c022fd2163f21d9135dfc8d71bf552cb"
+      },
+      {
+        "path": "agents/cso/dependency-analyzer.md",
+        "sha256": "fca8b8f76d2c7cdfc962e979e65ea5ed51452b7be4bf1e79f1bd5bded38e5985"
+      },
+      {
+        "path": "agents/cso/secret-scanner.md",
+        "sha256": "374982911d1d81741bc7a5d77f55db6490d8baad71e59cf998b2dcfa8726e315"
+      },
+      {
+        "path": "agents/cso/security-auditor.md",
+        "sha256": "57514cea0aad138e7b9f508230a1beb96d75290637a8ed628c2b81860bc5422b"
+      },
+      {
+        "path": "agents/cto/backend-engineer.md",
+        "sha256": "7660b93bc60fefd1b1f191467fa92c1ec9b9e9d63fadad4927b9efc5f7d94cb4"
+      },
+      {
+        "path": "agents/cto/cto.md",
+        "sha256": "6de591691e2ac3446415f570d9c3220e37ad6bb473e965ca824b5d0e68c2f491"
+      },
+      {
+        "path": "agents/cto/frontend-engineer.md",
+        "sha256": "ea83356772321dd9c10250581caaa0ccbf1d8977f9290d964f1d5c396c38c186"
+      },
+      {
+        "path": "agents/cto/infra-architect.md",
+        "sha256": "916ad53c69fcb1d932a35d54320e22e5a52f144dd7653e0be3b7d631d5971134"
+      },
+      {
+        "path": "agents/cto/qa-engineer.md",
+        "sha256": "d8f9d4cd9d3f045334df34eb4dc47542b921640fef2f4e3815a51e0dc8e1546e"
+      },
+      {
+        "path": "agents/cto/test-engineer.md",
+        "sha256": "c9a4883ae7cb35807deb9ed1b27449caf86832e1d7f6c71c4b9be25e00551446"
+      },
+      {
+        "path": "agents/cto/ui-designer.md",
+        "sha256": "84bed2caf92f91ab387d7c3fdbb040a821a3c2aa4ce36a4c303784aa73ea18da"
+      },
+      {
+        "path": "contracts/workflow-contract.md",
+        "sha256": "0ad641f29b6dae77aee35bdd008929412e551d2a650ed037ca43b285a37858a7"
+      },
+      {
+        "path": "output-styles/vais-default.md",
+        "sha256": "7df75db78773c2d62231ad84d2a1809e1a34f19aacf37c4df06e005afc0a853a"
+      },
+      {
+        "path": "skills/vais/SKILL.md",
+        "sha256": "468985185fa47afd86cc6309d53304fc560913c8946210d74cb5a42cd7c04a09"
+      },
+      {
+        "path": "skills/vais/phases/cto.md",
+        "sha256": "1e5c4e6a5bae589fddafb52b95e12b4f1b257d38e0958025556fa48200aaa5ce"
+      },
+      {
+        "path": "templates/design.template.md",
+        "sha256": "76fb3e822ef48aaae96749ef9027e08ece366c5ed7ae0c02e6ddd4d0828c85b4"
+      },
+      {
+        "path": "templates/do.template.md",
+        "sha256": "dbf43787a10128e132fd54a2f84a827b5dfdb35bc9d8db122d5bd02d4ad193ea"
+      },
+      {
+        "path": "templates/how/security-audit-report.md",
+        "sha256": "b0adc79e42d8196047211e7018d8907849961101bfb80b7764fe0e87d14b298f"
+      },
+      {
+        "path": "templates/main-md.template.md",
+        "sha256": "b81c3c1b4e8aecf7e60c7b0c63d532eb8c8c9cfd1dab7080dc091e04e6195916"
+      },
+      {
+        "path": "templates/plan-extended.template.md",
+        "sha256": "f0826089fc08222c28536c4ef08629efeb431ac4cd00c594c71f39d468eeee95"
+      },
+      {
+        "path": "templates/plan-minimal.template.md",
+        "sha256": "4da4ba2d217a9da29882a90856efe4be62160f318fb7125e62088db11917e506"
+      },
+      {
+        "path": "templates/plan-standard.template.md",
+        "sha256": "f1ef418a38adaebbf54414fd6a7dd036aee6e7629426ba5258648303b3e21e05"
+      },
+      {
+        "path": "templates/qa.template.md",
+        "sha256": "0d29591ee0df65e0ad7a88f00f980b8bf1792d67b834033106b8489391b1dc6d"
+      },
+      {
+        "path": "templates/report.template.md",
+        "sha256": "3a100d89b156b5bd7d40c32eb08299707e3f493297c713dd5ced01da016617c7"
+      },
+      {
+        "path": "vais.config.json",
+        "sha256": "92e724cc47e116a8e801e047012770cccbf1baba41e6d7fddd836d1130c745b4"
+      }
+    ]
+  },
+  "methodology": {
+    "mode": "repository-replay-with-live-host-extension",
+    "metricPolicy": "A=provider actual, B=host observed, C=repository/transcript proxy; tiers are never merged as actual tokens",
+    "proxyLimitation": "repository inventory is a lower bound and does not multiply repeated context reads across phases or agents",
+    "inventorySelectionRule": {
+      "id": "declared-entrypoint-and-mandatory-reference-v1",
+      "description": "Include the host entrypoint, selected phase router and C-Level agent, mandatory shared guards/config/output style, delegated execution agents, and phase artifact templates.",
+      "includedClasses": [
+        "host-entrypoint",
+        "selected-phase-router",
+        "selected-c-level-agent",
+        "mandatory-shared-guard",
+        "host-config-and-output-style",
+        "delegated-execution-agent",
+        "phase-artifact-template"
+      ],
+      "excludedClasses": [
+        "conditional-knowledge-not-activated-by-scenario",
+        "unrelated-c-level-and-execution-agent",
+        "historical-feature-document",
+        "generated-artifact-output"
+      ]
+    },
+    "liveHostRuns": {
+      "required": 6,
+      "captured": 0,
+      "status": "pending-external-host",
+      "reason": "Claude Code provider usage and approval events are not available in this execution host"
+    },
+    "qualityCommands": [
+      "npm test",
+      "npm run lint",
+      "node scripts/vais-validate-plugin.js"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "legacy-patch-normal",
+      "targetProfile": "patch",
+      "targetAssurance": "normal",
+      "legacyPhases": [
+        "plan",
+        "design",
+        "do",
+        "qa",
+        "report"
+      ],
+      "samples": [
+        {
+          "runId": "phase0b-legacy-patch-normal-01",
+          "repetition": 1,
+          "mode": "repository-replay",
+          "quality": {
+            "status": "unavailable",
+            "reason": "repository inventory replay does not execute scenario quality commands"
+          },
+          "metrics": {
+            "fixedContext": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "lower bound; repeated reads across phases and agents are not multiplied",
+              "files": [
+                {
+                  "path": "CLAUDE.md",
+                  "bytes": 19104,
+                  "lines": 208,
+                  "estimatedTokens": 4776
+                },
+                {
+                  "path": "skills/vais/SKILL.md",
+                  "bytes": 9650,
+                  "lines": 152,
+                  "estimatedTokens": 2413
+                },
+                {
+                  "path": "skills/vais/phases/cto.md",
+                  "bytes": 2753,
+                  "lines": 63,
+                  "estimatedTokens": 689
+                },
+                {
+                  "path": "agents/cto/cto.md",
+                  "bytes": 11884,
+                  "lines": 189,
+                  "estimatedTokens": 2971
+                },
+                {
+                  "path": "contracts/workflow-contract.md",
+                  "bytes": 3675,
+                  "lines": 96,
+                  "estimatedTokens": 919
+                },
+                {
+                  "path": "agents/_shared/context-loading.md",
+                  "bytes": 779,
+                  "lines": 17,
+                  "estimatedTokens": 195
+                },
+                {
+                  "path": "agents/_shared/clevel-main-guard.md",
+                  "bytes": 2193,
+                  "lines": 28,
+                  "estimatedTokens": 549
+                },
+                {
+                  "path": "agents/_shared/work-rules.md",
+                  "bytes": 5714,
+                  "lines": 106,
+                  "estimatedTokens": 1429
+                },
+                {
+                  "path": "agents/_shared/subdoc-guard.md",
+                  "bytes": 2608,
+                  "lines": 70,
+                  "estimatedTokens": 652
+                },
+                {
+                  "path": "agents/_shared/checkpoint-policy.md",
+                  "bytes": 4307,
+                  "lines": 74,
+                  "estimatedTokens": 1077
+                },
+                {
+                  "path": "agents/_shared/outro-format.md",
+                  "bytes": 1256,
+                  "lines": 40,
+                  "estimatedTokens": 314
+                },
+                {
+                  "path": "vais.config.json",
+                  "bytes": 22508,
+                  "lines": 542,
+                  "estimatedTokens": 5627
+                },
+                {
+                  "path": "output-styles/vais-default.md",
+                  "bytes": 3500,
+                  "lines": 90,
+                  "estimatedTokens": 875
+                },
+                {
+                  "path": "agents/cto/ui-designer.md",
+                  "bytes": 13202,
+                  "lines": 275,
+                  "estimatedTokens": 3301
+                },
+                {
+                  "path": "agents/cto/infra-architect.md",
+                  "bytes": 7570,
+                  "lines": 195,
+                  "estimatedTokens": 1893
+                },
+                {
+                  "path": "agents/cto/frontend-engineer.md",
+                  "bytes": 8322,
+                  "lines": 206,
+                  "estimatedTokens": 2081
+                },
+                {
+                  "path": "agents/cto/backend-engineer.md",
+                  "bytes": 5993,
+                  "lines": 161,
+                  "estimatedTokens": 1499
+                },
+                {
+                  "path": "agents/cto/test-engineer.md",
+                  "bytes": 8274,
+                  "lines": 216,
+                  "estimatedTokens": 2069
+                },
+                {
+                  "path": "agents/cto/qa-engineer.md",
+                  "bytes": 7320,
+                  "lines": 195,
+                  "estimatedTokens": 1830
+                }
+              ],
+              "totalBytes": 140612,
+              "totalLines": 2923,
+              "estimatedTokens": 35159
+            },
+            "artifactTemplates": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "template bytes are an inventory proxy, not generated artifact output bytes",
+              "files": [
+                {
+                  "path": "templates/plan-minimal.template.md",
+                  "bytes": 1806,
+                  "lines": 65,
+                  "estimatedTokens": 452
+                },
+                {
+                  "path": "templates/design.template.md",
+                  "bytes": 9958,
+                  "lines": 311,
+                  "estimatedTokens": 2490
+                },
+                {
+                  "path": "templates/do.template.md",
+                  "bytes": 1877,
+                  "lines": 105,
+                  "estimatedTokens": 470
+                },
+                {
+                  "path": "templates/qa.template.md",
+                  "bytes": 5223,
+                  "lines": 191,
+                  "estimatedTokens": 1306
+                },
+                {
+                  "path": "templates/report.template.md",
+                  "bytes": 2297,
+                  "lines": 95,
+                  "estimatedTokens": 575
+                },
+                {
+                  "path": "templates/main-md.template.md",
+                  "bytes": 1945,
+                  "lines": 69,
+                  "estimatedTokens": 487
+                }
+              ],
+              "totalBytes": 23106,
+              "totalLines": 836,
+              "estimatedTokens": 5780
+            },
+            "agentCount": {
+              "source": "legacy-policy-proxy",
+              "accuracy": "C",
+              "value": 7
+            },
+            "workflowApprovals": {
+              "source": "legacy-policy-range",
+              "accuracy": "C",
+              "minimum": 1,
+              "maximum": 2
+            },
+            "hostApprovals": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "offline replay has no host permission stream"
+            },
+            "providerTokens": {
+              "source": "provider",
+              "accuracy": "A",
+              "status": "unavailable",
+              "reason": "provider usage is not exposed to repository replay"
+            },
+            "hostTokens": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy event log has no correlated token usage"
+            },
+            "workflowElapsedMs": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy events lack a scenario-correlated start/stop pair"
+            },
+            "measurementElapsedMs": {
+              "source": "local-clock",
+              "accuracy": "C",
+              "value": 3.083
+            }
+          }
+        },
+        {
+          "runId": "phase0b-legacy-patch-normal-02",
+          "repetition": 2,
+          "mode": "repository-replay",
+          "quality": {
+            "status": "unavailable",
+            "reason": "repository inventory replay does not execute scenario quality commands"
+          },
+          "metrics": {
+            "fixedContext": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "lower bound; repeated reads across phases and agents are not multiplied",
+              "files": [
+                {
+                  "path": "CLAUDE.md",
+                  "bytes": 19104,
+                  "lines": 208,
+                  "estimatedTokens": 4776
+                },
+                {
+                  "path": "skills/vais/SKILL.md",
+                  "bytes": 9650,
+                  "lines": 152,
+                  "estimatedTokens": 2413
+                },
+                {
+                  "path": "skills/vais/phases/cto.md",
+                  "bytes": 2753,
+                  "lines": 63,
+                  "estimatedTokens": 689
+                },
+                {
+                  "path": "agents/cto/cto.md",
+                  "bytes": 11884,
+                  "lines": 189,
+                  "estimatedTokens": 2971
+                },
+                {
+                  "path": "contracts/workflow-contract.md",
+                  "bytes": 3675,
+                  "lines": 96,
+                  "estimatedTokens": 919
+                },
+                {
+                  "path": "agents/_shared/context-loading.md",
+                  "bytes": 779,
+                  "lines": 17,
+                  "estimatedTokens": 195
+                },
+                {
+                  "path": "agents/_shared/clevel-main-guard.md",
+                  "bytes": 2193,
+                  "lines": 28,
+                  "estimatedTokens": 549
+                },
+                {
+                  "path": "agents/_shared/work-rules.md",
+                  "bytes": 5714,
+                  "lines": 106,
+                  "estimatedTokens": 1429
+                },
+                {
+                  "path": "agents/_shared/subdoc-guard.md",
+                  "bytes": 2608,
+                  "lines": 70,
+                  "estimatedTokens": 652
+                },
+                {
+                  "path": "agents/_shared/checkpoint-policy.md",
+                  "bytes": 4307,
+                  "lines": 74,
+                  "estimatedTokens": 1077
+                },
+                {
+                  "path": "agents/_shared/outro-format.md",
+                  "bytes": 1256,
+                  "lines": 40,
+                  "estimatedTokens": 314
+                },
+                {
+                  "path": "vais.config.json",
+                  "bytes": 22508,
+                  "lines": 542,
+                  "estimatedTokens": 5627
+                },
+                {
+                  "path": "output-styles/vais-default.md",
+                  "bytes": 3500,
+                  "lines": 90,
+                  "estimatedTokens": 875
+                },
+                {
+                  "path": "agents/cto/ui-designer.md",
+                  "bytes": 13202,
+                  "lines": 275,
+                  "estimatedTokens": 3301
+                },
+                {
+                  "path": "agents/cto/infra-architect.md",
+                  "bytes": 7570,
+                  "lines": 195,
+                  "estimatedTokens": 1893
+                },
+                {
+                  "path": "agents/cto/frontend-engineer.md",
+                  "bytes": 8322,
+                  "lines": 206,
+                  "estimatedTokens": 2081
+                },
+                {
+                  "path": "agents/cto/backend-engineer.md",
+                  "bytes": 5993,
+                  "lines": 161,
+                  "estimatedTokens": 1499
+                },
+                {
+                  "path": "agents/cto/test-engineer.md",
+                  "bytes": 8274,
+                  "lines": 216,
+                  "estimatedTokens": 2069
+                },
+                {
+                  "path": "agents/cto/qa-engineer.md",
+                  "bytes": 7320,
+                  "lines": 195,
+                  "estimatedTokens": 1830
+                }
+              ],
+              "totalBytes": 140612,
+              "totalLines": 2923,
+              "estimatedTokens": 35159
+            },
+            "artifactTemplates": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "template bytes are an inventory proxy, not generated artifact output bytes",
+              "files": [
+                {
+                  "path": "templates/plan-minimal.template.md",
+                  "bytes": 1806,
+                  "lines": 65,
+                  "estimatedTokens": 452
+                },
+                {
+                  "path": "templates/design.template.md",
+                  "bytes": 9958,
+                  "lines": 311,
+                  "estimatedTokens": 2490
+                },
+                {
+                  "path": "templates/do.template.md",
+                  "bytes": 1877,
+                  "lines": 105,
+                  "estimatedTokens": 470
+                },
+                {
+                  "path": "templates/qa.template.md",
+                  "bytes": 5223,
+                  "lines": 191,
+                  "estimatedTokens": 1306
+                },
+                {
+                  "path": "templates/report.template.md",
+                  "bytes": 2297,
+                  "lines": 95,
+                  "estimatedTokens": 575
+                },
+                {
+                  "path": "templates/main-md.template.md",
+                  "bytes": 1945,
+                  "lines": 69,
+                  "estimatedTokens": 487
+                }
+              ],
+              "totalBytes": 23106,
+              "totalLines": 836,
+              "estimatedTokens": 5780
+            },
+            "agentCount": {
+              "source": "legacy-policy-proxy",
+              "accuracy": "C",
+              "value": 7
+            },
+            "workflowApprovals": {
+              "source": "legacy-policy-range",
+              "accuracy": "C",
+              "minimum": 1,
+              "maximum": 2
+            },
+            "hostApprovals": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "offline replay has no host permission stream"
+            },
+            "providerTokens": {
+              "source": "provider",
+              "accuracy": "A",
+              "status": "unavailable",
+              "reason": "provider usage is not exposed to repository replay"
+            },
+            "hostTokens": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy event log has no correlated token usage"
+            },
+            "workflowElapsedMs": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy events lack a scenario-correlated start/stop pair"
+            },
+            "measurementElapsedMs": {
+              "source": "local-clock",
+              "accuracy": "C",
+              "value": 2.641
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "legacy-feature-normal",
+      "targetProfile": "feature",
+      "targetAssurance": "normal",
+      "legacyPhases": [
+        "plan",
+        "design",
+        "do",
+        "qa",
+        "report"
+      ],
+      "samples": [
+        {
+          "runId": "phase0b-legacy-feature-normal-01",
+          "repetition": 1,
+          "mode": "repository-replay",
+          "quality": {
+            "status": "unavailable",
+            "reason": "repository inventory replay does not execute scenario quality commands"
+          },
+          "metrics": {
+            "fixedContext": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "lower bound; repeated reads across phases and agents are not multiplied",
+              "files": [
+                {
+                  "path": "CLAUDE.md",
+                  "bytes": 19104,
+                  "lines": 208,
+                  "estimatedTokens": 4776
+                },
+                {
+                  "path": "skills/vais/SKILL.md",
+                  "bytes": 9650,
+                  "lines": 152,
+                  "estimatedTokens": 2413
+                },
+                {
+                  "path": "skills/vais/phases/cto.md",
+                  "bytes": 2753,
+                  "lines": 63,
+                  "estimatedTokens": 689
+                },
+                {
+                  "path": "agents/cto/cto.md",
+                  "bytes": 11884,
+                  "lines": 189,
+                  "estimatedTokens": 2971
+                },
+                {
+                  "path": "contracts/workflow-contract.md",
+                  "bytes": 3675,
+                  "lines": 96,
+                  "estimatedTokens": 919
+                },
+                {
+                  "path": "agents/_shared/context-loading.md",
+                  "bytes": 779,
+                  "lines": 17,
+                  "estimatedTokens": 195
+                },
+                {
+                  "path": "agents/_shared/clevel-main-guard.md",
+                  "bytes": 2193,
+                  "lines": 28,
+                  "estimatedTokens": 549
+                },
+                {
+                  "path": "agents/_shared/work-rules.md",
+                  "bytes": 5714,
+                  "lines": 106,
+                  "estimatedTokens": 1429
+                },
+                {
+                  "path": "agents/_shared/subdoc-guard.md",
+                  "bytes": 2608,
+                  "lines": 70,
+                  "estimatedTokens": 652
+                },
+                {
+                  "path": "agents/_shared/checkpoint-policy.md",
+                  "bytes": 4307,
+                  "lines": 74,
+                  "estimatedTokens": 1077
+                },
+                {
+                  "path": "agents/_shared/outro-format.md",
+                  "bytes": 1256,
+                  "lines": 40,
+                  "estimatedTokens": 314
+                },
+                {
+                  "path": "vais.config.json",
+                  "bytes": 22508,
+                  "lines": 542,
+                  "estimatedTokens": 5627
+                },
+                {
+                  "path": "output-styles/vais-default.md",
+                  "bytes": 3500,
+                  "lines": 90,
+                  "estimatedTokens": 875
+                },
+                {
+                  "path": "agents/cto/ui-designer.md",
+                  "bytes": 13202,
+                  "lines": 275,
+                  "estimatedTokens": 3301
+                },
+                {
+                  "path": "agents/cto/infra-architect.md",
+                  "bytes": 7570,
+                  "lines": 195,
+                  "estimatedTokens": 1893
+                },
+                {
+                  "path": "agents/cto/frontend-engineer.md",
+                  "bytes": 8322,
+                  "lines": 206,
+                  "estimatedTokens": 2081
+                },
+                {
+                  "path": "agents/cto/backend-engineer.md",
+                  "bytes": 5993,
+                  "lines": 161,
+                  "estimatedTokens": 1499
+                },
+                {
+                  "path": "agents/cto/test-engineer.md",
+                  "bytes": 8274,
+                  "lines": 216,
+                  "estimatedTokens": 2069
+                },
+                {
+                  "path": "agents/cto/qa-engineer.md",
+                  "bytes": 7320,
+                  "lines": 195,
+                  "estimatedTokens": 1830
+                }
+              ],
+              "totalBytes": 140612,
+              "totalLines": 2923,
+              "estimatedTokens": 35159
+            },
+            "artifactTemplates": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "template bytes are an inventory proxy, not generated artifact output bytes",
+              "files": [
+                {
+                  "path": "templates/plan-standard.template.md",
+                  "bytes": 6156,
+                  "lines": 201,
+                  "estimatedTokens": 1539
+                },
+                {
+                  "path": "templates/design.template.md",
+                  "bytes": 9958,
+                  "lines": 311,
+                  "estimatedTokens": 2490
+                },
+                {
+                  "path": "templates/do.template.md",
+                  "bytes": 1877,
+                  "lines": 105,
+                  "estimatedTokens": 470
+                },
+                {
+                  "path": "templates/qa.template.md",
+                  "bytes": 5223,
+                  "lines": 191,
+                  "estimatedTokens": 1306
+                },
+                {
+                  "path": "templates/report.template.md",
+                  "bytes": 2297,
+                  "lines": 95,
+                  "estimatedTokens": 575
+                },
+                {
+                  "path": "templates/main-md.template.md",
+                  "bytes": 1945,
+                  "lines": 69,
+                  "estimatedTokens": 487
+                }
+              ],
+              "totalBytes": 27456,
+              "totalLines": 972,
+              "estimatedTokens": 6867
+            },
+            "agentCount": {
+              "source": "legacy-policy-proxy",
+              "accuracy": "C",
+              "value": 7
+            },
+            "workflowApprovals": {
+              "source": "legacy-policy-range",
+              "accuracy": "C",
+              "minimum": 1,
+              "maximum": 2
+            },
+            "hostApprovals": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "offline replay has no host permission stream"
+            },
+            "providerTokens": {
+              "source": "provider",
+              "accuracy": "A",
+              "status": "unavailable",
+              "reason": "provider usage is not exposed to repository replay"
+            },
+            "hostTokens": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy event log has no correlated token usage"
+            },
+            "workflowElapsedMs": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy events lack a scenario-correlated start/stop pair"
+            },
+            "measurementElapsedMs": {
+              "source": "local-clock",
+              "accuracy": "C",
+              "value": 1.6
+            }
+          }
+        },
+        {
+          "runId": "phase0b-legacy-feature-normal-02",
+          "repetition": 2,
+          "mode": "repository-replay",
+          "quality": {
+            "status": "unavailable",
+            "reason": "repository inventory replay does not execute scenario quality commands"
+          },
+          "metrics": {
+            "fixedContext": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "lower bound; repeated reads across phases and agents are not multiplied",
+              "files": [
+                {
+                  "path": "CLAUDE.md",
+                  "bytes": 19104,
+                  "lines": 208,
+                  "estimatedTokens": 4776
+                },
+                {
+                  "path": "skills/vais/SKILL.md",
+                  "bytes": 9650,
+                  "lines": 152,
+                  "estimatedTokens": 2413
+                },
+                {
+                  "path": "skills/vais/phases/cto.md",
+                  "bytes": 2753,
+                  "lines": 63,
+                  "estimatedTokens": 689
+                },
+                {
+                  "path": "agents/cto/cto.md",
+                  "bytes": 11884,
+                  "lines": 189,
+                  "estimatedTokens": 2971
+                },
+                {
+                  "path": "contracts/workflow-contract.md",
+                  "bytes": 3675,
+                  "lines": 96,
+                  "estimatedTokens": 919
+                },
+                {
+                  "path": "agents/_shared/context-loading.md",
+                  "bytes": 779,
+                  "lines": 17,
+                  "estimatedTokens": 195
+                },
+                {
+                  "path": "agents/_shared/clevel-main-guard.md",
+                  "bytes": 2193,
+                  "lines": 28,
+                  "estimatedTokens": 549
+                },
+                {
+                  "path": "agents/_shared/work-rules.md",
+                  "bytes": 5714,
+                  "lines": 106,
+                  "estimatedTokens": 1429
+                },
+                {
+                  "path": "agents/_shared/subdoc-guard.md",
+                  "bytes": 2608,
+                  "lines": 70,
+                  "estimatedTokens": 652
+                },
+                {
+                  "path": "agents/_shared/checkpoint-policy.md",
+                  "bytes": 4307,
+                  "lines": 74,
+                  "estimatedTokens": 1077
+                },
+                {
+                  "path": "agents/_shared/outro-format.md",
+                  "bytes": 1256,
+                  "lines": 40,
+                  "estimatedTokens": 314
+                },
+                {
+                  "path": "vais.config.json",
+                  "bytes": 22508,
+                  "lines": 542,
+                  "estimatedTokens": 5627
+                },
+                {
+                  "path": "output-styles/vais-default.md",
+                  "bytes": 3500,
+                  "lines": 90,
+                  "estimatedTokens": 875
+                },
+                {
+                  "path": "agents/cto/ui-designer.md",
+                  "bytes": 13202,
+                  "lines": 275,
+                  "estimatedTokens": 3301
+                },
+                {
+                  "path": "agents/cto/infra-architect.md",
+                  "bytes": 7570,
+                  "lines": 195,
+                  "estimatedTokens": 1893
+                },
+                {
+                  "path": "agents/cto/frontend-engineer.md",
+                  "bytes": 8322,
+                  "lines": 206,
+                  "estimatedTokens": 2081
+                },
+                {
+                  "path": "agents/cto/backend-engineer.md",
+                  "bytes": 5993,
+                  "lines": 161,
+                  "estimatedTokens": 1499
+                },
+                {
+                  "path": "agents/cto/test-engineer.md",
+                  "bytes": 8274,
+                  "lines": 216,
+                  "estimatedTokens": 2069
+                },
+                {
+                  "path": "agents/cto/qa-engineer.md",
+                  "bytes": 7320,
+                  "lines": 195,
+                  "estimatedTokens": 1830
+                }
+              ],
+              "totalBytes": 140612,
+              "totalLines": 2923,
+              "estimatedTokens": 35159
+            },
+            "artifactTemplates": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "template bytes are an inventory proxy, not generated artifact output bytes",
+              "files": [
+                {
+                  "path": "templates/plan-standard.template.md",
+                  "bytes": 6156,
+                  "lines": 201,
+                  "estimatedTokens": 1539
+                },
+                {
+                  "path": "templates/design.template.md",
+                  "bytes": 9958,
+                  "lines": 311,
+                  "estimatedTokens": 2490
+                },
+                {
+                  "path": "templates/do.template.md",
+                  "bytes": 1877,
+                  "lines": 105,
+                  "estimatedTokens": 470
+                },
+                {
+                  "path": "templates/qa.template.md",
+                  "bytes": 5223,
+                  "lines": 191,
+                  "estimatedTokens": 1306
+                },
+                {
+                  "path": "templates/report.template.md",
+                  "bytes": 2297,
+                  "lines": 95,
+                  "estimatedTokens": 575
+                },
+                {
+                  "path": "templates/main-md.template.md",
+                  "bytes": 1945,
+                  "lines": 69,
+                  "estimatedTokens": 487
+                }
+              ],
+              "totalBytes": 27456,
+              "totalLines": 972,
+              "estimatedTokens": 6867
+            },
+            "agentCount": {
+              "source": "legacy-policy-proxy",
+              "accuracy": "C",
+              "value": 7
+            },
+            "workflowApprovals": {
+              "source": "legacy-policy-range",
+              "accuracy": "C",
+              "minimum": 1,
+              "maximum": 2
+            },
+            "hostApprovals": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "offline replay has no host permission stream"
+            },
+            "providerTokens": {
+              "source": "provider",
+              "accuracy": "A",
+              "status": "unavailable",
+              "reason": "provider usage is not exposed to repository replay"
+            },
+            "hostTokens": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy event log has no correlated token usage"
+            },
+            "workflowElapsedMs": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy events lack a scenario-correlated start/stop pair"
+            },
+            "measurementElapsedMs": {
+              "source": "local-clock",
+              "accuracy": "C",
+              "value": 1.532
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "legacy-feature-high",
+      "targetProfile": "feature",
+      "targetAssurance": "high",
+      "legacyPhases": [
+        "plan",
+        "design",
+        "do",
+        "qa",
+        "report"
+      ],
+      "samples": [
+        {
+          "runId": "phase0b-legacy-feature-high-01",
+          "repetition": 1,
+          "mode": "repository-replay",
+          "quality": {
+            "status": "unavailable",
+            "reason": "repository inventory replay does not execute scenario quality commands"
+          },
+          "metrics": {
+            "fixedContext": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "lower bound; repeated reads across phases and agents are not multiplied",
+              "files": [
+                {
+                  "path": "CLAUDE.md",
+                  "bytes": 19104,
+                  "lines": 208,
+                  "estimatedTokens": 4776
+                },
+                {
+                  "path": "skills/vais/SKILL.md",
+                  "bytes": 9650,
+                  "lines": 152,
+                  "estimatedTokens": 2413
+                },
+                {
+                  "path": "skills/vais/phases/cto.md",
+                  "bytes": 2753,
+                  "lines": 63,
+                  "estimatedTokens": 689
+                },
+                {
+                  "path": "agents/cto/cto.md",
+                  "bytes": 11884,
+                  "lines": 189,
+                  "estimatedTokens": 2971
+                },
+                {
+                  "path": "contracts/workflow-contract.md",
+                  "bytes": 3675,
+                  "lines": 96,
+                  "estimatedTokens": 919
+                },
+                {
+                  "path": "agents/_shared/context-loading.md",
+                  "bytes": 779,
+                  "lines": 17,
+                  "estimatedTokens": 195
+                },
+                {
+                  "path": "agents/_shared/clevel-main-guard.md",
+                  "bytes": 2193,
+                  "lines": 28,
+                  "estimatedTokens": 549
+                },
+                {
+                  "path": "agents/_shared/work-rules.md",
+                  "bytes": 5714,
+                  "lines": 106,
+                  "estimatedTokens": 1429
+                },
+                {
+                  "path": "agents/_shared/subdoc-guard.md",
+                  "bytes": 2608,
+                  "lines": 70,
+                  "estimatedTokens": 652
+                },
+                {
+                  "path": "agents/_shared/checkpoint-policy.md",
+                  "bytes": 4307,
+                  "lines": 74,
+                  "estimatedTokens": 1077
+                },
+                {
+                  "path": "agents/_shared/outro-format.md",
+                  "bytes": 1256,
+                  "lines": 40,
+                  "estimatedTokens": 314
+                },
+                {
+                  "path": "vais.config.json",
+                  "bytes": 22508,
+                  "lines": 542,
+                  "estimatedTokens": 5627
+                },
+                {
+                  "path": "output-styles/vais-default.md",
+                  "bytes": 3500,
+                  "lines": 90,
+                  "estimatedTokens": 875
+                },
+                {
+                  "path": "agents/cto/ui-designer.md",
+                  "bytes": 13202,
+                  "lines": 275,
+                  "estimatedTokens": 3301
+                },
+                {
+                  "path": "agents/cto/infra-architect.md",
+                  "bytes": 7570,
+                  "lines": 195,
+                  "estimatedTokens": 1893
+                },
+                {
+                  "path": "agents/cto/frontend-engineer.md",
+                  "bytes": 8322,
+                  "lines": 206,
+                  "estimatedTokens": 2081
+                },
+                {
+                  "path": "agents/cto/backend-engineer.md",
+                  "bytes": 5993,
+                  "lines": 161,
+                  "estimatedTokens": 1499
+                },
+                {
+                  "path": "agents/cto/test-engineer.md",
+                  "bytes": 8274,
+                  "lines": 216,
+                  "estimatedTokens": 2069
+                },
+                {
+                  "path": "agents/cto/qa-engineer.md",
+                  "bytes": 7320,
+                  "lines": 195,
+                  "estimatedTokens": 1830
+                },
+                {
+                  "path": "agents/cso/cso.md",
+                  "bytes": 7259,
+                  "lines": 151,
+                  "estimatedTokens": 1815
+                },
+                {
+                  "path": "agents/cso/security-auditor.md",
+                  "bytes": 7452,
+                  "lines": 219,
+                  "estimatedTokens": 1863
+                },
+                {
+                  "path": "agents/cso/secret-scanner.md",
+                  "bytes": 5996,
+                  "lines": 179,
+                  "estimatedTokens": 1499
+                },
+                {
+                  "path": "agents/cso/dependency-analyzer.md",
+                  "bytes": 6378,
+                  "lines": 191,
+                  "estimatedTokens": 1595
+                }
+              ],
+              "totalBytes": 167697,
+              "totalLines": 3663,
+              "estimatedTokens": 41931
+            },
+            "artifactTemplates": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "template bytes are an inventory proxy, not generated artifact output bytes",
+              "files": [
+                {
+                  "path": "templates/plan-extended.template.md",
+                  "bytes": 4858,
+                  "lines": 188,
+                  "estimatedTokens": 1215
+                },
+                {
+                  "path": "templates/design.template.md",
+                  "bytes": 9958,
+                  "lines": 311,
+                  "estimatedTokens": 2490
+                },
+                {
+                  "path": "templates/do.template.md",
+                  "bytes": 1877,
+                  "lines": 105,
+                  "estimatedTokens": 470
+                },
+                {
+                  "path": "templates/qa.template.md",
+                  "bytes": 5223,
+                  "lines": 191,
+                  "estimatedTokens": 1306
+                },
+                {
+                  "path": "templates/report.template.md",
+                  "bytes": 2297,
+                  "lines": 95,
+                  "estimatedTokens": 575
+                },
+                {
+                  "path": "templates/main-md.template.md",
+                  "bytes": 1945,
+                  "lines": 69,
+                  "estimatedTokens": 487
+                },
+                {
+                  "path": "templates/how/security-audit-report.md",
+                  "bytes": 7421,
+                  "lines": 174,
+                  "estimatedTokens": 1856
+                }
+              ],
+              "totalBytes": 33579,
+              "totalLines": 1133,
+              "estimatedTokens": 8399
+            },
+            "agentCount": {
+              "source": "legacy-policy-proxy",
+              "accuracy": "C",
+              "value": 11
+            },
+            "workflowApprovals": {
+              "source": "legacy-policy-range",
+              "accuracy": "C",
+              "minimum": 2,
+              "maximum": 4
+            },
+            "hostApprovals": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "offline replay has no host permission stream"
+            },
+            "providerTokens": {
+              "source": "provider",
+              "accuracy": "A",
+              "status": "unavailable",
+              "reason": "provider usage is not exposed to repository replay"
+            },
+            "hostTokens": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy event log has no correlated token usage"
+            },
+            "workflowElapsedMs": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy events lack a scenario-correlated start/stop pair"
+            },
+            "measurementElapsedMs": {
+              "source": "local-clock",
+              "accuracy": "C",
+              "value": 1.82
+            }
+          }
+        },
+        {
+          "runId": "phase0b-legacy-feature-high-02",
+          "repetition": 2,
+          "mode": "repository-replay",
+          "quality": {
+            "status": "unavailable",
+            "reason": "repository inventory replay does not execute scenario quality commands"
+          },
+          "metrics": {
+            "fixedContext": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "lower bound; repeated reads across phases and agents are not multiplied",
+              "files": [
+                {
+                  "path": "CLAUDE.md",
+                  "bytes": 19104,
+                  "lines": 208,
+                  "estimatedTokens": 4776
+                },
+                {
+                  "path": "skills/vais/SKILL.md",
+                  "bytes": 9650,
+                  "lines": 152,
+                  "estimatedTokens": 2413
+                },
+                {
+                  "path": "skills/vais/phases/cto.md",
+                  "bytes": 2753,
+                  "lines": 63,
+                  "estimatedTokens": 689
+                },
+                {
+                  "path": "agents/cto/cto.md",
+                  "bytes": 11884,
+                  "lines": 189,
+                  "estimatedTokens": 2971
+                },
+                {
+                  "path": "contracts/workflow-contract.md",
+                  "bytes": 3675,
+                  "lines": 96,
+                  "estimatedTokens": 919
+                },
+                {
+                  "path": "agents/_shared/context-loading.md",
+                  "bytes": 779,
+                  "lines": 17,
+                  "estimatedTokens": 195
+                },
+                {
+                  "path": "agents/_shared/clevel-main-guard.md",
+                  "bytes": 2193,
+                  "lines": 28,
+                  "estimatedTokens": 549
+                },
+                {
+                  "path": "agents/_shared/work-rules.md",
+                  "bytes": 5714,
+                  "lines": 106,
+                  "estimatedTokens": 1429
+                },
+                {
+                  "path": "agents/_shared/subdoc-guard.md",
+                  "bytes": 2608,
+                  "lines": 70,
+                  "estimatedTokens": 652
+                },
+                {
+                  "path": "agents/_shared/checkpoint-policy.md",
+                  "bytes": 4307,
+                  "lines": 74,
+                  "estimatedTokens": 1077
+                },
+                {
+                  "path": "agents/_shared/outro-format.md",
+                  "bytes": 1256,
+                  "lines": 40,
+                  "estimatedTokens": 314
+                },
+                {
+                  "path": "vais.config.json",
+                  "bytes": 22508,
+                  "lines": 542,
+                  "estimatedTokens": 5627
+                },
+                {
+                  "path": "output-styles/vais-default.md",
+                  "bytes": 3500,
+                  "lines": 90,
+                  "estimatedTokens": 875
+                },
+                {
+                  "path": "agents/cto/ui-designer.md",
+                  "bytes": 13202,
+                  "lines": 275,
+                  "estimatedTokens": 3301
+                },
+                {
+                  "path": "agents/cto/infra-architect.md",
+                  "bytes": 7570,
+                  "lines": 195,
+                  "estimatedTokens": 1893
+                },
+                {
+                  "path": "agents/cto/frontend-engineer.md",
+                  "bytes": 8322,
+                  "lines": 206,
+                  "estimatedTokens": 2081
+                },
+                {
+                  "path": "agents/cto/backend-engineer.md",
+                  "bytes": 5993,
+                  "lines": 161,
+                  "estimatedTokens": 1499
+                },
+                {
+                  "path": "agents/cto/test-engineer.md",
+                  "bytes": 8274,
+                  "lines": 216,
+                  "estimatedTokens": 2069
+                },
+                {
+                  "path": "agents/cto/qa-engineer.md",
+                  "bytes": 7320,
+                  "lines": 195,
+                  "estimatedTokens": 1830
+                },
+                {
+                  "path": "agents/cso/cso.md",
+                  "bytes": 7259,
+                  "lines": 151,
+                  "estimatedTokens": 1815
+                },
+                {
+                  "path": "agents/cso/security-auditor.md",
+                  "bytes": 7452,
+                  "lines": 219,
+                  "estimatedTokens": 1863
+                },
+                {
+                  "path": "agents/cso/secret-scanner.md",
+                  "bytes": 5996,
+                  "lines": 179,
+                  "estimatedTokens": 1499
+                },
+                {
+                  "path": "agents/cso/dependency-analyzer.md",
+                  "bytes": 6378,
+                  "lines": 191,
+                  "estimatedTokens": 1595
+                }
+              ],
+              "totalBytes": 167697,
+              "totalLines": 3663,
+              "estimatedTokens": 41931
+            },
+            "artifactTemplates": {
+              "source": "repository-files",
+              "accuracy": "C",
+              "aggregation": "unique-file-inventory",
+              "limitation": "template bytes are an inventory proxy, not generated artifact output bytes",
+              "files": [
+                {
+                  "path": "templates/plan-extended.template.md",
+                  "bytes": 4858,
+                  "lines": 188,
+                  "estimatedTokens": 1215
+                },
+                {
+                  "path": "templates/design.template.md",
+                  "bytes": 9958,
+                  "lines": 311,
+                  "estimatedTokens": 2490
+                },
+                {
+                  "path": "templates/do.template.md",
+                  "bytes": 1877,
+                  "lines": 105,
+                  "estimatedTokens": 470
+                },
+                {
+                  "path": "templates/qa.template.md",
+                  "bytes": 5223,
+                  "lines": 191,
+                  "estimatedTokens": 1306
+                },
+                {
+                  "path": "templates/report.template.md",
+                  "bytes": 2297,
+                  "lines": 95,
+                  "estimatedTokens": 575
+                },
+                {
+                  "path": "templates/main-md.template.md",
+                  "bytes": 1945,
+                  "lines": 69,
+                  "estimatedTokens": 487
+                },
+                {
+                  "path": "templates/how/security-audit-report.md",
+                  "bytes": 7421,
+                  "lines": 174,
+                  "estimatedTokens": 1856
+                }
+              ],
+              "totalBytes": 33579,
+              "totalLines": 1133,
+              "estimatedTokens": 8399
+            },
+            "agentCount": {
+              "source": "legacy-policy-proxy",
+              "accuracy": "C",
+              "value": 11
+            },
+            "workflowApprovals": {
+              "source": "legacy-policy-range",
+              "accuracy": "C",
+              "minimum": 2,
+              "maximum": 4
+            },
+            "hostApprovals": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "offline replay has no host permission stream"
+            },
+            "providerTokens": {
+              "source": "provider",
+              "accuracy": "A",
+              "status": "unavailable",
+              "reason": "provider usage is not exposed to repository replay"
+            },
+            "hostTokens": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy event log has no correlated token usage"
+            },
+            "workflowElapsedMs": {
+              "source": "host",
+              "accuracy": "B",
+              "status": "unavailable",
+              "reason": "legacy events lack a scenario-correlated start/stop pair"
+            },
+            "measurementElapsedMs": {
+              "source": "local-clock",
+              "accuracy": "C",
+              "value": 1.821
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 모든 C-Level 공통 작업 원칙. 각 C-Level 메인 .md 는 자기 도메인 특이 규칙만 짧게 추가한다.
 
-workflow contract: `docs/workflow-contract-alignment/01-plan/workflow-contract-matrix.md`.
+workflow contract: `contracts/workflow-contract.md`.
 
 ## 일반 원칙
 

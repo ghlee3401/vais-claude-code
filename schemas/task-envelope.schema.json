@@ -4,39 +4,108 @@
   "title": "VAIS Task Envelope",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "policyVersion", "runId", "feature", "host", "request", "repoSnapshot", "profile", "assurance", "phaseGraph", "phaseStates", "scope", "checks", "artifacts", "context", "approval", "audit", "stopConditions"],
+  "required": [
+    "schemaVersion",
+    "policyVersion",
+    "runId",
+    "feature",
+    "host",
+    "request",
+    "repoSnapshot",
+    "profile",
+    "assurance",
+    "phaseGraph",
+    "phaseStates",
+    "scope",
+    "checks",
+    "artifacts",
+    "context",
+    "approval",
+    "audit",
+    "stopConditions"
+  ],
   "properties": {
-    "schemaVersion": { "const": "1.0" },
-    "policyVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
-    "runId": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{7,127}$" },
-    "feature": { "type": "string", "pattern": "^[a-zA-Z0-9가-힣_-]{1,100}$" },
-    "host": { "enum": ["claude-code", "codex", "unknown"] },
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "policyVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{7,127}$"
+    },
+    "feature": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9가-힣_-]{1,100}$"
+    },
+    "host": {
+      "enum": [
+        "claude-code",
+        "codex",
+        "unknown"
+      ]
+    },
     "request": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["summary", "hash", "rawPersistence"],
+      "required": [
+        "summary",
+        "hash",
+        "rawPersistence"
+      ],
       "properties": {
-        "summary": { "type": "string", "minLength": 1 },
-        "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
-        "rawPersistence": { "enum": ["none", "redacted-reference"] },
-        "redactedReference": { "type": "string", "minLength": 1 }
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "rawPersistence": {
+          "enum": [
+            "none",
+            "redacted-reference"
+          ]
+        },
+        "redactedReference": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "repoSnapshot": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["headSha", "dirtyPaths"],
+      "required": [
+        "headSha",
+        "dirtyPaths"
+      ],
       "properties": {
-        "headSha": { "type": "string", "pattern": "^([a-f0-9]{40}|unborn)$" },
+        "headSha": {
+          "type": "string",
+          "pattern": "^([a-f0-9]{40}|unborn)$"
+        },
         "dirtyPaths": {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["path", "hash"],
+            "required": [
+              "path",
+              "hash"
+            ],
             "properties": {
-              "path": { "type": "string", "minLength": 1 },
-              "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "hash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
             }
           }
         }
@@ -45,125 +114,492 @@
     "profile": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["recommended", "selected", "confidence", "reasons"],
+      "required": [
+        "recommended",
+        "selected",
+        "confidence",
+        "reasons"
+      ],
       "properties": {
-        "recommended": { "enum": ["patch", "feature", "initiative", "unknown"] },
-        "selected": { "enum": ["patch", "feature", "initiative"] },
-        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
-        "reasons": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+        "recommended": {
+          "enum": [
+            "patch",
+            "feature",
+            "initiative",
+            "unknown"
+          ]
+        },
+        "selected": {
+          "enum": [
+            "patch",
+            "feature",
+            "initiative"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     },
     "assurance": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["level", "triggers"],
+      "required": [
+        "level",
+        "triggers"
+      ],
       "properties": {
-        "level": { "enum": ["normal", "high", "regulated"] },
-        "triggers": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        "level": {
+          "enum": [
+            "normal",
+            "high",
+            "regulated"
+          ]
+        },
+        "triggers": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "auth",
+              "authorization",
+              "payment",
+              "pii",
+              "health",
+              "regulated",
+              "cross-border",
+              "migration",
+              "external-write",
+              "secret",
+              "dependency",
+              "infrastructure",
+              "destructive",
+              "untrusted-input",
+              "agent-capability"
+            ]
+          },
+          "uniqueItems": true
+        }
       }
     },
     "phaseGraph": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["required", "optional", "notRequired"],
+      "required": [
+        "required",
+        "optional",
+        "notRequired"
+      ],
       "properties": {
-        "required": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["ideation", "plan", "design", "do", "qa", "report"] } },
-        "optional": { "type": "array", "uniqueItems": true, "items": { "enum": ["ideation", "plan", "design", "do", "qa", "report"] } },
-        "notRequired": { "type": "array", "uniqueItems": true, "items": { "enum": ["ideation", "plan", "design", "do", "qa", "report"] } }
+        "required": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "ideation",
+              "plan",
+              "design",
+              "do",
+              "qa",
+              "report"
+            ]
+          }
+        },
+        "optional": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "ideation",
+              "plan",
+              "design",
+              "do",
+              "qa",
+              "report"
+            ]
+          }
+        },
+        "notRequired": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "ideation",
+              "plan",
+              "design",
+              "do",
+              "qa",
+              "report"
+            ]
+          }
+        }
       }
     },
     "phaseStates": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["plan", "design", "do", "qa", "report"],
+      "required": [
+        "ideation",
+        "plan",
+        "design",
+        "do",
+        "qa",
+        "report"
+      ],
       "properties": {
-        "ideation": { "enum": ["pending", "in-progress", "completed", "not-required", "blocked"] },
-        "plan": { "enum": ["pending", "in-progress", "completed", "not-required", "blocked"] },
-        "design": { "enum": ["pending", "in-progress", "completed", "not-required", "blocked"] },
-        "do": { "enum": ["pending", "in-progress", "completed", "not-required", "blocked"] },
-        "qa": { "enum": ["pending", "in-progress", "completed", "not-required", "blocked"] },
-        "report": { "enum": ["pending", "in-progress", "completed", "not-required", "blocked"] }
+        "ideation": {
+          "enum": [
+            "pending",
+            "in-progress",
+            "completed",
+            "not-required",
+            "blocked"
+          ]
+        },
+        "plan": {
+          "enum": [
+            "pending",
+            "in-progress",
+            "completed",
+            "not-required",
+            "blocked"
+          ]
+        },
+        "design": {
+          "enum": [
+            "pending",
+            "in-progress",
+            "completed",
+            "not-required",
+            "blocked"
+          ]
+        },
+        "do": {
+          "enum": [
+            "pending",
+            "in-progress",
+            "completed",
+            "not-required",
+            "blocked"
+          ]
+        },
+        "qa": {
+          "enum": [
+            "pending",
+            "in-progress",
+            "completed",
+            "not-required",
+            "blocked"
+          ]
+        },
+        "report": {
+          "enum": [
+            "pending",
+            "in-progress",
+            "completed",
+            "not-required",
+            "blocked"
+          ]
+        }
       }
     },
     "scope": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["in", "out", "allowedPaths", "forbiddenActions"],
+      "required": [
+        "in",
+        "out",
+        "allowedPaths",
+        "forbiddenActions"
+      ],
       "properties": {
-        "in": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
-        "out": { "type": "array", "items": { "type": "string", "minLength": 1 } },
-        "allowedPaths": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
-        "forbiddenActions": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        "in": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "out": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "allowedPaths": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "forbiddenActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     },
     "checks": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["required"],
+      "required": [
+        "required"
+      ],
       "properties": {
-        "required": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+        "required": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "acceptance-test",
+              "accessibility-test",
+              "analytics-test",
+              "architecture-review",
+              "auth-test",
+              "authorization-test",
+              "backup-restore-test",
+              "build",
+              "capacity-test",
+              "compatibility-test",
+              "compliance-review",
+              "configuration-test",
+              "contract-test",
+              "credential-test",
+              "data-flow-review",
+              "data-integrity-test",
+              "data-residency-review",
+              "dependency-scan",
+              "dry-run",
+              "e2e-test",
+              "event-contract-test",
+              "failover-test",
+              "failure-recovery-test",
+              "financial-control-test",
+              "hook-diff-review",
+              "idempotency-test",
+              "injection-test",
+              "input-validation-test",
+              "integration-test",
+              "lint",
+              "migration-dry-run",
+              "negative-test",
+              "path-safety-test",
+              "payment-test",
+              "performance-test",
+              "pii-scan",
+              "pipeline-test",
+              "privacy-review",
+              "prompt-injection-test",
+              "publisher-review",
+              "rate-limit-test",
+              "recovery-drill",
+              "regression-test",
+              "retention-test",
+              "rollback-test",
+              "rotation-check",
+              "rto-rpo-test",
+              "sandbox-test",
+              "secret-scan",
+              "security-review",
+              "size-type-limit-test",
+              "supply-chain-scan",
+              "tamper-test",
+              "tenant-isolation-test",
+              "tool-allowlist-test",
+              "ui-test",
+              "unit-test",
+              "visual-regression"
+            ]
+          },
+          "uniqueItems": true
+        }
       }
     },
     "artifacts": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["required", "conditional", "generated"],
+      "required": [
+        "required",
+        "conditional",
+        "generated"
+      ],
       "properties": {
-        "required": { "type": "array", "items": { "type": "string", "minLength": 1 } },
-        "conditional": { "type": "array", "items": { "type": "string", "minLength": 1 } },
-        "generated": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "conditional": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "generated": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     },
     "context": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["refs", "instructionBudgetBytes", "workingBudgetBytes"],
+      "required": [
+        "refs",
+        "instructionBudgetBytes",
+        "workingBudgetBytes"
+      ],
       "properties": {
         "refs": {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["path", "reason", "hash", "class"],
+            "required": [
+              "path",
+              "reason",
+              "hash",
+              "class"
+            ],
             "properties": {
-              "path": { "type": "string", "minLength": 1 },
-              "reason": { "type": "string", "minLength": 1 },
-              "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
-              "class": { "enum": ["instruction", "working", "evidence"] }
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "hash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "class": {
+                "enum": [
+                  "instruction",
+                  "working",
+                  "evidence"
+                ]
+              }
             }
           }
         },
-        "instructionBudgetBytes": { "type": "integer", "minimum": 0 },
-        "workingBudgetBytes": { "type": "integer", "minimum": 0 }
+        "instructionBudgetBytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "workingBudgetBytes": {
+          "type": "integer",
+          "minimum": 0
+        }
       }
     },
     "approval": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["state", "previewHash", "approvedBoundaryHash", "securityReviewId"],
+      "required": [
+        "state",
+        "previewHash",
+        "approvedBoundaryHash",
+        "securityReviewId"
+      ],
       "properties": {
-        "state": { "enum": ["preview-required", "approved", "security-review-required", "security-approved", "reapproval-required", "blocked"] },
-        "previewHash": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
-        "approvedBoundaryHash": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
-        "securityReviewId": { "type": ["string", "null"], "minLength": 1 }
+        "state": {
+          "enum": [
+            "preview-required",
+            "approved",
+            "security-review-required",
+            "security-approved",
+            "reapproval-required",
+            "blocked"
+          ]
+        },
+        "previewHash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "approvedBoundaryHash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "securityReviewId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
       }
     },
     "audit": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["ledgerPath", "requiredCoverage", "auditIncomplete", "lastSequence"],
+      "required": [
+        "ledgerPath",
+        "requiredCoverage",
+        "auditIncomplete",
+        "lastSequence"
+      ],
       "properties": {
-        "ledgerPath": { "type": "string", "minLength": 1 },
-        "requiredCoverage": { "const": 1 },
-        "auditIncomplete": { "type": "boolean" },
-        "lastSequence": { "type": "integer", "minimum": -1 }
+        "ledgerPath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredCoverage": {
+          "const": 1
+        },
+        "auditIncomplete": {
+          "type": "boolean"
+        },
+        "lastSequence": {
+          "type": "integer",
+          "minimum": -1
+        }
       }
     },
     "stopConditions": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "enum": ["scope-expansion", "risk-escalation", "destructive-action", "check-failure", "gate-failure", "requirement-conflict", "audit-incomplete"] }
+      "items": {
+        "enum": [
+          "scope-expansion",
+          "risk-escalation",
+          "destructive-action",
+          "check-failure",
+          "gate-failure",
+          "requirement-conflict",
+          "audit-incomplete"
+        ]
+      }
     }
   }
 }
