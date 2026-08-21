@@ -189,6 +189,13 @@
     "server": "mcp/vais-server/",
     "port": 8765
   },
+    "engine": "legacy",
+    "profile": {
+      "mode": "shadow",
+      "default": "feature"
+    },
+    "documentModel": "v1",
+    "requestPersistence": "redacted",
   "workflow": {
     "_sot": "PDCA 단계의 단일 진실 소스(SoT)는 본 키. CLAUDE.md/cto.md의 단계 표는 표시용 사본이며 본 키와 동기화 필수.",
     "checkpointPolicy": {

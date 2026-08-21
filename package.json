@@ -21,6 +21,7 @@
     "test": "node --test tests/*.test.js tests/integration/*.test.js",
     "test:integration": "node --test tests/integration/*.test.js",
     "lint": "eslint scripts/ lib/ hooks/ --max-warnings=0",
+    "workflow:classify": "node scripts/workflow-evaluation.js classifier",
     "context:baseline": "node scripts/context-baseline.js",
     "workflow:evaluate": "node scripts/workflow-evaluation.js validate",
     "workflow:baseline": "node scripts/workflow-evaluation.js baseline",

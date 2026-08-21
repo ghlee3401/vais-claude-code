@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vais.local/schemas/workflow-shadow-result.schema.json",
+  "title": "VAIS Workflow Shadow Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "classifierVersion",
+    "mode",
+    "runId",
+    "feature",
+    "host",
+    "sessionId",
+    "request",
+    "profile",
+    "assurance",
+    "compileSignals",
+    "phaseGraph",
+    "legacy"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "classifierVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "mode": { "const": "shadow" },
+    "runId": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{7,127}$" },
+    "feature": { "type": "string", "pattern": "^[a-zA-Z0-9가-힣_-]{1,100}$" },
+    "host": { "enum": ["claude-code", "codex", "unknown"] },
+    "sessionId": { "type": ["string", "null"] },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash", "summary", "redactionApplied", "redactedFields", "rawPersisted"],
+      "properties": {
+        "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "redactionApplied": { "type": "boolean" },
+        "redactedFields": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "rawPersisted": { "const": false }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recommended", "selected", "confidence", "reasons"],
+      "properties": {
+        "recommended": { "enum": ["patch", "feature", "initiative", "unknown"] },
+        "selected": { "enum": ["patch", "feature", "initiative"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "assurance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "triggers", "reasons"],
+      "properties": {
+        "level": { "enum": ["normal", "high", "regulated"] },
+        "triggers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "auth",
+              "authorization",
+              "payment",
+              "pii",
+              "health",
+              "regulated",
+              "cross-border",
+              "migration",
+              "external-write",
+              "secret",
+              "dependency",
+              "infrastructure",
+              "destructive",
+              "untrusted-input",
+              "agent-capability"
+            ]
+          }
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "compileSignals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "uiFlow",
+        "apiContract",
+        "dataModel",
+        "architecture",
+        "externalIntegration",
+        "publicContract",
+        "multiArea",
+        "highUncertainty",
+        "newProduct",
+        "ceoAnalysisAvailable"
+      ],
+      "properties": {
+        "uiFlow": { "type": "boolean" },
+        "apiContract": { "type": "boolean" },
+        "dataModel": { "type": "boolean" },
+        "architecture": { "type": "boolean" },
+        "externalIntegration": { "type": "boolean" },
+        "publicContract": { "type": "boolean" },
+        "multiArea": { "type": "boolean" },
+        "highUncertainty": { "type": "boolean" },
+        "newProduct": { "type": "boolean" },
+        "ceoAnalysisAvailable": { "type": "boolean" }
+      }
+    },
+    "phaseGraph": { "$ref": "#/definitions/phaseGraph" },
+    "legacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine", "executionChanged"],
+      "properties": {
+        "engine": { "const": "legacy" },
+        "executionChanged": { "const": false }
+      }
+    }
+  },
+  "definitions": {
+    "phaseList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "enum": ["ideation", "plan", "design", "do", "qa", "report"] }
+    },
+    "requiredPhaseList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["ideation", "plan", "design", "do", "qa", "report"] }
+    },
+    "phaseGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "optional", "notRequired"],
+      "properties": {
+        "required": { "$ref": "#/definitions/requiredPhaseList" },
+        "optional": { "$ref": "#/definitions/phaseList" },
+        "notRequired": { "$ref": "#/definitions/phaseList" }
+      }
+    }
+  }
+}

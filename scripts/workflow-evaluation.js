@@ -10,6 +10,7 @@ const {
   validateCriticalRiskCorpus,
 } = require('../lib/evaluation/corpus');
 const { buildLegacyBaseline, validateLegacyBaseline } = require('../lib/evaluation/legacy-baseline');
+const { evaluatePhase1 } = require('../lib/evaluation/classifier-evaluation');
 
 function parseArgs(argv) {
   const args = [...argv];
@@ -54,14 +55,21 @@ function baseline(baseDir, output) {
   return 0;
 }
 
+function classifier(baseDir) {
+  const result = evaluatePhase1(loadEvaluationCorpora(baseDir));
+  printJson(result);
+  return result.valid ? 0 : 1;
+}
+
 function main(argv = process.argv.slice(2), baseDir = process.cwd()) {
   const args = parseArgs(argv);
   if (args.command === 'validate') return validate(baseDir);
   if (args.command === 'baseline') return baseline(baseDir, args.output);
-  process.stderr.write('Usage: node scripts/workflow-evaluation.js validate|baseline [--output path]\n');
+  if (args.command === 'classifier') return classifier(baseDir);
+  process.stderr.write('Usage: node scripts/workflow-evaluation.js validate|baseline|classifier [--output path]\n');
   return 2;
 }
 
 if (require.main === module) process.exitCode = main();
 
-module.exports = { parseArgs, validate, baseline, main };
+module.exports = { parseArgs, validate, baseline, classifier, main };

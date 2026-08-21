@@ -10,6 +10,7 @@ const { debugLog } = require('../lib/debug');
 const { logHook } = require('../lib/hook-logger');
 const { getActiveFeature, getProgressSummary } = require('../lib/status');
 const { loadConfig } = require('../lib/paths');
+const { runShadowAnalysis } = require('../lib/workflow/shadow-runner');
 
 // 워크플로우 관련 키워드 감지
 const INTENT_PATTERNS = [
@@ -32,6 +33,19 @@ if (!userPrompt || userPrompt.length < 3) {
   process.exit(0);
 }
 
+const config = loadConfig();
+
+try {
+  runShadowAnalysis({
+    rawText: userPrompt,
+    feature: getActiveFeature() || 'unscoped',
+    host: 'claude-code',
+    sessionId: input.session_id || input.sessionId || null,
+    config,
+  });
+} catch (error) {
+  debugLog('PromptHandler', 'shadow classification failed', { error: error.message });
+}
 const promptLower = userPrompt.toLowerCase();
 
 const activeFeature = getActiveFeature();
@@ -59,7 +73,6 @@ for (const { keywords, phase } of INTENT_PATTERNS) {
 }
 
 // 범위 지정 패턴 감지: "plan부터 backend까지", "plan~backend"
-const config = loadConfig();
 const phases = config.workflow?.phases || [];
 const phaseNames = config.workflow?.phaseNames || {};
 
