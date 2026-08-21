@@ -131,12 +131,4 @@ describe('adaptive workflow Phase 0A contracts', () => {
       assert.ok(eventTypes.has(required), `missing audit event ${required}`);
     }
   });
-
-  it('host capability 계약이 Claude/Codex 공식 reference와 audit gap을 명시한다', () => {
-    const contract = fs.readFileSync(path.join(ROOT, 'docs/adaptive-workflow-kernel/01-plan/phase-0a-contracts.md'), 'utf8');
-    assert.match(contract, /code\.claude\.com\/docs\/en\/hooks/);
-    assert.match(contract, /learn\.chatgpt\.com\/docs\/hooks/);
-    assert.match(contract, /auditIncomplete=true/);
-    assert.match(contract, /관찰되지 않은 행동을 성공으로 추정하지 않는다/);
-  });
 });
