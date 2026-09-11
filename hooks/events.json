@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "vais event-log.jsonl 이벤트 스키마 문서. MCP 서버 + 대시보드 소비용",
   "events": {
     "session_start": {

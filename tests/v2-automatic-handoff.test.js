@@ -16,10 +16,15 @@ const {
   WorkItemStore,
   buildSpecialistAssignment,
   extractAgentHandoff,
+  isDeferredAgentResult,
   recordAutomaticHandoff,
+  recordDeferredHandoff,
   assertHandoffSize,
   writePhaseDocument,
 } = handoffApi;
+
+const ASYNC_LAUNCH_RECEIPT = 'Async agent launched successfully. (This tool result is internal metadata)\n' +
+  'agentId: a44d8840fd77b843e (internal ID)\nThe agent is working in the background.';
 
 const T0 = '2026-09-02T00:00:00.000Z';
 const SESSION = 'session-auto-handoff';
@@ -110,6 +115,56 @@ describe('v2 automatic Agent handoff persistence', () => {
     assert.equal(receipt.status, 'completed');
     assert.ok(fs.existsSync(path.join(root, receipt.evidencePath)));
     assert.deepEqual(store.missingCompletedSpecialists(item.id), []);
+  });
+
+  it('recognises a deferred Agent launch receipt as an open assignment, not a rejection', () => {
+    assert.equal(isDeferredAgentResult(ASYNC_LAUNCH_RECEIPT), true);
+    assert.equal(isDeferredAgentResult({ content: [{ text: ASYNC_LAUNCH_RECEIPT }] }), true);
+    assert.equal(isDeferredAgentResult(JSON.stringify(completedHandoff())), false);
+    assert.equal(isDeferredAgentResult('No structured handoff was returned.'), false);
+  });
+
+  it('registers a deferred handoff from a file inside the phase folder and removes the transient file', t => {
+    const { root, store, item, assignmentReceipt } = fixture(t);
+    assert.deepEqual(store.openAssignments(item.id).map(receipt => receipt.id), [assignmentReceipt.id]);
+    const phaseDir = path.join(root, 'docs', 'work-items', 'workflow', '2026-09-02-auto-handoff', '03-do');
+    fs.mkdirSync(phaseDir, { recursive: true });
+    const handoffFile = path.join(phaseDir, 'handoff.json');
+    fs.writeFileSync(handoffFile, JSON.stringify(completedHandoff()));
+    const receipt = recordDeferredHandoff(root, {
+      workItemId: item.id, sessionId: SESSION, assignmentId: assignmentReceipt.id,
+      handoffFile: path.relative(root, handoffFile), timestamp: T0,
+    });
+    assert.equal(receipt.source, 'deferred-agent-result');
+    assert.ok(fs.existsSync(path.join(root, receipt.evidencePath)));
+    assert.equal(fs.existsSync(handoffFile), false);
+    assert.deepEqual(store.missingCompletedSpecialists(item.id), []);
+    assert.deepEqual(store.openAssignments(item.id), []);
+    assert.throws(() => recordDeferredHandoff(root, {
+      workItemId: item.id, sessionId: SESSION, assignmentId: assignmentReceipt.id,
+      handoffFile: path.relative(root, handoffFile), timestamp: T0,
+    }), /still-open assignment/);
+  });
+
+  it('refuses a deferred handoff file outside the project and keeps non-transient files', t => {
+    const { root, store, item, assignmentReceipt } = fixture(t);
+    const outside = path.join(os.tmpdir(), `vais-outside-${process.pid}.json`);
+    fs.writeFileSync(outside, JSON.stringify(completedHandoff()));
+    t.after(() => fs.rmSync(outside, { force: true }));
+    assert.throws(() => recordDeferredHandoff(root, {
+      workItemId: item.id, sessionId: SESSION, assignmentId: assignmentReceipt.id,
+      handoffFile: outside, timestamp: T0,
+    }), /inside the project/);
+    assert.deepEqual(store.openAssignments(item.id).map(receipt => receipt.id), [assignmentReceipt.id]);
+    const kept = path.join(root, 'handoff.json');
+    fs.writeFileSync(kept, JSON.stringify(completedHandoff()));
+    const receipt = recordDeferredHandoff(root, {
+      workItemId: item.id, sessionId: SESSION, assignmentId: assignmentReceipt.id,
+      handoffFile: 'handoff.json', timestamp: T0,
+    });
+    assert.equal(receipt.transientRemoved, false);
+    assert.ok(fs.existsSync(kept));
+    assert.deepEqual(store.openAssignments(item.id), []);
   });
 
   it('rejects zero or multiple handoff objects without completing the assignment', t => {

@@ -6,7 +6,7 @@ const { AuthorizationStore } = require('../lib/workflow/v2/authorization-store')
 const { WorkItemStore } = require('../lib/workflow/v2/work-item-store');
 const { pathMatches } = require('../lib/workflow/v2/write-policy');
 const { EVENTS } = require('../lib/workflow/v2/state-machine');
-const { captureRepoSnapshot, diffSnapshots, classifyDrift } = require('../lib/workflow/v2/repo-drift');
+const { captureRepoSnapshot, diffSnapshots, classifyDrift, filterExternalDrift } = require('../lib/workflow/v2/repo-drift');
 const { resolveProjectRoot, resolveStartDir } = require('./v2-project-context');
 const { loadMode } = require('./workflow-v2-prompt');
 
@@ -25,7 +25,7 @@ function main() {
   }
   const observed = captureRepoSnapshot(projectRoot);
   const baseline = store.getRepoSnapshot(item.id);
-  const paths = diffSnapshots(baseline, observed);
+  const paths = filterExternalDrift(diffSnapshots(baseline, observed), item);
   if (!baseline) {
     store.setRepoSnapshot(item.id, observed, { reason: 'phase-entry' });
     return outputEmpty();

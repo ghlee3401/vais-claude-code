@@ -13,10 +13,11 @@ const { routePrompt } = require('../lib/workflow/v2/router');
 const { defaultAllowedPaths } = require('../lib/workflow/v2/write-policy');
 const { EVENTS, SLOT_HOLDING_STATUSES } = require('../lib/workflow/v2/state-machine');
 const { INTERNAL_COMMAND } = require('../scripts/vais-workflow-v2');
-const { captureRepoSnapshot, diffSnapshots, classifyDrift } = require('../lib/workflow/v2/repo-drift');
+const { captureRepoSnapshot, diffSnapshots, classifyDrift, filterExternalDrift } = require('../lib/workflow/v2/repo-drift');
 const { loadRoleCatalog, resolveRole, buildRolePrompt } = require('../lib/workflow/v2/role-registry');
 const { resolveProjectRoot, resolveStartDir, extractPrompt } = require('./v2-project-context');
 const { deterministicSlug } = require('../lib/workflow/v2/naming');
+const { PHASE_FOLDERS } = require('../lib/workflow/v2/document-manager');
 
 function loadMode(projectRoot) {
   try {
@@ -56,7 +57,8 @@ function phaseGuidance(item, sessionId, requestSlug = null) {
     ],
     do: [
       'CTO는 승인된 write scope 안에서만 구현하고 Design이 선택한 specialist만 호출한다. Design 승인 turn에서 Do부터 Review 결과까지 사용자 진행 요청 없이 계속한다.',
-      `각 specialist에 \`${INTERNAL_COMMAND} assignment --id ${item.id} --session ${sessionId} ...\`로 AS receipt를 발급해 Agent prompt에 넣는다. Agent 종료 시 훅이 handoff를 자동 저장하므로 handoff 파일을 다시 쓰거나 CLI로 재등록하지 않는다.`,
+      `각 specialist에 \`${INTERNAL_COMMAND} assignment --id ${item.id} --session ${sessionId} ...\`로 AS receipt를 발급해 Agent prompt에 넣는다. Agent 종료 시 훅이 handoff를 자동 저장하므로 저장된 handoff를 다시 쓰거나 재등록하지 않는다.`,
+      `Agent 도구가 launch receipt만 돌려주고 결과가 나중에 task notification으로 오면, 그 raw handoff JSON을 \`${PHASE_FOLDERS.do}/handoff.json\`에 그대로 저장한 뒤 \`${INTERNAL_COMMAND} handoff --id ${item.id} --session ${sessionId} --assignment <AS-id> --handoff-file <path>\`를 한 번 실행한다.`,
       `짧은 Do 본문을 쓴 뒤 \`${INTERNAL_COMMAND} do ready --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <do-draft>\`을 한 번 실행한다. transaction이 handoff·문서·Design-declared readiness 검사를 실행한다.`,
     ],
     review: [
@@ -64,6 +66,7 @@ function phaseGuidance(item, sessionId, requestSlug = null) {
       `먼저 \`${INTERNAL_COMMAND} review prepare --id ${item.id} --session ${sessionId} --revision ${item.designRevision}\`를 실행해 Design-declared review evidence를 정확히 한 번 준비한다. Do와 identity가 같은 check receipt는 재사용한다.`,
       `evidence가 fail/blocked이고 independent QA가 같은 identity의 보충 검사를 요구한 경우에만 \`${INTERNAL_COMMAND} review prepare --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --supplemental-check <tool-id> --supplemental-reason "<reason>"\`을 실행한다. 보충 검사는 Design-declared check별 한 번만 허용한다.`,
       `\`${INTERNAL_COMMAND} assignment --id ${item.id} --session ${sessionId} --role independent-qa --delegated-by ceo --phase review --mode verification --question "<question>" --code-write false --criterion "<criterion>" --ref <plan-ref> --ref <design-ref> --clean-room true\`로 정확히 한 번 위임한다. handoff는 Agent 종료 훅이 자동 저장한다. assignment.outputContract의 UTF-8 hard limit과 더 낮은 target을 지키고 로그·스크린샷은 짧은 경로나 receipt ID로만 참조한다.`,
+      `Agent 도구가 launch receipt만 돌려주고 QA 결과가 나중에 task notification으로 오면, 그 raw handoff JSON을 \`${PHASE_FOLDERS.review}/handoff.json\`에 그대로 저장한 뒤 \`${INTERNAL_COMMAND} handoff --id ${item.id} --session ${sessionId} --assignment <AS-id> --handoff-file <path>\`를 한 번 실행하고 review decide로 이어간다.`,
       `REQ-001/TC-001처럼 접두사를 생략하지 않은 ID별로 입력·출력·기대·실제·판정·엣지/제한·evidence를 짧게 기록한 뒤 \`${INTERNAL_COMMAND} review decide --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <review-draft>\`을 한 번 실행한다. decide는 기존 receipt와 QA handoff만 검증하며 check를 재실행하지 않는다. 실제 QA FAIL/BLOCKED면 Report로 가지 않으며 FAIL은 Design으로 돌아간다.`,
     ],
     report: [
@@ -81,15 +84,41 @@ function phaseGuidance(item, sessionId, requestSlug = null) {
   ];
 }
 
-function buildContext(route, item, leaseError, sessionId = '<session>') {
+// A specialist Agent that this session launched through the guard may still be running
+// when a non-managed turn (typically the harness's task notification) arrives. Revoking
+// the session authorization at that moment would strand the assignment: its handoff
+// could never be persisted and the next Gate would fail closed. Keep the authorization
+// while such an assignment is open; the write guard still limits every mutation to the
+// current phase paths and the public runtime commands.
+function openAssignmentContinuation(store, authorization) {
+  if (!authorization?.workItemId || !['do', 'review'].includes(authorization.phase)) return [];
+  const item = store.get(authorization.workItemId);
+  const current = store.getCurrent();
+  if (!item || !current || current.id !== item.id || item.status !== 'active' || item.phase !== authorization.phase) return [];
+  return store.openAssignments(item.id);
+}
+
+function continuationLines(item, open, sessionId) {
+  const folder = PHASE_FOLDERS[item.phase];
+  return [
+    `이 turn은 /vais 없이 도착했지만 이 세션이 시작한 specialist assignment가 열려 있다: ${open.map(receipt => `${receipt.id} (${receipt.role})`).join(', ')}.`,
+    `그 결과가 task notification으로 왔다면 raw specialist-handoff/v1 JSON을 \`${folder}/handoff.json\`에 그대로 저장하고 \`${INTERNAL_COMMAND} handoff --id ${item.id} --session ${sessionId} --assignment <AS-id> --handoff-file <path>\`를 한 번 실행한 뒤 현재 phase transaction을 이어간다.`,
+    '그 외의 문서·제품 코드 변경은 하지 않으며, 새 요청은 사용자가 /vais를 붙여 다시 보내도록 안내한다.',
+  ];
+}
+
+function buildContext(route, item, leaseError, sessionId = '<session>', options = {}) {
   const lines = [statusLine(item)];
   if (leaseError) {
     lines.push(`VAIS mutation blocked: ${leaseError}`);
     lines.push('다른 세션의 진행 작업을 변경하지 말고 읽기 전용 상태만 설명한다.');
     return lines.join('\n');
   }
+  const open = options.openAssignments || [];
   if (!route.managed) {
-    if (item) {
+    if (item && open.length > 0) {
+      lines.push(...continuationLines(item, open, sessionId));
+    } else if (item) {
       lines.push('이 요청에는 /vais가 없다. 현재 Work item의 상태·문서·제품 코드를 변경하지 않는다.');
       lines.push('작업 반영이 필요하면 사용자가 /vais를 붙여 다시 요청하도록 안내한다.');
     }
@@ -139,7 +168,7 @@ function observePromptDrift(store, item, sessionId, projectRoot) {
     store.setRepoSnapshot(item.id, observed, { reason: `${item.phase}-entry` });
     return item;
   }
-  const paths = diffSnapshots(baseline, observed);
+  const paths = filterExternalDrift(diffSnapshots(baseline, observed), item);
   if (paths.length === 0) return item;
   const classification = classifyDrift(paths, item);
   store.recordDriftAlert(item.id, paths, classification);
@@ -179,6 +208,11 @@ function main() {
   const route = routePrompt(extractPrompt(input), routeItem);
 
   if (!route.managed || !route.mutationAllowed) {
+    const open = sessionId ? openAssignmentContinuation(store, authStore.get(sessionId)) : [];
+    if (open.length > 0) {
+      authStore.touch(sessionId);
+      return outputContext(buildContext(route, routeItem, null, sessionId, { openAssignments: open }));
+    }
     if (sessionId) authStore.revoke(sessionId);
     return outputContext(buildContext(route, routeItem, null, sessionId));
   }
@@ -220,6 +254,7 @@ module.exports = {
   loadMode,
   statusLine,
   phaseGuidance,
+  openAssignmentContinuation,
   buildContext,
   applyDeterministicRoute,
   observePromptDrift,

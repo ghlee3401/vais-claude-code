@@ -21,6 +21,7 @@ const { resolveProjectRoot } = require('../hooks/v2-project-context');
 const { buildContextCapsule, assertFreshCapsule } = require('../lib/workflow/v2/context-capsule');
 const { runPhaseTransaction, prepareReviewEvidence, canonicalWriteScopes } = require('../lib/workflow/v2/phase-transaction');
 const { buildCheckIdentity, reviewEvidenceManifest } = require('../lib/workflow/v2/check-evidence');
+const { recordDeferredHandoff } = require('../lib/workflow/v2/automatic-handoff');
 
 const INTERNAL_COMMAND = `node ${JSON.stringify(__filename)}`;
 
@@ -518,16 +519,19 @@ function buildAssignment(projectRoot, options) {
   return { rolePrompt: buildRolePrompt(resolved.role), assignment, assignmentReceipt };
 }
 
+// Registers a specialist result that arrived after the Agent tool returned (deferred
+// launch receipt). The runtime applies the same envelope, schema, byte, and verdict
+// checks as the PostToolUse hook and persists canonical evidence.
 function recordHandoff(projectRoot, options) {
   const id = requireOption(options, 'id');
   const sessionId = requireOption(options, 'session');
   const assignmentId = requireOption(options, 'assignment');
-  const handoff = assertContract('specialistHandoff', readProjectJson(
-    projectRoot, requireOption(options, 'handoff-file'), 'Specialist handoff file'));
+  const handoffFile = requireOption(options, 'handoff-file');
   const store = new WorkItemStore(projectRoot);
+  const item = store.get(id);
+  if (!item) throw new Error(`Unknown work item: ${id}`);
   store.acquireLease(id, sessionId);
-  const receipt = store.recordAssignmentHandoff(id, assignmentId, handoff, sessionId);
-  return { handoff, receipt };
+  return recordDeferredHandoff(projectRoot, { workItemId: id, sessionId, assignmentId, handoffFile });
 }
 
 function contextCapsule(projectRoot, options) {

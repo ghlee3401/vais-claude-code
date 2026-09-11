@@ -1,7 +1,7 @@
 {
   "name": "vais-code",
-  "description": "VAIS Code — v2.2 organization-in-a-box. PO 1명이 6 C-Suite 가상 조직 운영. 4 Primary (CEO/CPO/CTO/CSO) + 2 Secondary (CBO/COO 명시 호출). CEO 7 차원 알고리즘 + sub-agent 직접 박제 + AskUserQuestion 클릭 인터페이스.",
-  "version": "3.0.0",
+  "description": "VAIS Code — v3 single /vais managed entry. 자연어 요청 하나로 가상 C-Suite 가 Plan→Design→Do→Review→Report 상태 머신을 진행하고, 사용자는 Plan·Design·최종 승인 3회만 결정. 독립 AI QA + runtime write scope guard. shadow 모드로 Legacy C-Suite 라우팅 복원 가능.",
+  "version": "3.0.1",
   "author": {
     "name": "VAIS Voice",
     "email": "ghlee0304@ncsoft.com"

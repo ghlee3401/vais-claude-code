@@ -5,15 +5,15 @@
     "email": "ghlee0304@ncsoft.com"
   },
   "metadata": {
-    "description": "VAIS Code — v2.2: organization-in-a-box. PO 1명이 6 C-Suite 가상 조직 운영 — CEO 7 차원 알고리즘으로 활성 C-Level 자동 결정 + sub-agent 직접 박제 (frontmatter 4 필수 필드) + AskUserQuestion 클릭. Real SendMessage 또는 simulation graceful degradation (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` 토글).",
-    "version": "3.0.0"
+    "description": "VAIS Code — v3: single /vais managed entry. 자연어 요청 하나로 가상 C-Suite 가 Plan→Design→Do→Review→Report 상태 머신을 진행하고 사용자는 Plan·Design·최종 승인 3회만 결정. 독립 AI QA + runtime write scope guard. shadow 모드로 Legacy C-Suite 라우팅 복원 가능.",
+    "version": "3.0.1"
   },
   "plugins": [
     {
       "name": "vais-code",
       "source": "./",
-      "description": "AI code-development assistant simulating a virtual C-Suite. v2.2 — organization-in-a-box: PO runs 6 virtual C-Suite agents (CEO 7-dimension algorithm auto-routing). 4 Primary (CEO/CPO/CTO/CSO) + 2 Secondary (CBO/COO explicit). Sub-agent direct stamping (frontmatter 4 fields). CTO mandatory PDCA. Real SendMessage or simulation graceful degradation.",
-      "version": "3.0.0",
+      "description": "AI code-development assistant simulating a virtual C-Suite. v3 — single /vais managed entry: one natural-language request drives Plan→Design→Do→Review→Report with three user approvals, independent read-only AI QA, runtime write-scope guards, and frozen Reports. Legacy C-Suite routing remains available in shadow mode.",
+      "version": "3.0.1",
       "author": {
         "name": "VAIS Voice",
         "email": "ghlee0304@ncsoft.com"

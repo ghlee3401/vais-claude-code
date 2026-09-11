@@ -200,8 +200,14 @@ describe('revision 4 fair Legacy/v2 comparison contract', () => {
   it('builds the Legacy stage from the approved Git baseline rather than dirty v2 files', t => {
     const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-legacy-stage-'));
     t.after(() => fs.rmSync(temp, { recursive: true, force: true }));
-    const result = buildLegacyStage(ROOT, temp, 'HEAD');
-    const expected = spawnSync('git', ['-C', ROOT, 'show', 'HEAD:skills/vais/SKILL.md'], { encoding: 'utf8' });
+    // The approved Legacy baseline is the last commit before the v2 managed entry landed
+    // (the commit that introduced skills/vais/legacy.md). HEAD itself now ships v2 files.
+    const introduced = spawnSync('git', ['-C', ROOT, 'log', '--diff-filter=A', '--format=%H', '-1', '--', 'skills/vais/legacy.md'],
+      { encoding: 'utf8' });
+    assert.equal(introduced.status, 0);
+    const baseline = introduced.stdout.trim() ? `${introduced.stdout.trim()}^` : 'HEAD';
+    const result = buildLegacyStage(ROOT, temp, baseline);
+    const expected = spawnSync('git', ['-C', ROOT, 'show', `${baseline}:skills/vais/SKILL.md`], { encoding: 'utf8' });
     assert.equal(expected.status, 0);
     assert.equal(fs.readFileSync(path.join(temp, 'skills', 'vais', 'SKILL.md'), 'utf8'), expected.stdout);
     assert.equal(fs.existsSync(path.join(temp, 'skills', 'vais', 'legacy.md')), false);

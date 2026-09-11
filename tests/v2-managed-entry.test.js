@@ -16,6 +16,7 @@ const {
   authorizeCommand,
   writePhaseDocument,
   deterministicSlug,
+  buildSpecialistAssignment,
 } = require('../lib/workflow/v2');
 const { decide, validateCurrentAuthorization } = require('../hooks/workflow-v2-write-guard');
 const { applyDeterministicRoute, phaseGuidance, buildContext } = require('../hooks/workflow-v2-prompt');
@@ -322,7 +323,8 @@ describe('v2 authorization and write policy', () => {
     assert.equal(authorizeCommand('node "/trusted/plugin/scripts/vais-workflow-v2.js" check --output docs/evidence.json', runtimeAuth).allowed, false);
     assert.equal(authorizeCommand('node "/trusted/plugin/scripts/vais-workflow-v2.js" plan present --revision 1', runtimeAuth).allowed, true);
     assert.equal(authorizeCommand('node "/trusted/plugin/scripts/vais-workflow-v2.js" review prepare --revision 1', runtimeAuth).allowed, true);
-    for (const command of ['create', 'event', 'handoff', 'document', 'run-check', 'indexes', 'plan --id legacy']) {
+    assert.equal(authorizeCommand('node "/trusted/plugin/scripts/vais-workflow-v2.js" handoff --id WI-1 --assignment AS-1', runtimeAuth).allowed, true);
+    for (const command of ['create', 'event', 'document', 'run-check', 'indexes', 'plan --id legacy']) {
       assert.equal(authorizeCommand(`node "/trusted/plugin/scripts/vais-workflow-v2.js" ${command}`, runtimeAuth).allowed, false);
     }
     assert.equal(authorizeCommand('node "/trusted/plugin/scripts/vais-workflow-v2.js" check --output docs/evidence.json && touch pwned', runtimeAuth).allowed, false);
@@ -809,7 +811,7 @@ describe('v2 workflow control CLI and runtime guidance', () => {
     fs.mkdirSync(path.dirname(handoffPath), { recursive: true });
     fs.writeFileSync(handoffPath, JSON.stringify({
       schema: 'specialist-handoff/v1', status: 'blocked', verdict: 'blocked', judgment: 'Browser adapter unavailable',
-      decisions: ['Do not claim visual verification'], behavior: { inputs: ['design'], outputs: ['blocked'], errors: ['no e2e script'] },
+      decisions: ['No visual claim'], behavior: { inputs: ['design'], outputs: ['blocked'], errors: ['no e2e script'] },
       evidence: ['e2e receipt'], affectedRequirements: ['REQ-001'], risks: ['visual flow unverified'],
       unverified: ['REQ-001'], recommendedChecks: ['e2e'],
     }));
@@ -1011,5 +1013,115 @@ describe('v2 workflow control CLI and runtime guidance', () => {
     const item = new WorkItemStore(root).get(prepared.item.id);
     assert.equal(item.phase, 'plan');
     assert.equal(item.approvals.plan, 'pending');
+  });
+});
+
+describe('deferred specialist results (asynchronous Agent tool)', () => {
+  const SESSION = 'session-deferred';
+
+  function doActiveWithOpenAssignment(root) {
+    const store = new WorkItemStore(root);
+    let item = store.create({
+      id: 'WI-2026-09-11-deferred', title: 'Deferred', primaryFeature: 'workflow', affectedFeatures: [], scale: 'compact',
+    }, T0);
+    const gate = (gateName, verdict, check) => ({
+      gateResult: { gate: gateName, verdict, requiredChecks: [check], passed: [check], failed: [], blocked: [], missing: [], evaluatedAt: T0 },
+    });
+    writePhaseDocument(root, item, 'plan', '# Plan\n\nREQ-001', { status: 'draft' });
+    item = store.apply(item.id, EVENTS.PLAN_PRESENTED, gate('plan', 'PASS', 'plan-document'), { timestamp: T0 });
+    item = store.apply(item.id, EVENTS.USER_PLAN_APPROVED, {}, { timestamp: T0 });
+    item = store.apply(item.id, EVENTS.DESIGN_SCOPE_DEFINED, {
+      writeScopes: ['src/**'], readinessChecks: ['test'], reviewChecks: ['test'], requiredSpecialists: ['backend-engineer'],
+    }, { timestamp: T0 });
+    writePhaseDocument(root, item, 'design', '# Design\n\nREQ-001\n\nTC-001', { status: 'draft' });
+    item = store.apply(item.id, EVENTS.DESIGN_PRESENTED, gate('design', 'PASS', 'design-document'), { timestamp: T0 });
+    item = store.apply(item.id, EVENTS.USER_DESIGN_APPROVED, {}, { timestamp: T0 });
+    store.acquireLease(item.id, SESSION);
+    const assignment = buildSpecialistAssignment({
+      role: 'backend-engineer', delegatedBy: 'cto', phase: 'do', mode: 'implementation',
+      question: 'Implement REQ-001.', codeWrite: true, writeScope: ['src/**'],
+      completionCriteria: ['TC-001 passes'], context: { refs: ['02-design/main.md'], receipts: [], cleanRoom: false },
+    });
+    const receipt = store.recordAssignment(item.id, assignment, SESSION);
+    store.recordAssignmentUse(item.id, receipt.id, SESSION);
+    store.setRepoSnapshot(item.id, require('../lib/workflow/v2/repo-drift').captureRepoSnapshot(root), { reason: 'test-baseline' });
+    new AuthorizationStore(root).grant({
+      sessionId: SESSION, workItemId: item.id, phase: 'do', action: 'continue-work',
+      allowedPaths: defaultAllowedPaths(store.get(item.id)), allowedCommands: [],
+    });
+    return { store, item: store.get(item.id), receipt };
+  }
+
+  it('publishes the handoff runtime command in enforce mode', () => {
+    const authorization = { allowedCommands: ['node "/plugin/scripts/vais-workflow-v2.js"'], allowedPaths: [] };
+    assert.equal(authorizeCommand('node "/plugin/scripts/vais-workflow-v2.js" handoff --id WI-1 --session s --assignment AS-1 --handoff-file docs/x/handoff.json', authorization).allowed, true);
+    assert.equal(authorizeCommand('node "/plugin/scripts/vais-workflow-v2.js" create --slug x', authorization).allowed, false);
+  });
+
+  it('keeps the session authorization on a non-managed turn while a launched assignment is still open', t => {
+    const root = fixture(t);
+    enableV2(root);
+    const { item, receipt } = doActiveWithOpenAssignment(root);
+    const output = runHook(root, 'workflow-v2-prompt.js', {
+      cwd: root, session_id: SESSION, prompt: '<task-notification>Agent finished</task-notification>',
+    });
+    const context = output.hookSpecificOutput.additionalContext;
+    assert.match(context, new RegExp(receipt.id));
+    assert.match(context, /handoff --id WI-2026-09-11-deferred/);
+    assert.doesNotMatch(context, /현재 Work item의 상태·문서·제품 코드를 변경하지 않는다/);
+    assert.ok(new AuthorizationStore(root).get(SESSION), 'authorization must survive the notification turn');
+    assert.equal(new WorkItemStore(root).get(item.id).phase, 'do');
+  });
+
+  it('still revokes the authorization on a non-managed turn when no assignment is open', t => {
+    const root = fixture(t);
+    enableV2(root);
+    const { store, item, receipt } = doActiveWithOpenAssignment(root);
+    const phaseDir = path.join(root, 'docs', 'work-items', 'workflow', '2026-09-11-deferred', '03-do');
+    fs.mkdirSync(phaseDir, { recursive: true });
+    fs.writeFileSync(path.join(phaseDir, 'handoff.json'), JSON.stringify({
+      schema: 'specialist-handoff/v1', status: 'completed', judgment: 'done',
+      decisions: [], behavior: { inputs: [], outputs: [], errors: [] }, evidence: [],
+      affectedRequirements: ['REQ-001'], risks: [], unverified: [], recommendedChecks: [],
+    }));
+    const registered = execute(['handoff', '--id', item.id, '--session', SESSION, '--assignment', receipt.id,
+      '--handoff-file', path.relative(root, path.join(phaseDir, 'handoff.json'))], root);
+    assert.equal(registered.status, 'completed');
+    assert.deepEqual(store.openAssignments(item.id), []);
+    const output = runHook(root, 'workflow-v2-prompt.js', {
+      cwd: root, session_id: SESSION, prompt: '다음으로 진행하자',
+    });
+    assert.match(output.hookSpecificOutput.additionalContext, /이 요청에는 \/vais가 없다/);
+    assert.equal(new AuthorizationStore(root).get(SESSION), null);
+  });
+
+  it('treats an asynchronous Agent launch receipt as an open assignment instead of a rejected handoff', t => {
+    const root = fixture(t);
+    enableV2(root);
+    const { store, item, receipt } = doActiveWithOpenAssignment(root);
+    const output = runHook(root, 'workflow-v2-agent-handoff.js', {
+      cwd: root, session_id: SESSION, tool_name: 'Agent',
+      tool_input: { subagent_type: 'v2-specialist', prompt: `Assignment receipt: ${receipt.id}` },
+      tool_response: 'Async agent launched successfully. agentId: a1b2c3 (internal ID). The agent is working in the background.',
+    });
+    assert.match(output.additionalContext, /stays open/);
+    assert.match(output.additionalContext, /handoff --id WI-2026-09-11-deferred/);
+    assert.doesNotMatch(output.additionalContext, /rejected/);
+    assert.deepEqual(store.openAssignments(item.id).map(value => value.id), [receipt.id]);
+  });
+
+  it('does not treat the Work item\'s own evidence and transient files as repository drift', t => {
+    const root = fixture(t);
+    enableV2(root);
+    const { store, item } = doActiveWithOpenAssignment(root);
+    const own = path.join(root, 'docs', 'work-items', 'workflow', '2026-09-11-deferred', '03-do');
+    fs.mkdirSync(path.join(own, 'evidence', 'transactions'), { recursive: true });
+    fs.writeFileSync(path.join(own, 'draft.md'), '# Do draft\n');
+    fs.writeFileSync(path.join(own, 'evidence', 'transactions', 'PT-1.failure.json'), '{}\n');
+    runHook(root, 'workflow-v2-prompt.js', { cwd: root, session_id: SESSION, prompt: '/vais 계속 진행해' });
+    assert.equal(store.readRegistry().driftAlerts.length, 0);
+    assert.equal(store.get(item.id).phase, 'do');
+    runHook(root, 'workflow-v2-drift.js', { cwd: root, session_id: SESSION, tool_name: 'Bash', tool_input: { command: 'pwd' } });
+    assert.equal(store.readRegistry().driftAlerts.length, 0);
   });
 });

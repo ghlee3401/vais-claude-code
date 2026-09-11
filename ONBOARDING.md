@@ -1,134 +1,54 @@
 # VAIS Code — Onboarding (5분 읽기)
 
 > **이 파일의 책임**: 처음 본 AI 또는 사람이 본 repo 의 구조·진입점·워크플로우를 5분 안에 파악하도록 돕는 가이드.
-> 더 깊이 파야 하면 → `CLAUDE.md` (Claude Code) / `AGENTS.md` (Cursor/Copilot) / `skills/vais/SKILL.md` (`/vais` 명령어).
+> 더 깊이 파야 하면 → `CLAUDE.md` (Claude Code 지침) / `README.md` (사용법 전체) / `skills/vais/SKILL.md` (`/vais` managed entry).
 
 ---
 
 ## 1. What This Is (1분)
 
-**VAIS Code** = Claude Code 플러그인. **AI 코드 개발 도우미 (C-Suite 조직 시뮬레이션)** — CEO 가 7 차원 알고리즘으로 활성 C-Level 을 자동 결정하고, 사용자는 AskUserQuestion 클릭만으로 서비스 런칭 라이프사이클(아이디어→기획→설계→구현→QA→보고)을 진행한다.
+**VAIS Code** = Claude Code 플러그인. 자연어 요청 하나(`/vais …`)를 받으면 가상 C-Suite 조직이 **Plan → Design → Do → Review → Report** 다섯 단계를 순서대로 진행하고, 사용자는 **Plan 승인 · Design 승인 · 최종 승인** 세 번만 결정한다.
 
 | 핵심 컨셉 | 설명 |
 |----------|------|
-| **4 Primary + 2 Secondary** | Primary (CEO/CPO/CTO/CSO) — CEO 자동 라우팅 / Secondary (CBO/COO) — 사용자 명시 호출만 활성. 코드 개발 외 영역은 옵션. |
-| **CEO 7 차원 알고리즘** | `lib/ceo-algorithm.js` — 보안/컴플라이언스/UX/데이터모델/외부통신/성능/제품정의 휴리스틱 + phase↔artifact 자동 매핑 |
-| **CTO 만 mandatory PDCA** | CTO: plan→design→do→qa 순차 mandatory. CEO ideation 만 mandatory. CPO/CSO/CBO/COO mandatory 미적용 (CEO 알고리즘 결정) |
-| **sub-agent 직접 박제** | `_tmp/` 폐기. sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter **4 필수 필드** (owner/artifact/phase/feature) 직접 작성. agent/generated/source/summary 는 auto-hydrate optional. main.md = 5 섹션 인덱스만 |
-| **AskUserQuestion 클릭 인터페이스** | 모든 결정 = 도구 호출. 자연어 명령어 안내 금지 |
-| **Lean checkpoint** | CP-0 (PRD missing) + CP-Q (Critical or matchRate<90) 만 발동. 나머지 자동 진행 + outro 한 줄. PO 클릭 ≤ 2회/피처 |
-| **Knowledge lazy-load** | `agents/{c-level}/knowledge/` 19 MD — phase + artifact 매칭 시만 Read. 메인 .md 의 "Knowledge Index" 표가 trigger |
-| **CEO 진입 절차 강제** | CEO 가 4 단계 순차 — `analyzeCEO()` Bash 호출 → 7 차원 등급 표 출력 → activeCLevel 인용 → AskUserQuestion. LLM 자체 라우팅 금지 |
+| **단일 `/vais` 진입** | C-Level·phase를 사용자가 고르지 않는다. `/vais <요청>`, `/vais status`, `/vais pause|resume|cancel`, 승인 문구가 전부 |
+| **5단계 상태 머신** | `lib/workflow/v2/state-machine.js`. 규모(compact/standard/extended)와 무관하게 다섯 단계 정본을 남기고, 허용 목록 밖 전이는 runtime이 거부 |
+| **승인 Gate 3개** | Plan / Design / 최종. `/vais plan 승인`, `/vais design 승인`, `/vais 최종 승인`. 모호한 답(`좋아`)·조건부 승인은 무효 |
+| **Design 승인 후 자동 진행** | Do → Readiness Gate → Review evidence → 독립 AI QA 결과 제시까지 사용자 진행 요청 없이 이어진다 |
+| **독립 QA** | `independent-qa`가 clean-room·read-only로 PASS/FAIL/BLOCKED 판정. FAIL은 Design으로 복귀(최대 3회) |
+| **runtime 역할 카드** | C-Level·specialist는 `contracts/v2-role-cards.json` 정본. 위임은 단일 Agent `v2-specialist` + 구조화 assignment/handoff JSON |
+| **Work item / Feature** | Feature = 장기 기능, Work item = 한 번의 변경. `docs/work-items/{feature}/{date-slug}/0N-*/main.md` 다섯 정본 + `docs/README.md` Master 인덱스 |
+| **runtime guard** | hook이 write scope 밖 쓰기, 셸 합성, `.vais/v2` 직접 수정, Gate 우회를 차단. `/vais` 없는 대화는 읽기 전용 |
 
-현재 버전: **v3.0.0** — VAIS workflow v2 managed entry (단일 `/vais` 진입 + Plan→Design→Do→Review→Report 상태 머신 `enforce`). 상세: `CHANGELOG.md`.
+현재 버전: **v3.0.1** — `vais.config.json > workflowV2.mode: enforce`. `shadow`로 바꾸면 Legacy C-Suite 라우팅(`skills/vais/legacy.md`)이 복원된다. 상세: `CHANGELOG.md`.
 
 ---
 
 ## 2. Quick Start (1분)
 
-### 시나리오 A — 사용자가 새 피처를 만들고 싶을 때
+### 시나리오 A — 사용자가 새 기능을 만들고 싶을 때
 
+```text
+/vais 비밀번호 재설정 기능 추가해줘   # 이력 검색 → Feature 관계·규모 확인 → Plan 제시
+/vais plan 승인                        # → Design 제시
+/vais design 승인                      # → Do → Readiness → 독립 QA → 결과·화면 제시
+/vais 최종 승인                        # → Report 작성·동결
 ```
-/vais ceo ideation 새-피처-아이디어    # 모호한 아이디어 → CEO 7 차원 분석 → 활성 C-Level 자동 결정
-                                          ↓ AskUserQuestion 클릭으로 phase 진행
-                                          ↓ CTO PDCA 만 mandatory, 비-CTO 는 CEO 알고리즘 결정
-/vais cto plan|design|do|qa|report {feature}   # 코드 영역 PDCA (mandatory)
-/vais cbo plan {feature}                # Secondary — GTM/마케팅/재무 필요 시 명시 호출
-/vais coo plan {feature}                # Secondary — 운영/CI/CD 필요 시 명시 호출
-/vais commit                            # 커밋 + semver bump + push
-```
+
+중간 수정은 `/vais <수정 내용>`, 상태 확인은 `/vais status`, 진행 중 다른 요청은 `/vais 새 작업: <요청>`(pending 큐)으로 보낸다.
 
 ### 시나리오 B — 코드 읽기 (이 repo 처음 본 AI)
 
 1. 본 `ONBOARDING.md` (지금) — 5분 진입
-2. `CLAUDE.md` — Claude Code 전용 지침 (Mandatory Rules + Project Structure 절)
-3. `vais.config.json` — 워크플로우 / 게이트 / C-Suite 정의
-4. `skills/vais/SKILL.md` — 명령어 라우팅
-5. `agents/{c-level}/{c-level}.md` — 각 C-Level 의 페르소나·책임
+2. `CLAUDE.md` — Claude Code 전용 지침 (v3 enforce 규칙 + Project Structure)
+3. `skills/vais/SKILL.md` — `/vais` managed entry 8줄 규칙
+4. `hooks/workflow-v2-prompt.js` — 단계별 지침이 실제로 어떻게 주입되는지
+5. `lib/workflow/v2/state-machine.js` + `router.js` — 상태 전이와 승인 문법 정본
+6. `contracts/v2-role-cards.json` — 역할·경계·위임 관계
 
 ### 시나리오 C — 디자인 시스템 사용
 
-`design-system/INDEX.md` 에 등록된 brand 카탈로그 확인 (brand-first — 71 brand DESIGN.md, default 5 사전 박제 + lazy import). ui-designer agent 가 design phase 시작 시 brand 선택 후 해당 `brands/{slug}/DESIGN.md` 를 정본으로 참조.
-
----
-
-## Agent Teams 활성화 (선택) {#agent-teams-activation}
-
-> **기본값: `agentTeams.enabled=false` (강제 X, 안내 O)** — 미활성 시 sequential 모드로 정상 동작합니다. 실제 CC SendMessage 도구를 사용하려면 아래 5 단계를 따르세요.
->
-> `enabled=false` 는 sequential 모드입니다. `enabled=true` 이지만 env flag 가 없을 때만 simulation fallback 이 동작합니다.
-
-### 전제 조건
-
-Claude Code 2.1+ 가 필요합니다.
-
-```bash
-claude --version
-# 예상 출력: 2.1.xxx (Claude Code)
-```
-
-### 활성화 5 단계
-
-**Step 1 — CC 버전 확인**
-
-```bash
-claude --version
-# 2.1.x 이상이어야 합니다
-```
-
-**Step 2 — env 변수 설정 (즉시 적용)**
-
-```bash
-export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
-```
-
-**Step 3 — settings.json 영구화 (선택)**
-
-세션 간 유지하려면 `~/.claude/settings.json` 에 추가:
-
-```json
-{
-  "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
-}
-```
-
-> 주의: vais-code 는 settings.json 을 자동으로 수정하지 않습니다. 직접 편집하세요.
-
-**Step 4 — vais.config 활성화**
-
-`vais.config.json` 내 `orchestration.agentTeams.enabled` 를 `true` 로 변경:
-
-```json
-{
-  "orchestration": {
-    "agentTeams": {
-      "enabled": true
-    }
-  }
-}
-```
-
-**Step 5 — 검증**
-
-새 Claude Code 세션을 시작한 뒤 확인:
-
-```bash
-/vais status
-# 출력 예시:
-# Agent Teams: enabled
-# SendMessage: real (CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=env)
-```
-
-경고 메시지가 없으면 real SendMessage 모드가 활성화된 것입니다.
-
-### Graceful Degradation
-
-| 조건 | 동작 |
-|------|------|
-| `agentTeams.enabled=false` | 조용 — 기존 sequential 모드 |
-| `enabled=true` + flag 미설정 | stderr 경고 1줄 + simulation fallback (byte-compat) |
-| `enabled=true` + CC < 2.1.0 | stderr 경고 1줄 + sequential fallback |
-| `enabled=true` + CC 2.1+ + flag 설정 | real SendMessage 활성 (조용) |
+`design-system/INDEX.md` 에 등록된 brand 카탈로그 확인 (brand-first — 71 brand DESIGN.md, default 5 사전 박제 + lazy import). UI 설계가 필요한 Design에서 ui-designer 역할이 brand 를 선택하고 `brands/{slug}/DESIGN.md` 를 정본으로 참조한다.
 
 ---
 
@@ -136,82 +56,90 @@ export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 
 ```mermaid
 flowchart TB
-    ONBOARD[ONBOARDING.md<br/>5분 진입] --> CLAUDE[CLAUDE.md<br/>Claude Code 지침]
-    ONBOARD --> AGENTS[AGENTS.md<br/>Cursor/Copilot 호환]
-    ONBOARD --> SKILL[skills/vais/SKILL.md<br/>/vais 명령어]
+    USER["/vais 요청 · 승인"] --> PROMPT["hooks/workflow-v2-prompt.js<br/>UserPromptSubmit · 라우팅·승인 판정·단계 지침"]
+    PROMPT --> SKILL["skills/vais/SKILL.md<br/>v2 managed entry (enforce)"]
+    PROMPT -. shadow/disabled .-> LEGACY["skills/vais/legacy.md<br/>Legacy C-Suite 라우팅"]
 
-    SKILL --> PHASES[skills/vais/phases/<br/>ceo·cpo·cto·cso·cbo·coo·ideation]
-    SKILL --> UTILS[skills/vais/utils/<br/>status·init·next·commit·...]
+    SKILL --> CLI["scripts/vais-workflow-v2.js<br/>plan present · design present · do ready ·<br/>review prepare/decide · report finalize · assignment"]
+    CLI --> LIB["lib/workflow/v2/ (23 모듈)<br/>state-machine · work-item-store · phase-transaction ·<br/>gate-engine · write-policy · tool-adapters · context-capsule"]
+    LIB --> STATE[".vais/v2/<br/>work-items.json · authorizations.json"]
+    LIB --> DOCS["docs/work-items/{feature}/{date-slug}/<br/>01-plan … 05-report/main.md + evidence/"]
+    DOCS --> INDEX["docs/README.md · docs/features/<br/>자동 생성 인덱스"]
 
-    PHASES --> AGENTSDIR[agents/<br/>6 C-Level + 47 sub-agents + knowledge/ 19 MD]
-    AGENTSDIR --> HOOKS[hooks/<br/>session-start·design-mcp-trigger·ideation-guard]
-    AGENTSDIR --> SCRIPTS[scripts/<br/>doc-validator·auto-judge·auto-select-template·patch-*·import-awesome-design-md]
+    SKILL --> AGENT["agents/v2-specialist.md<br/>단일 runtime specialist"]
+    AGENT --> ROLES["contracts/v2-role-cards.json<br/>C-Level · judgment · implementation 역할"]
+    AGENT --> HANDOFF["hooks/workflow-v2-agent-handoff.js<br/>handoff JSON 자동 저장"]
 
-    CLAUDE --> CONFIG[vais.config.json<br/>워크플로우·게이트·C-Suite 정의]
-    PHASES --> CONFIG
-    AGENTSDIR --> CONFIG
-
-    AGENTSDIR --> DOCS[docs/{feature}/<br/>피처별 PDCA 산출물]
-    DOCS --> DS[design-system/brands/<br/>71 brand DESIGN.md 박제]
+    GUARD["hooks/workflow-v2-write-guard.js<br/>PreToolUse · write scope · 셸 합성 차단"] --> LIB
+    DRIFT["hooks/workflow-v2-drift.js<br/>PostToolUse · 변경 경로 기록"] --> LIB
+    SCHEMAS["schemas/ (JSON schema)<br/>work-item · assignment · handoff · check-result · gate-result"] --> LIB
 ```
 
 부속 폴더 (그래프 외):
-- `lib/` — fs-utils, io, status, brand-validator, mcp-validator(deprecated) 등 공유 helper
-- `templates/` — PDCA 문서 템플릿 (4-tier plan: stub/minimal/standard/extended + design/do/qa/report/ideation + 6 서브디렉토리 alignment/biz/core/how/what/why)
-- `output-styles/` — 출력 스타일 (session-start hook 로드)
-- `mcp/` — `vais-design-system` MCP 서버 (design_search / design_stack_search — heuristics 가드레일 전용)
-- `vendor/ui-ux-pro-max` — BM25 검색 엔진 (직접 수정 금지)
+- `agents/{c-level}/` — Legacy C-Level·sub-agent 본문 + `knowledge/` 19 MD (역할 카드의 `knowledge` 필드가 lazy-load 대상으로 참조)
+- `templates/` — Legacy PDCA 문서 템플릿 (shadow 모드)
+- `skills/brief/` — `/vais brief` 임원 보고서 (워크플로우 독립)
+- `mcp/` + `vendor/ui-ux-pro-max` — design-system MCP 서버와 BM25 검색 엔진 (직접 수정 금지)
+- `scripts/evaluation/`, `tests/v2-*.test.js` — Legacy/v2 formal 비교 체계
 
 ---
 
 ## 4. 진입점 역할 표 (1분)
 
-| 파일 | 대상 | 역할 | 언제 보나 | 길이 |
-|------|------|------|-----------|:----:|
-| `ONBOARDING.md` | 모든 AI/사람 (처음) | 진입 가이드 — 5분 파악 | 처음 1번 | ~150줄 |
-| `CLAUDE.md` | Claude Code | 프로젝트 지침 — Rules + Structure + Workflow | Claude Code 세션 시작 시 자동 로드 | ~400줄 |
-| `AGENTS.md` | Cursor / Copilot / 일반 AI | Claude 외 AI 호환 지침 (CLAUDE.md 의 핵심 추출) | 다른 AI 도구 사용 시 | ~200줄 |
-| `skills/vais/SKILL.md` | Claude Code (skill) | `/vais` 명령어 진입점 — phase + 액션 라우팅 | `/vais` 호출 시 자동 로드 | ~250줄 |
+| 파일 | 대상 | 역할 | 언제 보나 |
+|------|------|------|-----------|
+| `ONBOARDING.md` | 모든 AI/사람 (처음) | 진입 가이드 — 5분 파악 | 처음 1번 |
+| `README.md` | 사용자 | 사용법 전체 — 명령·승인 문법·5단계·규모·역할·문서 구조·설정 | 사용법이 궁금할 때 |
+| `CLAUDE.md` | Claude Code | 프로젝트 지침 — v3 enforce 규칙 + Structure + shadow 모드 Legacy 규칙 | 세션 시작 시 자동 로드 |
+| `skills/vais/SKILL.md` | Claude Code (skill) | `/vais` managed entry — hook 컨텍스트를 runtime 정본으로 따르는 규칙 | `/vais` 호출 시 자동 로드 |
+| `skills/vais/legacy.md` | Claude Code (skill) | shadow/disabled 모드 Legacy 라우팅 | `workflowV2.mode ≠ enforce` 일 때 |
+| `contracts/v2-role-cards.json` | runtime | 역할 카드 정본 | 위임·역할 경계 확인 시 |
 
 ---
 
 ## 5. Next Steps (1분)
 
-### 워크플로우 1개 예시 — 새 기능 "social-login-integration"
+### 워크플로우 1개 예시 — "social-login-integration"
 
-```
-1. /vais ceo ideation social-login-integration
-   → CEO 가 사용자와 대화. 피처 정의·범위(Lake)·다음 C-Level 합의 → docs/social-login-integration/00-ideation/main.md 박제
+```text
+1. /vais 소셜 로그인 연동 추가해줘
+   → 관련 Work item 검색 → Feature 관계(new/existing)·규모 확인 (AskUserQuestion)
+   → CPO Plan 제시 → docs/work-items/{feature}/{date}-{slug}/01-plan/main.md
 
-2. /vais cto plan social-login-integration
-   → CTO 가 기획서 작성 (Standard 템플릿). CP-1 (Minimal/Standard/Extended) → docs/.../01-plan/main.md
+2. /vais plan 승인
+   → CTO Design 제시 (REQ별 동작·TC, write scope, readiness/review check, specialist 선택)
+   → UI 가 있으면 ui-designer 역할이 brand 선택 → design-system/brands/{slug}/DESIGN.md 정본
 
-3. /vais cto design social-login-integration
-   → ui-designer + infra-architect 위임 (병렬). CP-D (아키텍처 옵션) → docs/.../02-design/main.md
-   → 2-step AskUserQuestion 으로 brand 선택 (Hot 5 / Category / Manual / Default) → design-system/brands/{slug}/DESIGN.md 가 single source
+3. /vais design 승인
+   → Do: Design 이 고른 specialist 에 assignment 발급 → 구현 → do ready (readiness check)
+   → Review: review prepare (Tool evidence) → independent-qa 1회 → review decide
+   → 결과·스크린샷·제한 제시
 
-4. /vais cto do social-login-integration
-   → frontend-engineer + backend-engineer + test-engineer 위임 (병렬). 실제 구현. CP-2.
+4. /vais 최종 승인
+   → report finalize → 05-report/main.md 동결 · docs/README.md 갱신
 
-5. /vais cto qa social-login-integration
-   → qa-engineer 위임. matchRate 측정 + Critical/Important 이슈. CP-Q.
-
-6. /vais cto report social-login-integration
-   → 완료 보고서.
-
-7. /vais commit
-   → 커밋 메시지 + semver bump + (선택) push.
+5. 커밋은 별도 요청 — 문서 3개·코드 변경을 확인한 뒤 commit
 ```
 
 ### 더 알아보기
 
 | 주제 | 위치 |
 |------|------|
-| 6 C-Level 상세 책임 | `agents/{c-level}/{c-level}.md` |
-| Mandatory Rules (14개) | `CLAUDE.md` § Mandatory Rules |
-| Gate / Checkpoint 시스템 | `vais.config.json` + `agents/cto/cto.md` § Checkpoint |
-| 디자인 시스템 — brand 박제 | `scripts/import-awesome-design-md.js` + `design-system/specs/` + `design-system/brands/INDEX.md` |
+| 승인 문법 정규식 | `lib/workflow/v2/router.js` |
+| 단계별 지침·owner 카드 주입 | `hooks/workflow-v2-prompt.js > phaseGuidance` |
+| 문서 예산·필수 섹션 | `lib/workflow/v2/document-quality.js`, `phase-check.js` |
+| Tool check 9종 | `lib/workflow/v2/tool-adapters.js` |
+| write scope·명령 허용 정책 | `lib/workflow/v2/write-policy.js` |
+| v3 전환 근거 (Review Attempt 18) | `docs/work-items/vais-workflow/2026-08-31-workflow-redesign/05-report/main.md` |
 | Plugin 구조 검증 | `node scripts/vais-validate-plugin.js` |
+
+---
+
+## Legacy 참고 — Agent Teams (shadow 모드 전용)
+
+> 기본값: `agentTeams.enabled=false` (강제 X, 안내 O). `enabled=false` 는 sequential 모드이며, `enabled=true` 이지만 env flag 가 없을 때만 simulation fallback 이 동작한다.
+
+`orchestration.agentTeams.enabled` 와 `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` 로 활성화하는 대화-합성 모델은 **Legacy(shadow/disabled) 모드에서만** 의미가 있다. enforce 모드의 v2 runtime 은 단일 `v2-specialist` 위임과 구조화 handoff 만 사용하며 Agent Teams 설정을 읽지 않는다. 상세: `contracts/agent-teams.md`.
 
 ---
 

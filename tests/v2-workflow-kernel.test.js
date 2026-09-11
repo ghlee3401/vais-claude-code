@@ -16,6 +16,8 @@ const {
   captureRepoSnapshot,
   diffSnapshots,
   classifyDrift,
+  filterExternalDrift,
+  isRuntimeOwnedPath,
   normalizeWriteScopes,
 } = require('../lib/workflow/v2');
 
@@ -321,5 +323,22 @@ describe('v2 repository drift observation', () => {
     assert.equal(classifyDrift(['src/auth/login.js'], { writeScopes: ['src/auth/**'] }), 'within-design');
     assert.equal(classifyDrift(['src/payment.js'], { writeScopes: ['src/auth/**'] }), 'new-surface');
     assert.equal(classifyDrift(['docs/x/01-plan/main.md'], { writeScopes: ['src/**'] }), 'requirement-change');
+  });
+
+  it('ignores the runtime-owned evidence and drafts of the Work item itself but keeps canonical main.md', () => {
+    const item = { id: 'WI-2026-09-11-docs', primaryFeature: 'vais-workflow', writeScopes: ['README.md'] };
+    const own = 'docs/work-items/vais-workflow/2026-09-11-docs';
+    const paths = [
+      `${own}/04-review/draft.md`,
+      `${own}/04-review/evidence/transactions/PT-1.failure.json`,
+      `${own}/04-review/handoff.json`,
+      `${own}/02-design/revisions/v1.md`,
+    ];
+    assert.deepEqual(filterExternalDrift(paths, item), []);
+    assert.deepEqual(filterExternalDrift([...paths, `${own}/01-plan/main.md`], item), [`${own}/01-plan/main.md`]);
+    assert.deepEqual(filterExternalDrift(['docs/work-items/other/2026-09-11-x/04-review/draft.md'], item),
+      ['docs/work-items/other/2026-09-11-x/04-review/draft.md']);
+    assert.equal(isRuntimeOwnedPath(`${own}/main.md`, item), false);
+    assert.equal(isRuntimeOwnedPath('README.md', item), false);
   });
 });

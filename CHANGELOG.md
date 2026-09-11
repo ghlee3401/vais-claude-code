@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.0.1] - 2026-09-11
+
+### Fixed
+
+- **비동기 Agent 결과의 handoff 미기록 (Review 교착)** — 현재 Claude Code 빌드는 Agent 도구가 launch receipt 만 즉시 반환하고 specialist 결과를 task notification 으로 나중에 전달한다. 기존 PostToolUse hook 은 그 시점의 결과에 handoff 가 없어 거부했고, 이어지는 non-managed 알림 turn 이 세션 authorization 을 회수해 assignment 가 consumed 상태로 고정됐다 (재발급·재호출·재등록 모두 guard 차단). 수정: (1) hook 이 launch receipt 를 "열린 assignment" 로 인식하고 등록 절차를 안내 (`isDeferredAgentResult`), (2) enforce 모드 공개 명령에 `handoff` 추가 — `recordDeferredHandoff` 가 hook 과 동일한 envelope·schema·byte·verdict 검증 후 canonical evidence 를 기록하고 phase 폴더·`.vais/v2/drafts/` 의 임시 파일을 제거, (3) prompt hook 이 열린 assignment 가 있는 동안에는 non-managed turn 에서 authorization 을 회수하지 않고 등록 안내를 주입 (`openAssignmentContinuation`), (4) Do/Review 단계 안내에 deferred 결과 처리 절차 추가
+- **runtime 자기 산출물의 drift 오분류** — Work item 자신의 `docs/work-items/{feature}/{id}/**` 아래 evidence·revisions·draft·handoff 파일이 `new-surface` drift 로 분류되어 Review 중인 Work item 을 Design 으로 되돌렸다. `filterExternalDrift` 가 canonical `main.md` 를 제외한 runtime 소유 경로를 drift 관측에서 제외 (prompt hook · drift hook 공통)
+- **CLI `handoff` 계약 통일** — 기존 비공개 `handoff` 명령은 outputContract 검증과 evidence 기록 없이 registry 만 갱신했다. 이제 hook 경로와 동일한 검증·evidence 를 거친다
+
+### Changed
+
+- `README.md`·`ONBOARDING.md`·`CLAUDE.md` — v3 managed entry 사용법으로 전면 갱신 (단일 `/vais` 진입, 승인 문법, 5단계·Gate, 규모, 역할 카드, `docs/work-items` 구조, check 9종·hook 5종, `workflowV2` 설정, shadow rollback). Legacy 규칙은 shadow 모드 절로 격리
+- `.claude-plugin/plugin.json`·`marketplace.json` 설명문을 v3 기준으로 갱신
+- 회귀 테스트: deferred launch receipt 인식, deferred handoff 등록·임시 파일 제거·프로젝트 외부 파일 거부, non-managed turn 의 authorization 유지/회수 분기, runtime 소유 경로 drift 제외 (`tests/v2-automatic-handoff.test.js`, `tests/v2-managed-entry.test.js`, `tests/v2-workflow-kernel.test.js`)
+- `tests/v2-fair-comparison.test.js` Legacy stage 테스트가 HEAD 대신 승인된 Legacy baseline(`skills/vais/legacy.md` 도입 커밋의 부모)에서 stage 를 만들도록 수정 — v3.0.0 커밋 이후 HEAD 에 v2 파일이 포함되어 항상 실패하던 문제 해소
+
 ## [3.0.0] - 2026-09-11
 
 > Major: `/vais` 공개 진입 문법이 C-Level·phase 직접 호출에서 단일 managed entry 로 바뀐다. `vais.config.json > workflowV2.mode` 를 `shadow` 로 되돌리면 Legacy 흐름이 복원된다.

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.0.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-3.0.1-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -7,12 +7,13 @@
 <h1 align="center">VAIS Code</h1>
 
 <p align="center">
-  <strong>Virtual AI C-Suite for Software Development — v3.0.0</strong><br/>
-  organization-in-a-box · 6 C-Level Executives · 47 Specialized Sub-agents · 7-Dimension Routing Algorithm
+  <strong>Virtual AI C-Suite for Software Development — v3.0.1</strong><br/>
+  단일 <code>/vais</code> 진입 · Plan → Design → Do → Review → Report 상태 머신 · 사용자 승인 Gate 3개 · 독립 AI QA
 </p>
 
 <p align="center">
-  PO 의 자연어 의도를 CEO 가 7 차원 알고리즘으로 객관 매핑 → 활성 C-Level 동적 결정 → 자동 위임으로 서비스 라이프사이클 실행하는 Claude Code 플러그인
+  자연어 요청 하나로 가상 C-Suite 조직이 기획·설계·구현·검증·보고를 순서대로 진행하는 Claude Code 플러그인.<br/>
+  사용자는 C-Level이나 단계를 고르지 않고 <strong>승인만</strong> 합니다.
 </p>
 
 ---
@@ -23,434 +24,269 @@
 
 | 의존성 | 버전 | 용도 |
 |--------|------|------|
-| Node.js | ≥ 18 | plugin runtime |
-| Python3 | ≥ 3.8 | `vendor/ui-ux-pro-max` 디자인 시스템 검색 — design phase MCP 자동 호출 (기본 ON) |
+| Node.js | ≥ 18 | plugin runtime, hook 실행, 내부 workflow CLI |
+| Claude Code | ≥ 2.1.32 | UserPromptSubmit / PreToolUse / PostToolUse hook 지원 |
+| Python3 | ≥ 3.8 | `vendor/ui-ux-pro-max` 디자인 시스템 검색 — UI 설계 시 MCP 자동 호출 (기본 ON) |
 
-> ⚠️ **Python3 미설치 시** design phase 진입이 차단됩니다 (Hard fail). opt-out 원할 시 `vais.config.json > orchestration.mcp.enabled: false` 설정.
+> ⚠️ **Python3 미설치 시** UI 설계 단계 진입이 차단됩니다 (Hard fail). opt-out: `vais.config.json > orchestration.mcp.enabled: false`.
 
 ```bash
 # Install
 git clone https://github.com/ghlee3401/vais-claude-code.git
 cd vais-claude-code && bash scripts/setup-dev.sh
 
-# Python3 확인 (design phase 자동 호출 사용 시 필수)
-python3 --version  # 3.8 이상
-
 # In Claude Code
 /reload-plugins
-/vais help
+/vais status
 ```
 
-> **(선택) Real SendMessage 활성화**: `export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` + Claude Code 2.1+ + `vais.config.json > agentTeams.enabled=true`. `enabled=false` 는 sequential, `enabled=true` + env flag 없음은 simulation fallback 입니다. 자세한 설명은 [ONBOARDING.md#agent-teams-activation](./ONBOARDING.md#agent-teams-activation)
+### 첫 요청
 
-**3가지 사용법:**
-
-```bash
-# 1) 서비스 런칭 — CEO가 전체 파이프라인 지휘
-/vais ceo plan online-bookstore
-
-# 2) 기술 구현만 — PRD/기획이 이미 있을 때
-/vais cto plan login
-
-# 3) 특정 C-Level 직접 — 원하는 전문가만 호출
-/vais cbo plan market-entry          # 비즈니스 분석
-/vais cso plan payment-integration   # 보안 검토
-/vais cpo plan user-dashboard        # 제품 기획
+```text
+/vais 비밀번호 재설정 기능 추가해줘
 ```
 
-**Phase 지정:**
+이 한 줄이면 VAIS가 관련 이력을 검색하고 Feature 관계·규모를 제안한 뒤, Plan을 작성해 승인을 요청합니다. 이후 필요한 것은 아래 승인 문구뿐입니다.
 
-```bash
-/vais ceo ideation my-idea     # (선택) 아이디어 자유 대화
-/vais cpo plan my-feature      # 기획
-/vais cto design my-feature    # 설계
-/vais cto do my-feature        # 구현
-/vais cto qa my-feature        # QA
-/vais cto report my-feature    # 리포트
+```text
+/vais plan 승인      # Plan 승인 → Design 작성
+/vais design 승인    # Design 승인 → Do → Readiness → 독립 QA 까지 자동 진행
+/vais 최종 승인      # AI QA PASS 확인 후 → Report 작성·동결
 ```
-
-**임원/대외 보고 (독립 커맨드):**
-
-```bash
-/vais brief {주제}          # VARCO 고정 양식 기술 보고서 (HTML)
-/vais brief {주제} --deck   # 16:9 슬라이드 덱
-```
-
-> 개발 워크플로우와 무관하게 대화 맥락·제공 자료로 보고서를 생성합니다. 정본: `skills/brief/SKILL.md`
 
 ---
 
-## What Happens When You Run `/vais ceo`
+## 사용법 (v3 managed entry)
 
-사용자가 "온라인 서점 SaaS 만들어줘"라고 입력하면, CEO 는 **고정 시나리오를 따르지 않고** `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` 를 호출해 7 차원 (보안/컴플라이언스/UX/데이터모델/외부통신/성능/제품정의) 등급을 산출하고, 그 결과로 **활성 C-Level 을 동적으로 결정**합니다.
+v3.0.0부터 `/vais`는 **자연어 요청 하나만** 받습니다. C-Level(`ceo`, `cto` …)이나 phase(`plan`, `design` …)를 직접 지정하는 옛 문법은 진입점이 아닙니다. `/vais ceo …` 처럼 입력해도 일반 요청으로 처리됩니다.
 
-전형적인 신규 서비스 흐름 (CEO 알고리즘이 dimensions 모두 medium+ 으로 판정한 경우):
+### 명령
 
-| Step | C-Level | What They Do | Note |
-|------|---------|-------------|------|
-| **①** | **CPO** | PRD + 페르소나 + JTBD + Opportunity Solution Tree | productDefinition=high 시 자동 |
-| **②** | **CSO** (선택) | Threat model | security ≥ medium 시 자동 |
-| **③** | **CTO** | 아키텍처 + 데이터 모델 + API 계약 + UI 흐름 → 구현 + QA | mandatory PDCA (plan→design→do→qa) |
-| **④** | **CSO** | OWASP 감사 + 시크릿 스캔 + 의존성 분석 | security/externalAPI ≥ medium 시 |
-| **⑤** | **CBO** (명시 호출) | GTM + 가격 + Unit economics + 재무 모델 | Secondary — `/vais cbo` 로 명시 호출만 |
-| **⑥** | **COO** (명시 호출) | CI/CD + 배포 전략 + 모니터링 + Runbook | Secondary — `/vais coo` 로 명시 호출만 |
-| **Final** | **CEO** | 전체 산출물 종합 리뷰 → 리포트 | — |
+| 입력 | 동작 |
+|------|------|
+| `/vais <자연어 요청>` | 진행 중 Work item이 없으면 새 요청 시작. 있으면 현재 단계 작업 지시로 처리 |
+| `/vais status` (또는 `/vais 상태`) | 현재 Work item·단계·상태와 대기 요청 조회 (읽기 전용) |
+| `/vais pause` (`일시정지`) | 진행 중 Work item 일시정지 |
+| `/vais resume` (`재개`) | 일시정지된 Work item 재개 (정확히 1개일 때) |
+| `/vais cancel` (`취소`) | 진행 중 Work item 취소 |
+| `/vais 새 작업: <요청>` | 진행 중 작업을 유지한 채 새 요청을 **pending 큐**에 보관. `/vais status`에서 확인 |
+| `/vais brief {주제}` | 워크플로우와 무관한 임원/대외 보고 HTML 생성 (`--deck` 슬라이드). 정본: `skills/brief/SKILL.md` |
 
-**핵심 동작**:
-- **4 Primary 자동 라우팅 (CEO/CPO/CTO/CSO)** — CEO 알고리즘이 자동 결정
-- **2 Secondary 명시 호출 (CBO/COO)** — `/vais cbo|coo` 명시 시만 활성. 비즈니스/운영 영역은 옵션
-- **CTO 만 mandatory PDCA**, 비-CTO 는 CEO 알고리즘 결정으로 phase 활성화
-- **lean checkpoint (기본)**: CP-0/CP-Q 만 발동, 나머지는 자동 진행 + outro 한 줄. PO 클릭 ≤ 2회/피처
-- CEO 진입 시 algorithm 결과 (7 차원 등급 표) 를 응답에 직접 인용 — LLM 자체 라우팅 금지
-- CSO ↔ CTO 보안 검토 루프 최대 2회 (`pipeline.reviewLoops.cso-cto.maxIterations`)
+### 승인·거절 문법
 
----
+승인은 hook이 정규식으로 판정하므로 아래 문구를 그대로 쓰는 것이 안전합니다.
 
-## C-Suite Team
+| 상황 | 입력 | 결과 |
+|------|------|------|
+| Plan 제시 후 | `/vais plan 승인` 또는 `/vais 승인` | Design 단계 진입 |
+| Design 제시 후 | `/vais design 승인` 또는 `/vais 승인` | Do → Readiness → Review 자동 진행 |
+| AI QA PASS 후 | `/vais 최종 승인` 또는 `/vais approve` | Report 작성·동결 |
+| 수정 요청 | `/vais <수정 내용>` | 같은 단계에서 revision 수정 후 재제시 |
+| 최종 결과 거절 | `/vais 거절` 또는 `/vais 승인하지 않아` | Design으로 복귀 (요구사항이 바뀌면 이어지는 `/vais` 수정 요청에서 Plan 재작성) |
 
-### Executive (Opus) — 4 Primary + 2 Secondary
+주의할 점:
 
-| C-Level | Tier | Domain | One-liner |
-|---------|------|--------|-----------|
-| **CEO** | Primary | Strategy | 7 차원 알고리즘 (`lib/ceo-algorithm.js`) 으로 PO 의도 매핑 → 활성 C-Level 동적 결정. 자동 라우팅 진입점 |
-| **CPO** | Primary | Product | 무엇을 만들지 결정. PRD, 페르소나, JTBD, Opportunity Solution Tree, 백로그 |
-| **CTO** | Primary | Technology | 어떻게 만들지 실행. 아키텍처, 개발, 테스트, 디버깅. **mandatory PDCA** |
-| **CSO** | Primary | Security | 안전한지 확인. OWASP 감사, 시크릿/의존성 스캔, 독립 코드 리뷰, threat model |
-| **CBO** | Secondary | Business | 사업성 검증. 시장 분석, GTM, 가격 전략, 재무 모델, unit economics. **명시 호출만** (`/vais cbo`) |
-| **COO** | Secondary | Operations | 배포/운영. CI/CD, 모니터링, 성능 벤치마크, Runbook. **명시 호출만** (`/vais coo`) |
-
-> **Primary** = CEO 알고리즘이 자동 라우팅. **Secondary** = 코드 개발 외 영역이라 사용자가 `/vais cbo|coo {feature}` 명시 호출 시만 활성.
-
-### Sub-agents (Sonnet) — 47 Specialists
-
-<details>
-<summary><strong>CEO</strong> — 6 agents</summary>
-
-| Agent | Role |
-|-------|------|
-| absorb-analyzer | 외부 스킬/레퍼런스 흡수 분석 |
-| skill-creator | 신규 스킬/에이전트 마크다운 자동 생성 |
-| vision-author | Vision Statement + BHAG (Collins & Porras 'Built to Last') |
-| strategy-kernel-author | Strategy Kernel — Diagnosis + Guiding Policy + Coherent Actions (Rumelt) |
-| okr-author | OKR 정의 (Grove/Doerr) — Objective + 3~5 KR + 0.7 stretch scoring |
-| pr-faq-author | Amazon Working Backwards PR/FAQ (1-page Press Release + Internal/External FAQ) |
-
-</details>
-
-<details>
-<summary><strong>CPO</strong> — 8 agents</summary>
-
-| Agent | Role |
-|-------|------|
-| product-discoverer | 시장 기회 발굴, 고객 니즈 분석 |
-| product-strategist | 제품 전략 수립, 우선순위 결정 |
-| product-researcher | 경쟁사 벤치마킹, 사용 패턴 분석 |
-| prd-writer | PRD 작성 (기능/비기능 요구사항, 인수 기준) |
-| backlog-manager | PRD → User Story + Sprint Plan 변환 (INVEST/MoSCoW/RICE) |
-| roadmap-author | Now-Next-Later Roadmap (outcome-based, OKR → backlog 브릿지) |
-| ux-researcher | JTBD 인터뷰, 사용성 테스트, 정보 구조 설계 |
-| data-analyst | 제품 메트릭 분석 (DAU/MAU, A/B 테스트, 퍼널) |
-
-</details>
-
-<details>
-<summary><strong>CTO</strong> — 8 agents</summary>
-
-| Agent | Role |
-|-------|------|
-| infra-architect | DB 스키마, 환경 설정, 프로젝트 셋업 |
-| backend-engineer | API, 비즈니스 로직, 데이터 검증 |
-| frontend-engineer | UI 컴포넌트, 상태 관리, 클라이언트 최적화 |
-| ui-designer | IA, 와이어프레임, UI 디자인 |
-| db-architect | DB 스키마 최적화, 마이그레이션, 쿼리 튜닝 |
-| qa-engineer | Gap 분석, 코드 리뷰, QA 검증 (≥90% match) |
-| test-engineer | 단위/통합/E2E 테스트 코드 생성 |
-| incident-responder | 체계적 디버깅 (investigate → analyze → hypothesize → implement) |
-
-</details>
-
-<details>
-<summary><strong>CSO</strong> — 7 agents</summary>
-
-| Agent | Role |
-|-------|------|
-| security-auditor | OWASP Top 10 보안 감사 |
-| code-reviewer | 독립 코드 리뷰 (CTO 피어 리뷰와 별개) |
-| secret-scanner | API 키/토큰/비밀번호 탐지 (regex + entropy + heuristics) |
-| dependency-analyzer | CVE 취약점, 라이선스, 공급망 리스크 분석 |
-| plugin-validator | 플러그인 배포 전 구조 검증 |
-| skill-validator | 스킬/에이전트 마크다운 frontmatter 검증 |
-| compliance-auditor | GDPR, 라이선스 준수 확인 |
-
-</details>
-
-<details>
-<summary><strong>CBO</strong> — 10 agents</summary>
-
-| Agent | Role |
-|-------|------|
-| market-researcher | 시장/경쟁 분석 (PEST, SWOT, Porter 5F, TAM/SAM/SOM) |
-| customer-segmentation-analyst | 고객 세분화, 페르소나 (RFM, JTBD, AARRR+R) |
-| seo-analyst | SEO 감사, 콘텐츠 캘린더, Core Web Vitals |
-| copy-writer | 브랜드 포지셔닝, 마케팅 카피 (PAS/AIDA/BAB) |
-| growth-analyst | GTM 전략, growth loop, 퍼널 최적화, North Star Metric |
-| pricing-analyst | 가격 전략 (Cost-plus, Value-based, GBB tiering) |
-| financial-modeler | 3-Statement 모델, DCF, 시나리오 분석 (Bear/Base/Bull) |
-| unit-economics-analyst | CAC/LTV/Payback, cohort 분석, SaaS metrics |
-| finops-analyst | 클라우드 비용 분석, right-sizing, waste detection |
-| marketing-analytics-analyst | 멀티터치 어트리뷰션, 채널 ROI, incrementality |
-
-</details>
-
-<details>
-<summary><strong>COO</strong> — 8 agents</summary>
-
-| Agent | Role |
-|-------|------|
-| ci-cd-configurator | CI/CD 파이프라인 (GitHub Actions/GitLab CI/CircleCI) — scope-gated (cloud/hybrid only) |
-| container-config-author | Dockerfile + docker-compose (multi-stage + non-root) — scope-gated |
-| migration-planner | DB 스키마 마이그레이션 (forward + rollback + 데이터 손실 위험 평가) — triggered |
-| runbook-author | 운영 Runbook (Google SRE) — deploy checklist + Sev 1~4 incident playbook — scope-gated |
-| release-notes-writer | Release Notes + CHANGELOG.md (Keep a Changelog 6 sections + SemVer 자동 판정) |
-| sre-engineer | 모니터링/알림 설정, incident runbook |
-| release-monitor | 배포 후 canary 모니터링 |
-| performance-engineer | 성능 벤치마크, 회귀 탐지 |
-
-</details>
+- `좋아`, `ok`, `그래` 같은 모호한 답은 승인으로 기록되지 않습니다.
+- `조건부 승인`, `만약 … 승인`, `사용자 대신 승인` 등 조건·대리 표현이 섞이면 승인이 무효 처리됩니다.
+- **`/vais`가 없는 대화는 읽기 전용**입니다. Work item 상태·문서·제품 코드를 바꾸지 않으며, 반영이 필요하면 `/vais`를 붙여 다시 요청합니다.
+- 프로젝트 전체에서 진행 가능한 Work item은 **1개**입니다. 다른 세션이 잡고 있으면 읽기 전용으로만 안내합니다.
 
 ---
 
-## Routing — 7 Dimension Algorithm
+## Workflow — 5단계 상태 머신
 
-고정 시나리오 표 대신, CEO 가 `lib/ceo-algorithm.js` 의 `analyzeCEO(request)` 로 7 차원 등급을 산출해 **활성 C-Level 을 동적 결정** 합니다. PO 가 자연어로 의도만 던지면 CEO 가 객관 알고리즘으로 매핑합니다.
+모든 작업은 규모와 무관하게 다섯 단계를 남깁니다. 사용자 결정은 세 번뿐입니다.
 
-**7 차원** (`DIMENSIONS` 배열):
+| 단계 | Owner | 산출 | 사용자 Gate |
+|------|-------|------|-------------|
+| **Plan** | CPO | 문제·목표·범위·REQ-NNN·사용자 흐름·엣지 케이스·완료 조건·영향 | ✅ Plan 승인 |
+| **Design** | CTO | REQ별 동작·입력·출력·오류·TC-NNN, 전문 영역 판단, specialist·write scope·check 선언, rollback | ✅ Design 승인 |
+| **Do** | CTO | 승인된 write scope 안에서 구현. Design이 고른 specialist만 위임 | — (자동) |
+| **Review** | independent-qa | read-only clean-room 검증. Tool evidence·diff·실제 화면으로 PASS / FAIL / BLOCKED 판정 | ✅ 최종 승인 (AI QA PASS 후에만) |
+| **Report** | CEO | 결과·증거·잔여 제한 요약. 완료 시 `frozen: true`로 동결 | — |
 
-| # | 차원 | 트리거 예시 |
-|---|------|-----------|
-| 1 | 보안 (security) | 인증/인가, 결제, 개인정보, secret |
-| 2 | 컴플라이언스 (compliance) | GDPR, 약관, 라이선스, 감사 로그 |
-| 3 | UX | 화면 추가, 사용자 플로우, 정보 구조 |
-| 4 | 데이터모델 (dataModel) | 엔티티, 스키마, 마이그레이션 |
-| 5 | 외부통신 (externalAPI) | 외부 SaaS 연동, 웹훅, OAuth |
-| 6 | 성능 (performance) | 응답시간, 처리량, 비용 |
-| 7 | 제품정의 (productDefinition) | 신규 피처/제품, PRD 부재 |
-
-**알고리즘 흐름**:
-
-```
-사용자 입력
-  ↓
-analyzeDimensions()  → { dim1: 'high', dim2: 'medium', ... } (none/low/medium/high)
-  ↓
-buildArtifactPlan()  → phase × artifact 매트릭스 (각 artifact 의 trigger 함수가 등급 충족 시 활성)
-  ↓
-extractActiveCLevel() → ['ceo', 'cpo', 'cto', ...]   (Primary 만 자동 추천)
-  ↓
-CEO 응답에 7 차원 등급 표 직접 출력 + AskUserQuestion 으로 사용자 승인
+```text
+/vais 요청
+→ 관련 Feature/Work item 검색 → 관계·규모 확인
+→ Plan 제시 ──── /vais plan 승인
+→ Design 제시 ── /vais design 승인
+→ Do → Readiness Gate → Review evidence → 독립 AI QA
+→ 결과·화면·제한 제시 ── /vais 최종 승인
+→ Report 작성·동결
 ```
 
-**예시 매핑** (`PHASE_ARTIFACT_MAPPING` 발췌):
+**자동 진행과 복귀 규칙**
 
-| Phase | Artifact | Owner | Trigger |
-|-------|----------|-------|---------|
-| 01-plan | prd | cpo | productDefinition !== 'none' |
-| 01-plan | persona | cpo | ux ≥ medium |
-| 01-plan | jtbd | cpo | productDefinition === 'high' |
-| 01-plan | threat-model | cso | security ≥ medium |
-| 02-design | architecture | cto | always |
-| 02-design | data-model | cto | dataModel ≥ medium |
-| 02-design | api-contract | cto | externalAPI ≥ medium |
-| 02-design | ui-flow | cto | ux ≥ medium |
-| 03-do | secret-scan | cso | security ≥ medium |
-| 03-do | dependency-vulnerability | cso | externalAPI ≥ medium |
+- Design 승인 turn에서 Do부터 Review 결과 제시까지 사용자 진행 요청 없이 이어집니다. BLOCKED, scope drift, QA FAIL처럼 결정이 필요한 경우에만 멈춥니다.
+- Readiness NOT_READY가 3회 연속이면 `blocked`.
+- QA FAIL은 Design으로 돌아가 bounded repair를 수행하며 최대 3회. 초과 시 `blocked`.
+- 사용자가 직접 파일을 편집하면 다음 `/vais`에서 drift를 감지해 영향 범위에 따라 Do / Design / Plan으로 재라우팅합니다 (자동 삭제 없음).
+- 완료된 Report는 수정하지 않습니다. 후속 변경은 새 Work item으로 진행합니다.
 
-비-Primary 영역 (CBO/COO) 은 알고리즘 결과에 포함되지 않으며, 사용자가 `/vais cbo|coo {feature}` 로 명시 호출 시만 활성. 정본: `lib/ceo-algorithm.js` (197줄), `agents/ceo/knowledge/seven-dimension-routing.md`.
+### 작업 규모 (scale)
 
----
+Plan 시작 시 `compact` / `standard` / `extended` 중 하나로 확정합니다. 규모는 단계를 생략하지 않고 문서 깊이와 Agent 수만 조절합니다.
 
-## Workflow
-
-**CTO 만 mandatory PDCA**, 비-CTO 는 CEO 7 차원 알고리즘 결정으로 phase 활성화.
-
-| Phase | CTO mandatory? | 비-CTO 활성화 조건 | Description |
-|-------|:--------------:|--------------------|-------------|
-| **Ideation** | Optional (CEO) | CEO 진입 시 | 자유 대화 — PRD 부재 / 모호한 요구사항. CEO 가 7 차원 분석 + Plan 자동 참조 |
-| **Plan** | ✓ | CEO 알고리즘이 owner C-Level 추천 시 | 요구사항 정의, 범위 설정, 타임라인 |
-| **Design** | ✓ | CTO 가 cpo prereq 호출 시 | 아키텍처, 데이터 모델, API 계약, UI 흐름 |
-| **Do** | ✓ | CTO 가 sub-agent 병렬 위임 | 구현 (frontend + backend + test 병렬) |
-| **QA** | ✓ | CTO qa-engineer 위임 | Gap 분석. matchRate ≥ 90% (`gapAnalysis.maxIterations` = 2, autoIterate `escalate-on-fail`) |
-| **Report** | Optional | 사용자 명시 호출 시 | 최종 리포트, 회고, KPI |
-
-**Lean checkpoint** (기본): CP-0 (PRD missing) + CP-Q (Critical or matchRate<90) 만 발동. CP-1/CP-D/CP-G/CP-2 는 자동 진행 + outro 한 줄. PO 클릭 ≤ 2회/피처 추정.
-
-`vais.config.json > workflow.checkpointPolicy.mode = "lean"` (기본). `standard` / `strict` 토글 가능.
-
-**C-Level 간 의존성** (참고 — CEO 가 컨텍스트 따라 유연 판단, hard constraint 아님):
-
-| C-Level | 선행 조건 |
-|---------|-----------|
-| CPO | 없음 |
-| CTO | CPO 완료 권장 (PRD 입력) |
-| CSO | CTO 완료 (구현물 필요) |
-| COO | CTO 완료 (구현물 필요) |
-| CBO | 없음 (Secondary, 명시 호출만) |
+| 규모 | Do specialist 상한 | 문서 예산 (Plan / Design / Do / Review / Report) |
+|------|:------------------:|-----------------------------------------------|
+| compact | 1 | 5.5 KB / 8 KB / 2.5 KB / 5 KB / 2.5 KB |
+| standard | 2 | 6 KB / 10 KB / 3.5 KB / 6 KB / 3 KB |
+| extended | 제한 없음 | 10 KB / 18 KB / 6 KB / 10 KB / 5 KB (초과 시 사용자 승인 필요) |
 
 ---
 
-## Ideation (Phase 0)
+## Roles — runtime 역할 카드
 
-아이디어가 아직 모호할 때 사용합니다. 산출물 강제 없이 자유 대화로 아이디어를 숙성시킵니다.
+v3에서 C-Level과 specialist는 사용자가 호출하는 명령이 아니라 **runtime이 단계별로 배정하는 역할**입니다. 정본은 `contracts/v2-role-cards.json`이며, 위임은 단일 Agent `v2-specialist`에 역할 프롬프트 + 구조화된 assignment를 넘기는 방식으로만 이뤄집니다.
 
-```bash
-/vais ceo ideation pricing-strategy
-```
+### C-Level (phase owner)
 
-**동작:**
-1. CEO가 ideation 모드로 진입 — PRD 템플릿 강제 없음, "plan 갈까요?" 반복 질문 금지
-2. **첫 turn scope probe**: 30분 이내 직접 편집으로 해결 가능하면 "이건 `/vais` 규모 아닙니다. 바로 실행?" 제안
-3. 사용자 주도로 자유 대화 (5~10 turn)
-4. 두 종료 분기:
-   - **A. 요약 + plan** ("정리해줘" / "plan 가자" / "요약") → `docs/pricing-strategy/00-ideation/main.md` 저장 + 다음 C-Level 추천
-   - **B. 직접 실행** ("그냥 해줘" / "바로 실행" / "skip vais") → 문서 **없이** 종료, 일반 Edit/Write로 직접 처리
+| 역할 | 담당 단계 | 책임 |
+|------|-----------|------|
+| **CEO** | 전체 · Report | 단일 VAIS voice. 이력 검색, Work item 라우팅, 최종 Report 합성 |
+| **CPO** | Plan | 사용자 문제를 안정적인 REQ·범위·흐름·완료 조건으로 변환. 구현 결정은 하지 않음 |
+| **CTO** | Design · Do | 통합 Design, specialist·실행 wave 선택, write scope 안에서 Do 통제 |
+| **CSO** | 조건부 | 인증·권한·PII·결제·업로드·외부 입력이 있을 때 보안·컴플라이언스 범위 판단 |
+| **COO** | 조건부 | 배포·CI/CD·모니터링·마이그레이션·롤백 등 운영 표면이 바뀔 때만 참여 |
+| **CBO** | 조건부 | 시장·가격·재무·마케팅 결과가 바뀔 때만 참여 |
 
-**Ideation 없이 plan 직행도 가능:** `/vais cpo plan my-feature` — 기존과 동일하게 동작합니다.
+### Specialist
 
----
+| 종류 | 역할 | 비고 |
+|------|------|------|
+| judgment | independent-qa, ui-designer, db-architect, infra-architect, security-auditor, code-reviewer, migration-planner, sre-engineer, performance-engineer, product-discoverer, product-strategist, ux-researcher, data-analyst | read-only. 판단만 handoff로 반환 |
+| implementation | backend-engineer, frontend-engineer, test-engineer, incident-responder | Do 단계에서만 code-write 허용, Design이 선언한 write scope 한정 |
+| tool | secret-scan, dependency-scan, plugin-validator, skill-validator | 기계적 검사는 Agent가 아니라 Tool adapter가 실행 |
 
-## Quality Gates
-
-### 4-Step Harness Gate
-
-Sub-agent 종료 시 자동 실행되는 검증 파이프라인:
-
-| Step | Check | On Failure |
-|------|-------|------------|
-| **1. Document** | 필수 산출물 존재 (≥ 500B) | 누락 파일 목록 |
-| **2. Checkpoint** | AskUserQuestion 기록 존재 | 미승인 항목 표시 |
-| **3. Gate** | 1+2 종합 판정 | 실패 사유 집계 |
-| **4. Transition** | 통과 → 다음 phase 자동 전이 / 실패 → 재시도 가이드 | 디버그 팁 제공 |
-
-### Advisor Tool (M-24)
-
-모든 Sonnet sub-agent에 Opus reviewer가 내장되어, 작업 중 자동으로 전략 조언을 수신합니다:
-
-- **Early plan** (1회) — 접근 방향 검증
-- **Stuck** (1회) — 막혔을 때 대안 제시
-- **Final review** (1회) — 완료 전 누락 확인
-- Max 3회/요청. 월 $200 예산 캡 초과 시 자동 비활성화 (Sonnet 단독 계속)
-
-### CSO Final Gate
-
-코드가 수정되는 **모든** 시나리오에서 CSO가 최종 보안 검증을 수행합니다. CSO 승인 없이는 배포 단계로 넘어갈 수 없습니다.
+- Review의 independent-qa는 구현자의 자기 평가를 제외한 clean-room 컨텍스트로 정확히 1회 실행됩니다.
+- specialist는 Markdown을 쓰지 않고 `specialist-handoff/v1` JSON만 반환합니다. 단계 정본 `main.md`는 phase owner만 작성합니다.
+- Agent 도구가 launch receipt만 즉시 돌려주고 결과를 나중에 알림으로 전달하는 Claude Code 빌드에서는, 도착한 handoff JSON을 현재 phase 폴더의 `handoff.json`에 저장하고 내부 CLI `handoff` 명령으로 등록합니다. 같은 schema·크기·verdict 검증을 거치며 임시 파일은 자동 삭제됩니다. (3.0.1)
 
 ---
 
-## Document Structure (sub-agent 직접 박제)
+## Document Structure
 
-```
+```text
 docs/
-└── {feature}/                    # 피처 중심 구조
-    └── {NN-phase}/               # 00-ideation / 01-plan / 02-design / 03-do / 04-qa / 05-report
-        ├── main.md               # C-Level 5섹션 인덱스 (Executive Summary / Decision Record /
-        │                         #   Artifacts 표 / CEO 판단 근거 / Next Phase). 본문 X.
-        │                         # 여러 C-Level 이 기여 시 ## [CEO] / ## [CTO] H2 append-only,
-        │                         # 다른 C-Level 섹션·Decision Record 행 수정 금지
-        ├── {artifact}.md         # sub-agent 직접 박제 (frontmatter 4 필수)
-        │                         # 예: prd.md / persona.md / threat-model.md / architecture.md
-        │                         # 1 sub-agent → N artifact = N MD (큐레이션 X)
-        └── interface-contract.md # (02-design 만, 시스템 산출물)
+├── README.md                                  # Master 인덱스 (자동 생성) — 현재 Work item + 전체 목록
+├── features/{feature}/main.md                 # Feature 인덱스 (자동 생성) — 장기 기능 단위
+└── work-items/{feature}/{YYYY-MM-DD-slug}/    # Work item = 한 번의 변경
+    ├── main.md                                #   상태·승인·revision·이력 (frontmatter 정본)
+    ├── 01-plan/main.md                        #   다섯 단계 정본 (authored Markdown은 이 5개뿐)
+    ├── 02-design/main.md
+    ├── 03-do/main.md
+    ├── 04-review/main.md
+    ├── 05-report/main.md
+    └── {0N-phase}/
+        ├── revisions/vN.md                    #   승인된 의미 변경만 보존
+        └── evidence/                          #   transaction receipt · check 결과 · 로그 · 스크린샷
 ```
 
-**핵심 원칙**:
+- 정본 frontmatter: `schema: vais-phase/v1`, `work_item`, `phase`, `revision`, `status`, `based_on`, `approved_by`.
+- 요구사항·테스트 ID는 `REQ-001`, `TC-001`처럼 3자리 고정. Design은 Plan의 REQ 집합과, Review는 Design의 TC 집합과 정확히 일치해야 합니다.
+- 미승인 draft는 canonical 승격 시 삭제됩니다. 완료 시 `docs/**/draft.md`가 남으면 Report Gate가 실패합니다.
+- 상태 저장소는 `.vais/v2/` (`work-items.json`, `authorizations.json`). **직접 편집하지 않습니다.** 모든 상태 변경은 `scripts/vais-workflow-v2.js` transaction으로만 이뤄집니다.
 
-1. **sub-agent 직접 박제** — sub-agent 가 `docs/{feature}/{NN-phase}/{artifact}.md` 에 frontmatter 와 함께 직접 작성 (`_tmp/` 폐기). C-Level 은 main.md 의 Artifacts 표에 frontmatter `summary` 만 인덱싱.
-2. **frontmatter 4 필수** (`vais.config.json > workflow.frontmatterMinimal`):
-   ```yaml
-   ---
-   owner: cto                    # ceo|cpo|cto|cso|cbo|coo
-   artifact: prd                 # 파일 stem 과 일치
-   phase: plan                   # ideation|plan|design|do|qa|report
-   feature: social-login         # kebab-case
-   # 선택 (auto-hydrate): agent / generated / source / summary / knowledge_refs
-   ---
-   ```
-3. **main.md = 5 섹션 인덱스만** — Executive Summary / Decision Record (multi-owner, append-only, Owner 컬럼 필수) / Artifacts 표 / CEO 판단 근거 (7 차원 등급 표 인용) / Next Phase. 본문 작성 X (200줄 자연 충족, `mainMdMaxLines` warn).
-4. **Knowledge lazy-load** (`agents/{c-level}/knowledge/*.md`, 19 MD) — phase + artifact 매칭 시만 Read. C-Level 메인의 "Knowledge Index" 표가 trigger 명시.
-5. **Templates 4-tier auto-select** (`scripts/auto-select-template.js`) — `git status` surface count + domain 분포 + PRD 상태로 stub/minimal/standard/extended 자동 선택. `confidence < 0.6` 시 fallback CP-1.
+---
 
-**검증** (`scripts/doc-validator.js`):
-- W-OWN-01 (owner 누락) = **warn**
-- W-FRONT-01 (artifact/phase/feature 누락) = warn
-- W-FRONT-02~05 (enum/stem mismatch/summary>200) = warn
-- W-SCOPE-01/02/03 (plan/main.md 필수 3섹션) = **fail** (exit 1)
-- 정본: `vais.config.json > workflow.frontmatterMinimal.required` (config 변경만으로 strict ↔ minimal 토글)
+## Quality Gates & Runtime Guards
+
+### Tool check (Design에서 선언)
+
+Design은 readiness / review check를 아래 9종 중에서 고릅니다. 같은 Design revision·repo snapshot의 receipt는 재실행하지 않고 재사용합니다.
+
+| id | 실행 |
+|----|------|
+| `test` | `npm test` |
+| `e2e` | `npm run test:e2e` (또는 `e2e`, `test:browser`) — 스크린샷 등 evidence 산출 필수 |
+| `build` | `npm run build` |
+| `lint` | `npm run lint` |
+| `plugin-validator` | `node scripts/vais-validate-plugin.js` |
+| `doc-validator` | `node scripts/doc-validator.js` |
+| `skill-validator` | `python3 scripts/skill_eval/quick_validate.py` |
+| `dependency-scan` | `npm audit --json` |
+| `secret-scan` | `node scripts/checks/v2-secret-scan.js` |
+
+### Hook 5종 (`hooks/hooks.json`)
+
+| Hook | 이벤트 | 역할 |
+|------|--------|------|
+| `workflow-v2-prompt` | UserPromptSubmit | `/vais` 라우팅, 승인 판정, 단계별 지침 주입, drift 감지, session lease |
+| `workflow-v2-write-guard` | PreToolUse (Bash / Write / Edit / Agent) | 승인된 write scope 밖 쓰기, 셸 합성·리다이렉션, 미공개 workflow 명령 차단 |
+| `workflow-v2-agent-handoff` | PostToolUse (Agent) | specialist handoff JSON 자동 저장·검증 |
+| `workflow-v2-drift` | PostToolUse | 변경 경로가 Design scope 안인지 기록 |
+| `v2-project-context` | (공용) | 프로젝트 루트·프롬프트 추출 |
+
+- write scope는 Design이 `path/**` 또는 정확한 파일로 선언하며 `.git`, `.vais`, `docs/work-items`, `docs/features`, `docs/README.md`는 선언할 수 없습니다.
+- 세션 authorization은 30분 lease입니다 (`workflowV2.authorizationTtlMs`).
+
+---
+
+## Configuration (`vais.config.json`)
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| **`workflowV2.mode`** | `enforce` | `enforce` = v3 managed entry. `shadow` / `disabled` = Legacy 흐름 (아래 참조) |
+| `workflowV2.managedPrefix` | `/vais` | 관리 대상 프롬프트 접두사 |
+| `workflowV2.authorizationTtlMs` | `1800000` | 세션 authorization lease (30분) |
+| `workflowV2.statePath` | `.vais/v2/work-items.json` | Work item 상태 저장 경로 |
+| `orchestration.mcp.enabled` | `true` | UI 설계 시 design-system MCP 자동 호출 (Python3 ≥ 3.8 필수) |
+| `designSystem.model` | `brand-first` | `design-system/brands/{slug}/DESIGN.md` 71 brand 카탈로그 |
+| `designSystem.defaultBrand` | `null` | brand 미선택 fallback. `VAIS_DEFAULT_BRAND` env 우선 |
+| `designSystem.blockOnMissingBrand` | `true` | brand 미선택 + fallback 없으면 UI 설계 차단 |
+
+---
+
+## Legacy (shadow 모드) 로 되돌리기
+
+v3는 Legacy 구현과 문서를 삭제하지 않았습니다. Legacy C-Suite 라우팅으로 돌아가려면:
+
+1. `vais.config.json > workflowV2.mode`를 `"shadow"`로 변경
+2. Claude Code 세션 재시작 (`/reload-plugins`)
+
+shadow / disabled 모드에서는 `skills/vais/legacy.md`가 진입점이 되며, C-Level·phase 직접 호출(`/vais cto plan {feature}` 등), `docs/{feature}/{NN-phase}/main.md` 구조, lean checkpoint, Agent Teams, 47 sub-agent 직접 박제가 그대로 동작합니다. 상세는 [CHANGELOG.md](./CHANGELOG.md) v2.2.x 이하 항목과 `agents/`, `skills/vais/phases/`를 참조하세요.
+
+Agent Teams(`orchestration.agentTeams.enabled`, 기본 false)는 Legacy 전용입니다. `enabled=false` 는 sequential 모드, `enabled=true` + `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` 은 real SendMessage, flag 없이 `enabled=true` 면 simulation fallback 입니다. enforce 모드의 v2 runtime은 이 설정을 읽지 않습니다.
+
+> v3 전환 근거: Review Attempt 18 (Opus 3×2 동일 조건 비교) 에서 Quality PASS, EFF-01~08 전부 PASS — 사용자 turn 20%, 완료 시간 49.8%, authored bytes 81.1% 감소. 정본: `docs/work-items/vais-workflow/2026-08-31-workflow-redesign/05-report/main.md`
 
 ---
 
 ## Project Layout
 
-```
+```text
 vais-claude-code/
-├── agents/          6 C-Level 디렉토리 + 47 sub-agents + _shared 가드 + knowledge/ 19 MD
-│   ├── {c-level}/{c-level}.md         # 메인 (orchestrator, thin)
-│   ├── {c-level}/{sub-agent}.md       # 47 specialists
-│   ├── {c-level}/knowledge/*.md       # 도메인 지식 lazy-load (19 MD)
-│   └── _shared/                       # checkpoint-policy / work-rules / outro-format /
-│                                      #   clevel-main-guard / subdoc-guard / advisor-guard
-├── skills/vais/     /vais 스킬 진입점 + phase routers (ceo/cpo/cto/cso/cbo/coo/ideation) + utilities
-├── lib/             ceo-algorithm (197줄, 7 차원), patch-block, status, paths, advisor, ...
-├── scripts/         vais-validate-plugin, doc-validator, auto-judge, auto-select-template,
-│                    patch-clevel-guard, patch-subdoc-block, ...
-├── templates/       PDCA 문서 템플릿
-│   ├── plan-{stub,minimal,standard,extended}.template.md   # 4-tier auto-select
-│   ├── {ideation,design,do,qa,report}.template.md          # phase 별
-│   ├── main-md.template.md                                 # 5 섹션 인덱스 정본
-│   └── {alignment,biz,core,how,what,why}/                  # 36 sub-agent artifact 템플릿
-├── hooks/           SessionStart, PreToolUse (bash-guard, design-mcp-trigger, ideation-guard),
-│                    SubagentStart/Stop, Stop (doc-tracker, doc-validator)
-├── design-system/   Brand-first 카탈로그 (brands/{slug}/DESIGN.md × 71 Google Stitch 포맷, default 5 pre-baked + lazy import)
-├── mcp/             vais-design-system MCP 서버 (design_search heuristics 가드레일)
-├── ONBOARDING.md    5분 진입 가이드
-├── CLAUDE.md        Claude Code 전용 지침 (자동 로드)
-├── AGENTS.md        Cursor/Copilot 등 범용 AI 호환 지침
-├── vais.config.json 플러그인 전체 설정
-└── package.json     매니페스트
+├── skills/vais/           SKILL.md (v2 managed entry) · legacy.md (shadow 모드) · phases/ · utils/
+├── skills/brief/          /vais brief — VARCO 보고서·슬라이드 (워크플로우 독립)
+├── lib/workflow/v2/       상태 머신 · work-item-store · router · phase-transaction · gate-engine ·
+│                          write-policy · tool-adapters · context-capsule · repo-drift · role-registry … (23 모듈)
+├── scripts/vais-workflow-v2.js   내부 workflow CLI (status/search/context/plan present/design present/
+│                                 do ready/review prepare/review decide/report finalize/assignment/handoff)
+├── hooks/                 workflow-v2-prompt · workflow-v2-write-guard · workflow-v2-agent-handoff ·
+│                          workflow-v2-drift · v2-project-context (+ Legacy: session-start, design-mcp-trigger …)
+├── agents/v2-specialist.md   단일 runtime specialist Agent
+├── agents/{c-level}/      Legacy C-Level·sub-agent 본문 (shadow 모드 전용) + knowledge/ 19 MD
+├── contracts/             v2-role-cards.json · workflow-contract.md · agent-teams.md
+├── schemas/               work-item · specialist-assignment · specialist-handoff · check-result ·
+│                          gate-result · phase-transaction-receipt 등 JSON schema
+├── docs/                  README.md (Master) · features/ · work-items/
+├── design-system/         Brand-first 카탈로그 (brands/{slug}/DESIGN.md × 71)
+├── mcp/                   vais-design-system MCP 서버
+├── templates/             Legacy PDCA 문서 템플릿 (shadow 모드)
+├── tests/                 node --test (v2-*.test.js 16종 포함)
+├── ONBOARDING.md          5분 진입 가이드
+├── CLAUDE.md              Claude Code 전용 지침 (자동 로드)
+└── vais.config.json       플러그인 전체 설정
 ```
-
----
-
-## Configuration
-
-핵심 키:
-
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `workflow.phases` | ideation ~ report | PDCA phases (ideation optional) |
-| **`workflow.checkpointPolicy.mode`** | `lean` | `lean` (CP-0/CP-Q 만) / `standard` / `strict` |
-| **`workflow.template.autoSelect`** | `true` | `scripts/auto-select-template.js` 휴리스틱으로 stub/minimal/standard/extended 자동 선택 |
-| **`workflow.frontmatterMinimal.required`** | `[owner, artifact, phase, feature]` | `doc-validator` 가 동적 로드. config 변경만으로 strict ↔ minimal 토글 |
-| **`cSuite.knowledgePath`** | `agents/{role}/knowledge/` | C-Level 도메인 지식 lazy-load 경로 |
-| **`cSuite.primary`** | `[ceo, cpo, cto, cso]` | CEO 자동 라우팅 대상 |
-| **`cSuite.secondary`** | `[cbo, coo]` | 사용자 명시 호출만 |
-| **`gapAnalysis.maxIterations`** | `2` | 무한루프 차단. `autoIterate = "escalate-on-fail"` |
-| **`pipeline.reviewLoops.cso-cto.maxIterations`** | `2` | CSO ↔ CTO 보안 검토 루프 |
-| `gates.cto.plan.requirePrd` | `smart` | `missing` 만 CP-0 발동, `partial` 자동 강행 |
-| `gapThreshold` | 0.90 | QA 통과 기준 (90%) |
-| `advisor.enabled` | true | Opus advisor 활성화 |
-| `advisor.monthly_budget_usd` | 200 | 월 advisor 비용 캡 |
-| `orchestration.mcp.enabled` | true | design-system MCP heuristics 자동 호출 (기본 ON, Python3 ≥ 3.8 필수) |
-| **`designSystem.model`** | `brand-first` | Design system 모델 (brand-first only; mui-first deprecated) |
-| **`designSystem.defaultBrand`** | `null` | hook 미선택 fallback. CI 환경은 slug 지정 (예: `claude`). `VAIS_DEFAULT_BRAND` env 가 우선 |
-| **`designSystem.preBakedBrands`** | `[claude, linear, stripe, vercel, notion]` | repo 사전 박제 5 brand. 나머지는 사용자 선택 시 lazy import |
-| **`designSystem.blockOnMissingBrand`** | `true` | brand 미선택 + fallback 없으면 design phase 차단 (block-soft) |
 
 ---
 
 ## Testing
 
 ```bash
-npm test    # design-system MCP integration tests 포함
+npm test          # 전체 unit + integration
+npm run lint      # eslint scripts/ lib/ hooks/
+node scripts/vais-validate-plugin.js   # 플러그인 구조 검증
 ```
 
 ---
@@ -465,17 +301,11 @@ npm run prepare-hooks
 
 활성화되는 검사:
 
-- **legacy-path-guard** — `docs/NN-` 레거시 경로 패턴 커밋 차단 (예외: `docs/_legacy/`, `CHANGELOG.md`, 회귀 가드)
+- **legacy-path-guard** — top-level `docs/NN-` 레거시 경로 패턴 커밋 차단
 - ESLint (`scripts/`, `lib/`, `hooks/` — max-warnings 0)
 - Unit tests (`node --test tests/*.test.js`)
 
-비활성화:
-
-```bash
-git config --unset core.hooksPath
-```
-
-> `git commit --no-verify`로 hook을 우회하지 마세요. 규칙 위반은 LLM 재발 위험 + 수십 파일 재치환을 유발합니다. 자세한 정책은 `docs/legacy-path-guard/` 참조.
+> `git commit --no-verify`로 hook을 우회하지 마세요.
 
 ---
 
@@ -491,19 +321,17 @@ PR merge를 CI 통과 후에만 허용하려면 저장소 owner가 branch protec
 6. ✅ **Require branches to be up to date before merging**
 7. (선택) ✅ **Require pull request reviews before merging**
 
-> 자동화 범위 밖 — GitHub REST API로 설정 가능하나 owner PAT 필요. 수동 설정 유지.
-> 관련 설계: `docs/ci-bootstrap/02-design/main.md §5`
-
 ---
 
 ## Documentation
 
 - **[ONBOARDING.md](./ONBOARDING.md)** — 5분 진입 가이드 (처음 본 AI/사람용)
-- **[CLAUDE.md](./CLAUDE.md)** — Claude Code 전용 지침 (자동 로드, Mandatory Rules + Project Structure)
-- **[AGENTS.md](./AGENTS.md)** — Cursor/Copilot 등 범용 AI 호환 지침
+- **[CLAUDE.md](./CLAUDE.md)** — Claude Code 전용 지침 (자동 로드)
 - **[CHANGELOG.md](./CHANGELOG.md)** — 전체 버전 이력
-- **[lib/ceo-algorithm.js](./lib/ceo-algorithm.js)** — 7 차원 알고리즘 정본 (197줄)
-- **[agents/ceo/knowledge/seven-dimension-routing.md](./agents/ceo/knowledge/seven-dimension-routing.md)** — 알고리즘 한국어 명세
+- **[docs/README.md](./docs/README.md)** — Feature / Work item Master 인덱스
+- **[contracts/v2-role-cards.json](./contracts/v2-role-cards.json)** — runtime 역할 카드 정본
+- **[skills/vais/SKILL.md](./skills/vais/SKILL.md)** — `/vais` managed entry 규칙
+- **[skills/vais/legacy.md](./skills/vais/legacy.md)** — shadow 모드 Legacy 진입점
 
 ---
 
