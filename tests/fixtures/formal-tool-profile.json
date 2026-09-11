@@ -1,0 +1,16 @@
+{
+  "permissionMode": "bypassPermissions",
+  "strictMcpConfig": true,
+  "allowedTools": [
+    "Agent",
+    "AskUserQuestion",
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "TodoWrite",
+    "Write"
+  ],
+  "disallowedTools": []
+}

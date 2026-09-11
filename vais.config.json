@@ -1,5 +1,5 @@
 {
-  "version": "2.2.1",
+  "version": "3.0.0",
   "plugin": {
     "name": "vais-code",
     "description": "Virtual AI C-Suite for software development",
@@ -190,6 +190,12 @@
     "port": 8765
   },
     "engine": "legacy",
+    "workflowV2": {
+      "mode": "enforce",
+      "managedPrefix": "/vais",
+      "authorizationTtlMs": 1800000,
+      "statePath": ".vais/v2/work-items.json"
+    },
     "profile": {
       "mode": "shadow",
       "default": "feature"

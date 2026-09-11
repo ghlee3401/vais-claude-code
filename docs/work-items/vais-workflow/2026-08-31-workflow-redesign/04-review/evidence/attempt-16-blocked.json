@@ -1,0 +1,84 @@
+{
+  "schema": "vais-formal-cohort-blocked/v1",
+  "workItem": "WI-2026-08-31-workflow-redesign",
+  "attempt": 16,
+  "cohortId": "cohort-355426d703a92e1e3e1e58a9",
+  "policy": "subscription-no-dollar-cap",
+  "turnTimeoutMs": 900000,
+  "model": "claude-opus-5",
+  "effort": "low",
+  "toolProfileDigest": "067b5c11d6c8a51f4a284d4370fec701f876335f5285d8d872a071852bf7901c",
+  "stageRootDigests": {
+    "legacy": "a20a4f48f14f68ff20cdf4ffcf3d83b706c4af16ac2cee210215f052940f177f",
+    "v2": "6a4adaa5de20b822e173b89fcd97779cd06f5d5601866923c3b8a9c4e046c871"
+  },
+  "verdict": "blocked",
+  "effEvaluation": "not_evaluated",
+  "completedSlots": [
+    {
+      "sequence": 1,
+      "runKey": "legacy:1",
+      "formalTurnCount": 5,
+      "elapsedMs": 1110451,
+      "instructionTokens": 464181,
+      "totalCacheReadTokens": 12622932,
+      "outputTokens": 152394,
+      "eligible": true,
+      "terminalStatus": "completed",
+      "summarySha256": "3876a2b82ffea8fe4c30c29a15de5de0889f86e8fb84cc9cea2fa2190dae3ea0"
+    },
+    {
+      "sequence": 2,
+      "runKey": "v2:1",
+      "formalTurnCount": 4,
+      "elapsedMs": 526674,
+      "instructionTokens": 125468,
+      "totalCacheReadTokens": 2711319,
+      "outputTokens": 35870,
+      "eligible": true,
+      "terminalStatus": "completed",
+      "independentQaCalls": 1,
+      "reportFrozen": true,
+      "summarySha256": "4b071937d06cd94c5d9040dd02786349463a61e1284b63bdb9895f6887b1ada6"
+    },
+    {
+      "sequence": 3,
+      "runKey": "legacy:2",
+      "formalTurnCount": 5,
+      "elapsedMs": 1238234,
+      "instructionTokens": 353615,
+      "totalCacheReadTokens": 4642088,
+      "outputTokens": 99951,
+      "eligible": true,
+      "terminalStatus": "completed",
+      "summarySha256": "a0de302a35261d3197d3c76f67dd9d4e1920e05b0ea4e3ddb444038875f63f68"
+    },
+    {
+      "sequence": 4,
+      "runKey": "v2:2",
+      "formalTurnCount": 4,
+      "elapsedMs": 642894,
+      "instructionTokens": 146274,
+      "totalCacheReadTokens": 4202457,
+      "outputTokens": 42769,
+      "eligible": true,
+      "terminalStatus": "completed",
+      "independentQaCalls": 1,
+      "reportFrozen": true,
+      "summarySha256": "f5de6583a55024c578fefb7bf208efcb343812d648fc3a61aa9733736155acf8"
+    }
+  ],
+  "failedSlot": {
+    "sequence": 5,
+    "runKey": "legacy:3",
+    "turn": 1,
+    "durationMs": 145297,
+    "httpStatus": 429,
+    "terminalReason": "api_error",
+    "message": "You've hit your session limit · resets 7:10pm (Asia/Seoul)",
+    "rawSha256": "09b7757de0e24d9380ce9db29d7d93b47d0e42a6a7f06e452e5276e3a75d2c28"
+  },
+  "notRun": ["v2:3"],
+  "classification": "external-subscription-session-capacity",
+  "replacementAllowed": false
+}

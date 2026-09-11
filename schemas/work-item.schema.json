@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vais.local/schemas/work-item.schema.json",
+  "title": "VAIS v2 Work Item",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "primaryFeature",
+    "affectedFeatures",
+    "scale",
+    "phase",
+    "status",
+    "planRevision",
+    "designRevision",
+    "writeScopes",
+    "readinessChecks",
+    "reviewChecks",
+    "requiredSpecialists",
+    "readinessNotReadyCount",
+    "qaRepairCount",
+    "approvals",
+    "reportFrozen",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "id": { "type": "string", "pattern": "^WI-[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9][a-z0-9-]*$" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "primaryFeature": { "type": "string", "pattern": "^[a-z0-9][a-z0-9/-]*$" },
+    "affectedFeatures": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9/-]*$" }
+    },
+    "scale": { "enum": ["compact", "standard", "extended"] },
+    "phase": { "enum": ["plan", "design", "do", "review", "report"] },
+    "status": { "enum": ["active", "waiting-user", "blocked", "paused", "completed", "cancelled"] },
+    "planRevision": { "type": "integer", "minimum": 1 },
+    "designRevision": { "type": "integer", "minimum": 1 },
+    "writeScopes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!(?:\\.git|\\.vais)(?:/|$))(?!(?:docs/?(?:\\*\\*)?|docs/(?:work-items|features)(?:/|$)|docs/README\\.md(?:/|$))).+" }
+    },
+    "readinessChecks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
+    },
+    "reviewChecks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
+    },
+    "requiredSpecialists": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
+    },
+    "readinessNotReadyCount": { "type": "integer", "minimum": 0, "maximum": 3 },
+    "qaRepairCount": { "type": "integer", "minimum": 0, "maximum": 3 },
+    "approvals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plan", "design", "final"],
+      "properties": {
+        "plan": { "enum": ["pending", "approved"] },
+        "design": { "enum": ["pending", "approved"] },
+        "final": { "enum": ["pending", "approved"] }
+      }
+    },
+    "reportFrozen": { "type": "boolean" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "pausedStatus": { "enum": ["active", "waiting-user", "blocked"] },
+    "qaResetPending": { "type": "boolean" },
+    "blockReason": { "type": ["string", "null"], "maxLength": 500 },
+    "cancelReason": { "type": ["string", "null"], "maxLength": 500 },
+    "replacedBy": { "type": ["string", "null"], "pattern": "^WI-[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9][a-z0-9-]*$" }
+  }
+}

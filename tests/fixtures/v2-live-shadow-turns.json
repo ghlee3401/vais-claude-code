@@ -1,0 +1,59 @@
+{
+  "scenario": "mini-booking-complete-journey",
+  "repetition": 1,
+  "engine": "v2",
+  "turns": [
+    {
+      "sampleClass": "formal",
+      "computeClass": "delivery",
+      "role": "workflow-owner",
+      "diagnosticKind": null,
+      "journeyId": "booking-v2-01",
+      "totalCacheCreationTokens": 11000,
+      "totalCacheReadTokens": 2000,
+      "outputTokens": 500,
+      "elapsedMs": 100,
+      "providerListCost": 0.1,
+      "telemetryDigest": null
+    },
+    {
+      "sampleClass": "diagnostic",
+      "computeClass": "diagnostic",
+      "role": "diagnostic",
+      "diagnosticKind": "quota-recovery",
+      "journeyId": "booking-v2-01",
+      "totalCacheCreationTokens": 900,
+      "totalCacheReadTokens": 100,
+      "outputTokens": 50,
+      "elapsedMs": 20,
+      "providerListCost": 0.01,
+      "telemetryDigest": null
+    },
+    {
+      "sampleClass": "formal",
+      "computeClass": "assurance",
+      "role": "independent-qa",
+      "diagnosticKind": null,
+      "journeyId": "booking-v2-01",
+      "totalCacheCreationTokens": 7000,
+      "totalCacheReadTokens": 1000,
+      "outputTokens": 300,
+      "elapsedMs": 80,
+      "providerListCost": 0.08,
+      "telemetryDigest": null
+    },
+    {
+      "sampleClass": "diagnostic",
+      "computeClass": "diagnostic",
+      "role": "diagnostic",
+      "diagnosticKind": "router-attack",
+      "journeyId": "booking-v2-01",
+      "totalCacheCreationTokens": 600,
+      "totalCacheReadTokens": 50,
+      "outputTokens": 30,
+      "elapsedMs": 10,
+      "providerListCost": 0.005,
+      "telemetryDigest": null
+    }
+  ]
+}

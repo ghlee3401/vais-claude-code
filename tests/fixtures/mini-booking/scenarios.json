@@ -1,0 +1,9 @@
+{
+  "fixture": "mini-booking",
+  "scenarios": [
+    { "id": "initial", "viewport": [1280, 900], "expectedText": "다시 만나 반가워요" },
+    { "id": "invalid-login", "viewport": [390, 844], "expectedText": "이메일 형식과 6자 이상의 비밀번호" },
+    { "id": "password-reset", "viewport": [390, 844], "expectedText": "링크는 30분 동안 유효" },
+    { "id": "login-book", "viewport": [1280, 900], "expectedText": "Morning Flow 예약이 완료" }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vais.local/schemas/gate-result.schema.json",
+  "title": "VAIS v2 Gate Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["gate", "verdict", "requiredChecks", "passed", "failed", "blocked", "missing", "evaluatedAt"],
+  "properties": {
+    "gate": { "enum": ["plan", "design", "readiness", "review", "report"] },
+    "verdict": { "enum": ["PASS", "FAIL", "BLOCKED", "READY", "NOT_READY"] },
+    "requiredChecks": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "passed": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "failed": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "blocked": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "missing": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "evaluatedAt": { "type": "string", "format": "date-time" }
+  }
+}

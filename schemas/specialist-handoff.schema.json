@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vais.local/schemas/specialist-handoff.schema.json",
+  "title": "VAIS v2 Specialist Handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "status", "judgment", "decisions", "behavior", "evidence", "affectedRequirements", "risks", "unverified", "recommendedChecks"],
+  "properties": {
+    "schema": { "const": "specialist-handoff/v1" },
+    "status": { "enum": ["completed", "blocked"] },
+    "verdict": { "enum": ["pass", "fail", "blocked"] },
+    "judgment": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "decisions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "behavior": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inputs", "outputs", "errors"],
+      "properties": {
+        "inputs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "outputs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "errors": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "evidence": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "affectedRequirements": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^REQ-[0-9]{3}$" } },
+    "risks": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "unverified": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "recommendedChecks": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" } }
+  }
+}

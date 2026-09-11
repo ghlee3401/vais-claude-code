@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vais.local/schemas/specialist-assignment.schema.json",
+  "title": "VAIS v2 Specialist Assignment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "role", "delegatedBy", "phase", "mode", "question", "codeWrite", "writeScope", "completionCriteria", "context", "outputContract"],
+  "properties": {
+    "schema": { "const": "specialist-assignment/v1" },
+    "role": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "delegatedBy": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "phase": { "enum": ["plan", "design", "do", "review", "report"] },
+    "mode": { "enum": ["analysis", "implementation", "verification", "triage"] },
+    "question": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "codeWrite": { "type": "boolean" },
+    "writeScope": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "completionCriteria": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["refs", "receipts", "cleanRoom"],
+      "properties": {
+        "refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "receipts": { "type": "array", "items": { "type": "object" } },
+        "cleanRoom": { "type": "boolean" }
+      }
+    },
+    "outputContract": { "type": "object", "minProperties": 1 }
+  }
+}

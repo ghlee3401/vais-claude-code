@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini Booking</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <a class="brand" href="index.html" aria-label="Mini Booking 홈">
+        <span class="brand-mark">M</span>
+        <span>Mini Booking</span>
+      </a>
+      <span class="eyebrow">나를 위한 작은 루틴</span>
+    </header>
+
+    <section id="auth-view" class="auth-layout" aria-labelledby="auth-title">
+      <div class="intro">
+        <p class="kicker">오늘의 움직임을 예약하세요</p>
+        <h1 id="auth-title">가볍게 시작하고,<br>꾸준하게 이어가요.</h1>
+        <p>원하는 클래스를 살펴보고 단 몇 번의 클릭으로 자리를 예약하세요.</p>
+        <div class="mini-calendar" aria-hidden="true">
+          <span>월</span><span class="active">화</span><span>수</span><span>목</span><span>금</span>
+        </div>
+      </div>
+
+      <form id="login-form" class="panel" novalidate>
+        <div>
+          <p class="kicker">MEMBER LOGIN</p>
+          <h2>다시 만나 반가워요</h2>
+        </div>
+        <label>이메일
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required>
+        </label>
+        <label>비밀번호
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="6자 이상 입력" required minlength="6">
+        </label>
+        <p id="login-error" class="message error" role="alert" hidden></p>
+        <button class="primary" type="submit">로그인하고 예약하기</button>
+        <button id="forgot-button" class="link-button" type="button">비밀번호를 잊으셨나요?</button>
+      </form>
+
+      <form id="reset-form" class="panel" hidden novalidate>
+        <div>
+          <p class="kicker">PASSWORD RESET</p>
+          <h2>비밀번호 재설정</h2>
+          <p>가입한 이메일로 30분 동안 유효한 링크를 보내드려요.</p>
+        </div>
+        <label>이메일
+          <input id="reset-email" name="reset-email" type="email" placeholder="name@example.com" required>
+        </label>
+        <p id="reset-message" class="message" role="status" hidden></p>
+        <button class="primary" type="submit">재설정 링크 받기</button>
+        <button id="back-login" class="link-button" type="button">로그인으로 돌아가기</button>
+      </form>
+    </section>
+
+    <section id="booking-view" hidden aria-labelledby="booking-title">
+      <div class="booking-head">
+        <div>
+          <p class="kicker">THIS WEEK</p>
+          <h1 id="booking-title">어떤 움직임이<br>필요한가요?</h1>
+        </div>
+        <div class="account">
+          <span id="account-email"></span>
+          <strong id="booking-count">내 예약 0</strong>
+        </div>
+      </div>
+      <p id="booking-message" class="message success" role="status" hidden></p>
+      <div class="class-grid">
+        <article class="class-card coral">
+          <div class="class-meta"><span>화요일 · 08:00</span><span>50분</span></div>
+          <h2>Morning Flow</h2>
+          <p>차분한 호흡과 스트레칭으로 하루를 여는 초급 요가.</p>
+          <div class="class-action">
+            <span><strong>1</strong>자리 남음</span>
+            <button class="book-button" data-class="Morning Flow" type="button">예약하기</button>
+          </div>
+        </article>
+        <article class="class-card mint">
+          <div class="class-meta"><span>목요일 · 19:30</span><span>45분</span></div>
+          <h2>Core Balance</h2>
+          <p>균형과 코어를 깨우는 활기찬 전신 움직임.</p>
+          <div class="class-action">
+            <span><strong>4</strong>자리 남음</span>
+            <button class="book-button" data-class="Core Balance" type="button">예약하기</button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

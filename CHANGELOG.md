@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.0.0] - 2026-09-11
+
+> Major: `/vais` 공개 진입 문법이 C-Level·phase 직접 호출에서 단일 managed entry 로 바뀐다. `vais.config.json > workflowV2.mode` 를 `shadow` 로 되돌리면 Legacy 흐름이 복원된다.
+
+### Added
+
+- **VAIS workflow v2 managed entry 및 5단계 상태 머신 enforce 전환** — 단일 `/vais` 진입, Plan→Design→Do→Review→Report 상태 머신, Plan/Design/최종 승인 Gate, 단일 active Work item + pending queue, lease 기반 authorization (`lib/workflow/v2/` 23 모듈, `scripts/vais-workflow-v2.js` CLI)
+- **역할·쓰기 권한 계약** — `agents/v2-specialist.md` 단일 runtime specialist + `contracts/v2-role-cards.json` + 단계별 write scope, drift 검사, 구조화 handoff (`schemas/` 9종 JSON schema)
+- **Hook 5종** — `workflow-v2-prompt` (UserPromptSubmit), `workflow-v2-write-guard` (PreToolUse Bash/Write/Edit/Agent), `workflow-v2-agent-handoff` + `workflow-v2-drift` (PostToolUse), `v2-project-context`
+- **독립 QA + 실제 브라우저 증거** — readiness receipt 와 read-only independent QA 분리, Chrome 시나리오·스크린샷 결속, `scripts/checks/v2-secret-scan.js`
+- **문서 lifecycle** — Work item / Feature / Master 인덱스 (`docs/README.md`, `docs/features/`), 승인 revision 보존, transient draft 차단, Report freeze
+- **Legacy/v2 formal 비교 체계** — `scripts/evaluation/` 11종 (paired cohort, live shadow telemetry, trusted aggregator, mini-booking browser) + `tests/v2-*.test.js` 16종. Review Attempt 18 Opus 3×2 동일 조건 비교에서 Quality PASS, EFF-01~08 전부 PASS (사용자 turn 20%, 완료 시간 49.8%, authored bytes 81.1% 감소)
+
+### Changed
+
+- `skills/vais/SKILL.md` → v2 managed entry 로 교체. 기존 C-Suite 라우팅 지침은 `skills/vais/legacy.md` 로 보존 (`shadow`/`disabled` 모드에서 사용)
+- `vais.config.json` 에 `workflowV2` 블록 추가, 정본 기본값 `mode: enforce`
+- `output-styles/vais-default.md` — `enforce` 모드에서는 하단 리포트 대신 `[feature/work-item · phase · state]` 한 줄 표시
+- `lib/io.js` — `outputBlock` 에 `hookEventName` 포함, `outputPreToolAllow(updatedInput)` 추가, `notebook_path` 파싱
+- `ajv` 를 runtime dependency 로 이동 (schema 검증), `js-yaml` 4.3.2
+
 ## [2.2.1] - 2026-08-21
 
 ### Fixed

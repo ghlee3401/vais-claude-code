@@ -2,536 +2,236 @@
 schema: vais-phase/v1
 work_item: WI-2026-08-31-workflow-redesign
 phase: design
-revision: 1
+revision: 5
 status: approved
 based_on:
   - ../01-plan/main.md
+  - revisions/v4.md
+  - ../04-review/main.md
 approved_by: user
-approved_at: 2026-08-31
+approved_at: 2026-09-03
 ---
 
-# Design — VAIS workflow redesign
+# Design revision 5 — Subscription-native formal comparison
 
-## 1. 설계 원칙
+## 1. 결정과 변경 이유
 
-1. 모든 규모에서 Plan·Design·Do·Review·Report를 유지한다.
-2. 사용자는 하나의 VAIS와 대화하고 내부 Agent 호출은 VAIS가 책임진다.
-3. 문서는 단계의 판단과 이력을 남기되 Agent별 사고 과정을 복제하지 않는다.
-4. 상태·승인·권한·반복 제한은 런타임이 강제한다.
-5. 기존 엔진을 기준선으로 보존하고 새 엔진은 검증 후 전환한다.
+Design revision 4의 adapter와 공통 observer는 구현·Readiness를 통과했다. 그러나 승인된 $4 journey budget으로 실행한 새 formal cohort는 Legacy 1의 최종 승인 turn에서 provider의 정가 환산 상한에 도달해 중단됐다. 구독형 Claude Code 환경의 `total_cost_usd`는 실제 사용자 청구액이 아니며, dollar cap은 제품 효율이 아니라 생성 길이를 인위적으로 제한했다.
 
-## 2. 전체 구조
+이번 revision은 revision 4의 동등성 규칙을 모두 유지하면서 **formal 실행에서 dollar budget 제한을 제거**한다. provider list cost는 raw telemetry 재계산과 참고 관측에만 남기고 Quality·EFF·중단 조건으로 사용하지 않는다. runaway 방지는 고정된 사용자 turn 수, turn당 15분 timeout, 격리와 실패 즉시 중단 규칙으로 처리한다.
 
-```mermaid
-flowchart LR
-    U[사용자 /vais 요청] --> K[Workflow Kernel]
-    K --> H[History Resolver]
-    K --> S[State & Gate Engine]
-    K --> C[Context Builder]
-    K --> O[Phase Orchestrator]
-    O --> P[CPO · Plan]
-    O --> T[CTO · Design/Do]
-    O --> Q[Independent QA · Review]
-    O --> E[CEO · Report]
-    O --> X[Conditional Specialists]
-    S --> D[Canonical Documents]
-    Q --> V[Tool Evidence · Browser Screenshots]
-    D --> M[Generated Master Index]
-```
+Plan 범위, v2 공개 기능, revision 4의 prompt adapter와 assurance-aware EFF-01~08은 바꾸지 않는다. 변경 범위는 다음뿐이다.
 
-Workflow Kernel이 현재 Work item과 event를 기준으로 다음 행동을 결정한다. Agent Markdown의 자연어 해석은 판단에만 사용하고, 상태 전이와 쓰기 권한의 정본으로 사용하지 않는다.
+1. cohort 비용 정책을 `subscription-no-dollar-cap`으로 고정한다.
+2. 양쪽의 turn timeout을 900,000 ms로 고정하고 증거에 결속한다.
+3. provider list cost는 `OBSERVE`에만 남기며 효율·품질 판정에서 제외한다.
 
-## 3. 사용자 명령 계약
+Revision 4는 `revisions/v4.md`에 승인 이력으로 보존한다. 이 문서와 충돌하지 않는 이전 설계는 계속 유효하다.
 
-### 3.1 진입 규칙
+## 2. 유지되는 불변 조건
 
-- VAIS에 반영할 모든 요청, 피드백과 승인은 `/vais`로 시작한다.
-- `/vais {자연어}`는 새 작업 생성 명령이 아니라 현재 프로젝트 상태를 고려하는 단일 진입점이다.
-- `/vais status|pause|resume|cancel`은 자주 쓰는 제어의 단축 표현이다.
-- 기존 `/vais cto plan ...` 형식은 호환 계층에서 같은 Workflow Kernel로 라우팅하며 Gate를 우회하지 못한다.
-- 일반 도움말에서는 C-Level 직접 호출을 노출하지 않는다.
+- Compact/Standard/Extended 모두 Plan→Design→Do→Review→Report 다섯 Phase를 남긴다.
+- Plan과 Design은 사용자 승인 전 다음 단계로 진행하지 않는다.
+- Review는 구현 주체와 분리된 read-only independent-qa가 판정한다.
+- AI QA PASS 후 사용자 최종 승인을 요청하고, 승인 후에만 Report를 생성·동결한다.
+- Review FAIL은 Design을 거치지 않고 Do로 돌아갈 수 없으며 자동 repair는 기존 상한을 유지한다.
+- write scope, lease, drift, assignment, evidence digest, 원자적 상태 전이와 Report freeze를 완화하지 않는다.
+- 구현 품질이나 안전성을 낮춰 token을 줄이는 변경은 효율 개선으로 인정하지 않는다.
 
-### 3.2 `/vais`가 없는 요청
+## 3. 효율 측정 계약
 
-- 일반 질문은 읽기 전용으로 답할 수 있다.
-- 활성 Work item과 관련된 변경 요청은 `/vais`를 붙이라는 안내만 반환한다.
-- VAIS 상태, 정본 문서, 제품 코드의 mutation 권한을 발급하지 않는다.
-- 지원되는 Claude Code 쓰기 도구는 Hook이 차단한다. 사용자 편집기와 외부 프로세스는 차단 대상으로 과장하지 않고 다음 실행의 drift 검사로 다룬다.
+### 3.1 측정 계층
 
-### 3.3 응답 상태선
-
-모든 `/vais` 응답 첫 부분에는 다음 한 줄을 표시한다.
-
-```text
-[authentication/password-reset · Design · 사용자 승인 대기]
-```
-
-상세 이력, 대기 요청, Agent 참여와 재시도 횟수는 `/vais status`에서만 펼친다.
-
-## 4. 문서 모델
-
-```text
-docs/
-  README.md
-  features/
-    authentication/
-      main.md
-      password-reset/main.md
-  work-items/
-    authentication/
-      2026-08-29-password-reset/
-        main.md
-        01-plan/main.md
-        01-plan/revisions/v1.md
-        02-design/main.md
-        02-design/revisions/v1.md
-        03-do/main.md
-        04-review/main.md
-        04-review/evidence/
-          checks/manifest.json
-          logs/
-          screenshots/
-        05-report/main.md
-```
-
-### 4.1 정본과 파생 문서
-
-- Work item 루트 `main.md`가 현재 상태와 관계의 정본이다.
-- Phase `main.md`가 해당 단계 내용의 정본이다.
-- `docs/README.md`와 Feature 인덱스는 Report 완료 과정에서 정본 메타데이터로부터 갱신한다.
-- specialist는 정본 Markdown을 직접 쓰지 않는다.
-- raw tool log와 screenshot은 Review evidence이며 별도 판단 문서가 아니다.
-
-### 4.2 Work item 메타데이터
-
-필수 필드는 다음과 같다.
-
-```yaml
-schema: vais-work-item/v1
-id: WI-YYYY-MM-DD-slug
-title: human readable title
-primary_feature: stable-feature-id
-affected_features: []
-scale: compact | standard | extended
-phase: plan | design | do | review | report
-status: active | waiting-user | blocked | paused | completed | cancelled
-plan_revision: 1
-design_revision: 1
-readiness_not_ready_count: 0
-qa_repair_count: 0
-created_at: YYYY-MM-DD
-updated_at: YYYY-MM-DD
-approvals:
-  plan: pending | approved
-  design: pending | approved
-  final: pending | approved
-report_frozen: false
-```
-
-상태 필드는 frontmatter가 정본이며 본문 상태 표시는 여기서 생성한다. 경로 slug는 Plan 승인 전 조정할 수 있지만 Work item ID는 유지한다. Plan 승인 후 경로는 고정한다.
-
-### 4.3 Revision
-
-- `main.md`는 최신본이다.
-- 승인된 기존 내용이 실질적으로 바뀔 때만 기존본을 `revisions/vN.md`로 snapshot한다.
-- 최초 미승인 draft 수정, 오탈자, Design 재확인은 revision을 늘리지 않는다.
-- Review 실패 후 기술 설계가 실질적으로 달라지면 Design revision을 만든다.
-
-### 4.4 Report 불변성
-
-완료 순서는 다음으로 고정한다.
-
-```text
-사용자 최종 승인
-→ Report 작성
-→ Feature 문서 갱신
-→ Master 갱신
-→ 링크·스키마 검증
-→ completed
-→ Report write lock
-```
-
-완료 후 Report 수정 요청은 거부하고 새 Work item을 제안한다. 미완료·취소·차단 작업은 루트 상태와 Master에 남지만 완료 Report를 만들지 않는다.
-
-## 5. Feature와 Work item 탐색
-
-- Feature는 장기 capability이며 계층형 ID를 허용한다. 예: `authentication/password-reset`.
-- Work item은 한 번의 변경이며 상위 Feature 폴더 아래 `YYYY-MM-DD-slug`로 저장한다.
-- 하나의 Work item은 primary Feature 하나와 affected Feature 여러 개를 가진다.
-- 본문은 canonical Work item 한 곳에만 두고 affected Feature에는 링크만 둔다.
-- 새 요청 시 active, waiting, blocked, paused, completed, cancelled 및 Legacy 문서를 모두 검색한다.
-- v1 검색은 metadata, 제목, REQ, 관련 코드 경로의 결정적 검색을 사용한다. Graph/Vector DB는 사용하지 않는다.
-- VAIS는 “지난 작업과 비슷합니다. 이 작업의 후속으로 진행할까요?”라고 제안하고 Plan 승인으로 관계를 확정한다.
-
-## 6. 규모 판정
-
-| 규모 | 판단 기준 | 문서와 실행 차이 |
+| 계층 | 포함 | 사용 목적 |
 |---|---|---|
-| Compact | 한두 surface, 계약 변경 없음, 낮은 위험, 쉽게 되돌림 | 같은 섹션을 짧게 작성하고 최소 specialist/check만 사용 |
-| Standard | 여러 파일 또는 UI/API/data 중 둘 이상, 중간 위험 | 일반 깊이와 영향 회귀 검사를 사용 |
-| Extended | 다영역, 공개 계약·데이터·인프라·보안, 높은 불확실성 | 대안·rollback·전문 검토·평가를 강화 |
+| Quality | REQ/TC, 회귀, 실제 브라우저, 독립 QA, 승인·권한 공격 검사 | 절대 통과 조건 |
+| Delivery compute | main owner와 Plan/Design/Do/Report specialist의 provider telemetry | Legacy 대비 본체 작업 비교 |
+| Assurance compute | Review owner, independent-qa와 QA 판단에 사용된 model telemetry | 추가 보증 비용을 별도 공개 |
+| Pure waste | 동일 snapshot의 중복 check, 계약 오류 재시도, 중복 draft, 불필요한 Agent | 제거 대상 |
+| Human friction | 사용자 승인 수, 결정 없는 진행 요청, 전체 완료 시간 | 비개발자 사용 효율 |
+| Artifact efficiency | 정본 Markdown 수·byte, 임시 문서, evidence 크기 | 기록의 유용성 대비 부피 |
 
-규모는 변경 surface, 공개 계약, 데이터, 인프라, 보안 위험, 되돌릴 수 있는 정도와 불확실성으로 판정한다. 규모는 Phase 존재 여부에 영향을 주지 않는다.
+`total cache-creation token`과 provider list cost는 숨기지 않고 계속 기록한다. provider list cost는 구독형 사용자의 actual charge로 해석하지 않으며, Quality·EFF·실행 제한에 사용하지 않는 참고용 `OBSERVE`다. raw provider 자료가 없으면 비용만 관찰 불가로 표시하되 다른 신뢰 증거의 유효성을 대신 판정하지 않는다.
 
-## 7. 상태 머신
+### 3.2 Canonical workload와 adapter
 
-### 7.1 정상 전이
+- formal cohort는 feature·scale·요구사항·완료 조건·승인 결정·Mini Booking fixture digest를 담은 immutable canonical workload manifest 하나를 사용한다.
+- Legacy와 v2의 요청 의미는 canonical workload로 동일해야 하며, adapter는 각 엔진의 공개 라우팅·Phase·승인 문법만 변환한다.
+- adapter는 요구사항, 완료 조건, 구현·QA 힌트, 설명 또는 성공 가능성을 높이는 정보를 추가·삭제·재배열할 수 없다.
+- runtime에서 확정된 Plan/Design revision ID를 승인 문법에 대입하는 deterministic placeholder 치환만 허용한다.
+- 각 run은 canonical workload digest, adapter version과 digest, 각 rendered prompt digest를 기록한다. raw prompt를 증거에 영구 저장하지 않아도 같은 입력에서 동일 prompt digest를 재현할 수 있어야 한다.
+- adapter가 canonical workload 외의 이전 엔진 출력이나 다른 repetition 결과를 읽어 prompt를 보강하면 해당 cohort는 오염으로 `BLOCKED`다.
 
-| 현재 | event | 다음 | 조건 |
+### 3.3 실행 공정성과 오염 방지
+
+- 동일 immutable engine stage, 같은 Opus 모델·effort·tool profile·`subscription-no-dollar-cap` 정책과 turn timeout을 사용한다. 엔진 구현 차이 자체는 각 stage에 보존한다.
+- formal runner는 Claude CLI에 `--max-budget-usd`를 전달하지 않는다. 양쪽의 각 turn은 900,000 ms timeout 안에서만 실행하며 timeout·quota·provider 오류는 cohort 전체를 `BLOCKED`로 만든다.
+- Legacy/v2 각각 독립된 전체 여정 3회를 수집하고 repetition 1~3을 정확히 한 번씩만 허용한다.
+- 실행 순서는 `Legacy 1 → v2 1 → Legacy 2 → v2 2 → Legacy 3 → v2 3`으로 고정한다.
+- 각 run은 새 project copy와 새 session에서 실행하고 다른 run의 상태·문서·cache artifact를 재사용하지 않는다.
+- Legacy의 단계별 진행과 v2의 자동 진행을 그대로 사용한다. adapter가 전송한 Phase 진행·승인 turn도 실제 사용자 turn으로 세며, v2에 존재하지 않는 진행 turn을 숨기지 않는다.
+- outer/main, specialist, independent-qa telemetry를 raw provider result와 Agent manifest로 결속한다.
+- quota 복구, 공격 probe, 개발 중 진단 turn은 formal cohort에서 제외하고 diagnostic으로 보존한다.
+- 단계별 token, elapsed time, check command와 snapshot digest, 사용자 결정 turn을 함께 기록한다.
+- 산출값을 raw telemetry와 manifest에서 재계산할 수 없으면 평가기는 PASS를 만들지 않는다.
+- formal run을 시작한 뒤 실패 표본을 버리고 같은 repetition을 대체 실행할 수 없다. 환경·provider·증거 문제는 cohort 전체를 `BLOCKED`로 만들며 후속 실행은 새 승인 계약 없이는 formal 표본이 아니다.
+
+### 3.4 비교 규칙
+
+Quality Gate를 먼저 통과한 cohort에만 효율 판정을 적용한다.
+
+| ID | PASS 조건 |
+|---|---|
+| EFF-01 | v2 delivery compute 중앙값이 Legacy total cache-creation 중앙값의 110% 이하 |
+| EFF-02 | v2 전체 elapsed time 중앙값이 Legacy 중앙값의 110% 이하 |
+| EFF-03 | v2 canonical authored Markdown count와 byte 중앙값이 각각 Legacy 이하 |
+| EFF-04 | formal compact 여정의 independent-qa가 정확히 1회이며 required Agent 누락·중복 0 |
+| EFF-05 | 같은 Design revision·repo snapshot·check adapter의 중복 실행 0 |
+| EFF-06 | 완료 시 Phase 정본 외 transient draft Markdown 0 |
+| EFF-07 | 내부 문서 schema/byte 계약 오류 재시도 중앙값 0, 동일 오류 반복 0 |
+| EFF-08 | 사용자 결정은 Plan 승인·Design 승인·최종 승인뿐이며 별도 `Review 진행` 요청 0 |
+
+110%는 생성형 실행 편차를 실패로 오판하지 않기 위한 non-inferiority 경계다. 한 지표의 큰 악화를 다른 지표 개선으로 상쇄하지 않는다. independent-qa token과 총 provider cost는 cohort 표에 별도 열로 공개하되, 호출 수·capsule·handoff·중복 check 제한으로 통제한다. 3쌍 관측 후 규모별 보증 비용 기준선을 만들기 전에는 임의 token 상한을 추가하지 않는다.
+
+### 3.5 판정
+
+- `PASS`: Quality 전 항목 PASS, formal 3쌍 완전, EFF-01~08 전부 충족
+- `BLOCKED`: 표본 부족, provider/Chrome unavailable, 환경 차이, adapter 오염 또는 raw evidence 검증 불가. 효율은 판정하지 않는다.
+- `FAIL`: 유효하고 동등한 실행에서 품질 실패, 또는 Quality PASS인 완전한 cohort에서 EFF 조건 위반
+- `OBSERVE`: total token, assurance token, cache read, output token, list cost와 evidence byte 추세
+
+품질 실패를 효율 수치로 상쇄하지 않는다. 유효한 환경에서 품질이 실패하면 전체 판정은 `FAIL`이고 EFF-01~08은 `NOT_EVALUATED`다. 환경·증거 차단은 품질 실패로 추정하지 않고 `BLOCKED`로 유지한다. 기존 Review Attempt 4와 5의 판정은 당시 계약에 따른 이력으로 수정하지 않는다.
+
+## 4. Review evidence 단일 실행 구조
+
+```text
+Do transaction
+  → readinessChecks 1회 + immutable receipt
+  → Review evidence prepare
+      → reviewChecks 1회 + screenshot/raw receipt
+  → independent-qa 1회
+      → receipt·diff·화면을 독립 판단
+  → Review decide
+      → 기존 receipt와 QA handoff 검증만 수행
+      → check 재실행 금지
+```
+
+- check의 identity는 `adapter + normalized command + design revision + repo snapshot digest`다.
+- 동일 identity의 PASS receipt가 있으면 transaction과 Agent 모두 재실행하지 않는다.
+- independent-qa의 독립성은 구현자의 자기보고를 믿지 않고 runtime 소유의 원시 evidence와 실제 diff를 별도로 판단하는 데서 확보한다.
+- evidence가 누락·stale·의심스러우면 QA는 PASS 대신 `blocked`와 필요한 supplemental check ID를 반환한다. 보충 검사는 이유를 기록해 한 번 실행하며 일반 중복으로 세지 않는다.
+- Do readiness와 Review가 서로 다른 목적의 check를 선언할 수 있지만 같은 check가 필요하면 한 receipt를 재사용한다.
+
+## 5. 문서와 handoff lifecycle
+
+### 5.1 다섯 정본
+
+- 사용자에게 보존되는 authored Phase Markdown은 `01-plan/main.md`부터 `05-report/main.md`까지 다섯 개다.
+- Work item root와 Feature/Master는 정본 메타데이터에서 생성되는 index이며 authored Phase 수에 포함하지 않는다.
+- 미승인 draft는 runtime 임시 데이터로만 존재하고 canonical promotion 뒤 삭제한다.
+- 승인된 의미 변경만 `revisions/`에 보존한다. byte 조정·형식 재시도·동일 내용 draft는 revision이 아니다.
+- 완료 시 `docs/**/draft.md`와 `.vais/**/draft*.md`가 남으면 Report Gate가 실패한다.
+
+### 5.2 QA handoff
+
+QA handoff는 사고 과정이나 실행 로그를 복사하지 않고 다음만 가진다.
+
+- verdict와 한 문단 judgment
+- REQ/TC별 pass/fail/blocked 및 evidence ID
+- blocking finding
+- non-blocking risk와 unverified 항목
+- 필요한 supplemental check ID
+
+compact/standard/extended handoff JSON 한도는 각각 3KB/5KB/8KB다. 로그·스크린샷·명령 출력은 경로와 digest로 참조하며 handoff 본문에 재서술하지 않는다.
+
+## 6. 계약 재시도와 상태 기록
+
+- Phase owner에게 자유 형식 빈 파일 대신 frontmatter와 필수 section이 채워진 deterministic skeleton을 제공한다.
+- byte budget과 필수 ID는 canonical write 전에 local preflight로 검사한다.
+- 실패 receipt는 누락 section, 초과 byte와 허용 예시만 반환하고 전체 문서를 다시 출력하지 않는다.
+- 같은 schema error가 같은 transaction에서 두 번 발생하면 자동 재시도를 멈추고 내부 계약 결함으로 기록한다.
+- `repo.snapshot.updated`는 파일별로 누적하지 않고 Phase transaction 종료 시 최종 digest 한 건으로 coalesce한다. 외부 drift 감지는 즉시 유지한다.
+
+## 7. 사용자 진행 흐름
+
+Plan과 Design 승인, 최종 승인은 그대로 명시적으로 받는다. 결정이 필요 없는 Phase 진행 명령은 요구하지 않는다.
+
+```text
+/vais 요청
+→ Plan 제시 → 사용자 승인
+→ Design 제시 → 사용자 승인
+→ Do → Readiness → Review evidence → independent QA
+→ 실제 결과·화면·제약 제시 → 사용자 최종 승인
+→ Report
+```
+
+Design 승인 turn이 완료되면 Do부터 Review 결과 제시까지 자동으로 이어진다. 각 Phase의 state event와 main.md는 그대로 생성된다. BLOCKED, scope drift, QA FAIL처럼 사용자 결정이 필요한 경우에만 멈춘다.
+
+## 8. 요구사항 연결
+
+| 요구사항 | revision 4 결정 | 실패 처리 |
+|---|---|---|
+| REQ-001~006 | 다섯 Phase·세 승인·독립 QA 유지, 무결정 진행 turn 제거 | 승인·revision 불일치 시 무변경 |
+| REQ-013~018 | 기존 규모·문서 깊이·Agent 선택 유지, QA handoff만 bounded | 역할·범위·handoff 초과 시 Gate 차단 |
+| REQ-020~024 | runtime evidence를 한 번 만들고 independent-qa가 판정 | missing/stale evidence는 BLOCKED |
+| REQ-025~029 | skeleton preflight, draft cleanup, snapshot coalesce | 계약 반복 오류와 transient draft는 Gate 차단 |
+| REQ-030 | 같은 구독형 no-dollar-cap 정책에서 canonical workload 의미는 동일하게 유지하고 공개 진입 문법만 adapter로 변환한 3쌍을 평가 | 오염·환경 차이는 BLOCKED, 유효 품질 실패와 완전 EFF 위반은 FAIL |
+
+## 9. 추가 테스트 사례
+
+Revision 2의 TC-001~013, TC-015는 유지한다. 기존 TC-014의 단일 total-token 조건은 아래 사례로 대체한다.
+
+| TC | 검증 |
+|---|---|
+| TC-014A | raw telemetry에서 delivery와 assurance compute를 분리하고 합계가 provider total과 일치한다. |
+| TC-014B | 독립 QA token이 추가돼도 EFF-01~08을 충족하면 PASS하며 총량은 OBSERVE에 남는다. |
+| TC-016 | independent-qa가 사용한 동일 e2e receipt를 Review decide가 재실행하지 않는다. |
+| TC-017 | stale/missing receipt에는 QA가 BLOCKED와 supplemental check만 반환하고 임의 PASS하지 않는다. |
+| TC-018 | completed work item에 transient draft Markdown이 있으면 Report Gate가 실패한다. |
+| TC-019 | schema skeleton을 사용한 formal 3회에서 계약 오류 재시도 중앙값이 0이다. |
+| TC-020 | Design 승인 한 번으로 Do·Readiness·Review가 이어지고 standalone 진행 요청이 필요 없다. |
+| TC-021 | check identity가 같으면 재사용하고 revision 또는 snapshot이 다르면 stale로 거부한다. |
+| TC-022 | snapshot update가 Phase당 한 건으로 coalesce되며 외부 drift 탐지는 유지된다. |
+| TC-023 | canonical workload가 같으면 Legacy/v2 adapter는 공개 문법만 다르고 semantic payload digest는 같다. |
+| TC-024 | adapter가 요구사항·완료 조건·힌트를 추가·삭제하거나 이전 run을 읽으면 formal 증거가 거부된다. |
+| TC-025 | Legacy 단계별 turn과 v2 자동 진행 turn을 누락 없이 기록해 실제 사용자 turn 수를 비교한다. |
+| TC-026 | runner가 L1→v2-1→L2→v2-2→L3→v2-3 순서와 run별 project/session 격리를 강제한다. |
+| TC-027 | 여섯 run의 model·effort·tool profile·cost policy·turn timeout이 다르거나 formal CLI에 dollar cap이 있으면 cohort가 BLOCKED다. |
+| TC-028 | 동등한 실행의 품질 실패는 전체 FAIL과 EFF `NOT_EVALUATED`를 만든다. |
+| TC-029 | evidence 누락·환경 차이는 BLOCKED이며 실패 repetition을 대체 실행할 수 없다. |
+
+## 10. Do dispatch
+
+| Wave | 담당 | 구현 질문 | write scope |
 |---|---|---|---|
-| plan/active | `plan.presented` | plan/waiting-user | Plan Gate의 기계 조건 충족 |
-| plan/waiting-user | `user.plan.approved` | design/active | 명시적 `/vais` 승인 |
-| plan/waiting-user | `user.plan.revised` | plan/active | 사용자 수정 요청 |
-| design/active | `design.presented` | design/waiting-user | Design Gate의 기계 조건 충족 |
-| design/waiting-user | `user.design.approved` | do/active | 명시적 `/vais` 승인 |
-| design/waiting-user | `user.design.revised` | design/active 또는 plan/active | 요구사항 변경 여부에 따라 결정 |
-| do/active | `readiness.ready` | review/active | 모든 required readiness check 성공 |
-| do/active | `readiness.not-ready` | do/active | 수정 가능한 준비 실패, 연속 3회 미만 |
-| do/active | `readiness.blocked` | do/blocked | 환경·권한 등으로 검증 불가능 |
-| review/active | `qa.pass` | review/waiting-user | 모든 required Review check 성공 |
-| review/active | `qa.fail` | design/active | 자동 보완 3회 이하 |
-| review/active | `qa.blocked` | review/blocked | 필수 검증 불가능 |
-| review/waiting-user | `user.final.approved` | report/active | 명시적 최종 승인 |
-| review/waiting-user | `user.final.rejected` | design/active 또는 plan/active | 피드백 성격에 따라 결정 |
-| report/active | `report.validated` | report/completed | Report·Feature·Master·링크 검증 성공 |
-| report/active | `report.failed` | report/blocked | 완료 기록 검증 실패 |
+| 1 | backend-engineer | canonical workload를 Legacy 공개 Phase 문법으로만 변환하고 provider telemetry·terminal·artifact·turn 증거를 결속 | `scripts/evaluation/**`, 필요한 evaluation schema |
+| 2 | test-engineer | adapter 변조·순서·격리·cost policy·timeout·실패 분류를 공격하고 provider 호출 없는 dry-run으로 6개 slot을 검증 | `lib/evaluation/**`, `tests/v2-*.test.js`, `tests/fixtures/**` |
 
-### 7.2 제어 전이
+production runtime은 변경하지 않는다. main owner는 evaluation adapter 통합, 문서와 `workflowV2.mode: shadow` 유지만 담당한다. UI·frontend·인프라·운영·business specialist는 불필요하다.
 
-- `user.pause`: terminal이 아닌 작업을 paused로 만들고 진행 슬롯을 해제한다.
-- `user.resume`: 진행 슬롯이 비었고 drift 검사가 끝난 경우 이전 Phase로 복귀한다.
-- `user.cancel`: cancelled terminal로 전환한다. 다시 수행하면 새 Work item이다.
-- blocked는 슬롯을 유지한다. 다른 작업을 진행하려면 사용자가 pause 또는 cancel한다.
-- `superseded`는 별도 상태가 아니라 cancelled 사유와 `replaced_by` 관계로 표현한다.
+## 11. Readiness와 Review Gate
 
-### 7.3 불변 조건
+### Readiness
 
-- 프로젝트 전체에 `active`, `waiting-user`, `blocked`인 진행 Work item은 최대 하나다.
-- 승인된 Plan 없이 Design, 승인된 Design 없이 Do에 들어갈 수 없다.
-- Review에서 제품 코드를 수정할 수 없다.
-- Review FAIL은 Do로 직접 이동할 수 없다.
-- AI QA PASS 없이 사용자 최종 승인을 받을 수 없다.
-- 사용자 최종 승인 없이 Report를 만들 수 없다.
-- completed Report는 수정할 수 없다.
+- 기존 전체 unit/integration, lint, validator, audit와 공격 테스트 0 FAIL
+- TC-014A~029 PASS
+- 무과금 dry-run에서 canonical workload와 adapter 재현, 6개 slot 순서·격리·동일 조건 검증 PASS
+- Review check duplicate 0, completed fixture draft 0
+- 기존 승인·assignment·repairCycle·rollback 공격면 회귀 없음
+- source mode `shadow`
 
-## 8. Gate 설계
+### Review
 
-모든 항목은 `required`, `conditional`, `not-applicable` 중 하나로 분류한다. required 하나라도 실패하면 통과하지 못한다. 임의의 80%·90% 점수는 사용하지 않는다.
+- read-only independent QA 1회와 실제 Chrome 검증
+- immutable Legacy/v2 formal cohort 각 3회
+- 고정 순서와 동일 canonical workload·Opus·effort·tool profile·subscription cost policy·turn timeout 증거
+- Quality Gate PASS 후 EFF-01~08 전부 PASS
+- total·assurance token과 provider list cost는 OBSERVE 표에 분리 공개
+- AI QA 결과와 실제 화면을 사용자에게 제시하고 최종 승인 대기
 
-### 8.1 Plan Gate
+## 12. Rollback과 다음 Gate
 
-- 원 요청, 과거 작업 검색, Feature 관계
-- 목표·결과 미리보기, 범위·제외 범위
-- 안정적인 REQ, 사용자 흐름, 엣지 케이스, 완료 조건
-- 영향과 규모 판단
-- 중요한 미결정 사항 해소
-- 사용자 승인
-
-### 8.2 Design Gate
-
-- 각 REQ의 동작, 입력, 출력, 오류와 구현 결정
-- UI가 있으면 화면·상태·흐름·반응형·접근성 기준
-- API, backend, data, infra, security와 운영 설계 중 해당 영역
-- 영역별 필요/불필요/불확실 판정과 triage
-- TC의 조건·입력·기대 결과
-- 구현 Agent·순서·write scope·병렬성
-- readiness check와 Review check 구분
-- rollback과 실패 대응
-- 사용자 승인
-
-### 8.3 QA 준비 확인
-
-런타임 소유 Gate이며 구현 Agent의 자기평가를 신뢰하지 않는다.
-
-```text
-Do → READY → 독립 AI QA
-   → NOT_READY → Do 보완
-   → BLOCKED → do/blocked
-```
-
-필수 조건은 승인된 구현 작업 완료, 범위 준수, 해당 build/compile/typecheck, 변경 기능 테스트, 앱 또는 검증 환경 실행, 병렬 결과 통합, 필요한 데이터·설정 처리와 증거다. 연속 세 번째 `NOT_READY`에서 `do/blocked`가 된다. 이 횟수는 AI QA 보완 횟수와 별도다.
-
-### 8.4 AI QA Gate
-
-- 모든 REQ와 TC 검증
-- 관련 회귀 검사
-- Design과 코드 차이 검사
-- 테스트 삭제·약화 검사
-- UI의 브라우저 동작과 시각 증거
-- 필요한 보안·성능·운영 검사
-- 미검증·제한 공개
-- evidence manifest 완전성
-
-결과는 PASS/FAIL/BLOCKED뿐이다. 최초 QA 후 최대 3회의 자동 보완을 허용하므로 QA 실행은 최대 4회다. 각 보완은 Design checkpoint→Do→준비 확인→Review를 거친다. 승인된 UX·공개 계약·데이터·보안·비용·범위를 바꾸지 않는 기술 보완은 자동 진행할 수 있고, 그 경계를 바꾸면 사용자 재승인을 받는다.
-
-### 8.5 사용자 최종 승인과 Report Gate
-
-사용자에게 REQ별 결과, 실제 흐름, 설계/실제 화면 비교, 엣지 케이스, 알려진 제한과 스크린샷을 제시한다. 모호한 긍정은 승인으로 간주하지 않는다. Report Gate는 최종 승인 기록, 문서 링크, Feature/Master 반영과 freeze 가능 여부를 검사한다.
-
-## 9. 요구사항과 QA 사례
-
-| TC | 관련 REQ | 입력/상황 | 기대 결과 |
-|---|---|---|---|
-| TC-001 | 001,002,013 | Compact 요청 | 다섯 Phase가 존재하고 내용만 간결하다. |
-| TC-002 | 004,005 | Plan/Design 승인 없이 다음 단계 요청 | 전이가 차단되고 필요한 승인을 안내한다. |
-| TC-003 | 006 | 활성 작업 중 `/vais` 없는 수정 요청 | 읽기 전용 안내, 상태·코드 변경 없음 |
-| TC-004 | 007,008 | 과거 authentication 작업과 유사한 요청 | 기존 Feature/Work item 관계를 제안하고 사용자 승인 전 확정하지 않는다. |
-| TC-005 | 010 | 허용되지 않은 phase/status 전이 | 런타임이 거부하고 audit event를 남긴다. |
-| TC-006 | 011,012 | 두 세션이 서로 다른 작업을 시작 | 하나만 lease를 얻고 다른 요청은 pending에 남는다. |
-| TC-007 | 016 | 인증과 배포가 없는 UI 문구 변경 | CSO/COO 불필요 사유가 있으며 호출되지 않는다. |
-| TC-008 | 016 | 로그인 또는 비밀번호 재설정 | CSO가 필요한 보안 판단을 제공한다. |
-| TC-009 | 017,018 | frontend/backend 구현이 필요한 Design | 담당·질문·write scope가 있는 handoff만 dispatch된다. |
-| TC-010 | 019 | Do 중 승인되지 않은 DB 변경 발견 | 쓰기를 중단하고 Design으로 복귀한다. |
-| TC-011 | 020 | 빌드 실패가 세 번 반복 | QA 횟수를 쓰지 않고 do/blocked가 된다. |
-| TC-012 | 021,022 | AI QA에서 결함 발견 | QA는 코드를 수정하지 않고 Design→Do 경로로 보낸다. |
-| TC-013 | 022 | 세 번의 자동 보완 후에도 QA 실패 | review/blocked, 사용자 승인 요청 없음 |
-| TC-014 | 023 | 모바일 예약 UI | 브라우저 실행과 요구 viewport 스크린샷이 evidence에 존재한다. |
-| TC-015 | 024 | 사용자가 screenshot 피드백 제공 | 원문/이미지 참조와 구조화 해석이 보존되고 Design으로 이동한다. |
-| TC-016 | 025 | completed Report 수정 시도 | 쓰기를 거부하고 새 Work item을 제안한다. |
-| TC-017 | 026 | 승인된 Design의 실질 변경 | 이전 v1 snapshot과 revision 2가 생성된다. |
-| TC-018 | 027 | specialist dispatch | 역할에 필요한 최소 Context View만 제공되고 추가 검색 출처가 기록된다. |
-| TC-019 | 028 | secret/dependency/plugin 검사 | Tool 결과와 Agent 판단이 별도 계약으로 기록된다. |
-| TC-020 | 029 | 사용자가 Do 중 파일을 직접 변경 | drift를 감지하고 범위에 맞게 Do/Design/Plan으로 분기한다. |
-| TC-021 | 030 | 동일 Mini Booking 요청을 구/신 엔진으로 실행 | 안전 불변 조건과 품질을 유지하며 문서·컨텍스트·중복 호출이 감소한다. |
-| TC-022 | 003 | 한 Work item의 전체 Phase 실행 기록 | CPO·CTO·Independent QA·CEO의 고정 책임이 각 Phase에서 확인된다. |
-| TC-023 | 009 | 사용자 최종 승인 후 Report 완료 | Feature 관계와 전체 Work item 상태가 생성된 Master에서 조회된다. |
-| TC-024 | 014 | 목적만 있고 세부사항이 부족한 새 요청 | Plan에 문제·목표·범위·REQ·흐름·엣지 케이스·완료 조건·영향이 채워진 뒤 승인 요청이 나온다. |
-| TC-025 | 015 | 여러 UI/API 오류 상태가 있는 Design | 모든 REQ에 동작·입력·출력·오류·기술 결정과 하나 이상의 TC가 연결된다. |
-
-## 10. Agent 오케스트레이션
-
-### 10.1 Phase 책임
-
-| 역할 | 항상 맡는 책임 | 코드 쓰기 |
-|---|---|---|
-| CEO | 시작 조정, 이력 탐색, 단일 VAIS 응답, 상태 종료, Report | 제품 코드 금지 |
-| CPO | 모든 Plan | 금지 |
-| CTO | 모든 통합 Design과 Do 지휘 | Do에서 승인 범위만 |
-| Independent QA | 모든 Review와 최종 QA 판정 | 제품 코드 금지 |
-| CSO | 조건부 보안 판단 | Review에서는 금지 |
-| COO | 조건부 배포·운영 판단 | Do에서 승인 범위만 |
-| CBO | 조건부 사업·가격·시장 판단 | 제품 코드 금지 |
-
-### 10.2 Coverage 판단
-
-모든 Design은 UI, backend/API, data, infrastructure, security/compliance, operations, business 영역을 `필요`, `불필요`, `불확실`로 표시한다.
-
-- 필요: 해당 specialist를 호출한다.
-- 불필요: 한 줄 근거를 기록한다.
-- 불확실: 해당 C-Level이 짧은 triage를 수행해 불필요/조언/필수로 결정한다.
-- Do 또는 Review에서 새 surface가 발견되면 Design으로 돌아간다.
-
-이 Work item의 최초 분류는 다음과 같다.
-
-| 영역 | 판단 | 이유 |
-|---|---|---|
-| UI/UX | 필요 | `/vais` 상태선과 Mini Booking 화면 검증이 있음 |
-| Backend/runtime | 필요 | Node 기반 상태·Gate·dispatch·hook 변경 |
-| Data | 필요 | 파일 기반 Work item, lease, event와 schema 변경 |
-| Infrastructure | 불필요 | cloud/network/runtime topology를 새로 만들지 않음 |
-| Security | 필요 | 쓰기 권한, prompt 경계, secret redaction, multi-session lock |
-| Operations | 불확실→조건부 불필요 | packaging/install surface가 생길 때만 COO triage를 다시 수행 |
-| Business | 불필요 | 가격·시장·수익 모델 변경이 아님 |
-
-### 10.3 Specialist handoff
-
-```yaml
-schema: specialist-handoff/v1
-status: completed | blocked
-judgment: concise conclusion
-decisions: []
-behavior:
-  inputs: []
-  outputs: []
-  errors: []
-evidence: []
-affected_requirements: []
-risks: []
-unverified: []
-recommended_checks: []
-```
-
-실제 output contract 전체와 Phase assignment를 함께 주입한다. assignment에는 `phase`, `mode`, `code_write`, `write_scope`, 구체적 질문과 완료 조건이 포함된다. 결과가 중복되거나 정본에 사용되지 않는 호출은 금지한다.
-
-### 10.4 Agent 역할 카드
-
-Agent 파일은 공통 PDCA·문서·안전 규칙을 반복하지 않고 고유 판단 책임, 경계, 품질 기준과 escalation만 가진다. frontmatter는 name, description, kind, delegated_by, capabilities, modes, model, tools, knowledge를 사용한다. 공통 실행 규칙과 권한은 runtime assignment가 제공한다.
-
-## 11. Context View
-
-Context Builder는 다음 순서로 역할별 최소 컨텍스트를 만든다.
-
-1. 현재 승인 Plan과 Design에서 관련 REQ/TC 추출
-2. primary/affected Feature와 관련 Report 링크 선택
-3. 변경 대상 코드와 직접 consumer 선택
-4. 역할 카드와 필요한 knowledge만 lazy load
-5. 추가 검색 시 path·이유·hash를 receipt로 기록
-
-구현 Agent에게 다른 Agent의 장문 사고 과정을 전달하지 않는다. QA에는 구현 Agent의 자기평가를 제외한 clean-room view와 실제 diff, Plan, Design, check evidence를 제공한다. 재시도에는 전체 컨텍스트 대신 실패 이후 delta를 추가한다.
-
-## 12. Tool 계약과 Evidence
-
-```yaml
-check: build
-execution: succeeded | errored | unavailable
-verdict: pass | fail | blocked
-required: true
-scope: []
-requirements: []
-summary: concise result
-findings: []
-evidence: []
-```
-
-- build, lint, test, schema/frontmatter, link, secret, dependency, plugin, SEO technical 검사는 Tool adapter로 수행한다.
-- Tool은 Review에서 자동 수정하지 않는다.
-- 판단이 필요한 보안·성능·운영·UX 결과는 specialist 또는 QA가 해석한다.
-- required Tool이 unavailable이면 BLOCKED다.
-- Design이 readiness용 검사와 Review용 검사를 구분한다.
-- baseline 실패가 새 변경과 무관하면 warning이지만 필수 검증을 가리면 BLOCKED다.
-
-## 13. 병렬 실행과 쓰기 권한
-
-### 13.1 실행 파동
-
-Design이 안정된 인터페이스, 비중복 write scope, 의존성 부재를 증명한 작업만 병렬로 묶는다. 불확실하면 순차 실행한다. 여러 Agent를 한꺼번에 호출해 각자 설계와 코드를 만들게 하지 않는다.
-
-### 13.2 Phase 권한
-
-| Phase | 허용된 쓰기 |
-|---|---|
-| Plan | Work item 루트와 Plan |
-| Design | Work item 루트와 Design |
-| Do | 승인된 제품 코드·테스트·Do 기록 |
-| Review | Review와 evidence만, 제품 코드 금지 |
-| Report | Report·Feature·Master만, 제품 코드 금지 |
-| unmanaged | VAIS 상태와 코드 쓰기 금지 |
-
-Hook은 `run authorization`, 현재 phase, lease, allowed path를 함께 검증한다. Shell처럼 복합 쓰기가 가능한 도구는 명령 분석과 사후 diff를 함께 사용한다.
-
-### 13.3 외부 변경
-
-각 Phase 진입과 `/vais` turn 시작 시 repo snapshot을 비교한다.
-
-- 승인된 Design과 write scope 안의 변경: CTO가 검토하고 Do를 계속한다.
-- 새 기술 surface 또는 계약 변경: Design으로 이동한다.
-- 목표·범위·요구사항 변경: Plan으로 이동한다.
-- 외부 변경을 자동 restore하거나 삭제하지 않는다.
-
-## 14. 세션과 대기 요청
-
-- 프로젝트 상태는 session이 아니라 repository에 귀속된다.
-- 하나의 session만 짧은 mutation lease를 보유한다.
-- lease 만료나 이전 session 비활성 확인 후 다른 session이 같은 Work item을 이어받을 수 있다.
-- status/read-only 조회는 여러 session에서 가능하다.
-- active/waiting-user/blocked는 진행 슬롯을 차지한다.
-- paused/cancelled/completed는 슬롯을 해제한다.
-- pending request는 원 요청, 시각, session reference, redaction 여부만 내부 상태에 저장한다.
-- pending request는 자동으로 Work item이나 문서를 만들지 않는다.
-
-## 15. 현재 코드 개편 지도
-
-### 유지·확장
-
-- `lib/core/state-store.js`: atomic write와 lock 기반
-- `lib/observability/`: event, integrity, rotation
-- `lib/evaluation/`, `scripts/workflow-evaluation.js`: baseline과 비교 평가
-- plugin/template/doc validator와 기존 auditor: Tool adapter 기반
-- `vendor/ui-ux-pro-max/`, `design-system/`, 선별된 `agents/*/knowledge/`: lazy knowledge
-
-### 교체
-
-- `lib/core/state-machine.js`: event 기반 phase/status 머신
-- `lib/workflow/workflow-compiler.js`: 고정 5단계 + scale depth
-- `lib/quality/gate-manager.js`: 점수 대신 binary required conditions
-- `lib/ceo-algorithm.js`: keyword 강제 라우팅 대신 history/surface/coverage 판단
-- subagent dispatcher와 conversation orchestrator: assignment + structured handoff + Phase synthesis
-- paths, status, doc/template validator: 새 Feature/Work item 모델
-
-### 호환 후 폐기
-
-- 별도 ideation Phase와 template/guard
-- sub-agent 직접 Markdown, subdoc/clevel-main guard
-- Patch/Feature/Initiative에 따른 Phase 생략
-- matchRate와 임의 percentage Gate
-- QA Agent의 직접 수정
-- frontend/backend/test 고정 병렬 실행
-- 사용자의 C-Level 직접 호출을 전제로 한 기본 UX
-
-Legacy 파일을 즉시 삭제하지 않는다. 새 engine/schema를 병행 추가하고 Shadow Mode와 예제 평가가 통과한 뒤 기본값을 바꾼다.
-
-## 16. Do 실행 계획
-
-| Wave | 내용 | 주 책임 | write scope | 선행 조건 |
-|---|---|---|---|---|
-| 0 | Legacy baseline과 평가 fixture 고정 | CTO + test-engineer | `lib/evaluation/`, `scripts/`, `tests/fixtures/` | Design 승인 |
-| 1 | v2 schema, Work item store, event 상태 머신, Gate | backend-engineer | `schemas/`, `lib/core/`, `lib/quality/`, 관련 tests | Wave 0 |
-| 2 | `/vais` router, lease, pending, hook write guard | backend-engineer + security review | `skills/vais/`, `hooks/`, orchestration lib, tests | Wave 1 |
-| 3 | 정본 docs/index/revision, Context View, handoff | backend-engineer | `lib/`, `scripts/`, `templates/`, tests | Wave 1 |
-| 4 | C-Level/specialist 역할 카드와 Tool adapter | CTO + 해당 specialist | `agents/`, `scripts/`, config, tests | Wave 2~3 contract 안정화 |
-| 5 | Mini Booking UI fixture와 browser QA | ui-designer + frontend-engineer + test-engineer | 평가 fixture 전용 경로 | Wave 2~4 |
-| 6 | Shadow 비교, 호환 경로, 기본값 전환 판단 | CTO + Independent QA | evaluation result/evidence, 필요한 integration code | Wave 5 |
-
-Wave 내부에서도 write scope가 겹치면 순차 실행한다. Wave 6의 결과가 승인 기준에 미달하면 기존 기본 엔진을 유지한다.
-
-## 17. QA 준비 확인 계획
-
-Do 완료 시 최소 다음 검사를 실행한다.
-
-- 변경 schema와 frontmatter validation
-- state transition, approval, retry, lease, path permission 단위 테스트
-- lint와 전체 기존 test suite
-- plugin structure validator
-- 새 문서 path/link/revision/freeze 검사
-- Mini Booking fixture build와 실행
-- 병렬 작업 결과의 integration 확인
-- 승인 범위 밖 변경 유무 확인
-
-세 번 연속 정식 readiness 실패 시 `do/blocked`로 전환한다. Do 중 개별 formatter/test 반복은 정식 횟수에 포함하지 않고, 구현 완료를 선언한 뒤 실행한 Gate만 계산한다.
-
-## 18. Review 계획
-
-Mini Booking 클래스 예약 앱의 동일 snapshot과 동일 요청을 Legacy와 v2 엔진에 적용한다.
-
-| 시나리오 | 검증 목적 |
-|---|---|
-| 이메일 로그인 신규 기능 | 전체 Plan/Design, security 참여 |
-| 로그인 버튼 문구·크기 변경 | Compact 깊이와 UI QA |
-| 비밀번호 재설정 추가 | 기존 Feature 연결 |
-| 재설정 링크 유효시간 후속 수정 | 시간차 Work item 검색 |
-| 로그인 사용자만 예약 | authentication/booking 교차 영향 |
-| screenshot 기반 UI 피드백 | Review→Design feedback loop |
-| seeded 구현 결함 | AI QA 보완과 3회 제한 |
-| build/server 실패 | readiness 차단 |
-| 진행 중 새 요청과 다른 session | pending과 단일 lease |
-| `/vais` 없는 변경 요청 | unmanaged write 차단 |
-| 배포·상태 확인 요청 | 조건부 COO 참여 |
-
-### 성공 조건
-
-- 불법 상태 전환, 승인 누락, unmanaged AI write, 범위 밖 write, 다중 진행 Work item이 0건이다.
-- 의도적으로 넣은 중대한 결함을 모두 탐지한다.
-- retry 제한, Report freeze, REQ→Design→TC→Evidence 연결이 모두 통과한다.
-- Legacy보다 Agent instruction load, 중복 Agent 호출, 생성 문서 수와 크기가 감소한다.
-- 위 효율 개선 때문에 과업 성공, 결함 탐지 또는 사용자 이해 가능성이 낮아지지 않는다.
-- 개발 중 각 시나리오는 1회, 최종 후보의 핵심 시나리오는 독립적으로 3회 실행한다.
-
-## 19. Rollback
-
-- Legacy engine/schema/docs reader를 평가 완료까지 유지한다.
-- v2 engine은 feature flag와 Shadow Mode로 시작한다.
-- 기존 완료 문서는 `legacy`로 인덱싱할 뿐 내용을 다시 쓰지 않는다.
-- 진행 중 Legacy 작업은 자동 완료하지 않고 사용자 확인이 필요한 import 상태로 둔다.
-- v2 실패 시 기본 engine 설정만 Legacy로 되돌리고 생성된 v2 Work item과 evidence는 진단 자료로 보존한다.
-
-## 20. Design Gate 결과
-
-| 조건 | 결과 |
-|---|---|
-| 모든 REQ의 구현 영역과 TC 연결 | PASS |
-| UI/backend/data/infra/security/operations/business coverage | PASS |
-| Agent·순서·병렬성·write scope | PASS |
-| readiness와 Review 검사 분리 | PASS |
-| 상태·승인·retry·rollback | PASS |
-| 중요한 미결정 사항 | 없음 |
-| 사용자 승인 | PASS — 2026-08-31 설계 동결 |
+- 구현 중 이상이 생기면 revision 2 runtime 경로로 되돌릴 수 있도록 기존 receipt와 compatibility layer를 유지한다.
+- formal 3쌍 전에는 효율 PASS나 기본 엔진 전환을 선언하지 않는다.
+- Review PASS와 사용자 최종 승인 전에는 Report 생성, `enforce` 기본값 전환과 배포를 하지 않는다.
+- Design revision 5는 2026-09-03 사용자 승인 완료 상태다. 다음 단계는 no-dollar-cap runner 구현과 provider 호출 없는 dry-run이다.

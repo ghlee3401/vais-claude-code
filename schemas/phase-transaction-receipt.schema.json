@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vais.local/schemas/phase-transaction-receipt.schema.json",
+  "title": "VAIS v2 Phase Transaction Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "workItemId", "phase", "action", "verdict", "next", "evidencePath"],
+  "properties": {
+    "schema": { "const": "phase-transaction/v1" },
+    "id": { "type": "string", "pattern": "^PT-[0-9a-fA-F-]{36}$" },
+    "workItemId": { "type": "string", "pattern": "^WI-" },
+    "phase": { "enum": ["plan", "design", "do", "review", "report"] },
+    "action": { "enum": ["present", "ready", "decide", "finalize"] },
+    "verdict": { "enum": ["PASS", "FAIL", "BLOCKED", "READY", "NOT_READY"] },
+    "next": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase", "status"],
+      "properties": {
+        "phase": { "enum": ["plan", "design", "do", "review", "report"] },
+        "status": { "enum": ["active", "waiting-user", "blocked", "paused", "completed", "cancelled"] }
+      }
+    },
+    "evidencePath": { "type": "string", "minLength": 1 },
+    "findingPath": { "type": ["string", "null"] },
+    "continuation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["automatic", "nextAction", "requiresUserTurn"],
+      "properties": {
+        "automatic": { "const": true },
+        "nextAction": { "enum": ["review-evidence-prepare"] },
+        "requiresUserTurn": { "const": false }
+      }
+    }
+  }
+}

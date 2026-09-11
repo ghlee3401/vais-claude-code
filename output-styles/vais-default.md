@@ -33,6 +33,20 @@ AskUserQuestion 및 승인 후 자동 실행 규칙은 현재 로드된 `skills/
 
 ## 하단 리포트
 
+먼저 `vais.config.json > workflowV2.mode`를 확인합니다.
+
+### v2 `enforce`
+
+Legacy 하단 리포트를 출력하지 않습니다. Hook이 제공한 현재 Work item 상태를 기준으로 응답 첫 줄에 다음 한 줄만 표시합니다.
+
+```text
+[authentication/password-reset · design · waiting-user]
+```
+
+진행률은 Plan→Design→Do→Review→Report의 5단계만 사용합니다. C-Level·phase 직접 호출 명령을 사용자에게 추천하지 않습니다. 다음 행동은 “Plan 승인 대기”, “Design 피드백 대기”, “AI QA 진행 중”처럼 자연어로 설명합니다.
+
+### Legacy `shadow` 또는 `disabled`
+
 매 응답 마지막에 아래 상태 요약을 코드 블록으로 출력합니다. 값만 교체합니다.
 
 ```

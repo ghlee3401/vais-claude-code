@@ -1,0 +1,45 @@
+{
+  "schema": "independent-qa-result/v1",
+  "workItemId": "WI-2026-08-31-workflow-redesign",
+  "designRevision": 3,
+  "attempt": 5,
+  "verdict": "pass",
+  "codeWrite": false,
+  "checkedAt": "2026-09-02T20:30:00+09:00",
+  "checks": {
+    "snapshotAtomicityAndRollback": "pass",
+    "globalAndSymlinkDraftLifecycle": "pass",
+    "supplementalCheckAndConcurrentClaim": "pass",
+    "selfContainedLinkFreeStage": "pass",
+    "stageAndToolProfileBinding": "pass",
+    "rawCaptureContainment": "pass",
+    "canonicalFiveDocumentBinding": "pass",
+    "currentRevisionCheckEvidence": "pass",
+    "trustedThreeByTwoAggregator": "pass"
+  },
+  "attackRegressions": [
+    "parent-directory symlink cannot import external provider telemetry",
+    "missing, duplicate, or cross-Work-item phase mains cannot improve EFF-03",
+    "non-canonical evidence/main.md is derived rather than authored",
+    "empty provider captures are BLOCKED rather than FAIL",
+    "plugin and tool profile digests are verified before and after the journey",
+    "comma, whitespace, and leading-option tool profile inputs are rejected",
+    "past Design check events cannot replace current command or repository evidence"
+  ],
+  "verification": {
+    "full": { "passed": 561, "failed": 0, "skipped": 3 },
+    "runtimeFocused": { "passed": 53, "failed": 0 },
+    "evaluationFocused": { "passed": 28, "failed": 0 },
+    "lint": "pass",
+    "sourcePluginValidator": "pass",
+    "stagedPluginValidator": "pass-with-readme-advisory",
+    "dependencyAudit": "pass",
+    "legacyPathCheck": "pass",
+    "diffCheck": "pass",
+    "liveClaudeInvoked": false
+  },
+  "limitations": [
+    "This verdict covers implementation and formal execution readiness, not the unexecuted paid 3x2 cohort.",
+    "A trusted Legacy journey adapter and a user-approved prompt-equivalence rule are still required."
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "live-claude-code-ab-pilot",
+  "fixture": "mini-booking",
+  "scenario": "email-login-plan-only",
+  "model": "claude-sonnet-5",
+  "effort": "low",
+  "measuredAt": "2026-09-01",
+  "metricDefinition": {
+    "instructionTokens": "modelUsage.cacheCreationInputTokens from Claude Code JSON output",
+    "documentCount": "canonical Markdown documents created during the run",
+    "limitation": "One Plan-only pair is a pilot. It does not satisfy the required three paired full-journey repetitions."
+  },
+  "runs": [
+    {
+      "engine": "legacy",
+      "terminal": "budget-exhausted",
+      "quality": "fail",
+      "instructionTokens": 47577,
+      "agentCalls": 0,
+      "documentCount": 1,
+      "toolTurns": 9,
+      "costUsd": 0.3237408,
+      "findings": [
+        "Plan omitted explicit user flow and Definition of Done required by the frozen Plan Gate",
+        "No runtime Plan Gate or waiting-user state was created"
+      ]
+    },
+    {
+      "engine": "v2-staged",
+      "terminal": "completed",
+      "quality": "pass",
+      "instructionTokens": 26834,
+      "agentCalls": 0,
+      "documentCount": 2,
+      "toolTurns": 18,
+      "costUsd": 0.2948442,
+      "findings": [],
+      "evidence": [
+        "Work item root and canonical Plan created",
+        "plan-document check PASS",
+        "plan.presented event recorded",
+        "plan/waiting-user reached without implementation"
+      ]
+    }
+  ],
+  "comparison": {
+    "instructionReductionRate": 0.436,
+    "costReductionRate": 0.0893,
+    "qualityImproved": true,
+    "documentReductionProven": false,
+    "formalVerdict": "BLOCKED"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vais.local/schemas/automatic-handoff-evidence.schema.json",
+  "title": "VAIS v2 Automatic Specialist Handoff Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "workItemId", "assignmentId", "phase", "role", "designRevision", "repairCycle", "assignmentDigest", "handoffDigest", "persistedAt", "handoff"],
+  "properties": {
+    "schema": { "const": "automatic-handoff-evidence/v1" },
+    "workItemId": { "type": "string", "pattern": "^WI-" },
+    "assignmentId": { "type": "string", "pattern": "^AS-[0-9a-fA-F-]{36}$" },
+    "phase": { "enum": ["do", "review"] },
+    "role": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "designRevision": { "type": "integer", "minimum": 1 },
+    "repairCycle": { "type": "integer", "minimum": 0, "maximum": 3 },
+    "assignmentDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "handoffDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "persistedAt": { "type": "string", "format": "date-time" },
+    "handoff": { "type": "object", "minProperties": 1 }
+  }
+}

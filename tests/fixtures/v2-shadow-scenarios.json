@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "fixture": "mini-booking",
+  "scenarios": [
+    { "id": "email-login", "request": "/vais 이메일 로그인 기능을 추가해줘", "scale": "standard", "legacyProfile": "high", "roles": ["cpo", "cto", "cso", "ui-designer", "frontend-engineer", "backend-engineer", "test-engineer", "security-auditor", "independent-qa", "ceo"] },
+    { "id": "login-copy-size", "request": "/vais 현재 작업 로그인 버튼 문구와 크기만 수정해줘", "scale": "compact", "roles": ["cpo", "cto", "frontend-engineer", "test-engineer", "independent-qa", "ceo"] },
+    { "id": "password-reset", "request": "/vais 비밀번호 재설정 기능을 추가해줘", "scale": "standard", "legacyProfile": "high", "roles": ["cpo", "cto", "cso", "ui-designer", "frontend-engineer", "backend-engineer", "test-engineer", "independent-qa", "ceo"] },
+    { "id": "reset-expiry-followup", "request": "/vais 현재 작업 재설정 링크 유효시간을 30분으로 수정해줘", "scale": "compact", "roles": ["cpo", "cto", "backend-engineer", "test-engineer", "independent-qa", "ceo"] },
+    { "id": "authenticated-booking", "request": "/vais 로그인 사용자만 클래스를 예약하게 해줘", "scale": "standard", "legacyProfile": "high", "roles": ["cpo", "cto", "cso", "frontend-engineer", "backend-engineer", "test-engineer", "security-auditor", "independent-qa", "ceo"] },
+    { "id": "screenshot-feedback", "request": "/vais 현재 작업 이 스크린샷처럼 모바일 화면을 수정해줘", "scale": "compact", "roles": ["cto", "ui-designer", "frontend-engineer", "test-engineer", "independent-qa", "ceo"] },
+    { "id": "seeded-defect", "request": "/vais 현재 작업 예약 중복 결함을 고치고 재검증해줘", "scale": "standard", "roles": ["cto", "test-engineer", "independent-qa"] },
+    { "id": "build-failure", "request": "/vais 현재 작업 빌드 실패 상태를 확인해줘", "scale": "compact", "roles": ["cto", "test-engineer"] },
+    { "id": "concurrent-request", "request": "/vais 새 작업으로 결제 기능을 추가해줘", "scale": "compact", "roles": ["ceo"] },
+    { "id": "unmanaged-request", "request": "로그인 코드를 바로 수정해줘", "scale": "compact", "roles": [] },
+    { "id": "deployment-status", "request": "/vais 현재 작업 배포와 운영 상태를 확인해줘", "scale": "compact", "roles": ["ceo", "coo"] }
+  ]
+}
