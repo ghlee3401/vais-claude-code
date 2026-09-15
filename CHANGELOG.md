@@ -1,5 +1,29 @@
 # Changelog
 
+## [Unreleased] — 2026-09-15 청소 (Legacy 전면 제거)
+
+> 목적: 비개발자용 개발 하네스를 새로 설계·구현하기 위해 v2 runtime 커널만 남기고 나머지를 전부 제거한다. 롤백은 git 태그 `v3.0.1-legacy`.
+
+### Removed
+
+- **Legacy C-Suite**: `agents/{ceo,cpo,cto,cso,cbo,coo}/` 75 파일, `agents/_shared/` 9 파일, `skills/vais/legacy.md`·`phases/`·`utils/`, `templates/` 51 파일, `catalog.json`, `AGENTS.md`
+- **Legacy runtime**: `lib/*.js` 17 모듈 + `lib/{advisor,control,evaluation,observability,quality,registry,ui}/`, `lib/core/{migration,state-machine}.js`, `lib/workflow/{profile-classifier,shadow-runner,workflow-compiler}.js`
+- **Legacy hook·script**: `hooks/{session-start,design-mcp-trigger,ideation-guard,checkpoint-keyword,workflow-shadow}.js`, `hooks/events.json`, `scripts/` 37 파일 + `auditors/`·`evaluation/`·`skill_eval/`, `.hooks/pre-commit`, `.eslintrc.json`
+- **Shadow 평가 체계**: `lib/evaluation/`, `scripts/evaluation/`, `scripts/build-{v2,legacy}-plugin-stage.js`, 관련 테스트 6종·fixture·`schemas/live-shadow-evidence`
+- **Legacy contracts·schemas·tests**: `contracts/{agent-teams.md,workflow-contract.md,workflow-taxonomy.json}`, 비-v2 schema 7종, Legacy 테스트 39 파일 + `tests/integration/`·`_legacy-subdoc/`
+- **docs/ 전부** (구 work-items·features·README). 새 설계 문서가 첫 문서가 된다
+- **`.vais/` Legacy 상태 파일** (`status.json`, `agent-state.json`, `memory.json`, `event-log.jsonl`) 및 v2 runtime 상태 초기화
+- check adapter `doc-validator`, `skill-validator` (스크립트 삭제에 따라) — 남은 check id 7종: `test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan`
+
+### Changed
+
+- `package.json` — `agents` 등록을 `agents/` 디렉토리에서 `agents/v2-specialist.md` 단일 파일로 (Legacy 85개가 Agent 타입으로 노출되던 문제 해소). Legacy scripts·devDependencies(mui/react/emotion/sdk) 제거
+- `hooks/hooks.json` — UserPromptSubmit · PreToolUse · PostToolUse 의 v2 hook 4종만 등록 (mode 검사 없이 무조건 실행되던 Legacy hook 11개 제거)
+- `vais.config.json` — `version` · `plugin` · `workflowV2` 세 블록만 (v2 가 읽지 않던 키 19개 제거)
+- `output-styles/vais-default.md`, `skills/vais/SKILL.md` — v3 단일 목소리. `shadow` 분기와 Legacy 6단계 하단 리포트 제거. mode 가 `enforce` 가 아니면 `[VAIS · 하네스 비활성]` 을 첫 줄에 표시
+- `scripts/vais-validate-plugin.js` — `lib/fs-utils` 의존 제거, Legacy 전용 검증(agent-teams·status v4·synthesizer) 제거, agents 재귀 탐색
+- `CLAUDE.md`·`README.md`·`ONBOARDING.md` — 청소 후 구조와 새 하네스 원칙(루프 하나 · 코드로 강제 vs 데이터 · 단일 목소리 · 정직)으로 전면 재작성
+
 ## [3.0.1] - 2026-09-11
 
 ### Fixed

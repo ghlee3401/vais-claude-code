@@ -5,14 +5,14 @@
     "email": "ghlee0304@ncsoft.com"
   },
   "metadata": {
-    "description": "VAIS Code — v3: single /vais managed entry. 자연어 요청 하나로 가상 C-Suite 가 Plan→Design→Do→Review→Report 상태 머신을 진행하고 사용자는 Plan·Design·최종 승인 3회만 결정. 독립 AI QA + runtime write scope guard. shadow 모드로 Legacy C-Suite 라우팅 복원 가능.",
+    "description": "VAIS Code — 비개발자가 개발자처럼 웹 앱을 만들게 해주는 Claude Code 하네스. 단일 /vais 진입, 5단계 상태 머신 강제, 독립 AI QA, runtime write scope guard.",
     "version": "3.0.1"
   },
   "plugins": [
     {
       "name": "vais-code",
       "source": "./",
-      "description": "AI code-development assistant simulating a virtual C-Suite. v3 — single /vais managed entry: one natural-language request drives Plan→Design→Do→Review→Report with three user approvals, independent read-only AI QA, runtime write-scope guards, and frozen Reports. Legacy C-Suite routing remains available in shadow mode.",
+      "description": "Development harness for non-developers: one /vais entry drives Plan→Design→Do→Review→Report with runtime-enforced approvals, write scopes, independent read-only AI QA, and frozen Reports.",
       "version": "3.0.1",
       "author": {
         "name": "VAIS Voice",
@@ -22,13 +22,11 @@
       "license": "MIT",
       "category": "development",
       "keywords": [
+        "harness",
         "workflow",
         "development",
-        "infrastructure",
-        "gap-analysis",
         "qa",
         "planning",
-        "agent-team",
         "korean"
       ]
     }

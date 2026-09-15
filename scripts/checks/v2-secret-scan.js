@@ -34,7 +34,6 @@ function scanText(text) {
 
 function isObviousFixture(relative, line) {
   if (line.includes('vais-secret-scan: allow-fixture')) return true;
-  if (relative === 'templates/how/unit-test.md' && /AKIA[A-Z0-9]*EXAMPLE/.test(line)) return true;
   if (!relative.startsWith('tests/')) return false;
   return /(?:secret123456|ABCD1234EFGH|longvalue12345678|sk-abc123(?:\.\.\.|[0-9]+)|ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ|super-secret-value-12345|AKIA1234567890ABCDEF)/.test(line); // vais-secret-scan: allow-fixture
 }

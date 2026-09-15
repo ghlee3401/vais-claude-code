@@ -164,7 +164,14 @@ class ValidationResult {
 
 // ─── 유틸리티 ─────────────────────────────────────────────────
 
-const { fileExists } = require('../lib/fs-utils');
+function fileExists(p) {
+  try {
+    fs.accessSync(p);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
 
 function readJSON(p) {
   try {
@@ -552,36 +559,30 @@ function validateAgents(root, result) {
 
   if (!fileExists(agentsDir)) return;
 
-  // C-Level 하위 디렉토리 재귀 탐색
-  const subdirs = fs.readdirSync(agentsDir).filter(f => {
-    const fullPath = path.join(agentsDir, f);
-    return fs.statSync(fullPath).isDirectory();
-  });
+  const files = [];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.name.endsWith('.md')) files.push(full);
+    }
+  };
+  walk(agentsDir);
 
-  let totalFiles = 0;
+  for (const filePath of files) {
+    const content = fs.readFileSync(filePath, 'utf8');
+    const relPath = path.relative(root, filePath).split(path.sep).join('/');
 
-  for (const subdir of subdirs) {
-    const subdirPath = path.join(agentsDir, subdir);
-    const files = fs.readdirSync(subdirPath).filter(f => f.endsWith('.md'));
+    if (content.trim().length < 20) {
+      result.warn(cat, `${relPath}: 내용이 너무 짧습니다. 에이전트 정의를 충분히 작성하세요.`);
+    }
 
-    for (const file of files) {
-      const filePath = path.join(subdirPath, file);
-      const content = fs.readFileSync(filePath, 'utf8');
-      const relPath = `agents/${subdir}/${file}`;
-
-      if (content.trim().length < 20) {
-        result.warn(cat, `${relPath}: 내용이 너무 짧습니다. 에이전트 정의를 충분히 작성하세요.`);
-      }
-
-      if (!content.startsWith('---')) {
-        result.note(cat, `${relPath}: 프론트매터가 없습니다. model, tools 제한 등 설정 가능.`);
-      }
-
-      totalFiles++;
+    if (!content.startsWith('---')) {
+      result.note(cat, `${relPath}: 프론트매터가 없습니다. model, tools 제한 등 설정 가능.`);
     }
   }
 
-  result.note(cat, `발견된 agent 정의: ${totalFiles}개 (${subdirs.length}개 C-Level 디렉토리)`);
+  result.note(cat, `발견된 agent 정의: ${files.length}개`);
 }
 
 /**
@@ -965,124 +966,8 @@ function validate(pluginRoot) {
   validateMcpJson(root, result);
   validateLspJson(root, result);
   validateReadme(root, result);
-  validateAgentTeamsConfig(root, result);   // agent-teams-orchestration
-  validateStatusV4Schema(root, result);     // status.json v4 호환
-  validateSynthesisConsistency(root, result); // synthesizer 일관성
 
   return result;
-}
-
-// ─── agent-teams-orchestration 검증 ─────────────────────────
-
-/**
- * vais.config.json > orchestration.agentTeams 검증.
- * enabled=true 가 commit 에 포함되어 있으면 warning (사용자 모르게 활성화 방지, T4).
- */
-function validateAgentTeamsConfig(root, result) {
-  const cfgPath = path.join(root, 'vais.config.json');
-  if (!fs.existsSync(cfgPath)) return;
-  const cfg = readJSON(cfgPath);
-  if (!cfg) return;
-  const at = cfg?.orchestration?.agentTeams;
-  if (!at) {
-    result.note('agent-teams',`vais.config.json 에 orchestration.agentTeams 섹션 없음 (0.67.0 호환 — backward compatible)`);
-    return;
-  }
-  if (at.enabled === true) {
-    result.warn('agent-teams',
-      `vais.config.json > orchestration.agentTeams.enabled = true — 본 commit 이 Agent Teams 모드를 활성화합니다. ` +
-        `사용자가 의도한 것인지 PR 리뷰에서 확인 권장 (T4 mitigation).`
-    );
-  }
-  if (at.subagentSessions === true && at.enabled !== true) {
-    result.warn('agent-teams',
-      `subagentSessions=true 이지만 enabled=false — sub-agent 병렬 (패턴 D) 동작하지 않음. enabled 도 true 로 설정 필요.`
-    );
-  }
-  if (at.worktreeAutoCleanup === true) {
-    result.warn('agent-teams',
-      `worktreeAutoCleanup=true 는 memory feedback_no_auto_git_restore 정신에 어긋남. false 권장 (사용자 명시 호출 cleanup).`
-    );
-  }
-}
-
-/**
- * .vais/status.json 스키마 v3 / v4 검증 (있을 때만).
- */
-function validateStatusV4Schema(root, result) {
-  const statusPath = path.join(root, '.vais', 'status.json');
-  if (!fs.existsSync(statusPath)) return; // 신규 설치 — OK
-  const s = readJSON(statusPath);
-  if (!s) return;
-  if (s.version === 4) {
-    // v4 — activeFeatures 배열 검증
-    if (!Array.isArray(s.activeFeatures)) {
-      result.error('agent-teams',`status.json v4 인데 activeFeatures 배열 누락`);
-    }
-    // 각 feature 에 lock + subagentLocks + synthesisHistory 필드 존재 권장
-    for (const [name, feat] of Object.entries(s.features || {})) {
-      if (feat.lock === undefined) result.note('agent-teams',`features.${name}.lock 필드 없음 (v4 권장)`);
-      if (feat.subagentLocks === undefined)
-        result.note('agent-teams',`features.${name}.subagentLocks 필드 없음 (v4 권장)`);
-    }
-  } else if (s.version === 3 || s.version === 2) {
-    result.note('agent-teams',
-      `status.json v${s.version} — v4 마이그레이션 권장: node scripts/migrate-status-v3-to-v4.js`
-    );
-  }
-}
-
-/**
- * docs/{feature}/{phase}/main.md frontmatter synthesizer 일관성 검증 (v2 모드 한정).
- */
-function validateSynthesisConsistency(root, result) {
-  const docsPath = path.join(root, 'docs');
-  if (!fs.existsSync(docsPath)) return;
-  const features = fs.readdirSync(docsPath).filter((f) => {
-    try { return fs.statSync(path.join(docsPath, f)).isDirectory(); } catch (_) { return false; }
-  });
-  for (const feature of features) {
-    if (feature === '_legacy' || feature === '_scheduled' || feature === '_inbox') continue;
-    const phaseDirs = ['00-ideation', '01-plan', '02-design', '03-do', '04-qa', '05-report'];
-    for (const phaseDir of phaseDirs) {
-      const mainPath = path.join(docsPath, feature, phaseDir, 'main.md');
-      const logPath = path.join(docsPath, feature, phaseDir, 'decisions-log.md');
-      if (!fs.existsSync(mainPath)) continue;
-      const mainContent = fs.readFileSync(mainPath, 'utf8');
-      const mainFm = parseFrontmatter(mainContent);
-      if (mainFm?.['model-version'] !== 'v2') continue; // v1 모드 — skip
-      // v2: synthesizer 필수
-      if (!mainFm.synthesizer) {
-        result.warn('agent-teams',
-          `${feature}/${phaseDir}/main.md (v2) frontmatter.synthesizer 누락 (W-SYNTH-CONSISTENCY)`
-        );
-        continue;
-      }
-      if (fs.existsSync(logPath)) {
-        const logFm = parseFrontmatter(fs.readFileSync(logPath, 'utf8'));
-        if (logFm?.synthesizer !== mainFm.synthesizer) {
-          result.warn('agent-teams',
-            `${feature}/${phaseDir}: main.md synthesizer=${mainFm.synthesizer} vs decisions-log synthesizer=${logFm?.synthesizer} 불일치 (W-SYNTH-CONSISTENCY)`
-          );
-        }
-      }
-    }
-  }
-}
-
-function parseFrontmatter(content) {
-  const m = content.match(/^---\s*\n([\s\S]*?)\n---/);
-  if (!m) return null;
-  const out = {};
-  for (const line of m[1].split('\n')) {
-    const kv = line.match(/^(\w[\w-]*)\s*:\s*(.+?)\s*$/);
-    if (kv) {
-      let v = kv[2];
-      if (v.startsWith('"') && v.endsWith('"')) v = v.slice(1, -1);
-      out[kv[1]] = v;
-    }
-  }
-  return out;
 }
 
 // ─── CLI 실행 ─────────────────────────────────────────────────

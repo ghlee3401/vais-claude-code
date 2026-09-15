@@ -52,7 +52,7 @@ function phaseGuidance(item, sessionId, requestSlug = null) {
       `Plan을 고친 뒤 \`${INTERNAL_COMMAND} plan present --id ${item.id} --session ${sessionId} --revision ${item.planRevision} --body-file .vais/v2/drafts/plan.md\`을 한 번 실행한다. PASS일 때만 사용자 승인을 요청한다.`,
     ],
     design: [
-      'CTO Design은 REQ별 동작·입력·출력·오류·UI/기술 결정·TC를 정하고 필요한 전문 영역만 선택한다. Do specialist 상한은 compact 1명, standard 2명이며 단순 test 실행 역할은 고르지 않는다. REQ-001/TC-001처럼 3자리 ID를 쓰고, 디렉터리 write scope는 path/**로 표시한다. check id는 등록된 test, e2e, build, lint, plugin-validator, doc-validator, skill-validator, dependency-scan, secret-scan 중에서만 고른다.',
+      'CTO Design은 REQ별 동작·입력·출력·오류·UI/기술 결정·TC를 정하고 필요한 전문 영역만 선택한다. Do specialist 상한은 compact 1명, standard 2명이며 단순 test 실행 역할은 고르지 않는다. REQ-001/TC-001처럼 3자리 ID를 쓰고, 디렉터리 write scope는 path/**로 표시한다. check id는 등록된 test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan 중에서만 고른다.',
       `본문을 작성한 뒤 \`${INTERNAL_COMMAND} design present --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <design-draft> --scope "<approved-path>" --readiness-check <tool-id> --review-check <tool-id> [--specialist <role>]${item.qaRepairCount > 0 ? ' [--material true|false]' : ''}\`을 한 번 실행한다. 디렉터리 글롭은 셸 전개를 막도록 반드시 따옴표로 감싼다.${item.qaRepairCount > 0 ? ' QA 수정에서 material=true이면 새 revision 승인 대기, false이면 같은 승인 Design의 세부 수정으로 바로 Do에 간다.' : ' PASS일 때만 사용자 승인을 요청한다.'}`,
     ],
     do: [

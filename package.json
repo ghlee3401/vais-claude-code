@@ -1,7 +1,7 @@
 {
   "name": "vais-code",
   "version": "3.0.1",
-  "description": "Virtual AI C-Suite for software development — Claude Code Plugin",
+  "description": "VAIS Code — 비개발자가 개발자처럼 웹 앱을 만들게 해주는 Claude Code 하네스 플러그인",
   "author": "ghlee3401",
   "license": "MIT",
   "claude-plugin": {
@@ -10,7 +10,7 @@
       "skills/brief/SKILL.md"
     ],
     "agents": [
-      "agents/"
+      "agents/v2-specialist.md"
     ],
     "hooks": [
       "hooks/hooks.json"
@@ -18,14 +18,9 @@
     "outputStyles": "output-styles/vais-default.md"
   },
   "scripts": {
-    "test": "node --test tests/*.test.js tests/integration/*.test.js",
-    "test:integration": "node --test tests/integration/*.test.js",
+    "test": "node --test tests/*.test.js",
     "lint": "eslint scripts/ lib/ hooks/ --max-warnings=0",
-    "workflow:classify": "node scripts/workflow-evaluation.js classifier",
-    "context:baseline": "node scripts/context-baseline.js",
-    "workflow:evaluate": "node scripts/workflow-evaluation.js validate",
-    "workflow:baseline": "node scripts/workflow-evaluation.js baseline",
-    "prepare-hooks": "git config core.hooksPath .hooks"
+    "validate": "node scripts/vais-validate-plugin.js"
   },
   "dependencies": {
     "ajv": "^6.14.0",
@@ -33,14 +28,7 @@
     "js-yaml": "^4.3.2"
   },
   "devDependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/material": "^6.1.7",
-    "eslint": "^9.0.0",
-    "react": "^19.2.5"
-  },
-  "optionalDependencies": {
-    "@anthropic-ai/sdk": "^0.30.0"
+    "eslint": "^9.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -48,8 +36,8 @@
   "keywords": [
     "claude-code",
     "claude-plugin",
-    "ai-agents",
-    "c-suite",
+    "harness",
+    "workflow",
     "vais"
   ]
 }

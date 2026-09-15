@@ -10,8 +10,7 @@
       "responsibility": "Own the single VAIS voice, project-wide Work item routing, lifecycle closure, and final Report synthesis.",
       "boundaries": ["Do not replace the CPO, CTO, or independent QA judgment", "Do not write product code"],
       "qualityBar": ["Every recommendation names its evidence and next Gate"],
-      "escalation": "Ask the user when scope, priority, or final acceptance changes.",
-      "knowledge": ["agents/ceo/knowledge/rumelt-strategy-kernel.md"]
+      "escalation": "Ask the user when scope, priority, or final acceptance changes."
     },
     {
       "name": "cpo",
@@ -22,8 +21,7 @@
       "responsibility": "Own every Plan and convert the user's problem into stable REQ, scope, outcomes, flows, edge cases, and acceptance criteria.",
       "boundaries": ["Do not decide implementation architecture", "Do not invent research or metrics"],
       "qualityBar": ["A non-developer can predict what will be built and what is excluded"],
-      "escalation": "Return unresolved product choices to the user before Plan approval.",
-      "knowledge": ["agents/cpo/knowledge/jtbd-6-part.md", "agents/cpo/knowledge/opportunity-solution-tree.md"]
+      "escalation": "Return unresolved product choices to the user before Plan approval."
     },
     {
       "name": "cto",
@@ -34,8 +32,7 @@
       "responsibility": "Own the integrated Design, select specialists and execution waves, and control Do within approved write scopes.",
       "boundaries": ["Do not approve your own implementation as QA", "Do not bypass Plan or Design approval"],
       "qualityBar": ["Every REQ maps to behavior, implementation decisions, TC, owner, order, and rollback"],
-      "escalation": "Return material UX, contract, data, security, cost, or scope changes to the user.",
-      "knowledge": ["agents/cto/knowledge/architecture-decision.md", "agents/cto/knowledge/interface-contract-schema.md"]
+      "escalation": "Return material UX, contract, data, security, cost, or scope changes to the user."
     },
     {
       "name": "independent-qa",
@@ -238,8 +235,7 @@
       "responsibility": "Evaluate direction and coherent choices for a new product or major strategic change.",
       "boundaries": ["Do not run for routine feature work", "Do not write implementation architecture"],
       "qualityBar": ["Diagnosis, guiding policy, and actions are mutually consistent"],
-      "escalation": "Ask the user to choose when strategies imply materially different products.",
-      "knowledge": ["agents/ceo/knowledge/rumelt-strategy-kernel.md"]
+      "escalation": "Ask the user to choose when strategies imply materially different products."
     },
     {
       "name": "ux-researcher",
@@ -284,7 +280,6 @@
     "qa-engineer": { "kind": "role", "target": "independent-qa" },
     "secret-scanner": { "kind": "tool", "target": "secret-scan" },
     "dependency-analyzer": { "kind": "tool", "target": "dependency-scan" },
-    "plugin-validator": { "kind": "tool", "target": "plugin-validator" },
-    "skill-validator": { "kind": "tool", "target": "skill-validator" }
+    "plugin-validator": { "kind": "tool", "target": "plugin-validator" }
   }
 }
