@@ -1,0 +1,136 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-36628ef3-2796-46cd-822a-fb37d4620b31",
+  "workItemId": "WI-2026-09-15-harness-design",
+  "phase": "review",
+  "action": "decide",
+  "gate": {
+    "gate": "review",
+    "verdict": "FAIL",
+    "requiredChecks": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "plugin-validator",
+      "secret-scan"
+    ],
+    "passed": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "plugin-validator",
+      "secret-scan"
+    ],
+    "failed": [
+      "independent-qa-handoff"
+    ],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-15T09:30:27.190Z"
+  },
+  "checks": [
+    {
+      "check": "review-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/04-review/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical review document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 2752B is within the 10240B extended budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/04-review/main.md"
+      ]
+    },
+    {
+      "check": "independent-qa-handoff",
+      "execution": "succeeded",
+      "verdict": "fail",
+      "required": true,
+      "scope": [],
+      "requirements": [
+        "REQ-001",
+        "REQ-009"
+      ],
+      "summary": "Independent QA reported failure",
+      "findings": [
+        "Inspect the canonical independent QA evidence"
+      ],
+      "evidence": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/04-review/evidence/handoffs/AS-7f64349b-0ed8-4b9f-a4c8-5938141d4f2a.json"
+      ]
+    },
+    {
+      "check": "plugin-validator",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/harness/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/03-do/evidence/logs/plugin-validator.log"
+      ]
+    },
+    {
+      "check": "secret-scan",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/harness/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/04-review/evidence/logs/secret-scan.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "design",
+    "status": "active"
+  }
+}

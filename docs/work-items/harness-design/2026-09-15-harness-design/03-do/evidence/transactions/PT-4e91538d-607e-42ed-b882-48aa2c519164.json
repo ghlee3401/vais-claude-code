@@ -1,0 +1,113 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-4e91538d-607e-42ed-b882-48aa2c519164",
+  "workItemId": "WI-2026-09-15-harness-design",
+  "phase": "do",
+  "action": "ready",
+  "gate": {
+    "gate": "readiness",
+    "verdict": "READY",
+    "requiredChecks": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "plugin-validator"
+    ],
+    "passed": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "plugin-validator"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-15T09:25:54.330Z"
+  },
+  "checks": [
+    {
+      "check": "do-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/03-do/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical do document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 1489B is within the 6144B extended budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/03-do/main.md"
+      ]
+    },
+    {
+      "check": "specialist-handoffs",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/harness/**"
+      ],
+      "requirements": [],
+      "summary": "All Design-required specialist handoffs are uniquely consumed and complete",
+      "findings": [],
+      "evidence": []
+    },
+    {
+      "check": "plugin-validator",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/harness/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-design/2026-09-15-harness-design/03-do/evidence/logs/plugin-validator.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "review",
+    "status": "active"
+  }
+}

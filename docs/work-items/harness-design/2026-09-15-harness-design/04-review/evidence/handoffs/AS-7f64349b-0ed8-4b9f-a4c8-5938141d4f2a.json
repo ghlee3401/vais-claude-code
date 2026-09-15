@@ -1,0 +1,65 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-15-harness-design",
+  "assignmentId": "AS-7f64349b-0ed8-4b9f-a4c8-5938141d4f2a",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "c5ed41a463ae2933a2b051b50b3b8937096da809cfc9aeff69d94d5883ef5b16",
+  "handoffDigest": "2ded486e4f828da6cef8d4bfb2a82a8c268bdc0a341d2c286fb2e62ee5140932",
+  "persistedAt": "2026-09-15T09:30:00.627Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "fail",
+    "judgment": "FAIL. TC-001: design.md 0절 요약이 357자(공백 포함, 공백 제외 272)로 300자 초과, '역할' 미언급, '3절 로드맵' 참조 오류(실제 13절). TC-009: 2.8 의 lib/io.js 와 2.9 의 Agent 조건 guard 가 대응표에 없음. TC-002~008·010~014 는 PASS.",
+    "decisions": [
+      "TC-001 FAIL: 357자, 역할 미언급, 절 참조 오류",
+      "TC-009 FAIL: io.js·Agent guard 행 누락",
+      "TC-002~008, 010~014 PASS (12/14)",
+      "Design 으로 반환, 두 항목 수정 후 재검"
+    ],
+    "behavior": {
+      "inputs": [
+        "docs/harness/design.md",
+        "docs/harness/README.md",
+        "docs/harness/roadmap.md",
+        "01-plan · 02-design main.md"
+      ],
+      "outputs": [
+        "TC-001~014 판정 14건",
+        "verdict: fail",
+        "affected REQ-001, REQ-009"
+      ],
+      "errors": [
+        "Bash 가 Design 명령 범위 밖이라 차단",
+        "글자 수는 수작업 계산 (357/272)"
+      ]
+    },
+    "evidence": [
+      "design.md:7 0절 요약 357자(공백 포함)/272자(공백 제외); '역할'·'억지력' 단어 없음; '3절 로드맵' 인용 (로드맵은 13절)",
+      "design.md:120 확장(1) lib/io.js, design.md:136 guard 거부 규칙 — design.md:140-172 대응표 31행에 해당 행 없음",
+      "design.md:21-33 사슬 11행 8열, :51-74 억지력 6+11행, :80-85 kind 4행, :91-96 노트 4면, :104-110 명령 5행 빈칸 0",
+      "design.md:124-134 owner 9행(단계 11+Review), :190-203 결함 12건 H 번호; roadmap.md:5-14 8행 규모·의존·완료 조건"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-009"
+    ],
+    "risks": [
+      "PostToolUse 손잡이가 억지력 표에 미배정",
+      "장면 D·E 는 Report 명시 없이 종결",
+      "design.md 수정 시 승인 Design 과 불일치"
+    ],
+    "unverified": [
+      "글자 수 자동 계산 (Bash 차단)",
+      "receipt 2건은 재실행 안 함 (신뢰)"
+    ],
+    "recommendedChecks": [
+      "doc-validator",
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

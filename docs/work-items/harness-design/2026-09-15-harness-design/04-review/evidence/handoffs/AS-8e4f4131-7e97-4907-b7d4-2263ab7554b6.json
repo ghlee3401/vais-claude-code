@@ -1,0 +1,77 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-15-harness-design",
+  "assignmentId": "AS-8e4f4131-7e97-4907-b7d4-2263ab7554b6",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 1,
+  "assignmentDigest": "d5e78c191fbfbeed016dd02823bdc53db5bbef1f0ed0a7cf6eb667e62a9d9e5e",
+  "handoffDigest": "36360adb41e344344edfa836f3574073e4ab9639d3a7c533dde14035b370c43e",
+  "persistedAt": "2026-09-15T09:37:40.024Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "TC-001~014 전부 PASS. 0절 요약 약 227자(공백 포함), 사슬·역할 카드 언급, 절 참조 없음. 대응표 33행 파일·상태 빈칸 0, io.js·agent-policy·PostToolUse 행 존재. 1차 FAIL 2건 해소됨.",
+    "decisions": [
+      "TC-001 PASS: 요약 227자, 절 참조 없음",
+      "TC-009 PASS: 33행 채움, 지정 3행 존재",
+      "runtime 차단 서술을 억지력 언급으로 인정",
+      "roadmap '2.13 절' 참조는 TC 밖 경미 결함"
+    ],
+    "behavior": {
+      "inputs": [
+        "docs/harness/design.md 0~13절",
+        "docs/harness/README.md",
+        "docs/harness/roadmap.md",
+        "Plan REQ-001~014 · Design TC-001~014"
+      ],
+      "outputs": [
+        "TC-001~014 PASS 14/14",
+        "사슬 11행 8열·억지력 7+11행 빈칸 0",
+        "로드맵 8행 규모·의존·완료 조건 존재",
+        "장면 6개: Report 5·경고 1 종결"
+      ],
+      "errors": [
+        "Bash·scratchpad 쓰기 guard 차단, 수기 계수",
+        "roadmap.md 출처 '2.13 절' 실제는 13절"
+      ]
+    },
+    "evidence": [
+      "design.md:7 요약 5문장 227자(공백 포함, 수기 계수), 사슬·역할 카드·기획자~QA 언급, 절 번호 없음; README.md:7 동일 4문장",
+      "design.md:141-176 대응표 33행 모두 파일·상태 채움, :156 PostToolUse 행, :167 lib/io.js 행, :168 agent-policy.js 행",
+      "design.md:51-75 공통 7행에 손잡이 6종 전부 배정·단계별 11행; :117-121 자동 기록 6종·VAIS_HARNESS_OFF·버전 도장·tests/regression",
+      "roadmap.md:5-14 H1~H8 규모·의존·완료 조건; design.md:194-207 결함 12건 H번호; :125-137 owner 9행(단계 11+Review)·guard 거부 문장"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-010",
+      "REQ-011",
+      "REQ-012",
+      "REQ-013",
+      "REQ-014"
+    ],
+    "risks": [
+      "roadmap.md:3 '2.13 절' 이 13절과 불일치",
+      "요약에 '억지력' 낱말 없음 (개념만)",
+      "5절 diff 요약 담당 파일 대응표 누락"
+    ],
+    "unverified": [
+      "글자 수 도구 계수 불가, 수기 227자",
+      "plugin-validator·secret-scan 미재실행"
+    ],
+    "recommendedChecks": [
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

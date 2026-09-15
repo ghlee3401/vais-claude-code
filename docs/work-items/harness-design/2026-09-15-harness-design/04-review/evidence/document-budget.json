@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/harness-design/2026-09-15-harness-design/04-review/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 3079B is within the 10240B extended budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-design/2026-09-15-harness-design/04-review/main.md"
+  ]
+}

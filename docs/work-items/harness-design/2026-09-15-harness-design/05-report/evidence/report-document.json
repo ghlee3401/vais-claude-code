@@ -1,0 +1,15 @@
+{
+  "check": "report-document",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/harness-design/2026-09-15-harness-design/05-report/main.md"
+  ],
+  "requirements": [],
+  "summary": "Canonical report document is complete",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-design/2026-09-15-harness-design/05-report/main.md"
+  ]
+}

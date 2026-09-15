@@ -1,0 +1,71 @@
+{
+  "schema": "phase-transaction-failure/v1",
+  "transactionId": "PT-cecc7ece-592f-44ad-8923-d69873ce9f62",
+  "workItemId": "WI-2026-09-15-harness-design",
+  "phase": "design",
+  "code": "DOCUMENT_PREFLIGHT_FAILED",
+  "finding": "Canonical design document preflight failed: design-document, document-budget",
+  "preflight": {
+    "schema": "document-preflight/v1",
+    "phase": "design",
+    "path": "docs/work-items/harness-design/2026-09-15-harness-design/02-design/main.md",
+    "checks": [
+      {
+        "check": "design-document",
+        "execution": "succeeded",
+        "verdict": "fail",
+        "required": true,
+        "scope": [
+          "docs/work-items/harness-design/2026-09-15-harness-design/02-design/main.md"
+        ],
+        "requirements": [],
+        "summary": "2 design document issue(s) found",
+        "findings": [
+          "Identifier must use exactly three digits: TC 1",
+          "Document budget: Authored Markdown is 27831B (limit 18432B); extended overflow requires a reason and user approval"
+        ],
+        "evidence": [
+          "docs/work-items/harness-design/2026-09-15-harness-design/02-design/main.md"
+        ]
+      },
+      {
+        "check": "document-budget",
+        "execution": "succeeded",
+        "verdict": "fail",
+        "required": true,
+        "scope": [
+          "docs/work-items/harness-design/2026-09-15-harness-design/02-design/main.md"
+        ],
+        "requirements": [
+          "REQ-009",
+          "REQ-026"
+        ],
+        "summary": "1 document budget issue(s) found",
+        "findings": [
+          "Authored Markdown is 27831B (limit 18432B); extended overflow requires a reason and user approval"
+        ],
+        "evidence": [
+          "docs/work-items/harness-design/2026-09-15-harness-design/02-design/main.md"
+        ]
+      },
+      {
+        "check": "document-repetition",
+        "execution": "succeeded",
+        "verdict": "pass",
+        "required": true,
+        "scope": [
+          "docs/work-items/harness-design/2026-09-15-harness-design/02-design/main.md"
+        ],
+        "requirements": [
+          "REQ-026"
+        ],
+        "summary": "No long authored sentence is copied from an earlier phase",
+        "findings": [],
+        "evidence": [
+          "docs/work-items/harness-design/2026-09-15-harness-design/02-design/main.md"
+        ]
+      }
+    ]
+  },
+  "recordedAt": "2026-09-15T09:07:43.722Z"
+}
