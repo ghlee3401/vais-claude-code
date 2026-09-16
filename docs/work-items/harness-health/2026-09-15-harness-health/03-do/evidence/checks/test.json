@@ -1,0 +1,29 @@
+{
+  "check": "test",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "hooks/**",
+    "lib/**",
+    "scripts/**",
+    "schemas/**",
+    "tests/**",
+    "docs/harness/**",
+    "package.json",
+    "package-lock.json",
+    "vais.config.json",
+    ".claude-plugin/**",
+    "CHANGELOG.md",
+    "README.md",
+    "CLAUDE.md",
+    "ONBOARDING.md",
+    "skills/vais/SKILL.md"
+  ],
+  "requirements": [],
+  "summary": "Check passed",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-health/2026-09-15-harness-health/03-do/evidence/logs/test.log"
+  ]
+}

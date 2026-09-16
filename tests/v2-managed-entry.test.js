@@ -132,7 +132,8 @@ describe('/vais managed entry router', () => {
     assert.equal(routePrompt('/vais 승인할게', WAITING_PLAN).action, 'approve-plan');
     assert.equal(routePrompt('/vais Plan을 승인할게', WAITING_PLAN).action, 'approve-plan');
     const review = { ...WAITING_PLAN, phase: 'review' };
-    assert.equal(routePrompt('/vais 최종 결과를 승인합니다. 이 격리 벤치마크 실행의 사용자 승인을 명시적으로 부여합니다.', review).action, 'approve-final');
+    assert.equal(routePrompt('/vais 최종 결과를 승인합니다.', review).action, 'approve-final');
+    assert.equal(routePrompt('/vais 최종 결과를 승인합니다. 이 격리 벤치마크 실행의 사용자 승인을 명시적으로 부여합니다.', review).action, 'invalid-approval');
   });
 
   it('routes sentence-form Korean resume and keeps unclassified Review feedback read-only', () => {
@@ -157,20 +158,28 @@ describe('/vais managed entry router', () => {
     }).action, 'approve-plan');
   });
 
-  it('keeps the controlled live journey routable while treating approval mentions as requests', () => {
-    const prompts = [
-      '/vais Mini Booking 앱에 예약 취소 기능을 추가해줘. 기존 booking과 관련된 새 Feature이며 이름은 booking-cancellation, 규모는 compact로 확정한다. Plan Gate까지만 진행하고 승인을 요청해.',
-      '/vais Plan revision 1을 승인합니다. 승인된 Plan을 기준으로 Design Gate까지만 진행하고 승인을 요청해.',
-      '/vais Design revision 1을 승인합니다. 승인된 범위로 구현하고 독립 QA Review 결과와 최종 승인 요청까지 자동으로 진행해.',
-      '/vais 최종 결과를 승인합니다. AI QA PASS를 확인했습니다. Report를 확정하고 완료 상태를 보여줘.',
-    ];
+  it('accepts plain approvals and rejects approvals that carry extra instructions', () => {
     const states = [null,
       { ...WAITING_PLAN, planRevision: 1 },
       { ...WAITING_PLAN, phase: 'design', designRevision: 1 },
       { ...WAITING_PLAN, phase: 'review', designRevision: 1 },
     ];
-    assert.deepEqual(prompts.map((prompt, index) => routePrompt(prompt, states[index]).action), [
-      'start-request', 'approve-plan', 'approve-design', 'approve-final',
+    const composed = [
+      '/vais Mini Booking 앱에 예약 취소 기능을 추가해줘. 기존 booking과 관련된 새 Feature이며 이름은 booking-cancellation, 규모는 compact로 확정한다. Plan Gate까지만 진행하고 승인을 요청해.',
+      '/vais Plan revision 1을 승인합니다. 승인된 Plan을 기준으로 Design Gate까지만 진행하고 승인을 요청해.',
+      '/vais Design revision 1을 승인합니다. 승인된 범위로 구현하고 독립 QA Review 결과와 최종 승인 요청까지 자동으로 진행해.',
+      '/vais 최종 결과를 승인합니다. AI QA PASS를 확인했습니다. Report를 확정하고 완료 상태를 보여줘.',
+    ];
+    assert.deepEqual(composed.map((prompt, index) => routePrompt(prompt, states[index]).action), [
+      'start-request', 'invalid-approval', 'invalid-approval', 'invalid-approval',
+    ]);
+    const plain = [
+      '/vais Plan revision 1을 승인합니다.',
+      '/vais Design revision 1을 승인합니다. 진행해.',
+      '/vais 최종 결과를 승인합니다.',
+    ];
+    assert.deepEqual(plain.map((prompt, index) => routePrompt(prompt, states[index + 1]).action), [
+      'approve-plan', 'approve-design', 'approve-final',
     ]);
   });
 
@@ -877,11 +886,18 @@ describe('v2 workflow control CLI and runtime guidance', () => {
   });
 
   it('gives first-turn creation an exact session and canonical v2 document path', () => {
-    const lines = phaseGuidance(null, 'session-first').join('\n');
+    const lines = phaseGuidance(null, 'session-first', 'first-feature').join('\n');
     assert.match(lines, /--session session-first/);
+    assert.match(lines, /--slug first-feature/);
     assert.match(lines, /plan present/);
     assert.match(lines, /PASS일 때만 승인/);
     assert.match(lines, /\.vais\/v2\/drafts\/plan\.md/);
+  });
+
+  it('asks the user for a name instead of inventing one when the request has no ASCII words', () => {
+    const lines = phaseGuidance(null, 'session-first', null).join('\n');
+    assert.match(lines, /\/vais 이름: <name>/);
+    assert.doesNotMatch(lines, /plan present/);
   });
 
   it('enforces a managed prompt end to end and queues a concurrent request without creating another Work item', t => {

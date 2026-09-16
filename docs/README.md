@@ -10,4 +10,5 @@
 
 | Work item | Feature | Phase | Status | Updated |
 |---|---|---|---|---|
+| [WI-2026-09-15-harness-health — 안전·건강 (로드맵 H1)](work-items/harness-health/2026-09-15-harness-health/main.md) | harness-health | report | completed | 2026-09-15T10:38:52.833Z |
 | [WI-2026-09-15-harness-design — 하네스 설계 문서](work-items/harness-design/2026-09-15-harness-design/main.md) | harness-design | report | completed | 2026-09-15T09:38:47.888Z |

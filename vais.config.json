@@ -1,5 +1,5 @@
 {
-  "version": "3.0.1",
+  "version": "3.1.0",
   "plugin": {
     "name": "vais-code",
     "description": "VAIS Code — 비개발자가 개발자처럼 웹 앱을 만들게 해주는 Claude Code 하네스 플러그인",
@@ -7,8 +7,8 @@
   },
   "workflowV2": {
     "mode": "enforce",
-    "_mode": "enforce | disabled. enforce 가 정본. 하네스 자체를 고칠 때만 disabled 로 잠시 내린다.",
-    "managedPrefix": "/vais",
+    "_mode": "enforce | disabled. 대소문자·공백은 무시한다. 그 밖의 값은 enforce 로 취급되고 매 프롬프트에 경고가 뜬다. 비상 해제는 환경변수 VAIS_HARNESS_OFF=1.",
+    "leaseMs": 60000,
     "authorizationTtlMs": 1800000,
     "statePath": ".vais/v2/work-items.json"
   }

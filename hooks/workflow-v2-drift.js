@@ -7,13 +7,12 @@ const { WorkItemStore } = require('../lib/workflow/v2/work-item-store');
 const { pathMatches } = require('../lib/workflow/v2/write-policy');
 const { EVENTS } = require('../lib/workflow/v2/state-machine');
 const { captureRepoSnapshot, diffSnapshots, classifyDrift, filterExternalDrift } = require('../lib/workflow/v2/repo-drift');
-const { resolveProjectRoot, resolveStartDir } = require('./v2-project-context');
-const { loadMode } = require('./workflow-v2-prompt');
+const { resolveProjectRoot, resolveStartDir, resolveMode } = require('./v2-project-context');
 
 function main() {
   const input = readStdin();
   const projectRoot = resolveProjectRoot(resolveStartDir(input));
-  if (!projectRoot || loadMode(projectRoot) !== 'enforce') return outputEmpty();
+  if (!projectRoot || resolveMode(projectRoot).mode !== 'enforce') return outputEmpty();
   const sessionId = String(input.session_id || input.sessionId || '').trim();
   const authorization = new AuthorizationStore(projectRoot).get(sessionId);
   if (!authorization?.workItemId) return outputEmpty();

@@ -1,8 +1,28 @@
 # Changelog
 
-## [Unreleased] — 2026-09-15 청소 (Legacy 전면 제거)
+## [3.1.0] - 2026-09-15
 
-> 목적: 비개발자용 개발 하네스를 새로 설계·구현하기 위해 v2 runtime 커널만 남기고 나머지를 전부 제거한다. 롤백은 git 태그 `v3.0.1-legacy`.
+> 하네스 재구성 1단계. Legacy 를 전부 걷어내고(롤백 태그 `v3.0.1-legacy`), 설계 정본 `docs/harness/` 를 확정한 뒤, 로드맵 H1 `harness-health` 로 하네스가 조용히 죽거나 엉뚱한 이름을 붙이거나 읽기까지 막던 결함을 고쳤다.
+
+### Added
+
+- **설계 정본** `docs/harness/{README,design,roadmap}.md` — 사슬 11단계, ID 사슬, 억지력, 루프·kind, 제품 노트, 명령, 바탕 셋, 역할 카드, 대응표, 사용 장면 6, 결함 12, 로드맵 H1~H8 (Work item `WI-2026-09-15-harness-design`, 독립 QA 2차 PASS)
+- **비상 해제 스위치** `VAIS_HARNESS_OFF=1` — 모든 hook 이 즉시 통과하고 응답 첫 줄에 비활성 표시 (`lib/workflow/v2/config.js`)
+- **doctor** — `scripts/vais-doctor.js`, `npm run doctor`, `/vais doctor`, CLI `doctor`: 설정 파싱·mode·알 수 없는 키·hook 등록 파일·Node 버전·버전 동기화·플러그인 캐시 버전·상태 파일·비상 스위치 점검과 고치는 법 (`lib/workflow/v2/doctor.js`)
+- **회귀 세트 골격** `tests/regression/` + `npm run regression` — 장면 F(하네스 고장) 4경로
+- **버전 도장** — 모든 phase transaction receipt 에 `runtime: {plugin, node, claudeCode}` (schema optional 필드)
+- `/vais help` (`도움말`) 명령 표, `/vais 이름: <kebab-case>` 로 사용자가 Feature 이름 확정
+- `tests/v2-harness-health.test.js` — REQ-001~012 단위 테스트
+
+### Fixed
+
+- **mode 오설정 시 무음 비활성** — `Enforce` 처럼 대소문자·공백만 다른 값은 정상 동작. 그 밖의 값과 읽기 실패는 **enforce 로 취급해 닫힘으로 실패**하고 매 프롬프트 첫 줄에 `⚠ VAIS 하네스 경고` 를 주입한다. hook 예외도 `{}` 대신 경고를 낸다 (`resolveMode`)
+- **한글 요청의 해시 Feature 이름** — 영어 단어가 없으면 이름을 만들지 않고 사용자에게 묻는다. 사용자가 `/vais 이름: …` 으로 준 이름만 authorization 에 기록되고 CLI 는 그 값과 같을 때만 Work item 을 만든다 (`assertNewFeatureSlug`)
+- **lease 60초 하드코딩·죽은 설정 키** — `leaseMs`, `authorizationTtlMs` 를 `vais.config.json` 에서 읽고 `managedPrefix` 키는 삭제 (doctor 가 알 수 없는 키를 보고)
+- **읽기 명령·scratchpad 차단** — `git -C <path> status/diff/log/show/rev-parse/ls-files`, `node --version` 등 읽기 명령과 Claude scratchpad(`$TMPDIR/claude-*`) 쓰기는 authorization 없이 허용
+- **router 의 평가용 승인 문장 8개** 제거 — 승인 뒤에 붙을 수 있는 문장은 "진행해" 계열뿐
+- **Plan 수정 시 초안 경로** — hook 지침이 쓰기 범위 안의 `01-plan/draft.md` 를 가리킨다
+- 설계 문서 손질: 요약에 "억지력", roadmap 절 표기, 대응표에 diff-summary 행, 닫힘 실패 규칙
 
 ### Removed
 
@@ -19,7 +39,7 @@
 
 - `package.json` — `agents` 등록을 `agents/` 디렉토리에서 `agents/v2-specialist.md` 단일 파일로 (Legacy 85개가 Agent 타입으로 노출되던 문제 해소). Legacy scripts·devDependencies(mui/react/emotion/sdk) 제거
 - `hooks/hooks.json` — UserPromptSubmit · PreToolUse · PostToolUse 의 v2 hook 4종만 등록 (mode 검사 없이 무조건 실행되던 Legacy hook 11개 제거)
-- `vais.config.json` — `version` · `plugin` · `workflowV2` 세 블록만 (v2 가 읽지 않던 키 19개 제거)
+- `vais.config.json` — `version` · `plugin` · `workflowV2` 세 블록만 (v2 가 읽지 않던 키 19개 제거). `workflowV2` 는 `mode`, `leaseMs`, `authorizationTtlMs`, `statePath` 만 읽는다
 - `output-styles/vais-default.md`, `skills/vais/SKILL.md` — v3 단일 목소리. `shadow` 분기와 Legacy 6단계 하단 리포트 제거. mode 가 `enforce` 가 아니면 `[VAIS · 하네스 비활성]` 을 첫 줄에 표시
 - `scripts/vais-validate-plugin.js` — `lib/fs-utils` 의존 제거, Legacy 전용 검증(agent-teams·status v4·synthesizer) 제거, agents 재귀 탐색
 - `CLAUDE.md`·`README.md`·`ONBOARDING.md` — 청소 후 구조와 새 하네스 원칙(루프 하나 · 코드로 강제 vs 데이터 · 단일 목소리 · 정직)으로 전면 재작성

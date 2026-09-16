@@ -32,6 +32,16 @@
         "nextAction": { "enum": ["review-evidence-prepare"] },
         "requiresUserTurn": { "const": false }
       }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plugin", "node", "claudeCode"],
+      "properties": {
+        "plugin": { "type": ["string", "null"] },
+        "node": { "type": "string", "minLength": 1 },
+        "claudeCode": { "type": ["string", "null"] }
+      }
     }
   }
 }

@@ -1,0 +1,15 @@
+{
+  "check": "design-document",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/harness-health/2026-09-15-harness-health/02-design/main.md"
+  ],
+  "requirements": [],
+  "summary": "Canonical design document is complete",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-health/2026-09-15-harness-health/02-design/main.md"
+  ]
+}

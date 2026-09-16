@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.0.1-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-3.1.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -48,7 +48,10 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 | 입력 | 동작 |
 |---|---|
 | `/vais <자연어 요청>` | 진행 중 작업이 없으면 새 작업 시작. 있으면 현재 단계의 지시·피드백 |
+| `/vais 이름: <kebab-case>` | 요청에 영어 단어가 없어 이름을 못 정했을 때 사용자가 Feature 이름을 확정 |
 | `/vais status` (`상태`) | 현재 작업·단계·상태와 대기 요청 조회 (읽기 전용) |
+| `/vais doctor` | 하네스 건강검진: 설정·hook·버전·상태 파일 점검과 고치는 법 (읽기 전용) |
+| `/vais help` (`도움말`) | 명령 표 |
 | `/vais pause` (`일시정지`) / `resume` (`재개`) / `cancel` (`취소`) | 작업 슬롯 제어 |
 | `/vais 새 작업: <요청>` | 진행 중 작업을 유지한 채 새 요청을 대기열에 보관 |
 | `/vais brief <주제>` | 워크플로우와 무관한 임원 보고서 HTML (`--deck` 슬라이드) |
@@ -105,12 +108,14 @@ schemas/                    JSON 계약 (ajv 검증)
 ## 개발
 
 ```bash
-npm test          # tests/v2-*.test.js
+npm test            # tests/v2-*.test.js
+npm run regression  # tests/regression/ — 사용 장면 회귀 (장면 F 부터)
 npm run lint
-npm run validate  # 플러그인 구조 검증
+npm run validate    # 플러그인 구조 검증
+npm run doctor      # 하네스 건강검진
 ```
 
-`workflowV2.mode` 는 `enforce` 가 정본이다. 하네스 자체를 고칠 때만 `disabled` 로 내리고, 끝나면 되돌린다. 실행 중인 플러그인은 마켓플레이스 캐시 사본이므로 repo 변경은 push · 버전 bump · 플러그인 업데이트 뒤에 반영된다.
+`workflowV2.mode` 는 `enforce` 가 정본이다. 대소문자·공백은 무시되고, 그 밖의 잘못된 값은 **닫힘으로 실패**한다 (guard 는 계속 막고 매 프롬프트 첫 줄에 경고). 하네스를 끄는 길은 정확한 `disabled` 와 비상 스위치 `VAIS_HARNESS_OFF=1` 둘뿐이다. 하네스 자체를 고칠 때만 내리고, 끝나면 되돌린다. 실행 중인 플러그인은 마켓플레이스 캐시 사본이므로 repo 변경은 push · 버전 bump · 플러그인 업데이트 뒤에 반영된다.
 
 ## License
 

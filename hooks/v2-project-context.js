@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { resolveMode, loadWorkflowConfig, warningLine } = require('../lib/workflow/v2/config');
 
 const MAX_ROOT_WALK_DEPTH = 64;
 
@@ -22,8 +23,7 @@ function resolveStartDir(input) {
 function resolveProjectRoot(startDir) {
   let directory = path.resolve(startDir);
   for (let depth = 0; depth < MAX_ROOT_WALK_DEPTH; depth += 1) {
-    if (fs.existsSync(path.join(directory, 'vais.config.json')) ||
-      fs.existsSync(path.join(directory, '.vais', 'status.json'))) return directory;
+    if (fs.existsSync(path.join(directory, 'vais.config.json'))) return directory;
     const parent = path.dirname(directory);
     if (parent === directory) return null;
     directory = parent;
@@ -36,4 +36,13 @@ function extractPrompt(input) {
     .find(value => typeof value === 'string') || '';
 }
 
-module.exports = { MAX_ROOT_WALK_DEPTH, normalizeString, resolveStartDir, resolveProjectRoot, extractPrompt };
+module.exports = {
+  MAX_ROOT_WALK_DEPTH,
+  normalizeString,
+  resolveStartDir,
+  resolveProjectRoot,
+  extractPrompt,
+  resolveMode,
+  loadWorkflowConfig,
+  warningLine,
+};

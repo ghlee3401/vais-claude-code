@@ -1,0 +1,75 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-15-harness-health",
+  "assignmentId": "AS-9a99cd43-d4b0-4a28-bfda-2d2b293882a6",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 1,
+  "assignmentDigest": "f93bfa086739cb560261d6dffef6a16e65cab69bd085023f192508ebc1d2b0c6",
+  "handoffDigest": "41efc9e1c5bd7694b14ddffa70cd517408f61ec334708c76a639b931d6e35110",
+  "persistedAt": "2026-09-15T10:33:33.914Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "12 TC 전부 코드·테스트·문서로 충족. TC-009 무인가 doctor 허용, 비신뢰 경로·타 명령·셸 합성 거부, guard 의 trustedRuntimePrefixes 전달 확인. PASS",
+    "decisions": [
+      "TC-009 1차 FAIL 해소 확인, 재검 PASS",
+      "hook 예외 경로 failLoudContext 테스트 존재",
+      "design.md 8절 runtime 표기 122행 확인"
+    ],
+    "behavior": {
+      "inputs": [
+        "Plan/Design REQ·TC 12건",
+        "코드·테스트·문서 본문",
+        "receipt 4종 신뢰"
+      ],
+      "outputs": [
+        "21 unit + 4 regression pass",
+        "guard 무인가 doctor 경로 확인",
+        "6곳 3.1.0·CHANGELOG 확인"
+      ],
+      "errors": [
+        "캐시 guard 가 scratch 쓰기 차단",
+        "npm run regression 직접 실행 불가",
+        "hook stdin 실행 미수행"
+      ]
+    },
+    "evidence": [
+      "node --test tests/v2-harness-health.test.js: 21 pass 0 fail (TC-001~012)",
+      "node --test tests/regression/scene-f-harness-failure.test.js: 4 pass 0 fail (TC-010)",
+      "lib/workflow/v2/write-policy.js:18-20,184-186; hooks/workflow-v2-write-guard.js:21; docs/harness/design.md:122"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-010",
+      "REQ-011",
+      "REQ-012"
+    ],
+    "risks": [
+      "isScratchPath 심링크 realpath 미검사",
+      "regression 이 npm test 에 미포함",
+      "doctor tail 인자 무제한(무해)"
+    ],
+    "unverified": [
+      "hook 프로세스 stdin 실행 (캐시 차단)",
+      "실 repo doctor 출력 (캐시 차단)",
+      "npm run regression 스크립트 경유"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

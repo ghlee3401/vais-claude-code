@@ -6,9 +6,9 @@ const { AuthorizationStore } = require('../lib/workflow/v2/authorization-store')
 const { WorkItemStore } = require('../lib/workflow/v2/work-item-store');
 const { authorizeFilePath, authorizeCommand, defaultAllowedPaths } = require('../lib/workflow/v2/write-policy');
 const { SLOT_HOLDING_STATUSES } = require('../lib/workflow/v2/state-machine');
-const { resolveProjectRoot, resolveStartDir } = require('./v2-project-context');
-const { loadMode } = require('./workflow-v2-prompt');
+const { resolveProjectRoot, resolveStartDir, resolveMode, warningLine } = require('./v2-project-context');
 const { authorizeAgentInput } = require('../lib/workflow/v2/agent-policy');
+const { INTERNAL_COMMAND } = require('../scripts/vais-workflow-v2');
 
 function decide(input, projectRoot, authorization) {
   const tool = String(input.tool_name || input.toolName || '').toLowerCase();
@@ -16,7 +16,9 @@ function decide(input, projectRoot, authorization) {
   if (tool === 'write' || tool === 'edit' || tool === 'notebookedit') {
     return authorizeFilePath(projectRoot, parsed.filePath, authorization);
   }
-  if (tool === 'bash') return authorizeCommand(parsed.command, authorization);
+  // The guard's own install path is the trusted runtime CLI; it lets the unauthenticated
+  // read-only `doctor` subcommand run even when no session authorization exists.
+  if (tool === 'bash') return authorizeCommand(parsed.command, authorization, { trustedRuntimePrefixes: [INTERNAL_COMMAND] });
   if (tool === 'agent') return authorizeAgentInput(parsed.raw, authorization, projectRoot);
   return { allowed: true, kind: 'unmanaged-tool' };
 }
@@ -43,14 +45,18 @@ function validateCurrentAuthorization(store, authorization) {
 function main() {
   const input = readStdin();
   const projectRoot = resolveProjectRoot(resolveStartDir(input));
-  if (!projectRoot || loadMode(projectRoot) !== 'enforce') return outputEmpty();
+  if (!projectRoot) return outputEmpty();
+  // Fail-closed: an invalid mode value keeps the guard active (resolveMode returns enforce + warning).
+  const resolved = resolveMode(projectRoot);
+  if (resolved.mode !== 'enforce') return outputEmpty();
+  const warning = warningLine(resolved);
   const sessionId = String(input.session_id || input.sessionId || '').trim();
   const authorizationStore = new AuthorizationStore(projectRoot);
   const authorization = authorizationStore.get(sessionId);
   const parsed = parseHookInput(input);
   const result = decide(input, projectRoot, authorization);
-  if (!result.allowed) return outputBlock(`VAIS v2 write guard: ${result.reason}`);
-  if (authorization?.workItemId && !['read-only', 'unmanaged-tool'].includes(result.kind)) {
+  if (!result.allowed) return outputBlock(`VAIS v2 write guard: ${result.reason}${warning ? ` (${warning})` : ''}`);
+  if (authorization?.workItemId && !['read-only', 'unmanaged-tool', 'scratch-write'].includes(result.kind)) {
     const store = new WorkItemStore(projectRoot);
     const current = validateCurrentAuthorization(store, authorization);
     if (!current.valid) {

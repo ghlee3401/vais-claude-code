@@ -1,0 +1,65 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-15-harness-health",
+  "assignmentId": "AS-865324a9-8a36-48a9-b2b5-dadac6c47c97",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "0879f36ff3b2bc2e092c94ab451accf0d42d42f1ab4e84a787e95f96f4d07018",
+  "handoffDigest": "cea44257780bee508b65cdea556929355396f501ff51af6209bc2006b71a2126",
+  "persistedAt": "2026-09-15T10:24:41.881Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "fail",
+    "judgment": "FAIL: TC-009 /vais doctor 는 prompt hook 이 read-only action 에서 authorization 을 revoke 해 guard 가 CLI doctor 를 차단한다. TC-001~008·010~012 PASS.",
+    "decisions": [
+      "TC-009 FAIL: /vais doctor 실행 경로 차단",
+      "REQ-001 hook 예외 테스트 없음(코드만)",
+      "Design 복귀: doctor 를 무인가 읽기로"
+    ],
+    "behavior": {
+      "inputs": [
+        "Plan·Design REQ/TC 12",
+        "diff 27파일 + 신규 5파일",
+        "test·lint·validator 실행"
+      ],
+      "outputs": [
+        "159 test·lint·validator PASS",
+        "scene-f 4/4 PASS",
+        "TC-009 실행 경로 결함"
+      ],
+      "errors": [
+        "prompt hook revoke→guard 차단",
+        "hook 예외 테스트 부재",
+        "npm run regression 가드 차단"
+      ]
+    },
+    "evidence": [
+      "workflow-v2-prompt.js:272-279 revoke → write-policy.js:167-171,186 무인가 CLI 차단",
+      "v2-harness-health.test.js TC-001~012, scene-f 4/4, 4 receipts pass",
+      "design.md:59,120,175-176 · roadmap.md:3 · 버전 6곳 3.1.0 · CHANGELOG"
+    ],
+    "affectedRequirements": [
+      "REQ-009",
+      "REQ-001"
+    ],
+    "risks": [
+      "scratchpad symlink 우회 이론적",
+      "design.md §8 runtime 필드 불일치",
+      "REQ-004 prefix 삭제(Plan 상이)"
+    ],
+    "unverified": [
+      "hook stdin 실제 실행(가드)",
+      "npm run regression 직접 실행",
+      "실제 repo doctor 출력"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

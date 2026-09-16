@@ -2,7 +2,7 @@
 
 > **이 파일의 책임**: Claude Code 전용 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 `ONBOARDING.md`(5분), 사용법은 `README.md`.
 >
-> 상태: **2026-09-15 청소 완료.** Legacy(C-Suite 에이전트·템플릿·구 hook·구 lib·구 문서)를 전부 제거했고, 지금은 v2 runtime 커널 위에 "비개발자용 개발 하네스" 를 새로 설계·구현하는 단계다. 롤백은 git 태그 `v3.0.1-legacy`.
+> 상태: **2026-09-15 청소 완료 · 설계 정본 확정 · 로드맵 H1 진행.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md` (H1 `harness-health` → … → H8). 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다.
 
 ## 이 플러그인이 만드는 것
 
@@ -29,18 +29,18 @@ vais-claude-code/
 │   ├── workflow-v2-agent-handoff.js  # specialist handoff 자동 저장
 │   ├── workflow-v2-drift.js          # 변경 경로 기록
 │   ├── v2-project-context.js · run-node.sh
-├── lib/workflow/v2/          # 23 모듈: state-machine · work-item-store · phase-transaction · gate-engine ·
-│                             #   router · write-policy · tool-adapters · document-manager/quality · phase-check ·
+├── lib/workflow/v2/          # 25 모듈: config(mode·설정 정본) · doctor · state-machine · work-item-store · phase-transaction ·
+│                             #   gate-engine · router · write-policy · tool-adapters · document-manager/quality · phase-check ·
 │                             #   context-capsule/view · repo-drift · role-registry · agent-policy · automatic-handoff …
 ├── lib/core/state-store.js · lib/io.js · lib/context-metrics.js
 ├── scripts/vais-workflow-v2.js       # 내부 workflow CLI (hook 이 명령 형태를 지정)
-├── scripts/checks/v2-secret-scan.js · scripts/vais-validate-plugin.js · scripts/setup-dev.sh
+├── scripts/checks/v2-secret-scan.js · scripts/vais-validate-plugin.js · scripts/vais-doctor.js · scripts/setup-dev.sh
 ├── contracts/v2-role-cards.json      # 역할 정본 (23 role: c-level 7 · judgment 12 · implementation 4)
 ├── schemas/                  # work-item · specialist-assignment · specialist-handoff · check-result · gate-result ·
 │                             #   phase-transaction-receipt · review-evidence-prepare · automatic-handoff-evidence
 ├── output-styles/vais-default.md
 ├── mcp/ · design-system/ · vendor/   # UI 설계용 design-system MCP (보류 — ui-loop 설계에서 결정)
-├── tests/v2-*.test.js (10) + tests/fixtures/mini-booking
+├── tests/v2-*.test.js (11) + tests/regression/ + tests/fixtures/mini-booking
 ├── vais.config.json          # version · plugin · workflowV2 만
 └── ONBOARDING.md · README.md · CLAUDE.md · CHANGELOG.md
 ```
@@ -58,16 +58,19 @@ vais-claude-code/
 7. **Review 는 read-only 독립 QA** — `independent-qa` clean-room, `--code-write false`, 정확히 1회. AI QA PASS 후에만 최종 승인 요청.
 8. **write scope** — Do 는 Design 이 선언한 scope 안에서만. `.git`, `.vais`, `docs/work-items`, `docs/features`, `docs/README.md` 는 scope 불가.
 9. **`/vais` 없는 대화는 읽기 전용.**
-10. **산출물** — `docs/work-items/{feature}/{YYYY-MM-DD-slug}/01-plan|02-design|03-do|04-review|05-report/main.md`. Plan 초안은 `.vais/v2/drafts/plan.md`, 이후 초안은 phase 폴더 안에 두고 `--body-file` 로 넘긴다.
+10. **산출물** — `docs/work-items/{feature}/{YYYY-MM-DD-slug}/01-plan|02-design|03-do|04-review|05-report/main.md`. 첫 Plan 초안만 `.vais/v2/drafts/plan.md`, 이후 모든 초안(Plan 수정 포함)은 해당 phase 폴더의 `draft.md` 에 두고 `--body-file` 로 넘긴다 (승격 시 자동 삭제).
+10-1. **Feature 이름** — runtime 이 요청의 영어 단어에서 발급한다. 영어 단어가 없으면 AI 가 이름을 만들지 않고 사용자에게 묻는다. 사용자가 `/vais 이름: <kebab-case>` 로 준 이름만 CLI 가 받는다.
 11. **ID** — `REQ-001`, `TC-001` 3자리. Design REQ 집합 = Plan REQ 집합, Review TC 집합 = Design TC 집합.
 12. **문서 예산** — compact / standard / extended byte 한도 (`lib/workflow/v2/document-quality.js`). 이전 단계 문장(80자 이상) 복사 금지.
 13. **check id 7종** — `test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan`.
 14. **Bash** — 한 번에 한 명령. `&&`, `|`, `;`, 리다이렉션, `$( )` 금지. 읽기는 Read/Grep 우선.
 15. **위험 명령 금지** — `rm -rf`, `git push --force`, `git commit --no-verify`. 민감 정보는 환경 변수로만.
 
-## mode 가 enforce 가 아닐 때
+## mode 와 비상 스위치
 
-하네스가 꺼진 상태다. 첫 줄에 `[VAIS · 하네스 비활성]` 을 쓰고, 승인·범위·기록이 강제되지 않음을 알린다. 이 상태는 **하네스 자체를 고칠 때만** 쓴다. 작업이 끝나면 `enforce` 로 되돌린다.
+- `enforce` (정본) / `disabled`. 대소문자·공백은 무시된다. **그 밖의 값과 읽기 실패는 enforce 로 취급(닫힘)** 되고 매 프롬프트 첫 줄에 `⚠ VAIS 하네스 경고: …` 가 주입된다. 경고를 보면 첫 줄에 그대로 표시하고 `/vais doctor` 를 안내한다.
+- `disabled` 또는 환경변수 `VAIS_HARNESS_OFF=1` 이면 하네스가 꺼진다. 첫 줄에 `[VAIS · 하네스 비활성]` 을 쓰고 승인·범위·기록이 강제되지 않음을 알린다. 이 상태는 **하네스 자체를 고칠 때만** 쓴다. 끝나면 되돌린다.
+- 읽기 전용 명령(`git -C … status/diff/log/show`, `ls`, `cat`, `wc`, `node --version`)과 Claude scratchpad 쓰기는 authorization 없이 허용된다. 그 밖의 쓰기는 write scope 안에서만.
 
 ## 자기 수정 시 주의
 
@@ -77,9 +80,11 @@ vais-claude-code/
 ## Testing
 
 ```bash
-npm test          # node --test tests/*.test.js
-npm run lint      # eslint scripts/ lib/ hooks/ --max-warnings=0
-npm run validate  # 플러그인 구조 검증
+npm test            # node --test tests/*.test.js
+npm run regression  # tests/regression/ 사용 장면 회귀
+npm run lint        # eslint scripts/ lib/ hooks/ --max-warnings=0
+npm run validate    # 플러그인 구조 검증
+npm run doctor      # 하네스 건강검진 (= /vais doctor)
 ```
 
 ## Version Management

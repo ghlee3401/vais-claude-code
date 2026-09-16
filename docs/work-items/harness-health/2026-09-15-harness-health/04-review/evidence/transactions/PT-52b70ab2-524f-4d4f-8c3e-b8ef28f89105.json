@@ -1,0 +1,226 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-52b70ab2-524f-4d4f-8c3e-b8ef28f89105",
+  "workItemId": "WI-2026-09-15-harness-health",
+  "phase": "review",
+  "action": "decide",
+  "gate": {
+    "gate": "review",
+    "verdict": "FAIL",
+    "requiredChecks": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ],
+    "passed": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ],
+    "failed": [
+      "independent-qa-handoff"
+    ],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-15T10:24:46.238Z"
+  },
+  "checks": [
+    {
+      "check": "review-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-health/2026-09-15-harness-health/04-review/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical review document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-health/2026-09-15-harness-health/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-health/2026-09-15-harness-health/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 3055B is within the 6144B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-health/2026-09-15-harness-health/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-health/2026-09-15-harness-health/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-health/2026-09-15-harness-health/04-review/main.md"
+      ]
+    },
+    {
+      "check": "independent-qa-handoff",
+      "execution": "succeeded",
+      "verdict": "fail",
+      "required": true,
+      "scope": [],
+      "requirements": [
+        "REQ-009",
+        "REQ-001"
+      ],
+      "summary": "Independent QA reported failure",
+      "findings": [
+        "Inspect the canonical independent QA evidence"
+      ],
+      "evidence": [
+        "docs/work-items/harness-health/2026-09-15-harness-health/04-review/evidence/handoffs/AS-865324a9-8a36-48a9-b2b5-dadac6c47c97.json"
+      ]
+    },
+    {
+      "check": "test",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "hooks/**",
+        "lib/**",
+        "scripts/**",
+        "schemas/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "skills/vais/SKILL.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-health/2026-09-15-harness-health/03-do/evidence/logs/test.log"
+      ]
+    },
+    {
+      "check": "lint",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "hooks/**",
+        "lib/**",
+        "scripts/**",
+        "schemas/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "skills/vais/SKILL.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-health/2026-09-15-harness-health/03-do/evidence/logs/lint.log"
+      ]
+    },
+    {
+      "check": "plugin-validator",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "hooks/**",
+        "lib/**",
+        "scripts/**",
+        "schemas/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "skills/vais/SKILL.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-health/2026-09-15-harness-health/03-do/evidence/logs/plugin-validator.log"
+      ]
+    },
+    {
+      "check": "secret-scan",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "hooks/**",
+        "lib/**",
+        "scripts/**",
+        "schemas/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "skills/vais/SKILL.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-health/2026-09-15-harness-health/04-review/evidence/logs/secret-scan.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "design",
+    "status": "active"
+  }
+}

@@ -1,9 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-process.on('uncaughtException', () => { try { console.log('{}'); } catch (_) {} process.exit(0); });
-process.on('unhandledRejection', () => { try { console.log('{}'); } catch (_) {} process.exit(0); });
-
 const fs = require('fs');
 const path = require('path');
 const { readStdin } = require('../lib/io');
@@ -15,17 +12,51 @@ const { EVENTS, SLOT_HOLDING_STATUSES } = require('../lib/workflow/v2/state-mach
 const { INTERNAL_COMMAND } = require('../scripts/vais-workflow-v2');
 const { captureRepoSnapshot, diffSnapshots, classifyDrift, filterExternalDrift } = require('../lib/workflow/v2/repo-drift');
 const { loadRoleCatalog, resolveRole, buildRolePrompt } = require('../lib/workflow/v2/role-registry');
-const { resolveProjectRoot, resolveStartDir, extractPrompt } = require('./v2-project-context');
+const { resolveProjectRoot, resolveStartDir, extractPrompt, resolveMode, warningLine } = require('./v2-project-context');
 const { deterministicSlug } = require('../lib/workflow/v2/naming');
 const { PHASE_FOLDERS } = require('../lib/workflow/v2/document-manager');
 
-function loadMode(projectRoot) {
+const INACTIVE_LINE = '[VAIS · 하네스 비활성]';
+
+function outputContext(context) {
+  console.log(JSON.stringify({
+    hookSpecificOutput: {
+      hookEventName: 'UserPromptSubmit',
+      additionalContext: context,
+    },
+  }));
+}
+
+// A hook that dies must never look like a hook that passed. Every failure path
+// injects a visible warning instead of the silent `{}` that hid outages before.
+function failLoudContext(reason) {
+  return [
+    `⚠ VAIS 하네스 경고: hook 예외 — ${String(reason || 'unknown').slice(0, 300)}`,
+    '이 turn 은 읽기 전용으로 다룬다. `/vais doctor` 로 원인을 확인한다.',
+  ].join('\n');
+}
+
+function failLoud(reason) {
   try {
-    const config = JSON.parse(fs.readFileSync(path.join(projectRoot, 'vais.config.json'), 'utf8'));
-    return config.workflowV2?.mode || 'disabled';
-  } catch (_) {
-    return 'disabled';
-  }
+    outputContext(failLoudContext(reason));
+  } catch (_) { /* nothing left to do */ }
+  process.exit(0);
+}
+
+process.on('uncaughtException', error => failLoud(error?.message || String(error)));
+process.on('unhandledRejection', error => failLoud(error?.message || String(error)));
+
+function harnessInactiveContext(resolved) {
+  return [
+    INACTIVE_LINE,
+    warningLine(resolved) || '⚠ VAIS 하네스 경고: 하네스가 꺼져 있다',
+    '승인·쓰기 범위·기록이 강제되지 않는다. 읽기 전용 조언만 하고, 스위치를 끄거나 mode 를 enforce 로 되돌리도록 안내한다.',
+  ].join('\n');
+}
+
+// Backward-compatible mode reader: returns the effective mode string only.
+function loadMode(projectRoot) {
+  return resolveMode(projectRoot).mode;
 }
 
 function statusLine(item) {
@@ -34,14 +65,39 @@ function statusLine(item) {
   return `[${feature} · ${item.phase} · ${item.status}]`;
 }
 
+function planDraftPath(item) {
+  return `${defaultAllowedPaths(item)[0].replace(/\/\*\*$/, '')}/draft.md`;
+}
+
+const HELP_LINES = Object.freeze([
+  '명령 표 (사용자에게 그대로 보여준다):',
+  '| 입력 | 동작 |',
+  '|---|---|',
+  '| `/vais <자연어 요청>` | 새 작업 시작, 진행 중이면 현재 단계 지시·피드백 |',
+  '| `/vais plan 승인` · `/vais design 승인` · `/vais 최종 승인` | Gate 통과 (`/vais 승인` 도 현재 Gate 에 적용) |',
+  '| `/vais 거절 <이유>` | 최종 결과 거절 → Design 복귀 |',
+  '| `/vais 이름: <kebab-case>` | 영어 단어가 없는 요청의 Feature 이름 확정 |',
+  '| `/vais status` (`상태`) | 현재 작업·단계·대기 요청 (읽기) |',
+  '| `/vais doctor` | 하네스 건강검진 (읽기) |',
+  '| `/vais help` (`도움말`) | 이 표 |',
+  '| `/vais pause` · `resume` · `cancel` (`일시정지`·`재개`·`취소`) | 작업 슬롯 제어 |',
+  '| `/vais 새 작업: <요청>` | 진행 중 작업을 두고 새 요청을 대기열에 보관 |',
+  '`좋아`, `ok` 같은 모호한 답과 조건부·대리 표현은 승인이 아니다. `/vais` 없는 대화는 읽기 전용이다.',
+]);
+
 function phaseGuidance(item, sessionId, requestSlug = null) {
   if (!item) {
-    const slug = requestSlug || '<runtime-issued-slug>';
+    if (!requestSlug) {
+      return [
+        'CEO가 단일 대화 창구다. 관련 작업을 검색하고 Feature 관계·규모를 제안한 뒤 사용자 확인을 받는다.',
+        '이 요청에는 영어 단어가 없어 runtime 이 Feature 이름을 정하지 못했다. 사용자에게 kebab-case 영어 이름(예: `reading-log`)을 묻고, 사용자가 `/vais 이름: <name>` 으로 답할 때까지 Work item 을 만들지 않는다. AI 가 이름을 대신 정하면 CLI 가 거부한다.',
+      ];
+    }
     return [
       'CEO가 단일 대화 창구다. 관련 작업을 검색하고 Feature 관계·규모를 제안한 뒤 사용자 확인을 받는다.',
       '확인 전에는 Work item을 만들지 않는다. 확인 후 Plan 본문을 `.vais/v2/drafts/plan.md`에 작성한다.',
-      `이 요청에 런타임이 발급한 결정적 새 Feature slug는 \`${slug}\`다. new 관계면 다른 이름을 만들지 않는다.`,
-      `\`${INTERNAL_COMMAND} plan present --slug ${slug} --title "<title>" --feature <feature> --relation <new|existing> --scale <compact|standard|extended> --session ${sessionId} --revision 1 --body-file .vais/v2/drafts/plan.md\`을 한 번 실행한다.`,
+      `이 요청에 런타임이 발급한 결정적 새 Feature slug는 \`${requestSlug}\`다. new 관계면 다른 이름을 만들지 않는다.`,
+      `\`${INTERNAL_COMMAND} plan present --slug ${requestSlug} --title "<title>" --feature <feature> --relation <new|existing> --scale <compact|standard|extended> --session ${sessionId} --revision 1 --body-file .vais/v2/drafts/plan.md\`을 한 번 실행한다.`,
       '이 transaction이 Work item·Plan 검사·Gate를 처리한다. PASS일 때만 승인 요청하며, 실패하면 evidence finding만 고쳐 재실행한다.',
       'CPO Plan은 별도 Ideation 문서 없이 문제·목표·범위·REQ·흐름·엣지 케이스·완료 조건·영향만 담고 구현 결정은 Design에 남긴다. 요구사항 ID는 REQ-001처럼 3자리 형식으로 쓴다.',
     ];
@@ -49,7 +105,7 @@ function phaseGuidance(item, sessionId, requestSlug = null) {
   const byPhase = {
     plan: [
       'CPO가 요구사항·사용자 흐름·엣지 케이스를 구현 독립적으로 확정한다. 요구사항 ID는 REQ-001처럼 3자리 형식으로 쓴다.',
-      `Plan을 고친 뒤 \`${INTERNAL_COMMAND} plan present --id ${item.id} --session ${sessionId} --revision ${item.planRevision} --body-file .vais/v2/drafts/plan.md\`을 한 번 실행한다. PASS일 때만 사용자 승인을 요청한다.`,
+      `Plan 초안은 \`${planDraftPath(item)}\` 에 쓴다 (승격 시 자동 삭제). 고친 뒤 \`${INTERNAL_COMMAND} plan present --id ${item.id} --session ${sessionId} --revision ${item.planRevision} --body-file ${planDraftPath(item)}\`을 한 번 실행한다. PASS일 때만 사용자 승인을 요청한다.`,
     ],
     design: [
       'CTO Design은 REQ별 동작·입력·출력·오류·UI/기술 결정·TC를 정하고 필요한 전문 영역만 선택한다. Do specialist 상한은 compact 1명, standard 2명이며 단순 test 실행 역할은 고르지 않는다. REQ-001/TC-001처럼 3자리 ID를 쓰고, 디렉터리 write scope는 path/**로 표시한다. check id는 등록된 test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan 중에서만 고른다.',
@@ -125,9 +181,22 @@ function buildContext(route, item, leaseError, sessionId = '<session>', options 
     return lines.join('\n');
   }
   lines.push(`VAIS managed action: ${route.action}`);
+  if (route.action === 'help') {
+    lines.push(...HELP_LINES, '이 action은 읽기 전용이다.');
+    return lines.join('\n');
+  }
+  if (route.action === 'doctor') {
+    lines.push(`\`${INTERNAL_COMMAND} doctor\` 를 한 번 실행해 점검표를 사람 말로 요약해 보여준다. fail 항목은 fix 문구를 그대로 안내한다.`, '이 action은 읽기 전용이다.');
+    return lines.join('\n');
+  }
   if (route.action === 'queue-pending') {
     lines.push('현재 Work item은 변경하지 않았다. 새 요청은 Work item을 만들지 않고 pending에 보관했다.');
     lines.push('/vais status에서 대기 요청을 확인하고, 현재 작업 완료·일시정지·취소 후 사용자가 선택할 때만 새 Work item으로 만든다.');
+    return lines.join('\n');
+  }
+  if (route.action === 'name-feature') {
+    lines.push(`사용자가 Feature 이름 \`${route.slug}\` 을 확정했고 runtime 이 등록했다. 이 이름으로 Plan 을 진행한다.`);
+    lines.push(...phaseGuidance(null, sessionId, route.slug));
     return lines.join('\n');
   }
   lines.push('현재 Work item과 event 상태 머신의 transaction을 순서대로 처리한다. 사용자 결정 Gate나 BLOCKED/FAIL에서만 멈추며, C-Level이나 Phase 직접 호출로 Gate를 우회하지 않는다.');
@@ -182,21 +251,21 @@ function observePromptDrift(store, item, sessionId, projectRoot) {
   return routed;
 }
 
-function outputContext(context) {
-  console.log(JSON.stringify({
-    hookSpecificOutput: {
-      hookEventName: 'UserPromptSubmit',
-      additionalContext: context,
-    },
-  }));
+function requestSlugFor(route) {
+  if (route.action === 'name-feature') return route.slug;
+  if (route.action === 'start-request') return deterministicSlug(route.text);
+  return null;
 }
 
 function main() {
   const input = readStdin();
   const projectRoot = resolveProjectRoot(resolveStartDir(input));
   if (!projectRoot) return console.log('{}');
-  const mode = loadMode(projectRoot);
-  if (mode !== 'enforce') return console.log('{}');
+  const resolved = resolveMode(projectRoot);
+  if (resolved.mode === 'off') return outputContext(harnessInactiveContext(resolved));
+  if (resolved.mode === 'disabled') return console.log('{}');
+  const warning = warningLine(resolved);
+  const emit = context => outputContext(warning ? `${warning}\n${context}` : context);
 
   const sessionId = String(input.session_id || input.sessionId || '').trim();
   const store = new WorkItemStore(projectRoot);
@@ -211,18 +280,18 @@ function main() {
     const open = sessionId ? openAssignmentContinuation(store, authStore.get(sessionId)) : [];
     if (open.length > 0) {
       authStore.touch(sessionId);
-      return outputContext(buildContext(route, routeItem, null, sessionId, { openAssignments: open }));
+      return emit(buildContext(route, routeItem, null, sessionId, { openAssignments: open }));
     }
     if (sessionId) authStore.revoke(sessionId);
-    return outputContext(buildContext(route, routeItem, null, sessionId));
+    return emit(buildContext(route, routeItem, null, sessionId));
   }
 
-  if (!sessionId) return outputContext(buildContext(route, current, 'session id is unavailable', sessionId));
+  if (!sessionId) return emit(buildContext(route, current, 'session id is unavailable', sessionId));
   try {
     if (route.action === 'queue-pending') {
       store.queuePendingRequest(route.text, sessionId);
       authStore.revoke(sessionId);
-      return outputContext(buildContext(route, current, null, sessionId));
+      return emit(buildContext(route, current, null, sessionId));
     }
     let active = routeItem;
     if (active && route.action !== 'resume') {
@@ -238,26 +307,32 @@ function main() {
       sessionId,
       workItemId: active?.id || null,
       phase: active?.phase || 'plan',
-      action: route.action,
-      requestSlug: route.action === 'start-request' ? deterministicSlug(route.text) : null,
+      action: route.action === 'name-feature' ? 'start-request' : route.action,
+      requestSlug: requestSlugFor(route),
       allowedPaths: defaultAllowedPaths(active),
       allowedCommands: [INTERNAL_COMMAND],
     });
-    return outputContext(buildContext(route, active, null, sessionId));
+    return emit(buildContext(route, active, null, sessionId));
   } catch (error) {
     authStore.revoke(sessionId);
-    return outputContext(buildContext(route, routeItem, error.message, sessionId));
+    return emit(buildContext(route, routeItem, error.message, sessionId));
   }
 }
 
 module.exports = {
+  INACTIVE_LINE,
+  HELP_LINES,
   loadMode,
+  failLoudContext,
+  harnessInactiveContext,
   statusLine,
+  planDraftPath,
   phaseGuidance,
   openAssignmentContinuation,
   buildContext,
   applyDeterministicRoute,
   observePromptDrift,
+  requestSlugFor,
   main,
 };
 

@@ -4,7 +4,7 @@
 
 ## 0. 한 장 요약 (비개발자용)
 
-비개발자가 개발자처럼 웹 앱을 만들게 하는 하네스의 설계 정본이다. 요구사항부터 구현까지 11단계 사슬을 단계마다 문서·ID·승인·기록으로 묶고, 앞 단계 승인 없이는 다음 단계를 못 가게 runtime 이 막는다. 단계마다 기획자·디자이너·개발자·QA 역할 카드가 붙고, 사용자는 말하기·고르기·확인만 한다. 기억·안전·확장이 바탕이다. 이 작업은 문서만 만들고, 구현은 로드맵의 후속 작업 8개로 한다.
+비개발자가 개발자처럼 웹 앱을 만들게 하는 하네스의 설계 정본이다. 요구사항부터 구현까지 11단계 사슬을 단계마다 문서·ID·승인·기록으로 묶고, 앞 단계 승인 없이는 다음 단계를 못 가게 runtime 억지력이 막는다. 단계마다 기획자·디자이너·개발자·QA 역할 카드가 붙고, 사용자는 말하기·고르기·확인만 한다. 기억·안전·확장이 바탕이다. 구현은 로드맵의 후속 작업 8개로 한다.
 
 ## 1. 원칙
 
@@ -56,6 +56,7 @@
 | 저장 검사 | 필수 항목, ID 부모, stale, 예산을 검사하고 실패하면 저장하지 않는다 | CLI (`stage present`) |
 | 승인 잠금 | 명시 문구(`승인`, `N번`, `최종 승인`)만 승인이다. 모호·조건부·대리는 무효 | UserPromptSubmit + 상태 머신 |
 | 기록 잠금 | 결정·변경·승인이 장부에 없으면 턴을 끝낼 수 없다 | Stop |
+| 오설정 잠금 | mode 값이 잘못되면 열리지 않고 enforce 로 닫힘으로 실패하며 매 프롬프트에 경고한다. 끄는 길은 정확한 `disabled` 와 `VAIS_HARNESS_OFF` 뿐 | CLI `resolveMode` + UserPromptSubmit |
 | 표시 | 현재 단계·상태·다음 행동을 항상 보인다 | 상태 줄 + 응답 첫 줄 |
 
 단계별 저장 검사 (CLI 가 `contracts/chain-stages.json` 을 읽어 적용):
@@ -116,9 +117,9 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 
 **기억** — `.vais/v2/ledger.jsonl` (append-only, schema `ledger-entry/v1`: id, ts, workItemId, kind, text, why, source, refs). 자동 기록 지점: Plan 승인·Design 승인·최종 승인 → `milestone`; Design 의 `decisions` frontmatter 목록 → `decision`; 최종 거절·수정 요청 원문 → `feedback`; UI kind 의 수정 요청 원문 → `preference`; QA FAIL 항목·Report `--limitation` → `debt`; readiness NOT_READY·blocked → `risk`. 노출: 세션 브리핑, stage/feature Design 시작 시 관련 항목 주입, `decisions.md`.
 
-**안전** — (1) mode 정규화(대소문자·공백)와 미허용 값 시 매 프롬프트 `⚠ VAIS 하네스 비활성: 이유` 주입, hook 예외도 같은 줄로. (2) 비상 해제 스위치 `VAIS_HARNESS_OFF=1` 환경변수: 모든 hook 이 즉시 `{}` 를 내고 첫 줄에 비활성 표시. (3) 읽기 전용 명령(`git -C … status/diff/log`, `ls`, `cat`, `wc`, `head`, `tail`, `node --version`)과 scratchpad 경로 쓰기는 authorization 없이 허용. (4) Stop hook: 장부·상태 줄 누락 시 종료 거부. (5) 기존 write scope·승인·drift 유지.
+**안전** — (1) mode 정규화(대소문자·공백). 미허용 값과 읽기 실패는 enforce 로 취급해 닫힘으로 실패하고 매 프롬프트 첫 줄에 `⚠ VAIS 하네스 경고: 이유` 를 주입한다. hook 예외도 같은 줄로. (2) 비상 해제 스위치 `VAIS_HARNESS_OFF=1` 환경변수: 모든 hook 이 즉시 `{}` 를 내고 첫 줄에 비활성 표시. (3) 읽기 전용 명령(`git -C … status/diff/log`, `ls`, `cat`, `wc`, `head`, `tail`, `node --version`)과 scratchpad 경로 쓰기는 authorization 없이 허용. (4) Stop hook: 장부·상태 줄 누락 시 종료 거부. (5) 기존 write scope·승인·drift 유지.
 
-**확장** — (1) Claude Code 와 닿는 면(hook 입력 파싱, 도구 이름, Agent 결과 모양)은 `lib/io.js` 한 곳. (2) 모든 transaction receipt 에 `runtime: {model, claudeCode, plugin}` 버전 도장. (3) `tests/regression/` 시나리오 6개(11절 장면)를 `npm run regression` 으로 돌리고 doctor 가 버전 변화 감지 시 권고. (4) 역할 카드에 `modelHint` (judgment=strong, implementation=default, check=cheap) 데이터 필드. (5) 검사 어댑터 등록식 유지, `screenshot-compare` 어댑터 자리 예약.
+**확장** — (1) Claude Code 와 닿는 면(hook 입력 파싱, 도구 이름, Agent 결과 모양)은 `lib/io.js` 한 곳. (2) 모든 transaction receipt 에 `runtime: {plugin, node, claudeCode}` 버전 도장 (모델 이름은 CLI 가 알 수 없어 넣지 않는다). (3) `tests/regression/` 시나리오 6개(11절 장면)를 `npm run regression` 으로 돌리고 doctor 가 버전 변화 감지 시 권고. (4) 역할 카드에 `modelHint` (judgment=strong, implementation=default, check=cheap) 데이터 필드. (5) 검사 어댑터 등록식 유지, `screenshot-compare` 어댑터 자리 예약.
 
 ## 9. 역할 카드와 Agent 기준
 
@@ -171,6 +172,8 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 검사 어댑터 `screenshot-compare` 자리 | `lib/workflow/v2/tool-adapters.js` | 변경 |
 | 화면 산출물 렌더링·스크린샷 | `lib/workflow/v2/screen-capture.js` (Chrome 헤드리스) | 신규 |
 | 검수 페이지 (로컬 HTML) | `lib/workflow/v2/review-page.js` → `04-review/evidence/review.html` | 신규 |
+| 회차 diff 요약 (UI 수정 루프) | `lib/workflow/v2/diff-summary.js` | 신규 (H4) |
+| 하네스 설정 정본·mode 판정 | `lib/workflow/v2/config.js` | 신규 (H1) |
 | 앱 실행 (확인 단계) | `vais.config.json > run.command`, `tool-adapters.js` `serve` | 신규 |
 | 응답 형식 | `output-styles/vais-default.md` | 변경 |
 | 사용 문서 | `README.md`, `ONBOARDING.md`, `CLAUDE.md` | 변경 |
@@ -187,7 +190,7 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 
 **장면 E — 세션 끊김 뒤 재개**: 새 세션 시작 → 브리핑: `[book-app · ui · waiting-user] 지난 세션: 시안 2안 제시 후 대기. 열린 결정 1, 부채 2, stale 0. 제안: ① 1번 고르기 ② 2번 고르기 ③ 취소` → `/vais 1번` → Do → 화면 확인 → Review → 최종 승인 → Report 로 정상 종결. 세션 id 가 달라도 lease 를 새로 받는다.
 
-**장면 F — 하네스 고장**: 설정 mode 가 `Enforce` 로 저장됨 → 정규화되어 정상 동작. 값이 `enforcee` 라면 매 응답 첫 줄 `⚠ VAIS 하네스 비활성: mode 값 오류(enforcee)`, `/vais doctor` 가 고치는 법 제시. hook 스크립트가 예외로 죽으면 같은 경고 + `VAIS_HARNESS_OFF=1` 로 임시 해제 안내. 조용히 죽는 경로는 없다.
+**장면 F — 하네스 고장**: 설정 mode 가 `Enforce` 로 저장됨 → 정규화되어 정상 동작. 값이 `enforcee` 라면 guard 는 닫힌 채 매 응답 첫 줄 `⚠ VAIS 하네스 경고: mode 값 오류("enforcee")`, `/vais doctor` 가 고치는 법 제시. hook 스크립트가 예외로 죽으면 같은 경고 + `VAIS_HARNESS_OFF=1` 로 임시 해제 안내. 조용히 죽는 경로는 없다.
 
 ## 12. 현 커널 결함과 처리
 

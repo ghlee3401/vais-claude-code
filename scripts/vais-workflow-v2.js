@@ -22,6 +22,7 @@ const { buildContextCapsule, assertFreshCapsule } = require('../lib/workflow/v2/
 const { runPhaseTransaction, prepareReviewEvidence, canonicalWriteScopes } = require('../lib/workflow/v2/phase-transaction');
 const { buildCheckIdentity, reviewEvidenceManifest } = require('../lib/workflow/v2/check-evidence');
 const { recordDeferredHandoff } = require('../lib/workflow/v2/automatic-handoff');
+const { runDoctor } = require('../lib/workflow/v2/doctor');
 
 const INTERNAL_COMMAND = `node ${JSON.stringify(__filename)}`;
 
@@ -129,6 +130,22 @@ function create(projectRoot, options) {
   return item;
 }
 
+// A new Feature name comes only from the runtime (derived from the request) or from the
+// user's own `/vais 이름: <kebab-case>` turn. If the prompt hook could not derive one and the
+// user has not named it, the request slug is null and no Work item may be created.
+function assertNewFeatureSlug(relation, slug, feature, authorization) {
+  if (relation !== 'new') return;
+  if (authorization?.action === 'start-request' && !authorization.requestSlug) {
+    throw new Error('Feature 이름이 확정되지 않았다. 사용자가 `/vais 이름: <kebab-case>` 로 이름을 정하면 runtime 이 등록한다');
+  }
+  if (authorization?.requestSlug && slug !== authorization.requestSlug) {
+    throw new Error(`A new Feature must use the runtime-issued slug: ${authorization.requestSlug}`);
+  }
+  if (feature !== slug) {
+    throw new Error('A new Feature relation requires --feature to equal the Work item --slug');
+  }
+}
+
 function readProjectJson(projectRoot, value, label) {
   if (!value || value === true) return null;
   const target = path.resolve(projectRoot, String(value));
@@ -160,13 +177,8 @@ function preparePlan(projectRoot, options) {
   const slug = requireOption(options, 'slug');
   const feature = requireOption(options, 'feature');
   const authorization = new AuthorizationStore(projectRoot).get(sessionId);
-  if (relation === 'new' && authorization?.requestSlug && slug !== authorization.requestSlug) {
-    throw new Error(`A new Feature must use the runtime-issued slug: ${authorization.requestSlug}`);
-  }
-  if (relation === 'new' && feature !== slug) {
-    throw new Error('A new Feature relation requires --feature to equal the Work item --slug');
-  }
   const store = new WorkItemStore(projectRoot);
+  if (!store.get(id)) assertNewFeatureSlug(relation, slug, feature, authorization);
   let item = store.get(id);
   if (!item) {
     item = create(projectRoot, { ...options, id, session: sessionId });
@@ -558,12 +570,7 @@ function phaseTransaction(projectRoot, phase, action, options) {
     const slug = requireOption(options, 'slug');
     const feature = requireOption(options, 'feature');
     const authorization = new AuthorizationStore(projectRoot).get(requireOption(options, 'session'));
-    if (relation === 'new' && authorization?.requestSlug && slug !== authorization.requestSlug) {
-      throw new Error(`A new Feature must use the runtime-issued slug: ${authorization.requestSlug}`);
-    }
-    if (relation === 'new' && feature !== slug) {
-      throw new Error('A new Feature relation requires --feature to equal the Work item --slug');
-    }
+    if (!new WorkItemStore(projectRoot).get(id)) assertNewFeatureSlug(relation, slug, feature, authorization);
   }
   const receipt = runPhaseTransaction(projectRoot, {
     phase,
@@ -616,6 +623,7 @@ function execute(argv = process.argv.slice(2), projectRoot = null) {
   if (command === 'status') return { current: store.getCurrent(), pending: store.readRegistry().pendingRequests };
   if (command === 'search') return { matches: searchRelatedWork(root, requireOption(options, 'query'), { primaryFeature: options.feature }) };
   if (command === 'context') return contextCapsule(root, options);
+  if (command === 'doctor') return runDoctor(root);
   let result;
   if (command === 'create') result = create(root, options);
   else if (command === 'event') result = applyEvent(root, options);
@@ -663,6 +671,7 @@ module.exports = {
   CANONICAL_DOCUMENT_CHECKS,
   parseArgs,
   generatedWorkItemId,
+  assertNewFeatureSlug,
   preparePlan,
   refreshAuthorization,
   create,

@@ -601,7 +601,7 @@ describe('v2 phase transaction receipts', () => {
     fs.writeFileSync(draft, PLAN);
     new AuthorizationStore(root).grant({
       sessionId: SESSION, workItemId: null, phase: 'plan', action: 'start-request',
-      allowedPaths: [], allowedCommands: [],
+      requestSlug: 'booking-toggle', allowedPaths: [], allowedCommands: [],
     });
     const receipt = execute([
       'plan', 'present', '--slug', 'booking-toggle', '--title', 'Booking toggle',
@@ -646,8 +646,9 @@ describe('v2 phase transaction receipts', () => {
     assert.deepEqual(plan.next, { phase: 'plan', status: 'waiting-user' });
     assert.ok(Buffer.byteLength(JSON.stringify(plan)) <= RECEIPT_LIMITS.compact);
     assert.deepEqual(Object.keys(plan).sort(), [
-      'action', 'evidencePath', 'findingPath', 'id', 'next', 'phase', 'schema', 'verdict', 'workItemId',
+      'action', 'evidencePath', 'findingPath', 'id', 'next', 'phase', 'runtime', 'schema', 'verdict', 'workItemId',
     ]);
+    assert.equal(plan.runtime.node, process.version);
 
     const planEvidence = JSON.parse(fs.readFileSync(path.join(root, plan.evidencePath), 'utf8'));
     assert.ok(Array.isArray(planEvidence.checks));

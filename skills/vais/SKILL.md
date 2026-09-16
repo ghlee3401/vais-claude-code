@@ -22,6 +22,10 @@ Treat the UserPromptSubmit hook context as the runtime source of truth.
 - Specialists return structured handoff data; the Phase owner alone writes the canonical phase `main.md`.
 - If the request lacks `/vais`, stay read-only as instructed by the hook.
 
+## `disabled` or the emergency switch `VAIS_HARNESS_OFF=1`
+
+The harness is inactive. Say so on the first line (`[VAIS · 하네스 비활성]`), explain that no approval, write scope, or record is being enforced, and offer read-only advice only. Do not change Work item state, documents, or product code until the harness is back on.
+
 ## Any other value
 
-The harness is inactive. Say so on the first line (`[VAIS · 하네스 비활성]`), explain that no approval, write scope, or record is being enforced, and offer read-only advice only. Do not change Work item state, documents, or product code until the mode is `enforce` again.
+The runtime treats it as `enforce` (fail-closed) and injects `⚠ VAIS 하네스 경고: …` at the top of every prompt. Keep following the enforce rules, show the warning on your first line, and point the user to `/vais doctor` to fix the value.

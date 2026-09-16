@@ -52,9 +52,10 @@ flowchart TB
 ## 5. 개발 루프
 
 ```bash
-npm test && npm run lint && npm run validate   # 로컬 검증 (하네스 밖에서)
+npm test && npm run regression && npm run lint && npm run validate   # 로컬 검증
+npm run doctor                                                       # 하네스 건강검진
 ```
 
-하네스 자체를 고칠 때: 사용자가 `workflowV2.mode` 를 `disabled` 로 내림 → 수정 → 검증 → 커밋 → `enforce` 복귀. 실행 중 플러그인은 마켓플레이스 캐시 사본이라 push · 버전 bump · 업데이트 뒤에 반영된다.
+하네스 자체를 고칠 때: 사용자가 `workflowV2.mode` 를 `disabled` 로 내림(또는 `VAIS_HARNESS_OFF=1`) → 수정 → 검증 → 커밋 → `enforce` 복귀. mode 값이 잘못되면 열리지 않고 닫힘으로 실패하며 매 프롬프트에 경고가 뜬다. 실행 중 플러그인은 마켓플레이스 캐시 사본이라 push · 버전 bump · 업데이트 뒤에 반영된다.
 
 > 변경 이력: `CHANGELOG.md`

@@ -7,8 +7,7 @@ const { AuthorizationStore } = require('../lib/workflow/v2/authorization-store')
 const { recordAutomaticHandoff, isDeferredAgentResult } = require('../lib/workflow/v2/automatic-handoff');
 const { extractAssignmentId } = require('../lib/workflow/v2/agent-policy');
 const { PHASE_FOLDERS } = require('../lib/workflow/v2/document-manager');
-const { resolveProjectRoot, resolveStartDir } = require('./v2-project-context');
-const { loadMode } = require('./workflow-v2-prompt');
+const { resolveProjectRoot, resolveStartDir, resolveMode } = require('./v2-project-context');
 const { INTERNAL_COMMAND } = require('../scripts/vais-workflow-v2');
 
 function agentResult(input) {
@@ -60,7 +59,7 @@ function persistFromHook(input, projectRoot) {
 function main() {
   const input = readStdin();
   const projectRoot = resolveProjectRoot(resolveStartDir(input));
-  if (!projectRoot || loadMode(projectRoot) !== 'enforce') return outputEmpty();
+  if (!projectRoot || resolveMode(projectRoot).mode !== 'enforce') return outputEmpty();
   if (String(input.tool_name || input.toolName || '').toLowerCase() !== 'agent') return outputEmpty();
   try {
     const receipt = persistFromHook(input, projectRoot);

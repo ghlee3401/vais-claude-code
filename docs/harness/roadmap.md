@@ -1,6 +1,6 @@
 # VAIS 하네스 — 로드맵
 
-> 출처: [design.md](design.md) 2.13 절. 각 작업은 `/vais` Work item 하나로 진행하며 Plan → Design → Do → Review → Report 를 완주한다. 의존 작업이 Report 완료(frozen) 상태여야 다음 작업을 시작한다.
+> 출처: [design.md](design.md) 13절. 각 작업은 `/vais` Work item 하나로 진행하며 Plan → Design → Do → Review → Report 를 완주한다. 의존 작업이 Report 완료(frozen) 상태여야 다음 작업을 시작한다.
 
 | # | 작업 (feature slug) | 규모 | 의존 | 내용 | 완료 조건 |
 |---|---|---|---|---|---|
@@ -17,7 +17,7 @@
 
 | 작업 | 상태 | Work item |
 |---|---|---|
-| H1 | 미착수 | — |
+| H1 | 진행 중 | `WI-2026-09-15-harness-health` |
 | H2 | 미착수 | — |
 | H3 | 미착수 | — |
 | H4 | 미착수 | — |
