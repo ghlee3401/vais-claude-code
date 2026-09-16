@@ -25,6 +25,7 @@
     "affectedRequirements": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^REQ-[0-9]{3}$" } },
     "risks": { "type": "array", "items": { "type": "string", "minLength": 1 } },
     "unverified": { "type": "array", "items": { "type": "string", "minLength": 1 } },
-    "recommendedChecks": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" } }
+    "recommendedChecks": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" } },
+    "files": { "type": "array", "uniqueItems": true, "maxItems": 20, "items": { "type": "string", "minLength": 1, "maxLength": 200 } }
   }
 }

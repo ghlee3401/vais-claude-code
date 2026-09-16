@@ -1,0 +1,62 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-2e891693-4bc3-47c6-b24d-283444d66301",
+  "workItemId": "WI-2026-09-16-chain-stages",
+  "phase": "plan",
+  "action": "present",
+  "gate": {
+    "gate": "plan",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "plan-document",
+      "document-budget"
+    ],
+    "passed": [
+      "plan-document",
+      "document-budget"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-16T00:50:05.804Z"
+  },
+  "checks": [
+    {
+      "check": "plan-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/01-plan/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical plan document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/01-plan/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/01-plan/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 7060B is within the 10240B extended budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/01-plan/main.md"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "plan",
+    "status": "waiting-user"
+  }
+}

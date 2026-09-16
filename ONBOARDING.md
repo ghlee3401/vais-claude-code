@@ -21,6 +21,7 @@
 4. `hooks/workflow-v2-prompt.js` — 단계별 지침이 실제로 주입되는 곳
 5. `lib/workflow/v2/state-machine.js` + `router.js` — 상태 전이와 승인 문법 정본
 6. `contracts/v2-role-cards.json` — 역할 경계
+7. `contracts/chain-stages.json` + `contracts/work-kinds.json` — 제품 사슬 10단계와 작업 kind 정의 (데이터). 검사 로직은 `lib/workflow/v2/id-chain.js`
 
 ## 3. 동작 흐름 (1분)
 

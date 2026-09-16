@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.1.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-3.2.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -69,6 +69,25 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 | 최종 거절 | `/vais 거절` |
 
 `좋아`, `ok` 같은 모호한 답과 `조건부`, `대신` 이 섞인 문장은 승인으로 기록되지 않는다. `/vais` 가 없는 대화는 읽기 전용이다.
+
+## 작업 종류(kind)와 제품 사슬
+
+모든 작업은 `kind` 를 가진다. `feature`(기능), `ui`(화면 손보기), `bug`(버그), `harness`(플러그인 자체), 그리고 제품을 처음 세울 때 순서대로 거치는 **단계 kind** 10개다. 단계마다 정본 문서 하나가 `docs/product/` 에 생기고, 앞 단계가 승인되지 않으면 다음 단계는 시작할 수 없다.
+
+| 순서 | kind | 정본 | 항목 ID | 부모 |
+|---|---|---|---|---|
+| 1 | `stage-requirements` | `01-requirements.md` | REQ | 없음 |
+| 2 | `stage-features` | `02-features.md` | F | REQ |
+| 3 | `stage-screens` | `03-screens.md` + `flows/` | S | F |
+| 4 | `stage-wireframes` | `04-wireframes.md` + `wireframes/` | W | S |
+| 5 | `stage-design-system` | `05-design-system.md` | DS | 없음 |
+| 6 | `stage-mockups` | `06-mockups.md` + `mockups/` | V | W + DS |
+| 7 | `stage-data` | `07-data.md` | D | F |
+| 8 | `stage-api` | `08-api.md` | API | S 또는 F |
+| 9 | `stage-architecture` | `09-architecture.md` | T | 없음 |
+| 10 | `stage-test-plan` | `10-test-plan.md` | TC | F |
+
+정본 문서의 항목은 `### F-003 ← REQ-002` 제목과 `| 항목 | 내용 |` 표로 쓴다. runtime 이 부모 존재·허용 접두·필수 항목·산출물 파일·커버리지를 검사하고, 상위 항목이 바뀌면 하위 항목을 stale 로 표시한다. stale 은 그 단계를 다시 승인하거나 사용자가 `/vais 변경 없음 확인: F-003 ← REQ-002` 로 해소한다. 상태는 `stage status` 로 본다.
 
 ## 5단계
 

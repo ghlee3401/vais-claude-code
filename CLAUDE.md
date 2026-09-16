@@ -29,18 +29,18 @@ vais-claude-code/
 │   ├── workflow-v2-agent-handoff.js  # specialist handoff 자동 저장
 │   ├── workflow-v2-drift.js          # 변경 경로 기록
 │   ├── v2-project-context.js · run-node.sh
-├── lib/workflow/v2/          # 25 모듈: config(mode·설정 정본) · doctor · state-machine · work-item-store · phase-transaction ·
-│                             #   gate-engine · router · write-policy · tool-adapters · document-manager/quality · phase-check ·
-│                             #   context-capsule/view · repo-drift · role-registry · agent-policy · automatic-handoff …
+├── lib/workflow/v2/          # 27 모듈: config(mode·설정 정본) · doctor · chain-registry(단계·kind 카탈로그) · id-chain(ID 사슬·stale) ·
+│                             #   state-machine · work-item-store · phase-transaction · gate-engine · router · write-policy · tool-adapters ·
+│                             #   document-manager/quality · phase-check · context-capsule/view · repo-drift · role-registry · agent-policy · automatic-handoff …
+├── contracts/                # v2-role-cards.json · chain-stages.json(단계 10) · work-kinds.json(kind 14)
 ├── lib/core/state-store.js · lib/io.js · lib/context-metrics.js
 ├── scripts/vais-workflow-v2.js       # 내부 workflow CLI (hook 이 명령 형태를 지정)
 ├── scripts/checks/v2-secret-scan.js · scripts/vais-validate-plugin.js · scripts/vais-doctor.js · scripts/setup-dev.sh
-├── contracts/v2-role-cards.json      # 역할 정본 (23 role: c-level 7 · judgment 12 · implementation 4)
 ├── schemas/                  # work-item · specialist-assignment · specialist-handoff · check-result · gate-result ·
-│                             #   phase-transaction-receipt · review-evidence-prepare · automatic-handoff-evidence
+│                             #   phase-transaction-receipt · review-evidence-prepare · automatic-handoff-evidence · chain-stage · work-kinds
 ├── output-styles/vais-default.md
 ├── mcp/ · design-system/ · vendor/   # UI 설계용 design-system MCP (보류 — ui-loop 설계에서 결정)
-├── tests/v2-*.test.js (11) + tests/regression/ + tests/fixtures/mini-booking
+├── tests/v2-*.test.js (12) + tests/regression/(장면 A·F) + tests/fixtures/{mini-booking,product-stages}
 ├── vais.config.json          # version · plugin · workflowV2 만
 └── ONBOARDING.md · README.md · CLAUDE.md · CHANGELOG.md
 ```
@@ -60,9 +60,11 @@ vais-claude-code/
 9. **`/vais` 없는 대화는 읽기 전용.**
 10. **산출물** — `docs/work-items/{feature}/{YYYY-MM-DD-slug}/01-plan|02-design|03-do|04-review|05-report/main.md`. 첫 Plan 초안만 `.vais/v2/drafts/plan.md`, 이후 모든 초안(Plan 수정 포함)은 해당 phase 폴더의 `draft.md` 에 두고 `--body-file` 로 넘긴다 (승격 시 자동 삭제).
 10-1. **Feature 이름** — runtime 이 요청의 영어 단어에서 발급한다. 영어 단어가 없으면 AI 가 이름을 만들지 않고 사용자에게 묻는다. 사용자가 `/vais 이름: <kebab-case>` 로 준 이름만 CLI 가 받는다.
+10-2. **작업 kind** — 모든 Work item 은 `kind` 를 가진다 (`harness`·`feature`·`ui`·`bug`·`stage-*` 10, 정본 `contracts/work-kinds.json`). hook 이 제안하고 Plan 에 적어 사용자 확인 후 `plan present --kind` 로 넘긴다. 이 저장소 자체 작업은 `harness` 다.
+10-3. **제품 사슬** — `stage-*` kind 는 `docs/product/NN-*.md` 정본 하나를 만든다 (`contracts/chain-stages.json`). 항목은 `### F-003 ← REQ-002` 제목 + `| 항목 | 내용 |` 표. 앞 단계 승인·stale 없음이 진입 조건이고, `do ready` 의 `stage-document` 검사가 형식·부모·산출물·커버리지·예산을 본다. `report finalize` 가 정본을 approved 로 표시한다. stale 해소는 재승인 또는 사용자의 `/vais 변경 없음 확인: <항목> ← <부모>` 뿐이다.
 11. **ID** — `REQ-001`, `TC-001` 3자리. Design REQ 집합 = Plan REQ 집합, Review TC 집합 = Design TC 집합.
 12. **문서 예산** — compact / standard / extended byte 한도 (`lib/workflow/v2/document-quality.js`). 이전 단계 문장(80자 이상) 복사 금지.
-13. **check id 7종** — `test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan`.
+13. **check id** — Tool 7종 `test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan` + 내장 `stage-document`(단계 kind 전용).
 14. **Bash** — 한 번에 한 명령. `&&`, `|`, `;`, 리다이렉션, `$( )` 금지. 읽기는 Read/Grep 우선.
 15. **위험 명령 금지** — `rm -rf`, `git push --force`, `git commit --no-verify`. 민감 정보는 환경 변수로만.
 

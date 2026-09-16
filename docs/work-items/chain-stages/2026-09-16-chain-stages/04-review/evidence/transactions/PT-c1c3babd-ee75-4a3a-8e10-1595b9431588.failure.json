@@ -1,0 +1,68 @@
+{
+  "schema": "phase-transaction-failure/v1",
+  "transactionId": "PT-c1c3babd-ee75-4a3a-8e10-1595b9431588",
+  "workItemId": "WI-2026-09-16-chain-stages",
+  "phase": "review",
+  "code": "DOCUMENT_PREFLIGHT_FAILED",
+  "finding": "Canonical review document preflight failed: review-document",
+  "preflight": {
+    "schema": "document-preflight/v1",
+    "phase": "review",
+    "path": "docs/work-items/chain-stages/2026-09-16-chain-stages/04-review/main.md",
+    "checks": [
+      {
+        "check": "review-document",
+        "execution": "succeeded",
+        "verdict": "fail",
+        "required": true,
+        "scope": [
+          "docs/work-items/chain-stages/2026-09-16-chain-stages/04-review/main.md"
+        ],
+        "requirements": [],
+        "summary": "1 review document issue(s) found",
+        "findings": [
+          "Required review section is missing: input-output"
+        ],
+        "evidence": [
+          "docs/work-items/chain-stages/2026-09-16-chain-stages/04-review/main.md"
+        ]
+      },
+      {
+        "check": "document-budget",
+        "execution": "succeeded",
+        "verdict": "pass",
+        "required": true,
+        "scope": [
+          "docs/work-items/chain-stages/2026-09-16-chain-stages/04-review/main.md"
+        ],
+        "requirements": [
+          "REQ-009",
+          "REQ-026"
+        ],
+        "summary": "Authored Markdown 3565B is within the 10240B extended budget",
+        "findings": [],
+        "evidence": [
+          "docs/work-items/chain-stages/2026-09-16-chain-stages/04-review/main.md"
+        ]
+      },
+      {
+        "check": "document-repetition",
+        "execution": "succeeded",
+        "verdict": "pass",
+        "required": true,
+        "scope": [
+          "docs/work-items/chain-stages/2026-09-16-chain-stages/04-review/main.md"
+        ],
+        "requirements": [
+          "REQ-026"
+        ],
+        "summary": "No long authored sentence is copied from an earlier phase",
+        "findings": [],
+        "evidence": [
+          "docs/work-items/chain-stages/2026-09-16-chain-stages/04-review/main.md"
+        ]
+      }
+    ]
+  },
+  "recordedAt": "2026-09-16T04:24:18.618Z"
+}

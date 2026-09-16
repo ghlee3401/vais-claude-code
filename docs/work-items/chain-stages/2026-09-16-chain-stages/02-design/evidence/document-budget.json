@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/chain-stages/2026-09-16-chain-stages/02-design/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 10253B is within the 18432B extended budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/chain-stages/2026-09-16-chain-stages/02-design/main.md"
+  ]
+}

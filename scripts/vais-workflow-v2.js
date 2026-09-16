@@ -23,6 +23,7 @@ const { runPhaseTransaction, prepareReviewEvidence, canonicalWriteScopes } = req
 const { buildCheckIdentity, reviewEvidenceManifest } = require('../lib/workflow/v2/check-evidence');
 const { recordDeferredHandoff } = require('../lib/workflow/v2/automatic-handoff');
 const { runDoctor } = require('../lib/workflow/v2/doctor');
+const { chainStatus, confirmUnchanged, reindex } = require('../lib/workflow/v2/id-chain');
 
 const INTERNAL_COMMAND = `node ${JSON.stringify(__filename)}`;
 
@@ -123,6 +124,7 @@ function create(projectRoot, options) {
     primaryFeature: requireOption(options, 'feature'),
     affectedFeatures: options.affected || [],
     scale: requireOption(options, 'scale'),
+    ...(options.kind && options.kind !== true ? { kind: String(options.kind) } : {}),
   });
   assertContract('workItem', item);
   store.acquireLease(item.id, sessionId);
@@ -546,6 +548,22 @@ function recordHandoff(projectRoot, options) {
   return recordDeferredHandoff(projectRoot, { workItemId: id, sessionId, assignmentId, handoffFile });
 }
 
+// `stage confirm` records that a changed parent does not affect a child. The pair must have
+// been declared by the user in this session (`/vais 변경 없음 확인: F-003 ← REQ-002`); the
+// prompt hook stores it in the authorization, so the AI cannot confirm on its own.
+function stageConfirm(projectRoot, options) {
+  const sessionId = requireOption(options, 'session');
+  const item = requireOption(options, 'item').toUpperCase();
+  const parent = requireOption(options, 'parent').toUpperCase();
+  const authorization = new AuthorizationStore(projectRoot).get(sessionId);
+  const confirmed = (authorization?.stageConfirmations || []).some(entry =>
+    String(entry.item).toUpperCase() === item && String(entry.parent).toUpperCase() === parent);
+  if (!confirmed) {
+    throw new Error(`사용자가 \`/vais 변경 없음 확인: ${item} ← ${parent}\` 로 직접 확인해야 한다`);
+  }
+  return confirmUnchanged(projectRoot, item, parent);
+}
+
 function contextCapsule(projectRoot, options) {
   const store = new WorkItemStore(projectRoot);
   const item = options.id && options.id !== true ? store.get(String(options.id)) : store.getCurrent();
@@ -581,6 +599,7 @@ function phaseTransaction(projectRoot, phase, action, options) {
     primaryFeature: options.feature && options.feature !== true ? String(options.feature) : undefined,
     affectedFeatures: options.affected || [],
     scale: options.scale && options.scale !== true ? String(options.scale) : undefined,
+    kind: options.kind && options.kind !== true ? String(options.kind) : undefined,
     bodyFile: options['body-file'] && options['body-file'] !== true ? String(options['body-file']) : undefined,
     revision,
     writeScopes: options.scope,
@@ -624,8 +643,11 @@ function execute(argv = process.argv.slice(2), projectRoot = null) {
   if (command === 'search') return { matches: searchRelatedWork(root, requireOption(options, 'query'), { primaryFeature: options.feature }) };
   if (command === 'context') return contextCapsule(root, options);
   if (command === 'doctor') return runDoctor(root);
+  if (command === 'stage' && subcommand === 'status') return chainStatus(root);
   let result;
   if (command === 'create') result = create(root, options);
+  else if (command === 'stage' && subcommand === 'confirm') result = stageConfirm(root, options);
+  else if (command === 'stage' && subcommand === 'reindex') result = { schema: 'chain-index/v1', ...reindex(root) };
   else if (command === 'event') result = applyEvent(root, options);
   else if (command === 'pending') result = queuePending(root, options);
   else if (command === 'assignment') result = buildAssignment(root, options);
@@ -672,6 +694,7 @@ module.exports = {
   parseArgs,
   generatedWorkItemId,
   assertNewFeatureSlug,
+  stageConfirm,
   preparePlan,
   refreshAuthorization,
   create,

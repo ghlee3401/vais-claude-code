@@ -1,0 +1,203 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-89cfa0b2-86d4-44fc-bc01-6e3aa3151c92",
+  "workItemId": "WI-2026-09-16-chain-stages",
+  "phase": "do",
+  "action": "ready",
+  "gate": {
+    "gate": "readiness",
+    "verdict": "READY",
+    "requiredChecks": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "test",
+      "lint",
+      "plugin-validator"
+    ],
+    "passed": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "test",
+      "lint",
+      "plugin-validator"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-16T04:14:19.930Z"
+  },
+  "checks": [
+    {
+      "check": "do-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/03-do/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical do document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 3975B is within the 6144B extended budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/03-do/main.md"
+      ]
+    },
+    {
+      "check": "specialist-handoffs",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "contracts/**",
+        "schemas/**",
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "All Design-required specialist handoffs are uniquely consumed and complete",
+      "findings": [],
+      "evidence": []
+    },
+    {
+      "check": "test",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "contracts/**",
+        "schemas/**",
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/03-do/evidence/logs/test.log"
+      ]
+    },
+    {
+      "check": "lint",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "contracts/**",
+        "schemas/**",
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/03-do/evidence/logs/lint.log"
+      ]
+    },
+    {
+      "check": "plugin-validator",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "contracts/**",
+        "schemas/**",
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/chain-stages/2026-09-16-chain-stages/03-do/evidence/logs/plugin-validator.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "review",
+    "status": "active"
+  }
+}

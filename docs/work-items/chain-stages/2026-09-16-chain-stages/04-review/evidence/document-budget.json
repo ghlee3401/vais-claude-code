@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/chain-stages/2026-09-16-chain-stages/04-review/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 3699B is within the 10240B extended budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/chain-stages/2026-09-16-chain-stages/04-review/main.md"
+  ]
+}

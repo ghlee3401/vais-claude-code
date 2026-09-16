@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vais.local/schemas/work-kinds.schema.json",
+  "title": "VAIS work kind catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "defaultKind", "legacyKind", "kinds"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "defaultKind": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "legacyKind": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "kinds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "reads", "touches", "updates", "planTemplate", "designTemplate", "repairLimit", "entryRequires", "autoWriteScopes", "triggers"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "title": { "type": "string", "minLength": 1 },
+          "stage": { "type": "string", "pattern": "^stage-[a-z0-9-]+$" },
+          "reads": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+          "touches": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Z]{1,4}$" } },
+          "updates": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+          "planTemplate": { "enum": ["full", "one-line"] },
+          "designTemplate": { "enum": ["full", "options"] },
+          "repairLimit": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "entryRequires": { "type": ["string", "null"], "pattern": "^stage-[a-z0-9-]+$" },
+          "autoWriteScopes": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^docs/[a-z0-9-]+/.+$" } },
+          "triggers": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+        }
+      }
+    }
+  }
+}

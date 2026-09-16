@@ -15,6 +15,8 @@ const { loadRoleCatalog, resolveRole, buildRolePrompt } = require('../lib/workfl
 const { resolveProjectRoot, resolveStartDir, extractPrompt, resolveMode, warningLine } = require('./v2-project-context');
 const { deterministicSlug } = require('../lib/workflow/v2/naming');
 const { PHASE_FOLDERS } = require('../lib/workflow/v2/document-manager');
+const { suggestKind, getKind, kindOf, isStageKind, stageOfKind } = require('../lib/workflow/v2/chain-registry');
+const { assertStageEntry } = require('../lib/workflow/v2/id-chain');
 
 const INACTIVE_LINE = '[VAIS · 하네스 비활성]';
 
@@ -77,6 +79,7 @@ const HELP_LINES = Object.freeze([
   '| `/vais plan 승인` · `/vais design 승인` · `/vais 최종 승인` | Gate 통과 (`/vais 승인` 도 현재 Gate 에 적용) |',
   '| `/vais 거절 <이유>` | 최종 결과 거절 → Design 복귀 |',
   '| `/vais 이름: <kebab-case>` | 영어 단어가 없는 요청의 Feature 이름 확정 |',
+  '| `/vais 변경 없음 확인: F-003 ← REQ-002` | 상위 항목이 바뀌었지만 하위 항목은 그대로임을 사용자가 확인 (stale 해소) |',
   '| `/vais status` (`상태`) | 현재 작업·단계·대기 요청 (읽기) |',
   '| `/vais doctor` | 하네스 건강검진 (읽기) |',
   '| `/vais help` (`도움말`) | 이 표 |',
@@ -85,23 +88,64 @@ const HELP_LINES = Object.freeze([
   '`좋아`, `ok` 같은 모호한 답과 조건부·대리 표현은 승인이 아니다. `/vais` 없는 대화는 읽기 전용이다.',
 ]);
 
-function phaseGuidance(item, sessionId, requestSlug = null) {
+function kindLines(suggestion) {
+  if (!suggestion) return [];
+  const kind = getKind(suggestion.kind);
+  const lines = [
+    `runtime 이 제안하는 작업 kind 는 \`${suggestion.kind}\`${suggestion.trigger ? ` (요청의 "${suggestion.trigger}")` : ' (기본값)'} 다. Plan 에 kind 를 적어 사용자 확인을 받고 \`plan present\` 에 \`--kind ${suggestion.kind}\` 를 넘긴다. 다른 kind 가 맞으면 사용자에게 물어 정한다.`,
+  ];
+  if (suggestion.locked) {
+    lines.push(`이 kind 는 지금 시작할 수 없다: ${suggestion.locked}. 사용자에게 그대로 알리고 Work item 을 만들지 않는다.`);
+  } else if (isStageKind(kind)) {
+    const stage = stageOfKind(kind);
+    lines.push(`단계 kind 의 Plan 은 세 줄이면 된다: "요청 확인: <한 줄>", "kind: ${kind.id}", "단계: ${stage.order} ${stage.title}". 예산 2,048B.`);
+  }
+  return lines;
+}
+
+function stagePhaseLines(item, kind, stage, sessionId) {
+  const scopes = (kind.autoWriteScopes || []).map(scope => `--scope "${scope}"`).join(' ');
+  return {
+    plan: [
+      `이 작업은 ${stage.order}단계 ${stage.title} (kind ${kind.id}) 다. Plan 은 "요청 확인: <한 줄>", "kind: ${kind.id}", "단계: ${stage.order} ${stage.title}" 세 줄이면 된다.`,
+    ],
+    design: [
+      `Design 은 고르기 목록이다: "## 안 1" … (규모별 상한 compact 1 · standard 2 · extended 3), "쓰기 범위" 에 ${kind.autoWriteScopes.join(', ')}, readiness·review check 는 \`stage-document\`, rollback 한 줄.`,
+      `\`${INTERNAL_COMMAND} design present --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <design-draft> ${scopes} --readiness-check stage-document --review-check stage-document\`을 한 번 실행한다.`,
+    ],
+    do: [
+      `정본 \`${stage.file}\` 을 쓴다: frontmatter (schema: vais-stage/v1, stage: ${stage.id}, status: draft) + 항목마다 "### ${stage.idPrefix}-001${stage.parents?.required ? ' ← <부모 ID>' : ''}" 제목과 "| 항목 | 내용 |" 표. 필수 항목: ${stage.requiredFields.join(', ')}.${stage.documentSections ? ` 문서 섹션(## 제목): ${stage.documentSections.join(', ')}.` : ''}${stage.parents?.allowed?.length ? ` 부모는 승인된 상위 ID 만 (허용 접두: ${stage.parents.allowed.join(', ')}).` : ''}${stage.artifactDir ? ` 산출물(${(stage.artifactFields || []).join(', ')})은 \`${stage.artifactDir}/\` 아래 실제 파일이어야 한다.` : ''}`,
+      `그 뒤 짧은 Do 본문을 쓰고 \`${INTERNAL_COMMAND} do ready --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <do-draft>\` 를 한 번 실행한다. transaction 이 \`stage-document\` 검사(형식·부모·산출물·예산·커버리지)를 실행한다.`,
+    ],
+    report: [
+      `\`report finalize\` 가 \`${stage.file}\` 을 approved 로 표시하고 chain-index 에 항목 해시를 기록한다.`,
+    ],
+  };
+}
+
+function phaseGuidance(item, sessionId, requestSlug = null, options = {}) {
   if (!item) {
     if (!requestSlug) {
       return [
         'CEO가 단일 대화 창구다. 관련 작업을 검색하고 Feature 관계·규모를 제안한 뒤 사용자 확인을 받는다.',
         '이 요청에는 영어 단어가 없어 runtime 이 Feature 이름을 정하지 못했다. 사용자에게 kebab-case 영어 이름(예: `reading-log`)을 묻고, 사용자가 `/vais 이름: <name>` 으로 답할 때까지 Work item 을 만들지 않는다. AI 가 이름을 대신 정하면 CLI 가 거부한다.',
+        ...kindLines(options.kindSuggestion),
       ];
     }
+    const kindFlag = options.kindSuggestion ? ` --kind ${options.kindSuggestion.kind}` : '';
     return [
       'CEO가 단일 대화 창구다. 관련 작업을 검색하고 Feature 관계·규모를 제안한 뒤 사용자 확인을 받는다.',
       '확인 전에는 Work item을 만들지 않는다. 확인 후 Plan 본문을 `.vais/v2/drafts/plan.md`에 작성한다.',
       `이 요청에 런타임이 발급한 결정적 새 Feature slug는 \`${requestSlug}\`다. new 관계면 다른 이름을 만들지 않는다.`,
-      `\`${INTERNAL_COMMAND} plan present --slug ${requestSlug} --title "<title>" --feature <feature> --relation <new|existing> --scale <compact|standard|extended> --session ${sessionId} --revision 1 --body-file .vais/v2/drafts/plan.md\`을 한 번 실행한다.`,
+      ...kindLines(options.kindSuggestion),
+      `\`${INTERNAL_COMMAND} plan present --slug ${requestSlug} --title "<title>" --feature <feature> --relation <new|existing> --scale <compact|standard|extended>${kindFlag} --session ${sessionId} --revision 1 --body-file .vais/v2/drafts/plan.md\`을 한 번 실행한다.`,
       '이 transaction이 Work item·Plan 검사·Gate를 처리한다. PASS일 때만 승인 요청하며, 실패하면 evidence finding만 고쳐 재실행한다.',
       'CPO Plan은 별도 Ideation 문서 없이 문제·목표·범위·REQ·흐름·엣지 케이스·완료 조건·영향만 담고 구현 결정은 Design에 남긴다. 요구사항 ID는 REQ-001처럼 3자리 형식으로 쓴다.',
     ];
   }
+  const kind = kindOf(item);
+  const stage = stageOfKind(kind);
+  const stageLines = stage ? stagePhaseLines(item, kind, stage, sessionId) : null;
   const byPhase = {
     plan: [
       'CPO가 요구사항·사용자 흐름·엣지 케이스를 구현 독립적으로 확정한다. 요구사항 ID는 REQ-001처럼 3자리 형식으로 쓴다.',
@@ -131,12 +175,16 @@ function phaseGuidance(item, sessionId, requestSlug = null) {
     ],
   };
   const ownerByPhase = { plan: 'cpo', design: 'cto', do: 'cto', review: 'independent-qa', report: 'ceo' };
+  if (stage && stage.owner && ['plan', 'design', 'do'].includes(item.phase)) ownerByPhase[item.phase] = stage.owner;
   const owner = resolveRole(loadRoleCatalog(), ownerByPhase[item.phase]);
   const ownerPrompt = owner?.kind === 'role' ? buildRolePrompt(owner.role) : '';
+  const phaseLines = stageLines && stageLines[item.phase]
+    ? (item.phase === 'report' ? [...(byPhase.report || []), ...stageLines.report] : stageLines[item.phase])
+    : (byPhase[item.phase] || []);
   return [
     `먼저 \`${INTERNAL_COMMAND} context --id ${item.id} --phase ${item.phase} --role ${ownerByPhase[item.phase]}\`로 bounded Context Capsule을 한 번 읽고, 원문 전체 재탐색은 capsule이 부족할 때만 한다.`,
     ...(ownerPrompt ? [`Current phase owner card (execute this responsibility in the main VAIS voice; do not spawn the owner as a specialist):\n${ownerPrompt}`] : []),
-    ...(byPhase[item.phase] || []),
+    ...phaseLines,
   ];
 }
 
@@ -196,11 +244,16 @@ function buildContext(route, item, leaseError, sessionId = '<session>', options 
   }
   if (route.action === 'name-feature') {
     lines.push(`사용자가 Feature 이름 \`${route.slug}\` 을 확정했고 runtime 이 등록했다. 이 이름으로 Plan 을 진행한다.`);
-    lines.push(...phaseGuidance(null, sessionId, route.slug));
+    lines.push(...phaseGuidance(null, sessionId, route.slug, options));
+    return lines.join('\n');
+  }
+  if (route.action === 'stage-confirm-unchanged') {
+    lines.push(`사용자가 ${route.item} ← ${route.parent} 의 변경 없음을 확인했고 runtime 이 이 세션에 등록했다.`);
+    lines.push(`\`${INTERNAL_COMMAND} stage confirm --session ${sessionId} --item ${route.item} --parent ${route.parent}\` 를 한 번 실행하고, \`${INTERNAL_COMMAND} stage status\` 로 남은 stale 을 보여준다.`);
     return lines.join('\n');
   }
   lines.push('현재 Work item과 event 상태 머신의 transaction을 순서대로 처리한다. 사용자 결정 Gate나 BLOCKED/FAIL에서만 멈추며, C-Level이나 Phase 직접 호출로 Gate를 우회하지 않는다.');
-  lines.push(...phaseGuidance(item, sessionId, !item ? deterministicSlug(route.text) : null));
+  lines.push(...phaseGuidance(item, sessionId, !item ? deterministicSlug(route.text) : null, options));
   if (!route.mutationAllowed) lines.push('이 action은 읽기 전용이다.');
   return lines.join('\n');
 }
@@ -257,6 +310,19 @@ function requestSlugFor(route) {
   return null;
 }
 
+// Kind suggestion for a new request, with the entry-lock reason when the stage cannot start.
+function kindSuggestionFor(projectRoot, route) {
+  if (!['start-request', 'name-feature'].includes(route.action)) return null;
+  const suggestion = suggestKind(route.text);
+  let locked = null;
+  try {
+    assertStageEntry(projectRoot, getKind(suggestion.kind));
+  } catch (error) {
+    locked = error.message;
+  }
+  return { ...suggestion, locked };
+}
+
 function main() {
   const input = readStdin();
   const projectRoot = resolveProjectRoot(resolveStartDir(input));
@@ -309,10 +375,11 @@ function main() {
       phase: active?.phase || 'plan',
       action: route.action === 'name-feature' ? 'start-request' : route.action,
       requestSlug: requestSlugFor(route),
+      stageConfirmations: route.action === 'stage-confirm-unchanged' ? [{ item: route.item, parent: route.parent }] : [],
       allowedPaths: defaultAllowedPaths(active),
       allowedCommands: [INTERNAL_COMMAND],
     });
-    return emit(buildContext(route, active, null, sessionId));
+    return emit(buildContext(route, active, null, sessionId, { kindSuggestion: kindSuggestionFor(projectRoot, route) }));
   } catch (error) {
     authStore.revoke(sessionId);
     return emit(buildContext(route, routeItem, error.message, sessionId));
@@ -333,6 +400,9 @@ module.exports = {
   applyDeterministicRoute,
   observePromptDrift,
   requestSlugFor,
+  kindSuggestionFor,
+  kindLines,
+  stagePhaseLines,
   main,
 };
 

@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.2.0] - 2026-09-16
+
+> 로드맵 H2 `chain-stages`. 제품 사슬 1~10 단계를 데이터로 정의하고 각 단계를 5단계 커널 위의 작업(kind)으로 돌린다. 관문은 묶지 않는다 (사용자 결정 2026-09-16).
+
+### Added
+
+- **단계·kind 카탈로그** `contracts/chain-stages.json`(10 단계: ID 접두·정본 파일·필수 항목·부모표·커버리지·산출물·owner·specialist·고르기/확인) 과 `contracts/work-kinds.json`(harness·feature·ui·bug + stage 10) — `schemas/chain-stage.schema.json`, `schemas/work-kinds.schema.json` 으로 ajv 검증, 로더 `lib/workflow/v2/chain-registry.js`
+- **Work item `kind`** — `createInitialWorkItem` 과 schema 에 `kind`, 없는 기존 작업은 `harness` 로 읽음. `plan present --kind`. prompt hook 이 요청 문구의 트리거로 kind 를 제안하고 진입 잠금 상태를 알림
+- **진입 잠금** — `stage-N` 작업은 `stage-(N-1)` 정본이 approved 이고 stale 이 없을 때만 생성 (`STAGE_ENTRY_LOCKED`, `STAGE_STALE_BLOCK`)
+- **ID 사슬** `lib/workflow/v2/id-chain.js` — `### ID ← 부모` 문서 파서, 부모 필수·허용·존재 검사(오타 후보 제시), 필수 항목·문서 섹션·산출물 파일·커버리지·예산(1,024B + 항목당 1,536B) 검사, `.vais/v2/chain-index.json` 에 승인 항목 해시·parentHashes 기록, stale 계산, `stage confirm`(사용자가 `/vais 변경 없음 확인: F-003 ← REQ-002` 로 선언한 쌍만 허용), `stage status`, `stage reindex`
+- **내장 검사 `stage-document`** — 단계 kind 의 `do ready`·Review 에서 transaction 안에서 실행. `report finalize` 가 정본을 approved 로 표시하고 index 를 갱신
+- **kind 별 양식** — 단계 kind 는 one-line Plan(요청 확인·kind·단계)과 options Design(안 목록, 규모별 1/2/3)·예산 Plan 2,048B·Design 6,144B·Do 2,560B·Review 4,096B. 쓰기 범위는 kind 의 autoWriteScopes(`docs/product/**` 안)
+- **handoff `files`** — specialist 가 쓴 파일 목록. assignment write scope 밖이거나 읽기 전용이면 거부
+- **회귀 장면 A** `tests/regression/scene-a-first-product.test.js` — fixture 제품 문서 10종으로 1~10 단계를 CLI 로 완주, 건너뛰기·부모 오타·stale·reindex 포함. `tests/v2-chain-stages.test.js` REQ-001~013 단위 테스트
+- `qaRepairCount` 상한이 kind 의 `repairLimit`(ui 5) 을 따름
+
+### Changed
+
+- `docs/harness/design.md` 대응표 상태(H1·H2 완료 표시), `docs/harness/roadmap.md` H1 완료·H2 진행, README 에 kind·제품 사슬 표
+
 ## [3.1.0] - 2026-09-15
 
 > 하네스 재구성 1단계. Legacy 를 전부 걷어내고(롤백 태그 `v3.0.1-legacy`), 설계 정본 `docs/harness/` 를 확정한 뒤, 로드맵 H1 `harness-health` 로 하네스가 조용히 죽거나 엉뚱한 이름을 붙이거나 읽기까지 막던 결함을 고쳤다.

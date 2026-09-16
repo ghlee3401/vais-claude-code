@@ -1,0 +1,81 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-16-chain-stages",
+  "assignmentId": "AS-63b698c5-2c47-45a9-ae53-67bc402711f8",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "1c1648a1cc6ba3c61240f00db9f0de5e84f1e7cf61903010ef6e577d2e833d97",
+  "handoffDigest": "11c9cff2bcf3f17dce556ef854d1aa7739265aed91ce7db525252b04a4860cee",
+  "persistedAt": "2026-09-16T04:23:48.721Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "TC-001~013 전부 충족. 단위 16건·장면 A·회귀 5건을 직접 실행해 통과했고, 부정 케이스 7종(scope 밖·건너뛰기·부모 오타·파일 없음·읽기 전용 handoff·AI 단독 confirm·full 양식)을 재현 확인. 잔여 결함은 risks 참조.",
+    "decisions": [
+      "TC-008 scope 부정 케이스는 자체 테스트로 보강 확인",
+      "산출물 ../ 우회는 TC-011 범위 밖이라 risk 로 분류",
+      "부모 삭제 시 stale 미발생은 REQ-007 해석상 risk",
+      "doctor version-sync PASS, 캐시 경고는 Plan §8 예정"
+    ],
+    "behavior": {
+      "inputs": [
+        "Plan/Design 정본 + 카탈로그·schema 4종",
+        "lib v2 12 모듈·hook·CLI·docs·버전 6곳",
+        "tests 2종 + fixture 10종 + 산출물 8개",
+        "receipt 4종 + 자체 실행 결과"
+      ],
+      "outputs": [
+        "v2-chain-stages 16/16 pass",
+        "npm run regression 5/5 pass (장면 A·F)",
+        "scratch 부정 케이스 5/5 pass",
+        "doctor fail 0 · warn 1(plugin-cache)"
+      ],
+      "errors": [
+        "scope 밖→must stay under docs/product/",
+        "건너뛰기→1단계 요구사항 정의서가 먼저",
+        "REQ-009→승인된 부모가 없다 + 후보 제시",
+        "AI confirm→사용자 직접 확인 요구 거부"
+      ]
+    },
+    "evidence": [
+      "docs/work-items/chain-stages/2026-09-16-chain-stages/03-do/evidence/checks/{test,lint,plugin-validator}.json pass",
+      "04-review/evidence/checks/secret-scan.json pass; node --test unit 16 + regression 5 직접 실행 모두 pass",
+      "scratchpad/qa-negative.test.js: src/**·docs/work-items·../ scope 거부, full Plan 거부, 안 상한, impl 계약 files 허용 확인",
+      "npm run doctor version-sync 3.2.0 5곳 일치(+marketplace 2회 grep); roadmap H1 완료·H2 진행, design.md 완료(H2)"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-010",
+      "REQ-011",
+      "REQ-012",
+      "REQ-013"
+    ],
+    "risks": [
+      "산출물 값 ../ 로 artifactDir 밖 파일 통과",
+      "부모 항목 삭제 후 재승인 시 자식 stale 안 됨",
+      "TC-008 scope 단위 테스트가 인가 오류로 조기 종료",
+      "실행 플러그인 3.1.0, push·bump 전 미반영"
+    ],
+    "unverified": [
+      "실제 Claude 세션의 hook 주입 문구",
+      "npm test 전체 셋은 receipt 로만 확인"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

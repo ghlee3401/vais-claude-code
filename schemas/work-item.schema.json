@@ -37,6 +37,7 @@
       "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9/-]*$" }
     },
     "scale": { "enum": ["compact", "standard", "extended"] },
+    "kind": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
     "phase": { "enum": ["plan", "design", "do", "review", "report"] },
     "status": { "enum": ["active", "waiting-user", "blocked", "paused", "completed", "cancelled"] },
     "planRevision": { "type": "integer", "minimum": 1 },
@@ -62,7 +63,7 @@
       "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
     },
     "readinessNotReadyCount": { "type": "integer", "minimum": 0, "maximum": 3 },
-    "qaRepairCount": { "type": "integer", "minimum": 0, "maximum": 3 },
+    "qaRepairCount": { "type": "integer", "minimum": 0, "maximum": 5 },
     "approvals": {
       "type": "object",
       "additionalProperties": false,

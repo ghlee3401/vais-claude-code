@@ -141,13 +141,14 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 
 | 설계 요소 | 파일 / 모듈 | 상태 |
 |---|---|---|
-| 단계 정의 11 (필수 항목·검사·고르기·확인·owner) | `contracts/chain-stages.json` | 신규 |
-| kind 정의 (feature·ui·bug·stage-*) | `contracts/work-kinds.json` | 신규 |
-| ID 파싱·부모 검사·stale 전파 | `lib/workflow/v2/id-chain.js` | 신규 |
-| 단계 문서 저장 transaction (`stage present`) | `lib/workflow/v2/phase-transaction.js` 확장 + `scripts/vais-workflow-v2.js` | 변경 |
-| Work item `kind` 필드·진입 조건 | `lib/workflow/v2/state-machine.js`, `work-item-store.js`, `schemas/work-item.schema.json` | 변경 |
+| 단계 정의 11 (필수 항목·검사·고르기·확인·owner) | `contracts/chain-stages.json` | 완료 (H2) |
+| kind 정의 (feature·ui·bug·stage-*) | `contracts/work-kinds.json` | 완료 (H2) |
+| 단계·kind 로더 | `lib/workflow/v2/chain-registry.js` | 완료 (H2) |
+| ID 파싱·부모 검사·stale 전파·chain-index | `lib/workflow/v2/id-chain.js` | 완료 (H2) |
+| 단계 문서 검사·승인 (`stage-document` 내장 검사, `report finalize` 승인, `stage status/confirm/reindex`) | `lib/workflow/v2/phase-transaction.js`, `scripts/vais-workflow-v2.js` | 완료 (H2) |
+| Work item `kind` 필드·진입 조건·kind 별 양식·예산 | `state-machine.js`, `phase-check.js`, `document-quality.js`, `schemas/work-item.schema.json` | 완료 (H2) |
 | 화면 확인 정지점 (ui kind) | `state-machine.js` 이벤트 `USER_SCREEN_CONFIRMED` / `USER_SCREEN_REVISE`, `router.js` | 변경 |
-| 수정 루프 상한 5 | `state-machine.js` (`qaRepairCount` 상한 3→5) | 변경 |
+| 수정 루프 상한 (kind 의 `repairLimit`, ui 5) | `state-machine.js`, `contracts/work-kinds.json` | 완료 (H2) |
 | 장부 | `lib/workflow/v2/ledger.js`, `schemas/ledger-entry.schema.json`, `.vais/v2/ledger.jsonl` | 신규 |
 | 제품 노트 4면 렌더링 | `lib/workflow/v2/product-note.js` (README·roadmap·decisions) | 신규 |
 | 제안 엔진 | `lib/workflow/v2/proposal.js` | 신규 |
@@ -158,22 +159,23 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 명령 다섯 + 제안·기록 | `lib/workflow/v2/router.js`, `scripts/vais-workflow-v2.js` | 변경 |
 | 설명 명령 | `lib/workflow/v2/explain.js` | 신규 |
 | 저장·되돌리기 | `lib/workflow/v2/vcs.js` (버전 6곳 동기화·revert 목록) | 신규 |
-| doctor | `lib/workflow/v2/doctor.js`, `scripts/vais-doctor.js` | 신규 |
-| mode 정규화·fail-loud·비상 스위치 | `hooks/workflow-v2-prompt.js`(`loadMode`), 4 hook 공통 | 변경 |
-| 읽기 명령·scratchpad 허용 | `lib/workflow/v2/write-policy.js` | 변경 |
-| lease·TTL·prefix 를 config 에서 읽기 | `work-item-store.js`, `authorization-store.js`, `router.js` | 변경 |
-| slug: 한글 요청 → 로마자 대신 사용자 확인 슬러그 | `lib/workflow/v2/naming.js`, prompt hook | 변경 |
-| Plan 초안 경로 = 01-plan/draft.md 로 통일 | prompt hook 지침, `write-policy.js` | 변경 |
-| 버전 도장 | `phase-transaction.js` receipt, `schemas/phase-transaction-receipt.schema.json` | 변경 |
+| doctor | `lib/workflow/v2/doctor.js`, `scripts/vais-doctor.js` | 완료 (H1) |
+| mode 정규화·fail-loud·비상 스위치 | `lib/workflow/v2/config.js`(`resolveMode`), 4 hook 공통 | 완료 (H1) |
+| 읽기 명령·scratchpad 허용 | `lib/workflow/v2/write-policy.js` | 완료 (H1) |
+| lease·TTL 을 config 에서 읽기 (prefix 는 삭제) | `config.js`, `work-item-store.js`, `authorization-store.js` | 완료 (H1) |
+| slug: 한글 요청 → 사용자가 `/vais 이름:` 으로 확정 | `lib/workflow/v2/naming.js`, `router.js`, prompt hook | 완료 (H1) |
+| Plan 초안 경로 = 01-plan/draft.md 로 통일 | prompt hook 지침 | 완료 (H1) |
+| 버전 도장 | `phase-transaction.js` receipt, `schemas/phase-transaction-receipt.schema.json` | 완료 (H1) |
 | Claude Code 접점 어댑터 (hook 입력·도구 이름·Agent 결과) | `lib/io.js` | 변경 |
 | 별도 Agent 세 조건 guard, 역할 프롬프트 조립 | `lib/workflow/v2/agent-policy.js`, `role-registry.js` | 변경 |
-| 회귀 세트 | `tests/regression/*.test.js` (장면 6) | 신규 |
+| 회귀 세트 | `tests/regression/*.test.js` (장면 6 중 A·F 완료, 나머지 H3~H6) | 진행 중 |
+| specialist 산출물 직접 기록 (handoff `files`) | `schemas/specialist-handoff.schema.json`, `lib/workflow/v2/automatic-handoff.js` | 완료 (H2) |
 | 역할 modelHint | `contracts/v2-role-cards.json` | 변경 |
 | 검사 어댑터 `screenshot-compare` 자리 | `lib/workflow/v2/tool-adapters.js` | 변경 |
 | 화면 산출물 렌더링·스크린샷 | `lib/workflow/v2/screen-capture.js` (Chrome 헤드리스) | 신규 |
 | 검수 페이지 (로컬 HTML) | `lib/workflow/v2/review-page.js` → `04-review/evidence/review.html` | 신규 |
 | 회차 diff 요약 (UI 수정 루프) | `lib/workflow/v2/diff-summary.js` | 신규 (H4) |
-| 하네스 설정 정본·mode 판정 | `lib/workflow/v2/config.js` | 신규 (H1) |
+| 하네스 설정 정본·mode 판정 | `lib/workflow/v2/config.js` | 완료 (H1) |
 | 앱 실행 (확인 단계) | `vais.config.json > run.command`, `tool-adapters.js` `serve` | 신규 |
 | 응답 형식 | `output-styles/vais-default.md` | 변경 |
 | 사용 문서 | `README.md`, `ONBOARDING.md`, `CLAUDE.md` | 변경 |
