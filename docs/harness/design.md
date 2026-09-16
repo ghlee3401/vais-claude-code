@@ -149,12 +149,12 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | Work item `kind` 필드·진입 조건·kind 별 양식·예산 | `state-machine.js`, `phase-check.js`, `document-quality.js`, `schemas/work-item.schema.json` | 완료 (H2) |
 | 화면 확인 정지점 (ui kind) | `state-machine.js` 이벤트 `USER_SCREEN_CONFIRMED` / `USER_SCREEN_REVISE`, `router.js` | 변경 |
 | 수정 루프 상한 (kind 의 `repairLimit`, ui 5) | `state-machine.js`, `contracts/work-kinds.json` | 완료 (H2) |
-| 장부 | `lib/workflow/v2/ledger.js`, `schemas/ledger-entry.schema.json`, `.vais/v2/ledger.jsonl` | 신규 |
-| 제품 노트 4면 렌더링 | `lib/workflow/v2/product-note.js` (README·roadmap·decisions) | 신규 |
-| 제안 엔진 | `lib/workflow/v2/proposal.js` | 신규 |
-| 세션 브리핑 | `hooks/session-start.js` (v2 기반 재작성) | 신규 |
-| 상태 줄 | `scripts/vais-statusline.js` | 신규 |
-| Stop 잠금 | `hooks/workflow-v2-stop.js` + `hooks.json` | 신규 |
+| 장부 | `lib/workflow/v2/ledger.js`, `schemas/ledger-entry.schema.json`, `.vais/v2/ledger.jsonl` (store 잠금 안에서 append) | 완료 (H3) |
+| 제품 노트 4면 렌더링 | `lib/workflow/v2/product-note.js` (README·roadmap·decisions; 과거는 `docs/README.md`) | 완료 (H3) |
+| 제안 엔진 | `lib/workflow/v2/proposal.js` (규칙 기반, 모델 호출 없음) | 완료 (H3) |
+| 세션 브리핑 | `hooks/session-start.js` | 완료 (H3) |
+| 상태 줄 | `scripts/vais-statusline.js` (+ doctor `statusline` 검사) | 완료 (H3) |
+| Stop 잠금 | `hooks/workflow-v2-stop.js` + `hooks.json` (신호 2개, 턴당 1회) | 완료 (H3) |
 | 변경 기록 (PostToolUse) | `hooks/workflow-v2-drift.js`, `hooks/workflow-v2-agent-handoff.js` | 유지 |
 | 명령 다섯 + 제안·기록 | `lib/workflow/v2/router.js`, `scripts/vais-workflow-v2.js` | 변경 |
 | 설명 명령 | `lib/workflow/v2/explain.js` | 신규 |
@@ -168,7 +168,7 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 버전 도장 | `phase-transaction.js` receipt, `schemas/phase-transaction-receipt.schema.json` | 완료 (H1) |
 | Claude Code 접점 어댑터 (hook 입력·도구 이름·Agent 결과) | `lib/io.js` | 변경 |
 | 별도 Agent 세 조건 guard, 역할 프롬프트 조립 | `lib/workflow/v2/agent-policy.js`, `role-registry.js` | 변경 |
-| 회귀 세트 | `tests/regression/*.test.js` (장면 6 중 A·F 완료, 나머지 H3~H6) | 진행 중 |
+| 회귀 세트 | `tests/regression/*.test.js` (장면 6 중 A·E·F 완료, B·C·D 는 H4·H6) | 진행 중 |
 | specialist 산출물 직접 기록 (handoff `files`) | `schemas/specialist-handoff.schema.json`, `lib/workflow/v2/automatic-handoff.js` | 완료 (H2) |
 | 역할 modelHint | `contracts/v2-role-cards.json` | 변경 |
 | 검사 어댑터 `screenshot-compare` 자리 | `lib/workflow/v2/tool-adapters.js` | 변경 |

@@ -1,0 +1,64 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-16-product-note",
+  "assignmentId": "AS-fd2e5a59-8c56-4979-aa0a-71d1d989e106",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "e46023d00d65b5b05ef808e628f99e3316a7d71cb5eab994ece8081749aee350",
+  "handoffDigest": "482569d10ac9fb14c714b5965b6cb5ba4343efb5fe93381a63a498495bd77076",
+  "persistedAt": "2026-09-16T06:22:10.314Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "fail",
+    "judgment": "TC-001~010 충족(코드·Do test 로그 193 pass). TC-012 FAIL: secret-scan 이 tests/v2-product-note.test.js:100 fixture 를 credential-assignment 로 잡음.",
+    "decisions": [
+      "TC-012 FAIL: secret-scan 불통",
+      "TC-001~010 PASS (코드·Do 수신증 근거)",
+      "TC-011 은 Do 자기보고만 있어 미검증"
+    ],
+    "behavior": {
+      "inputs": [
+        "Plan·Design·diff 12개 모듈",
+        "Do receipt 3종",
+        "review secret-scan 수신증"
+      ],
+      "outputs": [
+        "장부 append·노트 3면·제안 ≤3",
+        "SessionStart·Stop JSON 형식",
+        "doctor 4검사·버전 6곳 3.3.0"
+      ],
+      "errors": [
+        "secret-scan exit 1 (fixture)",
+        "Do 본문 249 pass ≠ 로그 193",
+        "regression 수신증 없음"
+      ]
+    },
+    "evidence": [
+      "04-review/evidence/logs/secret-scan.log: tests/v2-product-note.test.js:100 credential-assignment",
+      "03-do/evidence/logs/test.log: 193 pass 0 fail, 'hooks as real processes' TC-005·007 ok",
+      "hooks.json 5 이벤트 · CLAUDE.md 10-4 · roadmap H2 완료/H3 진행 · design.md 완료(H3) 6행 · 버전 6곳 3.3.0"
+    ],
+    "affectedRequirements": [
+      "REQ-012"
+    ],
+    "risks": [
+      "Stop 신호A 1초 허용치로 누락 가능",
+      "노트 렌더 위치 Design 과 다름(store)",
+      "QA 세션에서 node 실행 차단"
+    ],
+    "unverified": [
+      "TC-011 regression 직접 실행",
+      "TC-005·007 hook 직접 실행",
+      "doctor 실제 실행 결과"
+    ],
+    "recommendedChecks": [
+      "secret-scan",
+      "test",
+      "lint",
+      "plugin-validator"
+    ]
+  }
+}

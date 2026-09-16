@@ -2,7 +2,7 @@
 
 > **이 파일의 책임**: Claude Code 전용 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 `ONBOARDING.md`(5분), 사용법은 `README.md`.
 >
-> 상태: **2026-09-15 청소 완료 · 설계 정본 확정 · 로드맵 H1 진행.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md` (H1 `harness-health` → … → H8). 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다.
+> 상태: **2026-09-16 로드맵 H1·H2 완료, H3 `product-note` 진행.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md` (H1 `harness-health` → … → H8). 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다.
 
 ## 이 플러그인이 만드는 것
 
@@ -23,24 +23,29 @@ vais-claude-code/
 ├── skills/brief/             # /vais brief — 임원 보고서 (워크플로우 독립)
 ├── agents/v2-specialist.md   # 유일한 위임 대상 Agent
 ├── hooks/
-│   ├── hooks.json            # UserPromptSubmit · PreToolUse · PostToolUse 만 등록
-│   ├── workflow-v2-prompt.js         # 라우팅·승인 판정·단계 지침·drift·lease
+│   ├── hooks.json            # SessionStart · UserPromptSubmit · PreToolUse · PostToolUse · Stop 5종 등록
+│   ├── session-start.js              # 세션 브리핑 (상태·지난 사건·열린 결정·부채·stale·제안 3)
+│   ├── workflow-v2-prompt.js         # 라우팅·승인 판정·단계 지침·drift·lease·장부 주입
 │   ├── workflow-v2-write-guard.js    # write scope·셸 합성 차단 (fail-closed)
 │   ├── workflow-v2-agent-handoff.js  # specialist handoff 자동 저장
 │   ├── workflow-v2-drift.js          # 변경 경로 기록
+│   ├── workflow-v2-stop.js           # 기록 잠금 (장부 누락·미기록 변경 시 턴 종료 1회 거부)
 │   ├── v2-project-context.js · run-node.sh
-├── lib/workflow/v2/          # 27 모듈: config(mode·설정 정본) · doctor · chain-registry(단계·kind 카탈로그) · id-chain(ID 사슬·stale) ·
+├── lib/workflow/v2/          # 30 모듈: config(mode·설정 정본) · doctor · chain-registry(단계·kind 카탈로그) · id-chain(ID 사슬·stale) ·
+│                             #   ledger(장부) · product-note(노트 3면) · proposal(제안) ·
 │                             #   state-machine · work-item-store · phase-transaction · gate-engine · router · write-policy · tool-adapters ·
 │                             #   document-manager/quality · phase-check · context-capsule/view · repo-drift · role-registry · agent-policy · automatic-handoff …
 ├── contracts/                # v2-role-cards.json · chain-stages.json(단계 10) · work-kinds.json(kind 14)
 ├── lib/core/state-store.js · lib/io.js · lib/context-metrics.js
 ├── scripts/vais-workflow-v2.js       # 내부 workflow CLI (hook 이 명령 형태를 지정)
-├── scripts/checks/v2-secret-scan.js · scripts/vais-validate-plugin.js · scripts/vais-doctor.js · scripts/setup-dev.sh
+├── scripts/checks/v2-secret-scan.js · scripts/vais-validate-plugin.js · scripts/vais-doctor.js · scripts/vais-statusline.js · scripts/setup-dev.sh
 ├── schemas/                  # work-item · specialist-assignment · specialist-handoff · check-result · gate-result ·
-│                             #   phase-transaction-receipt · review-evidence-prepare · automatic-handoff-evidence · chain-stage · work-kinds
+│                             #   phase-transaction-receipt · review-evidence-prepare · automatic-handoff-evidence · chain-stage · work-kinds · ledger-entry
 ├── output-styles/vais-default.md
 ├── mcp/ · design-system/ · vendor/   # UI 설계용 design-system MCP (보류 — ui-loop 설계에서 결정)
-├── tests/v2-*.test.js (12) + tests/regression/(장면 A·F) + tests/fixtures/{mini-booking,product-stages}
+├── tests/v2-*.test.js (13) + tests/regression/(장면 A·E·F) + tests/fixtures/{mini-booking,product-stages}
+├── docs/product/             # 제품 사슬 정본 NN-*.md + 자동 생성 노트 README·roadmap·decisions
+├── .vais/v2/                 # work-items.json · authorizations.json · chain-index.json · ledger.jsonl(append-only) — 직접 편집 금지
 ├── vais.config.json          # version · plugin · workflowV2 만
 └── ONBOARDING.md · README.md · CLAUDE.md · CHANGELOG.md
 ```
@@ -62,6 +67,7 @@ vais-claude-code/
 10-1. **Feature 이름** — runtime 이 요청의 영어 단어에서 발급한다. 영어 단어가 없으면 AI 가 이름을 만들지 않고 사용자에게 묻는다. 사용자가 `/vais 이름: <kebab-case>` 로 준 이름만 CLI 가 받는다.
 10-2. **작업 kind** — 모든 Work item 은 `kind` 를 가진다 (`harness`·`feature`·`ui`·`bug`·`stage-*` 10, 정본 `contracts/work-kinds.json`). hook 이 제안하고 Plan 에 적어 사용자 확인 후 `plan present --kind` 로 넘긴다. 이 저장소 자체 작업은 `harness` 다.
 10-3. **제품 사슬** — `stage-*` kind 는 `docs/product/NN-*.md` 정본 하나를 만든다 (`contracts/chain-stages.json`). 항목은 `### F-003 ← REQ-002` 제목 + `| 항목 | 내용 |` 표. 앞 단계 승인·stale 없음이 진입 조건이고, `do ready` 의 `stage-document` 검사가 형식·부모·산출물·커버리지·예산을 본다. `report finalize` 가 정본을 approved 로 표시한다. stale 해소는 재승인 또는 사용자의 `/vais 변경 없음 확인: <항목> ← <부모>` 뿐이다.
+10-4. **장부와 노트** — 승인·거절·QA FAIL·잔여 제한은 runtime 이 `.vais/v2/ledger.jsonl` 에 자동으로 남긴다(append-only, 손으로 쓰지 않음). Design 의 `## 결정` 불릿은 승인 때 decision 으로 기록되므로 결정은 그 절에 적는다. `docs/product/{README,roadmap,decisions}.md` 는 Report 마다 재생성되며 `roadmap.md` 의 `<!-- vais:user -->` 표식 사이만 손으로 고칠 수 있다. 세션 첫 줄의 브리핑과 Stop 잠금 사유는 그대로 사용자에게 보인다. Stop 이 턴을 막으면 해당 transaction·handoff 로 기록한 뒤 끝낸다.
 11. **ID** — `REQ-001`, `TC-001` 3자리. Design REQ 집합 = Plan REQ 집합, Review TC 집합 = Design TC 집합.
 12. **문서 예산** — compact / standard / extended byte 한도 (`lib/workflow/v2/document-quality.js`). 이전 단계 문장(80자 이상) 복사 금지.
 13. **check id** — Tool 7종 `test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan` + 내장 `stage-document`(단계 kind 전용).

@@ -22,21 +22,25 @@
 5. `lib/workflow/v2/state-machine.js` + `router.js` — 상태 전이와 승인 문법 정본
 6. `contracts/v2-role-cards.json` — 역할 경계
 7. `contracts/chain-stages.json` + `contracts/work-kinds.json` — 제품 사슬 10단계와 작업 kind 정의 (데이터). 검사 로직은 `lib/workflow/v2/id-chain.js`
+8. `lib/workflow/v2/ledger.js` + `product-note.js` + `proposal.js` — 장부(기억), 제품 노트 3면, 규칙 기반 제안. `hooks/session-start.js`(브리핑)·`hooks/workflow-v2-stop.js`(기록 잠금)·`scripts/vais-statusline.js` 가 이를 표시한다
 
 ## 3. 동작 흐름 (1분)
 
 ```mermaid
 flowchart TB
-    USER["/vais 요청 · 승인"] --> PROMPT["hooks/workflow-v2-prompt.js<br/>라우팅 · 승인 판정 · 단계 지침 · drift · lease"]
+    START["hooks/session-start.js<br/>세션 브리핑 (상태 · 지난 사건 · 제안 3)"] --> USER
+    USER["/vais 요청 · 승인"] --> PROMPT["hooks/workflow-v2-prompt.js<br/>라우팅 · 승인 판정 · 단계 지침 · drift · lease · 장부 주입"]
     PROMPT --> SKILL["skills/vais/SKILL.md"]
     SKILL --> CLI["scripts/vais-workflow-v2.js<br/>plan/design present · do ready · review prepare/decide · report finalize · assignment · handoff"]
-    CLI --> LIB["lib/workflow/v2/ (23 모듈)"]
-    LIB --> STATE[".vais/v2/ work-items.json · authorizations.json"]
-    LIB --> DOCS["docs/work-items/{feature}/{date-slug}/0N-*/main.md + evidence/"]
+    CLI --> LIB["lib/workflow/v2/ (30 모듈)"]
+    LIB --> STATE[".vais/v2/ work-items.json · authorizations.json · chain-index.json · ledger.jsonl"]
+    LIB --> DOCS["docs/work-items/… + docs/product/ (사슬 정본 · 노트 3면)"]
     SKILL --> AGENT["agents/v2-specialist.md"]
     AGENT --> HANDOFF["hooks/workflow-v2-agent-handoff.js"]
     GUARD["hooks/workflow-v2-write-guard.js<br/>write scope · 셸 합성 차단"] --> LIB
     DRIFT["hooks/workflow-v2-drift.js"] --> LIB
+    STOP["hooks/workflow-v2-stop.js<br/>기록 잠금"] --> STATE
+    STATUS["scripts/vais-statusline.js<br/>상태 줄"] --> STATE
 ```
 
 ## 4. 진입점 표 (1분)
@@ -46,7 +50,9 @@ flowchart TB
 | `CLAUDE.md` | Claude Code | 세션 시작 시 자동 로드. 원칙·규칙·구조 |
 | `skills/vais/SKILL.md` | Claude Code (skill) | `/vais` 호출 시 로드. hook 컨텍스트를 정본으로 따르는 규칙 |
 | `skills/brief/SKILL.md` | Claude Code (skill) | `/vais brief` 임원 보고서. 워크플로우 독립 |
-| `hooks/hooks.json` | Claude Code | UserPromptSubmit · PreToolUse · PostToolUse 등록 |
+| `hooks/hooks.json` | Claude Code | SessionStart · UserPromptSubmit · PreToolUse · PostToolUse · Stop 등록 |
+| `scripts/vais-statusline.js` | Claude Code statusline | `~/.claude/settings.json > statusLine` 에 등록하면 상태 줄 표시 (`/vais doctor` 가 안내) |
+| `docs/product/{README,roadmap,decisions}.md` | 사용자 | 제품 노트 현재·다음·왜 (자동 생성) |
 | `vais.config.json` | runtime | `workflowV2.mode` (`enforce` 정본 / `disabled` 하네스 수리용) |
 | `contracts/v2-role-cards.json` | runtime | 역할 정본 |
 

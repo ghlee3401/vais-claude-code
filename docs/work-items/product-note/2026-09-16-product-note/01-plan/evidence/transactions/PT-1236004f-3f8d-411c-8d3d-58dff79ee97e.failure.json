@@ -1,0 +1,53 @@
+{
+  "schema": "phase-transaction-failure/v1",
+  "transactionId": "PT-1236004f-3f8d-411c-8d3d-58dff79ee97e",
+  "workItemId": "WI-2026-09-16-product-note",
+  "phase": "plan",
+  "code": "DOCUMENT_PREFLIGHT_FAILED",
+  "finding": "Canonical plan document preflight failed: plan-document, document-budget",
+  "preflight": {
+    "schema": "document-preflight/v1",
+    "phase": "plan",
+    "path": "docs/work-items/product-note/2026-09-16-product-note/01-plan/main.md",
+    "checks": [
+      {
+        "check": "plan-document",
+        "execution": "succeeded",
+        "verdict": "fail",
+        "required": true,
+        "scope": [
+          "docs/work-items/product-note/2026-09-16-product-note/01-plan/main.md"
+        ],
+        "requirements": [],
+        "summary": "1 plan document issue(s) found",
+        "findings": [
+          "Document budget: Authored Markdown is 6183B (limit 6144B); compress it or obtain approval to raise the scale"
+        ],
+        "evidence": [
+          "docs/work-items/product-note/2026-09-16-product-note/01-plan/main.md"
+        ]
+      },
+      {
+        "check": "document-budget",
+        "execution": "succeeded",
+        "verdict": "fail",
+        "required": true,
+        "scope": [
+          "docs/work-items/product-note/2026-09-16-product-note/01-plan/main.md"
+        ],
+        "requirements": [
+          "REQ-009",
+          "REQ-026"
+        ],
+        "summary": "1 document budget issue(s) found",
+        "findings": [
+          "Authored Markdown is 6183B (limit 6144B); compress it or obtain approval to raise the scale"
+        ],
+        "evidence": [
+          "docs/work-items/product-note/2026-09-16-product-note/01-plan/main.md"
+        ]
+      }
+    ]
+  },
+  "recordedAt": "2026-09-16T04:33:36.216Z"
+}

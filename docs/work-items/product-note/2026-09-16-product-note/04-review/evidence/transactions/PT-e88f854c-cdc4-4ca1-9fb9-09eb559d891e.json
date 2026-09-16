@@ -1,0 +1,133 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-e88f854c-cdc4-4ca1-9fb9-09eb559d891e",
+  "workItemId": "WI-2026-09-16-product-note",
+  "phase": "review",
+  "action": "decide",
+  "gate": {
+    "gate": "review",
+    "verdict": "FAIL",
+    "requiredChecks": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "passed": [
+      "review-document",
+      "document-budget",
+      "document-repetition"
+    ],
+    "failed": [
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-16T06:22:43.354Z"
+  },
+  "checks": [
+    {
+      "check": "review-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/product-note/2026-09-16-product-note/04-review/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical review document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/product-note/2026-09-16-product-note/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/product-note/2026-09-16-product-note/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 2877B is within the 6144B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/product-note/2026-09-16-product-note/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/product-note/2026-09-16-product-note/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/product-note/2026-09-16-product-note/04-review/main.md"
+      ]
+    },
+    {
+      "check": "independent-qa-handoff",
+      "execution": "succeeded",
+      "verdict": "fail",
+      "required": true,
+      "scope": [],
+      "requirements": [
+        "REQ-012"
+      ],
+      "summary": "Independent QA reported failure",
+      "findings": [
+        "Inspect the canonical independent QA evidence"
+      ],
+      "evidence": [
+        "docs/work-items/product-note/2026-09-16-product-note/04-review/evidence/handoffs/AS-fd2e5a59-8c56-4979-aa0a-71d1d989e106.json"
+      ]
+    },
+    {
+      "check": "secret-scan",
+      "execution": "errored",
+      "verdict": "fail",
+      "required": true,
+      "scope": [
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "schemas/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check failed with exit 1",
+      "findings": [
+        "Inspect the raw evidence log for details"
+      ],
+      "evidence": [
+        "docs/work-items/product-note/2026-09-16-product-note/04-review/evidence/logs/secret-scan.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "design",
+    "status": "active"
+  }
+}

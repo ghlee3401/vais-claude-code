@@ -1,0 +1,71 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-16-product-note",
+  "assignmentId": "AS-a211da26-6c97-4b8b-b62f-44c0b71bd0c4",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 1,
+  "assignmentDigest": "997369c2ab23a908c7456d63145052c40e2cd415fd408c9edf540550530acbd0",
+  "handoffDigest": "7300e4bf4f49cda893788d554ea7e1f53bd7b5757c807008dc6620f3cc01b5c9",
+  "persistedAt": "2026-09-16T06:29:47.376Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "수정 회차 1 PASS. npm test 193/193, npm run regression 6/6(장면 E 포함) 직접 실행 확인. secret-scan exit 0. TC-001~012 모두 증거로 추적됨.",
+    "decisions": [
+      "TC-012 PASS: secret-scan 0 findings",
+      "TC-011 PASS: 장면 E 직접 실행",
+      "TC-005·007 프로세스 실행으로 확인"
+    ],
+    "behavior": {
+      "inputs": [
+        "Plan·Design·Do 문서",
+        "review secret-scan 수신증",
+        "npm test·regression 출력"
+      ],
+      "outputs": [
+        "193 pass / 0 fail",
+        "regression 6 pass (A·E·F)",
+        "버전 3.3.0 6곳 일치"
+      ],
+      "errors": [
+        "없음"
+      ]
+    },
+    "evidence": [
+      "npm test TAP: tests 193 pass 193 fail 0; suites 33~44 product-note TC-001~010·012 ok, 'hooks as real processes' ok",
+      "npm run regression: scene A·E·F 6 pass 0 fail; scene E 'briefs the new session … writes the product note' ok",
+      "04-review/evidence/logs/secret-scan.log status=0 findings []; tests/v2-product-note.test.js:100 allow-fixture 값"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-010",
+      "REQ-011",
+      "REQ-012"
+    ],
+    "risks": [
+      "Stop 신호A 1초 허용치 누락 가능",
+      "노트 렌더 위치 Design 과 다름(store)"
+    ],
+    "unverified": [
+      "1차↔2차 diff (미커밋 트리)",
+      "npm run doctor 직접 실행"
+    ],
+    "recommendedChecks": [
+      "secret-scan",
+      "test",
+      "lint",
+      "plugin-validator"
+    ]
+  }
+}

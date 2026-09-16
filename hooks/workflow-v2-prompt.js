@@ -17,6 +17,21 @@ const { deterministicSlug } = require('../lib/workflow/v2/naming');
 const { PHASE_FOLDERS } = require('../lib/workflow/v2/document-manager');
 const { suggestKind, getKind, kindOf, isStageKind, stageOfKind } = require('../lib/workflow/v2/chain-registry');
 const { assertStageEntry } = require('../lib/workflow/v2/id-chain');
+const ledger = require('../lib/workflow/v2/ledger');
+
+const LEDGER_INJECT_KINDS = Object.freeze(['feedback', 'preference', 'debt']);
+const LEDGER_INJECT_LIMIT = 5;
+
+// Memory shown at Design time: what the user already said about this feature.
+function ledgerLinesFor(projectRoot, item) {
+  if (!item || item.phase !== 'design' || !item.primaryFeature) return [];
+  const entries = ledger.recent(projectRoot, { feature: item.primaryFeature, kinds: LEDGER_INJECT_KINDS, limit: LEDGER_INJECT_LIMIT });
+  if (entries.length === 0) return [];
+  return [
+    `이 feature 의 장부 (최근 ${entries.length}, 피드백·취향·부채) — Design 에 반영하거나 반영하지 않는 이유를 적는다:`,
+    ...entries.map(entry => `- [${entry.kind}] ${entry.text}${entry.why ? ` (${entry.why})` : ''}`),
+  ];
+}
 
 const INACTIVE_LINE = '[VAIS · 하네스 비활성]';
 
@@ -152,7 +167,8 @@ function phaseGuidance(item, sessionId, requestSlug = null, options = {}) {
       `Plan 초안은 \`${planDraftPath(item)}\` 에 쓴다 (승격 시 자동 삭제). 고친 뒤 \`${INTERNAL_COMMAND} plan present --id ${item.id} --session ${sessionId} --revision ${item.planRevision} --body-file ${planDraftPath(item)}\`을 한 번 실행한다. PASS일 때만 사용자 승인을 요청한다.`,
     ],
     design: [
-      'CTO Design은 REQ별 동작·입력·출력·오류·UI/기술 결정·TC를 정하고 필요한 전문 영역만 선택한다. Do specialist 상한은 compact 1명, standard 2명이며 단순 test 실행 역할은 고르지 않는다. REQ-001/TC-001처럼 3자리 ID를 쓰고, 디렉터리 write scope는 path/**로 표시한다. check id는 등록된 test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan 중에서만 고른다.',
+      'CTO Design은 REQ별 동작·입력·출력·오류·UI/기술 결정·TC를 정하고 필요한 전문 영역만 선택한다. Do specialist 상한은 compact 1명, standard 2명이며 단순 test 실행 역할은 고르지 않는다. REQ-001/TC-001처럼 3자리 ID를 쓰고, 디렉터리 write scope는 path/**로 표시한다. check id는 등록된 test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan 중에서만 고른다. "## 결정" 절의 불릿은 Design 승인 때 장부에 decision 으로 기록된다.',
+      ...(options.ledgerLines || []),
       `본문을 작성한 뒤 \`${INTERNAL_COMMAND} design present --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <design-draft> --scope "<approved-path>" --readiness-check <tool-id> --review-check <tool-id> [--specialist <role>]${item.qaRepairCount > 0 ? ' [--material true|false]' : ''}\`을 한 번 실행한다. 디렉터리 글롭은 셸 전개를 막도록 반드시 따옴표로 감싼다.${item.qaRepairCount > 0 ? ' QA 수정에서 material=true이면 새 revision 승인 대기, false이면 같은 승인 Design의 세부 수정으로 바로 Do에 간다.' : ' PASS일 때만 사용자 승인을 요청한다.'}`,
     ],
     do: [
@@ -279,7 +295,9 @@ function applyDeterministicRoute(store, current, route, sessionId) {
   const event = eventByAction[route.action];
   if (!event || !current) return current;
   store.acquireLease(current.id, sessionId);
-  return store.apply(current.id, event, {}, { requireLease: true, sessionId });
+  // The user's own words travel with revisions and rejections so the ledger keeps them as feedback.
+  const payload = ['revise-plan', 'revise-design', 'reject-final'].includes(route.action) ? { reason: route.text } : {};
+  return store.apply(current.id, event, payload, { requireLease: true, sessionId });
 }
 
 function observePromptDrift(store, item, sessionId, projectRoot) {
@@ -379,7 +397,10 @@ function main() {
       allowedPaths: defaultAllowedPaths(active),
       allowedCommands: [INTERNAL_COMMAND],
     });
-    return emit(buildContext(route, active, null, sessionId, { kindSuggestion: kindSuggestionFor(projectRoot, route) }));
+    return emit(buildContext(route, active, null, sessionId, {
+      kindSuggestion: kindSuggestionFor(projectRoot, route),
+      ledgerLines: ledgerLinesFor(projectRoot, active),
+    }));
   } catch (error) {
     authStore.revoke(sessionId);
     return emit(buildContext(route, routeItem, error.message, sessionId));
@@ -403,6 +424,7 @@ module.exports = {
   kindSuggestionFor,
   kindLines,
   stagePhaseLines,
+  ledgerLinesFor,
   main,
 };
 

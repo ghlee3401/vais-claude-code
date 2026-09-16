@@ -1,0 +1,62 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-9d75c586-a602-41bb-9618-74cabeeaf145",
+  "workItemId": "WI-2026-09-16-product-note",
+  "phase": "plan",
+  "action": "present",
+  "gate": {
+    "gate": "plan",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "plan-document",
+      "document-budget"
+    ],
+    "passed": [
+      "plan-document",
+      "document-budget"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-16T04:33:51.486Z"
+  },
+  "checks": [
+    {
+      "check": "plan-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/product-note/2026-09-16-product-note/01-plan/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical plan document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/product-note/2026-09-16-product-note/01-plan/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/product-note/2026-09-16-product-note/01-plan/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 6110B is within the 6144B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/product-note/2026-09-16-product-note/01-plan/main.md"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "plan",
+    "status": "waiting-user"
+  }
+}

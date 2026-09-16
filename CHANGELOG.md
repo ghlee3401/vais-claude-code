@@ -1,5 +1,30 @@
 # Changelog
 
+## [3.3.0] - 2026-09-16
+
+> 로드맵 H3 `product-note`. 결정·변경·승인을 장부에 자동 기록하고, 장부와 사슬 상태로 제품 노트·세션 브리핑·상태 줄을 기계가 만들며, 기록 없이는 턴을 끝낼 수 없게 Stop 을 잠근다. 모델은 부르지 않는다.
+
+### Added
+
+- **장부** `.vais/v2/ledger.jsonl` (append-only, `schemas/ledger-entry.schema.json`, `lib/workflow/v2/ledger.js`) — `WorkItemStore.apply/applySequence` 잠금 안에서 자동 기록: Plan·Design·최종 승인·작업 완료 → milestone, Design 정본 `## 결정` 불릿(단계 kind 는 `## 안 N`) → decision, 수정 요청·최종 거절 원문(비밀 정보 마스킹) → feedback, QA FAIL → debt, NOT_READY·차단·Report 실패 → risk, Report `--limitation` → debt. 기록에 실패하면 상태도 바뀌지 않는다
+- **제품 노트 3면** `lib/workflow/v2/product-note.js` — Report finalize 마다 `docs/product/README.md`(현재: 10단계 상태·stale·승인일), `roadmap.md`(다음: 남은 단계·제안 3, `<!-- vais:user -->` 사이 보존), `decisions.md`(왜: 장부 kind 별) 재생성
+- **제안 엔진** `lib/workflow/v2/proposal.js` — work-items·chain-index·장부만 읽어 다음 행동 ≤3 (대기 Gate 결정 → blocked 사유 → 이어가기 → stale 해소 → 미작성 다음 단계 → 열린 부채 → 새 제품). 근거가 없으면 줄인다
+- **세션 브리핑** `hooks/session-start.js` (SessionStart) — `[feature · phase · status] 지난 세션: <마지막 사건> (<일시>). 열린 결정 n, 부채 n, stale n. 제안: ① … ② … ③ …`. 상태가 없으면 "시작 전", 깨진 장부 줄은 경고
+- **상태 줄** `scripts/vais-statusline.js` — `VAIS · {feature} · {phase}/{status} · 다음: {행동}`. doctor 가 `~/.claude/settings.json > statusLine` 설치를 안내
+- **Stop 잠금** `hooks/workflow-v2-stop.js` (Stop) — 신호 A: 상태가 바뀌었는데 사건·장부가 없거나 장부 기록이 필요한 사건에 줄이 없음, 신호 B: authorization 밖이고 drift 기록에도 없는 파일 변경. 같은 턴에서 1회만 막고(`stop_hook_active`) 두 번째는 risk 로 기록 후 통과. `VAIS_HARNESS_OFF`·disabled 존중
+- **doctor 검사 4종** — `hook-events`(SessionStart·UserPromptSubmit·PreToolUse·PostToolUse·Stop 등록), `ledger`(깨진 줄), `chain-stale`, `statusline`
+- **Design 지침에 장부 주입** — 같은 feature 의 feedback·preference·debt 최근 5개를 prompt hook 이 Design 단계 지침에 붙인다
+- **회귀 장면 E** `tests/regression/scene-e-session-resume.test.js` — Design 대기 중 세션 종료 → 새 세션 브리핑 → lease 재취득 → 종결 → 제품 노트·decisions.md 생성 → Stop 잠금. `tests/v2-product-note.test.js` REQ-001~010·012 단위 테스트
+- `lib/io.js` `outputSessionContext`, `outputStopBlock`
+
+### Fixed
+
+- **H2 잔여 결함 3건** — 산출물 값이 `..`·절대경로로 artifactDir 를 벗어나면 거부; 부모 항목을 삭제한 채 재승인하면 자식이 `parentMissing` stale 로 표시되고 `stage confirm` 으로 풀 수 없음(재승인만); stage kind Design 의 `docs/product/` 밖 쓰기 범위 거부를 실제 transaction 경로로 테스트
+
+### Changed
+
+- `docs/harness/roadmap.md` H2 완료·H3 진행, `docs/harness/design.md` 대응표(장부·노트·제안·브리핑·상태 줄·Stop 완료, 회귀 A·E·F), README 제품 노트 절, CLAUDE/ONBOARDING hook 5종
+
 ## [3.2.0] - 2026-09-16
 
 > 로드맵 H2 `chain-stages`. 제품 사슬 1~10 단계를 데이터로 정의하고 각 단계를 5단계 커널 위의 작업(kind)으로 돌린다. 관문은 묶지 않는다 (사용자 결정 2026-09-16).

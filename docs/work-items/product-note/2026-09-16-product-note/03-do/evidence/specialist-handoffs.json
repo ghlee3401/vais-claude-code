@@ -1,0 +1,26 @@
+{
+  "check": "specialist-handoffs",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "lib/**",
+    "hooks/**",
+    "scripts/**",
+    "schemas/**",
+    "tests/**",
+    "docs/harness/**",
+    "package.json",
+    "package-lock.json",
+    "vais.config.json",
+    ".claude-plugin/**",
+    "CHANGELOG.md",
+    "README.md",
+    "CLAUDE.md",
+    "ONBOARDING.md"
+  ],
+  "requirements": [],
+  "summary": "All Design-required specialist handoffs are uniquely consumed and complete",
+  "findings": [],
+  "evidence": []
+}

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.2.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-3.3.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -30,7 +30,7 @@
 | 의존성 | 버전 | 용도 |
 |---|---|---|
 | Node.js | ≥ 18 | plugin runtime, hook, 내부 CLI |
-| Claude Code | ≥ 2.1.32 | UserPromptSubmit / PreToolUse / PostToolUse hook |
+| Claude Code | ≥ 2.1.32 | SessionStart / UserPromptSubmit / PreToolUse / PostToolUse / Stop hook, statusline |
 | Python3 | ≥ 3.8 | design-system MCP (UI 설계 시에만) |
 
 ```bash
@@ -50,7 +50,8 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 | `/vais <자연어 요청>` | 진행 중 작업이 없으면 새 작업 시작. 있으면 현재 단계의 지시·피드백 |
 | `/vais 이름: <kebab-case>` | 요청에 영어 단어가 없어 이름을 못 정했을 때 사용자가 Feature 이름을 확정 |
 | `/vais status` (`상태`) | 현재 작업·단계·상태와 대기 요청 조회 (읽기 전용) |
-| `/vais doctor` | 하네스 건강검진: 설정·hook·버전·상태 파일 점검과 고치는 법 (읽기 전용) |
+| `/vais doctor` | 하네스 건강검진: 설정·hook 5종·버전·상태 파일·장부·stale·statusline 점검과 고치는 법 (읽기 전용) |
+| `/vais 변경 없음 확인: F-003 ← REQ-002` | 상위 항목이 바뀌었지만 하위는 그대로임을 확인 (stale 해소) |
 | `/vais help` (`도움말`) | 명령 표 |
 | `/vais pause` (`일시정지`) / `resume` (`재개`) / `cancel` (`취소`) | 작업 슬롯 제어 |
 | `/vais 새 작업: <요청>` | 진행 중 작업을 유지한 채 새 요청을 대기열에 보관 |
@@ -89,6 +90,19 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 
 정본 문서의 항목은 `### F-003 ← REQ-002` 제목과 `| 항목 | 내용 |` 표로 쓴다. runtime 이 부모 존재·허용 접두·필수 항목·산출물 파일·커버리지를 검사하고, 상위 항목이 바뀌면 하위 항목을 stale 로 표시한다. stale 은 그 단계를 다시 승인하거나 사용자가 `/vais 변경 없음 확인: F-003 ← REQ-002` 로 해소한다. 상태는 `stage status` 로 본다.
 
+## 제품 노트 · 장부 · 브리핑
+
+승인·거절·QA FAIL·잔여 제한은 사람이 적지 않는다. 상태가 바뀌는 순간 runtime 이 `.vais/v2/ledger.jsonl`(append-only 장부)에 남기고, Report 가 끝날 때마다 `docs/product/` 에 세 면을 다시 그린다.
+
+| 면 | 파일 | 내용 |
+|---|---|---|
+| 현재 | `docs/product/README.md` | 10단계 문서의 approved / stale / 미작성 상태와 승인일 |
+| 다음 | `docs/product/roadmap.md` | 남은 단계, 다음 행동 제안 3개, `<!-- vais:user -->` 사이의 내 메모(보존) |
+| 왜 | `docs/product/decisions.md` | 결정·피드백·취향·부채·리스크·이정표 |
+| 과거 | `docs/README.md` | 작업 목록 (기존) |
+
+새 세션이 열리면 SessionStart hook 이 첫 줄에 `[feature · phase · status] 지난 세션: … 열린 결정 n, 부채 n, stale n. 제안: ① … ② … ③ …` 를 넣는다. 터미널 상태 줄은 `scripts/vais-statusline.js` 를 `~/.claude/settings.json > statusLine` 에 등록하면 `VAIS · {feature} · {phase}/{status} · 다음: {행동}` 을 항상 보인다 (`/vais doctor` 가 설치법을 안내). 상태가 바뀌었는데 장부가 비었거나 기록되지 않은 파일 변경이 있으면 Stop hook 이 턴 종료를 한 번 막는다. 브리핑·제안·상태 줄은 모델을 부르지 않고 상태 파일 3개만 읽는다.
+
 ## 5단계
 
 | 단계 | 산출 | 사용자 Gate |
@@ -110,6 +124,9 @@ docs/work-items/{feature}/{YYYY-MM-DD-slug}/
 └── */evidence/            # check 결과, handoff, 스크린샷
 docs/features/{feature}/main.md   # 자동 생성 인덱스
 docs/README.md                    # 자동 생성 Master 인덱스
+docs/product/NN-*.md              # 제품 사슬 정본 (단계 kind)
+docs/product/{README,roadmap,decisions}.md   # 제품 노트 3면 (자동 생성)
+.vais/v2/ledger.jsonl             # 장부 (append-only, 직접 편집 금지)
 ```
 
 ## 구조
@@ -117,9 +134,9 @@ docs/README.md                    # 자동 생성 Master 인덱스
 ```text
 skills/vais/SKILL.md        /vais 진입 규칙
 agents/v2-specialist.md     유일한 위임 Agent
-hooks/                      prompt(라우팅·승인·지침) · write-guard · agent-handoff · drift
-lib/workflow/v2/            상태 머신 · 저장소 · transaction · gate · 문서 품질 · drift · 역할
-scripts/vais-workflow-v2.js 내부 CLI
+hooks/                      session-start(브리핑) · prompt(라우팅·승인·지침) · write-guard · agent-handoff · drift · stop(기록 잠금)
+lib/workflow/v2/            상태 머신 · 저장소 · transaction · gate · 문서 품질 · drift · 역할 · 사슬(chain-registry·id-chain) · 장부(ledger) · 노트(product-note) · 제안(proposal) · doctor
+scripts/vais-workflow-v2.js 내부 CLI · scripts/vais-statusline.js 상태 줄 · scripts/vais-doctor.js
 contracts/v2-role-cards.json  역할 정본
 schemas/                    JSON 계약 (ajv 검증)
 ```
@@ -128,7 +145,7 @@ schemas/                    JSON 계약 (ajv 검증)
 
 ```bash
 npm test            # tests/v2-*.test.js
-npm run regression  # tests/regression/ — 사용 장면 회귀 (장면 F 부터)
+npm run regression  # tests/regression/ — 사용 장면 회귀 (장면 A·E·F)
 npm run lint
 npm run validate    # 플러그인 구조 검증
 npm run doctor      # 하네스 건강검진

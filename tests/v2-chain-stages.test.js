@@ -186,9 +186,9 @@ describe('chain-stages REQ-008/011 stage document check, approval, artifacts', (
   });
 
   it('TC-008 stage kind write scopes must stay under docs/product', t => {
+    // The full transaction path (authorization + real Work item) is covered in
+    // tests/v2-product-note.test.js TC-010; here the unauthenticated call must still fail closed.
     const root = tempRoot(t);
-    const stageFile = path.join(root, 'docs', 'product', '01-requirements.md');
-    fs.mkdirSync(path.dirname(stageFile), { recursive: true });
     assert.throws(() => runPhaseTransaction(root, {
       phase: 'design', action: 'present', id: 'WI-2026-09-16-none', sessionId: 's', revision: 1,
       writeScopes: ['src/**'], readinessChecks: ['stage-document'], reviewChecks: ['stage-document'],
@@ -250,12 +250,15 @@ describe('chain-stages REQ-010 specialist files in handoffs', () => {
 });
 
 describe('chain-stages REQ-013 documents and versions', () => {
-  it('TC-013 the version is 3.2.0 everywhere and the roadmap marks H1 done', () => {
+  it('TC-013 the version is synchronized at 3.2.0 or later and the roadmap marks H1 done', () => {
     const versions = versionFiles(REPO);
-    assert.deepEqual([...new Set(Object.values(versions))], ['3.2.0'], JSON.stringify(versions));
+    const distinct = [...new Set(Object.values(versions))];
+    assert.equal(distinct.length, 1, JSON.stringify(versions));
+    const [major, minor] = distinct[0].split('.').map(Number);
+    assert.ok(major > 3 || (major === 3 && minor >= 2), distinct[0]);
     const roadmap = fs.readFileSync(path.join(REPO, 'docs', 'harness', 'roadmap.md'), 'utf8');
     assert.match(roadmap, /\| H1 \| 완료 \|/);
-    assert.match(roadmap, /\| H2 \| 진행 중 \|/);
+    assert.match(roadmap, /\| H2 \| (진행 중|완료) \|/);
     const design = fs.readFileSync(path.join(REPO, 'docs', 'harness', 'design.md'), 'utf8');
     assert.match(design, /`contracts\/chain-stages\.json` \| 완료 \(H2\)/);
     assert.match(fs.readFileSync(path.join(REPO, 'CHANGELOG.md'), 'utf8'), /## \[3\.2\.0\]/);

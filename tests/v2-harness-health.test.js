@@ -204,8 +204,9 @@ function doctorFixture(t) {
   fs.mkdirSync(path.join(root, 'hooks'));
   fs.writeFileSync(path.join(root, 'hooks', 'run-node.sh'), '#!/bin/sh\n');
   fs.writeFileSync(path.join(root, 'hooks', 'guard.js'), '');
+  const handler = [{ hooks: [{ type: 'command', command: '${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/hooks/guard.js' }] }];
   fs.writeFileSync(path.join(root, 'hooks', 'hooks.json'), JSON.stringify({
-    hooks: { PreToolUse: [{ matcher: 'Bash', hooks: [{ type: 'command', command: '${CLAUDE_PLUGIN_ROOT}/hooks/run-node.sh ${CLAUDE_PLUGIN_ROOT}/hooks/guard.js' }] }] },
+    hooks: { SessionStart: handler, UserPromptSubmit: handler, PreToolUse: handler, PostToolUse: handler, Stop: handler },
   }));
   return root;
 }

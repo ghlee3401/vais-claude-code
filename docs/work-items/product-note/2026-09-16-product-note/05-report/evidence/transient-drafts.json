@@ -1,0 +1,15 @@
+{
+  "check": "transient-drafts",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/product-note/2026-09-16-product-note"
+  ],
+  "requirements": [
+    "REQ-025"
+  ],
+  "summary": "No transient draft Markdown remains",
+  "findings": [],
+  "evidence": []
+}
