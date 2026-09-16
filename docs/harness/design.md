@@ -156,9 +156,9 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 상태 줄 | `scripts/vais-statusline.js` (+ doctor `statusline` 검사) | 완료 (H3) |
 | Stop 잠금 | `hooks/workflow-v2-stop.js` + `hooks.json` (신호 2개, 턴당 1회) | 완료 (H3) |
 | 변경 기록 (PostToolUse) | `hooks/workflow-v2-drift.js`, `hooks/workflow-v2-agent-handoff.js` | 유지 |
-| 명령 다섯 + 제안·기록 | `lib/workflow/v2/router.js`, `scripts/vais-workflow-v2.js` | 변경 |
-| 설명 명령 | `lib/workflow/v2/explain.js` | 신규 |
-| 저장·되돌리기 | `lib/workflow/v2/vcs.js` (버전 6곳 동기화·revert 목록) | 신규 |
+| 명령 다섯 + 제안·기록 | `lib/workflow/v2/router.js`(COMMAND_PATTERNS), `scripts/vais-workflow-v2.js`(status·explain·propose·ledger·save·revert), prompt hook 확인 토큰 | 완료 (H5) |
+| 설명 명령 | `lib/workflow/v2/explain.js` + `contracts/glossary.json` | 완료 (H5) |
+| 저장·되돌리기 | `lib/workflow/v2/vcs.js` (버전 7면 동기화·revert 목록, add·commit·revert 만) | 완료 (H5) |
 | doctor | `lib/workflow/v2/doctor.js`, `scripts/vais-doctor.js` | 완료 (H1) |
 | mode 정규화·fail-loud·비상 스위치 | `lib/workflow/v2/config.js`(`resolveMode`), 4 hook 공통 | 완료 (H1) |
 | 읽기 명령·scratchpad 허용 | `lib/workflow/v2/write-policy.js` | 완료 (H1) |

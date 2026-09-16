@@ -24,6 +24,7 @@
 7. `contracts/chain-stages.json` + `contracts/work-kinds.json` — 제품 사슬 10단계와 작업 kind 정의 (데이터). 검사 로직은 `lib/workflow/v2/id-chain.js`
 8. `lib/workflow/v2/ledger.js` + `product-note.js` + `proposal.js` — 장부(기억), 제품 노트 3면, 규칙 기반 제안. `hooks/session-start.js`(브리핑)·`hooks/workflow-v2-stop.js`(기록 잠금)·`scripts/vais-statusline.js` 가 이를 표시한다
 9. `lib/workflow/v2/screen-capture.js` + `diff-summary.js` + `review-page.js` — UI 루프: Chrome 헤드리스 스크린샷, 회차 diff, 검수 페이지. 상태 머신의 화면 확인 정지점(`do/waiting-user`)과 짝을 이룬다
+10. `lib/workflow/v2/briefing.js` + `explain.js` + `vcs.js`, `contracts/glossary.json` — 사용자 명령(상태·설명·저장·되돌리기·제안·기록). 쓰기 명령은 사용자 확인 문구가 세션 토큰이 된 뒤에만 CLI 가 실행한다
 
 ## 3. 동작 흐름 (1분)
 
@@ -64,6 +65,6 @@ npm test && npm run regression && npm run lint && npm run validate   # 로컬 �
 npm run doctor                                                       # 하네스 건강검진
 ```
 
-하네스 자체를 고칠 때: 사용자가 `workflowV2.mode` 를 `disabled` 로 내림(또는 `VAIS_HARNESS_OFF=1`) → 수정 → 검증 → 커밋 → `enforce` 복귀. mode 값이 잘못되면 열리지 않고 닫힘으로 실패하며 매 프롬프트에 경고가 뜬다. 실행 중 플러그인은 마켓플레이스 캐시 사본이라 push · 버전 bump · 업데이트 뒤에 반영된다.
+커밋은 `/vais 저장` → 제안 확인 → `/vais 저장 확인` 으로 한다(runtime 이 `git add`·`commit`, push 는 사람). 하네스 자체를 고칠 때: 사용자가 `workflowV2.mode` 를 `disabled` 로 내림(또는 `VAIS_HARNESS_OFF=1`) → 수정 → 검증 → 커밋 → `enforce` 복귀. mode 값이 잘못되면 열리지 않고 닫힘으로 실패하며 매 프롬프트에 경고가 뜬다. 실행 중 플러그인은 마켓플레이스 캐시 사본이라 push · 버전 bump · 업데이트 뒤에 반영된다.
 
 > 변경 이력: `CHANGELOG.md`

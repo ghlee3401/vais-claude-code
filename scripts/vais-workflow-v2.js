@@ -25,6 +25,11 @@ const { recordDeferredHandoff } = require('../lib/workflow/v2/automatic-handoff'
 const { runDoctor } = require('../lib/workflow/v2/doctor');
 const { chainStatus, confirmUnchanged, reindex } = require('../lib/workflow/v2/id-chain');
 const { capture } = require('../lib/workflow/v2/screen-capture');
+const { statusSummary } = require('../lib/workflow/v2/briefing');
+const { explain } = require('../lib/workflow/v2/explain');
+const { propose } = require('../lib/workflow/v2/proposal');
+const ledger = require('../lib/workflow/v2/ledger');
+const vcs = require('../lib/workflow/v2/vcs');
 
 const INTERNAL_COMMAND = `node ${JSON.stringify(__filename)}`;
 
@@ -602,6 +607,29 @@ function screensCapture(projectRoot, options) {
   };
 }
 
+// `/vais 기록 <종류> <내용>`: the entry is written only when this session's authorization holds
+// the token the prompt hook created from the user's own sentence (kind and text must match).
+function ledgerAdd(projectRoot, options) {
+  const sessionId = requireOption(options, 'session');
+  const kind = ledger.normalizeKind(requireOption(options, 'kind'));
+  const text = requireOption(options, 'text');
+  if (!kind || !ledger.USER_KINDS.includes(kind)) throw new Error(`장부 종류는 ${ledger.USER_KINDS.join('·')} 중 하나다`);
+  vcs.requireConfirmation(projectRoot, sessionId, entry => entry.type === 'ledger' && entry.kind === kind && String(entry.text) === text, `/vais 기록 ${kind} ${text}`);
+  const item = new WorkItemStore(projectRoot).getCurrent();
+  const entry = ledger.append(projectRoot, {
+    workItemId: item?.id || null, feature: item?.primaryFeature || null, kind, text,
+    why: '사용자가 직접 기록', source: { type: 'user', id: sessionId }, refs: [],
+  });
+  return { schema: 'ledger-add/v1', entry };
+}
+
+function ledgerList(projectRoot, options) {
+  const kind = options.kind && options.kind !== true ? ledger.normalizeKind(options.kind) : null;
+  if (options.kind && options.kind !== true && !kind) throw new Error(`장부 종류는 ${ledger.USER_KINDS.join('·')} 또는 milestone 중 하나다`);
+  const limit = Number(options.limit) || 10;
+  return { schema: 'ledger-list/v1', kind, entries: ledger.recent(projectRoot, { kinds: kind ? [kind] : undefined, limit }) };
+}
+
 function contextCapsule(projectRoot, options) {
   const store = new WorkItemStore(projectRoot);
   const item = options.id && options.id !== true ? store.get(String(options.id)) : store.getCurrent();
@@ -677,11 +705,19 @@ function execute(argv = process.argv.slice(2), projectRoot = null) {
   const { command, subcommand, options } = parseArgs(argv);
   const root = path.resolve(projectRoot || resolveProjectRoot(process.cwd()) || process.cwd());
   const store = new WorkItemStore(root);
-  if (command === 'status') return { current: store.getCurrent(), pending: store.readRegistry().pendingRequests };
+  if (command === 'status') return { current: store.getCurrent(), pending: store.readRegistry().pendingRequests, summary: statusSummary(root) };
   if (command === 'search') return { matches: searchRelatedWork(root, requireOption(options, 'query'), { primaryFeature: options.feature }) };
   if (command === 'context') return contextCapsule(root, options);
   if (command === 'doctor') return runDoctor(root);
   if (command === 'stage' && subcommand === 'status') return chainStatus(root);
+  if (command === 'explain') return { schema: 'explain/v1', ...explain(root, requireOption(options, 'target')) };
+  if (command === 'propose') return { schema: 'proposals/v1', proposals: propose(root) };
+  if (command === 'ledger' && subcommand === 'list') return ledgerList(root, options);
+  if (command === 'save' && subcommand === 'propose') return { schema: 'vcs-save-proposal/v1', ...vcs.saveProposal(root, { message: options.message && options.message !== true ? String(options.message) : undefined }) };
+  if (command === 'revert' && subcommand === 'propose') return { schema: 'vcs-revert-proposal/v1', ...vcs.revertProposal(root, requireOption(options, 'target')) };
+  if (command === 'ledger' && subcommand === 'add') return ledgerAdd(root, options);
+  if (command === 'save' && subcommand === 'commit') return vcs.commitSave(root, { sessionId: requireOption(options, 'session'), message: options.message && options.message !== true ? String(options.message) : undefined });
+  if (command === 'revert' && subcommand === 'commit') return vcs.revertCommits(root, { sessionId: requireOption(options, 'session'), target: requireOption(options, 'target') });
   let result;
   if (command === 'create') result = create(root, options);
   else if (command === 'stage' && subcommand === 'confirm') result = stageConfirm(root, options);
@@ -735,6 +771,8 @@ module.exports = {
   assertNewFeatureSlug,
   stageConfirm,
   screensCapture,
+  ledgerAdd,
+  ledgerList,
   preparePlan,
   refreshAuthorization,
   create,

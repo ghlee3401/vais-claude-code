@@ -1,0 +1,74 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-16-commands",
+  "assignmentId": "AS-5f2b1bfe-0a59-4706-afbd-edfe9110cb02",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "597e27d7d07c115cc7067afd34bd9a1aee4e02d195d320784ce7feb093bc722a",
+  "handoffDigest": "b5f60915b2fd653ad3b0b798b8a7071cc39cbb817e58e4db1dbe65257edd3362",
+  "persistedAt": "2026-09-16T09:51:09.464Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "TC-001~011 충족. npm test 217/217, regression 8/8, lint·doctor PASS. vcs.js git 은 add·commit·revert 만, push 없음.",
+    "decisions": [
+      "토큰은 hook main 이 사용자 route 에서만 발급",
+      "add -A 는 .vais/ 제외 형태로 구현(설계 취지 유지)",
+      "종류 오류 기록은 start-request 로 폴스루"
+    ],
+    "behavior": {
+      "inputs": [
+        "/vais 8 명령 문장",
+        "세션 confirmations 토큰",
+        "임시 git repo 버전 7면"
+      ],
+      "outputs": [
+        "status.summary·explain text",
+        "커밋·revert 해시",
+        "ledger source user 항목"
+      ],
+      "errors": [
+        "CONFIRMATION_REQUIRED",
+        "SAVE_REFUSED 버전 불일치",
+        "REPORT_OUTCOME_TOO_LONG"
+      ]
+    },
+    "evidence": [
+      "npm test: tests 217 pass 217 fail 0; npm run regression: 8 pass 0 fail (commands·A·C·E·F)",
+      "tests/v2-commands.test.js TC-003/004/006/007 부정 케이스(토큰 없음·타 세션·불일치·종류 오류·기록 화면 만들기) 본문 확인",
+      "doctor version-sync 3.5.0; README 배지·CHANGELOG 3.5.0; roadmap H4 완료·H5 진행; design.md 대응표 3행 완료(H5)"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-010",
+      "REQ-011"
+    ],
+    "risks": [
+      "문서 '버전 6곳' vs 실제 7면 표기 혼재",
+      "hook ledger-add-invalid 미도달",
+      "revert 는 미커밋 변경 시 전면 거부"
+    ],
+    "unverified": [
+      "Claude Code 실 hook 경로 E2E",
+      "플러그인 캐시 반영(3.5.0 미배포)",
+      "revert 충돌 시 abort 경로"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

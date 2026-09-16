@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "terms": [
+    { "id": "plan", "names": ["plan", "플랜", "계획"], "text": "무엇을 왜 만들지 적는 첫 문서. 문제·목표·범위·요구사항(REQ)·엣지 케이스·완료 조건을 담고, 사용자가 `/vais plan 승인` 해야 다음으로 간다. 구현 방법은 여기 적지 않는다.", "refs": ["docs/harness/design.md#5-루프와-일-양식"] },
+    { "id": "design", "names": ["design", "디자인 문서", "설계"], "text": "어떻게 만들지 정하는 문서. 요구사항마다 동작·입력·출력·오류·테스트(TC)를 정하고, 쓰기 범위와 검사 종류를 선언한다. 화면 작업이면 시안 그림 목록이다. `/vais design 승인` 뒤 자동으로 만들기가 시작된다.", "refs": ["docs/harness/design.md#5-루프와-일-양식"] },
+    { "id": "do", "names": ["do", "만들기", "구현 단계"], "text": "설계대로 실제로 만드는 단계. 사용자가 할 일은 없고, 끝나면 검사(readiness)가 자동으로 돈다. 화면 작업은 여기서 멈춰 전/후 그림을 보여준다.", "refs": [] },
+    { "id": "review", "names": ["review", "리뷰", "검수", "독립 qa", "qa"], "text": "만든 사람이 아닌 별도 검사자(독립 QA)가 요구사항과 테스트를 기준으로 PASS/FAIL 을 내는 단계. PASS 뒤에만 사용자가 `/vais 최종 승인` 할 수 있다.", "refs": [] },
+    { "id": "report", "names": ["report", "보고서", "리포트"], "text": "작업이 끝났음을 기록하는 문서. 확정되면 동결되어 고칠 수 없고, 남은 제한은 부채로 장부에 남는다.", "refs": [] },
+    { "id": "kind", "names": ["kind", "작업 종류", "카인드"], "text": "작업의 종류. `harness`(플러그인 자체), `feature`(기능), `ui`(화면 손보기), `bug`(버그), 그리고 제품 문서 10단계 각각(`stage-*`). 종류에 따라 문서 양식과 검사가 달라진다.", "refs": ["contracts/work-kinds.json"] },
+    { "id": "stale", "names": ["stale", "스테일", "낡음"], "text": "상위 문서 항목이 바뀌어 그 항목을 부모로 둔 하위 항목이 더는 맞다고 보장할 수 없는 상태. 하위를 다시 승인하거나 사용자가 `/vais 변경 없음 확인: <항목> ← <부모>` 로 풀어야 다음 단계로 갈 수 있다.", "refs": ["docs/harness/design.md#3-id-사슬-규칙"] },
+    { "id": "gate", "names": ["gate", "게이트", "관문", "승인"], "text": "사람이 결정하는 지점. Plan 승인, Design 승인, 최종 승인 세 곳이며 `승인` 이라는 말이 정확히 들어가야 한다. `좋아` 같은 말은 승인이 아니다.", "refs": [] },
+    { "id": "screen-check", "names": ["정지점", "화면 확인", "화면 확인 정지점"], "text": "화면 작업(ui)에서 만들기가 끝난 뒤 실제 화면 그림(전/후)을 보고 `/vais 확인` 또는 수정 문장으로 답하는 지점. 수정은 최대 5회, 여섯 번째는 막힌다.", "refs": ["docs/harness/design.md#5-루프와-일-양식"] },
+    { "id": "ledger", "names": ["장부", "ledger", "기록"], "text": "승인·결정·피드백·취향·부채·리스크가 자동으로 쌓이는 파일(`.vais/v2/ledger.jsonl`). 손으로 고치지 않고 `/vais 기록 <종류> <내용>` 으로 덧붙일 수만 있다. `docs/product/decisions.md` 가 이 장부를 사람 말로 다시 그린다.", "refs": ["docs/product/decisions.md"] },
+    { "id": "proposal", "names": ["제안", "다음 행동"], "text": "지금 상태에서 다음으로 할 만한 일 세 가지. 기다리는 결정, 안 만든 다음 단계, stale 해소, 남은 부채 순으로 규칙에 따라 뽑는다.", "refs": [] },
+    { "id": "chain", "names": ["사슬", "제품 사슬", "10단계", "단계"], "text": "요구사항 → 기능 → 화면 → 와이어프레임 → 디자인 시스템 → 시안 → 데이터 → API → 기술 구조 → 테스트 계획 순서로 만드는 제품 문서 10개. 앞 단계가 승인되지 않으면 다음 단계를 시작할 수 없다.", "refs": ["contracts/chain-stages.json"] },
+    { "id": "id-prefix", "names": ["id", "항목 id", "req", "f", "s", "w", "ds", "v", "d", "api", "t", "tc"], "text": "문서 항목의 이름표. REQ(요구사항)·F(기능)·S(화면)·W(와이어프레임)·DS(디자인 시스템)·V(시안)·D(데이터)·API(규약)·T(기술 구조)·TC(테스트). 번호는 세 자리이고 `### F-003 ← REQ-002` 처럼 부모를 함께 적는다.", "refs": ["docs/harness/design.md#3-id-사슬-규칙"] },
+    { "id": "doctor", "names": ["doctor", "닥터", "건강검진"], "text": "`/vais doctor`: 설정·hook·버전·상태 파일·장부·stale·상태 줄·브라우저·git 을 점검하고 고치는 법을 알려준다. 읽기 전용.", "refs": [] },
+    { "id": "checklist", "names": ["검수표", "checklist"], "text": "Review 에서 확인할 것을 사용자 말로 적은 5줄 이하 목록. 화면 작업은 승인 시안과 실제 화면을 나란히 놓은 검수 페이지에 들어간다.", "refs": [] },
+    { "id": "mockup", "names": ["시안", "안", "옵션"], "text": "고를 수 있는 후보. 화면 작업의 Design 은 앱 사본에 적용한 그림 1~3장이고 `/vais N번` 으로 고른 뒤 승인한다.", "refs": [] },
+    { "id": "round", "names": ["회차", "수정 회차"], "text": "화면 확인 정지점에서 수정 요청 한 번이 한 회차. 회차마다 그림과 무엇이 바뀌었는지(diff)가 남는다.", "refs": [] },
+    { "id": "debt", "names": ["부채", "debt", "잔여 제한"], "text": "끝내지 못하고 넘긴 것. Report 의 잔여 제한과 QA FAIL 이 자동으로 장부에 부채로 남고, 제안에서 정리 후보로 뜬다.", "refs": ["docs/product/decisions.md"] },
+    { "id": "preference", "names": ["취향", "preference"], "text": "화면에 대한 사용자의 선호(\"버튼은 크게, 파랑\"). 화면 확인에서 한 수정 요청과 채택한 시안이 자동으로 남고, 다음 화면 작업 Design 이 먼저 읽는다.", "refs": [] },
+    { "id": "save", "names": ["저장", "save", "커밋", "commit"], "text": "`/vais 저장` 은 버전 6곳이 맞는지 보고 바뀐 파일과 커밋 메시지를 제안한다. 사용자가 `/vais 저장 확인` 을 직접 치면 하네스가 커밋한다. push 는 사용자가 한다.", "refs": [] },
+    { "id": "revert", "names": ["되돌리기", "revert", "롤백"], "text": "`/vais 되돌리기 <작업 id 또는 커밋>` 은 되돌릴 커밋과 파일을 보여주고, `/vais 되돌리기 확인: <대상>` 뒤에만 되돌리는 커밋을 만든다. 파일을 지우지 않고 역방향 커밋을 쌓는다.", "refs": [] },
+    { "id": "work-item", "names": ["work item", "작업", "wi"], "text": "`/vais` 요청 하나가 만드는 단위. `WI-날짜-이름` 으로 부르고 Plan·Design·Do·Review·Report 다섯 문서를 가진다. 동시에 하나만 진행한다.", "refs": ["docs/README.md"] },
+    { "id": "write-scope", "names": ["쓰기 범위", "write scope", "범위"], "text": "Design 이 선언한, 만들기 단계에서 고쳐도 되는 파일·폴더 목록. 밖의 파일을 고치려 하면 hook 이 막는다.", "refs": [] },
+    { "id": "harness", "names": ["하네스", "harness"], "text": "AI 가 지켜야 할 규칙(승인·범위·기록·증거·고장 알림)을 코드로 강제하는 장치. 이 플러그인 자체를 가리키기도 한다.", "refs": ["docs/harness/design.md"] }
+  ]
+}

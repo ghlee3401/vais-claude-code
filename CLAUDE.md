@@ -2,7 +2,7 @@
 
 > **이 파일의 책임**: Claude Code 전용 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 `ONBOARDING.md`(5분), 사용법은 `README.md`.
 >
-> 상태: **2026-09-16 로드맵 H1~H3 완료, H4 `ui-loop` 진행.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md` (H1 `harness-health` → … → H8). 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다.
+> 상태: **2026-09-16 로드맵 H1~H4 완료, H5 `commands` 진행.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md` (H1 `harness-health` → … → H8). 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다.
 
 ## 이 플러그인이 만드는 것
 
@@ -32,10 +32,11 @@ vais-claude-code/
 │   ├── workflow-v2-stop.js           # 기록 잠금 (장부 누락·미기록 변경 시 턴 종료 1회 거부)
 │   ├── v2-project-context.js · run-node.sh
 ├── lib/workflow/v2/          # 33 모듈: config(mode·ui 설정) · doctor · chain-registry(단계·kind 카탈로그) · id-chain(ID 사슬·stale·산출물 렌더) ·
-│                             #   ledger(장부) · product-note(노트 3면) · proposal(제안) · screen-capture(스크린샷) · diff-summary(회차 diff) · review-page(검수 페이지) ·
+│                             #   ledger(장부) · product-note(노트 3면) · proposal(제안) · briefing(상태 문장) · explain(설명) · vcs(저장·되돌리기) ·
+│                             #   screen-capture(스크린샷) · diff-summary(회차 diff) · review-page(검수 페이지) ·
 │                             #   state-machine · work-item-store · phase-transaction · gate-engine · router · write-policy · tool-adapters ·
 │                             #   document-manager/quality · phase-check · context-capsule/view · repo-drift · role-registry · agent-policy · automatic-handoff …
-├── contracts/                # v2-role-cards.json · chain-stages.json(단계 10) · work-kinds.json(kind 14)
+├── contracts/                # v2-role-cards.json · chain-stages.json(단계 10) · work-kinds.json(kind 14) · glossary.json(용어 사전)
 ├── lib/core/state-store.js · lib/io.js · lib/context-metrics.js
 ├── scripts/vais-workflow-v2.js       # 내부 workflow CLI (hook 이 명령 형태를 지정)
 ├── scripts/checks/v2-secret-scan.js · scripts/vais-validate-plugin.js · scripts/vais-doctor.js · scripts/vais-statusline.js · scripts/setup-dev.sh
@@ -43,7 +44,7 @@ vais-claude-code/
 │                             #   phase-transaction-receipt · review-evidence-prepare · automatic-handoff-evidence · chain-stage · work-kinds · ledger-entry
 ├── output-styles/vais-default.md
 ├── mcp/ · design-system/ · vendor/   # UI 설계용 design-system MCP (보류 — ui-loop 설계에서 결정)
-├── tests/v2-*.test.js (14) + tests/regression/(장면 A·C·E·F) + tests/fixtures/{mini-booking,product-stages}
+├── tests/v2-*.test.js (15) + tests/regression/(장면 A·C·E·F + commands) + tests/fixtures/{mini-booking,product-stages}
 ├── docs/product/             # 제품 사슬 정본 NN-*.md + 자동 생성 노트 README·roadmap·decisions
 ├── .vais/v2/                 # work-items.json · authorizations.json · chain-index.json · ledger.jsonl(append-only) — 직접 편집 금지
 ├── vais.config.json          # version · plugin · workflowV2 · ui(appRoot·entry·url)
@@ -74,6 +75,7 @@ vais-claude-code/
 13. **check id** — Tool 7종 `test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan` + 내장 `stage-document`(단계 kind), `screen-capture`(ui kind), 예약 `screenshot-compare`.
 14. **Bash** — 한 번에 한 명령. `&&`, `|`, `;`, 리다이렉션, `$( )` 금지. 읽기는 Read/Grep 우선.
 15. **위험 명령 금지** — `rm -rf`, `git push --force`, `git commit --no-verify`. 민감 정보는 환경 변수로만.
+16. **사용자 명령** — `/vais 상태`·`설명`·`제안`·`기록 보기`·`doctor` 는 읽기 전용이며 hook 이 지정한 CLI(`status`·`explain`·`propose`·`ledger list`·`doctor`)를 실행해 결과 문장을 그대로 보인다. `/vais 저장`·`되돌리기`·`기록` 은 두 단계: 첫 명령은 제안만, 사용자가 확인 문구(`/vais 저장 확인`, `/vais 되돌리기 확인: <대상>`, `/vais 기록 <종류> <내용>`)를 직접 치면 runtime 이 토큰을 발급하고 `save commit`·`revert commit`·`ledger add` 가 실행된다. AI 가 `git commit` 을 직접 치거나 확인 문구를 대신 쓰지 않는다. push 는 사용자가 한다.
 
 ## mode 와 비상 스위치
 
@@ -106,4 +108,4 @@ npm run doctor      # 하네스 건강검진 (= /vais doctor)
 - `docs/README.md`, `docs/features/`, 완료된 Report 를 손으로 수정하지 말 것 (자동 생성·동결)
 - `vendor/` 를 직접 수정하지 말 것
 - `contracts/v2-role-cards.json`, `schemas/`, `vais.config.json` 키 구조를 사전 합의 없이 바꾸지 말 것
-- 사용자 요청 없이 커밋하지 말 것
+- 사용자 요청 없이 커밋하지 말 것 — 커밋은 `/vais 저장` → 사용자의 `/vais 저장 확인` 뒤 runtime 이 한다

@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/commands/2026-09-16-commands/05-report/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 2235B is within the 3072B standard budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/commands/2026-09-16-commands/05-report/main.md"
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "name": "vais-code",
   "description": "VAIS Code — 비개발자가 개발자처럼 웹 앱을 만들게 해주는 Claude Code 하네스. 단일 /vais 진입, Plan→Design→Do→Review→Report 를 hook 과 상태 머신으로 강제, 사용자는 고르기와 확인만 결정. 독립 read-only AI QA, runtime write scope guard, 동결 Report.",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "author": {
     "name": "VAIS Voice",
     "email": "ghlee0304@ncsoft.com"

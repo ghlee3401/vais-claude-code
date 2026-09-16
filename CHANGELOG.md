@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.5.0] - 2026-09-16
+
+> 로드맵 H5 `commands`. 비개발자용 명령 다섯(상태·설명·저장·되돌리기·doctor)과 부속 셋(제안·기록·기록 보기). 상태를 바꾸는 명령은 사용자가 확인 문구를 직접 친 뒤에만 runtime 이 실행한다.
+
+### Added
+
+- **`/vais 상태`** — `lib/workflow/v2/briefing.js`(브리핑 문장·`statusSummary`)로 세션 시작·상태 줄·상태 명령이 한 출처를 씀. CLI `status` 에 `summary`
+- **`/vais 설명 <ID·용어·파일>`** — `lib/workflow/v2/explain.js`: 항목 ID(부모·자식·만든 작업·승인일·stale), 용어(`contracts/glossary.json` 24개 + `schemas/glossary.schema.json`), 파일(정본 종류·상태·관련 작업). 모르면 후보만 제시. CLI `explain --target`
+- **`/vais 저장` → `/vais 저장 확인`** — `lib/workflow/v2/vcs.js`: 버전 7면(manifest 5 + README 배지 + CHANGELOG 헤더) 동기화 검사, 변경 파일 요약, 메시지 제안(`Work-Item:`·`Generated-By:` trailer). 확인 토큰이 있을 때만 `git add -A`(`.vais/` 제외)·`git commit -F`. CLI `save propose`, `save commit`
+- **`/vais 되돌리기 <작업 id·커밋>` → `/vais 되돌리기 확인: <대상>`** — 커밋·파일 목록(동결 Report 경고), 토큰 뒤 `git revert --no-edit`(실패 시 abort). CLI `revert propose`, `revert commit`
+- **`/vais 제안`**, **`/vais 기록 <종류> <내용>`**(`source user`, 한글 종류 매핑), **`/vais 기록 보기 [종류]`** — CLI `propose`, `ledger add`(토큰 필수), `ledger list`
+- **확인 토큰** — prompt hook 이 사용자 문장에서만 `authorization.confirmations[]` 를 발급(1회, 세션 한정). write-policy: 읽기 명령은 인가 없이, 쓰기 명령은 인가 + 토큰
+- **doctor `git`** — 저장소 여부·미커밋 변경 수·원격 존재
+- 회귀 `tests/regression/commands.test.js`(임시 git repo 에서 명령 표 전체), `tests/v2-commands.test.js` REQ-001~009·011
+
+### Fixed
+
+- **H4 잔여 3건** — Design 수정·material 개정 시 `chosenOption` 초기화; ui 트리거 `색` → `색상`·`색이`·`색을`·`색은`("검색" 오제안 제거); Report `--outcome` 500자 초과는 잘라 쓰지 않고 `REPORT_OUTCOME_TOO_LONG` 으로 거부
+
+### Changed
+
+- `docs/harness/roadmap.md` H4 완료·H5 진행, `docs/harness/design.md` 대응표(명령·설명·저장/되돌리기 완료), README 명령 표·두 단계 규칙, CLAUDE 16(커밋은 `/vais 저장` 흐름), ONBOARDING
+
 ## [3.4.0] - 2026-09-16
 
 > 로드맵 H4 `ui-loop`. 화면을 고치는 작업을 "시안 고르기 → 적용 → 실제 화면 보고 확인/수정(최대 5회) → 기록" 루프로 만들고, 화면은 기계가 찍은 스크린샷으로만 보인다.

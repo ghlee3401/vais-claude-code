@@ -1,0 +1,62 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-a5ce79b2-55d5-4e82-a97f-4a9f7b9ae49e",
+  "workItemId": "WI-2026-09-16-commands",
+  "phase": "plan",
+  "action": "present",
+  "gate": {
+    "gate": "plan",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "plan-document",
+      "document-budget"
+    ],
+    "passed": [
+      "plan-document",
+      "document-budget"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-16T09:14:54.455Z"
+  },
+  "checks": [
+    {
+      "check": "plan-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/commands/2026-09-16-commands/01-plan/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical plan document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/commands/2026-09-16-commands/01-plan/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/commands/2026-09-16-commands/01-plan/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 5527B is within the 6144B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/commands/2026-09-16-commands/01-plan/main.md"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "plan",
+    "status": "waiting-user"
+  }
+}

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.4.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-3.5.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -50,7 +50,12 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 |---|---|
 | `/vais <자연어 요청>` | 진행 중 작업이 없으면 새 작업 시작. 있으면 현재 단계의 지시·피드백 |
 | `/vais 이름: <kebab-case>` | 요청에 영어 단어가 없어 이름을 못 정했을 때 사용자가 Feature 이름을 확정 |
-| `/vais status` (`상태`) | 현재 작업·단계·상태와 대기 요청 조회 (읽기 전용) |
+| `/vais 상태` (`status`) | 현재 작업·단계·기다리는 결정·부채·stale·다음 행동 3개를 사람 말로 (읽기 전용) |
+| `/vais 설명 <ID·용어·파일>` | 항목 ID 의 부모·자식·만든 작업·stale, 용어 뜻(사전 데이터), 파일이 어느 정본인지 (읽기 전용) |
+| `/vais 저장 [메시지]` → `/vais 저장 확인[: 메시지]` | 버전 6곳 동기화 검사·변경 요약·커밋 메시지 제안 → 사용자가 확인 문구를 직접 치면 runtime 이 `git add`·`commit`. push 는 사용자가 |
+| `/vais 되돌리기 <작업 id·커밋>` → `/vais 되돌리기 확인: <대상>` | 되돌릴 커밋·파일 목록 → 확인하면 `git revert --no-edit` 커밋 |
+| `/vais 제안` | 다음 행동 3개와 근거 (읽기 전용) |
+| `/vais 기록 <결정·피드백·취향·부채·리스크·메모> <내용>` · `/vais 기록 보기 [종류]` | 장부에 직접 남기기(사용자 원문 그대로) · 최근 10건 |
 | `/vais doctor` | 하네스 건강검진: 설정·hook 5종·버전·상태 파일·장부·stale·statusline 점검과 고치는 법 (읽기 전용) |
 | `/vais 변경 없음 확인: F-003 ← REQ-002` | 상위 항목이 바뀌었지만 하위는 그대로임을 확인 (stale 해소) |
 | `/vais N번` | 시안 Design 에서 안 고르기 (그 뒤 `/vais design 승인`) |
@@ -73,6 +78,8 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 | 최종 거절 | `/vais 거절` |
 
 `좋아`, `ok` 같은 모호한 답과 `조건부`, `대신` 이 섞인 문장은 승인으로 기록되지 않는다. `/vais` 가 없는 대화는 읽기 전용이다.
+
+저장·되돌리기·기록처럼 상태를 바꾸는 명령은 두 단계다. 첫 명령은 제안만 보이고, 사용자가 확인 문구(`/vais 저장 확인`, `/vais 되돌리기 확인: <대상>`, `/vais 기록 …`)를 **직접** 치면 그 문장이 세션 토큰이 되어 runtime 이 실행한다. AI 가 대신 친 확인은 토큰이 되지 않아 CLI 가 거부한다. runtime 이 쓰는 git 명령은 `add`·`commit`·`revert` 셋뿐이며 push·force·reset 은 없다.
 
 ## 작업 종류(kind)와 제품 사슬
 
@@ -156,7 +163,8 @@ skills/vais/SKILL.md        /vais 진입 규칙
 agents/v2-specialist.md     유일한 위임 Agent
 hooks/                      session-start(브리핑) · prompt(라우팅·승인·지침) · write-guard · agent-handoff · drift · stop(기록 잠금)
 lib/workflow/v2/            상태 머신 · 저장소 · transaction · gate · 문서 품질 · drift · 역할 · 사슬(chain-registry·id-chain) · 장부(ledger) · 노트(product-note) · 제안(proposal) · doctor ·
-                            화면(screen-capture·diff-summary·review-page)
+                            화면(screen-capture·diff-summary·review-page) · 명령(briefing·explain·vcs)
+contracts/glossary.json     `/vais 설명` 용어 사전 (데이터)
 scripts/vais-workflow-v2.js 내부 CLI · scripts/vais-statusline.js 상태 줄 · scripts/vais-doctor.js
 contracts/v2-role-cards.json  역할 정본
 schemas/                    JSON 계약 (ajv 검증)
@@ -166,7 +174,7 @@ schemas/                    JSON 계약 (ajv 검증)
 
 ```bash
 npm test            # tests/v2-*.test.js
-npm run regression  # tests/regression/ — 사용 장면 회귀 (장면 A·C·E·F; VAIS_SCREEN_RENDERER=stub 로 그림은 대체)
+npm run regression  # tests/regression/ — 사용 장면 회귀 (장면 A·C·E·F + 명령 표; VAIS_SCREEN_RENDERER=stub 로 그림은 대체)
 npm run lint
 npm run validate    # 플러그인 구조 검증
 npm run doctor      # 하네스 건강검진

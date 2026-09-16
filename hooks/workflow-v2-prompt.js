@@ -136,7 +136,12 @@ const HELP_LINES = Object.freeze([
   '| `/vais 변경 없음 확인: F-003 ← REQ-002` | 상위 항목이 바뀌었지만 하위 항목은 그대로임을 사용자가 확인 (stale 해소) |',
   '| `/vais N번` | 시안 Design 에서 안 고르기 (그 뒤 `/vais design 승인`) |',
   '| `/vais 확인` · `/vais <수정 요청>` | 화면 확인 정지점: 확인하면 Review, 수정 문장이면 다시 고쳐 찍음 (최대 5회) |',
-  '| `/vais status` (`상태`) | 현재 작업·단계·대기 요청 (읽기) |',
+  '| `/vais 상태` (`status`) | 현재 작업·단계·기다리는 결정·부채·stale·제안을 사람 말로 (읽기) |',
+  '| `/vais 설명 <ID·용어·파일>` | 항목 ID 의 부모·자식·만든 작업, 용어 뜻, 파일이 어느 정본인지 (읽기) |',
+  '| `/vais 저장 [메시지]` → `/vais 저장 확인` | 버전 6곳 검사·변경 요약·메시지 제안 → 사용자가 확인하면 runtime 이 커밋 (push 는 사용자) |',
+  '| `/vais 되돌리기 <작업 id·커밋>` → `/vais 되돌리기 확인: <대상>` | 되돌릴 커밋·파일 제시 → 확인하면 revert 커밋 |',
+  '| `/vais 제안` | 다음 행동 3개 (읽기) |',
+  '| `/vais 기록 <결정·피드백·취향·부채·리스크·메모> <내용>` · `/vais 기록 보기 [종류]` | 장부에 직접 남기기 · 최근 10건 보기 |',
   '| `/vais doctor` | 하네스 건강검진 (읽기) |',
   '| `/vais help` (`도움말`) | 이 표 |',
   '| `/vais pause` · `resume` · `cancel` (`일시정지`·`재개`·`취소`) | 작업 슬롯 제어 |',
@@ -270,6 +275,41 @@ function continuationLines(item, open, sessionId) {
   ];
 }
 
+function quote(value) {
+  return JSON.stringify(String(value ?? ''));
+}
+
+// Guidance for the user commands (docs/harness/design.md §7). Read commands run an
+// unauthenticated CLI query and show its sentence verbatim; write commands run the CLI only
+// because this turn's user sentence became a confirmation token in the session authorization.
+function commandGuidance(route, sessionId) {
+  const cli = INTERNAL_COMMAND;
+  switch (route.action) {
+    case 'status':
+      return [`\`${cli} status\` 를 한 번 실행해 결과의 \`summary\` 문장을 그대로 보인다. 대기 요청(pending)이 있으면 함께 알린다.`, '이 action은 읽기 전용이다.'];
+    case 'explain':
+      return [`\`${cli} explain --target ${quote(route.target)}\` 를 한 번 실행해 \`text\` 를 그대로 보이고 \`refs\` 를 링크로 붙인다. \`kind\` 가 unknown 이면 모른다고 말하고 \`candidates\` 를 제시한다. 사전에 없는 뜻을 지어내지 않는다.`, '이 action은 읽기 전용이다.'];
+    case 'save':
+      return [`\`${cli} save propose${route.message ? ` --message ${quote(route.message)}` : ''}\` 를 한 번 실행한다. 결과가 ok 면 버전·변경 파일·제안 메시지·경고를 보이고 사용자에게 \`/vais 저장 확인\` (또는 \`/vais 저장 확인: <메시지>\`) 을 안내한다. ok 가 아니면 reason 을 그대로 전한다. 커밋은 하지 않는다.`, '이 action은 읽기 전용이다.'];
+    case 'save-confirm':
+      return [`사용자가 저장을 직접 확인했고 runtime 이 이 세션에 확인 토큰을 등록했다. \`${cli} save commit --session ${sessionId}${route.message ? ` --message ${quote(route.message)}` : ''}\` 을 한 번 실행하고 커밋 해시·제목·파일 수를 보인다. push 는 사용자가 \`! git push\` 로 한다. 실패하면 reason 을 그대로 전하고 다시 시도하지 않는다.`];
+    case 'revert':
+      return [`\`${cli} revert propose --target ${quote(route.target)}\` 를 한 번 실행해 되돌릴 커밋(해시·제목·파일)과 경고를 보이고 \`/vais 되돌리기 확인: ${route.target}\` 을 안내한다. revert 는 하지 않는다.`, '이 action은 읽기 전용이다.'];
+    case 'revert-confirm':
+      return [`사용자가 되돌리기를 직접 확인했고 runtime 이 이 세션에 확인 토큰을 등록했다. \`${cli} revert commit --session ${sessionId} --target ${quote(route.target)}\` 을 한 번 실행하고 만들어진 revert 커밋을 보인다. 실패하면 reason 을 그대로 전한다.`];
+    case 'propose':
+      return [`\`${cli} propose\` 를 한 번 실행해 제안을 ①②③ 로 보인다. 근거(reason)를 한 줄씩 붙이고, 없는 제안을 만들지 않는다.`, '이 action은 읽기 전용이다.'];
+    case 'ledger-list':
+      return [`\`${cli} ledger list${route.kind ? ` --kind ${route.kind}` : ''} --limit 10\` 을 한 번 실행해 항목을 시간순으로 보인다.${route.rawKind && !route.kind ? ` "${route.rawKind}" 는 종류가 아니라 전체를 보인다.` : ''}`, '이 action은 읽기 전용이다.'];
+    case 'ledger-add':
+      return [`사용자가 장부 기록을 직접 요청했고 runtime 이 이 세션에 확인 토큰을 등록했다. \`${cli} ledger add --session ${sessionId} --kind ${route.kind} --text ${quote(route.text)}\` 을 한 번 실행하고 기록된 항목을 보인다. 내용을 고쳐 쓰지 않는다.`];
+    case 'ledger-add-invalid':
+      return [`"${route.rawKind}" 는 장부 종류가 아니다. 종류는 결정·피드백·취향·부채·리스크·메모 (decision·feedback·preference·debt·risk·note) 중 하나다. 사용자에게 다시 입력하도록 안내한다.`, '이 action은 읽기 전용이다.'];
+    default:
+      return null;
+  }
+}
+
 function buildContext(route, item, leaseError, sessionId = '<session>', options = {}) {
   const lines = [statusLine(item)];
   if (leaseError) {
@@ -294,6 +334,11 @@ function buildContext(route, item, leaseError, sessionId = '<session>', options 
   }
   if (route.action === 'doctor') {
     lines.push(`\`${INTERNAL_COMMAND} doctor\` 를 한 번 실행해 점검표를 사람 말로 요약해 보여준다. fail 항목은 fix 문구를 그대로 안내한다.`, '이 action은 읽기 전용이다.');
+    return lines.join('\n');
+  }
+  const commandLines = commandGuidance(route, sessionId);
+  if (commandLines) {
+    lines.push(...commandLines);
     return lines.join('\n');
   }
   if (route.action === 'queue-pending') {
@@ -387,6 +432,14 @@ function observePromptDrift(store, item, sessionId, projectRoot) {
   return routed;
 }
 
+// Only the user's own sentence in this turn becomes a write-command token.
+function confirmationsFor(route) {
+  if (route.action === 'save-confirm') return [{ type: 'save', message: route.message || null }];
+  if (route.action === 'revert-confirm') return [{ type: 'revert', target: route.target }];
+  if (route.action === 'ledger-add') return [{ type: 'ledger', kind: route.kind, text: route.text }];
+  return [];
+}
+
 function requestSlugFor(route) {
   if (route.action === 'name-feature') return route.slug;
   if (route.action === 'start-request') return deterministicSlug(route.text);
@@ -459,6 +512,7 @@ function main() {
       action: route.action === 'name-feature' ? 'start-request' : route.action,
       requestSlug: requestSlugFor(route),
       stageConfirmations: route.action === 'stage-confirm-unchanged' ? [{ item: route.item, parent: route.parent }] : [],
+      confirmations: confirmationsFor(route),
       allowedPaths: defaultAllowedPaths(active),
       allowedCommands: [INTERNAL_COMMAND],
     });
@@ -491,6 +545,8 @@ module.exports = {
   stagePhaseLines,
   ledgerLinesFor,
   uiPhaseLines,
+  commandGuidance,
+  confirmationsFor,
   main,
 };
 

@@ -360,10 +360,13 @@ describe('ui-loop REQ-010 doctor', () => {
 });
 
 describe('ui-loop REQ-012 documents and versions', () => {
-  it('TC-012 version 3.4.0 everywhere, CHANGELOG, roadmap H3 done and H4 in progress, design.md rows done', () => {
+  it('TC-012 version synchronized at 3.4.0 or later, CHANGELOG, roadmap H3 done and H4 in progress, design.md rows done', () => {
     const versions = versionFiles(REPO);
-    assert.deepEqual([...new Set(Object.values(versions))], ['3.4.0'], JSON.stringify(versions));
-    assert.ok(fs.readFileSync(path.join(REPO, 'README.md'), 'utf8').includes('version-3.4.0-blue'));
+    const distinct = [...new Set(Object.values(versions))];
+    assert.equal(distinct.length, 1, JSON.stringify(versions));
+    const [major, minor] = distinct[0].split('.').map(Number);
+    assert.ok(major > 3 || (major === 3 && minor >= 4), distinct[0]);
+    assert.ok(fs.readFileSync(path.join(REPO, 'README.md'), 'utf8').includes(`version-${distinct[0]}-blue`));
     assert.ok(fs.readFileSync(path.join(REPO, 'CHANGELOG.md'), 'utf8').includes('## [3.4.0]'));
     const roadmap = fs.readFileSync(path.join(REPO, 'docs', 'harness', 'roadmap.md'), 'utf8');
     assert.match(roadmap, /\| H3 \| 완료 \|/);

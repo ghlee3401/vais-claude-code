@@ -242,7 +242,9 @@ describe('harness-health REQ-009 doctor', () => {
     assert.equal(authorizeCommand(`${cli} doctor`, null, trusted).allowed, true);
     assert.equal(authorizeCommand('node "${CLAUDE_PLUGIN_ROOT}/scripts/vais-workflow-v2.js" doctor', null).allowed, true);
     assert.equal(authorizeCommand(`${cli} plan present --slug x`, null, trusted).allowed, false);
-    assert.equal(authorizeCommand(`${cli} status`, null, trusted).allowed, false);
+    // `status` became a read-only user command (H5); a mutating command must still be closed.
+    assert.equal(authorizeCommand(`${cli} status`, null, trusted).allowed, true);
+    assert.equal(authorizeCommand(`${cli} handoff --id x --session s`, null, trusted).allowed, false);
     assert.equal(authorizeCommand(`${cli} doctor && rm -rf /`, null, trusted).allowed, false);
     assert.equal(authorizeCommand('node /tmp/evil/scripts/vais-workflow-v2.js doctor', null, trusted).allowed, false);
     assert.equal(authorizeCommand(`${cli} doctor`, null).allowed, false);

@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/commands/2026-09-16-commands/02-design/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 9756B is within the 10240B standard budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/commands/2026-09-16-commands/02-design/main.md"
+  ]
+}
