@@ -1,0 +1,65 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-16-ui-loop",
+  "assignmentId": "AS-70a0d157-6546-431b-8e04-6aa79d0d55cc",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 1,
+  "assignmentDigest": "242a4acc76dfb8753a66076fe244ac8b76a5a1b83ba933005b04c6137c482b3c",
+  "handoffDigest": "d6db98bd888b61036f58145af848ff76058f4adc32ae39d2cd33a77e77b22f99",
+  "persistedAt": "2026-09-16T08:53:42.637Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "12/12 TC PASS. TC-004: blocked 면 hook 이 '상한 5회 · /vais 확인 · /vais cancel' 지침만 내고 statusLine 이 blockReason 을 보인다. npm test 207 pass·0 skip, regression 7 pass·0 skip, lint·doctor fail 0.",
+    "decisions": [
+      "hook 316-322 blocked 분기·116-122 statusLine 확인",
+      "실제 run() 경로도 blocked 가 slot-holding 이라 적용됨",
+      "TC-005 실제 Chrome 3.2s 실행, skip 없음",
+      "1차 PASS 11 TC 는 회귀 없음(테스트 수 207 동일)"
+    ],
+    "behavior": {
+      "inputs": [
+        "Plan·Design REQ/TC-001~012 + 9절",
+        "hooks/workflow-v2-prompt.js 본문",
+        "tests/v2-ui-loop.test.js TC-004",
+        "npm test·regression·lint·doctor 출력"
+      ],
+      "outputs": [
+        "TC-001~012 PASS",
+        "blocked 지침에 '취향 기록' 문구 없음",
+        "router do/blocked 확인 → screen-confirm",
+        "doctor browser·statusline·version pass"
+      ],
+      "errors": []
+    },
+    "evidence": [
+      "npm test: # tests 207 · pass 207 · skipped 0; 'TC-005 real Chrome renders the fixture app' duration_ms 3167",
+      "npm run regression: scene A·C·E·F tests 7 · pass 7 · skipped 0; scene C 390ms",
+      "hooks/workflow-v2-prompt.js:116-122 statusLine blockReason · :316-322 blocked 분기 · :450-465 post-transition 전달",
+      "tests/v2-ui-loop.test.js:194-225 TC-004 blocked 컨텍스트·상태 줄 검증; npm run lint 경고 0; doctor fail 0 warn 1"
+    ],
+    "affectedRequirements": [
+      "REQ-004"
+    ],
+    "risks": [
+      "chosenOption 이 material 개정 뒤 유지됨",
+      "트리거 '색' 이 '검색' 요청에 ui 오제안",
+      "do/blocked 에서 수정 문장은 일반 지침으로 흐름",
+      "blocked 경로는 단위 테스트만, 장면 C 미포함"
+    ],
+    "unverified": [
+      "실제 Chrome 으로 do ready 전 구간 실행",
+      "플러그인 캐시 3.4.0 반영 (push 전)",
+      "do/blocked 에서 /vais cancel 실제 실행"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

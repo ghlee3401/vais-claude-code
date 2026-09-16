@@ -1,0 +1,68 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-16-ui-loop",
+  "assignmentId": "AS-fd16e8ce-278f-414c-baea-87392ab765e6",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "632069bf3e176de91de476f69dd8ff084ea9f74cfb334ff98c52c0bbb5e552f9",
+  "handoffDigest": "7e0e7056a5d62a749ac979b3139aceb6feddd025c2e527a3407d65a1d6c9a3af",
+  "persistedAt": "2026-09-16T08:43:34.980Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "fail",
+    "judgment": "11/12 TC PASS (npm test 207 pass·0 skip, regression 7 pass·0 skip, 실제 Chrome 캡처 5.4s 실행). TC-004 FAIL: 6번째 수정은 do/blocked 로 막히지만 hook 이 '취향 기록·Design 복귀' 지침을 내고 상한 이유를 안 보인다.",
+    "decisions": [
+      "상태 머신·ledger 는 6회차 blocked 를 바르게 기록",
+      "hook screen-revise 분기가 blocked 상태를 가르지 않음",
+      "Plan 엣지 '5회 상한 — 확인하거나 취소' 안내 미구현",
+      "나머지 11 TC 는 코드 읽기·테스트 출력·doctor 로 확인"
+    ],
+    "behavior": {
+      "inputs": [
+        "Plan·Design REQ/TC-001~012",
+        "git diff HEAD 31 파일 + 신규 5 파일",
+        "npm test·regression·lint·doctor 출력",
+        "Do receipt 3 + secret-scan receipt"
+      ],
+      "outputs": [
+        "TC-001~003·005~012 PASS, TC-004 FAIL",
+        "doctor WARN(캐시만)·3.4.0 5곳 일치",
+        "실제 Chrome 캡처 테스트 skip 없이 통과",
+        "장면 C 1.5s 통과, decisions 취향 3건"
+      ],
+      "errors": [
+        "6회차 hook 지침이 실제 상태와 모순",
+        "blockReason 을 보이는 사용자 경로 없음"
+      ]
+    },
+    "evidence": [
+      "npm test: # tests 207 · pass 207 · skipped 0; 'TC-005 real Chrome renders the fixture app' duration_ms 5453",
+      "npm run regression: scene A·C·E·F tests 7 · pass 7 · skipped 0; scene C 1504ms",
+      "hooks/workflow-v2-prompt.js:314-316 screen-revise 지침 vs lib/workflow/v2/state-machine.js:271-281 blocked 전이",
+      "03-do/evidence/checks/{test,lint,plugin-validator}.json pass · 04-review/evidence/checks/secret-scan.json pass"
+    ],
+    "affectedRequirements": [
+      "REQ-004"
+    ],
+    "risks": [
+      "chosenOption 이 material Design 개정 뒤 유지됨",
+      "트리거 '색' 이 '검색' 요청에 ui 오제안",
+      "예약 screenshot-compare 선언 시 gate BLOCKED",
+      "W·V PNG 렌더가 Review 검사에서 재실행"
+    ],
+    "unverified": [
+      "실제 Chrome 으로 do ready 전 구간 실행",
+      "플러그인 캐시 3.4.0 반영 (push 전)",
+      "/vais status 가 blockReason 을 보이는지"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

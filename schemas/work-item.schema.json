@@ -64,6 +64,8 @@
     },
     "readinessNotReadyCount": { "type": "integer", "minimum": 0, "maximum": 3 },
     "qaRepairCount": { "type": "integer", "minimum": 0, "maximum": 5 },
+    "screenRevisionCount": { "type": "integer", "minimum": 0, "maximum": 5 },
+    "chosenOption": { "type": ["integer", "null"], "minimum": 1, "maximum": 9 },
     "approvals": {
       "type": "object",
       "additionalProperties": false,

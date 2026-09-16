@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/ui-loop/2026-09-16-ui-loop/03-do/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 4881B is within the 6144B extended budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/ui-loop/2026-09-16-ui-loop/03-do/main.md"
+  ]
+}

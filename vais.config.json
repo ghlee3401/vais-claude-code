@@ -1,5 +1,5 @@
 {
-  "version": "3.3.0",
+  "version": "3.4.0",
   "plugin": {
     "name": "vais-code",
     "description": "VAIS Code — 비개발자가 개발자처럼 웹 앱을 만들게 해주는 Claude Code 하네스 플러그인",
@@ -11,5 +11,11 @@
     "leaseMs": 60000,
     "authorizationTtlMs": 1800000,
     "statePath": ".vais/v2/work-items.json"
+  },
+  "ui": {
+    "_ui": "ui kind 의 화면 확인에 쓰는 앱 위치. appRoot(+entry) 는 정적 파일을, url 은 이미 떠 있는 앱을 가리킨다. 이 저장소는 플러그인 자체라 비어 있다.",
+    "appRoot": null,
+    "entry": "index.html",
+    "url": null
   }
 }

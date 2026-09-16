@@ -147,7 +147,7 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | ID 파싱·부모 검사·stale 전파·chain-index | `lib/workflow/v2/id-chain.js` | 완료 (H2) |
 | 단계 문서 검사·승인 (`stage-document` 내장 검사, `report finalize` 승인, `stage status/confirm/reindex`) | `lib/workflow/v2/phase-transaction.js`, `scripts/vais-workflow-v2.js` | 완료 (H2) |
 | Work item `kind` 필드·진입 조건·kind 별 양식·예산 | `state-machine.js`, `phase-check.js`, `document-quality.js`, `schemas/work-item.schema.json` | 완료 (H2) |
-| 화면 확인 정지점 (ui kind) | `state-machine.js` 이벤트 `USER_SCREEN_CONFIRMED` / `USER_SCREEN_REVISE`, `router.js` | 변경 |
+| 화면 확인 정지점 (ui kind) | `state-machine.js` 이벤트 `USER_OPTION_CHOSEN` / `USER_SCREEN_CONFIRMED` / `USER_SCREEN_REVISED`, `router.js`, prompt hook | 완료 (H4) |
 | 수정 루프 상한 (kind 의 `repairLimit`, ui 5) | `state-machine.js`, `contracts/work-kinds.json` | 완료 (H2) |
 | 장부 | `lib/workflow/v2/ledger.js`, `schemas/ledger-entry.schema.json`, `.vais/v2/ledger.jsonl` (store 잠금 안에서 append) | 완료 (H3) |
 | 제품 노트 4면 렌더링 | `lib/workflow/v2/product-note.js` (README·roadmap·decisions; 과거는 `docs/README.md`) | 완료 (H3) |
@@ -168,13 +168,13 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 버전 도장 | `phase-transaction.js` receipt, `schemas/phase-transaction-receipt.schema.json` | 완료 (H1) |
 | Claude Code 접점 어댑터 (hook 입력·도구 이름·Agent 결과) | `lib/io.js` | 변경 |
 | 별도 Agent 세 조건 guard, 역할 프롬프트 조립 | `lib/workflow/v2/agent-policy.js`, `role-registry.js` | 변경 |
-| 회귀 세트 | `tests/regression/*.test.js` (장면 6 중 A·E·F 완료, B·C·D 는 H4·H6) | 진행 중 |
+| 회귀 세트 | `tests/regression/*.test.js` (장면 6 중 A·C·E·F 완료, B·D 는 H6) | 진행 중 |
 | specialist 산출물 직접 기록 (handoff `files`) | `schemas/specialist-handoff.schema.json`, `lib/workflow/v2/automatic-handoff.js` | 완료 (H2) |
 | 역할 modelHint | `contracts/v2-role-cards.json` | 변경 |
-| 검사 어댑터 `screenshot-compare` 자리 | `lib/workflow/v2/tool-adapters.js` | 변경 |
-| 화면 산출물 렌더링·스크린샷 | `lib/workflow/v2/screen-capture.js` (Chrome 헤드리스) | 신규 |
-| 검수 페이지 (로컬 HTML) | `lib/workflow/v2/review-page.js` → `04-review/evidence/review.html` | 신규 |
-| 회차 diff 요약 (UI 수정 루프) | `lib/workflow/v2/diff-summary.js` | 신규 (H4) |
+| 검사 어댑터 `screenshot-compare` 자리 | `lib/workflow/v2/tool-adapters.js` (예약, 내장 `screen-capture` 는 동작) | 완료 (H4) |
+| 화면 산출물 렌더링·스크린샷 | `lib/workflow/v2/screen-capture.js` (Chrome 헤드리스, `VAIS_CHROME`, stub 렌더러 표기) + CLI `screens capture` | 완료 (H4) |
+| 검수 페이지 (로컬 HTML) | `lib/workflow/v2/review-page.js` → `04-review/evidence/review.html` | 완료 (H4) |
+| 회차 diff 요약 (UI 수정 루프) | `lib/workflow/v2/diff-summary.js` → `03-do/evidence/screens/round-N/diff.md` | 완료 (H4) |
 | 하네스 설정 정본·mode 판정 | `lib/workflow/v2/config.js` | 완료 (H1) |
 | 앱 실행 (확인 단계) | `vais.config.json > run.command`, `tool-adapters.js` `serve` | 신규 |
 | 응답 형식 | `output-styles/vais-default.md` | 변경 |

@@ -1,0 +1,15 @@
+{
+  "check": "transient-drafts",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/ui-loop/2026-09-16-ui-loop"
+  ],
+  "requirements": [
+    "REQ-025"
+  ],
+  "summary": "No transient draft Markdown remains",
+  "findings": [],
+  "evidence": []
+}

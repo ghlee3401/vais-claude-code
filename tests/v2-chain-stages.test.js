@@ -212,7 +212,7 @@ describe('chain-stages REQ-008/011 stage document check, approval, artifacts', (
 describe('chain-stages REQ-009 kind templates and budgets', () => {
   it('TC-009 stage kinds use one-line Plan and options Design with scale-capped options', () => {
     const stageItem = { id: 'WI-2026-09-16-s', primaryFeature: 's', scale: 'compact', kind: 'stage-features', phase: 'design' };
-    assert.deepEqual(requiredSectionsFor(stageItem, 'plan').map(([name]) => name), ['request-confirm', 'kind', 'stage']);
+    assert.deepEqual(requiredSectionsFor(stageItem, 'plan').map(([name]) => name), ['request-confirm', 'kind', 'stage-or-target']);
     assert.deepEqual(requiredSectionsFor(stageItem, 'design').map(([name]) => name), ['options', 'write-scope', 'readiness-review', 'rollback']);
     assert.deepEqual(requiredSectionsFor({ kind: 'harness' }, 'plan').map(([name]) => name), ['problem', 'goal', 'scope', 'requirements', 'user-flow', 'edge-cases', 'completion', 'impact']);
     assert.deepEqual(optionCountFindings(stageItem, 'design', '## 안 1\n## 안 2\n'), ['Design options: compact 규모는 안 1개까지다 (현재 2)']);

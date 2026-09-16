@@ -22,15 +22,52 @@ const ledger = require('../lib/workflow/v2/ledger');
 const LEDGER_INJECT_KINDS = Object.freeze(['feedback', 'preference', 'debt']);
 const LEDGER_INJECT_LIMIT = 5;
 
-// Memory shown at Design time: what the user already said about this feature.
+// Kinds whose Design decides how screens look: taste travels across features for them.
+const SCREEN_KINDS = Object.freeze(['ui', 'stage-wireframes', 'stage-mockups', 'stage-design-system']);
+
+// Memory shown at Design time: what the user already said about this feature, plus every
+// recorded taste (preference) for screen kinds — taste belongs to the product, not one feature.
 function ledgerLinesFor(projectRoot, item) {
   if (!item || item.phase !== 'design' || !item.primaryFeature) return [];
   const entries = ledger.recent(projectRoot, { feature: item.primaryFeature, kinds: LEDGER_INJECT_KINDS, limit: LEDGER_INJECT_LIMIT });
-  if (entries.length === 0) return [];
-  return [
-    `이 feature 의 장부 (최근 ${entries.length}, 피드백·취향·부채) — Design 에 반영하거나 반영하지 않는 이유를 적는다:`,
-    ...entries.map(entry => `- [${entry.kind}] ${entry.text}${entry.why ? ` (${entry.why})` : ''}`),
-  ];
+  const lines = [];
+  if (entries.length) {
+    lines.push(`이 feature 의 장부 (최근 ${entries.length}, 피드백·취향·부채) — Design 에 반영하거나 반영하지 않는 이유를 적는다:`,
+      ...entries.map(entry => `- [${entry.kind}] ${entry.text}${entry.why ? ` (${entry.why})` : ''}`));
+  }
+  if (SCREEN_KINDS.includes(kindOf(item)?.id)) {
+    const seen = new Set(entries.map(entry => entry.id));
+    const tastes = ledger.recent(projectRoot, { kinds: ['preference'], limit: LEDGER_INJECT_LIMIT }).filter(entry => !seen.has(entry.id));
+    if (tastes.length) {
+      lines.push(`제품 전체 취향 장부 (최근 ${tastes.length}) — 시안은 이 취향을 따르거나 벗어나는 이유를 적는다:`,
+        ...tastes.map(entry => `- [preference] ${entry.text}${entry.why ? ` (${entry.why})` : ''}`));
+    }
+  }
+  return lines;
+}
+
+// Phase guidance for screen-check kinds (ui): one-line Plan, option screenshots, the screen
+// check after Do. Pictures are shown by reading the PNGs, never by describing them.
+function uiPhaseLines(item, kind, sessionId) {
+  const dir = `docs/work-items/${item.primaryFeature}/${String(item.id).replace(/^WI-/, '')}`;
+  const round = (item.screenRevisionCount || 0) + 1;
+  return {
+    plan: [
+      `이 작업은 화면 손보기(kind ${kind.id}) 다. Plan 은 "요청 확인: <한 줄>", "kind: ${kind.id}", "대상 화면: <화면 이름 또는 S/W/V ID 또는 파일>" 세 줄이면 된다. 초안은 \`${planDraftPath(item)}\`.`,
+    ],
+    design: [
+      `Design 은 시안 고르기다: 안마다 앱 작업 사본을 \`${dir}/02-design/options/N/\` 에 만들고(vais.config.json > ui.appRoot 의 파일을 복사해 CSS/HTML 을 바꿈) \`${INTERNAL_COMMAND} screens capture --id ${item.id} --session ${sessionId} --target ${dir}/02-design/options/N/<entry> --out ${dir}/02-design/options/N\` 으로 데스크톱·모바일 PNG 를 찍는다. 규모별 안 상한 compact 1 · standard 2 · extended 3.`,
+      `본문: "## 안 N" 마다 "사본: <경로>", "데스크톱: <png>", "모바일: <png>" 줄과 한 줄 설명, "## 검수표"(≤5줄), "## 쓰기 범위"(제품 파일), "readiness · review" check, "rollback". 그림이 없는 안은 Gate 를 통과하지 못한다.`,
+      `\`${INTERNAL_COMMAND} design present --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <design-draft> --scope "<app path>" --readiness-check <tool-id> --review-check <tool-id>${(item.screenRevisionCount || 0) > 0 || item.qaRepairCount > 0 ? ' --material false' : ''}\`을 한 번 실행한다. PASS 뒤 PNG 를 Read 로 열어 사용자에게 보이고, 사용자는 \`/vais N번\` 으로 고른 뒤 \`/vais design 승인\` 한다.${(item.screenRevisionCount || 0) > 0 ? ` 지금은 화면 확인 수정 회차 ${item.screenRevisionCount} — 사용자의 수정 요청을 "## 수정 회차 ${item.screenRevisionCount}" 절에 적고 material=false 로 제시하면 바로 Do 로 간다.` : ''}`,
+    ],
+    do: [
+      `승인된 안(안 ${item.chosenOption || '?'})을 제품 파일(write scope)에 적용한다. \`${INTERNAL_COMMAND} do ready --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <do-draft>\` 가 회차 ${round} 화면을 \`${dir}/03-do/evidence/screens/round-${round}/\` 에 찍고 diff.md 를 만든다 (내장 검사 screen-capture; Chrome 이 없으면 NOT_READY).`,
+      `READY 뒤 상태는 do/waiting-user(화면 확인 정지점)다. round-0(전)·round-${round}(후) 의 desktop.png·mobile.png 를 Read 로 열어 보이고 diff.md 의 요약을 한 줄로 붙인 뒤 멈춘다. 사용자가 \`/vais 확인\` 이면 Review, 다른 문장이면 수정 회차로 Design 세부 수정(material=false) → Do 재실행이다. 상한 ${kind.repairLimit}회.`,
+    ],
+    review: [
+      `\`review prepare\` 가 \`${dir}/04-review/evidence/review.html\`(승인 시안 | 전 | 후, 회차 diff, 검수표)을 만든다. 독립 QA 에 그 경로와 round PNG 경로를 ref 로 넘긴다.`,
+    ],
+  };
 }
 
 const INACTIVE_LINE = '[VAIS · 하네스 비활성]';
@@ -79,7 +116,9 @@ function loadMode(projectRoot) {
 function statusLine(item) {
   if (!item) return '[VAIS · 새 요청 · Plan 시작 준비]';
   const feature = item.primaryFeature || item.id;
-  return `[${feature} · ${item.phase} · ${item.status}]`;
+  // A blocked item always shows why, so the user never has to dig for the reason.
+  const reason = item.status === 'blocked' && item.blockReason ? `: ${item.blockReason}` : '';
+  return `[${feature} · ${item.phase} · ${item.status}${reason}]`;
 }
 
 function planDraftPath(item) {
@@ -95,6 +134,8 @@ const HELP_LINES = Object.freeze([
   '| `/vais 거절 <이유>` | 최종 결과 거절 → Design 복귀 |',
   '| `/vais 이름: <kebab-case>` | 영어 단어가 없는 요청의 Feature 이름 확정 |',
   '| `/vais 변경 없음 확인: F-003 ← REQ-002` | 상위 항목이 바뀌었지만 하위 항목은 그대로임을 사용자가 확인 (stale 해소) |',
+  '| `/vais N번` | 시안 Design 에서 안 고르기 (그 뒤 `/vais design 승인`) |',
+  '| `/vais 확인` · `/vais <수정 요청>` | 화면 확인 정지점: 확인하면 Review, 수정 문장이면 다시 고쳐 찍음 (최대 5회) |',
   '| `/vais status` (`상태`) | 현재 작업·단계·대기 요청 (읽기) |',
   '| `/vais doctor` | 하네스 건강검진 (읽기) |',
   '| `/vais help` (`도움말`) | 이 표 |',
@@ -160,7 +201,7 @@ function phaseGuidance(item, sessionId, requestSlug = null, options = {}) {
   }
   const kind = kindOf(item);
   const stage = stageOfKind(kind);
-  const stageLines = stage ? stagePhaseLines(item, kind, stage, sessionId) : null;
+  const stageLines = stage ? stagePhaseLines(item, kind, stage, sessionId) : (kind?.screenCheck ? uiPhaseLines(item, kind, sessionId) : null);
   const byPhase = {
     plan: [
       'CPO가 요구사항·사용자 흐름·엣지 케이스를 구현 독립적으로 확정한다. 요구사항 ID는 REQ-001처럼 3자리 형식으로 쓴다.',
@@ -195,7 +236,9 @@ function phaseGuidance(item, sessionId, requestSlug = null, options = {}) {
   const owner = resolveRole(loadRoleCatalog(), ownerByPhase[item.phase]);
   const ownerPrompt = owner?.kind === 'role' ? buildRolePrompt(owner.role) : '';
   const phaseLines = stageLines && stageLines[item.phase]
-    ? (item.phase === 'report' ? [...(byPhase.report || []), ...stageLines.report] : stageLines[item.phase])
+    ? (item.phase === 'report' ? [...(byPhase.report || []), ...stageLines.report]
+      : item.phase === 'review' && kind?.screenCheck ? [...stageLines.review, ...byPhase.review]
+        : [...stageLines[item.phase], ...(item.phase === 'design' ? (options.ledgerLines || []) : [])])
     : (byPhase[item.phase] || []);
   return [
     `먼저 \`${INTERNAL_COMMAND} context --id ${item.id} --phase ${item.phase} --role ${ownerByPhase[item.phase]}\`로 bounded Context Capsule을 한 번 읽고, 원문 전체 재탐색은 capsule이 부족할 때만 한다.`,
@@ -263,6 +306,22 @@ function buildContext(route, item, leaseError, sessionId = '<session>', options 
     lines.push(...phaseGuidance(null, sessionId, route.slug, options));
     return lines.join('\n');
   }
+  if (route.action === 'choose-option') {
+    lines.push(`사용자가 안 ${route.option} 을 골랐고 runtime 이 기록했다 (장부 decision). 아직 승인은 아니다 — 사용자가 \`/vais design 승인\` 하면 Do 로 간다. 다른 안을 고르면 다시 \`/vais N번\`.`);
+    return lines.join('\n');
+  }
+  if (route.action === 'screen-confirm') {
+    lines.push('사용자가 화면을 확인했다. Review 로 넘어간다.');
+  }
+  if (route.action === 'screen-revise') {
+    if (item?.status === 'blocked') {
+      // The limit was reached: no more rounds, and the guidance must say so instead of promising one.
+      const limit = kindOf(item)?.repairLimit || 5;
+      lines.push(`화면 수정 상한 ${limit}회에 도달해 이 요청("${String(route.text).slice(0, 120)}")은 적용되지 않았고 작업은 blocked(${item.blockReason || 'screen-revision-limit'}) 상태다. 사용자에게 그대로 알린다: 지금 화면을 받아들이면 \`/vais 확인\` (Review 로 진행), 아니면 \`/vais cancel\` 로 작업을 취소하고 새 작업으로 다시 시작한다. 더 고치는 길은 없다.`);
+      return lines.join('\n');
+    }
+    lines.push(`사용자의 화면 수정 요청("${String(route.text).slice(0, 120)}")이 장부에 취향으로 기록됐고 Design 세부 수정 단계로 돌아왔다. Design 정본에 "## 수정 회차 ${item?.screenRevisionCount || '?'}" 절로 요청과 바꿀 내용을 적고 material=false 로 제시한 뒤 Do 에서 적용해 다시 화면을 찍는다. 남은 수정 기회 ${Math.max(0, (kindOf(item)?.repairLimit || 5) - (item?.screenRevisionCount || 0))}회.`);
+  }
   if (route.action === 'stage-confirm-unchanged') {
     lines.push(`사용자가 ${route.item} ← ${route.parent} 의 변경 없음을 확인했고 runtime 이 이 세션에 등록했다.`);
     lines.push(`\`${INTERNAL_COMMAND} stage confirm --session ${sessionId} --item ${route.item} --parent ${route.parent}\` 를 한 번 실행하고, \`${INTERNAL_COMMAND} stage status\` 로 남은 stale 을 보여준다.`);
@@ -289,14 +348,20 @@ function applyDeterministicRoute(store, current, route, sessionId) {
     'revise-plan': EVENTS.USER_PLAN_REVISED,
     'revise-design': EVENTS.USER_DESIGN_REVISED,
     'reject-final': EVENTS.USER_FINAL_REJECTED,
+    'choose-option': EVENTS.USER_OPTION_CHOSEN,
+    'screen-confirm': EVENTS.USER_SCREEN_CONFIRMED,
+    'screen-revise': EVENTS.USER_SCREEN_REVISED,
     pause: EVENTS.USER_PAUSE,
     cancel: EVENTS.USER_CANCEL,
   };
   const event = eventByAction[route.action];
   if (!event || !current) return current;
   store.acquireLease(current.id, sessionId);
-  // The user's own words travel with revisions and rejections so the ledger keeps them as feedback.
-  const payload = ['revise-plan', 'revise-design', 'reject-final'].includes(route.action) ? { reason: route.text } : {};
+  // The user's own words travel with revisions, rejections, and screen requests so the ledger
+  // keeps them as feedback or taste; an option choice carries its number.
+  const payload = ['revise-plan', 'revise-design', 'reject-final', 'screen-revise'].includes(route.action)
+    ? { reason: route.text }
+    : route.action === 'choose-option' ? { option: route.option } : {};
   return store.apply(current.id, event, payload, { requireLease: true, sessionId });
 }
 
@@ -425,6 +490,7 @@ module.exports = {
   kindLines,
   stagePhaseLines,
   ledgerLinesFor,
+  uiPhaseLines,
   main,
 };
 

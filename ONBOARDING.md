@@ -23,6 +23,7 @@
 6. `contracts/v2-role-cards.json` — 역할 경계
 7. `contracts/chain-stages.json` + `contracts/work-kinds.json` — 제품 사슬 10단계와 작업 kind 정의 (데이터). 검사 로직은 `lib/workflow/v2/id-chain.js`
 8. `lib/workflow/v2/ledger.js` + `product-note.js` + `proposal.js` — 장부(기억), 제품 노트 3면, 규칙 기반 제안. `hooks/session-start.js`(브리핑)·`hooks/workflow-v2-stop.js`(기록 잠금)·`scripts/vais-statusline.js` 가 이를 표시한다
+9. `lib/workflow/v2/screen-capture.js` + `diff-summary.js` + `review-page.js` — UI 루프: Chrome 헤드리스 스크린샷, 회차 diff, 검수 페이지. 상태 머신의 화면 확인 정지점(`do/waiting-user`)과 짝을 이룬다
 
 ## 3. 동작 흐름 (1분)
 
@@ -32,7 +33,7 @@ flowchart TB
     USER["/vais 요청 · 승인"] --> PROMPT["hooks/workflow-v2-prompt.js<br/>라우팅 · 승인 판정 · 단계 지침 · drift · lease · 장부 주입"]
     PROMPT --> SKILL["skills/vais/SKILL.md"]
     SKILL --> CLI["scripts/vais-workflow-v2.js<br/>plan/design present · do ready · review prepare/decide · report finalize · assignment · handoff"]
-    CLI --> LIB["lib/workflow/v2/ (30 모듈)"]
+    CLI --> LIB["lib/workflow/v2/ (33 모듈)"]
     LIB --> STATE[".vais/v2/ work-items.json · authorizations.json · chain-index.json · ledger.jsonl"]
     LIB --> DOCS["docs/work-items/… + docs/product/ (사슬 정본 · 노트 3면)"]
     SKILL --> AGENT["agents/v2-specialist.md"]
@@ -53,7 +54,7 @@ flowchart TB
 | `hooks/hooks.json` | Claude Code | SessionStart · UserPromptSubmit · PreToolUse · PostToolUse · Stop 등록 |
 | `scripts/vais-statusline.js` | Claude Code statusline | `~/.claude/settings.json > statusLine` 에 등록하면 상태 줄 표시 (`/vais doctor` 가 안내) |
 | `docs/product/{README,roadmap,decisions}.md` | 사용자 | 제품 노트 현재·다음·왜 (자동 생성) |
-| `vais.config.json` | runtime | `workflowV2.mode` (`enforce` 정본 / `disabled` 하네스 수리용) |
+| `vais.config.json` | runtime | `workflowV2.mode` (`enforce` 정본 / `disabled` 하네스 수리용) · `ui` (앱 위치: appRoot·entry·url) |
 | `contracts/v2-role-cards.json` | runtime | 역할 정본 |
 
 ## 5. 개발 루프

@@ -24,6 +24,7 @@ const { buildCheckIdentity, reviewEvidenceManifest } = require('../lib/workflow/
 const { recordDeferredHandoff } = require('../lib/workflow/v2/automatic-handoff');
 const { runDoctor } = require('../lib/workflow/v2/doctor');
 const { chainStatus, confirmUnchanged, reindex } = require('../lib/workflow/v2/id-chain');
+const { capture } = require('../lib/workflow/v2/screen-capture');
 
 const INTERNAL_COMMAND = `node ${JSON.stringify(__filename)}`;
 
@@ -564,6 +565,43 @@ function stageConfirm(projectRoot, options) {
   return confirmUnchanged(projectRoot, item, parent);
 }
 
+// `screens capture` photographs one target (project file or http(s) URL) at desktop and mobile
+// size into a folder inside the current phase of the authorized Work item. Design options and
+// ad-hoc checks use it; `do ready` captures rounds on its own.
+function screensCapture(projectRoot, options) {
+  const sessionId = requireOption(options, 'session');
+  const id = requireOption(options, 'id');
+  const target = requireOption(options, 'target');
+  const out = requireOption(options, 'out');
+  const store = new WorkItemStore(projectRoot);
+  const item = store.get(id);
+  if (!item) throw new Error(`Unknown work item: ${id}`);
+  const authorization = new AuthorizationStore(projectRoot).get(sessionId);
+  if (!authorization || authorization.workItemId !== id || authorization.phase !== item.phase) {
+    throw new Error('screens capture requires the current session authorization for this Work item phase');
+  }
+  const outRelative = normalizeRelative(projectRoot, out);
+  const allowed = defaultAllowedPaths(item);
+  if (!outRelative || !allowed.some(scope => scopeWithin(outRelative, scope) || scopeWithin(`${outRelative}/x`, scope))) {
+    throw new Error(`--out must stay inside the current phase folder (${allowed.join(', ')})`);
+  }
+  let resolvedTarget = target;
+  if (!/^https?:\/\//i.test(target)) {
+    const relative = normalizeRelative(projectRoot, target);
+    if (!relative) throw new Error('--target must be a project file or an http(s) URL');
+    resolvedTarget = path.join(projectRoot, relative);
+  }
+  store.acquireLease(id, sessionId);
+  const result = capture(resolvedTarget, path.join(projectRoot, outRelative));
+  return {
+    schema: 'screen-capture/v1',
+    workItemId: id,
+    renderer: result.renderer,
+    url: result.url,
+    files: Object.fromEntries(Object.entries(result.files).map(([name, file]) => [name, normalizeRelative(projectRoot, file)])),
+  };
+}
+
 function contextCapsule(projectRoot, options) {
   const store = new WorkItemStore(projectRoot);
   const item = options.id && options.id !== true ? store.get(String(options.id)) : store.getCurrent();
@@ -648,6 +686,7 @@ function execute(argv = process.argv.slice(2), projectRoot = null) {
   if (command === 'create') result = create(root, options);
   else if (command === 'stage' && subcommand === 'confirm') result = stageConfirm(root, options);
   else if (command === 'stage' && subcommand === 'reindex') result = { schema: 'chain-index/v1', ...reindex(root) };
+  else if (command === 'screens' && subcommand === 'capture') result = screensCapture(root, options);
   else if (command === 'event') result = applyEvent(root, options);
   else if (command === 'pending') result = queuePending(root, options);
   else if (command === 'assignment') result = buildAssignment(root, options);
@@ -695,6 +734,7 @@ module.exports = {
   generatedWorkItemId,
   assertNewFeatureSlug,
   stageConfirm,
+  screensCapture,
   preparePlan,
   refreshAuthorization,
   create,

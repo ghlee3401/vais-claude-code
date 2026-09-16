@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.3.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-3.4.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -32,6 +32,7 @@
 | Node.js | ≥ 18 | plugin runtime, hook, 내부 CLI |
 | Claude Code | ≥ 2.1.32 | SessionStart / UserPromptSubmit / PreToolUse / PostToolUse / Stop hook, statusline |
 | Python3 | ≥ 3.8 | design-system MCP (UI 설계 시에만) |
+| Chrome / Chromium | 최근 버전 | `ui` 작업과 와이어프레임·시안 단계의 스크린샷 (헤드리스). 없으면 그림이 필요한 Gate 가 멈춘다. `VAIS_CHROME=<경로>` 로 지정 가능 |
 
 ```bash
 git clone https://github.com/ghlee3401/vais-claude-code.git
@@ -52,6 +53,8 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 | `/vais status` (`상태`) | 현재 작업·단계·상태와 대기 요청 조회 (읽기 전용) |
 | `/vais doctor` | 하네스 건강검진: 설정·hook 5종·버전·상태 파일·장부·stale·statusline 점검과 고치는 법 (읽기 전용) |
 | `/vais 변경 없음 확인: F-003 ← REQ-002` | 상위 항목이 바뀌었지만 하위는 그대로임을 확인 (stale 해소) |
+| `/vais N번` | 시안 Design 에서 안 고르기 (그 뒤 `/vais design 승인`) |
+| `/vais 확인` · `/vais <수정 요청>` | 화면 확인 정지점: 확인하면 Review, 수정 문장이면 다시 고쳐 찍음 (최대 5회) |
 | `/vais help` (`도움말`) | 명령 표 |
 | `/vais pause` (`일시정지`) / `resume` (`재개`) / `cancel` (`취소`) | 작업 슬롯 제어 |
 | `/vais 새 작업: <요청>` | 진행 중 작업을 유지한 채 새 요청을 대기열에 보관 |
@@ -89,6 +92,23 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 | 10 | `stage-test-plan` | `10-test-plan.md` | TC | F |
 
 정본 문서의 항목은 `### F-003 ← REQ-002` 제목과 `| 항목 | 내용 |` 표로 쓴다. runtime 이 부모 존재·허용 접두·필수 항목·산출물 파일·커버리지를 검사하고, 상위 항목이 바뀌면 하위 항목을 stale 로 표시한다. stale 은 그 단계를 다시 승인하거나 사용자가 `/vais 변경 없음 확인: F-003 ← REQ-002` 로 해소한다. 상태는 `stage status` 로 본다.
+
+## UI 루프 — 그림으로 고르고 그림으로 확인
+
+화면을 고치는 작업(`ui` kind)은 말이 아니라 스크린샷으로 진행된다. 설치된 Chrome 을 헤드리스로 돌려 데스크톱(1280×800)·모바일(390×844) PNG 를 찍는다.
+
+```text
+/vais 로그인 버튼이 눈에 안 띔      → kind ui, Plan 한 줄 승인
+Design: 시안 2안(앱 사본에 적용한 그림)  → /vais 2번 → /vais design 승인
+Do: 적용 → 회차 1 화면(전/후) + diff 한 줄  → "더 크게" → 회차 2 → "색은 파랑" → 회차 3 → /vais 확인
+Review: 검수 페이지(승인 시안 | 전 | 후) → 독립 QA → /vais 최종 승인 → 취향 장부 기록
+```
+
+- 앱 위치는 `vais.config.json > ui` (`appRoot`+`entry` 정적 파일, 또는 `url`). 앱을 띄우는 일은 하지 않는다.
+- 시안 사본은 Work item 의 `02-design/options/N/` 안에만 둔다. 제품 코드는 Do 에서만 바뀐다.
+- 회차마다 `03-do/evidence/screens/round-N/` 에 그림과 `diff.md`("`.primary padding: 15px 20px → 22px 30px`" 처럼 기계가 뽑은 변화)가 남고, Review 는 `04-review/evidence/review.html` 을 만든다.
+- 수정 요청 원문은 장부 `preference` 로 남아 다음 UI·와이어·시안 작업의 Design 첫 줄에 뜬다. 6번째 수정은 막힌다.
+- 와이어프레임(html)·시안(svg) 단계 산출물도 `do ready` 때 PNG 로 렌더된다.
 
 ## 제품 노트 · 장부 · 브리핑
 
@@ -135,7 +155,8 @@ docs/product/{README,roadmap,decisions}.md   # 제품 노트 3면 (자동 생성
 skills/vais/SKILL.md        /vais 진입 규칙
 agents/v2-specialist.md     유일한 위임 Agent
 hooks/                      session-start(브리핑) · prompt(라우팅·승인·지침) · write-guard · agent-handoff · drift · stop(기록 잠금)
-lib/workflow/v2/            상태 머신 · 저장소 · transaction · gate · 문서 품질 · drift · 역할 · 사슬(chain-registry·id-chain) · 장부(ledger) · 노트(product-note) · 제안(proposal) · doctor
+lib/workflow/v2/            상태 머신 · 저장소 · transaction · gate · 문서 품질 · drift · 역할 · 사슬(chain-registry·id-chain) · 장부(ledger) · 노트(product-note) · 제안(proposal) · doctor ·
+                            화면(screen-capture·diff-summary·review-page)
 scripts/vais-workflow-v2.js 내부 CLI · scripts/vais-statusline.js 상태 줄 · scripts/vais-doctor.js
 contracts/v2-role-cards.json  역할 정본
 schemas/                    JSON 계약 (ajv 검증)
@@ -145,7 +166,7 @@ schemas/                    JSON 계약 (ajv 검증)
 
 ```bash
 npm test            # tests/v2-*.test.js
-npm run regression  # tests/regression/ — 사용 장면 회귀 (장면 A·E·F)
+npm run regression  # tests/regression/ — 사용 장면 회귀 (장면 A·C·E·F; VAIS_SCREEN_RENDERER=stub 로 그림은 대체)
 npm run lint
 npm run validate    # 플러그인 구조 검증
 npm run doctor      # 하네스 건강검진

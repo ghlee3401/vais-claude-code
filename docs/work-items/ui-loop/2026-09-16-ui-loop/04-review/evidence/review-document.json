@@ -1,0 +1,15 @@
+{
+  "check": "review-document",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/ui-loop/2026-09-16-ui-loop/04-review/main.md"
+  ],
+  "requirements": [],
+  "summary": "Canonical review document is complete",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/ui-loop/2026-09-16-ui-loop/04-review/main.md"
+  ]
+}

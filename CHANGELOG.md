@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.4.0] - 2026-09-16
+
+> 로드맵 H4 `ui-loop`. 화면을 고치는 작업을 "시안 고르기 → 적용 → 실제 화면 보고 확인/수정(최대 5회) → 기록" 루프로 만들고, 화면은 기계가 찍은 스크린샷으로만 보인다.
+
+### Added
+
+- **스크린샷 도구** `lib/workflow/v2/screen-capture.js` — 설치된 Chrome 헤드리스(`VAIS_CHROME` 또는 후보 경로)로 데스크톱 1280×800·모바일 390×844 PNG. 없으면 `CHROME_NOT_FOUND` 로 멈추고 설치를 안내. 테스트용 `VAIS_SCREEN_RENDERER=stub` 은 결과에 renderer 를 표기
+- **ui kind 양식** — `contracts/work-kinds.json` ui: `planTemplate one-line`, `designTemplate options-screens`, `screenCheck true`, 트리거 확장. Design 의 `## 안 N` 마다 `사본:`·`데스크톱:`·`모바일:` 경로가 Work item 폴더 안에 실제로 있어야 Gate 통과(`optionScreenshotFindings`), `## 검수표` 필수
+- **화면 확인 정지점** — `state-machine`: screenCheck kind 의 READY → `do/waiting-user`; 이벤트 `USER_OPTION_CHOSEN`(`/vais N번`, 선택 없이는 Design 승인 불가), `USER_SCREEN_CONFIRMED`(`/vais 확인` → Review), `USER_SCREEN_REVISED`(수정 문장 → Design 세부 수정 material=false → Do). 6번째 수정은 `screen-revision-limit` blocked. router·prompt hook 연결, 도움말 표 갱신
+- **회차 화면·diff** — 내장 검사 `screen-capture`: `do ready` 가 `03-do/evidence/screens/round-N/{desktop,mobile}.png` 를 찍고 앱 파일을 `src/` 에 스냅샷, `git` HEAD 상태로 `round-0`(전)을 만든다. `lib/workflow/v2/diff-summary.js` 가 CSS 선언 비교(`선택자 속성: 이전 → 이후`)와 파일 변경을 `diff.md` 로 남김
+- **검수 페이지** `lib/workflow/v2/review-page.js` — `review prepare` 가 `04-review/evidence/review.html`(승인 시안 | 전 | 후, 회차 diff, Design 검수표 ≤5)을 만들고 receipt 에 `reviewPage` 로 알림
+- **CLI `screens capture --id --session --target --out`** — 프로젝트 안 파일 또는 http(s) URL 을 현재 phase 폴더 안에만 찍는다 (write-policy 공개 명령)
+- **취향 장부** — 화면 수정 요청 원문 → `preference`, 안 선택 → `decision`, ui 최종 승인 → `preference "채택: 안 N"`. ui·와이어·시안·디자인 시스템 Design 지침에 제품 전체 preference 최근 5개 주입
+- **W·V 산출물 렌더** — `contracts/chain-stages.json` `renderArtifacts: true`(와이어프레임·화면 시안); `stage-document` 검사가 html/svg 를 같은 폴더의 PNG 로 렌더하고 실패는 finding
+- **doctor** `browser`(Chrome 경로) 검사; `statusline` 검사가 프로젝트 `.claude/settings.json`·`settings.local.json` 도 본다 (H3 잔여 결함)
+- `vais.config.json > ui` 블록(appRoot·entry·url), `lib/workflow/v2/config.js loadUiConfig`
+- **회귀 장면 C** `tests/regression/scene-c-ui-loop.test.js` — fixture mini-booking: 시안 2안 → `2번` → 승인 → 회차 1 전/후 → 수정 2회(diff·취향) → `확인` → review.html → QA → 최종 승인 → decisions.md 취향 3건. `tests/v2-ui-loop.test.js` REQ-001~010·012 (실제 Chrome 캡처 1건은 Chrome 없으면 skip)
+- Tool adapter 자리 `screenshot-compare`(예약), work-item schema `screenRevisionCount`·`chosenOption`, review-evidence-prepare schema `reviewPage`
+
+### Changed
+
+- `docs/harness/roadmap.md` H3 완료·H4 진행, `docs/harness/design.md` 대응표(정지점·screen-capture·review-page·diff-summary·screenshot-compare 완료), CLAUDE 10-5, README UI 루프 절·Chrome 의존성, ONBOARDING
+- 장면 A 는 `VAIS_SCREEN_RENDERER=stub` 로 W·V 렌더를 대체해 빠르게 돈다
+
 ## [3.3.0] - 2026-09-16
 
 > 로드맵 H3 `product-note`. 결정·변경·승인을 장부에 자동 기록하고, 장부와 사슬 상태로 제품 노트·세션 브리핑·상태 줄을 기계가 만들며, 기록 없이는 턴을 끝낼 수 없게 Stop 을 잠근다. 모델은 부르지 않는다.

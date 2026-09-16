@@ -22,6 +22,10 @@ const idChain = require('../../lib/workflow/v2/id-chain');
 const FIXTURES = path.join(__dirname, '..', 'fixtures', 'product-stages');
 const FEATURE = 'reading-log';
 
+// Wireframe and mockup artifacts are rendered to PNG at `do ready`; the deterministic stub keeps
+// this scene fast. Real Chrome rendering is covered by tests/v2-ui-loop.test.js.
+process.env.VAIS_SCREEN_RENDERER = process.env.VAIS_SCREEN_RENDERER || 'stub';
+
 const QA_PASS = {
   schema: 'specialist-handoff/v1', status: 'completed', verdict: 'pass', judgment: '단계 문서 검사 통과',
   decisions: ['형식·부모·산출물 확인'], behavior: { inputs: ['stage doc'], outputs: ['pass'], errors: [] },

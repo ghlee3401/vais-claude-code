@@ -1,0 +1,81 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-bd9bd005-9ebe-4602-a28f-e6e7ea9291ac",
+  "workItemId": "WI-2026-09-16-ui-loop",
+  "phase": "design",
+  "action": "present",
+  "gate": {
+    "gate": "design",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "design-document",
+      "document-budget",
+      "document-repetition"
+    ],
+    "passed": [
+      "design-document",
+      "document-budget",
+      "document-repetition"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-16T08:45:31.082Z"
+  },
+  "checks": [
+    {
+      "check": "design-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/ui-loop/2026-09-16-ui-loop/02-design/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical design document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/ui-loop/2026-09-16-ui-loop/02-design/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/ui-loop/2026-09-16-ui-loop/02-design/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 12980B is within the 18432B extended budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/ui-loop/2026-09-16-ui-loop/02-design/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/ui-loop/2026-09-16-ui-loop/02-design/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/ui-loop/2026-09-16-ui-loop/02-design/main.md"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "do",
+    "status": "active"
+  }
+}
