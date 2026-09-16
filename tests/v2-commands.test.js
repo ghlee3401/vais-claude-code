@@ -290,11 +290,14 @@ describe('commands REQ-009 doctor git', () => {
 });
 
 describe('commands REQ-011 documents and versions', () => {
-  it('TC-011 version 3.5.0 everywhere, CHANGELOG, roadmap H4 done, design.md rows done', () => {
+  it('TC-011 one version (≥ 3.5.0) everywhere, CHANGELOG, roadmap H4 done, design.md rows done', () => {
     const versions = versionFiles(REPO);
-    assert.deepEqual([...new Set(Object.values(versions))], [VERSION], JSON.stringify(versions));
+    const current = [...new Set(Object.values(versions))];
+    assert.equal(current.length, 1, JSON.stringify(versions));
+    const [major, minor] = current[0].split('.').map(Number);
+    assert.ok(major > 3 || (major === 3 && minor >= 5), `repo version ${current[0]} predates H5`);
     assert.equal(vcs.versionReport(REPO).synced, true);
-    assert.ok(fs.readFileSync(path.join(REPO, 'CHANGELOG.md'), 'utf8').includes(`## [${VERSION}]`));
+    assert.ok(fs.readFileSync(path.join(REPO, 'CHANGELOG.md'), 'utf8').includes(`## [${current[0]}]`));
     const roadmap = fs.readFileSync(path.join(REPO, 'docs', 'harness', 'roadmap.md'), 'utf8');
     assert.match(roadmap, /\| H4 \| 완료 \|/);
     assert.match(roadmap, /\| H5 \| (진행 중|완료) \|/);

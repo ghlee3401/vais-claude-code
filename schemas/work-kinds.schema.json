@@ -24,7 +24,7 @@
           "touches": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Z]{1,4}$" } },
           "updates": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
           "planTemplate": { "enum": ["full", "one-line"] },
-          "designTemplate": { "enum": ["full", "options", "options-screens"] },
+          "designTemplate": { "enum": ["full", "options", "options-screens", "implementation", "bugfix"] },
           "screenCheck": { "type": "boolean" },
           "repairLimit": { "type": "integer", "minimum": 1, "maximum": 5 },
           "entryRequires": { "type": ["string", "null"], "pattern": "^stage-[a-z0-9-]+$" },

@@ -25,6 +25,8 @@ const { recordDeferredHandoff } = require('../lib/workflow/v2/automatic-handoff'
 const { runDoctor } = require('../lib/workflow/v2/doctor');
 const { chainStatus, confirmUnchanged, reindex } = require('../lib/workflow/v2/id-chain');
 const { capture } = require('../lib/workflow/v2/screen-capture');
+const { withApp } = require('../lib/workflow/v2/app-runner');
+const { loadUiConfig } = require('../lib/workflow/v2/config');
 const { statusSummary } = require('../lib/workflow/v2/briefing');
 const { explain } = require('../lib/workflow/v2/explain');
 const { propose } = require('../lib/workflow/v2/proposal');
@@ -597,7 +599,11 @@ function screensCapture(projectRoot, options) {
     resolvedTarget = path.join(projectRoot, relative);
   }
   store.acquireLease(id, sessionId);
-  const result = capture(resolvedTarget, path.join(projectRoot, outRelative));
+  // A target equal to ui.run.url starts the app around the shot, as `do ready` does.
+  const ui = loadUiConfig(projectRoot);
+  const result = ui.run && ui.run.url === resolvedTarget
+    ? withApp(projectRoot, ui.run, url => capture(url, path.join(projectRoot, outRelative)))
+    : capture(resolvedTarget, path.join(projectRoot, outRelative));
   return {
     schema: 'screen-capture/v1',
     workItemId: id,

@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.6.0] - 2026-09-16
+
+> 로드맵 H6 `feature-bug-kinds`. 기능 추가와 버그 수정이 승인된 제품 문서(ID 사슬) 위에서만 일어난다. Design 은 "무엇을 만드는지" 를 승인 ID 인용과 새 항목 선언으로만 적고, runtime 이 그 항목을 정본 문서에 붙이고 Report 때 `구현됨` 도장을 찍는다.
+
+### Added
+
+- **인용 규칙** `lib/workflow/v2/citation.js` — Design 의 `## 인용`(승인 ID 목록)·`## 신규`(`### API-003 ← S-001, F-003` + 표)를 `id-chain` 의 항목 파서로 읽어 사슬과 대조: 존재하지 않는 인용, 다음 빈 번호가 아닌 ID, 미승인 단계, 필수 항목 누락, 허용되지 않는 부모, 정본 예산 초과가 finding. `do ready` READY 때 `applyAdditions` 가 신규 항목을 `docs/product/0N-*.md` 끝에 붙이고 chain-index 에 `status: draft` 로 등록(같은 작업의 이전 draft 는 교체, 실패 시 스냅샷으로 롤백). `report finalize` 의 `markImplemented` 가 인용·신규 항목에 `implemented {workItem, at}` 을 찍고 draft 를 approved 로 바꾼다. 단계 재승인 때도 도장은 유지
+- **feature · bug kind 양식** — `contracts/work-kinds.json`: feature `planTemplate one-line` / `designTemplate implementation`, bug `one-line` / `bugfix`(schema enum 확장). Plan 세 줄 `요청 확인·kind·관련 ID`. implementation Design 필수 절: 안 N·인용·신규·검수표·쓰기 범위·readiness/review·rollback. bugfix 는 `## 재현`(절차 + `재현 화면: <png>` — Work item 폴더 안 실제 PNG, `재현 불가` 는 거부)·`## 원인`·`## 수정안` 과 신규 TC 항목이 추가로 필수, 선택 `## 해소 부채`. Review 는 인용·신규 TC 집합과 정확히 같아야 하고 bugfix 는 `## 재현 재실행` 절 필수
+- **stale Gate** — feature/bug `design present` 는 stale 항목이 하나라도 있으면 `STAGE_STALE_BLOCK` 으로 쓰기 전에 거부
+- **내장 검사 `implementation-document`** — Do·Review 에서 Design 인용·신규를 다시 검증하고 정본 예산을 미리 계산. 화면(S·W·V)을 인용한 feature 는 `screen-capture` 가 Review 증거로 자동 실행
+- **앱 실행 어댑터** `lib/workflow/v2/app-runner.js` — `vais.config.json > ui.run {command: [argv], url, readyTimeoutMs}`(셸 없음). `withApp` 이 앱을 띄우고 URL 응답을 기다린 뒤 스크린샷을 찍고 프로세스 그룹을 종료. 시작 실패·시간 초과는 `APP_START_FAILED`. `do ready` 의 screen-capture 와 `screens capture --target <ui.run.url>` 이 사용
+- **장부·노트** — bug Report 는 `버그 해결 — <제목>` milestone 과 `## 해소 부채` 불릿마다 `부채 해소: …` note 를 남김. 제품 노트 "현재" 표에 `구현됨` 열과 `approved · draft N` 상태
+- 회귀 `tests/regression/scene-b-feature.test.js`(책 검색 기능), `scene-d-bug.test.js`(별점 저장 버그), 단위 `tests/v2-feature-bug.test.js` TC-001~011, fixture `tests/fixtures/static-server.js`
+
+### Fixed
+
+- **H5 잔여** — 문서·용어집·도움말의 "버전 6곳" 을 실제 검사 "버전 7면" 으로 통일; prompt hook 의 죽은 `ledger-add-invalid` 분기 삭제
+- 문서 preflight 실패 메시지에 첫 finding 최대 3개를 함께 보여 evidence 파일을 열지 않아도 이유가 보인다
+
+### Changed
+
+- feature 트리거 `기능 추가`·`새 기능`·`feature`, bug 트리거에 `깨졌`·`오류가` 추가. `docs/harness/roadmap.md` H5 완료·H6 진행, `docs/harness/design.md` 대응표(인용 강제·앱 실행 완료), README kind 표, CLAUDE 10-6, ONBOARDING
+
 ## [3.5.0] - 2026-09-16
 
 > 로드맵 H5 `commands`. 비개발자용 명령 다섯(상태·설명·저장·되돌리기·doctor)과 부속 셋(제안·기록·기록 보기). 상태를 바꾸는 명령은 사용자가 확인 문구를 직접 친 뒤에만 runtime 이 실행한다.

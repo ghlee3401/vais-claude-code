@@ -18,8 +18,8 @@
 ## 제안
 
 1. 1단계 요구사항 정의서 작성 — `/vais 새 제품: <제품 이름>` (아직 승인된 요구사항 정의서 가 없다)
-2. 부채 정리: roadmap H5 상태를 완료로 바꾸는 것은 H6 Do 에서 한다 — `/vais roadmap H5 상태를 완료로 바꾸는 것은 H6 Do 에서 한다` (WI-2026-09-16-commands 에 남은 부채)
-3. 부채 정리: 문서의 '버전 6곳' 표기와 실제 저장 검사 7면(manifest 5 + README 배지 + CHANGELOG 헤더)이 혼재한다 — `/vais 문서의 '버전 6곳' 표기와 실제 저장 검사 7면(manifest 5 + README 배지 + CHANGELOG 헤더)이 혼재한다` (WI-2026-09-16-commands 에 남은 부채)
+2. 부채 정리: 앱 조기 종료 감지는 Linux /proc 전제, 다른 OS 는 readyTimeoutMs 만료로만 실패 — `/vais 앱 조기 종료 감지는 Linux /proc 전제, 다른 OS 는 readyTimeoutMs 만료로만 실패` (WI-2026-09-16-feature-bug-kinds 에 남은 부채)
+3. 부채 정리: withApp 대기는 동기 폴링(300ms)이라 transaction 중 다른 일을 하지 않는다 — `/vais withApp 대기는 동기 폴링(300ms)이라 transaction 중 다른 일을 하지 않는다` (WI-2026-09-16-feature-bug-kinds 에 남은 부채)
 
 ## 내 메모
 

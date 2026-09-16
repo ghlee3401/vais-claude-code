@@ -90,6 +90,7 @@ function presentPlan(root) {
     title: 'Lean transaction',
     primaryFeature: 'workflow',
     scale: 'compact',
+    kind: 'harness',
     sessionId: SESSION,
     revision: 1,
     body: PLAN,
@@ -196,7 +197,7 @@ describe('v2 phase transaction receipts', () => {
     authorize(root, 'plan', null, 'start-request');
     const plan = runPhaseTransaction(root, {
       phase: 'plan', action: 'present', id: 'WI-2026-09-02-trace-set', sessionId: SESSION, revision: 1,
-      title: 'Trace set', primaryFeature: 'workflow', scale: 'compact',
+      title: 'Trace set', primaryFeature: 'workflow', scale: 'compact', kind: 'harness',
       body: PLAN.replace('REQ-001: 예약', 'REQ-001: 예약\nREQ-002: 취소'), timestamp: T0,
     });
     const store = new WorkItemStore(root);
@@ -577,7 +578,7 @@ describe('v2 phase transaction receipts', () => {
     const invalid = PLAN.replaceAll('REQ-001', 'REQ-1').replaceAll('TC-001', 'TC-1');
     assert.throws(() => runPhaseTransaction(root, {
       phase: 'plan', action: 'present', id: 'WI-2026-09-02-short-ids',
-      title: 'Short IDs', primaryFeature: 'short-ids', scale: 'compact',
+      title: 'Short IDs', primaryFeature: 'short-ids', scale: 'compact', kind: 'harness',
       sessionId: SESSION, revision: 1, body: invalid, timestamp: T0,
     }), /Canonical plan document preflight failed/);
   });
@@ -605,7 +606,7 @@ describe('v2 phase transaction receipts', () => {
     });
     const receipt = execute([
       'plan', 'present', '--slug', 'booking-toggle', '--title', 'Booking toggle',
-      '--feature', 'booking-toggle', '--relation', 'new', '--scale', 'compact',
+      '--feature', 'booking-toggle', '--relation', 'new', '--scale', 'compact', '--kind', 'harness',
       '--session', SESSION, '--revision', '1', '--body-file', '.vais/v2/drafts/plan.md',
     ], root);
     assert.equal(receipt.verdict, 'PASS');
@@ -748,7 +749,7 @@ describe('v2 phase transaction receipts', () => {
     let failure;
     assert.throws(() => runPhaseTransaction(root, {
       phase: 'plan', action: 'present', id,
-      title: 'Invalid plan', primaryFeature: 'invalid-plan', scale: 'compact',
+      title: 'Invalid plan', primaryFeature: 'invalid-plan', scale: 'compact', kind: 'harness',
       sessionId: SESSION, revision: 1, body: '# Plan\n\nREQ-001 only', timestamp: T0,
     }), error => {
       failure = error;
@@ -773,7 +774,7 @@ describe('v2 phase transaction receipts', () => {
 
     const receipt = runPhaseTransaction(root, {
       phase: 'plan', action: 'present', id,
-      title: 'Invalid plan', primaryFeature: 'invalid-plan', scale: 'compact',
+      title: 'Invalid plan', primaryFeature: 'invalid-plan', scale: 'compact', kind: 'harness',
       sessionId: SESSION, revision: 1, body: PLAN, timestamp: T0,
     });
     assert.equal(receipt.workItemId, id);

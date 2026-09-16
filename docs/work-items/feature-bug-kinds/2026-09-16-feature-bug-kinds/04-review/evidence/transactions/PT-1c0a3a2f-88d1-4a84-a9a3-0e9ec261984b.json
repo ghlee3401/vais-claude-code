@@ -1,0 +1,132 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-1c0a3a2f-88d1-4a84-a9a3-0e9ec261984b",
+  "workItemId": "WI-2026-09-16-feature-bug-kinds",
+  "phase": "review",
+  "action": "decide",
+  "gate": {
+    "gate": "review",
+    "verdict": "FAIL",
+    "requiredChecks": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "passed": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "secret-scan"
+    ],
+    "failed": [
+      "independent-qa-handoff"
+    ],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-16T11:24:26.293Z"
+  },
+  "checks": [
+    {
+      "check": "review-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/04-review/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical review document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 2919B is within the 6144B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/04-review/main.md"
+      ]
+    },
+    {
+      "check": "independent-qa-handoff",
+      "execution": "succeeded",
+      "verdict": "fail",
+      "required": true,
+      "scope": [],
+      "requirements": [
+        "REQ-010"
+      ],
+      "summary": "Independent QA reported failure",
+      "findings": [
+        "Inspect the canonical independent QA evidence"
+      ],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/04-review/evidence/handoffs/AS-9338599b-c964-4487-8e72-996dcfb2d828.json"
+      ]
+    },
+    {
+      "check": "secret-scan",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "schemas/**",
+        "contracts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/04-review/evidence/logs/secret-scan.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "design",
+    "status": "active"
+  }
+}

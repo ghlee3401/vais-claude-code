@@ -1,0 +1,81 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-7ba03c8b-e4d2-4795-96b3-a114dea16fda",
+  "workItemId": "WI-2026-09-16-feature-bug-kinds",
+  "phase": "design",
+  "action": "present",
+  "gate": {
+    "gate": "design",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "design-document",
+      "document-budget",
+      "document-repetition"
+    ],
+    "passed": [
+      "design-document",
+      "document-budget",
+      "document-repetition"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-16T10:43:15.508Z"
+  },
+  "checks": [
+    {
+      "check": "design-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/02-design/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical design document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/02-design/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/02-design/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 10062B is within the 10240B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/02-design/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/02-design/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/02-design/main.md"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "design",
+    "status": "waiting-user"
+  }
+}

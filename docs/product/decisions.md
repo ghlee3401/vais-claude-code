@@ -1,9 +1,15 @@
 # 제품 노트 — 왜
 
-> 자동 생성 (`.vais/v2/ledger.jsonl` 34건). 결정·피드백·취향·부채·리스크·이정표 순.
+> 자동 생성 (`.vais/v2/ledger.jsonl` 49건). 결정·피드백·취향·부채·리스크·이정표 순.
 
-## 결정 (12)
+## 결정 (18)
 
+- 2026-09-16 10:55 · WI-2026-09-16-feature-bug-kinds · 구현 kind 의 Design 에서 "만드는 것" 은 인용 ID 와 신규 ID 항목만이다. 서술은 `## 안 N` 의 접근 설명에만 둔다. — Design revision 1 에서 확정
+- 2026-09-16 10:55 · WI-2026-09-16-feature-bug-kinds · 신규 항목은 Do 가 READY 일 때 runtime 이 정본에 붙인다. AI 가 제품 문서를 직접 편집하지 않는다(write scope 도 열지 않음). — Design revision 1 에서 확정
+- 2026-09-16 10:55 · WI-2026-09-16-feature-bug-kinds · 신규 항목은 append 시 `draft`, Report 확정 시 `approved` + `implemented`. 승인 없는 항목이 사슬에 남지 않는다. — Design revision 1 에서 확정
+- 2026-09-16 10:55 · WI-2026-09-16-feature-bug-kinds · stale 은 Design 제시 자체를 막는다(문서를 쓰기 전). 해소는 재승인 또는 `/vais 변경 없음 확인`. — Design revision 1 에서 확정
+- 2026-09-16 10:55 · WI-2026-09-16-feature-bug-kinds · 앱 실행 명령은 배열로만 받고 셸을 거치지 않는다. 캡처 뒤 반드시 종료한다. — Design revision 1 에서 확정
+- 2026-09-16 10:55 · WI-2026-09-16-feature-bug-kinds · 사슬이 비어 있으면 feature/bug 를 시작할 수 없다(예외 없음, 사용자 확인 2026-09-16). — Design revision 1 에서 확정
 - 2026-09-16 09:33 · WI-2026-09-16-commands · 커밋 메시지에는 Work item ID 와 `Generated-By: vais-code <version>` trailer 가 붙어 되돌리기가 ID 로 커밋을 찾을 수 있다. — Design revision 1 에서 확정
 - 2026-09-16 09:33 · WI-2026-09-16-commands · 용어 사전은 데이터(`contracts/glossary.json`)로 두어 코드 수정 없이 늘린다. — Design revision 1 에서 확정
 - 2026-09-16 09:33 · WI-2026-09-16-commands · 브리핑 문장 생성을 lib 로 옮겨 상태 명령·세션 시작·상태 줄이 한 출처를 쓴다. — Design revision 1 에서 확정
@@ -17,8 +23,12 @@
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 테스트는 stub 렌더러로 결정적으로 돌리고 receipt 에 stub 임을 남긴다. 실제 렌더 검증은 Chrome 이 있는 환경의 별도 테스트와 사용자 확인으로 한다. — Design revision 1 에서 확정
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 취향은 제품 전체 속성이라 feature 를 넘어 주입한다. — Design revision 1 에서 확정
 
-## 부채 (14)
+## 부채 (18)
 
+- 2026-09-16 11:35 · WI-2026-09-16-feature-bug-kinds · 앱 조기 종료 감지는 Linux /proc 전제, 다른 OS 는 readyTimeoutMs 만료로만 실패 — WI-2026-09-16-feature-bug-kinds Report 의 잔여 제한
+- 2026-09-16 11:35 · WI-2026-09-16-feature-bug-kinds · withApp 대기는 동기 폴링(300ms)이라 transaction 중 다른 일을 하지 않는다 — WI-2026-09-16-feature-bug-kinds Report 의 잔여 제한
+- 2026-09-16 11:35 · WI-2026-09-16-feature-bug-kinds · 실제 Chrome 캡처와 플러그인 캐시 반영은 테스트하지 않았다(stub 렌더러, 3.6.0 업데이트 전) — WI-2026-09-16-feature-bug-kinds Report 의 잔여 제한
+- 2026-09-16 11:24 · WI-2026-09-16-feature-bug-kinds · QA FAIL: independent-qa-handoff — 독립 QA 가 independent-qa-handoff 를 실패로 판정했다 (수정 회차 1)
 - 2026-09-16 10:07 · WI-2026-09-16-commands · roadmap H5 상태를 완료로 바꾸는 것은 H6 Do 에서 한다 — WI-2026-09-16-commands Report 의 잔여 제한
 - 2026-09-16 10:07 · WI-2026-09-16-commands · 문서의 '버전 6곳' 표기와 실제 저장 검사 7면(manifest 5 + README 배지 + CHANGELOG 헤더)이 혼재한다 — WI-2026-09-16-commands Report 의 잔여 제한
 - 2026-09-16 10:07 · WI-2026-09-16-commands · prompt hook 의 ledger-add-invalid 지침 분기는 router 가 종류 오류 기록을 일반 요청으로 흘려보내 도달하지 않는다 (무해한 죽은 분기, H7 정리) — WI-2026-09-16-commands Report 의 잔여 제한
@@ -34,8 +44,16 @@
 - 2026-09-16 09:08 · WI-2026-09-16-ui-loop · do/blocked(수정 상한) 에서 수정 문장은 적용되지 않고 확인·취소만 유효하다. blocked 경로는 단위 테스트로만 검증(장면 C 미포함) — WI-2026-09-16-ui-loop Report 의 잔여 제한
 - 2026-09-16 08:43 · WI-2026-09-16-ui-loop · QA FAIL: independent-qa-handoff — 독립 QA 가 independent-qa-handoff 를 실패로 판정했다 (수정 회차 1)
 
-## 이정표 (8)
+## 리스크 (1)
 
+- 2026-09-16 11:16 · WI-2026-09-16-feature-bug-kinds · Do 준비 미달 1회: test — readiness 검사가 실패했다
+
+## 이정표 (12)
+
+- 2026-09-16 11:35 · WI-2026-09-16-feature-bug-kinds · 작업 완료 — 기능·버그 작업 종류 · 인용 강제 · 문서 갱신 · 앱 실행 — Report 가 확정되어 동결됐다
+- 2026-09-16 11:34 · WI-2026-09-16-feature-bug-kinds · 최종 승인 — 기능·버그 작업 종류 · 인용 강제 · 문서 갱신 · 앱 실행 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
+- 2026-09-16 10:55 · WI-2026-09-16-feature-bug-kinds · Design 승인 (revision 1) — 기능·버그 작업 종류 · 인용 강제 · 문서 갱신 · 앱 실행 — 사용자가 Design 을 승인했다
+- 2026-09-16 10:40 · WI-2026-09-16-feature-bug-kinds · Plan 승인 (revision 1) — 기능·버그 작업 종류 · 인용 강제 · 문서 갱신 · 앱 실행 — 사용자가 Plan 을 승인했다
 - 2026-09-16 10:07 · WI-2026-09-16-commands · 작업 완료 — 사용자 명령 · 상태 설명 저장 되돌리기 제안 기록 — Report 가 확정되어 동결됐다
 - 2026-09-16 10:07 · WI-2026-09-16-commands · 최종 승인 — 사용자 명령 · 상태 설명 저장 되돌리기 제안 기록 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
 - 2026-09-16 09:33 · WI-2026-09-16-commands · Design 승인 (revision 1) — 사용자 명령 · 상태 설명 저장 되돌리기 제안 기록 — 사용자가 Design 을 승인했다

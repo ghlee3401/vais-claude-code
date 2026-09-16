@@ -168,7 +168,7 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 버전 도장 | `phase-transaction.js` receipt, `schemas/phase-transaction-receipt.schema.json` | 완료 (H1) |
 | Claude Code 접점 어댑터 (hook 입력·도구 이름·Agent 결과) | `lib/io.js` | 변경 |
 | 별도 Agent 세 조건 guard, 역할 프롬프트 조립 | `lib/workflow/v2/agent-policy.js`, `role-registry.js` | 변경 |
-| 회귀 세트 | `tests/regression/*.test.js` (장면 6 중 A·C·E·F 완료, B·D 는 H6) | 진행 중 |
+| 회귀 세트 | `tests/regression/*.test.js` (장면 A·B·C·D·E·F + commands, `npm run regression`) | 완료 (H6) |
 | specialist 산출물 직접 기록 (handoff `files`) | `schemas/specialist-handoff.schema.json`, `lib/workflow/v2/automatic-handoff.js` | 완료 (H2) |
 | 역할 modelHint | `contracts/v2-role-cards.json` | 변경 |
 | 검사 어댑터 `screenshot-compare` 자리 | `lib/workflow/v2/tool-adapters.js` (예약, 내장 `screen-capture` 는 동작) | 완료 (H4) |
@@ -176,7 +176,8 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 검수 페이지 (로컬 HTML) | `lib/workflow/v2/review-page.js` → `04-review/evidence/review.html` | 완료 (H4) |
 | 회차 diff 요약 (UI 수정 루프) | `lib/workflow/v2/diff-summary.js` → `03-do/evidence/screens/round-N/diff.md` | 완료 (H4) |
 | 하네스 설정 정본·mode 판정 | `lib/workflow/v2/config.js` | 완료 (H1) |
-| 앱 실행 (확인 단계) | `vais.config.json > run.command`, `tool-adapters.js` `serve` | 신규 |
+| 앱 실행 (확인 단계) | `vais.config.json > ui.run {command, url}`, `lib/workflow/v2/app-runner.js` `withApp` (screen-capture · `screens capture` 가 사용) | 완료 (H6) |
+| 인용 강제 · 구현됨 도장 | `lib/workflow/v2/citation.js` (parse·validate·applyAdditions·markImplemented), 내장 검사 `implementation-document`, stale Gate | 완료 (H6) |
 | 응답 형식 | `output-styles/vais-default.md` | 변경 |
 | 사용 문서 | `README.md`, `ONBOARDING.md`, `CLAUDE.md` | 변경 |
 

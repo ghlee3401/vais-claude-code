@@ -1,0 +1,206 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-663c75e9-4fd4-4e43-be5b-1bc7dfe6f70b",
+  "workItemId": "WI-2026-09-16-feature-bug-kinds",
+  "phase": "do",
+  "action": "ready",
+  "gate": {
+    "gate": "readiness",
+    "verdict": "NOT_READY",
+    "requiredChecks": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "test",
+      "lint",
+      "plugin-validator"
+    ],
+    "passed": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "lint",
+      "plugin-validator"
+    ],
+    "failed": [
+      "test"
+    ],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-16T11:16:54.842Z"
+  },
+  "checks": [
+    {
+      "check": "do-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/03-do/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical do document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 1980B is within the 3584B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/03-do/main.md"
+      ]
+    },
+    {
+      "check": "specialist-handoffs",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "schemas/**",
+        "contracts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "All Design-required specialist handoffs are uniquely consumed and complete",
+      "findings": [],
+      "evidence": []
+    },
+    {
+      "check": "test",
+      "execution": "errored",
+      "verdict": "fail",
+      "required": true,
+      "scope": [
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "schemas/**",
+        "contracts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check failed with exit 1",
+      "findings": [
+        "Inspect the raw evidence log for details"
+      ],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/03-do/evidence/logs/test.log"
+      ]
+    },
+    {
+      "check": "lint",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "schemas/**",
+        "contracts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/03-do/evidence/logs/lint.log"
+      ]
+    },
+    {
+      "check": "plugin-validator",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "schemas/**",
+        "contracts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/03-do/evidence/logs/plugin-validator.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "do",
+    "status": "active"
+  }
+}

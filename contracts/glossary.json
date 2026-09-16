@@ -20,7 +20,7 @@
     { "id": "round", "names": ["회차", "수정 회차"], "text": "화면 확인 정지점에서 수정 요청 한 번이 한 회차. 회차마다 그림과 무엇이 바뀌었는지(diff)가 남는다.", "refs": [] },
     { "id": "debt", "names": ["부채", "debt", "잔여 제한"], "text": "끝내지 못하고 넘긴 것. Report 의 잔여 제한과 QA FAIL 이 자동으로 장부에 부채로 남고, 제안에서 정리 후보로 뜬다.", "refs": ["docs/product/decisions.md"] },
     { "id": "preference", "names": ["취향", "preference"], "text": "화면에 대한 사용자의 선호(\"버튼은 크게, 파랑\"). 화면 확인에서 한 수정 요청과 채택한 시안이 자동으로 남고, 다음 화면 작업 Design 이 먼저 읽는다.", "refs": [] },
-    { "id": "save", "names": ["저장", "save", "커밋", "commit"], "text": "`/vais 저장` 은 버전 6곳이 맞는지 보고 바뀐 파일과 커밋 메시지를 제안한다. 사용자가 `/vais 저장 확인` 을 직접 치면 하네스가 커밋한다. push 는 사용자가 한다.", "refs": [] },
+    { "id": "save", "names": ["저장", "save", "커밋", "commit"], "text": "`/vais 저장` 은 버전 7면(설정 파일 5곳 + README 배지 + CHANGELOG 머리)이 맞는지 보고 바뀐 파일과 커밋 메시지를 제안한다. 사용자가 `/vais 저장 확인` 을 직접 치면 하네스가 커밋한다. push 는 사용자가 한다.", "refs": [] },
     { "id": "revert", "names": ["되돌리기", "revert", "롤백"], "text": "`/vais 되돌리기 <작업 id 또는 커밋>` 은 되돌릴 커밋과 파일을 보여주고, `/vais 되돌리기 확인: <대상>` 뒤에만 되돌리는 커밋을 만든다. 파일을 지우지 않고 역방향 커밋을 쌓는다.", "refs": [] },
     { "id": "work-item", "names": ["work item", "작업", "wi"], "text": "`/vais` 요청 하나가 만드는 단위. `WI-날짜-이름` 으로 부르고 Plan·Design·Do·Review·Report 다섯 문서를 가진다. 동시에 하나만 진행한다.", "refs": ["docs/README.md"] },
     { "id": "write-scope", "names": ["쓰기 범위", "write scope", "범위"], "text": "Design 이 선언한, 만들기 단계에서 고쳐도 되는 파일·폴더 목록. 밖의 파일을 고치려 하면 hook 이 막는다.", "refs": [] },

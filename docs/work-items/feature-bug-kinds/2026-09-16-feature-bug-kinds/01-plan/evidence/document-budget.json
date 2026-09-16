@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/01-plan/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 5478B is within the 6144B standard budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/01-plan/main.md"
+  ]
+}

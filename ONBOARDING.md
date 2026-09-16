@@ -25,6 +25,7 @@
 8. `lib/workflow/v2/ledger.js` + `product-note.js` + `proposal.js` — 장부(기억), 제품 노트 3면, 규칙 기반 제안. `hooks/session-start.js`(브리핑)·`hooks/workflow-v2-stop.js`(기록 잠금)·`scripts/vais-statusline.js` 가 이를 표시한다
 9. `lib/workflow/v2/screen-capture.js` + `diff-summary.js` + `review-page.js` — UI 루프: Chrome 헤드리스 스크린샷, 회차 diff, 검수 페이지. 상태 머신의 화면 확인 정지점(`do/waiting-user`)과 짝을 이룬다
 10. `lib/workflow/v2/briefing.js` + `explain.js` + `vcs.js`, `contracts/glossary.json` — 사용자 명령(상태·설명·저장·되돌리기·제안·기록). 쓰기 명령은 사용자 확인 문구가 세션 토큰이 된 뒤에만 CLI 가 실행한다
+11. `lib/workflow/v2/citation.js` + `app-runner.js` — 기능·버그 작업: Design 의 `## 인용`·`## 신규` 를 사슬과 대조하고, `do ready` 가 신규 항목을 정본에 붙이고, `report finalize` 가 `구현됨` 도장을 찍는다. `ui.run` 으로 앱을 띄워 화면을 찍는다
 
 ## 3. 동작 흐름 (1분)
 

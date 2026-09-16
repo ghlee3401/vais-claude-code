@@ -138,7 +138,7 @@ const HELP_LINES = Object.freeze([
   '| `/vais 확인` · `/vais <수정 요청>` | 화면 확인 정지점: 확인하면 Review, 수정 문장이면 다시 고쳐 찍음 (최대 5회) |',
   '| `/vais 상태` (`status`) | 현재 작업·단계·기다리는 결정·부채·stale·제안을 사람 말로 (읽기) |',
   '| `/vais 설명 <ID·용어·파일>` | 항목 ID 의 부모·자식·만든 작업, 용어 뜻, 파일이 어느 정본인지 (읽기) |',
-  '| `/vais 저장 [메시지]` → `/vais 저장 확인` | 버전 6곳 검사·변경 요약·메시지 제안 → 사용자가 확인하면 runtime 이 커밋 (push 는 사용자) |',
+  '| `/vais 저장 [메시지]` → `/vais 저장 확인` | 버전 7면 검사·변경 요약·메시지 제안 → 사용자가 확인하면 runtime 이 커밋 (push 는 사용자) |',
   '| `/vais 되돌리기 <작업 id·커밋>` → `/vais 되돌리기 확인: <대상>` | 되돌릴 커밋·파일 제시 → 확인하면 revert 커밋 |',
   '| `/vais 제안` | 다음 행동 3개 (읽기) |',
   '| `/vais 기록 <결정·피드백·취향·부채·리스크·메모> <내용>` · `/vais 기록 보기 [종류]` | 장부에 직접 남기기 · 최근 10건 보기 |',
@@ -184,6 +184,31 @@ function stagePhaseLines(item, kind, stage, sessionId) {
   };
 }
 
+// Phase guidance for implementation kinds (feature · bug): cite approved IDs, declare new ones,
+// let the runtime append them, and let QA judge exactly those TCs.
+function implementationPhaseLines(item, kind, sessionId) {
+  const dir = `docs/work-items/${item.primaryFeature}/${String(item.id).replace(/^WI-/, '')}`;
+  const bug = kind.designTemplate === 'bugfix';
+  return {
+    plan: [
+      `이 작업은 ${bug ? '버그 수정' : '기능 추가·변경'}(kind ${kind.id}) 다. 먼저 \`${INTERNAL_COMMAND} stage status\` 와 docs/product/*.md 에서 관련 항목 ID 를 찾는다. Plan 은 "요청 확인: <한 줄>", "kind: ${kind.id}", "관련 ID: <F-…, S-…>" 세 줄이면 된다${bug ? ' (재현 절차 한 줄 포함)' : ''}. 초안은 \`${planDraftPath(item)}\`.`,
+    ],
+    design: [
+      `Design 은 사슬 위의 인용·선언이다: "## 안 N"(접근안, 규모별 1~3), "## 인용"(건드리는 승인 ID 목록), "## 신규"(새 항목을 "### API-007 ← S-002" + "| 항목 | 내용 |" 표로, 그 단계의 필수 항목을 모두 채워서, 번호는 다음 빈 번호), "## 검수표"(≤5), "## 쓰기 범위"(제품 코드), readiness·review check, rollback.${bug ? ' 버그는 "## 재현"(절차 + `재현 화면: <png>` — `screens capture` 로 찍은 Work item 폴더 안 파일), "## 원인", "## 수정안"(1개), 신규 TC 항목이 필수다. 선택: "## 해소 부채" 불릿.' : ''} ID 없는 "만드는 것" 서술은 Gate 를 통과하지 못하고, stale 항목이 있으면 제시 자체가 거부된다.`,
+      `\`${INTERNAL_COMMAND} design present --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file ${dir}/02-design/draft.md --scope "<app path>" --readiness-check <tool-id> --review-check <tool-id>${item.qaRepairCount > 0 ? ' [--material true|false]' : ''}\`을 한 번 실행한다. PASS 뒤 사용자는 \`/vais N번\` 없이 바로 \`/vais design 승인\` 한다(안이 여럿이면 어느 안인지 본문에 밝힌다).`,
+    ],
+    do: [
+      `승인된 안을 쓰기 범위 안의 제품 코드에 적용한다. 제품 문서(docs/product/*.md)는 직접 고치지 않는다 — \`${INTERNAL_COMMAND} do ready --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file ${dir}/03-do/draft.md\` 가 READY 일 때 "## 신규" 항목을 정본에 붙이고(index draft) 화면(S·W·V) 을 인용했으면 screen-capture 로 찍는다.`,
+    ],
+    review: [
+      `독립 QA 의 \`--criterion\` 은 Design 의 "## 검수표" 줄과 인용·신규 TC 만으로 만든다${bug ? '. 버그는 "## 재현" 절차를 다시 실행해 미발생인지 확인하게 하고 Review 문서에 "## 재현 재실행" 절과 증거 경로를 쓴다' : ''}. Review 문서의 TC 집합은 Design 의 인용·신규 TC 와 같아야 한다.`,
+    ],
+    report: [
+      `\`report finalize\` 가 인용·신규 항목에 구현됨 도장을 찍고 신규 항목을 approved 로 바꾼다${bug ? '. "## 해소 부채" 는 장부 note 로 남는다' : ''}. 제품 노트 "현재" 의 구현됨 열이 늘어난다.`,
+    ],
+  };
+}
+
 function phaseGuidance(item, sessionId, requestSlug = null, options = {}) {
   if (!item) {
     if (!requestSlug) {
@@ -206,7 +231,9 @@ function phaseGuidance(item, sessionId, requestSlug = null, options = {}) {
   }
   const kind = kindOf(item);
   const stage = stageOfKind(kind);
-  const stageLines = stage ? stagePhaseLines(item, kind, stage, sessionId) : (kind?.screenCheck ? uiPhaseLines(item, kind, sessionId) : null);
+  const stageLines = stage ? stagePhaseLines(item, kind, stage, sessionId)
+    : kind?.screenCheck ? uiPhaseLines(item, kind, sessionId)
+      : ['implementation', 'bugfix'].includes(kind?.designTemplate) ? implementationPhaseLines(item, kind, sessionId) : null;
   const byPhase = {
     plan: [
       'CPO가 요구사항·사용자 흐름·엣지 케이스를 구현 독립적으로 확정한다. 요구사항 ID는 REQ-001처럼 3자리 형식으로 쓴다.',
@@ -242,7 +269,7 @@ function phaseGuidance(item, sessionId, requestSlug = null, options = {}) {
   const ownerPrompt = owner?.kind === 'role' ? buildRolePrompt(owner.role) : '';
   const phaseLines = stageLines && stageLines[item.phase]
     ? (item.phase === 'report' ? [...(byPhase.report || []), ...stageLines.report]
-      : item.phase === 'review' && kind?.screenCheck ? [...stageLines.review, ...byPhase.review]
+      : item.phase === 'review' && (kind?.screenCheck || ['implementation', 'bugfix'].includes(kind?.designTemplate)) ? [...stageLines.review, ...byPhase.review]
         : [...stageLines[item.phase], ...(item.phase === 'design' ? (options.ledgerLines || []) : [])])
     : (byPhase[item.phase] || []);
   return [
@@ -303,8 +330,6 @@ function commandGuidance(route, sessionId) {
       return [`\`${cli} ledger list${route.kind ? ` --kind ${route.kind}` : ''} --limit 10\` 을 한 번 실행해 항목을 시간순으로 보인다.${route.rawKind && !route.kind ? ` "${route.rawKind}" 는 종류가 아니라 전체를 보인다.` : ''}`, '이 action은 읽기 전용이다.'];
     case 'ledger-add':
       return [`사용자가 장부 기록을 직접 요청했고 runtime 이 이 세션에 확인 토큰을 등록했다. \`${cli} ledger add --session ${sessionId} --kind ${route.kind} --text ${quote(route.text)}\` 을 한 번 실행하고 기록된 항목을 보인다. 내용을 고쳐 쓰지 않는다.`];
-    case 'ledger-add-invalid':
-      return [`"${route.rawKind}" 는 장부 종류가 아니다. 종류는 결정·피드백·취향·부채·리스크·메모 (decision·feedback·preference·debt·risk·note) 중 하나다. 사용자에게 다시 입력하도록 안내한다.`, '이 action은 읽기 전용이다.'];
     default:
       return null;
   }
@@ -545,6 +570,7 @@ module.exports = {
   stagePhaseLines,
   ledgerLinesFor,
   uiPhaseLines,
+  implementationPhaseLines,
   commandGuidance,
   confirmationsFor,
   main,

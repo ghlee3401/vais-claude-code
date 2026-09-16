@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.5.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-3.6.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -52,7 +52,7 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 | `/vais 이름: <kebab-case>` | 요청에 영어 단어가 없어 이름을 못 정했을 때 사용자가 Feature 이름을 확정 |
 | `/vais 상태` (`status`) | 현재 작업·단계·기다리는 결정·부채·stale·다음 행동 3개를 사람 말로 (읽기 전용) |
 | `/vais 설명 <ID·용어·파일>` | 항목 ID 의 부모·자식·만든 작업·stale, 용어 뜻(사전 데이터), 파일이 어느 정본인지 (읽기 전용) |
-| `/vais 저장 [메시지]` → `/vais 저장 확인[: 메시지]` | 버전 6곳 동기화 검사·변경 요약·커밋 메시지 제안 → 사용자가 확인 문구를 직접 치면 runtime 이 `git add`·`commit`. push 는 사용자가 |
+| `/vais 저장 [메시지]` → `/vais 저장 확인[: 메시지]` | 버전 7면(manifest 5 + README 배지 + CHANGELOG 헤더) 동기화 검사·변경 요약·커밋 메시지 제안 → 사용자가 확인 문구를 직접 치면 runtime 이 `git add`·`commit`. push 는 사용자가 |
 | `/vais 되돌리기 <작업 id·커밋>` → `/vais 되돌리기 확인: <대상>` | 되돌릴 커밋·파일 목록 → 확인하면 `git revert --no-edit` 커밋 |
 | `/vais 제안` | 다음 행동 3개와 근거 (읽기 전용) |
 | `/vais 기록 <결정·피드백·취향·부채·리스크·메모> <내용>` · `/vais 기록 보기 [종류]` | 장부에 직접 남기기(사용자 원문 그대로) · 최근 10건 |
@@ -100,6 +100,21 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 
 정본 문서의 항목은 `### F-003 ← REQ-002` 제목과 `| 항목 | 내용 |` 표로 쓴다. runtime 이 부모 존재·허용 접두·필수 항목·산출물 파일·커버리지를 검사하고, 상위 항목이 바뀌면 하위 항목을 stale 로 표시한다. stale 은 그 단계를 다시 승인하거나 사용자가 `/vais 변경 없음 확인: F-003 ← REQ-002` 로 해소한다. 상태는 `stage status` 로 본다.
 
+### 기능·버그 — 승인된 문서 위에서만
+
+10단계가 승인된 뒤의 기능 추가(`feature`)와 버그 수정(`bug`)은 문서를 새로 쓰지 않는다. Plan 은 `요청 확인 · kind · 관련 ID` 세 줄이고, Design 은 "무엇을 만드는지" 를 **ID 로만** 적는다.
+
+```text
+/vais 책을 제목으로 검색하고 싶어요   → kind feature, Plan 세 줄 승인
+Design: ## 안 1·2 (접근안) / ## 인용 REQ-001, F-001, S-001, TC-001 / ## 신규 ### F-003 ← REQ-001 (표) · ### API-003 ← S-001, F-003 · ### TC-003 ← F-003 / ## 검수표 ≤5
+Do: 코드 수정 → do ready 가 F-003·API-003·TC-003 을 02·08·10 정본 끝에 붙임(draft) + 화면(S 인용) 스크린샷
+Review: 독립 QA 가 검수표 + TC-001·TC-003 만 검사 → /vais 최종 승인 → Report 가 인용·신규 항목에 구현됨 도장
+```
+
+- 없는 ID 인용, 다음 빈 번호가 아닌 새 ID, 미승인 단계의 항목, 필수 항목 누락, stale 항목이 하나라도 있으면 Design 을 제시할 수 없다.
+- `bug` 는 `## 재현`(절차 + `재현 화면: <png>` — `screens capture` 로 찍은 실제 그림)·`## 원인`·`## 수정안` 과 재발 방지 `TC` 항목이 필수다. "재현 불가" 는 거부된다. Review 는 재현 절차를 다시 실행한 `## 재현 재실행` 을 적는다. `## 해소 부채` 를 적으면 장부에 `부채 해소` 로 남는다.
+- 제품 노트 "현재" 표의 `구현됨` 열이 늘어나는 것이 진행 표시다.
+
 ## UI 루프 — 그림으로 고르고 그림으로 확인
 
 화면을 고치는 작업(`ui` kind)은 말이 아니라 스크린샷으로 진행된다. 설치된 Chrome 을 헤드리스로 돌려 데스크톱(1280×800)·모바일(390×844) PNG 를 찍는다.
@@ -111,7 +126,7 @@ Do: 적용 → 회차 1 화면(전/후) + diff 한 줄  → "더 크게" → 회
 Review: 검수 페이지(승인 시안 | 전 | 후) → 독립 QA → /vais 최종 승인 → 취향 장부 기록
 ```
 
-- 앱 위치는 `vais.config.json > ui` (`appRoot`+`entry` 정적 파일, 또는 `url`). 앱을 띄우는 일은 하지 않는다.
+- 앱 위치는 `vais.config.json > ui` (`appRoot`+`entry` 정적 파일, 또는 `url`). 띄워야 보이는 앱은 `ui.run: { "command": ["npm", "run", "dev"], "url": "http://localhost:5173/", "readyTimeoutMs": 15000 }` 로 선언하면 스크린샷 전에 runtime 이 앱을 띄우고 URL 이 응답할 때까지 기다린 뒤 끝나면 종료한다 (셸 문자열 아님, argv 배열).
 - 시안 사본은 Work item 의 `02-design/options/N/` 안에만 둔다. 제품 코드는 Do 에서만 바뀐다.
 - 회차마다 `03-do/evidence/screens/round-N/` 에 그림과 `diff.md`("`.primary padding: 15px 20px → 22px 30px`" 처럼 기계가 뽑은 변화)가 남고, Review 는 `04-review/evidence/review.html` 을 만든다.
 - 수정 요청 원문은 장부 `preference` 로 남아 다음 UI·와이어·시안 작업의 Design 첫 줄에 뜬다. 6번째 수정은 막힌다.

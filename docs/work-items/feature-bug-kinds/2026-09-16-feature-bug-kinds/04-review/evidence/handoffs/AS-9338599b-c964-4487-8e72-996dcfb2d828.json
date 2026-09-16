@@ -1,0 +1,64 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-16-feature-bug-kinds",
+  "assignmentId": "AS-9338599b-c964-4487-8e72-996dcfb2d828",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "c1243c6b0ca421b5489a9513c7631b995b79ff5bc95826438e71ad5e67d562d1",
+  "handoffDigest": "f7d085d643fb33c09a9038920735ec3f66d1509eb635ad48254a0946ea82d913",
+  "persistedAt": "2026-09-16T11:24:06.788Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "fail",
+    "judgment": "REQ-001~009 동작은 PASS(단위 11/11, 회귀 10/10, 코드 대조 일치). REQ-010 만 미완: design.md 171행 회귀 세트가 'B·D 는 H6 / 진행 중' 으로 남아 대응표 A~F 갱신 누락.",
+    "decisions": [
+      "동작 검증 PASS, 문서 1행 누락으로 FAIL",
+      "stale Gate·READY-only append 코드 확인",
+      "withApp argv·URL 대기·그룹 종료 확인"
+    ],
+    "behavior": {
+      "inputs": [
+        "node --test v2-feature-bug",
+        "npm run regression",
+        "citation·app-runner 소스"
+      ],
+      "outputs": [
+        "11/11 PASS",
+        "10/10 PASS (B·D 포함)",
+        "버전 7면 3.6.0 일치"
+      ],
+      "errors": [
+        "design.md:171 회귀 세트 stale",
+        "CLAUDE.md:5 상태 H5 진행",
+        "test TC 번호≠Design TC표"
+      ]
+    },
+    "evidence": [
+      "tests/v2-feature-bug.test.js TC-001~011 pass 11 fail 0; tests/regression 10 pass (scene-b·scene-d 부정 케이스 포함)",
+      "phase-transaction.js:593-600 STAGE_STALE_BLOCK 쓰기 전 거부 · :672-677 READY 때만 applyAdditions · :713 markImplemented",
+      "docs/harness/design.md:171 '장면 6 중 A·C·E·F 완료, B·D 는 H6 | 진행 중' 미갱신; :179-180 은 완료(H6) 로 갱신됨"
+    ],
+    "affectedRequirements": [
+      "REQ-010"
+    ],
+    "risks": [
+      "Review TC 집합은 Design 10개여야 함",
+      "Do 문서 REQ 번호가 Design 표와 다름",
+      "F 만 인용 시 캡처 없음 테스트 부재"
+    ],
+    "unverified": [
+      "F-only feature 캡처 생략 e2e",
+      "stale 해소 뒤 design 통과 e2e",
+      "실제 Chrome 렌더러 (stub 사용)"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}
