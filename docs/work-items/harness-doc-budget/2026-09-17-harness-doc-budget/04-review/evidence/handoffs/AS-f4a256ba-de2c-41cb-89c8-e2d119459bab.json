@@ -1,0 +1,59 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-17-harness-doc-budget",
+  "assignmentId": "AS-f4a256ba-de2c-41cb-89c8-e2d119459bab",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "cbea142d9978b7cc4527176c0125ce47bdd5a059b104c9c8fda96b1fc6e8e112",
+  "handoffDigest": "609e8f51ec4d646fc1b7c3fb65e0374a4be6dd52bf5d8786387da6334d212b24",
+  "persistedAt": "2026-09-17T08:22:36.807Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "TC-001~004 모두 코드·설정·문서·버전과 일치. npm test 235/0, lint·regression 통과",
+    "decisions": [
+      "표 20칸 Design과 동일",
+      "doctor·validate는 scope 밖"
+    ],
+    "behavior": {
+      "inputs": [
+        "documentBudgets 덮어쓰기",
+        "0·-1·\"x\" 칸"
+      ],
+      "outputs": [
+        "병합 예산·ignored",
+        "①②③ 사용자 말 finding"
+      ],
+      "errors": [
+        "doctor warn",
+        "기본값 대체"
+      ]
+    },
+    "evidence": [
+      "config.js · document-quality.js · doctor.js: budgets, overflowFinding, document-budgets",
+      "tests/v2-lean-document-quality.test.js harness-doc-budget 4건 ok; 버전 9곳 4.1.0; README 155-166"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004"
+    ],
+    "risks": [
+      "75% 테스트는 실측값 하드코딩",
+      "doctor 실행은 미확인"
+    ],
+    "unverified": [
+      "npm run doctor fail 0",
+      "npm run validate"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator"
+    ]
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-f7510e1c-7ac7-40d6-9f95-b990f73c9853",
+  "workItemId": "WI-2026-09-17-harness-doc-budget",
+  "phase": "review",
+  "action": "decide",
+  "gate": {
+    "gate": "review",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "passed": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-17T08:25:23.050Z"
+  },
+  "checks": [
+    {
+      "check": "review-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-doc-budget/2026-09-17-harness-doc-budget/04-review/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical review document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-doc-budget/2026-09-17-harness-doc-budget/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-doc-budget/2026-09-17-harness-doc-budget/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 2208B is within the 5120B compact budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-doc-budget/2026-09-17-harness-doc-budget/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-doc-budget/2026-09-17-harness-doc-budget/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-doc-budget/2026-09-17-harness-doc-budget/04-review/main.md"
+      ]
+    },
+    {
+      "check": "independent-qa-handoff",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [],
+      "requirements": [
+        "REQ-001",
+        "REQ-002",
+        "REQ-003",
+        "REQ-004"
+      ],
+      "summary": "Independent QA completed without a failure verdict",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-doc-budget/2026-09-17-harness-doc-budget/04-review/evidence/handoffs/AS-f4a256ba-de2c-41cb-89c8-e2d119459bab.json"
+      ]
+    },
+    {
+      "check": "secret-scan",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/workflow/v2/document-quality.js",
+        "lib/workflow/v2/config.js",
+        "lib/workflow/v2/doctor.js",
+        "vais.config.json",
+        "tests/**",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "docs/harness/design.md",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        ".claude-plugin/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-doc-budget/2026-09-17-harness-doc-budget/04-review/evidence/logs/secret-scan.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "review",
+    "status": "waiting-user"
+  }
+}

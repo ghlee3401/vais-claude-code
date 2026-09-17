@@ -1,9 +1,12 @@
 # 제품 노트 — 왜
 
-> 자동 생성 (`.vais/v2/ledger.jsonl` 88건). 결정·피드백·취향·부채·리스크·이정표 순.
+> 자동 생성 (`.vais/v2/ledger.jsonl` 98건). 결정·피드백·취향·부채·리스크·이정표 순.
 
-## 결정 (32)
+## 결정 (35)
 
+- 2026-09-17 08:14 · WI-2026-09-17-harness-doc-budget · 설정 키는 최상위 `documentBudgets` 다(`workflowV2` 아래가 아님). 부분 덮어쓰기를 허용하고, 잘못된 값은 그 칸만 무시해 닫힘으로 동작한다. — Design revision 1 에서 확정
+- 2026-09-17 08:14 · WI-2026-09-17-harness-doc-budget · 버전은 4.1.0. 하네스 판정이 바뀌므로 minor 다. — Design revision 1 에서 확정
+- 2026-09-17 08:14 · WI-2026-09-17-harness-doc-budget · 예산 원칙은 유지하고 값만 올린다. 기준은 "지난 실측 최대가 새 한도의 75% 이하" 이며 1.4배·1024 배수로 정했다. 80자 복사 금지·extended 예외 승인은 그대로. — Design revision 1 에서 확정
 - 2026-09-17 07:36 · WI-2026-09-17-harness-docs-module-count · 모듈 수 표기는 세 문서 모두 "38 모듈" 로 쓰고, 기준(폴더의 js 파일 수, index.js 포함)은 README 기준 줄 한 곳에만 둔다. CLAUDE·ONBOARDING 은 수만 적는다. — Design revision 1 에서 확정
 - 2026-09-17 07:36 · WI-2026-09-17-harness-docs-module-count · 버전은 4.0.1 유지. 이번도 문서만 바뀐다. — Design revision 1 에서 확정
 - 2026-09-17 07:25 · WI-2026-09-17-harness-readme-status-2 · 버전은 4.0.1 을 유지한다. 문서 한 파일 갱신이라 플러그인 동작이 바뀌지 않는다 (사용자 확인 2026-09-17). — Design revision 1 에서 확정
@@ -37,8 +40,11 @@
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 테스트는 stub 렌더러로 결정적으로 돌리고 receipt 에 stub 임을 남긴다. 실제 렌더 검증은 Chrome 이 있는 환경의 별도 테스트와 사용자 확인으로 한다. — Design revision 1 에서 확정
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 취향은 제품 전체 속성이라 feature 를 넘어 주입한다. — Design revision 1 에서 확정
 
-## 부채 (27)
+## 부채 (30)
 
+- 2026-09-17 08:26 · WI-2026-09-17-harness-doc-budget · 새 예산은 push 후 플러그인을 4.1.0 으로 업데이트해야 이 저장소에서도 적용된다. 실행 중 캐시는 4.0.1 — WI-2026-09-17-harness-doc-budget Report 의 잔여 제한
+- 2026-09-17 08:26 · WI-2026-09-17-harness-doc-budget · 독립 QA specialist 가 세 작업 연속으로 읽기 전용 handoff 에 files 항목을 넣거나 문자열 한도를 넘겨 재출력을 받았다. agents/v2-specialist.md 지시문에 읽기 전용이면 files 금지와 문자열 한도 표를 못 박는 것이 다음 하네스 작업 후보다(harness-docs-module-count 의 잔여 제한과 같음) — WI-2026-09-17-harness-doc-budget Report 의 잔여 제한
+- 2026-09-17 08:26 · WI-2026-09-17-harness-doc-budget · 예외 승인됐던 extended Design 28,280B 는 새 한도 26,624B 도 넘어 예외 절차가 그대로 필요하다 — WI-2026-09-17-harness-doc-budget Report 의 잔여 제한
 - 2026-09-17 07:48 · WI-2026-09-17-harness-docs-module-count · 독립 QA specialist 가 두 작업 연속으로 읽기 전용 handoff 에 files 항목을 넣어 등록이 거부되고 재출력을 받았다. agents/v2-specialist.md 지시문에 읽기 전용이면 files 금지를 못 박는 것이 다음 하네스 작업 후보다 — WI-2026-09-17-harness-docs-module-count Report 의 잔여 제한
 - 2026-09-17 07:30 · WI-2026-09-17-harness-readme-status-2 · CLAUDE.md 와 ONBOARDING.md 의 '35 모듈' 표기가 실제 38 과 다르다(이번 범위 밖, 다음 문서 작업에서 맞춘다) — WI-2026-09-17-harness-readme-status-2 Report 의 잔여 제한
 - 2026-09-17 07:30 · WI-2026-09-17-harness-readme-status-2 · README 세는 기준 줄의 '최상위 키' 는 정확히는 hooks.json 의 hooks 아래 키를 뜻한다(동작 무관, 표현 손질 후보) — WI-2026-09-17-harness-readme-status-2 Report 의 잔여 제한
@@ -71,8 +77,12 @@
 
 - 2026-09-16 11:16 · WI-2026-09-16-feature-bug-kinds · Do 준비 미달 1회: test — readiness 검사가 실패했다
 
-## 이정표 (28)
+## 이정표 (32)
 
+- 2026-09-17 08:26 · WI-2026-09-17-harness-doc-budget · 작업 완료 — 문서 예산 상향과 설정화 — Report 가 확정되어 동결됐다
+- 2026-09-17 08:26 · WI-2026-09-17-harness-doc-budget · 최종 승인 — 문서 예산 상향과 설정화 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
+- 2026-09-17 08:14 · WI-2026-09-17-harness-doc-budget · Design 승인 (revision 1) — 문서 예산 상향과 설정화 — 사용자가 Design 을 승인했다
+- 2026-09-17 08:12 · WI-2026-09-17-harness-doc-budget · Plan 승인 (revision 1) — 문서 예산 상향과 설정화 — 사용자가 Plan 을 승인했다
 - 2026-09-17 07:48 · WI-2026-09-17-harness-docs-module-count · 작업 완료 — 모듈 수 표기 통일과 기준 줄 손질 — Report 가 확정되어 동결됐다
 - 2026-09-17 07:48 · WI-2026-09-17-harness-docs-module-count · 최종 승인 — 모듈 수 표기 통일과 기준 줄 손질 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
 - 2026-09-17 07:36 · WI-2026-09-17-harness-docs-module-count · Design 승인 (revision 1) — 모듈 수 표기 통일과 기준 줄 손질 — 사용자가 Design 을 승인했다

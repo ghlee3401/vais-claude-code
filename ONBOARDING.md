@@ -11,7 +11,7 @@
 - 플러그인은 Plan → Design → Do → Review → Report 를 hook + 상태 머신으로 **강제**하고, 결정·증거를 **기록**하며, 결과를 **보여준다**.
 - 모델(Claude)이 바뀌어도 유지되는 것은 코드로 못 박은 규칙(승인·범위·기록·증거·고장 알림)이고, 바뀌면 줄이는 것은 데이터(역할 카드·양식·지시문)다.
 
-**4.0.1 상태 (2026-09-17)**: 2026-09-15 에 Legacy(C-Suite 에이전트 85개, 템플릿, 구 hook·lib·문서 ≈ 40,000줄)를 전부 제거하고(롤백 태그 `v3.0.1-legacy`), 그 위에 로드맵 H1~H8 로 새 하네스를 올렸다. 쓰이지 않던 디자인 시스템 MCP·vendor 는 H8 에서 삭제했다. 설계 정본은 `docs/harness/design.md`, 순서는 `docs/harness/roadmap.md`.
+**4.1.0 상태 (2026-09-17, 문서 예산 상향·설정화)**: 2026-09-15 에 Legacy(C-Suite 에이전트 85개, 템플릿, 구 hook·lib·문서 ≈ 40,000줄)를 전부 제거하고(롤백 태그 `v3.0.1-legacy`), 그 위에 로드맵 H1~H8 로 새 하네스를 올렸다. 쓰이지 않던 디자인 시스템 MCP·vendor 는 H8 에서 삭제했다. 설계 정본은 `docs/harness/design.md`, 순서는 `docs/harness/roadmap.md`.
 
 ## 2. 처음 읽는 순서 (2분)
 
@@ -51,7 +51,7 @@ flowchart TB
 | `hooks/hooks.json` | Claude Code | SessionStart · UserPromptSubmit · PreToolUse · PostToolUse · Stop 등록 |
 | `scripts/vais-statusline.js` | Claude Code statusline | `~/.claude/settings.json > statusLine` 에 등록하면 상태 줄 표시 (`/vais doctor` 가 안내) |
 | `docs/product/{README,roadmap,decisions}.md` | 사용자 | 제품 노트 현재·다음·왜 (자동 생성) |
-| `vais.config.json` | runtime | `workflowV2.mode` (`enforce` 정본 / `disabled` 하네스 수리용) · `ui` (앱 위치: appRoot·entry·url, 기동: run {command[], url}) |
+| `vais.config.json` | runtime | `workflowV2.mode` (`enforce` 정본 / `disabled` 하네스 수리용) · `documentBudgets` (단계 문서 byte 한도 칸 단위 덮어쓰기, README "문서 예산") · `ui` (앱 위치: appRoot·entry·url, 기동: run {command[], url}) |
 | `contracts/v2-role-cards.json` | runtime | 역할 정본 |
 
 ## 5. 개발 루프

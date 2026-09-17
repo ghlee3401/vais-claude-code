@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-4.0.1-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-4.1.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -13,7 +13,7 @@
 
 ---
 
-> **현재 상태 (4.0.1, 2026-09-17)**: 로드맵 H1~H8 완료. 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌고, 쓰이지 않던 디자인 시스템 MCP·vendor·브랜드 카탈로그는 제거됐다(되살림: 커밋 `66d0f6b`). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
+> **현재 상태 (4.1.0, 2026-09-17)**: 로드맵 H1~H8 완료, 문서 예산 상향·설정화(`documentBudgets`). 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌고, 쓰이지 않던 디자인 시스템 MCP·vendor·브랜드 카탈로그는 제거됐다(되살림: 커밋 `66d0f6b`). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
 
 ## 무엇인가
 
@@ -151,6 +151,19 @@ Review: 검수 페이지(승인 시안 | 전 | 후) → 독립 QA → /vais 최�
 | 과거 | `docs/README.md` | 작업 목록 (기존) |
 
 새 세션이 열리면 SessionStart hook 이 첫 줄에 `[feature · phase · status] 지난 세션: … 열린 결정 n, 부채 n, stale n. 제안: ① … ② … ③ …` 를 넣는다. 터미널 상태 줄은 `scripts/vais-statusline.js` 를 `~/.claude/settings.json > statusLine` 에 등록하면 `VAIS · {feature} · {phase}/{status} · 다음: {행동}` 을 항상 보인다 (`/vais doctor` 가 설치법을 안내). 상태가 바뀌었는데 장부가 비었거나 기록되지 않은 파일 변경이 있으면 Stop hook 이 턴 종료를 한 번 막는다. 브리핑·제안·상태 줄은 모델을 부르지 않고 상태 파일 3개만 읽는다.
+
+## 문서 예산
+
+단계 문서(`main.md`)는 비개발자가 읽을 만큼만 쓴다. 한도는 byte 이고(한글 1자 ≈ 3B), 이전 단계 문장(80자 이상)을 복사하면 거부된다. 기본값은 H1~H8 의 실측 문서가 모두 한도의 75% 아래에 오도록 정했다.
+
+| 규모 | plan | design | do | review | report |
+|---|---|---|---|---|---|
+| compact | 8,192 | 12,288 | 4,096 | 7,168 | 4,096 |
+| standard | 9,216 | 14,336 | 5,120 | 9,216 | 4,096 |
+| extended | 14,336 | 26,624 | 8,192 | 14,336 | 7,168 |
+| stage 단계 문서 | 3,072 | 8,192 | 4,096 | 6,144 | 4,096 |
+
+프로젝트는 `vais.config.json > documentBudgets` 로 칸 단위로 덮어쓴다 (`{ "standard": { "design": 20480 } }`). 양의 정수가 아닌 칸은 무시하고 기본값을 쓰며 `/vais doctor` 가 알린다. 한도를 넘기면 present 가 세 갈래를 말한다: ① 본문 줄이기 ② `--scale` 올리기(extended 는 frontmatter `budget_exception` + 사용자 승인) ③ 설정 올리기.
 
 ## 5단계
 

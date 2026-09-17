@@ -1,0 +1,27 @@
+{
+  "check": "test",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "lib/workflow/v2/document-quality.js",
+    "lib/workflow/v2/config.js",
+    "lib/workflow/v2/doctor.js",
+    "vais.config.json",
+    "tests/**",
+    "README.md",
+    "CLAUDE.md",
+    "ONBOARDING.md",
+    "docs/harness/design.md",
+    "CHANGELOG.md",
+    "package.json",
+    "package-lock.json",
+    ".claude-plugin/**"
+  ],
+  "requirements": [],
+  "summary": "Check passed",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-doc-budget/2026-09-17-harness-doc-budget/03-do/evidence/logs/test.log"
+  ]
+}

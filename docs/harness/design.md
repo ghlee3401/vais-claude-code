@@ -147,6 +147,7 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | ID 파싱·부모 검사·stale 전파·chain-index | `lib/workflow/v2/id-chain.js` | 완료 (H2) |
 | 단계 문서 검사·승인 (`stage-document` 내장 검사, `report finalize` 승인, `stage status/confirm/reindex`) | `lib/workflow/v2/phase-transaction.js`, `scripts/vais-workflow-v2.js` | 완료 (H2) |
 | Work item `kind` 필드·진입 조건·kind 별 양식·예산 | `state-machine.js`, `phase-check.js`, `document-quality.js`, `schemas/work-item.schema.json` | 완료 (H2) |
+| 문서 예산 기본값(실측 최대 ≤ 75%)·`vais.config.json > documentBudgets` 칸 단위 덮어쓰기·doctor `document-budgets`·사용자 말 초과 안내 | `config.js` (`DEFAULT_DOCUMENT_BUDGETS`, `loadDocumentBudgets`), `document-quality.js`, `doctor.js` | 완료 (4.1.0 `harness-doc-budget`) |
 | 화면 확인 정지점 (ui kind) | `state-machine.js` 이벤트 `USER_OPTION_CHOSEN` / `USER_SCREEN_CONFIRMED` / `USER_SCREEN_REVISED`, `router.js`, prompt hook | 완료 (H4) |
 | 수정 루프 상한 (kind 의 `repairLimit`, ui 5) | `state-machine.js`, `contracts/work-kinds.json` | 완료 (H2) |
 | 장부 | `lib/workflow/v2/ledger.js`, `schemas/ledger-entry.schema.json`, `.vais/v2/ledger.jsonl` (store 잠금 안에서 append) | 완료 (H3) |

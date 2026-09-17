@@ -2,7 +2,7 @@
 
 > **이 파일의 책임**: Claude Code 전용 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 `ONBOARDING.md`(5분), 사용법은 `README.md`.
 >
-> 상태: **4.0.1 (2026-09-17) — 로드맵 H1~H8 완료.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md`. 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다. 이 저장소 자체 작업의 kind 는 `harness` 다.
+> 상태: **4.1.0 (2026-09-17) — 로드맵 H1~H8 완료, 문서 예산 상향·설정화.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md`. 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다. 이 저장소 자체 작업의 kind 는 `harness` 다.
 
 ## 이 플러그인이 만드는 것
 
@@ -46,7 +46,7 @@ vais-claude-code/
 ├── tests/v2-*.test.js (16) + tests/regression/(장면 A·B·C·D·E·F + commands, 공통 준비 helpers.js) + tests/fixtures/{mini-booking,product-stages,static-server.js}
 ├── docs/product/             # 제품 사슬 정본 NN-*.md + 자동 생성 노트 README·roadmap·decisions
 ├── .vais/v2/                 # work-items.json · authorizations.json · chain-index.json · ledger.jsonl(append-only) — 직접 편집 금지
-├── vais.config.json          # version · plugin · workflowV2 · ui(appRoot·entry·url)
+├── vais.config.json          # version · plugin · workflowV2 · documentBudgets(문서 예산 덮어쓰기) · ui(appRoot·entry·url)
 └── ONBOARDING.md · README.md · CLAUDE.md · CHANGELOG.md
 ```
 
@@ -71,7 +71,7 @@ vais-claude-code/
 10-5. **화면은 그림으로** — `ui` kind 와 와이어프레임·시안 단계에서 화면을 말로 설명하지 않는다. `screens capture` 또는 `do ready` 가 만든 PNG 를 Read 로 열어 응답에 보인다. ui Design 은 `## 안 N` 마다 `사본:`·`데스크톱:`·`모바일:` 경로(Work item 폴더 안)와 `## 검수표` 가 있어야 통과하고, 사용자는 `/vais N번` 으로 고른 뒤 승인한다. Do 가 READY 면 `do/waiting-user`(화면 확인 정지점)에서 round-0(전)·round-N(후) 그림과 `diff.md` 한 줄을 보이고 멈춘다. `/vais 확인` 이면 Review, 다른 문장이면 Design 세부 수정(material=false, `## 수정 회차 N`) → Do 재실행. 6번째 수정은 막힌다. Chrome 이 없으면 그림 없는 승인을 만들지 말고 `/vais doctor` 의 설치 안내를 전한다.
 10-6. **기능·버그는 사슬 위에서** — `feature`·`bug` kind 의 Plan 은 `요청 확인·kind·관련 ID` 세 줄이다. Design 은 만드는 것을 `## 인용`(승인 ID)과 `## 신규`(`### API-003 ← S-001, F-003` + 그 단계의 필수 항목 표, 다음 빈 번호)로만 적는다. ID 없는 서술, 없는 인용, 미승인 단계, stale 항목이 있으면 `design present` 가 거부된다. `docs/product/*.md` 는 손으로 고치지 않는다 — `do ready` 가 READY 일 때 신규 항목을 정본에 붙이고(draft), `report finalize` 가 `구현됨` 도장을 찍고 approved 로 바꾼다. bug 는 `## 재현`(절차 + `재현 화면: <png>`, `screens capture` 로 찍은 Work item 폴더 안 파일)·`## 원인`·`## 수정안`·신규 TC 가 필수고 "재현 불가" 는 거부된다. QA 의 `--criterion` 은 `## 검수표` 와 인용·신규 TC 만이고 Review 문서의 TC 집합은 그것과 같아야 한다. 앱을 띄워야 찍히는 화면은 `vais.config.json > ui.run {command: [argv], url}` 로 선언한다.
 11. **ID** — `REQ-001`, `TC-001` 3자리. Design REQ 집합 = Plan REQ 집합, Review TC 집합 = Design TC 집합.
-12. **문서 예산** — compact / standard / extended byte 한도 (`lib/workflow/v2/document-quality.js`). 이전 단계 문장(80자 이상) 복사 금지.
+12. **문서 예산** — 단계 문서 byte 한도. 기본값(README "문서 예산" 표, `lib/workflow/v2/config.js`)은 compact / standard / extended × plan·design·do·review·report 와 stage 단계 문서용 한 줄이며, 프로젝트는 `vais.config.json > documentBudgets.{규모}.{단계}` 로 칸 단위로 덮어쓴다(잘못된 칸은 무시, `/vais doctor` 가 알림). 초과하면 present 가 "① 본문 줄이기 ② `--scale` 올리기(extended 는 `budget_exception` 예외 승인) ③ 설정 올리기" 를 안내한다. 이전 단계 문장(80자 이상) 복사 금지.
 13. **check id** — Tool 7종 `test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan` + 내장 `stage-document`(단계 kind), `screen-capture`(ui kind), 예약 `screenshot-compare`.
 14. **Bash** — 한 번에 한 명령. `&&`, `|`, `;`, 리다이렉션, `$( )` 금지. 읽기는 Read/Grep 우선.
 15. **위험 명령 금지** — `rm -rf`, `git push --force`, `git commit --no-verify`. 민감 정보는 환경 변수로만.

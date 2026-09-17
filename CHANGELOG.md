@@ -1,9 +1,22 @@
 # Changelog
 
-## [Unreleased]
+## [4.1.0] - 2026-09-17
+
+> `harness-doc-budget`. 단계 문서 byte 예산이 낮아 Design 이 반복해서 한도에 붙던 문제(실측 55개 중 8개가 95% 초과)를 풀고, 프로젝트가 예산을 조정할 수 있게 한다.
 
 ### Changed
 
+- **문서 예산 상향** — 기본값을 약 1.4배(1024 배수)로 올려 H1~H8 실측 최대가 모두 새 한도의 75% 이하가 되게 했다. standard: plan 9,216 · design 14,336 · do 5,120 · review 9,216 · report 4,096; compact 8,192/12,288/4,096/7,168/4,096; extended 14,336/26,624/8,192/14,336/7,168; stage 단계 문서 3,072/8,192/4,096/6,144/4,096. 원칙(80자 이상 문장 복사 금지, extended 예외 승인)은 그대로. 기본값은 `lib/workflow/v2/config.js` 로 옮기고 `document-quality.js` 가 재수출한다
+- **예산 초과 안내** — finding 이 사용자 말로 세 갈래를 말한다: ① 본문 줄이기 ② `--scale` 올리기(extended 는 frontmatter `budget_exception` 예외 승인) ③ `vais.config.json > documentBudgets.{규모}.{단계}` 올리기
+- README "문서 예산" 절, CLAUDE 규칙 12, ONBOARDING 설정 표, `docs/harness/design.md` 대응표 행
+
+### Added
+
+- **`vais.config.json > documentBudgets`** — `{compact|standard|extended|stage}.{plan|design|do|review|report}` 를 칸 단위로 덮어쓴다(부분 허용, `_` 로 시작하는 키는 주석). 양의 정수가 아닌 칸은 무시하고 기본값을 쓰며, `/vais doctor` 의 새 검사 `document-budgets` 가 무시된 칸을 알린다
+
+### Fixed
+
+- `package-lock.json` 루트 버전이 3.0.1 로 남아 있던 것을 맞췄다
 - `docs/harness/README.md` 상태 표를 현재 값으로 갱신 — 구현 "H1~H8 완료 (4.0.1)", 커널 "모듈 38 · hook 이벤트 5 · 스크립트 6 · CLI 1", 표 아래 세는 기준 한 줄. 버전은 4.0.1 유지 (`harness-readme-status-2`)
 - `CLAUDE.md`·`ONBOARDING.md` 의 "35 모듈" → "38 모듈" 로 README 와 통일, README 세는 기준 줄의 "최상위 키" → "`hooks` 아래 키". 버전 4.0.1 유지 (`harness-docs-module-count`)
 

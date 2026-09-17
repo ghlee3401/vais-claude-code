@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/harness-doc-budget/2026-09-17-harness-doc-budget/04-review/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 2208B is within the 5120B compact budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-doc-budget/2026-09-17-harness-doc-budget/04-review/main.md"
+  ]
+}

@@ -18,8 +18,8 @@
 ## 제안
 
 1. 1단계 요구사항 정의서 작성 — `/vais 새 제품: <제품 이름>` (아직 승인된 요구사항 정의서 가 없다)
-2. 부채 정리: 독립 QA specialist 가 두 작업 연속으로 읽기 전용 handoff 에 files 항목을 넣어 등록이 거부되고 재출력을 받았다. agents/v2-specialist.md 지시문에 읽기 전용이면 files 금지를 못 박는 것이 다음 하네스 작업 후보다 — `/vais 독립 QA specialist 가 두 작업 연속으로 읽기 전용 handoff 에 files 항목을 넣어 등록이 거부되고 재출력을 받았다. agents/v2-specialist.md 지시문에 읽기 전용이면 files 금지를 못 박는 것이 다음 하네스 작업 후보다` (WI-2026-09-17-harness-docs-module-count 에 남은 부채)
-3. 부채 정리: CLAUDE.md 와 ONBOARDING.md 의 '35 모듈' 표기가 실제 38 과 다르다(이번 범위 밖, 다음 문서 작업에서 맞춘다) — `/vais CLAUDE.md 와 ONBOARDING.md 의 '35 모듈' 표기가 실제 38 과 다르다(이번 범위 밖, 다음 문서 작업에서 맞춘다)` (WI-2026-09-17-harness-readme-status-2 에 남은 부채)
+2. 부채 정리: 새 예산은 push 후 플러그인을 4.1.0 으로 업데이트해야 이 저장소에서도 적용된다. 실행 중 캐시는 4.0.1 — `/vais 새 예산은 push 후 플러그인을 4.1.0 으로 업데이트해야 이 저장소에서도 적용된다. 실행 중 캐시는 4.0.1` (WI-2026-09-17-harness-doc-budget 에 남은 부채)
+3. 부채 정리: 독립 QA specialist 가 세 작업 연속으로 읽기 전용 handoff 에 files 항목을 넣거나 문자열 한도를 넘겨 재출력을 받았다. agents/v2-specialist.md 지시문에 읽기 전용이면 files 금지와 문자열 한도 표를 못 박는 것이 다음 하네스 작업 후보다(harness-docs-module-count 의 잔여 제한과 같음) — `/vais 독립 QA specialist 가 세 작업 연속으로 읽기 전용 handoff 에 files 항목을 넣거나 문자열 한도를 넘겨 재출력을 받았다. agents/v2-specialist.md 지시문에 읽기 전용이면 files 금지와 문자열 한도 표를 못 박는 것이 다음 하네스 작업 후보다(harness-docs-module-count 의 잔여 제한과 같음)` (WI-2026-09-17-harness-doc-budget 에 남은 부채)
 
 ## 내 메모
 
