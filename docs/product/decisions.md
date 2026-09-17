@@ -1,9 +1,14 @@
 # 제품 노트 — 왜
 
-> 자동 생성 (`.vais/v2/ledger.jsonl` 49건). 결정·피드백·취향·부채·리스크·이정표 순.
+> 자동 생성 (`.vais/v2/ledger.jsonl` 61건). 결정·피드백·취향·부채·리스크·이정표 순.
 
-## 결정 (18)
+## 결정 (23)
 
+- 2026-09-16 11:54 · WI-2026-09-16-regression-and-docs · 저장은 `git add -A -- .` 로 `.gitignore` 를 존중하고, `.vais/` 는 add 뒤 `git rm --cached` 로 빼낸다. exclude pathspec 은 무시 규칙과 겹치면 git 이 실패하므로 쓰지 않는다. — Design revision 1 에서 확정
+- 2026-09-16 11:54 · WI-2026-09-16-regression-and-docs · `commit` 은 정확히 그 단어 하나일 때만 저장 별칭이다. 뒤에 말이 붙으면 새 요청으로 본다(저장 메시지는 `저장 <메시지>` 로만). — Design revision 1 에서 확정
+- 2026-09-16 11:54 · WI-2026-09-16-regression-and-docs · 저장 실패 reason 은 사용자 말로 "스테이지 N개 됨 · 커밋 안 됨 · 원인" 을 담는다. 재시도는 runtime 이 하지 않는다. — Design revision 1 에서 확정
+- 2026-09-16 11:54 · WI-2026-09-16-regression-and-docs · 회귀 helper 는 준비 코드만 모으고 판정 코드는 각 장면에 남긴다. 장면 파일 하나가 설계 §11 장면 하나다. — Design revision 1 에서 확정
+- 2026-09-16 11:54 · WI-2026-09-16-regression-and-docs · 4.0.0 은 새 기능 없이 "사용자 루프·양식 넷·노트·명령·kind 가 한 벌 완성" 을 뜻한다. — Design revision 1 에서 확정
 - 2026-09-16 10:55 · WI-2026-09-16-feature-bug-kinds · 구현 kind 의 Design 에서 "만드는 것" 은 인용 ID 와 신규 ID 항목만이다. 서술은 `## 안 N` 의 접근 설명에만 둔다. — Design revision 1 에서 확정
 - 2026-09-16 10:55 · WI-2026-09-16-feature-bug-kinds · 신규 항목은 Do 가 READY 일 때 runtime 이 정본에 붙인다. AI 가 제품 문서를 직접 편집하지 않는다(write scope 도 열지 않음). — Design revision 1 에서 확정
 - 2026-09-16 10:55 · WI-2026-09-16-feature-bug-kinds · 신규 항목은 append 시 `draft`, Report 확정 시 `approved` + `implemented`. 승인 없는 항목이 사슬에 남지 않는다. — Design revision 1 에서 확정
@@ -23,8 +28,11 @@
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 테스트는 stub 렌더러로 결정적으로 돌리고 receipt 에 stub 임을 남긴다. 실제 렌더 검증은 Chrome 이 있는 환경의 별도 테스트와 사용자 확인으로 한다. — Design revision 1 에서 확정
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 취향은 제품 전체 속성이라 feature 를 넘어 주입한다. — Design revision 1 에서 확정
 
-## 부채 (18)
+## 부채 (21)
 
+- 2026-09-17 00:58 · WI-2026-09-16-regression-and-docs · 이전에 git 이 추적하던 .vais/ 파일이 있는 프로젝트는 저장 때 그 파일들이 삭제로 커밋된다(이 repo 는 해당 없음) — WI-2026-09-16-regression-and-docs Report 의 잔여 제한
+- 2026-09-17 00:58 · WI-2026-09-16-regression-and-docs · 저장 실패 문구는 커밋되지 않았다 로 시작해 문서의 커밋 안 됨 표현과 글자가 다르다 — WI-2026-09-16-regression-and-docs Report 의 잔여 제한
+- 2026-09-17 00:58 · WI-2026-09-16-regression-and-docs · 회귀 60초 상한은 테스트가 강제하지 않고 QA 가 측정했다(현재 3초) — WI-2026-09-16-regression-and-docs Report 의 잔여 제한
 - 2026-09-16 11:35 · WI-2026-09-16-feature-bug-kinds · 앱 조기 종료 감지는 Linux /proc 전제, 다른 OS 는 readyTimeoutMs 만료로만 실패 — WI-2026-09-16-feature-bug-kinds Report 의 잔여 제한
 - 2026-09-16 11:35 · WI-2026-09-16-feature-bug-kinds · withApp 대기는 동기 폴링(300ms)이라 transaction 중 다른 일을 하지 않는다 — WI-2026-09-16-feature-bug-kinds Report 의 잔여 제한
 - 2026-09-16 11:35 · WI-2026-09-16-feature-bug-kinds · 실제 Chrome 캡처와 플러그인 캐시 반영은 테스트하지 않았다(stub 렌더러, 3.6.0 업데이트 전) — WI-2026-09-16-feature-bug-kinds Report 의 잔여 제한
@@ -48,8 +56,12 @@
 
 - 2026-09-16 11:16 · WI-2026-09-16-feature-bug-kinds · Do 준비 미달 1회: test — readiness 검사가 실패했다
 
-## 이정표 (12)
+## 이정표 (16)
 
+- 2026-09-17 00:58 · WI-2026-09-16-regression-and-docs · 작업 완료 — H7 회귀 세트와 문서 정리 (4.0.0) — Report 가 확정되어 동결됐다
+- 2026-09-17 00:27 · WI-2026-09-16-regression-and-docs · 최종 승인 — H7 회귀 세트와 문서 정리 (4.0.0) — 독립 QA PASS 뒤 사용자가 결과를 승인했다
+- 2026-09-16 11:54 · WI-2026-09-16-regression-and-docs · Design 승인 (revision 1) — H7 회귀 세트와 문서 정리 (4.0.0) — 사용자가 Design 을 승인했다
+- 2026-09-16 11:51 · WI-2026-09-16-regression-and-docs · Plan 승인 (revision 1) — H7 회귀 세트와 문서 정리 (4.0.0) — 사용자가 Plan 을 승인했다
 - 2026-09-16 11:35 · WI-2026-09-16-feature-bug-kinds · 작업 완료 — 기능·버그 작업 종류 · 인용 강제 · 문서 갱신 · 앱 실행 — Report 가 확정되어 동결됐다
 - 2026-09-16 11:34 · WI-2026-09-16-feature-bug-kinds · 최종 승인 — 기능·버그 작업 종류 · 인용 강제 · 문서 갱신 · 앱 실행 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
 - 2026-09-16 10:55 · WI-2026-09-16-feature-bug-kinds · Design 승인 (revision 1) — 기능·버그 작업 종류 · 인용 강제 · 문서 갱신 · 앱 실행 — 사용자가 Design 을 승인했다

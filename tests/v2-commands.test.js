@@ -306,3 +306,58 @@ describe('commands REQ-011 documents and versions', () => {
     assert.match(fs.readFileSync(path.join(REPO, 'README.md'), 'utf8'), /\/vais 저장 확인/);
   });
 });
+
+// regression-and-docs (roadmap H7) REQ-002~004: the save defects found while saving 3.6.0.
+describe('regression-and-docs REQ-002/003/004 save works in a real repository layout', () => {
+  it('TC-002 commits when .gitignore already ignores .vais/, never commits .vais/, and explains a failure', t => {
+    const root = gitRoot(t);
+    fs.writeFileSync(path.join(root, '.gitignore'), '.vais/\n');
+    fs.mkdirSync(path.join(root, '.vais', 'v2'), { recursive: true });
+    fs.writeFileSync(path.join(root, '.vais', 'v2', 'state.json'), '{}');
+    fs.writeFileSync(path.join(root, 'note.txt'), 'hello');
+    grantConfirmation(root, 's', { type: 'save' });
+    const saved = vcs.commitSave(root, { sessionId: 's' });
+    assert.match(saved.hash, /^[0-9a-f]{40}$/);
+    assert.deepEqual(git(root, ['show', '--name-only', '--format=', 'HEAD']).split('\n').filter(Boolean).sort(), ['.gitignore', 'note.txt']);
+    assert.equal(vcs.changedFiles(root).length, 0);
+
+    // A project without the ignore rule still never commits runtime state.
+    const bare = gitRoot(t);
+    fs.mkdirSync(path.join(bare, '.vais', 'v2'), { recursive: true });
+    fs.writeFileSync(path.join(bare, '.vais', 'v2', 'state.json'), '{}');
+    fs.writeFileSync(path.join(bare, 'note.txt'), 'hello');
+    grantConfirmation(bare, 's', { type: 'save' });
+    vcs.commitSave(bare, { sessionId: 's' });
+    assert.deepEqual(git(bare, ['show', '--name-only', '--format=', 'HEAD']).split('\n').filter(Boolean), ['note.txt']);
+    assert.equal(git(bare, ['ls-files', '.vais']), '');
+
+    // A commit that cannot happen (nothing staged after add) is reported in the user's words, without retry.
+    const stuck = gitRoot(t);
+    fs.mkdirSync(path.join(stuck, '.vais'), { recursive: true });
+    fs.writeFileSync(path.join(stuck, '.vais', 'only.json'), '{}');
+    fs.writeFileSync(path.join(stuck, 'note.txt'), 'hello');
+    grantConfirmation(stuck, 's', { type: 'save' });
+    fs.writeFileSync(path.join(stuck, '.git', 'hooks', 'pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
+    assert.throws(() => vcs.commitSave(stuck, { sessionId: 's' }), error => error.code === 'SAVE_FAILED' && /스테이지 1개 됨 · 커밋 단계에서 실패/.test(error.message) && error.staged === 1);
+  });
+
+  it('TC-003 `commit` is a save alias only as the bare word or with 확인/confirm', () => {
+    assert.equal(routePrompt('/vais commit', null).action, 'save');
+    assert.equal(routePrompt('/vais commit 확인', null).action, 'save-confirm');
+    const confirmed = routePrompt('/vais commit confirm: feat: 검색', null);
+    assert.equal(confirmed.action, 'save-confirm');
+    assert.match(JSON.stringify(confirmed), /feat: 검색/);
+    assert.equal(routePrompt('/vais 저장 확인', null).action, 'save-confirm');
+    assert.notEqual(routePrompt('/vais commit 기능 만들어', null).action, 'save');
+    assert.notEqual(routePrompt('/vais commit 기능 만들어', null).action, 'save-confirm');
+    assert.match(prompt.HELP_LINES.join('\n'), /`commit` → `commit 확인`/);
+  });
+
+  it('TC-004 changedFiles keeps the leading dot of the first changed path', t => {
+    const root = gitRoot(t);
+    fs.writeFileSync(path.join(root, '.claude-plugin', 'plugin.json'), JSON.stringify({ version: VERSION, touched: true }));
+    const files = vcs.changedFiles(root);
+    assert.deepEqual(files, [{ status: 'M', file: '.claude-plugin/plugin.json' }]);
+    assert.deepEqual(vcs.saveProposal(root).changedFiles, ['M .claude-plugin/plugin.json']);
+  });
+});

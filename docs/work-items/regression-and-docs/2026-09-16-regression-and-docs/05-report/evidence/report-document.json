@@ -1,0 +1,15 @@
+{
+  "check": "report-document",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/05-report/main.md"
+  ],
+  "requirements": [],
+  "summary": "Canonical report document is complete",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/05-report/main.md"
+  ]
+}

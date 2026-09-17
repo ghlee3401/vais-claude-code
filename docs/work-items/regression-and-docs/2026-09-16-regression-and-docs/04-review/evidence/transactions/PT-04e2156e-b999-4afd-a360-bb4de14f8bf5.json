@@ -1,0 +1,134 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-04e2156e-b999-4afd-a360-bb4de14f8bf5",
+  "workItemId": "WI-2026-09-16-regression-and-docs",
+  "phase": "review",
+  "action": "decide",
+  "gate": {
+    "gate": "review",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "passed": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-16T12:09:53.759Z"
+  },
+  "checks": [
+    {
+      "check": "review-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical review document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 2652B is within the 6144B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+      ]
+    },
+    {
+      "check": "independent-qa-handoff",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [],
+      "requirements": [
+        "REQ-001",
+        "REQ-002",
+        "REQ-003",
+        "REQ-004",
+        "REQ-005",
+        "REQ-006",
+        "REQ-007"
+      ],
+      "summary": "Independent QA completed without a failure verdict",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/evidence/handoffs/AS-53428fde-1de0-48eb-a045-37148a4f25de.json"
+      ]
+    },
+    {
+      "check": "secret-scan",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "contracts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/evidence/logs/secret-scan.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "review",
+    "status": "waiting-user"
+  }
+}

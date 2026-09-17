@@ -1,67 +1,29 @@
 'use strict';
 
-// Regression scene A (docs/harness/design.md §11): a first product walks stages 1..10 through
-// the public runtime CLI. Each stage is one Work item: one-line Plan → options Design → stage
-// document → readiness (stage-document) → independent QA → final approval → Report approves the
-// canonical stage file. Also covers skipping a stage, a wrong parent, and stale propagation.
+// 장면 A — 처음 시작 (docs/harness/design.md §11)
+// 검증: 1~10 단계 문서를 runtime CLI 로 완주(한 줄 Plan → 안 Design → 정본 → stage-document → QA → Report 승인),
+//       단계 건너뛰기·잘못된 부모·stale 전파 차단
+// 렌더러: stub (와이어프레임·시안 PNG 렌더; 실제 Chrome 은 tests/v2-ui-loop.test.js)
 
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
 
 const { execute } = require('../../scripts/vais-workflow-v2');
 const { WorkItemStore } = require('../../lib/workflow/v2/work-item-store');
-const { AuthorizationStore } = require('../../lib/workflow/v2/authorization-store');
 const { EVENTS } = require('../../lib/workflow/v2/state-machine');
 const { recordAutomaticHandoff } = require('../../lib/workflow/v2/automatic-handoff');
 const { loadChainCatalog } = require('../../lib/workflow/v2/chain-registry');
 const idChain = require('../../lib/workflow/v2/id-chain');
+const helpers = require('./helpers');
 
-const FIXTURES = path.join(__dirname, '..', 'fixtures', 'product-stages');
+const { write, installStage, grant } = helpers;
 const FEATURE = 'reading-log';
-
-// Wireframe and mockup artifacts are rendered to PNG at `do ready`; the deterministic stub keeps
-// this scene fast. Real Chrome rendering is covered by tests/v2-ui-loop.test.js.
-process.env.VAIS_SCREEN_RENDERER = process.env.VAIS_SCREEN_RENDERER || 'stub';
-
-const QA_PASS = {
-  schema: 'specialist-handoff/v1', status: 'completed', verdict: 'pass', judgment: '단계 문서 검사 통과',
-  decisions: ['형식·부모·산출물 확인'], behavior: { inputs: ['stage doc'], outputs: ['pass'], errors: [] },
-  evidence: ['stage-document check'], affectedRequirements: [], risks: [], unverified: [], recommendedChecks: [],
-};
+const QA_PASS = helpers.qaPass('단계 문서 검사 통과', { decisions: ['형식·부모·산출물 확인'], inputs: ['stage doc'], evidence: ['stage-document check'] });
 
 function makeRoot(t) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-scene-a-'));
-  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  fs.writeFileSync(path.join(root, 'vais.config.json'), JSON.stringify({ version: '3.2.0', workflowV2: { mode: 'enforce' } }));
-  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ name: 'reading-log', version: '0.0.1' }));
-  return root;
-}
-
-function write(root, relative, content) {
-  const target = path.join(root, relative);
-  fs.mkdirSync(path.dirname(target), { recursive: true });
-  fs.writeFileSync(target, content);
-  return relative;
-}
-
-function installStage(root, stage) {
-  fs.mkdirSync(path.join(root, path.dirname(stage.file)), { recursive: true });
-  fs.copyFileSync(path.join(FIXTURES, path.basename(stage.file)), path.join(root, stage.file));
-  if (stage.artifactDir) {
-    const source = path.join(FIXTURES, path.basename(stage.artifactDir));
-    fs.mkdirSync(path.join(root, stage.artifactDir), { recursive: true });
-    for (const name of fs.readdirSync(source)) fs.copyFileSync(path.join(source, name), path.join(root, stage.artifactDir, name));
-  }
-}
-
-function grant(root, session, item, phase, action = 'continue-work', extra = {}) {
-  new AuthorizationStore(root).grant({
-    sessionId: session, workItemId: item?.id || null, phase, action,
-    allowedPaths: [], allowedCommands: [], ...extra,
-  });
+  return helpers.makeRoot(t, 'scene-a', {}, { name: 'reading-log' });
 }
 
 function workItemDir(root, item) {

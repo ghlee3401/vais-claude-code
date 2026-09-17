@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.6.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-4.0.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -13,7 +13,7 @@
 
 ---
 
-> **현재 상태 (2026-09-15)**: Legacy 를 전부 걷어내고 v2 runtime 커널만 남긴 뒤, 새 하네스를 설계·구현하는 중이다. 아래 사용법은 지금 동작하는 커널 기준이며, 새 설계가 들어오면 갱신된다. 롤백: git 태그 `v3.0.1-legacy`.
+> **현재 상태 (4.0.0, 2026-09-16)**: 로드맵 H1~H7 완료. 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌다. 남은 것은 H8(디자인 시스템 MCP 유지·삭제 결정). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
 
 ## 무엇인가
 
@@ -44,6 +44,14 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 
 ## 사용법
 
+### 순서
+
+1. **새 제품**: `/vais 새 제품: <이름>` → 요구사항 정의서부터 10단계 문서를 하나씩 승인한다(아래 "작업 종류와 제품 사슬").
+2. **기능·버그**: 10단계가 끝나면 `/vais <원하는 기능>` · `/vais <안 되는 것>` 으로 말한다. Plan 세 줄 → Design(승인 ID 인용) → 자동 만들기 → QA → 최종 승인.
+3. **화면 손보기**: `/vais <화면 불만>` → 시안 고르기 → 실제 화면 보고 확인·수정(최대 5회).
+4. **저장**: `/vais 저장` → 제안 확인 → `/vais 저장 확인`. push 는 직접.
+5. **막히면**: `/vais 상태`, `/vais 설명 <것>`, `/vais doctor`.
+
 ### 명령
 
 | 입력 | 동작 |
@@ -52,7 +60,7 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 | `/vais 이름: <kebab-case>` | 요청에 영어 단어가 없어 이름을 못 정했을 때 사용자가 Feature 이름을 확정 |
 | `/vais 상태` (`status`) | 현재 작업·단계·기다리는 결정·부채·stale·다음 행동 3개를 사람 말로 (읽기 전용) |
 | `/vais 설명 <ID·용어·파일>` | 항목 ID 의 부모·자식·만든 작업·stale, 용어 뜻(사전 데이터), 파일이 어느 정본인지 (읽기 전용) |
-| `/vais 저장 [메시지]` → `/vais 저장 확인[: 메시지]` | 버전 7면(manifest 5 + README 배지 + CHANGELOG 헤더) 동기화 검사·변경 요약·커밋 메시지 제안 → 사용자가 확인 문구를 직접 치면 runtime 이 `git add`·`commit`. push 는 사용자가 |
+| `/vais 저장 [메시지]` → `/vais 저장 확인[: 메시지]` (영어: `/vais commit` → `/vais commit 확인`) | 버전 7면(manifest 5 + README 배지 + CHANGELOG 헤더) 동기화 검사·변경 요약·커밋 메시지 제안 → 사용자가 확인 문구를 직접 치면 runtime 이 `git add`(`.gitignore` 존중, `.vais/` 제외)·`commit`. 실패하면 "스테이지 N개 됨 · 커밋 안 됨 · 원인" 을 그대로 보이고 재시도하지 않는다. push 는 사용자가 |
 | `/vais 되돌리기 <작업 id·커밋>` → `/vais 되돌리기 확인: <대상>` | 되돌릴 커밋·파일 목록 → 확인하면 `git revert --no-edit` 커밋 |
 | `/vais 제안` | 다음 행동 3개와 근거 (읽기 전용) |
 | `/vais 기록 <결정·피드백·취향·부채·리스크·메모> <내용>` · `/vais 기록 보기 [종류]` | 장부에 직접 남기기(사용자 원문 그대로) · 최근 10건 |

@@ -1,0 +1,199 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-3d95ea97-f32b-466a-87b4-c8dbe4310b8c",
+  "workItemId": "WI-2026-09-16-regression-and-docs",
+  "phase": "do",
+  "action": "ready",
+  "gate": {
+    "gate": "readiness",
+    "verdict": "READY",
+    "requiredChecks": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "test",
+      "lint",
+      "plugin-validator"
+    ],
+    "passed": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "test",
+      "lint",
+      "plugin-validator"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-16T12:03:54.107Z"
+  },
+  "checks": [
+    {
+      "check": "do-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/03-do/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical do document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 2048B is within the 3584B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/03-do/main.md"
+      ]
+    },
+    {
+      "check": "specialist-handoffs",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "contracts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "All Design-required specialist handoffs are uniquely consumed and complete",
+      "findings": [],
+      "evidence": []
+    },
+    {
+      "check": "test",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "contracts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/03-do/evidence/logs/test.log"
+      ]
+    },
+    {
+      "check": "lint",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "contracts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/03-do/evidence/logs/lint.log"
+      ]
+    },
+    {
+      "check": "plugin-validator",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/**",
+        "hooks/**",
+        "scripts/**",
+        "contracts/**",
+        "tests/**",
+        "docs/harness/**",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**",
+        "CHANGELOG.md",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/03-do/evidence/logs/plugin-validator.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "review",
+    "status": "active"
+  }
+}

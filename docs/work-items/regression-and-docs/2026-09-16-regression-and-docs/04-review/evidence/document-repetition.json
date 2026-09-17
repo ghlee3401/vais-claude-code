@@ -1,0 +1,17 @@
+{
+  "check": "document-repetition",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+  ],
+  "requirements": [
+    "REQ-026"
+  ],
+  "summary": "No long authored sentence is copied from an earlier phase",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+  ]
+}

@@ -11,21 +11,16 @@
 - 플러그인은 Plan → Design → Do → Review → Report 를 hook + 상태 머신으로 **강제**하고, 결정·증거를 **기록**하며, 결과를 **보여준다**.
 - 모델(Claude)이 바뀌어도 유지되는 것은 코드로 못 박은 규칙(승인·범위·기록·증거·고장 알림)이고, 바뀌면 줄이는 것은 데이터(역할 카드·양식·지시문)다.
 
-**2026-09-15 상태**: Legacy(C-Suite 에이전트 85개, 템플릿, 구 hook·lib·문서 ≈ 40,000줄)를 전부 제거했다. 남은 것은 v2 runtime 커널 ≈ 8,000줄과 `brief` 스킬. 새 하네스 설계는 이 커널 위에서 `/vais` 로 진행한다. 롤백은 git 태그 `v3.0.1-legacy`.
+**4.0.0 상태 (2026-09-16)**: 2026-09-15 에 Legacy(C-Suite 에이전트 85개, 템플릿, 구 hook·lib·문서 ≈ 40,000줄)를 전부 제거하고(롤백 태그 `v3.0.1-legacy`), 그 위에 로드맵 H1~H7 로 새 하네스를 올렸다. 설계 정본은 `docs/harness/design.md`, 순서는 `docs/harness/roadmap.md`. 남은 것은 H8(디자인 시스템 MCP 유지·삭제 결정).
 
 ## 2. 처음 읽는 순서 (2분)
 
-1. `ONBOARDING.md` — 지금
-2. `CLAUDE.md` — 설계 원칙 + enforce 규칙 15개 + 자기 수정 주의
-3. `skills/vais/SKILL.md` — `/vais` 가 hook 컨텍스트를 어떻게 따르는가
-4. `hooks/workflow-v2-prompt.js` — 단계별 지침이 실제로 주입되는 곳
-5. `lib/workflow/v2/state-machine.js` + `router.js` — 상태 전이와 승인 문법 정본
-6. `contracts/v2-role-cards.json` — 역할 경계
-7. `contracts/chain-stages.json` + `contracts/work-kinds.json` — 제품 사슬 10단계와 작업 kind 정의 (데이터). 검사 로직은 `lib/workflow/v2/id-chain.js`
-8. `lib/workflow/v2/ledger.js` + `product-note.js` + `proposal.js` — 장부(기억), 제품 노트 3면, 규칙 기반 제안. `hooks/session-start.js`(브리핑)·`hooks/workflow-v2-stop.js`(기록 잠금)·`scripts/vais-statusline.js` 가 이를 표시한다
-9. `lib/workflow/v2/screen-capture.js` + `diff-summary.js` + `review-page.js` — UI 루프: Chrome 헤드리스 스크린샷, 회차 diff, 검수 페이지. 상태 머신의 화면 확인 정지점(`do/waiting-user`)과 짝을 이룬다
-10. `lib/workflow/v2/briefing.js` + `explain.js` + `vcs.js`, `contracts/glossary.json` — 사용자 명령(상태·설명·저장·되돌리기·제안·기록). 쓰기 명령은 사용자 확인 문구가 세션 토큰이 된 뒤에만 CLI 가 실행한다
-11. `lib/workflow/v2/citation.js` + `app-runner.js` — 기능·버그 작업: Design 의 `## 인용`·`## 신규` 를 사슬과 대조하고, `do ready` 가 신규 항목을 정본에 붙이고, `report finalize` 가 `구현됨` 도장을 찍는다. `ui.run` 으로 앱을 띄워 화면을 찍는다
+1. **입구** — `ONBOARDING.md`(지금) → `CLAUDE.md`(원칙·enforce 규칙·자기 수정 주의) → `skills/vais/SKILL.md`(`/vais` 가 hook 컨텍스트를 따르는 규칙) → `hooks/workflow-v2-prompt.js`(단계 지침이 실제로 주입되는 곳)
+2. **상태 머신·승인** — `lib/workflow/v2/state-machine.js` + `router.js`(상태 전이·승인 문법·명령 패턴), `contracts/v2-role-cards.json`(역할 경계)
+3. **제품 사슬** — `contracts/chain-stages.json` + `contracts/work-kinds.json`(10단계·kind 14, 데이터) → `lib/workflow/v2/id-chain.js`(ID·부모·stale) → `citation.js`(기능·버그의 인용·신규·구현됨)
+4. **기록** — `lib/workflow/v2/ledger.js` + `product-note.js` + `proposal.js`(장부·노트 3면·제안) 와 이를 보이는 `hooks/session-start.js`·`hooks/workflow-v2-stop.js`·`scripts/vais-statusline.js`
+5. **화면** — `lib/workflow/v2/screen-capture.js` + `diff-summary.js` + `review-page.js` + `app-runner.js`(스크린샷·회차 diff·검수 페이지·앱 기동), 정지점 `do/waiting-user`
+6. **명령·검증** — `lib/workflow/v2/briefing.js` + `explain.js` + `vcs.js`, `contracts/glossary.json`(상태·설명·저장·되돌리기), `tests/regression/`(설계 §11 장면 A~F + 명령 표, 준비 코드는 `helpers.js`)
 
 ## 3. 동작 흐름 (1분)
 
@@ -35,7 +30,7 @@ flowchart TB
     USER["/vais 요청 · 승인"] --> PROMPT["hooks/workflow-v2-prompt.js<br/>라우팅 · 승인 판정 · 단계 지침 · drift · lease · 장부 주입"]
     PROMPT --> SKILL["skills/vais/SKILL.md"]
     SKILL --> CLI["scripts/vais-workflow-v2.js<br/>plan/design present · do ready · review prepare/decide · report finalize · assignment · handoff"]
-    CLI --> LIB["lib/workflow/v2/ (33 모듈)"]
+    CLI --> LIB["lib/workflow/v2/ (35 모듈)"]
     LIB --> STATE[".vais/v2/ work-items.json · authorizations.json · chain-index.json · ledger.jsonl"]
     LIB --> DOCS["docs/work-items/… + docs/product/ (사슬 정본 · 노트 3면)"]
     SKILL --> AGENT["agents/v2-specialist.md"]
@@ -56,7 +51,7 @@ flowchart TB
 | `hooks/hooks.json` | Claude Code | SessionStart · UserPromptSubmit · PreToolUse · PostToolUse · Stop 등록 |
 | `scripts/vais-statusline.js` | Claude Code statusline | `~/.claude/settings.json > statusLine` 에 등록하면 상태 줄 표시 (`/vais doctor` 가 안내) |
 | `docs/product/{README,roadmap,decisions}.md` | 사용자 | 제품 노트 현재·다음·왜 (자동 생성) |
-| `vais.config.json` | runtime | `workflowV2.mode` (`enforce` 정본 / `disabled` 하네스 수리용) · `ui` (앱 위치: appRoot·entry·url) |
+| `vais.config.json` | runtime | `workflowV2.mode` (`enforce` 정본 / `disabled` 하네스 수리용) · `ui` (앱 위치: appRoot·entry·url, 기동: run {command[], url}) |
 | `contracts/v2-role-cards.json` | runtime | 역할 정본 |
 
 ## 5. 개발 루프
@@ -66,6 +61,6 @@ npm test && npm run regression && npm run lint && npm run validate   # 로컬 �
 npm run doctor                                                       # 하네스 건강검진
 ```
 
-커밋은 `/vais 저장` → 제안 확인 → `/vais 저장 확인` 으로 한다(runtime 이 `git add`·`commit`, push 는 사람). 하네스 자체를 고칠 때: 사용자가 `workflowV2.mode` 를 `disabled` 로 내림(또는 `VAIS_HARNESS_OFF=1`) → 수정 → 검증 → 커밋 → `enforce` 복귀. mode 값이 잘못되면 열리지 않고 닫힘으로 실패하며 매 프롬프트에 경고가 뜬다. 실행 중 플러그인은 마켓플레이스 캐시 사본이라 push · 버전 bump · 업데이트 뒤에 반영된다.
+커밋은 `/vais 저장` → 제안 확인 → `/vais 저장 확인` 으로 한다(영어 `commit` → `commit 확인`; runtime 이 `.gitignore` 를 존중해 `git add`·`commit`, `.vais/` 는 제외, push 는 사람). 실패하면 "스테이지 N개 됨 · 커밋 안 됨 · 원인" 이 그대로 보이고 runtime 은 재시도하지 않는다. 하네스 자체를 고칠 때: 사용자가 `workflowV2.mode` 를 `disabled` 로 내림(또는 `VAIS_HARNESS_OFF=1`) → 수정 → 검증 → 커밋 → `enforce` 복귀. mode 값이 잘못되면 열리지 않고 닫힘으로 실패하며 매 프롬프트에 경고가 뜬다. 실행 중 플러그인은 마켓플레이스 캐시 사본이라 push · 버전 bump · 업데이트 뒤에 반영된다.
 
 > 변경 이력: `CHANGELOG.md`

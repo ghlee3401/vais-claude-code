@@ -1,82 +1,39 @@
 'use strict';
 
-// Regression scene C (docs/harness/design.md §11): a button is hard to see. Two option mockups
-// are photographed, the user picks one, Do applies it, the screen check shows before/after with
-// a plain-words diff, the user asks for two changes, confirms, QA reviews the page, the Report
-// records the taste. Screens are rendered by the deterministic stub; real Chrome rendering is
-// covered by tests/v2-ui-loop.test.js.
+// 장면 C — UI 손보기 (docs/harness/design.md §11): "로그인 버튼이 눈에 안 띈다"
+// 검증: ui 작업 — 시안 2안 스크린샷 → /vais 2번 → 승인 → 적용 → 화면 확인 정지점(전/후 + diff 한 줄) →
+//       수정 2회(취향 장부) → /vais 확인 → 검수 페이지 → QA → Report 에 "채택: 안 2"
+// 렌더러: stub (실제 Chrome 은 tests/v2-ui-loop.test.js)
 
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
-const { execFileSync } = require('child_process');
 
 const { execute } = require('../../scripts/vais-workflow-v2');
 const { WorkItemStore } = require('../../lib/workflow/v2/work-item-store');
-const { AuthorizationStore } = require('../../lib/workflow/v2/authorization-store');
-const { EVENTS } = require('../../lib/workflow/v2/state-machine');
-const { routePrompt } = require('../../lib/workflow/v2/router');
 const { recordAutomaticHandoff } = require('../../lib/workflow/v2/automatic-handoff');
 const ledger = require('../../lib/workflow/v2/ledger');
-const prompt = require('../../hooks/workflow-v2-prompt');
+const helpers = require('./helpers');
 
-const FIXTURE = path.join(__dirname, '..', 'fixtures', 'mini-booking');
+const { MINI_BOOKING, git, copyDir, write, grant, userSays } = helpers;
 const FEATURE = 'booking-ui';
-const QA_PASS = {
-  schema: 'specialist-handoff/v1', status: 'completed', verdict: 'pass', judgment: '승인 시안과 실제 화면이 일치',
-  decisions: ['검수표 3줄 통과'], behavior: { inputs: ['review.html'], outputs: ['pass'], errors: [] },
-  evidence: ['04-review/evidence/review.html'], affectedRequirements: [], risks: [], unverified: [], recommendedChecks: [],
-};
+const QA_PASS = helpers.qaPass('승인 시안과 실제 화면이 일치', { decisions: ['검수표 3줄 통과'], inputs: ['review.html'], evidence: ['04-review/evidence/review.html'] });
 
-process.env.VAIS_SCREEN_RENDERER = process.env.VAIS_SCREEN_RENDERER || 'stub';
-
-function git(root, args) {
-  return execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], env: { ...process.env, GIT_AUTHOR_NAME: 'vais', GIT_AUTHOR_EMAIL: 'vais@example.com', GIT_COMMITTER_NAME: 'vais', GIT_COMMITTER_EMAIL: 'vais@example.com' } });
-}
-
+// The app is committed so `do ready` can photograph the "before" state (round 0) from git HEAD.
 function makeRoot(t) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-scene-c-'));
-  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  fs.writeFileSync(path.join(root, 'vais.config.json'), JSON.stringify({ version: '3.4.0', workflowV2: { mode: 'enforce' }, ui: { appRoot: 'app', entry: 'index.html' } }));
-  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ name: 'mini-booking', version: '0.0.1' }));
-  copyDir(FIXTURE, path.join(root, 'app'));
+  const root = helpers.makeRoot(t, 'scene-c', { ui: { appRoot: 'app', entry: 'index.html' } }, { name: 'mini-booking' });
+  copyDir(MINI_BOOKING, path.join(root, 'app'));
   git(root, ['init', '-q']);
   git(root, ['add', '-A']);
   git(root, ['commit', '-q', '-m', 'fixture']);
   return root;
 }
 
-function copyDir(source, target) {
-  fs.mkdirSync(target, { recursive: true });
-  for (const entry of fs.readdirSync(source, { withFileTypes: true })) {
-    if (entry.isDirectory()) copyDir(path.join(source, entry.name), path.join(target, entry.name));
-    else fs.copyFileSync(path.join(source, entry.name), path.join(target, entry.name));
-  }
-}
-
-function write(root, relative, content) {
-  const target = path.join(root, relative);
-  fs.mkdirSync(path.dirname(target), { recursive: true });
-  fs.writeFileSync(target, content);
-  return relative;
-}
-
 function replaceCss(file, from, to) {
   const text = fs.readFileSync(file, 'utf8');
   assert.ok(text.includes(from), `CSS fixture no longer contains "${from}"`);
   fs.writeFileSync(file, text.replace(from, to));
-}
-
-function grant(root, session, item, phase, action = 'continue-work', extra = {}) {
-  new AuthorizationStore(root).grant({ sessionId: session, workItemId: item?.id || null, phase, action, allowedPaths: [], allowedCommands: [], ...extra });
-}
-
-// The user's sentence goes through the same router and event mapping the prompt hook uses.
-function userSays(root, store, item, session, sentence) {
-  const route = routePrompt(sentence, item);
-  return prompt.applyDeterministicRoute(store, item, route, session);
 }
 
 describe('scene C — a button is hard to see: options, screen check, two fixes, confirm, review', () => {

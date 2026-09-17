@@ -1,53 +1,34 @@
 'use strict';
 
-// Regression scene E (docs/harness/design.md §11): a session ends while Design waits for the
-// user; the next session is briefed from state alone, takes a fresh lease, finishes the Work
-// item, and the product note plus decisions.md come out of the Report. The Stop lock is
-// exercised on the same repository.
+// 장면 E — 세션 끊김 뒤 재개 (docs/harness/design.md §11)
+// 검증: Design 대기 중 세션이 끝난 뒤 새 세션이 상태 파일만으로 브리핑·상태 줄을 받고, 새 lease 로 승인·Do·QA·Report 를 마치며,
+//       Stop 잠금이 미기록 상태를 한 번 막고, 제품 노트·decisions.md 가 Report 에서 나온다
+// 렌더러: 해당 없음
 
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
 
 const { execute } = require('../../scripts/vais-workflow-v2');
 const { WorkItemStore } = require('../../lib/workflow/v2/work-item-store');
-const { AuthorizationStore } = require('../../lib/workflow/v2/authorization-store');
 const { EVENTS } = require('../../lib/workflow/v2/state-machine');
 const { recordAutomaticHandoff } = require('../../lib/workflow/v2/automatic-handoff');
 const { loadChainCatalog } = require('../../lib/workflow/v2/chain-registry');
 const ledger = require('../../lib/workflow/v2/ledger');
+const helpers = require('./helpers');
 const stateStore = require('../../lib/core/state-store');
 const { buildBriefing } = require('../../hooks/session-start');
 const { stopDecision } = require('../../hooks/workflow-v2-stop');
 const { statusLineText } = require('../../scripts/vais-statusline');
 
-const FIXTURES = path.join(__dirname, '..', 'fixtures', 'product-stages');
+const { FIXTURES, write, grant } = helpers;
 const FEATURE = 'reading-log';
-const QA_PASS = {
-  schema: 'specialist-handoff/v1', status: 'completed', verdict: 'pass', judgment: '단계 문서 검사 통과',
-  decisions: ['형식·부모 확인'], behavior: { inputs: ['stage doc'], outputs: ['pass'], errors: [] },
-  evidence: ['stage-document check'], affectedRequirements: [], risks: [], unverified: [], recommendedChecks: [],
-};
+const QA_PASS = helpers.qaPass('단계 문서 검사 통과', { decisions: ['형식·부모 확인'], inputs: ['stage doc'], evidence: ['stage-document check'] });
 
+// A one-second lease so the second session can take over without waiting.
 function makeRoot(t) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-scene-e-'));
-  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  fs.writeFileSync(path.join(root, 'vais.config.json'), JSON.stringify({ version: '3.3.0', workflowV2: { mode: 'enforce', leaseMs: 1000 } }));
-  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ name: 'reading-log', version: '0.0.1' }));
-  return root;
-}
-
-function write(root, relative, content) {
-  const target = path.join(root, relative);
-  fs.mkdirSync(path.dirname(target), { recursive: true });
-  fs.writeFileSync(target, content);
-  return relative;
-}
-
-function grant(root, session, item, phase, action = 'continue-work', extra = {}) {
-  new AuthorizationStore(root).grant({ sessionId: session, workItemId: item?.id || null, phase, action, allowedPaths: [], allowedCommands: [], ...extra });
+  return helpers.makeRoot(t, 'scene-e', { workflowV2: { mode: 'enforce', leaseMs: 1000 } }, { name: 'reading-log' });
 }
 
 describe('scene E — a session dies while Design waits; the next session resumes from state alone', () => {

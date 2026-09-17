@@ -1,0 +1,68 @@
+{
+  "schema": "phase-transaction-failure/v1",
+  "transactionId": "PT-8e156d42-d790-48a3-93ab-9382f50e85d0",
+  "workItemId": "WI-2026-09-16-regression-and-docs",
+  "phase": "review",
+  "code": "DOCUMENT_PREFLIGHT_FAILED",
+  "finding": "Canonical review document preflight failed: review-document — review TC trace set is missing: TC-011",
+  "preflight": {
+    "schema": "document-preflight/v1",
+    "phase": "review",
+    "path": "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md",
+    "checks": [
+      {
+        "check": "review-document",
+        "execution": "succeeded",
+        "verdict": "fail",
+        "required": true,
+        "scope": [
+          "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+        ],
+        "requirements": [],
+        "summary": "1 review document issue(s) found",
+        "findings": [
+          "review TC trace set is missing: TC-011"
+        ],
+        "evidence": [
+          "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+        ]
+      },
+      {
+        "check": "document-budget",
+        "execution": "succeeded",
+        "verdict": "pass",
+        "required": true,
+        "scope": [
+          "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+        ],
+        "requirements": [
+          "REQ-009",
+          "REQ-026"
+        ],
+        "summary": "Authored Markdown 2519B is within the 6144B standard budget",
+        "findings": [],
+        "evidence": [
+          "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+        ]
+      },
+      {
+        "check": "document-repetition",
+        "execution": "succeeded",
+        "verdict": "pass",
+        "required": true,
+        "scope": [
+          "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+        ],
+        "requirements": [
+          "REQ-026"
+        ],
+        "summary": "No long authored sentence is copied from an earlier phase",
+        "findings": [],
+        "evidence": [
+          "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/04-review/main.md"
+        ]
+      }
+    ]
+  },
+  "recordedAt": "2026-09-16T12:09:33.500Z"
+}

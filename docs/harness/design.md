@@ -166,11 +166,11 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | slug: 한글 요청 → 사용자가 `/vais 이름:` 으로 확정 | `lib/workflow/v2/naming.js`, `router.js`, prompt hook | 완료 (H1) |
 | Plan 초안 경로 = 01-plan/draft.md 로 통일 | prompt hook 지침 | 완료 (H1) |
 | 버전 도장 | `phase-transaction.js` receipt, `schemas/phase-transaction-receipt.schema.json` | 완료 (H1) |
-| Claude Code 접점 어댑터 (hook 입력·도구 이름·Agent 결과) | `lib/io.js` | 변경 |
-| 별도 Agent 세 조건 guard, 역할 프롬프트 조립 | `lib/workflow/v2/agent-policy.js`, `role-registry.js` | 변경 |
+| Claude Code 접점 어댑터 (hook 입력·도구 이름·Agent 결과·SessionStart·Stop 출력) | `lib/io.js` | 완료 (H3) |
+| 별도 Agent 세 조건 guard, 역할 프롬프트 조립 | `lib/workflow/v2/agent-policy.js`, `role-registry.js` | 유지 |
 | 회귀 세트 | `tests/regression/*.test.js` (장면 A·B·C·D·E·F + commands, `npm run regression`) | 완료 (H6) |
 | specialist 산출물 직접 기록 (handoff `files`) | `schemas/specialist-handoff.schema.json`, `lib/workflow/v2/automatic-handoff.js` | 완료 (H2) |
-| 역할 modelHint | `contracts/v2-role-cards.json` | 변경 |
+| 역할 modelHint | `contracts/v2-role-cards.json` | 유지 |
 | 검사 어댑터 `screenshot-compare` 자리 | `lib/workflow/v2/tool-adapters.js` (예약, 내장 `screen-capture` 는 동작) | 완료 (H4) |
 | 화면 산출물 렌더링·스크린샷 | `lib/workflow/v2/screen-capture.js` (Chrome 헤드리스, `VAIS_CHROME`, stub 렌더러 표기) + CLI `screens capture` | 완료 (H4) |
 | 검수 페이지 (로컬 HTML) | `lib/workflow/v2/review-page.js` → `04-review/evidence/review.html` | 완료 (H4) |
@@ -178,10 +178,23 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 하네스 설정 정본·mode 판정 | `lib/workflow/v2/config.js` | 완료 (H1) |
 | 앱 실행 (확인 단계) | `vais.config.json > ui.run {command, url}`, `lib/workflow/v2/app-runner.js` `withApp` (screen-capture · `screens capture` 가 사용) | 완료 (H6) |
 | 인용 강제 · 구현됨 도장 | `lib/workflow/v2/citation.js` (parse·validate·applyAdditions·markImplemented), 내장 검사 `implementation-document`, stale Gate | 완료 (H6) |
-| 응답 형식 | `output-styles/vais-default.md` | 변경 |
-| 사용 문서 | `README.md`, `ONBOARDING.md`, `CLAUDE.md` | 변경 |
+| 응답 형식 | `output-styles/vais-default.md` | 유지 |
+| 사용 문서 | `README.md`, `ONBOARDING.md`, `CLAUDE.md` | 완료 (H7) |
+| 저장 결함 3건 (`.gitignore` 와 exclude 경로 충돌, `commit` 별칭, 변경 목록 앞 점) | `lib/workflow/v2/vcs.js`, `router.js`, prompt hook 도움말 | 완료 (H7) |
+| 회귀 공통 준비 | `tests/regression/helpers.js` | 완료 (H7) |
+| 디자인 시스템 MCP 유지·삭제 결정 | `mcp/`, `design-system/`, `vendor/` | 보류 (H8) |
 
 ## 11. 사용 장면 6개
+
+| 장면 | 파일 | 검증 |
+|---|---|---|
+| A 처음 시작 | `tests/regression/scene-a-first-product.test.js` | 1~10 단계, 건너뛰기·잘못된 부모·stale |
+| B 기능 추가 | `tests/regression/scene-b-feature.test.js` | 인용·신규 append·화면 캡처·구현됨 |
+| C UI 손보기 | `tests/regression/scene-c-ui-loop.test.js` | 시안 2안·정지점·수정 2회·검수 페이지·취향 |
+| D 버그 | `tests/regression/scene-d-bug.test.js` | 재현 PNG·원인·수정안·신규 TC·부채 해소 |
+| E 세션 재개 | `tests/regression/scene-e-session-resume.test.js` | 브리핑·lease·Stop 잠금·제품 노트 |
+| F 하네스 고장 | `tests/regression/scene-f-harness-failure.test.js` | mode 정규화·경고·비상 스위치 |
+| 명령 표 | `tests/regression/commands.test.js` | 상태·설명·저장·되돌리기·제안·기록 |
 
 **장면 A — 처음 시작**: `/vais 새 제품: 독서 기록 앱` → kind `stage-requirements` Work item 생성(선행 문서 없음이므로 진입 허용) → Plan: "요구사항 정의서를 만든다" 한 줄 확인 → Design: 요구사항 후보 12개 넣기/빼기 → 승인 → Do: `01-requirements.md` 작성(REQ-001~008) → Review: 필수 항목·완료 조건 검사 PASS → 최종 승인 → Report: 문서 approved, 장부 milestone, 로드맵 "다음: 기능 정의서" 제안. 이어서 2~10 단계를 같은 방식으로 진행하고, 9 단계 확인에서 빈 앱이 실제로 뜬 스크린샷을 본다.
 

@@ -22,6 +22,6 @@
 | H3 | 완료 | `WI-2026-09-16-product-note` (3.3.0) |
 | H4 | 완료 | `WI-2026-09-16-ui-loop` (3.4.0) |
 | H5 | 완료 | `WI-2026-09-16-commands` (3.5.0) |
-| H6 | 진행 중 | `WI-2026-09-16-feature-bug-kinds` |
-| H7 | 미착수 | — |
+| H6 | 완료 | `WI-2026-09-16-feature-bug-kinds` (3.6.0) |
+| H7 | 진행 중 | `WI-2026-09-16-regression-and-docs` |
 | H8 | 미착수 | — |

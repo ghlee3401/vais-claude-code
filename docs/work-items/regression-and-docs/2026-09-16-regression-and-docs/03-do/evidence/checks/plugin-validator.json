@@ -1,0 +1,28 @@
+{
+  "check": "plugin-validator",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "lib/**",
+    "hooks/**",
+    "scripts/**",
+    "contracts/**",
+    "tests/**",
+    "docs/harness/**",
+    "package.json",
+    "package-lock.json",
+    "vais.config.json",
+    ".claude-plugin/**",
+    "CHANGELOG.md",
+    "README.md",
+    "CLAUDE.md",
+    "ONBOARDING.md"
+  ],
+  "requirements": [],
+  "summary": "Check passed",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/regression-and-docs/2026-09-16-regression-and-docs/03-do/evidence/logs/plugin-validator.log"
+  ]
+}

@@ -1,5 +1,22 @@
 # Changelog
 
+## [4.0.0] - 2026-09-16
+
+> 로드맵 H7 `regression-and-docs`. 새 기능 없이 3.1~3.6 에서 들어온 것을 한 벌로 맞춘다: 사용자 루프 하나([3.1.0] 건강검진 → [3.2.0] 제품 사슬 → [3.3.0] 장부·노트 → [3.4.0] 화면 루프 → [3.5.0] 명령 → [3.6.0] 기능·버그 kind), 문서 양식 넷, 제품 노트 3면, 명령 표, kind 14. 이 상태가 4.0.0 이다.
+
+### Fixed
+
+- **저장이 실제 repo 에서 멈추던 결함** — `lib/workflow/v2/vcs.js` 가 `git add -A -- . :(exclude).vais/` 를 썼는데, `.gitignore` 에 `.vais/` 가 있으면 git 이 "무시된 경로" 안내와 종료 코드 1 을 내 커밋 전에 멈췄다(3.6.0 저장 때 발견). 이제 `git add -A -- .`(`.gitignore` 존중) 뒤 `git rm -r --cached --ignore-unmatch -- .vais` 로 무시 규칙이 없는 프로젝트에서도 `.vais/` 를 빼며, 실패하면 `SAVE_FAILED` 에 "스테이지 N개 됨 · 커밋 안 됨 · 원인" 을 사용자 말로 담고 재시도하지 않는다
+- **`/vais commit` 별칭** — `commit`(단독) → 저장, `commit 확인`·`commit confirm[: 메시지]` → 저장 확인. `commit 기능 만들어` 같은 문장은 새 요청 그대로. 도움말 표·용어집에 표기
+- **저장 제안 변경 목록 첫 줄의 앞 점 누락** — `git()` 이 출력을 trim 해 porcelain 첫 줄의 상태 열 공백이 사라졌다. `raw` 옵션과 정규식 파싱으로 `.claude-plugin/…` 이 그대로 보인다
+
+### Changed
+
+- **회귀 세트 정리** — `tests/regression/helpers.js` 로 임시 repo·fixture 복사·사슬 승인·권한·사용자 문장·QA 결과 준비 코드를 모으고, 장면 A~F + commands 파일 머리를 `장면 X — design.md §11 / 검증 / 렌더러` 로 통일. commands 회귀는 `.gitignore` 에 `.vais/` 가 있는 저장소(실제 repo 와 같은 조건)를 쓴다. `docs/harness/design.md` §11 에 장면 ↔ 파일 표
+- **문서 셋** — README(4.0.0 상태, 사용 순서 다섯 줄, 저장 별칭·실패 안내), ONBOARDING(읽는 순서 6 묶음, 35 모듈, `ui.run`), CLAUDE(상태 줄, 규칙 10-1→10-6 순서, 구조도, Testing)
+- `docs/harness/design.md` 대응표 잔여 행 최종화(완료·유지·보류 H8), `docs/harness/roadmap.md` H6 완료·H7 진행
+- 단위 `tests/v2-commands.test.js` 에 H7 TC-002~004(`.gitignore` 저장소 커밋·`.vais/` 미포함·실패 reason, `commit` 별칭, 앞 점 보존)
+
 ## [3.6.0] - 2026-09-16
 
 > 로드맵 H6 `feature-bug-kinds`. 기능 추가와 버그 수정이 승인된 제품 문서(ID 사슬) 위에서만 일어난다. Design 은 "무엇을 만드는지" 를 승인 ID 인용과 새 항목 선언으로만 적고, runtime 이 그 항목을 정본 문서에 붙이고 Report 때 `구현됨` 도장을 찍는다.

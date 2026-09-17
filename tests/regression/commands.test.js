@@ -1,15 +1,15 @@
 'use strict';
 
-// Regression: the user command table (docs/harness/design.md §7) works end to end in a real git
-// repository. Every sentence goes through the router; write commands only run after the prompt
-// hook turned the user's confirmation sentence into a session token.
+// 명령 표 — 사용자 명령 (docs/harness/design.md §7)
+// 검증: 상태·설명·저장·되돌리기·제안·기록 이 실제 git 저장소에서 표대로 동작. 모든 문장은 router 를 지나고,
+//       쓰기 명령은 prompt hook 이 사용자 확인 문구를 세션 토큰으로 바꾼 뒤에만 실행된다.
+//       저장은 `.gitignore` 에 `.vais/` 가 있는 저장소(실제 repo 와 같은 조건)에서 커밋까지 간다
+// 렌더러: 해당 없음
 
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
-const { execFileSync } = require('child_process');
 
 const { execute } = require('../../scripts/vais-workflow-v2');
 const { routePrompt } = require('../../lib/workflow/v2/router');
@@ -18,25 +18,15 @@ const idChain = require('../../lib/workflow/v2/id-chain');
 const { loadChainCatalog } = require('../../lib/workflow/v2/chain-registry');
 const ledger = require('../../lib/workflow/v2/ledger');
 const prompt = require('../../hooks/workflow-v2-prompt');
+const helpers = require('./helpers');
 
-const FIXTURES = path.join(__dirname, '..', 'fixtures', 'product-stages');
-const VERSION = '3.5.0';
+const { FIXTURES, VERSION, git } = helpers;
 const SESSION = 'commands-session';
 
-function git(root, args) {
-  return execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], env: { ...process.env, GIT_AUTHOR_NAME: 'vais', GIT_AUTHOR_EMAIL: 'vais@example.com', GIT_COMMITTER_NAME: 'vais', GIT_COMMITTER_EMAIL: 'vais@example.com' } }).trim();
-}
-
 function makeRoot(t) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-commands-'));
-  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  fs.writeFileSync(path.join(root, 'vais.config.json'), JSON.stringify({ version: VERSION, workflowV2: { mode: 'enforce' } }));
-  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ name: 'app', version: VERSION }));
-  fs.mkdirSync(path.join(root, '.claude-plugin'));
-  fs.writeFileSync(path.join(root, '.claude-plugin', 'plugin.json'), JSON.stringify({ version: VERSION }));
-  fs.writeFileSync(path.join(root, '.claude-plugin', 'marketplace.json'), JSON.stringify({ metadata: { version: VERSION }, plugins: [{ version: VERSION }] }));
-  fs.writeFileSync(path.join(root, 'README.md'), `<img src="https://img.shields.io/badge/version-${VERSION}-blue">\n`);
-  fs.writeFileSync(path.join(root, 'CHANGELOG.md'), `# Changelog\n\n## [${VERSION}] - 2026-09-16\n`);
+  const root = helpers.makeRoot(t, 'commands');
+  helpers.writeVersionFiles(root, VERSION);
+  fs.writeFileSync(path.join(root, '.gitignore'), '.vais/\nnode_modules/\n');
   for (const order of [1, 2]) {
     const stage = loadChainCatalog().stages.find(entry => entry.order === order);
     fs.mkdirSync(path.join(root, path.dirname(stage.file)), { recursive: true });
@@ -98,14 +88,14 @@ describe('commands — the user command table works end to end', () => {
     const saved = execute(['save', 'commit', '--session', SESSION, '--message', confirm.message], root);
     assert.equal(saved.subject, 'feat: 앱 v1 추가 (WI-2026-09-16-app)');
     assert.equal(git(root, ['rev-parse', 'HEAD']), saved.hash);
-    assert.match(git(root, ['log', '-1', '--format=%B']), /Generated-By: vais-code 3\.5\.0/);
+    assert.match(git(root, ['log', '-1', '--format=%B']), new RegExp(`Generated-By: vais-code ${VERSION.replaceAll('.', '\\.')}`));
     // The token was consumed with the turn: a second commit needs a new sentence.
     fs.writeFileSync(path.join(root, 'app.txt'), 'v2');
     userTypes(root, '/vais 상태');
     assert.throws(() => execute(['save', 'commit', '--session', SESSION], root), /직접 입력해야/);
     userTypes(root, '/vais 저장 확인');
     const second = execute(['save', 'commit', '--session', SESSION], root);
-    assert.match(second.subject, /^chore: 작업 저장 \(3\.5\.0\)$/);
+    assert.match(second.subject, new RegExp(`^chore: 작업 저장 \\(${VERSION.replaceAll('.', '\\.')}\\)$`));
 
     // 되돌리기: list, then revert only after `/vais 되돌리기 확인: <대상>`.
     assert.equal(userTypes(root, `/vais 되돌리기 ${saved.hash}`).action, 'revert');

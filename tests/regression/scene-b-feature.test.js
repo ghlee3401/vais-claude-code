@@ -1,75 +1,37 @@
 'use strict';
 
-// Regression scene B (docs/harness/design.md §11): "책을 제목으로 검색하고 싶어요". A feature Work
-// item on an approved ten-stage chain: one-line Plan, a Design that cites F-001·S-001 and declares
-// F-003·API-003·TC-003, Do that edits the app, `do ready` that appends the new items to the
-// canonical files and photographs the screen through the running app, independent QA on exactly
-// the cited and declared TCs, and a Report that stamps 구현됨.
+// 장면 B — 기능 추가 (docs/harness/design.md §11): "책을 제목으로 검색하고 싶어요"
+// 검증: 승인된 10단계 사슬 위 feature 작업 — 세 줄 Plan, 인용(F-001·S-001)·신규(F-003·API-003·TC-003) Design,
+//       잘못된 인용·번호 거부, do ready 가 정본 append + 앱을 띄워 화면 캡처, QA 는 인용·신규 TC 만, Report 가 구현됨 도장
+// 렌더러: stub (앱은 tests/fixtures/static-server.js 로 실제 HTTP 기동)
 
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
 
 const { execute } = require('../../scripts/vais-workflow-v2');
 const { WorkItemStore } = require('../../lib/workflow/v2/work-item-store');
-const { AuthorizationStore } = require('../../lib/workflow/v2/authorization-store');
-const { routePrompt } = require('../../lib/workflow/v2/router');
 const { recordAutomaticHandoff } = require('../../lib/workflow/v2/automatic-handoff');
-const { loadChainCatalog, suggestKind } = require('../../lib/workflow/v2/chain-registry');
+const { suggestKind } = require('../../lib/workflow/v2/chain-registry');
 const idChain = require('../../lib/workflow/v2/id-chain');
 const ledger = require('../../lib/workflow/v2/ledger');
-const prompt = require('../../hooks/workflow-v2-prompt');
+const helpers = require('./helpers');
 
-const FIXTURES = path.join(__dirname, '..', 'fixtures', 'product-stages');
-const MINI_BOOKING = path.join(__dirname, '..', 'fixtures', 'mini-booking');
-const STATIC_SERVER = path.join(__dirname, '..', 'fixtures', 'static-server.js');
+const { MINI_BOOKING, STATIC_SERVER, write, grant, userSays, copyDir, approveChain } = helpers;
 const PORT = '4181';
 const FEATURE = 'book-search';
-const QA_PASS = {
-  schema: 'specialist-handoff/v1', status: 'completed', verdict: 'pass', judgment: 'TC-001·TC-003 기대 결과와 실제 화면이 일치',
-  decisions: ['검수표 2줄 통과'], behavior: { inputs: ['round-1/desktop.png'], outputs: ['pass'], errors: [] },
-  evidence: ['03-do/evidence/screens/round-1/desktop.png'], affectedRequirements: ['REQ-001'], risks: [], unverified: [], recommendedChecks: [],
-};
-
-process.env.VAIS_SCREEN_RENDERER = process.env.VAIS_SCREEN_RENDERER || 'stub';
+const QA_PASS = helpers.qaPass('TC-001·TC-003 기대 결과와 실제 화면이 일치', {
+  decisions: ['검수표 2줄 통과'], inputs: ['round-1/desktop.png'], evidence: ['03-do/evidence/screens/round-1/desktop.png'], affectedRequirements: ['REQ-001'],
+});
 
 function makeRoot(t) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-scene-b-'));
-  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  fs.writeFileSync(path.join(root, 'vais.config.json'), JSON.stringify({
-    version: '3.6.0', workflowV2: { mode: 'enforce' },
+  const root = helpers.makeRoot(t, 'scene-b', {
     ui: { appRoot: 'app', entry: 'index.html', run: { command: [process.execPath, STATIC_SERVER, 'app', PORT], url: `http://127.0.0.1:${PORT}/index.html`, readyTimeoutMs: 10000 } },
-  }));
-  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ name: 'reading-log', version: '0.0.1' }));
-  fs.mkdirSync(path.join(root, 'app'));
-  for (const name of fs.readdirSync(MINI_BOOKING)) fs.copyFileSync(path.join(MINI_BOOKING, name), path.join(root, 'app', name));
-  for (const stage of loadChainCatalog().stages) {
-    fs.mkdirSync(path.join(root, path.dirname(stage.file)), { recursive: true });
-    fs.copyFileSync(path.join(FIXTURES, path.basename(stage.file)), path.join(root, stage.file));
-    if (stage.artifactDir && fs.existsSync(path.join(FIXTURES, path.basename(stage.artifactDir)))) {
-      fs.mkdirSync(path.join(root, stage.artifactDir), { recursive: true });
-      for (const name of fs.readdirSync(path.join(FIXTURES, path.basename(stage.artifactDir)))) fs.copyFileSync(path.join(FIXTURES, path.basename(stage.artifactDir), name), path.join(root, stage.artifactDir, name));
-    }
-    idChain.approveStage(root, stage, { workItem: `WI-2026-09-16-s${stage.order}` });
-  }
+  }, { name: 'reading-log' });
+  copyDir(MINI_BOOKING, path.join(root, 'app'));
+  approveChain(root);
   return root;
-}
-
-function write(root, relative, content) {
-  const target = path.join(root, relative);
-  fs.mkdirSync(path.dirname(target), { recursive: true });
-  fs.writeFileSync(target, content);
-  return relative;
-}
-
-function grant(root, session, item, phase, action = 'continue-work', extra = {}) {
-  new AuthorizationStore(root).grant({ sessionId: session, workItemId: item?.id || null, phase, action, allowedPaths: [], allowedCommands: [], ...extra });
-}
-
-function userSays(root, store, item, session, sentence) {
-  return prompt.applyDeterministicRoute(store, item, routePrompt(sentence, item), session);
 }
 
 function table(rows) {

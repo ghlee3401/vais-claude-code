@@ -1,7 +1,9 @@
 'use strict';
 
-// Regression scene F (docs/harness/design.md §11): the harness must never die quietly.
-// Four paths: mis-cased mode, unknown mode value, unreadable config, emergency switch.
+// 장면 F — 하네스 고장 (docs/harness/design.md §11)
+// 검증: 하네스는 조용히 죽지 않는다 — 대소문자 다른 mode 는 정상, 알 수 없는 mode 는 닫힌 채 매 프롬프트 경고,
+//       읽을 수 없는 설정도 경고, 비상 스위치는 눈에 보이게 끈다
+// 렌더러: 해당 없음
 
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');

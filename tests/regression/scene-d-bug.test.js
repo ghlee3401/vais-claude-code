@@ -1,76 +1,39 @@
 'use strict';
 
-// Regression scene D (docs/harness/design.md §11): "별점 저장이 안 돼요". A bug Work item: the
-// Design must show the reproduction (a screenshot taken through the running app), name the cause
-// and one fix, cite F-002·TC-002, and declare a regression TC-003. QA re-runs the reproduction.
-// The Report stamps 구현됨, records "버그 해결", and notes the debt the fix resolved.
+// 장면 D — 버그 (docs/harness/design.md §11): "별점 저장이 안 돼요"
+// 검증: bug 작업 — 재현 PNG(앱을 띄워 screens capture)·원인·수정안·신규 TC 없이는 Design 거부, "재현 불가" 거부,
+//       do ready 가 TC-003 을 테스트 계획에 append, Review 는 재현 재실행 절 필수, Report 가 구현됨·"버그 해결"·부채 해소 note
+// 렌더러: stub (앱은 tests/fixtures/static-server.js 로 실제 HTTP 기동)
 
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
 
 const { execute } = require('../../scripts/vais-workflow-v2');
 const { WorkItemStore } = require('../../lib/workflow/v2/work-item-store');
-const { AuthorizationStore } = require('../../lib/workflow/v2/authorization-store');
-const { routePrompt } = require('../../lib/workflow/v2/router');
 const { recordAutomaticHandoff } = require('../../lib/workflow/v2/automatic-handoff');
-const { loadChainCatalog, suggestKind } = require('../../lib/workflow/v2/chain-registry');
+const { suggestKind } = require('../../lib/workflow/v2/chain-registry');
 const idChain = require('../../lib/workflow/v2/id-chain');
 const ledger = require('../../lib/workflow/v2/ledger');
-const prompt = require('../../hooks/workflow-v2-prompt');
+const helpers = require('./helpers');
 
-const FIXTURES = path.join(__dirname, '..', 'fixtures', 'product-stages');
-const MINI_BOOKING = path.join(__dirname, '..', 'fixtures', 'mini-booking');
-const STATIC_SERVER = path.join(__dirname, '..', 'fixtures', 'static-server.js');
+const { MINI_BOOKING, STATIC_SERVER, write, grant, userSays, copyDir, approveChain } = helpers;
 const PORT = '4182';
 const URL = `http://127.0.0.1:${PORT}/index.html`;
 const FEATURE = 'rating-save';
-const QA_PASS = {
-  schema: 'specialist-handoff/v1', status: 'completed', verdict: 'pass', judgment: '재현 절차를 다시 실행해도 오류가 나지 않고 TC-002·TC-003 이 통과',
-  decisions: ['재현 재실행 미발생'], behavior: { inputs: ['재현 절차'], outputs: ['pass'], errors: [] },
-  evidence: ['02-design/repro/desktop.png'], affectedRequirements: ['REQ-002'], risks: [], unverified: [], recommendedChecks: [],
-};
-
-process.env.VAIS_SCREEN_RENDERER = process.env.VAIS_SCREEN_RENDERER || 'stub';
+const QA_PASS = helpers.qaPass('재현 절차를 다시 실행해도 오류가 나지 않고 TC-002·TC-003 이 통과', {
+  decisions: ['재현 재실행 미발생'], inputs: ['재현 절차'], evidence: ['02-design/repro/desktop.png'], affectedRequirements: ['REQ-002'],
+});
 
 function makeRoot(t) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'vais-scene-d-'));
-  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  fs.writeFileSync(path.join(root, 'vais.config.json'), JSON.stringify({
-    version: '3.6.0', workflowV2: { mode: 'enforce' },
+  const root = helpers.makeRoot(t, 'scene-d', {
     ui: { appRoot: 'app', entry: 'index.html', run: { command: [process.execPath, STATIC_SERVER, 'app', PORT], url: URL, readyTimeoutMs: 10000 } },
-  }));
-  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ name: 'reading-log', version: '0.0.1' }));
-  fs.mkdirSync(path.join(root, 'app'));
-  for (const name of fs.readdirSync(MINI_BOOKING)) fs.copyFileSync(path.join(MINI_BOOKING, name), path.join(root, 'app', name));
-  for (const stage of loadChainCatalog().stages) {
-    fs.mkdirSync(path.join(root, path.dirname(stage.file)), { recursive: true });
-    fs.copyFileSync(path.join(FIXTURES, path.basename(stage.file)), path.join(root, stage.file));
-    if (stage.artifactDir && fs.existsSync(path.join(FIXTURES, path.basename(stage.artifactDir)))) {
-      fs.mkdirSync(path.join(root, stage.artifactDir), { recursive: true });
-      for (const name of fs.readdirSync(path.join(FIXTURES, path.basename(stage.artifactDir)))) fs.copyFileSync(path.join(FIXTURES, path.basename(stage.artifactDir), name), path.join(root, stage.artifactDir, name));
-    }
-    idChain.approveStage(root, stage, { workItem: `WI-2026-09-16-s${stage.order}` });
-  }
+  }, { name: 'reading-log' });
+  copyDir(MINI_BOOKING, path.join(root, 'app'));
+  approveChain(root);
   ledger.append(root, { workItemId: 'WI-2026-09-16-s10', feature: FEATURE, kind: 'debt', text: '별점 저장 오류가 가끔 난다', why: '테스트 계획에서 미해결', source: { type: 'event', id: 'fixture' } });
   return root;
-}
-
-function write(root, relative, content) {
-  const target = path.join(root, relative);
-  fs.mkdirSync(path.dirname(target), { recursive: true });
-  fs.writeFileSync(target, content);
-  return relative;
-}
-
-function grant(root, session, item, phase, action = 'continue-work', extra = {}) {
-  new AuthorizationStore(root).grant({ sessionId: session, workItemId: item?.id || null, phase, action, allowedPaths: [], allowedCommands: [], ...extra });
-}
-
-function userSays(root, store, item, session, sentence) {
-  return prompt.applyDeterministicRoute(store, item, routePrompt(sentence, item), session);
 }
 
 function designBody(work, options = {}) {
