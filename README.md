@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-4.0.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-4.0.1-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -13,7 +13,7 @@
 
 ---
 
-> **현재 상태 (4.0.0, 2026-09-16)**: 로드맵 H1~H7 완료. 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌다. 남은 것은 H8(디자인 시스템 MCP 유지·삭제 결정). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
+> **현재 상태 (4.0.1, 2026-09-17)**: 로드맵 H1~H8 완료. 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌고, 쓰이지 않던 디자인 시스템 MCP·vendor·브랜드 카탈로그는 제거됐다(되살림: 커밋 `66d0f6b`). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
 
 ## 무엇인가
 
@@ -31,7 +31,6 @@
 |---|---|---|
 | Node.js | ≥ 18 | plugin runtime, hook, 내부 CLI |
 | Claude Code | ≥ 2.1.32 | SessionStart / UserPromptSubmit / PreToolUse / PostToolUse / Stop hook, statusline |
-| Python3 | ≥ 3.8 | design-system MCP (UI 설계 시에만) |
 | Chrome / Chromium | 최근 버전 | `ui` 작업과 와이어프레임·시안 단계의 스크린샷 (헤드리스). 없으면 그림이 필요한 Gate 가 멈춘다. `VAIS_CHROME=<경로>` 로 지정 가능 |
 
 ```bash

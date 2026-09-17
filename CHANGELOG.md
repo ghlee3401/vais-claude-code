@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.0.1] - 2026-09-17
+
+> 로드맵 H8 `design-system-mcp`. 쓰이지 않던 디자인 시스템 MCP 를 삭제해 로드맵 H1~H8 을 닫는다.
+
+### Removed
+
+- **디자인 시스템 MCP** — `mcp/`(stdio runner), `.mcp.json`, `plugin.json` 의 `mcpServers`, `vendor/ui-ux-pro-max`(Python 검색 스크립트 + CSV 1.2MB), `design-system/`(브랜드 DESIGN.md 5종, Legacy 를 가리키던 INDEX). 근거: 세션마다 "Connection closed" 로 연결 실패, `lib/`·`hooks/`·`scripts/` 참조 0, Python3 의존성이 비개발자 설치를 무겁게 함, 5단계 디자인 시스템은 H4 이후 스크린샷 3안으로 동작. 되살림은 커밋 `66d0f6b` 에서 checkout
+- README 의존성 표의 Python 행, CLAUDE 구조도·Do NOT 의 `vendor/` 줄, 역할 카드 `ui-designer.knowledge` 참조
+
+### Changed
+
+- `docs/harness/roadmap.md` H7·H8 완료, 로드맵 종료 표기. `docs/harness/design.md` 대응표 H8 행 → 삭제 (H8)
+
 ## [4.0.0] - 2026-09-16
 
 > 로드맵 H7 `regression-and-docs`. 새 기능 없이 3.1~3.6 에서 들어온 것을 한 벌로 맞춘다: 사용자 루프 하나([3.1.0] 건강검진 → [3.2.0] 제품 사슬 → [3.3.0] 장부·노트 → [3.4.0] 화면 루프 → [3.5.0] 명령 → [3.6.0] 기능·버그 kind), 문서 양식 넷, 제품 노트 3면, 명령 표, kind 14. 이 상태가 4.0.0 이다.

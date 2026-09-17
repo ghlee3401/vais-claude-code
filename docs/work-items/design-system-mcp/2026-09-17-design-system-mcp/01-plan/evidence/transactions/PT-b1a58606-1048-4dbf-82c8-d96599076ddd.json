@@ -1,0 +1,62 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-b1a58606-1048-4dbf-82c8-d96599076ddd",
+  "workItemId": "WI-2026-09-17-design-system-mcp",
+  "phase": "plan",
+  "action": "present",
+  "gate": {
+    "gate": "plan",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "plan-document",
+      "document-budget"
+    ],
+    "passed": [
+      "plan-document",
+      "document-budget"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-17T01:14:53.216Z"
+  },
+  "checks": [
+    {
+      "check": "plan-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/01-plan/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical plan document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/01-plan/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/01-plan/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 3860B is within the 5632B compact budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/01-plan/main.md"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "plan",
+    "status": "waiting-user"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/03-do/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 1490B is within the 2560B compact budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/03-do/main.md"
+  ]
+}

@@ -23,5 +23,7 @@
 | H4 | 완료 | `WI-2026-09-16-ui-loop` (3.4.0) |
 | H5 | 완료 | `WI-2026-09-16-commands` (3.5.0) |
 | H6 | 완료 | `WI-2026-09-16-feature-bug-kinds` (3.6.0) |
-| H7 | 진행 중 | `WI-2026-09-16-regression-and-docs` |
-| H8 | 미착수 | — |
+| H7 | 완료 | `WI-2026-09-16-regression-and-docs` (4.0.0) |
+| H8 | 완료 | `WI-2026-09-17-design-system-mcp` (4.0.1) — 삭제 결정 |
+
+로드맵 H1~H8 종료 (2026-09-17). 이후 작업은 제품 사슬(`/vais 새 제품: …`)과 feature·bug·ui kind 로 진행하고, 하네스 자체 수정은 `harness` kind 로 한 건씩 한다.

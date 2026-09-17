@@ -1,0 +1,81 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-b1e2b3e5-0e21-48f1-8695-27435a1a8fdc",
+  "workItemId": "WI-2026-09-17-design-system-mcp",
+  "phase": "design",
+  "action": "present",
+  "gate": {
+    "gate": "design",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "design-document",
+      "document-budget",
+      "document-repetition"
+    ],
+    "passed": [
+      "design-document",
+      "document-budget",
+      "document-repetition"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-17T01:16:53.303Z"
+  },
+  "checks": [
+    {
+      "check": "design-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/02-design/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical design document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/02-design/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/02-design/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 4410B is within the 8192B compact budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/02-design/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/02-design/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/02-design/main.md"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "design",
+    "status": "waiting-user"
+  }
+}

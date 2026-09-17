@@ -182,7 +182,7 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 사용 문서 | `README.md`, `ONBOARDING.md`, `CLAUDE.md` | 완료 (H7) |
 | 저장 결함 3건 (`.gitignore` 와 exclude 경로 충돌, `commit` 별칭, 변경 목록 앞 점) | `lib/workflow/v2/vcs.js`, `router.js`, prompt hook 도움말 | 완료 (H7) |
 | 회귀 공통 준비 | `tests/regression/helpers.js` | 완료 (H7) |
-| 디자인 시스템 MCP 유지·삭제 결정 | `mcp/`, `design-system/`, `vendor/` | 보류 (H8) |
+| 디자인 시스템 MCP 유지·삭제 결정 | `mcp/`, `design-system/`, `vendor/`, `.mcp.json` 삭제 — 근거: 연결 실패 이력, 코드 참조 0, Python 의존성, 5단계는 스크린샷 3안으로 동작. 되살림: 커밋 `66d0f6b` | 삭제 (H8) |
 
 ## 11. 사용 장면 6개
 

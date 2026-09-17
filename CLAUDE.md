@@ -2,7 +2,7 @@
 
 > **이 파일의 책임**: Claude Code 전용 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 `ONBOARDING.md`(5분), 사용법은 `README.md`.
 >
-> 상태: **4.0.0 (2026-09-16) — 로드맵 H1~H7 완료, H8 `design-system-mcp` 남음.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md`. 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다. 이 저장소 자체 작업의 kind 는 `harness` 다.
+> 상태: **4.0.1 (2026-09-17) — 로드맵 H1~H8 완료.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md`. 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다. 이 저장소 자체 작업의 kind 는 `harness` 다.
 
 ## 이 플러그인이 만드는 것
 
@@ -43,7 +43,6 @@ vais-claude-code/
 ├── schemas/                  # work-item · specialist-assignment · specialist-handoff · check-result · gate-result ·
 │                             #   phase-transaction-receipt · review-evidence-prepare · automatic-handoff-evidence · chain-stage · work-kinds · ledger-entry
 ├── output-styles/vais-default.md
-├── mcp/ · design-system/ · vendor/   # UI 설계용 design-system MCP (보류 — ui-loop 설계에서 결정)
 ├── tests/v2-*.test.js (16) + tests/regression/(장면 A·B·C·D·E·F + commands, 공통 준비 helpers.js) + tests/fixtures/{mini-booking,product-stages,static-server.js}
 ├── docs/product/             # 제품 사슬 정본 NN-*.md + 자동 생성 노트 README·roadmap·decisions
 ├── .vais/v2/                 # work-items.json · authorizations.json · chain-index.json · ledger.jsonl(append-only) — 직접 편집 금지
@@ -107,6 +106,5 @@ npm run doctor      # 하네스 건강검진 (= /vais doctor)
 
 - `.vais/v2/` 를 직접 편집하지 말 것
 - `docs/README.md`, `docs/features/`, 완료된 Report 를 손으로 수정하지 말 것 (자동 생성·동결)
-- `vendor/` 를 직접 수정하지 말 것
 - `contracts/v2-role-cards.json`, `schemas/`, `vais.config.json` 키 구조를 사전 합의 없이 바꾸지 말 것
 - 사용자 요청 없이 커밋하지 말 것 — 커밋은 `/vais 저장` → 사용자의 `/vais 저장 확인` 뒤 runtime 이 한다

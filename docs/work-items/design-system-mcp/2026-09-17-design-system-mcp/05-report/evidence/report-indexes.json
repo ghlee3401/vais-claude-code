@@ -1,0 +1,19 @@
+{
+  "check": "report-indexes",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/README.md",
+    "docs/features/design-system-mcp/main.md"
+  ],
+  "requirements": [
+    "REQ-009"
+  ],
+  "summary": "Feature and Master indexes link the Work item",
+  "findings": [],
+  "evidence": [
+    "docs/README.md",
+    "docs/features/design-system-mcp/main.md"
+  ]
+}

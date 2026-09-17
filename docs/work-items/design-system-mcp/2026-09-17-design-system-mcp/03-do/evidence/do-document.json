@@ -1,0 +1,15 @@
+{
+  "check": "do-document",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/03-do/main.md"
+  ],
+  "requirements": [],
+  "summary": "Canonical do document is complete",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/design-system-mcp/2026-09-17-design-system-mcp/03-do/main.md"
+  ]
+}

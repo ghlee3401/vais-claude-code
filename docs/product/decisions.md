@@ -1,9 +1,13 @@
 # 제품 노트 — 왜
 
-> 자동 생성 (`.vais/v2/ledger.jsonl` 61건). 결정·피드백·취향·부채·리스크·이정표 순.
+> 자동 생성 (`.vais/v2/ledger.jsonl` 72건). 결정·피드백·취향·부채·리스크·이정표 순.
 
-## 결정 (23)
+## 결정 (27)
 
+- 2026-09-17 01:18 · WI-2026-09-17-design-system-mcp · 유지안 기각: 연결 실패 원인 재현·수리와 Python 의존성 유지가 compact 를 넘고, 쓰는 코드가 없어 고쳐도 사용처가 없다. — Design revision 1 에서 확정
+- 2026-09-17 01:18 · WI-2026-09-17-design-system-mcp · 축소안(브랜드 DESIGN.md 5종만 참고 자료로 보관) 기각: INDEX 가 Legacy 를 가리키는 죽은 문서라 정본이 없고, 필요하면 원본(VoltAgent/awesome-design-md)이나 git 이력에서 가져온다. — Design revision 1 에서 확정
+- 2026-09-17 01:18 · WI-2026-09-17-design-system-mcp · 되살림 경로: git 태그 없이 4.0.0 커밋(`66d0f6b`)에서 세 폴더를 checkout 하면 된다. Report 에 적는다. — Design revision 1 에서 확정
+- 2026-09-17 01:18 · WI-2026-09-17-design-system-mcp · 디자인 시스템 MCP(`mcp/`·`.mcp.json`·plugin.json mcpServers)·`vendor/ui-ux-pro-max`·`design-system/` 를 전부 삭제한다. 근거: 세션 내내 "Connection closed" 로 연결 실패, lib·hooks·scripts 에 참조 0, Python3 의존성이 비개발자 설치를 무겁게 함, 5단계 디자인 시스템은 H4 이후 스크린샷 3안으로 동작. — Design revision 1 에서 확정
 - 2026-09-16 11:54 · WI-2026-09-16-regression-and-docs · 저장은 `git add -A -- .` 로 `.gitignore` 를 존중하고, `.vais/` 는 add 뒤 `git rm --cached` 로 빼낸다. exclude pathspec 은 무시 규칙과 겹치면 git 이 실패하므로 쓰지 않는다. — Design revision 1 에서 확정
 - 2026-09-16 11:54 · WI-2026-09-16-regression-and-docs · `commit` 은 정확히 그 단어 하나일 때만 저장 별칭이다. 뒤에 말이 붙으면 새 요청으로 본다(저장 메시지는 `저장 <메시지>` 로만). — Design revision 1 에서 확정
 - 2026-09-16 11:54 · WI-2026-09-16-regression-and-docs · 저장 실패 reason 은 사용자 말로 "스테이지 N개 됨 · 커밋 안 됨 · 원인" 을 담는다. 재시도는 runtime 이 하지 않는다. — Design revision 1 에서 확정
@@ -28,8 +32,11 @@
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 테스트는 stub 렌더러로 결정적으로 돌리고 receipt 에 stub 임을 남긴다. 실제 렌더 검증은 Chrome 이 있는 환경의 별도 테스트와 사용자 확인으로 한다. — Design revision 1 에서 확정
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 취향은 제품 전체 속성이라 feature 를 넘어 주입한다. — Design revision 1 에서 확정
 
-## 부채 (21)
+## 부채 (24)
 
+- 2026-09-17 01:32 · WI-2026-09-17-design-system-mcp · package-lock.json 루트 버전이 3.0.1 로 남아 있다(동작 무관, 버전 7면 밖). 다음 하네스 작업에서 npm install 로 맞춘다 — WI-2026-09-17-design-system-mcp Report 의 잔여 제한
+- 2026-09-17 01:32 · WI-2026-09-17-design-system-mcp · 개인 설정 .claude/settings.local.json 에 옛 MCP 도구 허용 항목이 남아 있다(저장소 밖, 사용자가 지운다) — WI-2026-09-17-design-system-mcp Report 의 잔여 제한
+- 2026-09-17 01:32 · WI-2026-09-17-design-system-mcp · write guard 가 승인된 쓰기 범위 안에서도 AI 의 rm·git rm 을 막아 삭제는 사용자가 직접 실행했다 — WI-2026-09-17-design-system-mcp Report 의 잔여 제한
 - 2026-09-17 00:58 · WI-2026-09-16-regression-and-docs · 이전에 git 이 추적하던 .vais/ 파일이 있는 프로젝트는 저장 때 그 파일들이 삭제로 커밋된다(이 repo 는 해당 없음) — WI-2026-09-16-regression-and-docs Report 의 잔여 제한
 - 2026-09-17 00:58 · WI-2026-09-16-regression-and-docs · 저장 실패 문구는 커밋되지 않았다 로 시작해 문서의 커밋 안 됨 표현과 글자가 다르다 — WI-2026-09-16-regression-and-docs Report 의 잔여 제한
 - 2026-09-17 00:58 · WI-2026-09-16-regression-and-docs · 회귀 60초 상한은 테스트가 강제하지 않고 QA 가 측정했다(현재 3초) — WI-2026-09-16-regression-and-docs Report 의 잔여 제한
@@ -56,8 +63,12 @@
 
 - 2026-09-16 11:16 · WI-2026-09-16-feature-bug-kinds · Do 준비 미달 1회: test — readiness 검사가 실패했다
 
-## 이정표 (16)
+## 이정표 (20)
 
+- 2026-09-17 01:32 · WI-2026-09-17-design-system-mcp · 작업 완료 — H8 디자인 시스템 MCP 유지·삭제 결정 — Report 가 확정되어 동결됐다
+- 2026-09-17 01:32 · WI-2026-09-17-design-system-mcp · 최종 승인 — H8 디자인 시스템 MCP 유지·삭제 결정 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
+- 2026-09-17 01:18 · WI-2026-09-17-design-system-mcp · Design 승인 (revision 1) — H8 디자인 시스템 MCP 유지·삭제 결정 — 사용자가 Design 을 승인했다
+- 2026-09-17 01:15 · WI-2026-09-17-design-system-mcp · Plan 승인 (revision 1) — H8 디자인 시스템 MCP 유지·삭제 결정 — 사용자가 Plan 을 승인했다
 - 2026-09-17 00:58 · WI-2026-09-16-regression-and-docs · 작업 완료 — H7 회귀 세트와 문서 정리 (4.0.0) — Report 가 확정되어 동결됐다
 - 2026-09-17 00:27 · WI-2026-09-16-regression-and-docs · 최종 승인 — H7 회귀 세트와 문서 정리 (4.0.0) — 독립 QA PASS 뒤 사용자가 결과를 승인했다
 - 2026-09-16 11:54 · WI-2026-09-16-regression-and-docs · Design 승인 (revision 1) — H7 회귀 세트와 문서 정리 (4.0.0) — 사용자가 Design 을 승인했다

@@ -116,7 +116,7 @@
       "boundaries": ["Do not write production UI code", "Do not force a brand choice when existing product tokens are authoritative"],
       "qualityBar": ["A frontend engineer can implement every visible and interactive state without guessing"],
       "escalation": "Ask the user when alternative flows change the product experience.",
-      "knowledge": ["vendor/ui-ux-pro-max/SKILL.md"]
+      "knowledge": []
     },
     {
       "name": "db-architect",
