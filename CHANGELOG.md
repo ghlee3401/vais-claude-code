@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- `docs/harness/README.md` 상태 표를 현재 값으로 갱신 — 구현 "H1~H8 완료 (4.0.1)", 커널 "모듈 38 · hook 이벤트 5 · 스크립트 6 · CLI 1", 표 아래 세는 기준 한 줄. 버전은 4.0.1 유지 (`harness-readme-status-2`)
+
 ## [4.0.1] - 2026-09-17
 
 > 로드맵 H8 `design-system-mcp`. 쓰이지 않던 디자인 시스템 MCP 를 삭제해 로드맵 H1~H8 을 닫는다.

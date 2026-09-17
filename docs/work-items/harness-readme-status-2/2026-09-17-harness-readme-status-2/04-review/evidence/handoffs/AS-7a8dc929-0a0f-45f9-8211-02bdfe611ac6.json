@@ -1,0 +1,55 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-17-harness-readme-status-2",
+  "assignmentId": "AS-7a8dc929-0a0f-45f9-8211-02bdfe611ac6",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "2f53c1a437c786566cdd4a1cc1d657d6afe7e29a8a039aa9cba34043f8ce6575",
+  "handoffDigest": "e7ac1c3e40bc6ebd380b0213793786dac334b7b9760abaae648654f295b82e1b",
+  "persistedAt": "2026-09-17T07:29:18.661Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "TC-001~003 모두 저장소 실제 값과 일치. 모듈 38·이벤트 5·스크립트 6·CLI 1·버전 4.0.1",
+    "decisions": [
+      "PASS — 세 TC 전부 일치",
+      "기준 문구 오차는 비차단"
+    ],
+    "behavior": {
+      "inputs": [
+        "lib/workflow/v2 목록",
+        "hooks.json·버전 6면"
+      ],
+      "outputs": [
+        "README 상태 표 대조",
+        "CHANGELOG 대조"
+      ],
+      "errors": [
+        "없음"
+      ]
+    },
+    "evidence": [
+      "README.md:21-24 표·기준; lib/workflow/v2 .js 38; hooks.json 이벤트 5·스크립트 6",
+      "CHANGELOG.md:3-7 Unreleased; 버전 6면 4.0.1; design.md:7 11단계 동일"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003"
+    ],
+    "risks": [
+      "기준 줄 '최상위 키' 표현 부정확",
+      "CLAUDE.md 35 모듈 불일치 잔존"
+    ],
+    "unverified": [
+      "validate·test 미재실행"
+    ],
+    "recommendedChecks": [
+      "secret-scan",
+      "plugin-validator"
+    ]
+  }
+}

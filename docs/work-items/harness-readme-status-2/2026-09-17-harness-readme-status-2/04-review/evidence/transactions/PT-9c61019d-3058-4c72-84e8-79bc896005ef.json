@@ -1,0 +1,118 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-9c61019d-3058-4c72-84e8-79bc896005ef",
+  "workItemId": "WI-2026-09-17-harness-readme-status-2",
+  "phase": "review",
+  "action": "decide",
+  "gate": {
+    "gate": "review",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "passed": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-17T07:29:29.707Z"
+  },
+  "checks": [
+    {
+      "check": "review-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/04-review/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical review document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 1806B is within the 5120B compact budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/04-review/main.md"
+      ]
+    },
+    {
+      "check": "independent-qa-handoff",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [],
+      "requirements": [
+        "REQ-001",
+        "REQ-002",
+        "REQ-003"
+      ],
+      "summary": "Independent QA completed without a failure verdict",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/04-review/evidence/handoffs/AS-7a8dc929-0a0f-45f9-8211-02bdfe611ac6.json"
+      ]
+    },
+    {
+      "check": "secret-scan",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/harness/README.md",
+        "CHANGELOG.md"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/04-review/evidence/logs/secret-scan.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "review",
+    "status": "waiting-user"
+  }
+}

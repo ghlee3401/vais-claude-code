@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/04-review/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 1806B is within the 5120B compact budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/04-review/main.md"
+  ]
+}

@@ -1,9 +1,12 @@
 # 제품 노트 — 왜
 
-> 자동 생성 (`.vais/v2/ledger.jsonl` 72건). 결정·피드백·취향·부채·리스크·이정표 순.
+> 자동 생성 (`.vais/v2/ledger.jsonl` 81건). 결정·피드백·취향·부채·리스크·이정표 순.
 
-## 결정 (27)
+## 결정 (30)
 
+- 2026-09-17 07:25 · WI-2026-09-17-harness-readme-status-2 · 버전은 4.0.1 을 유지한다. 문서 한 파일 갱신이라 플러그인 동작이 바뀌지 않는다 (사용자 확인 2026-09-17). — Design revision 1 에서 확정
+- 2026-09-17 07:25 · WI-2026-09-17-harness-readme-status-2 · 모듈 수는 `lib/workflow/v2/*.js` 파일 수(index.js 포함)로 센다. CLAUDE.md·ONBOARDING 의 "35 모듈" 과 다른데, 그 두 문서는 이번 범위 밖이라 Report 잔여 제한으로 남긴다. — Design revision 1 에서 확정
+- 2026-09-17 07:25 · WI-2026-09-17-harness-readme-status-2 · CHANGELOG 는 `[Unreleased]` 절로 적는다. 이미 커밋된 `[4.0.1]` 절을 고치지 않는다. — Design revision 1 에서 확정
 - 2026-09-17 01:18 · WI-2026-09-17-design-system-mcp · 유지안 기각: 연결 실패 원인 재현·수리와 Python 의존성 유지가 compact 를 넘고, 쓰는 코드가 없어 고쳐도 사용처가 없다. — Design revision 1 에서 확정
 - 2026-09-17 01:18 · WI-2026-09-17-design-system-mcp · 축소안(브랜드 DESIGN.md 5종만 참고 자료로 보관) 기각: INDEX 가 Legacy 를 가리키는 죽은 문서라 정본이 없고, 필요하면 원본(VoltAgent/awesome-design-md)이나 git 이력에서 가져온다. — Design revision 1 에서 확정
 - 2026-09-17 01:18 · WI-2026-09-17-design-system-mcp · 되살림 경로: git 태그 없이 4.0.0 커밋(`66d0f6b`)에서 세 폴더를 checkout 하면 된다. Report 에 적는다. — Design revision 1 에서 확정
@@ -32,8 +35,10 @@
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 테스트는 stub 렌더러로 결정적으로 돌리고 receipt 에 stub 임을 남긴다. 실제 렌더 검증은 Chrome 이 있는 환경의 별도 테스트와 사용자 확인으로 한다. — Design revision 1 에서 확정
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 취향은 제품 전체 속성이라 feature 를 넘어 주입한다. — Design revision 1 에서 확정
 
-## 부채 (24)
+## 부채 (26)
 
+- 2026-09-17 07:30 · WI-2026-09-17-harness-readme-status-2 · CLAUDE.md 와 ONBOARDING.md 의 '35 모듈' 표기가 실제 38 과 다르다(이번 범위 밖, 다음 문서 작업에서 맞춘다) — WI-2026-09-17-harness-readme-status-2 Report 의 잔여 제한
+- 2026-09-17 07:30 · WI-2026-09-17-harness-readme-status-2 · README 세는 기준 줄의 '최상위 키' 는 정확히는 hooks.json 의 hooks 아래 키를 뜻한다(동작 무관, 표현 손질 후보) — WI-2026-09-17-harness-readme-status-2 Report 의 잔여 제한
 - 2026-09-17 01:32 · WI-2026-09-17-design-system-mcp · package-lock.json 루트 버전이 3.0.1 로 남아 있다(동작 무관, 버전 7면 밖). 다음 하네스 작업에서 npm install 로 맞춘다 — WI-2026-09-17-design-system-mcp Report 의 잔여 제한
 - 2026-09-17 01:32 · WI-2026-09-17-design-system-mcp · 개인 설정 .claude/settings.local.json 에 옛 MCP 도구 허용 항목이 남아 있다(저장소 밖, 사용자가 지운다) — WI-2026-09-17-design-system-mcp Report 의 잔여 제한
 - 2026-09-17 01:32 · WI-2026-09-17-design-system-mcp · write guard 가 승인된 쓰기 범위 안에서도 AI 의 rm·git rm 을 막아 삭제는 사용자가 직접 실행했다 — WI-2026-09-17-design-system-mcp Report 의 잔여 제한
@@ -63,8 +68,12 @@
 
 - 2026-09-16 11:16 · WI-2026-09-16-feature-bug-kinds · Do 준비 미달 1회: test — readiness 검사가 실패했다
 
-## 이정표 (20)
+## 이정표 (24)
 
+- 2026-09-17 07:30 · WI-2026-09-17-harness-readme-status-2 · 작업 완료 — 하네스 README 상태 표 갱신 — Report 가 확정되어 동결됐다
+- 2026-09-17 07:30 · WI-2026-09-17-harness-readme-status-2 · 최종 승인 — 하네스 README 상태 표 갱신 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
+- 2026-09-17 07:25 · WI-2026-09-17-harness-readme-status-2 · Design 승인 (revision 1) — 하네스 README 상태 표 갱신 — 사용자가 Design 을 승인했다
+- 2026-09-17 07:23 · WI-2026-09-17-harness-readme-status-2 · Plan 승인 (revision 1) — 하네스 README 상태 표 갱신 — 사용자가 Plan 을 승인했다
 - 2026-09-17 01:32 · WI-2026-09-17-design-system-mcp · 작업 완료 — H8 디자인 시스템 MCP 유지·삭제 결정 — Report 가 확정되어 동결됐다
 - 2026-09-17 01:32 · WI-2026-09-17-design-system-mcp · 최종 승인 — H8 디자인 시스템 MCP 유지·삭제 결정 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
 - 2026-09-17 01:18 · WI-2026-09-17-design-system-mcp · Design 승인 (revision 1) — H8 디자인 시스템 MCP 유지·삭제 결정 — 사용자가 Design 을 승인했다

@@ -18,8 +18,8 @@
 ## 제안
 
 1. 1단계 요구사항 정의서 작성 — `/vais 새 제품: <제품 이름>` (아직 승인된 요구사항 정의서 가 없다)
-2. 부채 정리: package-lock.json 루트 버전이 3.0.1 로 남아 있다(동작 무관, 버전 7면 밖). 다음 하네스 작업에서 npm install 로 맞춘다 — `/vais package-lock.json 루트 버전이 3.0.1 로 남아 있다(동작 무관, 버전 7면 밖). 다음 하네스 작업에서 npm install 로 맞춘다` (WI-2026-09-17-design-system-mcp 에 남은 부채)
-3. 부채 정리: 개인 설정 .claude/settings.local.json 에 옛 MCP 도구 허용 항목이 남아 있다(저장소 밖, 사용자가 지운다) — `/vais 개인 설정 .claude/settings.local.json 에 옛 MCP 도구 허용 항목이 남아 있다(저장소 밖, 사용자가 지운다)` (WI-2026-09-17-design-system-mcp 에 남은 부채)
+2. 부채 정리: CLAUDE.md 와 ONBOARDING.md 의 '35 모듈' 표기가 실제 38 과 다르다(이번 범위 밖, 다음 문서 작업에서 맞춘다) — `/vais CLAUDE.md 와 ONBOARDING.md 의 '35 모듈' 표기가 실제 38 과 다르다(이번 범위 밖, 다음 문서 작업에서 맞춘다)` (WI-2026-09-17-harness-readme-status-2 에 남은 부채)
+3. 부채 정리: README 세는 기준 줄의 '최상위 키' 는 정확히는 hooks.json 의 hooks 아래 키를 뜻한다(동작 무관, 표현 손질 후보) — `/vais README 세는 기준 줄의 '최상위 키' 는 정확히는 hooks.json 의 hooks 아래 키를 뜻한다(동작 무관, 표현 손질 후보)` (WI-2026-09-17-harness-readme-status-2 에 남은 부채)
 
 ## 내 메모
 

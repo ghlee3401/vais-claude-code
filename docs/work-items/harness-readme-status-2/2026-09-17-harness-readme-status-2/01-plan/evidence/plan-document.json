@@ -1,0 +1,15 @@
+{
+  "check": "plan-document",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/01-plan/main.md"
+  ],
+  "requirements": [],
+  "summary": "Canonical plan document is complete",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/01-plan/main.md"
+  ]
+}

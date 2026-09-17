@@ -18,5 +18,7 @@
 | 항목 | 값 |
 |---|---|
 | 설계 승인 | 2026-09-15 (Design revision 1) |
-| 구현 | H1 `harness-health` 진행 중 (2026-09-15) |
-| 현재 커널 | v2 runtime (lib/workflow/v2) 23 모듈, hook 4, CLI 1 |
+| 구현 | 로드맵 H1~H8 완료 (4.0.1, 2026-09-17) |
+| 현재 커널 | v2 runtime 모듈 38 (`lib/workflow/v2/*.js`, index.js 포함), hook 이벤트 5 · 스크립트 6, CLI 1 (`scripts/vais-workflow-v2.js`) |
+
+세는 기준: 모듈은 `lib/workflow/v2` 의 `.js` 파일 수, hook 이벤트는 `hooks/hooks.json` 의 최상위 키 수, hook 스크립트는 그 파일이 부르는 `hooks/*.js` 의 서로 다른 수, CLI 는 hook 이 명령 형태를 지정하는 `scripts/vais-workflow-v2.js` 하나. 버전은 `vais.config.json > version`.

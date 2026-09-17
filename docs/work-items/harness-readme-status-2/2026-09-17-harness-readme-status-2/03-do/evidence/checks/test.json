@@ -1,0 +1,16 @@
+{
+  "check": "test",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/harness/README.md",
+    "CHANGELOG.md"
+  ],
+  "requirements": [],
+  "summary": "Check passed",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/03-do/evidence/logs/test.log"
+  ]
+}

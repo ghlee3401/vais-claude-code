@@ -10,6 +10,7 @@
 
 | Work item | Feature | Phase | Status | Updated |
 |---|---|---|---|---|
+| [WI-2026-09-17-harness-readme-status-2 — 하네스 README 상태 표 갱신](work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/main.md) | harness-readme-status-2 | report | completed | 2026-09-17T07:30:37.869Z |
 | [WI-2026-09-17-design-system-mcp — H8 디자인 시스템 MCP 유지·삭제 결정](work-items/design-system-mcp/2026-09-17-design-system-mcp/main.md) | design-system-mcp | report | completed | 2026-09-17T01:32:19.419Z |
 | [WI-2026-09-16-regression-and-docs — H7 회귀 세트와 문서 정리 (4.0.0)](work-items/regression-and-docs/2026-09-16-regression-and-docs/main.md) | regression-and-docs | report | completed | 2026-09-17T00:58:29.067Z |
 | [WI-2026-09-16-feature-bug-kinds — 기능·버그 작업 종류 · 인용 강제 · 문서 갱신 · 앱 실행](work-items/feature-bug-kinds/2026-09-16-feature-bug-kinds/main.md) | feature-bug-kinds | report | completed | 2026-09-16T11:35:00.371Z |
