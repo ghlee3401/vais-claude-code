@@ -1,0 +1,37 @@
+{
+  "check": "lint",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "skills/diagram/**",
+    "contracts/chain-stages.json",
+    "schemas/chain-stage.schema.json",
+    "lib/workflow/v2/router.js",
+    "lib/workflow/v2/write-policy.js",
+    "lib/workflow/v2/config.js",
+    "lib/workflow/v2/id-chain.js",
+    "lib/workflow/v2/diagram.js",
+    "lib/workflow/v2/index.js",
+    "hooks/workflow-v2-prompt.js",
+    "scripts/vais-workflow-v2.js",
+    "vais.config.json",
+    ".gitignore",
+    "tests/**",
+    "README.md",
+    "CLAUDE.md",
+    "ONBOARDING.md",
+    "docs/harness/design.md",
+    "CHANGELOG.md",
+    "package.json",
+    "package-lock.json",
+    ".claude-plugin/**",
+    "docs/diagrams/**"
+  ],
+  "requirements": [],
+  "summary": "Check passed",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/03-do/evidence/logs/lint.log"
+  ]
+}

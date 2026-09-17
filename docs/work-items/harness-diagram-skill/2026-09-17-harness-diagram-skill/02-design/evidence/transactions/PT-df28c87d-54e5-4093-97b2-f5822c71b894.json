@@ -1,0 +1,81 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-df28c87d-54e5-4093-97b2-f5822c71b894",
+  "workItemId": "WI-2026-09-17-harness-diagram-skill",
+  "phase": "design",
+  "action": "present",
+  "gate": {
+    "gate": "design",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "design-document",
+      "document-budget",
+      "document-repetition"
+    ],
+    "passed": [
+      "design-document",
+      "document-budget",
+      "document-repetition"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-17T08:56:32.678Z"
+  },
+  "checks": [
+    {
+      "check": "design-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/02-design/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical design document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/02-design/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/02-design/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 8094B is within the 14336B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/02-design/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/02-design/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/02-design/main.md"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "design",
+    "status": "waiting-user"
+  }
+}

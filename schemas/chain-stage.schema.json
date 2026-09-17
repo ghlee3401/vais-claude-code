@@ -24,6 +24,7 @@
           "artifactDir": { "type": "string", "pattern": "^docs/[a-z0-9-]+/[a-z0-9-]+$" },
           "artifactFields": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
           "renderArtifacts": { "type": "boolean" },
+          "diagram": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z][a-z-]*$" } },
           "documentSections": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
           "requiredFields": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
           "parents": {

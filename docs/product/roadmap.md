@@ -18,8 +18,8 @@
 ## 제안
 
 1. 1단계 요구사항 정의서 작성 — `/vais 새 제품: <제품 이름>` (아직 승인된 요구사항 정의서 가 없다)
-2. 부채 정리: 새 예산은 push 후 플러그인을 4.1.0 으로 업데이트해야 이 저장소에서도 적용된다. 실행 중 캐시는 4.0.1 — `/vais 새 예산은 push 후 플러그인을 4.1.0 으로 업데이트해야 이 저장소에서도 적용된다. 실행 중 캐시는 4.0.1` (WI-2026-09-17-harness-doc-budget 에 남은 부채)
-3. 부채 정리: 독립 QA specialist 가 세 작업 연속으로 읽기 전용 handoff 에 files 항목을 넣거나 문자열 한도를 넘겨 재출력을 받았다. agents/v2-specialist.md 지시문에 읽기 전용이면 files 금지와 문자열 한도 표를 못 박는 것이 다음 하네스 작업 후보다(harness-docs-module-count 의 잔여 제한과 같음) — `/vais 독립 QA specialist 가 세 작업 연속으로 읽기 전용 handoff 에 files 항목을 넣거나 문자열 한도를 넘겨 재출력을 받았다. agents/v2-specialist.md 지시문에 읽기 전용이면 files 금지와 문자열 한도 표를 못 박는 것이 다음 하네스 작업 후보다(harness-docs-module-count 의 잔여 제한과 같음)` (WI-2026-09-17-harness-doc-budget 에 남은 부채)
+2. 부채 정리: 원본 예제 assets/example-*.html 은 authorization 30분 안에 복사하지 못해 동봉하지 않았다. 유형 참조의 Examples 줄이 없는 파일을 가리키므로 다음 작업에서 references/ 에서 복사하거나 그 줄을 지운다 — `/vais 원본 예제 assets/example-*.html 은 authorization 30분 안에 복사하지 못해 동봉하지 않았다. 유형 참조의 Examples 줄이 없는 파일을 가리키므로 다음 작업에서 references/ 에서 복사하거나 그 줄을 지운다` (WI-2026-09-17-harness-diagram-skill 에 남은 부채)
+3. 부채 정리: diagram export CLI 는 실행 중 캐시(4.1.0)에 없어 테스트로만 확인했다. push 와 플러그인 4.2.0 업데이트 뒤 실제 사용이 첫 실행이다 — `/vais diagram export CLI 는 실행 중 캐시(4.1.0)에 없어 테스트로만 확인했다. push 와 플러그인 4.2.0 업데이트 뒤 실제 사용이 첫 실행이다` (WI-2026-09-17-harness-diagram-skill 에 남은 부채)
 
 ## 내 메모
 

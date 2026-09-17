@@ -1,0 +1,26 @@
+skills/diagram/ 은 cathrynlavery/diagram-design (https://github.com/cathrynlavery/diagram-design,
+main@9874ad73813715fc36875e45afd9cd94c68f3c3f, 2026-09-17 가져옴) 의 skills/diagram-design/ 을
+VAIS Code 사정에 맞게 고쳐 쓴 스냅샷이다. 원본 라이선스(MIT)는 아래와 같고, 수정본에도 그대로 적용된다.
+수정: 유형 40종 → 11종, 브랜드 온보딩·가져오기·기하 검증 스크립트 제거, 저장 위치·PNG 내보내기를 VAIS runtime 으로 교체, 한국어 지시문.
+
+MIT License
+
+Copyright (c) 2025 Cathryn Lavery
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

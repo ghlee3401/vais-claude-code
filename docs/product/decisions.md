@@ -1,9 +1,21 @@
 # 제품 노트 — 왜
 
-> 자동 생성 (`.vais/v2/ledger.jsonl` 98건). 결정·피드백·취향·부채·리스크·이정표 순.
+> 자동 생성 (`.vais/v2/ledger.jsonl` 122건). 결정·피드백·취향·부채·리스크·이정표 순.
 
-## 결정 (35)
+## 결정 (47)
 
+- 2026-09-17 09:08 · WI-2026-09-17-harness-diagram-skill · 원본은 통째로 동기화하지 않고 우리 사정에 맞게 고친 스냅샷으로 갖는다. 출처는 파일 머리와 `LICENSE`(MIT) 로 남기고, 갱신은 필요할 때 사람이 원본과 비교한다. 릴리스가 없어 커밋 해시로 고정한다. — Design revision 1 에서 확정
+- 2026-09-17 09:08 · WI-2026-09-17-harness-diagram-skill · 유형은 개발 문서용 11종만 남긴다: 흐름도·유저 저니·스윔레인·시퀀스·상태 기계·구조도·상위 구조·데이터 흐름·ER·타임라인·트리. 나머지 29종은 요청 시 "지원 목록 + 가장 가까운 유형" 으로 안내한다. — Design revision 1 에서 확정
+- 2026-09-17 09:08 · WI-2026-09-17-harness-diagram-skill · Python·Playwright·가져오기·기하 검증은 가져오지 않는다. PNG 는 기존 Chrome 캡처, SVG 는 Node 추출 20줄로 대신한다. — Design revision 1 에서 확정
+- 2026-09-17 09:08 · WI-2026-09-17-harness-diagram-skill · 독립 사용의 산출 폴더는 `docs/diagrams/`(`vais.config.json > diagrams.dir`), `/vais diagram` 이 그 폴더를 그 턴의 write scope 에 넣는다. `/vais` 없는 요청은 저장하지 않고 안내한다. — Design revision 1 에서 확정
+- 2026-09-17 09:08 · WI-2026-09-17-harness-diagram-skill · 3단계 Design 은 흐름도 안을 그림으로 보이고, Do 의 흐름 파일은 `.html` 을 권장하되 `.mmd` 도 계속 받는다(기존 제품 호환). — Design revision 1 에서 확정
+- 2026-09-17 09:08 · WI-2026-09-17-harness-diagram-skill · 버전 4.2.0 (새 스킬·명령·계약 키). — Design revision 1 에서 확정
+- 2026-09-17 08:56 · WI-2026-09-17-harness-diagram-skill · 독립 사용의 산출 폴더는 `docs/diagrams/`(`vais.config.json > diagrams.dir`), `/vais diagram` 이 그 폴더를 그 턴의 write scope 에 넣는다. `/vais` 없는 요청은 저장하지 않고 안내한다. — Design revision 1 에서 확정
+- 2026-09-17 08:56 · WI-2026-09-17-harness-diagram-skill · 3단계 Design 은 흐름도 안을 그림으로 보이고, Do 의 흐름 파일은 `.html` 을 권장하되 `.mmd` 도 계속 받는다(기존 제품 호환). — Design revision 1 에서 확정
+- 2026-09-17 08:56 · WI-2026-09-17-harness-diagram-skill · 버전 4.2.0 (새 스킬·명령·계약 키). — Design revision 1 에서 확정
+- 2026-09-17 08:56 · WI-2026-09-17-harness-diagram-skill · 원본은 통째로 동기화하지 않고 우리 사정에 맞게 고친 스냅샷으로 갖는다. 출처는 파일 머리와 `LICENSE`(MIT) 로 남기고, 갱신은 필요할 때 사람이 원본과 비교한다. 릴리스가 없어 커밋 해시로 고정한다. — Design revision 1 에서 확정
+- 2026-09-17 08:56 · WI-2026-09-17-harness-diagram-skill · 유형은 개발 문서용 11종만 남긴다: 흐름도·유저 저니·스윔레인·시퀀스·상태 기계·구조도·상위 구조·데이터 흐름·ER·타임라인·트리. 나머지 29종은 요청 시 "지원 목록 + 가장 가까운 유형" 으로 안내한다. — Design revision 1 에서 확정
+- 2026-09-17 08:56 · WI-2026-09-17-harness-diagram-skill · Python·Playwright·가져오기·기하 검증은 가져오지 않는다. PNG 는 기존 Chrome 캡처, SVG 는 Node 추출 20줄로 대신한다. — Design revision 1 에서 확정
 - 2026-09-17 08:14 · WI-2026-09-17-harness-doc-budget · 설정 키는 최상위 `documentBudgets` 다(`workflowV2` 아래가 아님). 부분 덮어쓰기를 허용하고, 잘못된 값은 그 칸만 무시해 닫힘으로 동작한다. — Design revision 1 에서 확정
 - 2026-09-17 08:14 · WI-2026-09-17-harness-doc-budget · 버전은 4.1.0. 하네스 판정이 바뀌므로 minor 다. — Design revision 1 에서 확정
 - 2026-09-17 08:14 · WI-2026-09-17-harness-doc-budget · 예산 원칙은 유지하고 값만 올린다. 기준은 "지난 실측 최대가 새 한도의 75% 이하" 이며 1.4배·1024 배수로 정했다. 80자 복사 금지·extended 예외 승인은 그대로. — Design revision 1 에서 확정
@@ -40,8 +52,13 @@
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 테스트는 stub 렌더러로 결정적으로 돌리고 receipt 에 stub 임을 남긴다. 실제 렌더 검증은 Chrome 이 있는 환경의 별도 테스트와 사용자 확인으로 한다. — Design revision 1 에서 확정
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 취향은 제품 전체 속성이라 feature 를 넘어 주입한다. — Design revision 1 에서 확정
 
-## 부채 (30)
+## 부채 (35)
 
+- 2026-09-17 09:33 · WI-2026-09-17-harness-diagram-skill · 원본 예제 assets/example-*.html 은 authorization 30분 안에 복사하지 못해 동봉하지 않았다. 유형 참조의 Examples 줄이 없는 파일을 가리키므로 다음 작업에서 references/ 에서 복사하거나 그 줄을 지운다 — WI-2026-09-17-harness-diagram-skill Report 의 잔여 제한
+- 2026-09-17 09:33 · WI-2026-09-17-harness-diagram-skill · diagram export CLI 는 실행 중 캐시(4.1.0)에 없어 테스트로만 확인했다. push 와 플러그인 4.2.0 업데이트 뒤 실제 사용이 첫 실행이다 — WI-2026-09-17-harness-diagram-skill Report 의 잔여 제한
+- 2026-09-17 09:33 · WI-2026-09-17-harness-diagram-skill · 하네스 빈틈: Design 이 시킨 사용자 행동(clone, .gitignore)이 두 번 저장소 변경 감지로 잡혀 Do 가 Design 으로 되돌아갔고, authorization 30분(workflowV2.authorizationTtlMs)이 큰 Do 에 짧아 한 번 만료됐다. drift 예외 경로와 TTL 기본값 상향이 다음 하네스 작업 후보다 — WI-2026-09-17-harness-diagram-skill Report 의 잔여 제한
+- 2026-09-17 09:33 · WI-2026-09-17-harness-diagram-skill · 독립 QA specialist 가 네 작업 연속으로 handoff 에 files 항목을 넣거나 문자열 한도를 넘겨 재출력을 받았다(이번 3회). agents/v2-specialist.md 지시문에 출력 계약 표와 읽기 전용 files 금지를 못 박는 것이 1순위 후보다 — WI-2026-09-17-harness-diagram-skill Report 의 잔여 제한
+- 2026-09-17 09:33 · WI-2026-09-17-harness-diagram-skill · docs/harness/design.md 대응표 행에 docs/diagrams 문자열이 없다(내용은 있음). 다음 문서 작업에서 한 단어 보강 — WI-2026-09-17-harness-diagram-skill Report 의 잔여 제한
 - 2026-09-17 08:26 · WI-2026-09-17-harness-doc-budget · 새 예산은 push 후 플러그인을 4.1.0 으로 업데이트해야 이 저장소에서도 적용된다. 실행 중 캐시는 4.0.1 — WI-2026-09-17-harness-doc-budget Report 의 잔여 제한
 - 2026-09-17 08:26 · WI-2026-09-17-harness-doc-budget · 독립 QA specialist 가 세 작업 연속으로 읽기 전용 handoff 에 files 항목을 넣거나 문자열 한도를 넘겨 재출력을 받았다. agents/v2-specialist.md 지시문에 읽기 전용이면 files 금지와 문자열 한도 표를 못 박는 것이 다음 하네스 작업 후보다(harness-docs-module-count 의 잔여 제한과 같음) — WI-2026-09-17-harness-doc-budget Report 의 잔여 제한
 - 2026-09-17 08:26 · WI-2026-09-17-harness-doc-budget · 예외 승인됐던 extended Design 28,280B 는 새 한도 26,624B 도 넘어 예외 절차가 그대로 필요하다 — WI-2026-09-17-harness-doc-budget Report 의 잔여 제한
@@ -73,12 +90,19 @@
 - 2026-09-16 09:08 · WI-2026-09-16-ui-loop · do/blocked(수정 상한) 에서 수정 문장은 적용되지 않고 확인·취소만 유효하다. blocked 경로는 단위 테스트로만 검증(장면 C 미포함) — WI-2026-09-16-ui-loop Report 의 잔여 제한
 - 2026-09-16 08:43 · WI-2026-09-16-ui-loop · QA FAIL: independent-qa-handoff — 독립 QA 가 independent-qa-handoff 를 실패로 판정했다 (수정 회차 1)
 
-## 리스크 (1)
+## 리스크 (3)
 
+- 2026-09-17 09:01 · WI-2026-09-17-harness-diagram-skill · Stop 잠금 경고 (통과): 기록되지 않은 변경 1개: docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/main.md — 같은 턴에서 두 번째 Stop — 차단 대신 기록
+- 2026-09-17 08:53 · WI-2026-09-17-harness-diagram-skill · Stop 잠금 경고 (통과): 기록되지 않은 변경 1개: references/diagram-design/ — 같은 턴에서 두 번째 Stop — 차단 대신 기록
 - 2026-09-16 11:16 · WI-2026-09-16-feature-bug-kinds · Do 준비 미달 1회: test — readiness 검사가 실패했다
 
-## 이정표 (32)
+## 이정표 (37)
 
+- 2026-09-17 09:33 · WI-2026-09-17-harness-diagram-skill · 작업 완료 — 다이어그램 스킬 흡수 — Report 가 확정되어 동결됐다
+- 2026-09-17 09:32 · WI-2026-09-17-harness-diagram-skill · 최종 승인 — 다이어그램 스킬 흡수 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
+- 2026-09-17 09:08 · WI-2026-09-17-harness-diagram-skill · Design 승인 (revision 1) — 다이어그램 스킬 흡수 — 사용자가 Design 을 승인했다
+- 2026-09-17 08:56 · WI-2026-09-17-harness-diagram-skill · Design 승인 (revision 1) — 다이어그램 스킬 흡수 — 사용자가 Design 을 승인했다
+- 2026-09-17 08:48 · WI-2026-09-17-harness-diagram-skill · Plan 승인 (revision 1) — 다이어그램 스킬 흡수 — 사용자가 Plan 을 승인했다
 - 2026-09-17 08:26 · WI-2026-09-17-harness-doc-budget · 작업 완료 — 문서 예산 상향과 설정화 — Report 가 확정되어 동결됐다
 - 2026-09-17 08:26 · WI-2026-09-17-harness-doc-budget · 최종 승인 — 문서 예산 상향과 설정화 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
 - 2026-09-17 08:14 · WI-2026-09-17-harness-doc-budget · Design 승인 (revision 1) — 문서 예산 상향과 설정화 — 사용자가 Design 을 승인했다

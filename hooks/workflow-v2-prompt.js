@@ -17,6 +17,7 @@ const { deterministicSlug } = require('../lib/workflow/v2/naming');
 const { PHASE_FOLDERS } = require('../lib/workflow/v2/document-manager');
 const { suggestKind, getKind, kindOf, isStageKind, stageOfKind } = require('../lib/workflow/v2/chain-registry');
 const { assertStageEntry } = require('../lib/workflow/v2/id-chain');
+const { loadDiagramConfig } = require('../lib/workflow/v2/config');
 const ledger = require('../lib/workflow/v2/ledger');
 
 const LEDGER_INJECT_KINDS = Object.freeze(['feedback', 'preference', 'debt']);
@@ -172,10 +173,13 @@ function stagePhaseLines(item, kind, stage, sessionId) {
     ],
     design: [
       `Design 은 고르기 목록이다: "## 안 1" … (규모별 상한 compact 1 · standard 2 · extended 3), "쓰기 범위" 에 ${kind.autoWriteScopes.join(', ')}, readiness·review check 는 \`stage-document\`, rollback 한 줄.`,
+      ...(Array.isArray(stage.diagram) && stage.diagram.length > 0 ? [
+        `안마다 그림을 \`skills/diagram\` 규칙(유형 ${stage.diagram.join('·')})으로 \`docs/work-items/${item.primaryFeature}/${String(item.id).replace(/^WI-/, '')}/02-design/options/N/flow.html\` 에 그리고 \`${INTERNAL_COMMAND} screens capture --id ${item.id} --session ${sessionId} --target <그 html> --out <같은 폴더>\` 로 PNG 를 찍어 Read 로 열어 응답에 보인다. 말로 설명하지 않는다.`,
+      ] : []),
       `\`${INTERNAL_COMMAND} design present --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <design-draft> ${scopes} --readiness-check stage-document --review-check stage-document\`을 한 번 실행한다.`,
     ],
     do: [
-      `정본 \`${stage.file}\` 을 쓴다: frontmatter (schema: vais-stage/v1, stage: ${stage.id}, status: draft) + 항목마다 "### ${stage.idPrefix}-001${stage.parents?.required ? ' ← <부모 ID>' : ''}" 제목과 "| 항목 | 내용 |" 표. 필수 항목: ${stage.requiredFields.join(', ')}.${stage.documentSections ? ` 문서 섹션(## 제목): ${stage.documentSections.join(', ')}.` : ''}${stage.parents?.allowed?.length ? ` 부모는 승인된 상위 ID 만 (허용 접두: ${stage.parents.allowed.join(', ')}).` : ''}${stage.artifactDir ? ` 산출물(${(stage.artifactFields || []).join(', ')})은 \`${stage.artifactDir}/\` 아래 실제 파일이어야 한다.` : ''}`,
+      `정본 \`${stage.file}\` 을 쓴다: frontmatter (schema: vais-stage/v1, stage: ${stage.id}, status: draft) + 항목마다 "### ${stage.idPrefix}-001${stage.parents?.required ? ' ← <부모 ID>' : ''}" 제목과 "| 항목 | 내용 |" 표. 필수 항목: ${stage.requiredFields.join(', ')}.${stage.documentSections ? ` 문서 섹션(## 제목): ${stage.documentSections.join(', ')}.` : ''}${stage.parents?.allowed?.length ? ` 부모는 승인된 상위 ID 만 (허용 접두: ${stage.parents.allowed.join(', ')}).` : ''}${stage.artifactDir ? ` 산출물(${(stage.artifactFields || []).join(', ')})은 \`${stage.artifactDir}/\` 아래 실제 파일이어야 한다.` : ''}${Array.isArray(stage.diagram) && stage.diagram.length > 0 ? ` 흐름 파일은 \`skills/diagram\` 규칙으로 그린 \`.html\` 을 권장하고(\`do ready\` 가 PNG 로 렌더), 기존 \`.mmd\` 도 그대로 받는다.` : ''}`,
       `그 뒤 짧은 Do 본문을 쓰고 \`${INTERNAL_COMMAND} do ready --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <do-draft>\` 를 한 번 실행한다. transaction 이 \`stage-document\` 검사(형식·부모·산출물·예산·커버리지)를 실행한다.`,
     ],
     report: [
@@ -309,9 +313,16 @@ function quote(value) {
 // Guidance for the user commands (docs/harness/design.md §7). Read commands run an
 // unauthenticated CLI query and show its sentence verbatim; write commands run the CLI only
 // because this turn's user sentence became a confirmation token in the session authorization.
-function commandGuidance(route, sessionId) {
+function commandGuidance(route, sessionId, options = {}) {
   const cli = INTERNAL_COMMAND;
   switch (route.action) {
+    case 'diagram': {
+      const dir = options.diagramsDir || 'docs/diagrams';
+      return [
+        `사용자가 다이어그램을 요청했다: ${quote(route.request)}. \`skills/diagram/SKILL.md\` 를 Skill 도구(\`diagram\`)로 켜고 그 규칙대로 그린다. 저장 위치는 \`${dir}/<slug>.html\` 한 파일이며, runtime 이 이 턴의 write scope 에 \`${dir}/**\` 를 넣었다(활성 Work item 이 있으면 그 phase 폴더도 유지).`,
+        `요청에 svg·png 가 있으면 \`${cli} diagram export --session ${sessionId} --file ${dir}/<slug>.html [--svg] [--png]\` 을 한 번 실행하고, 만들어진 PNG 는 Read 로 열어 응답에 보인다. 요청에 없는 내보내기는 만들지 않는다. Work item 상태는 바뀌지 않는다.`,
+      ];
+    }
     case 'status':
       return [`\`${cli} status\` 를 한 번 실행해 결과의 \`summary\` 문장을 그대로 보인다. 대기 요청(pending)이 있으면 함께 알린다.`, '이 action은 읽기 전용이다.'];
     case 'explain':
@@ -361,7 +372,7 @@ function buildContext(route, item, leaseError, sessionId = '<session>', options 
     lines.push(`\`${INTERNAL_COMMAND} doctor\` 를 한 번 실행해 점검표를 사람 말로 요약해 보여준다. fail 항목은 fix 문구를 그대로 안내한다.`, '이 action은 읽기 전용이다.');
     return lines.join('\n');
   }
-  const commandLines = commandGuidance(route, sessionId);
+  const commandLines = commandGuidance(route, sessionId, { diagramsDir: options.diagramsDir });
   if (commandLines) {
     lines.push(...commandLines);
     return lines.join('\n');
@@ -538,12 +549,14 @@ function main() {
       requestSlug: requestSlugFor(route),
       stageConfirmations: route.action === 'stage-confirm-unchanged' ? [{ item: route.item, parent: route.parent }] : [],
       confirmations: confirmationsFor(route),
-      allowedPaths: defaultAllowedPaths(active),
+      // `/vais diagram` adds the stand-alone drawing folder for this turn only (skills/diagram §10).
+      allowedPaths: [...defaultAllowedPaths(active), ...(route.action === 'diagram' ? [`${loadDiagramConfig(projectRoot).dir}/**`] : [])],
       allowedCommands: [INTERNAL_COMMAND],
     });
     return emit(buildContext(route, active, null, sessionId, {
       kindSuggestion: kindSuggestionFor(projectRoot, route),
       ledgerLines: ledgerLinesFor(projectRoot, active),
+      diagramsDir: loadDiagramConfig(projectRoot).dir,
     }));
   } catch (error) {
     authStore.revoke(sessionId);

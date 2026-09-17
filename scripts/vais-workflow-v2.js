@@ -27,6 +27,7 @@ const { chainStatus, confirmUnchanged, reindex } = require('../lib/workflow/v2/i
 const { capture } = require('../lib/workflow/v2/screen-capture');
 const { withApp } = require('../lib/workflow/v2/app-runner');
 const { loadUiConfig } = require('../lib/workflow/v2/config');
+const { exportDiagram } = require('../lib/workflow/v2/diagram');
 const { statusSummary } = require('../lib/workflow/v2/briefing');
 const { explain } = require('../lib/workflow/v2/explain');
 const { propose } = require('../lib/workflow/v2/proposal');
@@ -572,6 +573,25 @@ function stageConfirm(projectRoot, options) {
   return confirmUnchanged(projectRoot, item, parent);
 }
 
+// `diagram export` turns one skills/diagram HTML into a stand-alone .svg and/or .png next to it.
+// Any current session authorization works (a `/vais diagram` turn or a Work item phase); the file
+// must sit inside that authorization's write scope, so the guard's rule holds for exports too.
+function diagramExport(projectRoot, options) {
+  const sessionId = requireOption(options, 'session');
+  const file = requireOption(options, 'file');
+  const authorization = new AuthorizationStore(projectRoot).get(sessionId);
+  if (!authorization) throw new Error('diagram export requires a current /vais session authorization');
+  const relative = normalizeRelative(projectRoot, file);
+  if (!relative) throw new Error('--file must be a project file');
+  if (!(authorization.allowedPaths || []).some(scope => scopeWithin(relative, scope))) {
+    throw new Error(`--file is outside the approved write scope (${(authorization.allowedPaths || []).join(', ') || '없음'})`);
+  }
+  const wantSvg = options.svg === true || options.svg === 'true';
+  const wantPng = options.png === true || options.png === 'true';
+  if (!wantSvg && !wantPng) throw new Error('--svg 또는 --png 중 하나는 있어야 한다');
+  return exportDiagram(projectRoot, relative, { svg: wantSvg, png: wantPng });
+}
+
 // `screens capture` photographs one target (project file or http(s) URL) at desktop and mobile
 // size into a folder inside the current phase of the authorized Work item. Design options and
 // ad-hoc checks use it; `do ready` captures rounds on its own.
@@ -729,6 +749,7 @@ function execute(argv = process.argv.slice(2), projectRoot = null) {
   else if (command === 'stage' && subcommand === 'confirm') result = stageConfirm(root, options);
   else if (command === 'stage' && subcommand === 'reindex') result = { schema: 'chain-index/v1', ...reindex(root) };
   else if (command === 'screens' && subcommand === 'capture') result = screensCapture(root, options);
+  else if (command === 'diagram' && subcommand === 'export') result = diagramExport(root, options);
   else if (command === 'event') result = applyEvent(root, options);
   else if (command === 'pending') result = queuePending(root, options);
   else if (command === 'assignment') result = buildAssignment(root, options);
@@ -777,6 +798,7 @@ module.exports = {
   assertNewFeatureSlug,
   stageConfirm,
   screensCapture,
+  diagramExport,
   ledgerAdd,
   ledgerList,
   preparePlan,

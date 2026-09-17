@@ -1,0 +1,67 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-17-harness-diagram-skill",
+  "assignmentId": "AS-838c2a93-2dab-4f8e-8d7d-273cb3126d0c",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "55c63cb92f4943789fa16e6c5860647275ecaa81bad58f3383f58d19b7d0334c",
+  "handoffDigest": "e0d4f2c0afed370c746e7dcd7e8444a2dfac100b412a1d3463afde756fdd4dee",
+  "persistedAt": "2026-09-17T09:28:08.627Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "TC-001~005 모두 증거와 일치. npm test 241/241, regression 10/10, lint 0, 버전 8곳 4.2.0, 실제 Chrome PNG 존재. 잔여: 예제 HTML 미동봉, design.md 에 docs/diagrams 없음",
+    "decisions": [
+      "예제 HTML 누락은 TC 범위 밖, 위험으로 기록",
+      "design.md docs/diagrams 부재는 대응표 행 요건 충족",
+      "validator·doctor 는 Do receipt 로 대체"
+    ],
+    "behavior": {
+      "inputs": [
+        "skills/diagram 17 파일",
+        "diff 21 파일 + 신규 4",
+        "tests/v2-diagram.test.js"
+      ],
+      "outputs": [
+        "test 241 pass, regression 10",
+        "SKILL.md 16854B, 금지어 0",
+        "evidence/diagram/desktop.png"
+      ],
+      "errors": [
+        "export scope 밖 거부 확인",
+        "diagrams.dir 오류값 기본 복귀",
+        "/vais 없는 턴 authorization 해제"
+      ]
+    },
+    "evidence": [
+      "tests/v2-diagram.test.js (TC-001~004 ok 22~25), tests/regression/scene-a-first-product.test.js (S-002.png, S-001.mmd)",
+      "03-do/evidence/checks/plugin-validator.json (pass)",
+      "03-do/evidence/diagram/desktop.png (VAIS 루프 흐름도 실제 렌더)"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005"
+    ],
+    "risks": [
+      "type-*.md 11개가 없는 example 참조",
+      "design.md 행에 docs/diagrams 없음",
+      "diagram export 실사용 미실행"
+    ],
+    "unverified": [
+      "npm run doctor (명령 scope 밖)",
+      "plugin-validator 직접 재실행",
+      "Chrome 없는 환경 PNG 생략 안내"
+    ],
+    "recommendedChecks": [
+      "plugin-validator",
+      "test",
+      "secret-scan"
+    ]
+  }
+}

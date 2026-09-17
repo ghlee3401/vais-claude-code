@@ -1,5 +1,6 @@
 node_modules/
 .vais/
+/references/
 .claude/settings.local.json
 .claude/settings.json
 .claude/agent-memory/

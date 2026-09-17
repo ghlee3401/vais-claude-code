@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/01-plan/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 5771B is within the 9216B standard budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/01-plan/main.md"
+  ]
+}

@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.2.0] - 2026-09-17
+
+> `harness-diagram-skill`. 그림 그리는 규칙을 플러그인에 넣는다. 사용자는 어느 대화에서든 같은 규칙으로 다이어그램을 얻고, 3단계 화면 정의서의 흐름도는 Mermaid 텍스트 대신 그림으로 확인한다.
+
+### Added
+
+- **`skills/diagram/`** — [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design)(MIT, main@9874ad7)의 `skills/diagram-design/` 을 우리 사정에 맞게 고친 스냅샷. 유형 40종 → 개발 문서용 11종(흐름도·유저 저니·스윔레인·시퀀스·상태 기계·구조도·상위 구조·데이터 흐름·ER·타임라인·트리), 한국어 SKILL.md(24KB 이하), style-guide·semantic-patterns·템플릿 2. 브랜드 온보딩·가져오기(draw.io·Mermaid·Excalidraw)·Python 검증·Playwright 는 가져오지 않았다. 출처는 파일 머리와 `skills/diagram/LICENSE`
+- **`/vais diagram <요청>`** — 라우터 명령 하나. 상태 머신은 건드리지 않고 그 턴의 write scope 에 `docs/diagrams/**`(`vais.config.json > diagrams.dir`)를 넣는다. `/vais` 없는 "그려줘" 는 저장하지 않고 안내한다
+- **`diagram export --session … --file <html> [--svg] [--png]`** — `lib/workflow/v2/diagram.js`. SVG 는 HTML 의 첫 `<svg>` 를 꺼내 Google Fonts `@import` 를 넣은 독립 파일, PNG 는 기존 Chrome 캡처 재사용. 파일은 authorization 의 write scope 안이어야 한다
+- **3단계 흐름 파일 렌더** — `contracts/chain-stages.json` stage-screens 에 `renderArtifacts: true`·`diagram: ["flowchart","journey"]`. `.html` 흐름 파일은 `do ready` 가 PNG 로 찍고 `.mmd` 는 그대로 통과. prompt hook 이 3단계 Design 에 "안마다 `02-design/options/N/flow.html` + `screens capture` PNG" 를, Do 에 "`.html` 권장·`.mmd` 허용" 을 지시
+- `.gitignore` 에 `references/`(외부 원본 인박스). 테스트 `tests/v2-diagram.test.js`, 회귀 장면 A 에 html 흐름 파일 케이스(`S-002.html`)
+
 ## [4.1.0] - 2026-09-17
 
 > `harness-doc-budget`. 단계 문서 byte 예산이 낮아 Design 이 반복해서 한도에 붙던 문제(실측 55개 중 8개가 95% 초과)를 풀고, 프로젝트가 예산을 조정할 수 있게 한다.

@@ -41,6 +41,8 @@
       "file": "docs/product/03-screens.md",
       "artifactDir": "docs/product/flows",
       "artifactFields": ["흐름 파일"],
+      "renderArtifacts": true,
+      "diagram": ["flowchart", "journey"],
       "requiredFields": ["담는 기능", "이동 조건", "흐름 파일"],
       "parents": { "required": true, "allowed": ["F"] },
       "coverage": "F",

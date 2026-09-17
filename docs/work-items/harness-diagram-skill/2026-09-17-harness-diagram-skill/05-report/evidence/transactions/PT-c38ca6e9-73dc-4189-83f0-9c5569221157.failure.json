@@ -1,0 +1,9 @@
+{
+  "schema": "phase-transaction-failure/v1",
+  "transactionId": "PT-c38ca6e9-73dc-4189-83f0-9c5569221157",
+  "workItemId": "WI-2026-09-17-harness-diagram-skill",
+  "phase": "report",
+  "code": "REPORT_OUTCOME_TOO_LONG",
+  "finding": "Report --outcome 은 500자 이내여야 한다 (현재 543자). 세부는 Review·Do 문서에 있으므로 요약만 적는다",
+  "recordedAt": "2026-09-17T09:32:49.667Z"
+}

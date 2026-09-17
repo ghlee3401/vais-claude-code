@@ -1,0 +1,19 @@
+{
+  "check": "independent-qa-handoff",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [],
+  "requirements": [
+    "REQ-001",
+    "REQ-002",
+    "REQ-003",
+    "REQ-004",
+    "REQ-005"
+  ],
+  "summary": "Independent QA completed without a failure verdict",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/04-review/evidence/handoffs/AS-838c2a93-2dab-4f8e-8d7d-273cb3126d0c.json"
+  ]
+}

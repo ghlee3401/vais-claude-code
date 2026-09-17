@@ -2,7 +2,7 @@
 
 > **이 파일의 책임**: Claude Code 전용 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 `ONBOARDING.md`(5분), 사용법은 `README.md`.
 >
-> 상태: **4.1.0 (2026-09-17) — 로드맵 H1~H8 완료, 문서 예산 상향·설정화.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md`. 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다. 이 저장소 자체 작업의 kind 는 `harness` 다.
+> 상태: **4.2.0 (2026-09-17) — 로드맵 H1~H8 완료, 문서 예산 상향·설정화, 다이어그램 스킬 흡수.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md`. 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다. 이 저장소 자체 작업의 kind 는 `harness` 다.
 
 ## 이 플러그인이 만드는 것
 
@@ -21,6 +21,7 @@
 vais-claude-code/
 ├── skills/vais/SKILL.md      # /vais managed entry (enforce 전용)
 ├── skills/brief/             # /vais brief — 임원 보고서 (워크플로우 독립)
+├── skills/diagram/           # 다이어그램 11종 (diagram-design MIT 스냅샷) — /vais diagram · 3단계 흐름도 · 요청 시 SVG·PNG
 ├── agents/v2-specialist.md   # 유일한 위임 대상 Agent
 ├── hooks/
 │   ├── hooks.json            # SessionStart · UserPromptSubmit · PreToolUse · PostToolUse · Stop 5종 등록
@@ -76,6 +77,7 @@ vais-claude-code/
 14. **Bash** — 한 번에 한 명령. `&&`, `|`, `;`, 리다이렉션, `$( )` 금지. 읽기는 Read/Grep 우선.
 15. **위험 명령 금지** — `rm -rf`, `git push --force`, `git commit --no-verify`. 민감 정보는 환경 변수로만.
 16. **사용자 명령** — `/vais 상태`·`설명`·`제안`·`기록 보기`·`doctor` 는 읽기 전용이며 hook 이 지정한 CLI(`status`·`explain`·`propose`·`ledger list`·`doctor`)를 실행해 결과 문장을 그대로 보인다. `/vais 저장`·`되돌리기`·`기록` 은 두 단계: 첫 명령은 제안만, 사용자가 확인 문구(`/vais 저장 확인`, `/vais 되돌리기 확인: <대상>`, `/vais 기록 <종류> <내용>`)를 직접 치면 runtime 이 토큰을 발급하고 `save commit`·`revert commit`·`ledger add` 가 실행된다. AI 가 `git commit` 을 직접 치거나 확인 문구를 대신 쓰지 않는다. push 는 사용자가 한다.
+17. **다이어그램** — 그림은 `skills/diagram/SKILL.md` 규칙(11종, HTML + 인라인 SVG 한 파일)으로만 그린다. `/vais diagram <요청>` 은 그 턴의 write scope 에 `docs/diagrams/**`(`vais.config.json > diagrams.dir`)를 넣고 Work item 상태는 바꾸지 않는다. `/vais` 없는 "그려줘" 는 저장하지 않고 `/vais diagram` 을 안내한다. 3단계 화면 정의서의 흐름도 안은 `02-design/options/N/flow.html` + `screens capture` PNG 로 보이고, Do 의 흐름 파일은 `.html`(권장, `do ready` 가 PNG 렌더) 또는 `.mmd`. SVG·PNG 내보내기는 요청 시 `diagram export --file … --svg --png` 한 번. Python·Playwright 는 쓰지 않는다.
 
 ## mode 와 비상 스위치
 

@@ -1,0 +1,15 @@
+{
+  "check": "transient-drafts",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill"
+  ],
+  "requirements": [
+    "REQ-025"
+  ],
+  "summary": "No transient draft Markdown remains",
+  "findings": [],
+  "evidence": []
+}

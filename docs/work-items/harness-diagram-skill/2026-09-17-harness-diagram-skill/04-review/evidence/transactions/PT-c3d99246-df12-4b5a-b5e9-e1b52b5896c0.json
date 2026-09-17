@@ -1,0 +1,141 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-c3d99246-df12-4b5a-b5e9-e1b52b5896c0",
+  "workItemId": "WI-2026-09-17-harness-diagram-skill",
+  "phase": "review",
+  "action": "decide",
+  "gate": {
+    "gate": "review",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "passed": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-17T09:31:11.449Z"
+  },
+  "checks": [
+    {
+      "check": "review-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/04-review/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical review document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 2595B is within the 9216B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/04-review/main.md"
+      ]
+    },
+    {
+      "check": "independent-qa-handoff",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [],
+      "requirements": [
+        "REQ-001",
+        "REQ-002",
+        "REQ-003",
+        "REQ-004",
+        "REQ-005"
+      ],
+      "summary": "Independent QA completed without a failure verdict",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/04-review/evidence/handoffs/AS-838c2a93-2dab-4f8e-8d7d-273cb3126d0c.json"
+      ]
+    },
+    {
+      "check": "secret-scan",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "skills/diagram/**",
+        "contracts/chain-stages.json",
+        "schemas/chain-stage.schema.json",
+        "lib/workflow/v2/router.js",
+        "lib/workflow/v2/write-policy.js",
+        "lib/workflow/v2/config.js",
+        "lib/workflow/v2/id-chain.js",
+        "lib/workflow/v2/diagram.js",
+        "lib/workflow/v2/index.js",
+        "hooks/workflow-v2-prompt.js",
+        "scripts/vais-workflow-v2.js",
+        "vais.config.json",
+        ".gitignore",
+        "tests/**",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "docs/harness/design.md",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        ".claude-plugin/**",
+        "docs/diagrams/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/04-review/evidence/logs/secret-scan.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "review",
+    "status": "waiting-user"
+  }
+}

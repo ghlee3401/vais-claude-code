@@ -117,6 +117,10 @@ describe('scene A — a first product walks all ten stages', () => {
 
     const status = idChain.chainStatus(root);
     assert.deepEqual(status.stages.map(stage => stage.status), Array(10).fill('approved'));
+    // Stage 3 flow files: the Mermaid one passes untouched, the skills/diagram HTML one is rendered to PNG.
+    assert.ok(fs.existsSync(path.join(root, 'docs', 'product', 'flows', 'S-001.mmd')));
+    assert.ok(!fs.existsSync(path.join(root, 'docs', 'product', 'flows', 'S-001.png')));
+    assert.ok(fs.existsSync(path.join(root, 'docs', 'product', 'flows', 'S-002.png')), 'html flow file rendered to PNG');
     assert.deepEqual(status.stale, []);
     assert.equal(Object.keys(idChain.loadChainIndex(root).items).length, 18);
 

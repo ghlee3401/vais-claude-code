@@ -10,6 +10,7 @@
 
 | Work item | Feature | Phase | Status | Updated |
 |---|---|---|---|---|
+| [WI-2026-09-17-harness-diagram-skill — 다이어그램 스킬 흡수](work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/main.md) | harness-diagram-skill | report | completed | 2026-09-17T09:33:02.909Z |
 | [WI-2026-09-17-harness-doc-budget — 문서 예산 상향과 설정화](work-items/harness-doc-budget/2026-09-17-harness-doc-budget/main.md) | harness-doc-budget | report | completed | 2026-09-17T08:26:49.105Z |
 | [WI-2026-09-17-harness-docs-module-count — 모듈 수 표기 통일과 기준 줄 손질](work-items/harness-docs-module-count/2026-09-17-harness-docs-module-count/main.md) | harness-docs-module-count | report | completed | 2026-09-17T07:48:52.999Z |
 | [WI-2026-09-17-harness-readme-status-2 — 하네스 README 상태 표 갱신](work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/main.md) | harness-readme-status-2 | report | completed | 2026-09-17T07:30:37.869Z |

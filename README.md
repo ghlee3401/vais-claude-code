@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-4.1.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-4.2.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -13,7 +13,7 @@
 
 ---
 
-> **현재 상태 (4.1.0, 2026-09-17)**: 로드맵 H1~H8 완료, 문서 예산 상향·설정화(`documentBudgets`). 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌고, 쓰이지 않던 디자인 시스템 MCP·vendor·브랜드 카탈로그는 제거됐다(되살림: 커밋 `66d0f6b`). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
+> **현재 상태 (4.2.0, 2026-09-17)**: 로드맵 H1~H8 완료, 문서 예산 상향·설정화(`documentBudgets`), 다이어그램 스킬(`skills/diagram`, `/vais diagram`). 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌고, 쓰이지 않던 디자인 시스템 MCP·vendor·브랜드 카탈로그는 제거됐다(되살림: 커밋 `66d0f6b`). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
 
 ## 무엇인가
 
@@ -164,6 +164,18 @@ Review: 검수 페이지(승인 시안 | 전 | 후) → 독립 QA → /vais 최�
 | stage 단계 문서 | 3,072 | 8,192 | 4,096 | 6,144 | 4,096 |
 
 프로젝트는 `vais.config.json > documentBudgets` 로 칸 단위로 덮어쓴다 (`{ "standard": { "design": 20480 } }`). 양의 정수가 아닌 칸은 무시하고 기본값을 쓰며 `/vais doctor` 가 알린다. 한도를 넘기면 present 가 세 갈래를 말한다: ① 본문 줄이기 ② `--scale` 올리기(extended 는 frontmatter `budget_exception` + 사용자 승인) ③ 설정 올리기.
+
+## 다이어그램 — 그림은 같은 규칙으로
+
+`skills/diagram/` 은 [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design)(MIT)을 이 플러그인 사정에 맞게 고쳐 담은 스킬이다. 흐름도·유저 저니·스윔레인·시퀀스·상태 기계·구조도·상위 구조·데이터 흐름·ER·타임라인·트리 11종을 외부 의존성 없는 HTML + 인라인 SVG 한 파일로 그린다. Python·Playwright·가져오기(draw.io 등)는 가져오지 않았다.
+
+| 상황 | 하는 말 | 저장 위치 |
+|---|---|---|
+| 아무 때나 그림이 필요할 때 | `/vais diagram 회원가입 유저 플로우` | `docs/diagrams/<slug>.html` (`vais.config.json > diagrams.dir`) |
+| `/vais` 없이 "그려줘" | 스킬은 켜지지만 저장은 막힌다 | `/vais diagram …` 을 안내 |
+| 3단계 화면 정의서 | Design 이 흐름도 2~3안을 PNG 로 보이고 `/vais N번` | Do 의 흐름 파일 `docs/product/flows/S-001.html`(`.mmd` 도 허용) → `do ready` 가 PNG 렌더 |
+
+내보내기는 요청할 때만: `diagram export --file <html> --svg --png` 이 같은 폴더에 SVG(Node 추출 + 글꼴 import)와 PNG(설치된 Chrome)를 만든다. 그림은 말로 설명하지 않고 PNG 를 응답에 보인다.
 
 ## 5단계
 

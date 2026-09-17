@@ -1,0 +1,235 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-f2fee779-0203-4fb9-b578-e824f609493d",
+  "workItemId": "WI-2026-09-17-harness-diagram-skill",
+  "phase": "do",
+  "action": "ready",
+  "gate": {
+    "gate": "readiness",
+    "verdict": "READY",
+    "requiredChecks": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "test",
+      "lint",
+      "plugin-validator"
+    ],
+    "passed": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "test",
+      "lint",
+      "plugin-validator"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-17T09:23:51.875Z"
+  },
+  "checks": [
+    {
+      "check": "do-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/03-do/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical do document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 2515B is within the 5120B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/03-do/main.md"
+      ]
+    },
+    {
+      "check": "specialist-handoffs",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "skills/diagram/**",
+        "contracts/chain-stages.json",
+        "schemas/chain-stage.schema.json",
+        "lib/workflow/v2/router.js",
+        "lib/workflow/v2/write-policy.js",
+        "lib/workflow/v2/config.js",
+        "lib/workflow/v2/id-chain.js",
+        "lib/workflow/v2/diagram.js",
+        "lib/workflow/v2/index.js",
+        "hooks/workflow-v2-prompt.js",
+        "scripts/vais-workflow-v2.js",
+        "vais.config.json",
+        ".gitignore",
+        "tests/**",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "docs/harness/design.md",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        ".claude-plugin/**",
+        "docs/diagrams/**"
+      ],
+      "requirements": [],
+      "summary": "All Design-required specialist handoffs are uniquely consumed and complete",
+      "findings": [],
+      "evidence": []
+    },
+    {
+      "check": "test",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "skills/diagram/**",
+        "contracts/chain-stages.json",
+        "schemas/chain-stage.schema.json",
+        "lib/workflow/v2/router.js",
+        "lib/workflow/v2/write-policy.js",
+        "lib/workflow/v2/config.js",
+        "lib/workflow/v2/id-chain.js",
+        "lib/workflow/v2/diagram.js",
+        "lib/workflow/v2/index.js",
+        "hooks/workflow-v2-prompt.js",
+        "scripts/vais-workflow-v2.js",
+        "vais.config.json",
+        ".gitignore",
+        "tests/**",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "docs/harness/design.md",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        ".claude-plugin/**",
+        "docs/diagrams/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/03-do/evidence/logs/test.log"
+      ]
+    },
+    {
+      "check": "lint",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "skills/diagram/**",
+        "contracts/chain-stages.json",
+        "schemas/chain-stage.schema.json",
+        "lib/workflow/v2/router.js",
+        "lib/workflow/v2/write-policy.js",
+        "lib/workflow/v2/config.js",
+        "lib/workflow/v2/id-chain.js",
+        "lib/workflow/v2/diagram.js",
+        "lib/workflow/v2/index.js",
+        "hooks/workflow-v2-prompt.js",
+        "scripts/vais-workflow-v2.js",
+        "vais.config.json",
+        ".gitignore",
+        "tests/**",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "docs/harness/design.md",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        ".claude-plugin/**",
+        "docs/diagrams/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/03-do/evidence/logs/lint.log"
+      ]
+    },
+    {
+      "check": "plugin-validator",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "skills/diagram/**",
+        "contracts/chain-stages.json",
+        "schemas/chain-stage.schema.json",
+        "lib/workflow/v2/router.js",
+        "lib/workflow/v2/write-policy.js",
+        "lib/workflow/v2/config.js",
+        "lib/workflow/v2/id-chain.js",
+        "lib/workflow/v2/diagram.js",
+        "lib/workflow/v2/index.js",
+        "hooks/workflow-v2-prompt.js",
+        "scripts/vais-workflow-v2.js",
+        "vais.config.json",
+        ".gitignore",
+        "tests/**",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "docs/harness/design.md",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        ".claude-plugin/**",
+        "docs/diagrams/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/03-do/evidence/logs/plugin-validator.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "review",
+    "status": "active"
+  }
+}
