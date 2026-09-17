@@ -30,7 +30,7 @@ flowchart TB
     USER["/vais 요청 · 승인"] --> PROMPT["hooks/workflow-v2-prompt.js<br/>라우팅 · 승인 판정 · 단계 지침 · drift · lease · 장부 주입"]
     PROMPT --> SKILL["skills/vais/SKILL.md"]
     SKILL --> CLI["scripts/vais-workflow-v2.js<br/>plan/design present · do ready · review prepare/decide · report finalize · assignment · handoff"]
-    CLI --> LIB["lib/workflow/v2/ (35 모듈)"]
+    CLI --> LIB["lib/workflow/v2/ (38 모듈)"]
     LIB --> STATE[".vais/v2/ work-items.json · authorizations.json · chain-index.json · ledger.jsonl"]
     LIB --> DOCS["docs/work-items/… + docs/product/ (사슬 정본 · 노트 3면)"]
     SKILL --> AGENT["agents/v2-specialist.md"]

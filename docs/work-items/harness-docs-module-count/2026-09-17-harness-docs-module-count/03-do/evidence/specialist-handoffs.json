@@ -1,0 +1,16 @@
+{
+  "check": "specialist-handoffs",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "CLAUDE.md",
+    "ONBOARDING.md",
+    "docs/harness/README.md",
+    "CHANGELOG.md"
+  ],
+  "requirements": [],
+  "summary": "All Design-required specialist handoffs are uniquely consumed and complete",
+  "findings": [],
+  "evidence": []
+}

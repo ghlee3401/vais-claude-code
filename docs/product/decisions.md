@@ -1,9 +1,11 @@
 # 제품 노트 — 왜
 
-> 자동 생성 (`.vais/v2/ledger.jsonl` 81건). 결정·피드백·취향·부채·리스크·이정표 순.
+> 자동 생성 (`.vais/v2/ledger.jsonl` 88건). 결정·피드백·취향·부채·리스크·이정표 순.
 
-## 결정 (30)
+## 결정 (32)
 
+- 2026-09-17 07:36 · WI-2026-09-17-harness-docs-module-count · 모듈 수 표기는 세 문서 모두 "38 모듈" 로 쓰고, 기준(폴더의 js 파일 수, index.js 포함)은 README 기준 줄 한 곳에만 둔다. CLAUDE·ONBOARDING 은 수만 적는다. — Design revision 1 에서 확정
+- 2026-09-17 07:36 · WI-2026-09-17-harness-docs-module-count · 버전은 4.0.1 유지. 이번도 문서만 바뀐다. — Design revision 1 에서 확정
 - 2026-09-17 07:25 · WI-2026-09-17-harness-readme-status-2 · 버전은 4.0.1 을 유지한다. 문서 한 파일 갱신이라 플러그인 동작이 바뀌지 않는다 (사용자 확인 2026-09-17). — Design revision 1 에서 확정
 - 2026-09-17 07:25 · WI-2026-09-17-harness-readme-status-2 · 모듈 수는 `lib/workflow/v2/*.js` 파일 수(index.js 포함)로 센다. CLAUDE.md·ONBOARDING 의 "35 모듈" 과 다른데, 그 두 문서는 이번 범위 밖이라 Report 잔여 제한으로 남긴다. — Design revision 1 에서 확정
 - 2026-09-17 07:25 · WI-2026-09-17-harness-readme-status-2 · CHANGELOG 는 `[Unreleased]` 절로 적는다. 이미 커밋된 `[4.0.1]` 절을 고치지 않는다. — Design revision 1 에서 확정
@@ -35,8 +37,9 @@
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 테스트는 stub 렌더러로 결정적으로 돌리고 receipt 에 stub 임을 남긴다. 실제 렌더 검증은 Chrome 이 있는 환경의 별도 테스트와 사용자 확인으로 한다. — Design revision 1 에서 확정
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 취향은 제품 전체 속성이라 feature 를 넘어 주입한다. — Design revision 1 에서 확정
 
-## 부채 (26)
+## 부채 (27)
 
+- 2026-09-17 07:48 · WI-2026-09-17-harness-docs-module-count · 독립 QA specialist 가 두 작업 연속으로 읽기 전용 handoff 에 files 항목을 넣어 등록이 거부되고 재출력을 받았다. agents/v2-specialist.md 지시문에 읽기 전용이면 files 금지를 못 박는 것이 다음 하네스 작업 후보다 — WI-2026-09-17-harness-docs-module-count Report 의 잔여 제한
 - 2026-09-17 07:30 · WI-2026-09-17-harness-readme-status-2 · CLAUDE.md 와 ONBOARDING.md 의 '35 모듈' 표기가 실제 38 과 다르다(이번 범위 밖, 다음 문서 작업에서 맞춘다) — WI-2026-09-17-harness-readme-status-2 Report 의 잔여 제한
 - 2026-09-17 07:30 · WI-2026-09-17-harness-readme-status-2 · README 세는 기준 줄의 '최상위 키' 는 정확히는 hooks.json 의 hooks 아래 키를 뜻한다(동작 무관, 표현 손질 후보) — WI-2026-09-17-harness-readme-status-2 Report 의 잔여 제한
 - 2026-09-17 01:32 · WI-2026-09-17-design-system-mcp · package-lock.json 루트 버전이 3.0.1 로 남아 있다(동작 무관, 버전 7면 밖). 다음 하네스 작업에서 npm install 로 맞춘다 — WI-2026-09-17-design-system-mcp Report 의 잔여 제한
@@ -68,8 +71,12 @@
 
 - 2026-09-16 11:16 · WI-2026-09-16-feature-bug-kinds · Do 준비 미달 1회: test — readiness 검사가 실패했다
 
-## 이정표 (24)
+## 이정표 (28)
 
+- 2026-09-17 07:48 · WI-2026-09-17-harness-docs-module-count · 작업 완료 — 모듈 수 표기 통일과 기준 줄 손질 — Report 가 확정되어 동결됐다
+- 2026-09-17 07:48 · WI-2026-09-17-harness-docs-module-count · 최종 승인 — 모듈 수 표기 통일과 기준 줄 손질 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
+- 2026-09-17 07:36 · WI-2026-09-17-harness-docs-module-count · Design 승인 (revision 1) — 모듈 수 표기 통일과 기준 줄 손질 — 사용자가 Design 을 승인했다
+- 2026-09-17 07:35 · WI-2026-09-17-harness-docs-module-count · Plan 승인 (revision 1) — 모듈 수 표기 통일과 기준 줄 손질 — 사용자가 Plan 을 승인했다
 - 2026-09-17 07:30 · WI-2026-09-17-harness-readme-status-2 · 작업 완료 — 하네스 README 상태 표 갱신 — Report 가 확정되어 동결됐다
 - 2026-09-17 07:30 · WI-2026-09-17-harness-readme-status-2 · 최종 승인 — 하네스 README 상태 표 갱신 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
 - 2026-09-17 07:25 · WI-2026-09-17-harness-readme-status-2 · Design 승인 (revision 1) — 하네스 README 상태 표 갱신 — 사용자가 Design 을 승인했다

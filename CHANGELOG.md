@@ -5,6 +5,7 @@
 ### Changed
 
 - `docs/harness/README.md` 상태 표를 현재 값으로 갱신 — 구현 "H1~H8 완료 (4.0.1)", 커널 "모듈 38 · hook 이벤트 5 · 스크립트 6 · CLI 1", 표 아래 세는 기준 한 줄. 버전은 4.0.1 유지 (`harness-readme-status-2`)
+- `CLAUDE.md`·`ONBOARDING.md` 의 "35 모듈" → "38 모듈" 로 README 와 통일, README 세는 기준 줄의 "최상위 키" → "`hooks` 아래 키". 버전 4.0.1 유지 (`harness-docs-module-count`)
 
 ## [4.0.1] - 2026-09-17
 

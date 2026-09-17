@@ -1,0 +1,55 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-17-harness-docs-module-count",
+  "assignmentId": "AS-cb186942-9819-4129-b841-bd2a6dd76892",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "f6006364edbce9fde4d92f76aee1989cd981653455e111489be5687275c42f1f",
+  "handoffDigest": "4812f11ed812cc2701bc42eabf776f21404ea692102c46df43718ed8208584d8",
+  "persistedAt": "2026-09-17T07:39:35.672Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "PASS. TC-001~003 hold; '35 모듈' left only in auto-generated docs/product notes",
+    "decisions": [
+      "ledger quotes not counted",
+      "TC-001 grep: 3 note hits"
+    ],
+    "behavior": {
+      "inputs": [
+        "Plan/Design REQ-TC",
+        "git diff -U0 4 files"
+      ],
+      "outputs": [
+        "TC-001~003 verified",
+        "verdict pass"
+      ],
+      "errors": [
+        "none"
+      ]
+    },
+    "evidence": [
+      "git diff -U0: CLAUDE.md:34 ONBOARDING.md:33 docs/harness/README.md:24 CHANGELOG.md:8, 1 line each",
+      "ls lib/workflow/v2 = 38 .js; hooks.json hooks keys = 5; version 4.0.1 x6 incl README badge"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003"
+    ],
+    "risks": [
+      "docs/product '35 모듈' x3",
+      "TC-001 literal grep unmet"
+    ],
+    "unverified": [
+      "npm run validate not rerun"
+    ],
+    "recommendedChecks": [
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

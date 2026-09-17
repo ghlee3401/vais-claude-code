@@ -10,6 +10,7 @@
 
 | Work item | Feature | Phase | Status | Updated |
 |---|---|---|---|---|
+| [WI-2026-09-17-harness-docs-module-count — 모듈 수 표기 통일과 기준 줄 손질](work-items/harness-docs-module-count/2026-09-17-harness-docs-module-count/main.md) | harness-docs-module-count | report | completed | 2026-09-17T07:48:52.999Z |
 | [WI-2026-09-17-harness-readme-status-2 — 하네스 README 상태 표 갱신](work-items/harness-readme-status-2/2026-09-17-harness-readme-status-2/main.md) | harness-readme-status-2 | report | completed | 2026-09-17T07:30:37.869Z |
 | [WI-2026-09-17-design-system-mcp — H8 디자인 시스템 MCP 유지·삭제 결정](work-items/design-system-mcp/2026-09-17-design-system-mcp/main.md) | design-system-mcp | report | completed | 2026-09-17T01:32:19.419Z |
 | [WI-2026-09-16-regression-and-docs — H7 회귀 세트와 문서 정리 (4.0.0)](work-items/regression-and-docs/2026-09-16-regression-and-docs/main.md) | regression-and-docs | report | completed | 2026-09-17T00:58:29.067Z |

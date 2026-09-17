@@ -31,7 +31,7 @@ vais-claude-code/
 │   ├── workflow-v2-drift.js          # 변경 경로 기록
 │   ├── workflow-v2-stop.js           # 기록 잠금 (장부 누락·미기록 변경 시 턴 종료 1회 거부)
 │   ├── v2-project-context.js · run-node.sh
-├── lib/workflow/v2/          # 35 모듈: config(mode·ui 설정) · doctor · chain-registry(단계·kind 카탈로그) · id-chain(ID 사슬·stale·산출물 렌더) · citation(인용·신규·구현됨) · app-runner(ui.run) ·
+├── lib/workflow/v2/          # 38 모듈: config(mode·ui 설정) · doctor · chain-registry(단계·kind 카탈로그) · id-chain(ID 사슬·stale·산출물 렌더) · citation(인용·신규·구현됨) · app-runner(ui.run) ·
 │                             #   ledger(장부) · product-note(노트 3면) · proposal(제안) · briefing(상태 문장) · explain(설명) · vcs(저장·되돌리기) ·
 │                             #   screen-capture(스크린샷) · diff-summary(회차 diff) · review-page(검수 페이지) ·
 │                             #   state-machine · work-item-store · phase-transaction · gate-engine · router · write-policy · tool-adapters ·
