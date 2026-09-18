@@ -23,7 +23,9 @@ const { runPhaseTransaction, prepareReviewEvidence, canonicalWriteScopes } = req
 const { buildCheckIdentity, reviewEvidenceManifest } = require('../lib/workflow/v2/check-evidence');
 const { recordDeferredHandoff } = require('../lib/workflow/v2/automatic-handoff');
 const { runDoctor } = require('../lib/workflow/v2/doctor');
-const { chainStatus, confirmUnchanged, reindex } = require('../lib/workflow/v2/id-chain');
+const { chainStatus, confirmUnchanged, reindex, SCOPE_NAME } = require('../lib/workflow/v2/id-chain');
+const { getKind, isStageKind, stageOfKind } = require('../lib/workflow/v2/chain-registry');
+const { proposeScopeMigration, commitScopeMigration } = require('../lib/workflow/v2/migrate-scopes');
 const { capture } = require('../lib/workflow/v2/screen-capture');
 const { withApp } = require('../lib/workflow/v2/app-runner');
 const { loadUiConfig } = require('../lib/workflow/v2/config');
@@ -97,14 +99,43 @@ function bool(value) {
   return value === true || value === 'true' || value === 'yes';
 }
 
-function generatedWorkItemId(options, timestamp = new Date()) {
+// Stage Work items are named by their stage (`WI-<date>-requirements`), so a second scope or a
+// re-run on the same day would collide: the id takes `-2`, `-3` … past a finished item.
+function generatedWorkItemId(options, timestamp = new Date(), store = null) {
   if (options.id && options.id !== true) return String(options.id);
   const slug = requireOption(options, 'slug');
   if (!/^[a-z0-9][a-z0-9-]*$/.test(slug)) {
     throw new Error('--slug must be lowercase kebab-case');
   }
   const date = timestamp.toISOString().slice(0, 10);
-  return `WI-${date}-${slug}`;
+  const base = `WI-${date}-${slug}`;
+  if (!store || !isStageKind(String(options.kind || ''))) return base;
+  let id = base;
+  for (let suffix = 2; ; suffix += 1) {
+    const existing = store.get(id);
+    if (!existing || (existing.phase === 'plan' && existing.status === 'active')) return id;
+    id = `${base}-${suffix}`;
+  }
+}
+
+// Stage Work items (harness-scope-sections REQ-001): `--slug` is the stage's short name and
+// `--feature` is the scope the user gave (`/vais 범위: <kebab>`) or the runtime inherited from
+// the latest stage Work item. Neither may be invented by the AI.
+function assertStageWorkItemNaming(options, authorization) {
+  const kind = options.kind && options.kind !== true ? getKind(String(options.kind)) : null;
+  if (!isStageKind(kind)) return false;
+  const expected = stageOfKind(kind).id.replace(/^stage-/, '');
+  const slug = requireOption(options, 'slug');
+  const feature = requireOption(options, 'feature');
+  if (slug !== expected) throw new Error(`단계 작업의 --slug 는 단계 이름 \`${expected}\` 여야 한다 (폴더 docs/work-items/<범위>/<날짜>-${expected}/)`);
+  if (!SCOPE_NAME.test(feature)) throw new Error('단계 작업의 --feature 는 범위 이름(kebab-case 영어, 예: member-management)이어야 한다');
+  if (authorization?.action === 'start-request' && !authorization.requestSlug) {
+    throw new Error('범위 이름이 확정되지 않았다. 사용자가 `/vais 범위: <kebab-case>` 로 정하면 runtime 이 등록한다');
+  }
+  if (authorization?.requestSlug && feature !== authorization.requestSlug) {
+    throw new Error(`단계 작업의 범위(--feature)는 runtime 이 등록한 \`${authorization.requestSlug}\` 여야 한다`);
+  }
+  return true;
 }
 
 function refreshAuthorization(projectRoot, sessionId, item, action) {
@@ -144,7 +175,8 @@ function create(projectRoot, options) {
 // A new Feature name comes only from the runtime (derived from the request) or from the
 // user's own `/vais 이름: <kebab-case>` turn. If the prompt hook could not derive one and the
 // user has not named it, the request slug is null and no Work item may be created.
-function assertNewFeatureSlug(relation, slug, feature, authorization) {
+function assertNewFeatureSlug(relation, slug, feature, authorization, options = null) {
+  if (options && assertStageWorkItemNaming(options, authorization)) return;
   if (relation !== 'new') return;
   if (authorization?.action === 'start-request' && !authorization.requestSlug) {
     throw new Error('Feature 이름이 확정되지 않았다. 사용자가 `/vais 이름: <kebab-case>` 로 이름을 정하면 runtime 이 등록한다');
@@ -182,14 +214,14 @@ function preparePlan(projectRoot, options) {
   if (!draft.relative.startsWith('.vais/v2/drafts/')) {
     throw new Error('Plan body file must be inside .vais/v2/drafts/');
   }
-  const id = generatedWorkItemId(options);
+  const store = new WorkItemStore(projectRoot);
+  const id = generatedWorkItemId(options, new Date(), store);
   const relation = requireOption(options, 'relation');
   if (!['new', 'existing'].includes(relation)) throw new Error('--relation must be new or existing');
   const slug = requireOption(options, 'slug');
   const feature = requireOption(options, 'feature');
   const authorization = new AuthorizationStore(projectRoot).get(sessionId);
-  const store = new WorkItemStore(projectRoot);
-  if (!store.get(id)) assertNewFeatureSlug(relation, slug, feature, authorization);
+  if (!store.get(id)) assertNewFeatureSlug(relation, slug, feature, authorization, options);
   let item = store.get(id);
   if (!item) {
     item = create(projectRoot, { ...options, id, session: sessionId });
@@ -675,13 +707,14 @@ function phaseTransaction(projectRoot, phase, action, options) {
   if (!Number.isInteger(revision) || revision < 1) throw new Error('--revision must be a positive integer');
   let id = options.id && options.id !== true ? String(options.id) : undefined;
   if (phase === 'plan' && !id) {
-    id = generatedWorkItemId(options);
+    const store = new WorkItemStore(projectRoot);
+    id = generatedWorkItemId(options, new Date(), store);
     const relation = requireOption(options, 'relation');
     if (!['new', 'existing'].includes(relation)) throw new Error('--relation must be new or existing');
     const slug = requireOption(options, 'slug');
     const feature = requireOption(options, 'feature');
     const authorization = new AuthorizationStore(projectRoot).get(requireOption(options, 'session'));
-    if (!new WorkItemStore(projectRoot).get(id)) assertNewFeatureSlug(relation, slug, feature, authorization);
+    if (!store.get(id)) assertNewFeatureSlug(relation, slug, feature, authorization, options);
   }
   const receipt = runPhaseTransaction(projectRoot, {
     phase,
@@ -742,6 +775,13 @@ function execute(argv = process.argv.slice(2), projectRoot = null) {
   if (command === 'ledger' && subcommand === 'list') return ledgerList(root, options);
   if (command === 'save' && subcommand === 'propose') return { schema: 'vcs-save-proposal/v1', ...vcs.saveProposal(root, { message: options.message && options.message !== true ? String(options.message) : undefined }) };
   if (command === 'revert' && subcommand === 'propose') return { schema: 'vcs-revert-proposal/v1', ...vcs.revertProposal(root, requireOption(options, 'target')) };
+  if (command === 'migrate' && subcommand === 'propose') {
+    const { _plans, ...proposal } = proposeScopeMigration(root, requireOption(options, 'scope'));
+    return proposal;
+  }
+  if (command === 'migrate' && subcommand === 'commit') {
+    return commitScopeMigration(root, { sessionId: requireOption(options, 'session'), scope: options.scope && options.scope !== true ? String(options.scope) : undefined });
+  }
   if (command === 'ledger' && subcommand === 'add') return ledgerAdd(root, options);
   if (command === 'save' && subcommand === 'commit') return vcs.commitSave(root, { sessionId: requireOption(options, 'session'), message: options.message && options.message !== true ? String(options.message) : undefined });
   if (command === 'revert' && subcommand === 'commit') return vcs.revertCommits(root, { sessionId: requireOption(options, 'session'), target: requireOption(options, 'target') });
@@ -797,6 +837,7 @@ module.exports = {
   parseArgs,
   generatedWorkItemId,
   assertNewFeatureSlug,
+  assertStageWorkItemNaming,
   stageConfirm,
   screensCapture,
   diagramExport,

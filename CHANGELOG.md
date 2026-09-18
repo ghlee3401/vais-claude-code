@@ -1,5 +1,23 @@
 # Changelog
 
+## [4.3.0] - 2026-09-18
+
+> `harness-scope-sections`. 제품 정본을 "범위(제품 안의 기능 묶음)" 로 묶는다. 정본은 단계마다 파일 하나 그대로이고 그 안이 `## 범위: <이름>` 절로 나뉜다. 단계 작업의 회의록은 `docs/work-items/<범위>/<날짜>-<단계>/` 에 쌓인다. 사용자 지적: "로그인이라는 feature 단위로 다 뭉쳐 있어야 되는데 너무 산발적이다".
+
+### Added
+
+- **범위 절** — `contracts/chain-stages.json` 의 항목형 단계 8개(01·02·03·04·06·07·08·10)에 `scoped: true`. `parseStageDocument` 가 `## 범위: X` 아래 항목에 `scope` 를 붙이고 `validateStageDocument(…, { scope })` 가 절 밖 항목·절 없는 문서·다른 범위 항목의 추가/변경/삭제·01 절의 `문제:`/`목표:` 누락을 finding 으로 낸다. 커버리지는 범위별. `approveStage`·`reindex`·citation 이 chain-index 항목에 `scope` 를 남기고 `stage status` 가 접두별 `nextIds` 와 범위별 개수를 준다
+- **범위 이름** — `/vais 범위: <kebab> …` (문장 안 `범위: X` 도 인식). 단계 kind 는 요청 문장에서 이름을 뽑지 않는다: 1단계는 사용자가 주고, 2단계부터는 가장 최근 단계 작업의 범위를 물려받는다(`inheritedScope`). CLI `plan present` 는 단계 kind 에서 `--slug` = 단계 이름(`requirements`…), `--feature` = 범위를 검사하고(`assertStageWorkItemNaming`), 같은 날 같은 단계가 다시 오면 id 에 `-2`·`-3` 을 붙인다
+- **`/vais 정리: 범위 X` → `/vais 정리 확인`** — `lib/workflow/v2/migrate-scopes.js`. 제안은 옮길 회의록 폴더(옛 feature → 범위, id 유지)·감쌀 정본(01 은 `## 문제`/`## 목표` 첫 문장을 절 안 `문제:`/`목표:` 줄로)·바뀔 상태(work-items `primaryFeature`·chain-index `scope`·장부 `feature`) 수를 보이고, 확인 토큰이 있어야 `migrate commit` 이 실행된다. 활성·대기·paused 작업 / 다른 세션 lease / 저장 안 된 변경 / 정본과 chain-index 불일치면 거부, 중간 실패는 undo 목록으로 되돌린다(변경 0). 두 번째 실행은 "변경 없음"
+- **인덱스·노트** — `docs/README.md` 열 "범위 · Feature", 제품 노트 "현재" 에 `## 범위별` 표(`| 범위 | 항목 | 구현됨 | stale |`)
+
+### Changed
+
+- 01 요구사항 정의서의 `documentSections` 는 `대상 사용자`·`제외` 두 개(제품 절, 범위 절 위에 한 번)이고 `문제`·`목표` 는 범위 절 첫머리 한 줄씩(`scopeLines`). 옛 정본은 `/vais 정리` 전까지 stage-document 검사가 그 명령을 안내하며 막는다
+- prompt hook: 단계 kind 의 시작 지침이 범위·slug·폴더를 말하고(`stageStartGuidance`), Do 지침이 "절이 없으면 문서 끝에 만들고 그 안에만 쓴다 · 다른 범위는 한 글자도 바꾸지 않는다 · 번호는 `nextIds`" 를 지시한다. 도움말 표에 `범위:`·`정리` 행
+- 이 저장소의 `authorizationTtlMs` 를 2시간으로(큰 하네스 Do 의 만료 재발 방지). 다른 프로젝트 기본값 30분은 그대로
+- 회귀 장면 A 가 `work-items/reading-log/<날짜>-<단계>/` 배치와 범위 물려받기를 검증하고, 단계 fixture 8개가 범위 절을 갖는다. 새 테스트 `tests/v2-scope-sections.test.js`(절 검사·라우터·CLI 이름 규칙·노트 표)·`tests/v2-migrate-scopes.test.js`(po_report 형태 fixture 이전·안전조건·되돌림)
+
 ## [4.2.1] - 2026-09-17
 
 > `harness-guidance-limits`. runtime 이 거부하는 한도를 AI 가 미리 알고 첫 시도에 맞추게 한다. 사용자 지적: "한도가 있으면 만들 때 그 한도로 적으라고 해야지, 넘기고 다시 요청하면 토큰 낭비다".

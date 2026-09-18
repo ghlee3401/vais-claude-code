@@ -4,6 +4,8 @@ stage: stage-test-plan
 status: draft
 ---
 
+## 범위: reading-log
+
 ### TC-001 ← F-001
 | 항목 | 내용 |
 |---|---|

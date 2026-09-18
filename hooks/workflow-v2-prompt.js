@@ -19,6 +19,7 @@ const { PHASE_FOLDERS } = require('../lib/workflow/v2/document-manager');
 const { suggestKind, getKind, kindOf, isStageKind, stageOfKind } = require('../lib/workflow/v2/chain-registry');
 const { assertStageEntry } = require('../lib/workflow/v2/id-chain');
 const { loadDiagramConfig } = require('../lib/workflow/v2/config');
+const { readProposal } = require('../lib/workflow/v2/migrate-scopes');
 const ledger = require('../lib/workflow/v2/ledger');
 
 const LEDGER_INJECT_KINDS = Object.freeze(['feedback', 'preference', 'debt']);
@@ -135,6 +136,8 @@ const HELP_LINES = Object.freeze([
   '| `/vais plan 승인` · `/vais design 승인` · `/vais 최종 승인` | Gate 통과 (`/vais 승인` 도 현재 Gate 에 적용) |',
   '| `/vais 거절 <이유>` | 최종 결과 거절 → Design 복귀 |',
   '| `/vais 이름: <kebab-case>` | 영어 단어가 없는 요청의 Feature 이름 확정 |',
+  '| `/vais 범위: <kebab-case> <요청>` | 단계 작업(1~10단계)의 범위 이름. 1단계는 필수, 2단계부터는 직전 단계 작업의 범위를 물려받는다 |',
+  '| `/vais 정리: 범위 <이름>` → `/vais 정리 확인` | 옛 구조(단계별 Feature 폴더·절 없는 정본)를 범위 하나로 정리 — 제안을 보고 확인하면 runtime 이 옮긴다 |',
   '| `/vais 변경 없음 확인: F-003 ← REQ-002` | 상위 항목이 바뀌었지만 하위 항목은 그대로임을 사용자가 확인 (stale 해소) |',
   '| `/vais N번` | 시안 Design 에서 안 고르기 (그 뒤 `/vais design 승인`) |',
   '| `/vais 확인` · `/vais <수정 요청>` | 화면 확인 정지점: 확인하면 Review, 수정 문장이면 다시 고쳐 찍음 (최대 5회) |',
@@ -168,6 +171,7 @@ function kindLines(suggestion) {
 
 function stagePhaseLines(item, kind, stage, sessionId) {
   const scopes = (kind.autoWriteScopes || []).map(scope => `--scope "${scope}"`).join(' ');
+  const scope = String(item.primaryFeature || '').split('/')[0];
   return {
     plan: [
       `이 작업은 ${stage.order}단계 ${stage.title} (kind ${kind.id}) 다. Plan 은 "요청 확인: <한 줄>", "kind: ${kind.id}", "단계: ${stage.order} ${stage.title}" 세 줄이면 된다.`,
@@ -180,8 +184,11 @@ function stagePhaseLines(item, kind, stage, sessionId) {
       `\`${INTERNAL_COMMAND} design present --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <design-draft> ${scopes} --readiness-check stage-document --review-check stage-document\`을 한 번 실행한다.`,
     ],
     do: [
-      `정본 \`${stage.file}\` 을 쓴다: frontmatter (schema: vais-stage/v1, stage: ${stage.id}, status: draft) + 항목마다 "### ${stage.idPrefix}-001${stage.parents?.required ? ' ← <부모 ID>' : ''}" 제목과 "| 항목 | 내용 |" 표. 필수 항목: ${stage.requiredFields.join(', ')}.${stage.documentSections ? ` 문서 섹션(## 제목): ${stage.documentSections.join(', ')}.` : ''}${stage.parents?.allowed?.length ? ` 부모는 승인된 상위 ID 만 (허용 접두: ${stage.parents.allowed.join(', ')}).` : ''}${stage.artifactDir ? ` 산출물(${(stage.artifactFields || []).join(', ')})은 \`${stage.artifactDir}/\` 아래 실제 파일이어야 한다.` : ''}${Array.isArray(stage.diagram) && stage.diagram.length > 0 ? ` 흐름 파일은 \`skills/diagram\` 규칙으로 그린 \`.html\` 을 권장하고(\`do ready\` 가 PNG 로 렌더), 기존 \`.mmd\` 도 그대로 받는다.` : ''}`,
-      `그 뒤 짧은 Do 본문을 쓰고 \`${INTERNAL_COMMAND} do ready --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <do-draft>\` 를 한 번 실행한다. transaction 이 \`stage-document\` 검사(형식·부모·산출물·예산·커버리지)를 실행한다.`,
+      `정본 \`${stage.file}\` 을 쓴다: frontmatter (schema: vais-stage/v1, stage: ${stage.id}, status: draft) + 항목마다 "### ${stage.idPrefix}-001${stage.parents?.required ? ' ← <부모 ID>' : ''}" 제목과 "| 항목 | 내용 |" 표. 필수 항목: ${stage.requiredFields.join(', ')}.${stage.documentSections ? ` 문서 섹션(## 제목, 범위 절 위에 한 번): ${stage.documentSections.join(', ')}.` : ''}${stage.parents?.allowed?.length ? ` 부모는 승인된 상위 ID 만 (허용 접두: ${stage.parents.allowed.join(', ')}).` : ''}${stage.artifactDir ? ` 산출물(${(stage.artifactFields || []).join(', ')})은 \`${stage.artifactDir}/\` 아래 실제 파일이어야 한다.` : ''}${Array.isArray(stage.diagram) && stage.diagram.length > 0 ? ` 흐름 파일은 \`skills/diagram\` 규칙으로 그린 \`.html\` 을 권장하고(\`do ready\` 가 PNG 로 렌더), 기존 \`.mmd\` 도 그대로 받는다.` : ''}`,
+      ...(stage.scoped ? [
+        `이 작업의 범위는 \`${scope}\` 다. 항목은 \`## 범위: ${scope}\` 절 아래에만 쓴다 — 절이 없으면 문서 끝에 만든다${(stage.scopeLines || []).length ? `(절 첫머리에 ${stage.scopeLines.map(field => `"${field}: <한 줄>"`).join(' · ')})` : ''}. 다른 범위의 절과 항목은 한 글자도 바꾸지 않는다(바뀌면 stage-document FAIL). 새 항목 번호는 \`${INTERNAL_COMMAND} stage status\` 의 \`nextIds\` 부터 잇는다.`,
+      ] : []),
+      `그 뒤 짧은 Do 본문을 쓰고 \`${INTERNAL_COMMAND} do ready --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <do-draft>\` 를 한 번 실행한다. transaction 이 \`stage-document\` 검사(형식·부모·산출물·예산·커버리지${stage.scoped ? '·범위' : ''})를 실행한다.`,
     ],
     report: [
       `\`report finalize\` 가 \`${stage.file}\` 을 approved 로 표시하고 chain-index 에 항목 해시를 기록한다.`,
@@ -214,8 +221,33 @@ function implementationPhaseLines(item, kind, sessionId) {
   };
 }
 
+// A stage Work item is named by its scope (harness-scope-sections REQ-001): the Feature is the
+// scope the user typed (`범위:`) or the one inherited from the latest stage Work item, and the
+// slug is the stage's short name. Without a scope the runtime asks instead of inventing one.
+function stageStartGuidance(kind, sessionId, scope, options = {}) {
+  const stage = stageOfKind(kind);
+  const slug = stage.id.replace(/^stage-/, '');
+  const lines = ['CEO가 단일 대화 창구다. 관련 작업을 검색하고 규모를 제안한 뒤 사용자 확인을 받는다.', ...kindLines(options.kindSuggestion)];
+  if (options.kindSuggestion?.locked) return lines;
+  if (!scope) {
+    lines.push(
+      `이 단계 작업에는 범위(제품 안의 기능 묶음, 예: \`member-management\`) 이름이 필요한데 사용자가 주지 않았고 물려받을 이전 단계 작업도 없다. kebab-case 영어 이름을 묻고, 사용자가 \`/vais 범위: <name> ${stage.order === 1 ? '새 제품 …' : stage.title}\` 으로 답할 때까지 Work item 을 만들지 않는다. AI 가 이름을 대신 정하면 CLI 가 거부한다.`,
+    );
+    return lines;
+  }
+  lines.push(
+    `이 단계 작업의 범위(Feature)는 \`${scope}\` 다${options.scopeInherited ? ' — 사용자가 따로 주지 않아 가장 최근 단계 작업에서 물려받았다. 다른 범위면 사용자가 `/vais 범위: <name> …` 으로 다시 보낸다' : ' (사용자가 `범위:` 로 확정)'}. Work item slug 는 단계 이름 \`${slug}\` 이고 회의록은 \`docs/work-items/${scope}/<날짜>-${slug}/\` 에 쌓인다.`,
+    '확인 전에는 Work item을 만들지 않는다. 확인 후 Plan 본문을 `.vais/v2/drafts/plan.md`에 작성한다.',
+    `\`${INTERNAL_COMMAND} plan present --slug ${slug} --title "<title>" --feature ${scope} --relation ${options.scopeInherited ? 'existing' : '<new|existing>'} --scale <compact|standard|extended> --kind ${kind.id} --session ${sessionId} --revision 1 --body-file .vais/v2/drafts/plan.md\`을 한 번 실행한다${options.scopeInherited ? '' : ' (이 범위의 첫 작업이면 new, 이미 그 범위의 작업이 있으면 existing)'}.`,
+    '이 transaction이 Work item·Plan 검사·Gate를 처리한다. PASS일 때만 승인 요청하며, 실패하면 evidence finding만 고쳐 재실행한다.',
+  );
+  return lines;
+}
+
 function phaseGuidance(item, sessionId, requestSlug = null, options = {}) {
   if (!item) {
+    const stageKind = options.kindSuggestion && isStageKind(getKind(options.kindSuggestion.kind)) ? getKind(options.kindSuggestion.kind) : null;
+    if (stageKind) return stageStartGuidance(stageKind, sessionId, requestSlug, options);
     if (!requestSlug) {
       return [
         'CEO가 단일 대화 창구다. 관련 작업을 검색하고 Feature 관계·규모를 제안한 뒤 사용자 확인을 받는다.',
@@ -325,6 +357,18 @@ function commandGuidance(route, sessionId, options = {}) {
         `요청에 svg·png 가 있으면 \`${cli} diagram export --session ${sessionId} --file ${dir}/<slug>.html [--svg] [--png]\` 을 한 번 실행하고, 만들어진 PNG 는 Read 로 열어 응답에 보인다. 요청에 없는 내보내기는 만들지 않는다. Work item 상태는 바뀌지 않는다.`,
       ];
     }
+    case 'migrate':
+      return [
+        `사용자가 범위 \`${route.scope}\` 로 정리를 요청했다. \`${cli} migrate propose --scope ${route.scope}\` 를 한 번 실행해 옮길 회의록 폴더(옛 → 새), 감쌀 정본과 절 위치, 바뀔 상태·장부 항목 수, 경고를 표로 보이고 \`/vais 정리 확인\` 을 안내한다. ok 가 아니면 reason 을 그대로 전한다. 파일은 옮기지 않는다.`,
+        '이 action은 읽기 전용이다.',
+      ];
+    case 'migrate-confirm': {
+      const scope = route.scope || options.migrationScope || null;
+      if (!scope) return ['정리 제안이 없다. 사용자에게 먼저 `/vais 정리: 범위 <이름>` 으로 제안을 받도록 안내한다.', '이 action은 읽기 전용이다.'];
+      return [
+        `사용자가 정리를 직접 확인했고 runtime 이 이 세션에 확인 토큰(범위 \`${scope}\`)을 등록했다. \`${cli} migrate commit --session ${sessionId} --scope ${scope}\` 을 한 번 실행하고 옮긴 폴더·감싼 정본·바뀐 상태 수를 보인다. 거부·실패하면 reason 과 다음 행동을 그대로 전하고 다시 시도하지 않는다. 다른 세션이 이 프로젝트를 쓰고 있으면 폴더가 바뀌었음을 알리라고 전한다.`,
+      ];
+    }
     case 'status':
       return [`\`${cli} status\` 를 한 번 실행해 결과의 \`summary\` 문장을 그대로 보인다. 대기 요청(pending)이 있으면 함께 알린다.`, '이 action은 읽기 전용이다.'];
     case 'explain':
@@ -374,7 +418,7 @@ function buildContext(route, item, leaseError, sessionId = '<session>', options 
     lines.push(`\`${INTERNAL_COMMAND} doctor\` 를 한 번 실행해 점검표를 사람 말로 요약해 보여준다. fail 항목은 fix 문구를 그대로 안내한다.`, '이 action은 읽기 전용이다.');
     return lines.join('\n');
   }
-  const commandLines = commandGuidance(route, sessionId, { diagramsDir: options.diagramsDir });
+  const commandLines = commandGuidance(route, sessionId, { diagramsDir: options.diagramsDir, migrationScope: options.migrationScope });
   if (commandLines) {
     lines.push(...commandLines);
     return lines.join('\n');
@@ -385,7 +429,7 @@ function buildContext(route, item, leaseError, sessionId = '<session>', options 
     return lines.join('\n');
   }
   if (route.action === 'name-feature') {
-    lines.push(`사용자가 Feature 이름 \`${route.slug}\` 을 확정했고 runtime 이 등록했다. 이 이름으로 Plan 을 진행한다.`);
+    lines.push(`사용자가 Feature(범위) 이름 \`${route.slug}\` 을 확정했고 runtime 이 등록했다. 이 이름으로 Plan 을 진행한다.`);
     lines.push(...phaseGuidance(null, sessionId, route.slug, options));
     return lines.join('\n');
   }
@@ -411,7 +455,8 @@ function buildContext(route, item, leaseError, sessionId = '<session>', options 
     return lines.join('\n');
   }
   lines.push('현재 Work item과 event 상태 머신의 transaction을 순서대로 처리한다. 사용자 결정 Gate나 BLOCKED/FAIL에서만 멈추며, C-Level이나 Phase 직접 호출로 Gate를 우회하지 않는다.');
-  lines.push(...phaseGuidance(item, sessionId, !item ? deterministicSlug(route.text) : null, options));
+  const requestSlug = !item ? (options.requestSlug !== undefined ? options.requestSlug : deterministicSlug(route.text)) : null;
+  lines.push(...phaseGuidance(item, sessionId, requestSlug, options));
   if (!route.mutationAllowed) lines.push('이 action은 읽기 전용이다.');
   return lines.join('\n');
 }
@@ -471,17 +516,33 @@ function observePromptDrift(store, item, sessionId, projectRoot) {
 }
 
 // Only the user's own sentence in this turn becomes a write-command token.
-function confirmationsFor(route) {
+function confirmationsFor(route, projectRoot = null) {
   if (route.action === 'save-confirm') return [{ type: 'save', message: route.message || null }];
   if (route.action === 'revert-confirm') return [{ type: 'revert', target: route.target }];
   if (route.action === 'ledger-add') return [{ type: 'ledger', kind: route.kind, text: route.text }];
+  if (route.action === 'migrate-confirm') {
+    // `/vais 정리 확인` names no scope: the token takes it from the proposal this project holds.
+    const scope = route.scope || (projectRoot ? readProposal(projectRoot)?.scope : null) || null;
+    return scope ? [{ type: 'migrate', scope }] : [];
+  }
   return [];
 }
 
-function requestSlugFor(route) {
+// The scope the latest stage Work item used: stages 2..10 inherit it unless the user names one.
+function inheritedScope(projectRoot) {
+  if (!projectRoot) return null;
+  const items = new WorkItemStore(projectRoot).list()
+    .filter(item => isStageKind(kindOf(item)) && item.primaryFeature)
+    .sort((left, right) => String(right.updatedAt || '').localeCompare(String(left.updatedAt || '')));
+  return items.length ? String(items[0].primaryFeature).split('/')[0] : null;
+}
+
+function requestSlugFor(route, projectRoot = null) {
   if (route.action === 'name-feature') return route.slug;
-  if (route.action === 'start-request') return deterministicSlug(route.text);
-  return null;
+  if (route.action !== 'start-request') return null;
+  // Stage kinds never take their name from the request text: the scope is given or inherited.
+  if (isStageKind(getKind(suggestKind(route.text).kind))) return inheritedScope(projectRoot);
+  return deterministicSlug(route.text);
 }
 
 // Kind suggestion for a new request, with the entry-lock reason when the stage cannot start.
@@ -543,14 +604,16 @@ function main() {
       store.setRepoSnapshot(active.id, captureRepoSnapshot(projectRoot), { reason: `prompt-${route.action}` });
     }
     if (active && !SLOT_HOLDING_STATUSES.has(active.status)) active = null;
+    const requestSlug = requestSlugFor(route, projectRoot);
+    const confirmations = confirmationsFor(route, projectRoot);
     authStore.grant({
       sessionId,
       workItemId: active?.id || null,
       phase: active?.phase || 'plan',
       action: route.action === 'name-feature' ? 'start-request' : route.action,
-      requestSlug: requestSlugFor(route),
+      requestSlug,
       stageConfirmations: route.action === 'stage-confirm-unchanged' ? [{ item: route.item, parent: route.parent }] : [],
-      confirmations: confirmationsFor(route),
+      confirmations,
       // `/vais diagram` adds the stand-alone drawing folder for this turn only (skills/diagram §10).
       allowedPaths: [...defaultAllowedPaths(active), ...(route.action === 'diagram' ? [`${loadDiagramConfig(projectRoot).dir}/**`] : [])],
       allowedCommands: [INTERNAL_COMMAND],
@@ -559,6 +622,9 @@ function main() {
       kindSuggestion: kindSuggestionFor(projectRoot, route),
       ledgerLines: ledgerLinesFor(projectRoot, active),
       diagramsDir: loadDiagramConfig(projectRoot).dir,
+      requestSlug: active ? null : requestSlug,
+      scopeInherited: route.action === 'start-request' && Boolean(requestSlug) && isStageKind(getKind(suggestKind(route.text).kind)),
+      migrationScope: confirmations.find(entry => entry.type === 'migrate')?.scope || null,
     }));
   } catch (error) {
     authStore.revoke(sessionId);
@@ -580,6 +646,8 @@ module.exports = {
   applyDeterministicRoute,
   observePromptDrift,
   requestSlugFor,
+  inheritedScope,
+  stageStartGuidance,
   kindSuggestionFor,
   kindLines,
   stagePhaseLines,

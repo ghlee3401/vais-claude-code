@@ -4,6 +4,8 @@ stage: stage-api
 status: draft
 ---
 
+## 범위: reading-log
+
 ### API-001 ← S-001, F-001
 | 항목 | 내용 |
 |---|---|

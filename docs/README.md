@@ -10,6 +10,7 @@
 
 | Work item | Feature | Phase | Status | Updated |
 |---|---|---|---|---|
+| [WI-2026-09-18-harness-scope-sections — 범위로 묶는 정본과 회의록](work-items/harness-scope-sections/2026-09-18-harness-scope-sections/main.md) | harness-scope-sections | report | completed | 2026-09-18T03:37:11.457Z |
 | [WI-2026-09-17-harness-guidance-limits — 코드 한도를 지시문에 그대로](work-items/harness-guidance-limits/2026-09-17-harness-guidance-limits/main.md) | harness-guidance-limits | report | completed | 2026-09-18T00:29:09.350Z |
 | [WI-2026-09-17-harness-diagram-skill — 다이어그램 스킬 흡수](work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/main.md) | harness-diagram-skill | report | completed | 2026-09-17T09:33:02.909Z |
 | [WI-2026-09-17-harness-doc-budget — 문서 예산 상향과 설정화](work-items/harness-doc-budget/2026-09-17-harness-doc-budget/main.md) | harness-doc-budget | report | completed | 2026-09-17T08:26:49.105Z |

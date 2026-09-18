@@ -314,7 +314,7 @@ describe('ui-loop REQ-009 stage artifact rendering', () => {
       }
       if (order < 4) idChain.approveStage(root, stage, { workItem: `WI-2026-09-16-s${order}` });
     }
-    const wireframes = createInitialWorkItem({ id: 'WI-2026-09-16-w', title: 'w', primaryFeature: 'w', scale: 'compact', kind: 'stage-wireframes' });
+    const wireframes = createInitialWorkItem({ id: 'WI-2026-09-16-w', title: 'w', primaryFeature: 'reading-log', scale: 'compact', kind: 'stage-wireframes' });
     assert.equal(getStage('stage-wireframes').renderArtifacts, true);
     const result = idChain.stageDocumentCheck(root, wireframes, STUB);
     assert.equal(result.verdict, 'pass', result.findings.join('; '));

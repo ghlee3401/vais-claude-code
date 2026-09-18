@@ -4,6 +4,8 @@ stage: stage-wireframes
 status: draft
 ---
 
+## 범위: reading-log
+
 ### W-001 ← S-001
 | 항목 | 내용 |
 |---|---|

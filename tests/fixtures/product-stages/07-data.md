@@ -4,6 +4,8 @@ stage: stage-data
 status: draft
 ---
 
+## 범위: reading-log
+
 ### D-001 ← F-001
 | 항목 | 내용 |
 |---|---|

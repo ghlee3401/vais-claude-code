@@ -4,6 +4,8 @@ stage: stage-mockups
 status: draft
 ---
 
+## 범위: reading-log
+
 ### V-001 ← W-001, DS-001
 | 항목 | 내용 |
 |---|---|

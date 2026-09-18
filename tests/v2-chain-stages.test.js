@@ -123,7 +123,7 @@ describe('chain-stages REQ-005/006 stage document parsing and parent rules', () 
     const stage = getStage('stage-features');
     const index = idChain.loadChainIndex(root);
     const check = text => idChain.validateStageDocument(root, stage, idChain.parseStageDocument(text, stage), index, { rawText: text });
-    const head = '---\nschema: vais-stage/v1\nstage: stage-features\n---\n';
+    const head = '---\nschema: vais-stage/v1\nstage: stage-features\n---\n## 범위: reading-log\n';
     const fields = '| 항목 | 내용 |\n|---|---|\n| 동작 | a |\n| 입력 | b |\n| 출력 | c |\n| 오류 | d |\n| 규칙 | e |\n';
     assert.ok(check(`${head}### F-001\n${fields}`).some(finding => /부모 ID 가 필요/.test(finding)));
     assert.ok(check(`${head}### F-001 ← S-001\n${fields}`).some(finding => /허용되지 않는 부모 S-001/.test(finding)));
@@ -169,7 +169,7 @@ describe('chain-stages REQ-008/011 stage document check, approval, artifacts', (
   it('TC-008 approval writes frontmatter and index; a failing document is not approved', t => {
     const root = tempRoot(t);
     const stage = installStageFixture(root, 1);
-    const item = createInitialWorkItem({ id: 'WI-2026-09-16-r', title: 'r', primaryFeature: 'r', scale: 'compact', kind: 'stage-requirements' });
+    const item = createInitialWorkItem({ id: 'WI-2026-09-16-r', title: 'r', primaryFeature: 'reading-log', scale: 'compact', kind: 'stage-requirements' });
     assert.equal(idChain.stageDocumentCheck(root, item).verdict, 'pass');
     const result = idChain.approveStage(root, stage, { workItem: item.id });
     assert.deepEqual(result.items, ['REQ-001', 'REQ-002']);

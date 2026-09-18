@@ -4,6 +4,8 @@ stage: stage-screens
 status: draft
 ---
 
+## 범위: reading-log
+
 ### S-001 ← F-001
 | 항목 | 내용 |
 |---|---|

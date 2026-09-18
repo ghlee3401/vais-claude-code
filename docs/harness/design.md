@@ -34,12 +34,15 @@
 
 문서 형식: 각 항목은 `### {ID} ← {부모 ID}` 제목 아래 필수 항목을 표로 둔다. 제목의 ID 와 화살표는 runtime 이 파싱한다. 화면·와이어·시안은 파일이 정본이고 MD 는 목록·부모·상태만 적는다.
 
+범위 절 (4.3.0 `harness-scope-sections`): 정본은 단계마다 파일 하나 그대로이고, 항목형 단계 8개(1·2·3·4·6·7·8·10, `scoped: true`)의 항목은 `## 범위: <이름>` 절 아래에만 둔다. 1단계는 절 첫머리에 `문제:`·`목표:` 한 줄씩(`scopeLines`), 제품 절(`## 대상 사용자`·`## 제외`)은 위에 한 번. 범위 이름 = 그 단계 Work item 의 Feature 이고 사용자가 `/vais 범위: <kebab>` 으로 주며 2단계부터 물려받는다. 회의록은 `docs/work-items/<범위>/<날짜>-<단계>/`. 한 작업은 자기 범위의 절만 쓴다(다른 범위 항목의 추가·변경·삭제는 `stage-document` FAIL). 커버리지는 범위 안에서 본다. 5·9 단계는 제품 전체 문서라 절이 없다. 이전은 `/vais 정리: 범위 X` → `/vais 정리 확인`.
+
 ## 3. ID 사슬 규칙
 
 - **형식**: `REQ-001`, `F-001`, `S-001`, `W-001`, `DS-001`, `V-001`, `D-001`, `API-001`, `T-001`, `TC-001`. 세 자리 고정, 삭제해도 번호를 재사용하지 않는다.
 - **부모 필수**: REQ 를 제외한 모든 ID 는 부모 ID 를 하나 이상 가진다. 허용 부모: F←REQ, S←F, W←S, DS←(없음, 제품당 1세트), V←W+DS, D←F, API←S 또는 F, T←(없음), TC←F. 부모가 없거나 허용 밖이면 `stage present` 가 거부한다.
 - **stale 전파**: 상위 항목의 본문 해시가 바뀌면 그 자식 전부에 `stale: true` 가 붙는다. stale 항목이 하나라도 있으면 구현 kind 의 Design Gate 가 막힌다. 해소는 자식 항목을 재승인하거나 "변경 없음 확인" 을 장부에 남기는 두 가지뿐이다.
 - **인용 강제**: 구현 kind 의 Design 은 "이번에 만드는 것" 을 ID 목록으로만 적는다. ID 없는 서술 항목이 있으면 Gate 실패. QA 는 그 ID 의 TC 만 검사한다.
+- **범위**: chain-index 항목은 `scope`(`## 범위:` 절 이름)를 갖는다. 작업은 자기 범위 밖의 항목을 더하거나 바꾸거나 지울 수 없고, 새 번호는 범위와 무관하게 접두별 다음 번호(`nextIds`)다.
 - **역추적**: 모든 ID 는 만든 Work item 과 승인 revision 을 frontmatter 에 갖는다. `/vais 설명 F-003` 은 부모·자식·만든 작업·마지막 검증일을 답한다.
 
 ## 4. 억지력
@@ -111,7 +114,7 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | `/vais 되돌리기 <작업 id 또는 커밋>` | 대상 | 되돌릴 변경 목록 제시 → 사용자 확인 후 revert 커밋 | 쓰기 (확인 후) |
 | `/vais doctor` | 없음 | 설정·hook·버전·캐시·상태 파일·stale·죽은 키 점검표 + 고치는 법 | 읽기 |
 
-부속: `/vais 제안` (다음 행동 3개), `/vais 기록 <종류> <내용>` (장부 수동 기록), `/vais 기록 보기`. 기존 `status/pause/resume/cancel/새 작업:` 유지. router 의 평가용 문장 8개는 제거한다.
+부속: `/vais 제안` (다음 행동 3개), `/vais 기록 <종류> <내용>` (장부 수동 기록), `/vais 기록 보기`, `/vais 범위: <kebab> <요청>` (단계 작업의 범위 이름), `/vais 정리: 범위 <이름>` → `/vais 정리 확인` (4.3.0 이전 구조를 범위 하나로: 제안 → 사용자 확인 → `migrate commit`, 안전조건 넷·되돌림). 기존 `status/pause/resume/cancel/새 작업:` 유지. router 의 평가용 문장 8개는 제거한다.
 
 ## 8. 바탕 셋
 
@@ -150,6 +153,7 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 문서 예산 기본값(실측 최대 ≤ 75%)·`vais.config.json > documentBudgets` 칸 단위 덮어쓰기·doctor `document-budgets`·사용자 말 초과 안내 | `config.js` (`DEFAULT_DOCUMENT_BUDGETS`, `loadDocumentBudgets`), `document-quality.js`, `doctor.js` | 완료 (4.1.0 `harness-doc-budget`) |
 | 코드 한도를 지시문에 그대로: Report outcome 700·limitation 300(거부, `REPORT_LIMITS` interpolation), QA `guidance`(`describeHandoffLimits`), `이름:` 뒤 문장 무시 | `phase-transaction.js`, `contracts.js`, `router.js`, prompt hook, CLI `assignment`, `agents/v2-specialist.md` | 완료 (4.2.1 `harness-guidance-limits`) |
 | 다이어그램 스킬(diagram-design MIT 스냅샷, 11종)·`/vais diagram` 산출 폴더 authorization·`diagram export`(SVG 추출 + Chrome PNG)·3단계 흐름 파일 `.html` 렌더(`renderArtifacts`·`diagram` 키) | `skills/diagram/**`, `router.js`, `config.js` (`loadDiagramConfig`), `diagram.js`, `write-policy.js`, prompt hook, CLI `diagram export`, `contracts/chain-stages.json` | 완료 (4.2.0 `harness-diagram-skill`) |
+| 범위 절(`scoped`·`scopeLines`, `## 범위:` 파싱·검증·`item.scope`·범위별 커버리지·`nextIds`)·단계 작업 이름(범위 = Feature, slug = 단계, 물려받기, 같은 날 `-2`)·`docs/README.md` "범위 · Feature"·제품 노트 `범위별` 표·`/vais 정리` 두 단계(제안·토큰·안전조건 넷·undo) | `contracts/chain-stages.json`, `schemas/chain-stage.schema.json`, `id-chain.js`, `router.js`(`범위`·`정리`), prompt hook(`stageStartGuidance`·`inheritedScope`), CLI `plan present`(`assertStageWorkItemNaming`)·`migrate propose/commit`, `migrate-scopes.js`, `product-note.js`, `document-manager.js`, `write-policy.js` | 완료 (4.3.0 `harness-scope-sections`) |
 | 화면 확인 정지점 (ui kind) | `state-machine.js` 이벤트 `USER_OPTION_CHOSEN` / `USER_SCREEN_CONFIRMED` / `USER_SCREEN_REVISED`, `router.js`, prompt hook | 완료 (H4) |
 | 수정 루프 상한 (kind 의 `repairLimit`, ui 5) | `state-machine.js`, `contracts/work-kinds.json` | 완료 (H2) |
 | 장부 | `lib/workflow/v2/ledger.js`, `schemas/ledger-entry.schema.json`, `.vais/v2/ledger.jsonl` (store 잠금 안에서 append) | 완료 (H3) |

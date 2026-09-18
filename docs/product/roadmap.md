@@ -18,8 +18,8 @@
 ## 제안
 
 1. 1단계 요구사항 정의서 작성 — `/vais 새 제품: <제품 이름>` (아직 승인된 요구사항 정의서 가 없다)
-2. 부채 정리: 실증: 표를 받은 QA 도 첫 handoff 에서 한 칸을 한 글자 넘겨(20자 한도에 21자) 재출력 1회. files 오류와 큰 초과는 사라졌다. 다음은 specialist 가 반환 전에 스스로 돌리는 검증 명령(handoff validate --file)이다 — `/vais 실증: 표를 받은 QA 도 첫 handoff 에서 한 칸을 한 글자 넘겨(20자 한도에 21자) 재출력 1회. files 오류와 큰 초과는 사라졌다. 다음은 specialist 가 반환 전에 스스로 돌리는 검증 명령(handoff validate --file)이다` (WI-2026-09-17-harness-guidance-limits 에 남은 부채)
-3. 부채 정리: 새 지시문·guidance 는 플러그인 4.2.1 업데이트 뒤에야 hook 이 실제로 주입한다. 이번 Review 는 CTO 가 같은 표를 prompt 에 직접 붙여 검증했다 — `/vais 새 지시문·guidance 는 플러그인 4.2.1 업데이트 뒤에야 hook 이 실제로 주입한다. 이번 Review 는 CTO 가 같은 표를 prompt 에 직접 붙여 검증했다` (WI-2026-09-17-harness-guidance-limits 에 남은 부채)
+2. 부채 정리: 실제 po_report 복사본 이전은 write guard 로 Do·QA 에서 실증하지 못했고 같은 형태의 fixture 로 대체했다. 플러그인 4.3.0 업데이트 뒤 po_report 에서 '/vais 정리: 범위 member-management' 를 실제로 돌려 확인한다. — `/vais 실제 po_report 복사본 이전은 write guard 로 Do·QA 에서 실증하지 못했고 같은 형태의 fixture 로 대체했다. 플러그인 4.3.0 업데이트 뒤 po_report 에서 '/vais 정리: 범위 member-management' 를 실제로 돌려 확인한다.` (WI-2026-09-18-harness-scope-sections 에 남은 부채)
+3. 부채 정리: 테스트용 실패 주입 옵션 failAfter·beforeApply 가 commitScopeMigration 에 남아 있다(운영 경로에서는 비어 있음). 이전 후 doctor 결과와 범위 인덱스의 작업 순서는 미검증. — `/vais 테스트용 실패 주입 옵션 failAfter·beforeApply 가 commitScopeMigration 에 남아 있다(운영 경로에서는 비어 있음). 이전 후 doctor 결과와 범위 인덱스의 작업 순서는 미검증.` (WI-2026-09-18-harness-scope-sections 에 남은 부채)
 
 ## 내 메모
 

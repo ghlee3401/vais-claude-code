@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-4.2.1-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-4.3.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -13,7 +13,7 @@
 
 ---
 
-> **현재 상태 (4.2.1, 2026-09-17)**: 로드맵 H1~H8 완료, 문서 예산 상향·설정화(`documentBudgets`), 다이어그램 스킬(`skills/diagram`, `/vais diagram`), 코드 한도를 지시문에 그대로(Report 700/300, QA `guidance`). 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌고, 쓰이지 않던 디자인 시스템 MCP·vendor·브랜드 카탈로그는 제거됐다(되살림: 커밋 `66d0f6b`). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
+> **현재 상태 (4.3.0, 2026-09-18)**: 로드맵 H1~H8 완료, 문서 예산 상향·설정화(`documentBudgets`), 다이어그램 스킬(`skills/diagram`, `/vais diagram`), 코드 한도를 지시문에 그대로(Report 700/300, QA `guidance`), 정본을 범위로 묶기(`## 범위: <이름>` 절, `/vais 범위:`, `/vais 정리`). 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌고, 쓰이지 않던 디자인 시스템 MCP·vendor·브랜드 카탈로그는 제거됐다(되살림: 커밋 `66d0f6b`). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
 
 ## 무엇인가
 
@@ -57,6 +57,8 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 |---|---|
 | `/vais <자연어 요청>` | 진행 중 작업이 없으면 새 작업 시작. 있으면 현재 단계의 지시·피드백 |
 | `/vais 이름: <kebab-case>` | 요청에 영어 단어가 없어 이름을 못 정했을 때 사용자가 Feature 이름을 확정 |
+| `/vais 범위: <kebab-case> <요청>` | 단계 작업(1~10단계)의 범위 이름. 1단계는 필수(문장 안 `범위: X` 도 됨), 2단계부터는 직전 단계 작업의 범위를 물려받으므로 바꿀 때만 쓴다 |
+| `/vais 정리: 범위 <이름>` → `/vais 정리 확인` | 4.3.0 이전 구조(단계별 Feature 폴더 · 절 없는 정본)를 범위 하나로 정리. 제안(옮길 폴더·감쌀 정본·바뀔 상태 수)을 보고 확인하면 runtime 이 옮긴다. 진행 중 작업·다른 세션·저장 안 된 변경이 있으면 거부 |
 | `/vais 상태` (`status`) | 현재 작업·단계·기다리는 결정·부채·stale·다음 행동 3개를 사람 말로 (읽기 전용) |
 | `/vais 설명 <ID·용어·파일>` | 항목 ID 의 부모·자식·만든 작업·stale, 용어 뜻(사전 데이터), 파일이 어느 정본인지 (읽기 전용) |
 | `/vais 저장 [메시지]` → `/vais 저장 확인[: 메시지]` (영어: `/vais commit` → `/vais commit 확인`) | 버전 7면(manifest 5 + README 배지 + CHANGELOG 헤더) 동기화 검사·변경 요약·커밋 메시지 제안 → 사용자가 확인 문구를 직접 치면 runtime 이 `git add`(`.gitignore` 존중, `.vais/` 제외)·`commit`. 실패하면 "스테이지 N개 됨 · 커밋 안 됨 · 원인" 을 그대로 보이고 재시도하지 않는다. push 는 사용자가 |
@@ -105,7 +107,26 @@ cd vais-claude-code && npm install && bash scripts/setup-dev.sh
 | 9 | `stage-architecture` | `09-architecture.md` | T | 없음 |
 | 10 | `stage-test-plan` | `10-test-plan.md` | TC | F |
 
-정본 문서의 항목은 `### F-003 ← REQ-002` 제목과 `| 항목 | 내용 |` 표로 쓴다. runtime 이 부모 존재·허용 접두·필수 항목·산출물 파일·커버리지를 검사하고, 상위 항목이 바뀌면 하위 항목을 stale 로 표시한다. stale 은 그 단계를 다시 승인하거나 사용자가 `/vais 변경 없음 확인: F-003 ← REQ-002` 로 해소한다. 상태는 `stage status` 로 본다.
+정본 문서의 항목은 `### F-003 ← REQ-002` 제목과 `| 항목 | 내용 |` 표로 쓴다. runtime 이 부모 존재·허용 접두·필수 항목·산출물 파일·커버리지를 검사하고, 상위 항목이 바뀌면 하위 항목을 stale 로 표시한다. stale 은 그 단계를 다시 승인하거나 사용자가 `/vais 변경 없음 확인: F-003 ← REQ-002` 로 해소한다. 상태는 `stage status` 로 본다(접두별 다음 번호 `nextIds` 포함).
+
+### 범위 — 정본은 하나, 안은 기능 묶음별
+
+제품은 "구성원 관리", "목표 관리" 같은 **범위**(기능 묶음) 단위로 자란다. 정본 파일은 단계마다 하나 그대로이고, 그 안을 `## 범위: <이름>` 절로 나눈다(05 디자인 시스템·09 기술 구조는 제품 전체 문서라 절이 없다). 회의록도 범위별로 쌓인다.
+
+```text
+docs/product/01-requirements.md
+├── ## 대상 사용자 · ## 제외              ← 제품 절(한 번)
+├── ## 범위: member-management            ← 문제: · 목표: 한 줄씩, 그 아래 REQ-001~016
+└── ## 범위: goal-tracking                ← 문제: · 목표:, REQ-017~
+docs/work-items/member-management/2026-09-17-requirements/ … 2026-09-18-wireframes/
+docs/work-items/goal-tracking/2026-09-20-requirements/ …
+docs/features/member-management/main.md   ← 범위의 회의록 순서 = 단계 순서
+```
+
+- 이름은 사용자가 준다: `/vais 범위: goal-tracking 요구사항 정의서` 또는 `/vais 새 제품: po-report 범위: member-management`. 2단계부터는 직전 단계 작업의 범위를 물려받는다. AI 는 이름을 만들지 않는다.
+- 한 작업은 자기 범위의 절만 쓴다. 절이 없으면 문서 끝에 만들고, 다른 범위의 항목을 바꾸거나 지우면 `stage-document` 검사가 막는다. 커버리지("모든 REQ 에 F 가 있는가")도 범위 안에서 본다.
+- 제품 노트 "현재" 에 `범위별` 표가 붙고, `docs/README.md` 의 열 이름은 "범위 · Feature" 다.
+- 4.3.0 이전에 시작한 프로젝트는 `/vais 정리: 범위 <이름>` → `/vais 정리 확인` 한 번으로 옮긴다. 옛 Work item ID 는 그대로 두고 폴더만 `<범위>/<id>` 로 간다.
 
 ### 기능·버그 — 승인된 문서 위에서만
 
@@ -192,7 +213,7 @@ Review: 검수 페이지(승인 시안 | 전 | 후) → 독립 QA → /vais 최�
 ## 산출물
 
 ```text
-docs/work-items/{feature}/{YYYY-MM-DD-slug}/
+docs/work-items/{feature}/{YYYY-MM-DD-slug}/      # 단계 작업은 {범위}/{YYYY-MM-DD-단계}/
 ├── main.md                # 작업 상태
 ├── 01-plan/main.md … 05-report/main.md
 └── */evidence/            # check 결과, handoff, 스크린샷
@@ -210,7 +231,7 @@ skills/vais/SKILL.md        /vais 진입 규칙
 agents/v2-specialist.md     유일한 위임 Agent
 hooks/                      session-start(브리핑) · prompt(라우팅·승인·지침) · write-guard · agent-handoff · drift · stop(기록 잠금)
 lib/workflow/v2/            상태 머신 · 저장소 · transaction · gate · 문서 품질 · drift · 역할 · 사슬(chain-registry·id-chain) · 장부(ledger) · 노트(product-note) · 제안(proposal) · doctor ·
-                            화면(screen-capture·diff-summary·review-page) · 명령(briefing·explain·vcs)
+                            화면(screen-capture·diff-summary·review-page) · 명령(briefing·explain·vcs) · 범위 정리(migrate-scopes)
 contracts/glossary.json     `/vais 설명` 용어 사전 (데이터)
 scripts/vais-workflow-v2.js 내부 CLI · scripts/vais-statusline.js 상태 줄 · scripts/vais-doctor.js
 contracts/v2-role-cards.json  역할 정본

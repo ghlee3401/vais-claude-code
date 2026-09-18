@@ -11,7 +11,7 @@
 - 플러그인은 Plan → Design → Do → Review → Report 를 hook + 상태 머신으로 **강제**하고, 결정·증거를 **기록**하며, 결과를 **보여준다**.
 - 모델(Claude)이 바뀌어도 유지되는 것은 코드로 못 박은 규칙(승인·범위·기록·증거·고장 알림)이고, 바뀌면 줄이는 것은 데이터(역할 카드·양식·지시문)다.
 
-**4.2.0 상태 (2026-09-17, 문서 예산 상향·설정화 · 다이어그램 스킬)**: 2026-09-15 에 Legacy(C-Suite 에이전트 85개, 템플릿, 구 hook·lib·문서 ≈ 40,000줄)를 전부 제거하고(롤백 태그 `v3.0.1-legacy`), 그 위에 로드맵 H1~H8 로 새 하네스를 올렸다. 쓰이지 않던 디자인 시스템 MCP·vendor 는 H8 에서 삭제했다. 설계 정본은 `docs/harness/design.md`, 순서는 `docs/harness/roadmap.md`.
+**4.3.0 상태 (2026-09-18, 문서 예산 상향·설정화 · 다이어그램 스킬 · 정본을 범위 절로 묶기)**: 2026-09-15 에 Legacy(C-Suite 에이전트 85개, 템플릿, 구 hook·lib·문서 ≈ 40,000줄)를 전부 제거하고(롤백 태그 `v3.0.1-legacy`), 그 위에 로드맵 H1~H8 로 새 하네스를 올렸다. 쓰이지 않던 디자인 시스템 MCP·vendor 는 H8 에서 삭제했다. 설계 정본은 `docs/harness/design.md`, 순서는 `docs/harness/roadmap.md`.
 
 ## 2. 처음 읽는 순서 (2분)
 
@@ -30,7 +30,7 @@ flowchart TB
     USER["/vais 요청 · 승인"] --> PROMPT["hooks/workflow-v2-prompt.js<br/>라우팅 · 승인 판정 · 단계 지침 · drift · lease · 장부 주입"]
     PROMPT --> SKILL["skills/vais/SKILL.md"]
     SKILL --> CLI["scripts/vais-workflow-v2.js<br/>plan/design present · do ready · review prepare/decide · report finalize · assignment · handoff"]
-    CLI --> LIB["lib/workflow/v2/ (38 모듈)"]
+    CLI --> LIB["lib/workflow/v2/ (39 모듈)"]
     LIB --> STATE[".vais/v2/ work-items.json · authorizations.json · chain-index.json · ledger.jsonl"]
     LIB --> DOCS["docs/work-items/… + docs/product/ (사슬 정본 · 노트 3면)"]
     SKILL --> AGENT["agents/v2-specialist.md"]

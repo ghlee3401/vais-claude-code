@@ -41,7 +41,7 @@ describe('scene E — a session dies while Design waits; the next session resume
     // Session A: Plan → approval → Design presented, then the session is gone.
     grant(root, 'session-a', null, 'plan', 'start-request', { requestSlug: FEATURE });
     write(root, '.vais/v2/drafts/plan.md', '요청 확인: 독서 기록 앱의 요구사항 정의서를 만든다.\nkind: stage-requirements\n단계: 1 요구사항 정의서\n');
-    const plan = execute(['plan', 'present', '--slug', FEATURE, '--title', '1단계 요구사항 정의서', '--feature', FEATURE, '--relation', 'new',
+    const plan = execute(['plan', 'present', '--slug', 'requirements', '--title', '1단계 요구사항 정의서', '--feature', FEATURE, '--relation', 'new',
       '--scale', 'compact', '--kind', kind, '--session', 'session-a', '--revision', '1', '--body-file', '.vais/v2/drafts/plan.md'], root);
     let item = store.get(plan.workItemId);
     store.apply(item.id, EVENTS.USER_PLAN_APPROVED, {}, { requireLease: true, sessionId: 'session-a' });

@@ -1,0 +1,69 @@
+{
+  "schema": "phase-transaction-failure/v1",
+  "transactionId": "PT-29293582-d51f-45e5-aa50-bc34d76c4116",
+  "workItemId": "WI-2026-09-18-harness-scope-sections",
+  "phase": "review",
+  "code": "DOCUMENT_PREFLIGHT_FAILED",
+  "finding": "Canonical review document preflight failed: review-document — Required review section is missing: input-output / review REQ trace set is missing: REQ-001, REQ-002, REQ-003, REQ-005, REQ-006, REQ-007",
+  "preflight": {
+    "schema": "document-preflight/v1",
+    "phase": "review",
+    "path": "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/04-review/main.md",
+    "checks": [
+      {
+        "check": "review-document",
+        "execution": "succeeded",
+        "verdict": "fail",
+        "required": true,
+        "scope": [
+          "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/04-review/main.md"
+        ],
+        "requirements": [],
+        "summary": "2 review document issue(s) found",
+        "findings": [
+          "Required review section is missing: input-output",
+          "review REQ trace set is missing: REQ-001, REQ-002, REQ-003, REQ-005, REQ-006, REQ-007"
+        ],
+        "evidence": [
+          "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/04-review/main.md"
+        ]
+      },
+      {
+        "check": "document-budget",
+        "execution": "succeeded",
+        "verdict": "pass",
+        "required": true,
+        "scope": [
+          "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/04-review/main.md"
+        ],
+        "requirements": [
+          "REQ-009",
+          "REQ-026"
+        ],
+        "summary": "Authored Markdown 2779B is within the 9216B standard budget",
+        "findings": [],
+        "evidence": [
+          "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/04-review/main.md"
+        ]
+      },
+      {
+        "check": "document-repetition",
+        "execution": "succeeded",
+        "verdict": "pass",
+        "required": true,
+        "scope": [
+          "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/04-review/main.md"
+        ],
+        "requirements": [
+          "REQ-026"
+        ],
+        "summary": "No long authored sentence is copied from an earlier phase",
+        "findings": [],
+        "evidence": [
+          "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/04-review/main.md"
+        ]
+      }
+    ]
+  },
+  "recordedAt": "2026-09-18T02:43:21.215Z"
+}

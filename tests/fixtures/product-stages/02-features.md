@@ -4,6 +4,8 @@ stage: stage-features
 status: draft
 ---
 
+## 범위: reading-log
+
 ### F-001 ← REQ-001
 | 항목 | 내용 |
 |---|---|

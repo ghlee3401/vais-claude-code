@@ -1,9 +1,15 @@
 # 제품 노트 — 왜
 
-> 자동 생성 (`.vais/v2/ledger.jsonl` 136건). 결정·피드백·취향·부채·리스크·이정표 순.
+> 자동 생성 (`.vais/v2/ledger.jsonl` 149건). 결정·피드백·취향·부채·리스크·이정표 순.
 
-## 결정 (52)
+## 결정 (58)
 
+- 2026-09-18 02:11 · WI-2026-09-18-harness-scope-sections · 이전된 옛 작업의 Work item ID 는 유지하고 폴더만 `<범위>/<id>` 로 옮긴다(장부·chain-index 참조 안정). 새 작업부터 `<날짜>-<단계>` 이름이다. — Design revision 1 에서 확정
+- 2026-09-18 02:11 · WI-2026-09-18-harness-scope-sections · 이전은 활성 작업 없음 · 다른 세션 lease 없음 · git 깨끗함일 때만 실행하고, 실패하면 아무것도 바꾸지 않는다. — Design revision 1 에서 확정
+- 2026-09-18 02:11 · WI-2026-09-18-harness-scope-sections · 이 저장소의 authorization 을 2시간으로 올린다(큰 Do 의 만료 재발 방지). 다른 프로젝트 기본값은 그대로. — Design revision 1 에서 확정
+- 2026-09-18 02:11 · WI-2026-09-18-harness-scope-sections · 버전 4.3.0. — Design revision 1 에서 확정
+- 2026-09-18 02:11 · WI-2026-09-18-harness-scope-sections · 정본은 단계마다 파일 하나를 유지하고, 그 안을 `## 범위: <이름>` 절로 묶는다. 폴더로 쪼개지 않는다(ID 사슬·커버리지·제품 단위 문서 05·09 보존). — Design revision 1 에서 확정
+- 2026-09-18 02:11 · WI-2026-09-18-harness-scope-sections · 범위 이름은 사용자가 준다. 단계 kind 는 요청 문장에서 이름을 뽑지 않고, 2~10단계는 직전 단계 작업의 범위를 물려받는다. — Design revision 1 에서 확정
 - 2026-09-17 09:46 · WI-2026-09-17-harness-guidance-limits · 코드가 강제하는 한도는 지시문에 같은 숫자를 코드에서 끌어와 적는다. 복사한 숫자는 두지 않고 테스트로 대조한다. — Design revision 1 에서 확정
 - 2026-09-17 09:46 · WI-2026-09-17-harness-guidance-limits · outcome 한도는 700자로 올린다(사용자 논의 2026-09-17). limitation 은 300자 유지, 넘기면 잘라내지 않고 거부한다. — Design revision 1 에서 확정
 - 2026-09-17 09:46 · WI-2026-09-17-harness-guidance-limits · QA 출력 계약 숫자는 assignment 결과의 `guidance` 로 그 자리에서 생성해 Agent prompt 에 붙인다. specialist 지시문에는 원칙 세 줄만 둔다. — Design revision 1 에서 확정
@@ -61,8 +67,11 @@
 
 - 2026-09-17 09:39 · WI-2026-09-17-harness-guidance-limits · 잠시만, 500자가 너무 적은건 아닌지 한 번만 더 논의하자 — Plan Gate 에서 사용자가 수정을 요청했다
 
-## 부채 (39)
+## 부채 (42)
 
+- 2026-09-18 03:37 · WI-2026-09-18-harness-scope-sections · 실제 po_report 복사본 이전은 write guard 로 Do·QA 에서 실증하지 못했고 같은 형태의 fixture 로 대체했다. 플러그인 4.3.0 업데이트 뒤 po_report 에서 '/vais 정리: 범위 member-management' 를 실제로 돌려 확인한다. — WI-2026-09-18-harness-scope-sections Report 의 잔여 제한
+- 2026-09-18 03:37 · WI-2026-09-18-harness-scope-sections · 테스트용 실패 주입 옵션 failAfter·beforeApply 가 commitScopeMigration 에 남아 있다(운영 경로에서는 비어 있음). 이전 후 doctor 결과와 범위 인덱스의 작업 순서는 미검증. — WI-2026-09-18-harness-scope-sections Report 의 잔여 제한
+- 2026-09-18 03:37 · WI-2026-09-18-harness-scope-sections · 옛 정본은 4.3.0 업데이트 뒤 '/vais 정리' 전까지 항목형 단계·기능 작업의 stage-document 검사가 그 명령을 안내하며 막는다(05·09 단계는 영향 없음). — WI-2026-09-18-harness-scope-sections Report 의 잔여 제한
 - 2026-09-18 00:29 · WI-2026-09-17-harness-guidance-limits · 실증: 표를 받은 QA 도 첫 handoff 에서 한 칸을 한 글자 넘겨(20자 한도에 21자) 재출력 1회. files 오류와 큰 초과는 사라졌다. 다음은 specialist 가 반환 전에 스스로 돌리는 검증 명령(handoff validate --file)이다 — WI-2026-09-17-harness-guidance-limits Report 의 잔여 제한
 - 2026-09-18 00:29 · WI-2026-09-17-harness-guidance-limits · 새 지시문·guidance 는 플러그인 4.2.1 업데이트 뒤에야 hook 이 실제로 주입한다. 이번 Review 는 CTO 가 같은 표를 prompt 에 직접 붙여 검증했다 — WI-2026-09-17-harness-guidance-limits Report 의 잔여 제한
 - 2026-09-18 00:29 · WI-2026-09-17-harness-guidance-limits · 이름: bad name 은 이제 이름 bad 로 받는다(뒤 문장 무시의 결과). kebab 이 아닌 토큰만 거부된다 — WI-2026-09-17-harness-guidance-limits Report 의 잔여 제한
@@ -109,8 +118,12 @@
 - 2026-09-17 08:53 · WI-2026-09-17-harness-diagram-skill · Stop 잠금 경고 (통과): 기록되지 않은 변경 1개: references/diagram-design/ — 같은 턴에서 두 번째 Stop — 차단 대신 기록
 - 2026-09-16 11:16 · WI-2026-09-16-feature-bug-kinds · Do 준비 미달 1회: test — readiness 검사가 실패했다
 
-## 이정표 (41)
+## 이정표 (45)
 
+- 2026-09-18 03:37 · WI-2026-09-18-harness-scope-sections · 작업 완료 — 범위로 묶는 정본과 회의록 — Report 가 확정되어 동결됐다
+- 2026-09-18 03:36 · WI-2026-09-18-harness-scope-sections · 최종 승인 — 범위로 묶는 정본과 회의록 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
+- 2026-09-18 02:11 · WI-2026-09-18-harness-scope-sections · Design 승인 (revision 1) — 범위로 묶는 정본과 회의록 — 사용자가 Design 을 승인했다
+- 2026-09-18 01:58 · WI-2026-09-18-harness-scope-sections · Plan 승인 (revision 1) — 범위로 묶는 정본과 회의록 — 사용자가 Plan 을 승인했다
 - 2026-09-18 00:29 · WI-2026-09-17-harness-guidance-limits · 작업 완료 — 코드 한도를 지시문에 그대로 — Report 가 확정되어 동결됐다
 - 2026-09-18 00:28 · WI-2026-09-17-harness-guidance-limits · 최종 승인 — 코드 한도를 지시문에 그대로 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
 - 2026-09-17 09:46 · WI-2026-09-17-harness-guidance-limits · Design 승인 (revision 1) — 코드 한도를 지시문에 그대로 — 사용자가 Design 을 승인했다

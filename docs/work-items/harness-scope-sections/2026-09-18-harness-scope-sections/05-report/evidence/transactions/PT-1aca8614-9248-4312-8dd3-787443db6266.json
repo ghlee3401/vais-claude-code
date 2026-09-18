@@ -1,0 +1,119 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-1aca8614-9248-4312-8dd3-787443db6266",
+  "workItemId": "WI-2026-09-18-harness-scope-sections",
+  "phase": "report",
+  "action": "finalize",
+  "gate": {
+    "gate": "report",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "report-document",
+      "document-budget",
+      "document-repetition",
+      "transient-drafts",
+      "report-indexes"
+    ],
+    "passed": [
+      "report-document",
+      "document-budget",
+      "document-repetition",
+      "transient-drafts",
+      "report-indexes"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-18T03:37:11.445Z"
+  },
+  "checks": [
+    {
+      "check": "report-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/05-report/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical report document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/05-report/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/05-report/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 2567B is within the 4096B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/05-report/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/05-report/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/05-report/main.md"
+      ]
+    },
+    {
+      "check": "transient-drafts",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections"
+      ],
+      "requirements": [
+        "REQ-025"
+      ],
+      "summary": "No transient draft Markdown remains",
+      "findings": [],
+      "evidence": []
+    },
+    {
+      "check": "report-indexes",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/README.md",
+        "docs/features/harness-scope-sections/main.md"
+      ],
+      "requirements": [
+        "REQ-009"
+      ],
+      "summary": "Feature and Master indexes link the Work item",
+      "findings": [],
+      "evidence": [
+        "docs/README.md",
+        "docs/features/harness-scope-sections/main.md"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "report",
+    "status": "completed"
+  }
+}

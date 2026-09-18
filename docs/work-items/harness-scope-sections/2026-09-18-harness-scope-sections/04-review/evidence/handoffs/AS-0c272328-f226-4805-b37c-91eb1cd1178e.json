@@ -1,0 +1,70 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-18-harness-scope-sections",
+  "assignmentId": "AS-0c272328-f226-4805-b37c-91eb1cd1178e",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "4876ee2948f876d2f6def5d202bf658a3d35cf35d1563c439ab9df7b4fc4312c",
+  "handoffDigest": "3f8a3a9a763e08c38cba6cc5564056b05cef09b2c737dd8c17699be3798c50b8",
+  "persistedAt": "2026-09-18T02:42:57.453Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "TC-001~007 모두 테스트·문서·버전으로 추적 확인. npm test 257/0, regression 10/0, lint 0 경고, 버전 7면+lock 4.3.0, TTL 7200000. po_report 실사본 이전은 write guard 로 미실증.",
+    "decisions": [
+      "PASS — 7 TC 전부 증거 있음",
+      "po_report 실증은 fixture 로 대체 인정",
+      "validate 는 readiness 영수증으로 인정"
+    ],
+    "behavior": {
+      "inputs": [
+        "범위: X · 정리: 범위 X",
+        "## 범위: 절 정본",
+        "옛 구조 fixture 4단계"
+      ],
+      "outputs": [
+        "work-items/<범위>/<날짜>-<단계>",
+        "nextIds·범위별 표·열 제목",
+        "이동·감싸기·상태 3종 재기록"
+      ],
+      "errors": [
+        "절 밖·타범위 변경 finding",
+        "활성·lease·dirty·불일치 거부",
+        "중간 실패 시 변경 0 되돌림"
+      ]
+    },
+    "evidence": [
+      "tests/v2-scope-sections·v2-migrate-scopes·regression/scene-a (재실행 pass)",
+      "03-do/evidence/checks/plugin-validator.json pass · 04-review/evidence/checks/secret-scan.json pass",
+      "버전 7면+lock 4.3.0 · CHANGELOG [4.3.0] · design.md L37·L117 · CLAUDE 16"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-006",
+      "REQ-007"
+    ],
+    "risks": [
+      "테스트용 failAfter 훅 잔존",
+      "features 인덱스 단계 순서 미검증",
+      "doctor fail 0 이전 후 미검증"
+    ],
+    "unverified": [
+      "po_report 복사본 실제 migrate",
+      "npm run validate 직접 실행",
+      "이전 후 doctor 결과"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

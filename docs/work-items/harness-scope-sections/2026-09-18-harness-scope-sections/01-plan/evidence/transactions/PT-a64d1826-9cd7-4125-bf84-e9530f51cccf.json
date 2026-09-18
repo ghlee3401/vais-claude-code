@@ -1,0 +1,62 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-a64d1826-9cd7-4125-bf84-e9530f51cccf",
+  "workItemId": "WI-2026-09-18-harness-scope-sections",
+  "phase": "plan",
+  "action": "present",
+  "gate": {
+    "gate": "plan",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "plan-document",
+      "document-budget"
+    ],
+    "passed": [
+      "plan-document",
+      "document-budget"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-18T01:47:02.339Z"
+  },
+  "checks": [
+    {
+      "check": "plan-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/01-plan/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical plan document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/01-plan/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/01-plan/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 7482B is within the 9216B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/01-plan/main.md"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "plan",
+    "status": "waiting-user"
+  }
+}

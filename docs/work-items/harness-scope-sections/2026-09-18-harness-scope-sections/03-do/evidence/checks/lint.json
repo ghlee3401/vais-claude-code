@@ -1,0 +1,29 @@
+{
+  "check": "lint",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "contracts/chain-stages.json",
+    "schemas/chain-stage.schema.json",
+    "lib/workflow/v2/**",
+    "hooks/workflow-v2-prompt.js",
+    "scripts/vais-workflow-v2.js",
+    "tests/**",
+    "README.md",
+    "CLAUDE.md",
+    "ONBOARDING.md",
+    "docs/harness/design.md",
+    "CHANGELOG.md",
+    "package.json",
+    "package-lock.json",
+    "vais.config.json",
+    ".claude-plugin/**"
+  ],
+  "requirements": [],
+  "summary": "Check passed",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/03-do/evidence/logs/lint.log"
+  ]
+}

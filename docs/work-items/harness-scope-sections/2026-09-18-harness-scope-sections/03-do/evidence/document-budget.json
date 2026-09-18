@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/03-do/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 3359B is within the 5120B standard budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-scope-sections/2026-09-18-harness-scope-sections/03-do/main.md"
+  ]
+}
