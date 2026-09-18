@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.2.1] - 2026-09-17
+
+> `harness-guidance-limits`. runtime 이 거부하는 한도를 AI 가 미리 알고 첫 시도에 맞추게 한다. 사용자 지적: "한도가 있으면 만들 때 그 한도로 적으라고 해야지, 넘기고 다시 요청하면 토큰 낭비다".
+
+### Changed
+
+- **Report 한도** — `--outcome` 500 → 700자(논의 반영), `--limitation` 은 각 300자이며 넘기면 잘라내던 것을 거부로 바꿨다(`REPORT_LIMITS`, `assertReportInputs`). prompt hook 의 Report 지침이 두 숫자를 상수에서 끌어와 보인다
+- **QA 출력 계약 안내** — `assignment` 결과에 `guidance`(규모별 judgment·decisions·behavior·evidence·risks·unverified 글자 수·개수·바이트 표, `describeHandoffLimits`). Review 지침이 그것을 Agent prompt 에 붙이고 읽기 전용이면 `files` 금지를 명시. `agents/v2-specialist.md` 에 첫 시도 규칙 3개(한도 80% 안, 계약 밖 키 금지, 바이트 한도)
+- **Feature 이름** — `이름: <kebab> …` 뒤 문장은 slug 에 붙지 않는다(`harness-diagram-skill-plan` 재발 방지)
+- CLAUDE 규칙 5·10-1·18, README Report 행, design.md 대응표 행. 테스트 `tests/v2-guidance-limits.test.js` 가 지시문 숫자와 코드 상수를 대조
+
 ## [4.2.0] - 2026-09-17
 
 > `harness-diagram-skill`. 그림 그리는 규칙을 플러그인에 넣는다. 사용자는 어느 대화에서든 같은 규칙으로 다이어그램을 얻고, 3단계 화면 정의서의 흐름도는 Mermaid 텍스트 대신 그림으로 확인한다.

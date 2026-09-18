@@ -1,0 +1,60 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-17-harness-guidance-limits",
+  "assignmentId": "AS-b4c23a5b-cd9e-4cdf-9ec5-98ba17082aa2",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "acffb4de707b216c5febbdb675ddd1208121527225a6bfa4669d8a56d5312375",
+  "handoffDigest": "6464b40fd6e3086e6616fac16ffa0e4014629143c7617c311a537cea114aca78",
+  "persistedAt": "2026-09-17T09:54:38.941Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "pass",
+    "judgment": "TC-001~005 모두 코드·문서·테스트로 확인. npm test 245/245, lint 0 경고. PASS",
+    "decisions": [
+      "잔여 slice 는 다른 필드라 무관",
+      "guidance 는 계약에서 생성됨"
+    ],
+    "behavior": {
+      "inputs": [
+        "--outcome 701자",
+        "--limitation 301자"
+      ],
+      "outputs": [
+        "limits 700/300",
+        "assignment.guidance"
+      ],
+      "errors": [
+        "OUTCOME_TOO_LONG",
+        "LIMITATION_TOO_LONG"
+      ]
+    },
+    "evidence": [
+      "lib/workflow/v2/phase-transaction.js:106-124,144; hooks/workflow-v2-prompt.js:13,262,269",
+      "tests/v2-guidance-limits.test.js 4/4 pass; lib/workflow/v2/router.js:45; docs/harness/design.md:151"
+    ],
+    "affectedRequirements": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005"
+    ],
+    "risks": [
+      "이번 QA prompt 에 guidance 미첨부"
+    ],
+    "unverified": [
+      "npm run regression 미실행",
+      "npm run validate 미실행"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

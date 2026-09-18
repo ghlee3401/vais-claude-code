@@ -2,7 +2,7 @@
 
 > **이 파일의 책임**: Claude Code 전용 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 `ONBOARDING.md`(5분), 사용법은 `README.md`.
 >
-> 상태: **4.2.0 (2026-09-17) — 로드맵 H1~H8 완료, 문서 예산 상향·설정화, 다이어그램 스킬 흡수.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md`. 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다. 이 저장소 자체 작업의 kind 는 `harness` 다.
+> 상태: **4.2.1 (2026-09-17) — 로드맵 H1~H8 완료, 문서 예산 상향·설정화, 다이어그램 스킬 흡수, 코드 한도를 지시문에 그대로.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md`. 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다. 이 저장소 자체 작업의 kind 는 `harness` 다.
 
 ## 이 플러그인이 만드는 것
 
@@ -59,13 +59,13 @@ vais-claude-code/
 2. **단일 VAIS voice** — C-Level·specialist 를 사용자에게 고르게 하지 않는다.
 3. **Gate 우회 금지** — Plan·Design 은 사용자 명시 승인(`/vais plan 승인`, `/vais design 승인`) 후에만 다음으로. Ideation 은 Plan 안에.
 4. **상태 변경은 내부 CLI 로만** — `plan present` / `design present` / `do ready` / `review prepare` / `review decide` / `report finalize` / `assignment` / `handoff`. `.vais/v2/` 직접 편집 금지. FAIL 이면 finding 만 고쳐 재실행.
-5. **위임은 `v2-specialist` 만** — `assignment` receipt + runtime 역할 프롬프트. specialist 는 `specialist-handoff/v1` JSON 만 반환. Agent 결과가 나중에 task notification 으로 오면 raw JSON 을 phase 폴더 `handoff.json` 에 저장 후 `handoff --id … --assignment … --handoff-file …` 1회.
+5. **위임은 `v2-specialist` 만** — `assignment` receipt + runtime 역할 프롬프트 + 결과의 `guidance`(출력 계약 숫자 표)를 Agent prompt 에 그대로 붙인다. specialist 는 `specialist-handoff/v1` JSON 만 반환하고, 읽기 전용(`--code-write false`)이면 `files` 를 넣지 않는다. Agent 결과가 나중에 task notification 으로 오면 raw JSON 을 phase 폴더 `handoff.json` 에 저장 후 `handoff --id … --assignment … --handoff-file …` 1회.
 6. **Design 승인 후 자동 진행** — Do → Readiness → Review evidence → 독립 QA 결과 제시까지. BLOCKED·drift·QA FAIL 에서만 멈춘다.
 7. **Review 는 read-only 독립 QA** — `independent-qa` clean-room, `--code-write false`, 정확히 1회. AI QA PASS 후에만 최종 승인 요청.
 8. **write scope** — Do 는 Design 이 선언한 scope 안에서만. `.git`, `.vais`, `docs/work-items`, `docs/features`, `docs/README.md` 는 scope 불가.
 9. **`/vais` 없는 대화는 읽기 전용.**
 10. **산출물** — `docs/work-items/{feature}/{YYYY-MM-DD-slug}/01-plan|02-design|03-do|04-review|05-report/main.md`. 첫 Plan 초안만 `.vais/v2/drafts/plan.md`, 이후 모든 초안(Plan 수정 포함)은 해당 phase 폴더의 `draft.md` 에 두고 `--body-file` 로 넘긴다 (승격 시 자동 삭제).
-10-1. **Feature 이름** — runtime 이 요청의 영어 단어에서 발급한다. 영어 단어가 없으면 AI 가 이름을 만들지 않고 사용자에게 묻는다. 사용자가 `/vais 이름: <kebab-case>` 로 준 이름만 CLI 가 받는다.
+10-1. **Feature 이름** — runtime 이 요청의 영어 단어에서 발급한다. 영어 단어가 없으면 AI 가 이름을 만들지 않고 사용자에게 묻는다. 사용자가 `/vais 이름: <kebab-case>` 로 준 이름만 CLI 가 받고, 이름 뒤에 붙은 문장은 slug 에 들어가지 않는다(`이름: a-b 추려서 Plan` → `a-b`).
 10-2. **작업 kind** — 모든 Work item 은 `kind` 를 가진다 (`harness`·`feature`·`ui`·`bug`·`stage-*` 10, 정본 `contracts/work-kinds.json`). hook 이 제안하고 Plan 에 적어 사용자 확인 후 `plan present --kind` 로 넘긴다. 이 저장소 자체 작업은 `harness` 다.
 10-3. **제품 사슬** — `stage-*` kind 는 `docs/product/NN-*.md` 정본 하나를 만든다 (`contracts/chain-stages.json`). 항목은 `### F-003 ← REQ-002` 제목 + `| 항목 | 내용 |` 표. 앞 단계 승인·stale 없음이 진입 조건이고, `do ready` 의 `stage-document` 검사가 형식·부모·산출물·커버리지·예산을 본다. `report finalize` 가 정본을 approved 로 표시한다. stale 해소는 재승인 또는 사용자의 `/vais 변경 없음 확인: <항목> ← <부모>` 뿐이다.
 10-4. **장부와 노트** — 승인·거절·QA FAIL·잔여 제한은 runtime 이 `.vais/v2/ledger.jsonl` 에 자동으로 남긴다(append-only, 손으로 쓰지 않음). Design 의 `## 결정` 불릿은 승인 때 decision 으로 기록되므로 결정은 그 절에 적는다. `docs/product/{README,roadmap,decisions}.md` 는 Report 마다 재생성되며 `roadmap.md` 의 `<!-- vais:user -->` 표식 사이만 손으로 고칠 수 있다. 세션 첫 줄의 브리핑과 Stop 잠금 사유는 그대로 사용자에게 보인다. Stop 이 턴을 막으면 해당 transaction·handoff 로 기록한 뒤 끝낸다.
@@ -78,6 +78,7 @@ vais-claude-code/
 15. **위험 명령 금지** — `rm -rf`, `git push --force`, `git commit --no-verify`. 민감 정보는 환경 변수로만.
 16. **사용자 명령** — `/vais 상태`·`설명`·`제안`·`기록 보기`·`doctor` 는 읽기 전용이며 hook 이 지정한 CLI(`status`·`explain`·`propose`·`ledger list`·`doctor`)를 실행해 결과 문장을 그대로 보인다. `/vais 저장`·`되돌리기`·`기록` 은 두 단계: 첫 명령은 제안만, 사용자가 확인 문구(`/vais 저장 확인`, `/vais 되돌리기 확인: <대상>`, `/vais 기록 <종류> <내용>`)를 직접 치면 runtime 이 토큰을 발급하고 `save commit`·`revert commit`·`ledger add` 가 실행된다. AI 가 `git commit` 을 직접 치거나 확인 문구를 대신 쓰지 않는다. push 는 사용자가 한다.
 17. **다이어그램** — 그림은 `skills/diagram/SKILL.md` 규칙(11종, HTML + 인라인 SVG 한 파일)으로만 그린다. `/vais diagram <요청>` 은 그 턴의 write scope 에 `docs/diagrams/**`(`vais.config.json > diagrams.dir`)를 넣고 Work item 상태는 바꾸지 않는다. `/vais` 없는 "그려줘" 는 저장하지 않고 `/vais diagram` 을 안내한다. 3단계 화면 정의서의 흐름도 안은 `02-design/options/N/flow.html` + `screens capture` PNG 로 보이고, Do 의 흐름 파일은 `.html`(권장, `do ready` 가 PNG 렌더) 또는 `.mmd`. SVG·PNG 내보내기는 요청 시 `diagram export --file … --svg --png` 한 번. Python·Playwright 는 쓰지 않는다.
+18. **코드 한도는 지시문에 그대로** — runtime 이 거부하는 한도는 hook 지시문에 같은 숫자로 미리 보인다(복사가 아니라 상수 interpolation). Report `--outcome` 700자 이내 요약, `--limitation` 각 300자 한 줄, 넘기면 잘리지 않고 거부. QA handoff 숫자는 `assignment` 결과의 `guidance`. 한도를 넘겨 다시 시도하는 것은 낭비이므로 처음부터 안에 맞춘다.
 
 ## mode 와 비상 스위치
 

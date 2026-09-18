@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-4.2.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-4.2.1-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -13,7 +13,7 @@
 
 ---
 
-> **현재 상태 (4.2.0, 2026-09-17)**: 로드맵 H1~H8 완료, 문서 예산 상향·설정화(`documentBudgets`), 다이어그램 스킬(`skills/diagram`, `/vais diagram`). 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌고, 쓰이지 않던 디자인 시스템 MCP·vendor·브랜드 카탈로그는 제거됐다(되살림: 커밋 `66d0f6b`). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
+> **현재 상태 (4.2.1, 2026-09-17)**: 로드맵 H1~H8 완료, 문서 예산 상향·설정화(`documentBudgets`), 다이어그램 스킬(`skills/diagram`, `/vais diagram`), 코드 한도를 지시문에 그대로(Report 700/300, QA `guidance`). 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌고, 쓰이지 않던 디자인 시스템 MCP·vendor·브랜드 카탈로그는 제거됐다(되살림: 커밋 `66d0f6b`). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
 
 ## 무엇인가
 
@@ -185,7 +185,7 @@ Review: 검수 페이지(승인 시안 | 전 | 후) → 독립 QA → /vais 최�
 | Design | REQ별 동작·입출력·오류·TC-NNN, write scope, check, specialist 선택 | 승인 |
 | Do | 승인된 write scope 안에서 구현 | 자동 |
 | Review | read-only 독립 AI QA. PASS / FAIL / BLOCKED | AI PASS 후 최종 승인 |
-| Report | 결과·증거·잔여 제한. 완료 시 동결 | — |
+| Report | 결과(700자 이내 요약)·증거·잔여 제한(각 300자 한 줄). 넘기면 잘리지 않고 거부. 완료 시 동결 | — |
 
 규모는 compact / standard / extended 로 자동 분류되며 문서 깊이·specialist 수만 달라진다. 복귀: Readiness NOT_READY 3회 → blocked, QA FAIL → Design (최대 3회), 최종 거절 → Design.
 

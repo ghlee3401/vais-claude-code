@@ -148,6 +148,7 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 단계 문서 검사·승인 (`stage-document` 내장 검사, `report finalize` 승인, `stage status/confirm/reindex`) | `lib/workflow/v2/phase-transaction.js`, `scripts/vais-workflow-v2.js` | 완료 (H2) |
 | Work item `kind` 필드·진입 조건·kind 별 양식·예산 | `state-machine.js`, `phase-check.js`, `document-quality.js`, `schemas/work-item.schema.json` | 완료 (H2) |
 | 문서 예산 기본값(실측 최대 ≤ 75%)·`vais.config.json > documentBudgets` 칸 단위 덮어쓰기·doctor `document-budgets`·사용자 말 초과 안내 | `config.js` (`DEFAULT_DOCUMENT_BUDGETS`, `loadDocumentBudgets`), `document-quality.js`, `doctor.js` | 완료 (4.1.0 `harness-doc-budget`) |
+| 코드 한도를 지시문에 그대로: Report outcome 700·limitation 300(거부, `REPORT_LIMITS` interpolation), QA `guidance`(`describeHandoffLimits`), `이름:` 뒤 문장 무시 | `phase-transaction.js`, `contracts.js`, `router.js`, prompt hook, CLI `assignment`, `agents/v2-specialist.md` | 완료 (4.2.1 `harness-guidance-limits`) |
 | 다이어그램 스킬(diagram-design MIT 스냅샷, 11종)·`/vais diagram` 산출 폴더 authorization·`diagram export`(SVG 추출 + Chrome PNG)·3단계 흐름 파일 `.html` 렌더(`renderArtifacts`·`diagram` 키) | `skills/diagram/**`, `router.js`, `config.js` (`loadDiagramConfig`), `diagram.js`, `write-policy.js`, prompt hook, CLI `diagram export`, `contracts/chain-stages.json` | 완료 (4.2.0 `harness-diagram-skill`) |
 | 화면 확인 정지점 (ui kind) | `state-machine.js` 이벤트 `USER_OPTION_CHOSEN` / `USER_SCREEN_CONFIRMED` / `USER_SCREEN_REVISED`, `router.js`, prompt hook | 완료 (H4) |
 | 수정 루프 상한 (kind 의 `repairLimit`, ui 5) | `state-machine.js`, `contracts/work-kinds.json` | 완료 (H2) |

@@ -7,7 +7,7 @@ const { WorkItemStore } = require('../lib/workflow/v2/work-item-store');
 const { AuthorizationStore } = require('../lib/workflow/v2/authorization-store');
 const { EVENTS, SLOT_HOLDING_STATUSES } = require('../lib/workflow/v2/state-machine');
 const { defaultAllowedPaths, scopeWithin, normalizeRelative } = require('../lib/workflow/v2/write-policy');
-const { assertContract, buildSpecialistAssignment } = require('../lib/workflow/v2/contracts');
+const { assertContract, buildSpecialistAssignment, describeHandoffLimits } = require('../lib/workflow/v2/contracts');
 const { evaluateGate } = require('../lib/workflow/v2/gate-engine');
 const { searchRelatedWork } = require('../lib/workflow/v2/history-resolver');
 const { loadRoleCatalog, resolveRole, buildRolePrompt } = require('../lib/workflow/v2/role-registry');
@@ -539,7 +539,8 @@ function buildAssignment(projectRoot, options) {
   });
   store.acquireLease(id, sessionId);
   const assignmentReceipt = store.recordAssignment(id, assignment, sessionId);
-  return { rolePrompt: buildRolePrompt(resolved.role), assignment, assignmentReceipt };
+  // `guidance` restates the output contract's numbers for the Agent prompt (harness-guidance-limits).
+  return { rolePrompt: buildRolePrompt(resolved.role), assignment, assignmentReceipt, guidance: describeHandoffLimits(assignment.outputContract) };
 }
 
 // Registers a specialist result that arrived after the Agent tool returned (deferred

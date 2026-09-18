@@ -1,0 +1,133 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-8323172a-8588-4d2e-bc82-d0825194de8c",
+  "workItemId": "WI-2026-09-17-harness-guidance-limits",
+  "phase": "review",
+  "action": "decide",
+  "gate": {
+    "gate": "review",
+    "verdict": "PASS",
+    "requiredChecks": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "passed": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-18T00:28:22.432Z"
+  },
+  "checks": [
+    {
+      "check": "review-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-guidance-limits/2026-09-17-harness-guidance-limits/04-review/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical review document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-guidance-limits/2026-09-17-harness-guidance-limits/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-guidance-limits/2026-09-17-harness-guidance-limits/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 2489B is within the 7168B compact budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-guidance-limits/2026-09-17-harness-guidance-limits/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/harness-guidance-limits/2026-09-17-harness-guidance-limits/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-guidance-limits/2026-09-17-harness-guidance-limits/04-review/main.md"
+      ]
+    },
+    {
+      "check": "independent-qa-handoff",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [],
+      "requirements": [
+        "REQ-001",
+        "REQ-002",
+        "REQ-003",
+        "REQ-004",
+        "REQ-005"
+      ],
+      "summary": "Independent QA completed without a failure verdict",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-guidance-limits/2026-09-17-harness-guidance-limits/04-review/evidence/handoffs/AS-b4c23a5b-cd9e-4cdf-9ec5-98ba17082aa2.json"
+      ]
+    },
+    {
+      "check": "secret-scan",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "hooks/workflow-v2-prompt.js",
+        "agents/v2-specialist.md",
+        "lib/workflow/v2/router.js",
+        "lib/workflow/v2/phase-transaction.js",
+        "lib/workflow/v2/contracts.js",
+        "scripts/vais-workflow-v2.js",
+        "tests/**",
+        "CLAUDE.md",
+        "README.md",
+        "docs/harness/design.md",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/harness-guidance-limits/2026-09-17-harness-guidance-limits/04-review/evidence/logs/secret-scan.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "review",
+    "status": "waiting-user"
+  }
+}

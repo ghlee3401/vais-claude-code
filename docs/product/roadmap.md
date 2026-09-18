@@ -18,8 +18,8 @@
 ## 제안
 
 1. 1단계 요구사항 정의서 작성 — `/vais 새 제품: <제품 이름>` (아직 승인된 요구사항 정의서 가 없다)
-2. 부채 정리: 원본 예제 assets/example-*.html 은 authorization 30분 안에 복사하지 못해 동봉하지 않았다. 유형 참조의 Examples 줄이 없는 파일을 가리키므로 다음 작업에서 references/ 에서 복사하거나 그 줄을 지운다 — `/vais 원본 예제 assets/example-*.html 은 authorization 30분 안에 복사하지 못해 동봉하지 않았다. 유형 참조의 Examples 줄이 없는 파일을 가리키므로 다음 작업에서 references/ 에서 복사하거나 그 줄을 지운다` (WI-2026-09-17-harness-diagram-skill 에 남은 부채)
-3. 부채 정리: diagram export CLI 는 실행 중 캐시(4.1.0)에 없어 테스트로만 확인했다. push 와 플러그인 4.2.0 업데이트 뒤 실제 사용이 첫 실행이다 — `/vais diagram export CLI 는 실행 중 캐시(4.1.0)에 없어 테스트로만 확인했다. push 와 플러그인 4.2.0 업데이트 뒤 실제 사용이 첫 실행이다` (WI-2026-09-17-harness-diagram-skill 에 남은 부채)
+2. 부채 정리: 실증: 표를 받은 QA 도 첫 handoff 에서 한 칸을 한 글자 넘겨(20자 한도에 21자) 재출력 1회. files 오류와 큰 초과는 사라졌다. 다음은 specialist 가 반환 전에 스스로 돌리는 검증 명령(handoff validate --file)이다 — `/vais 실증: 표를 받은 QA 도 첫 handoff 에서 한 칸을 한 글자 넘겨(20자 한도에 21자) 재출력 1회. files 오류와 큰 초과는 사라졌다. 다음은 specialist 가 반환 전에 스스로 돌리는 검증 명령(handoff validate --file)이다` (WI-2026-09-17-harness-guidance-limits 에 남은 부채)
+3. 부채 정리: 새 지시문·guidance 는 플러그인 4.2.1 업데이트 뒤에야 hook 이 실제로 주입한다. 이번 Review 는 CTO 가 같은 표를 prompt 에 직접 붙여 검증했다 — `/vais 새 지시문·guidance 는 플러그인 4.2.1 업데이트 뒤에야 hook 이 실제로 주입한다. 이번 Review 는 CTO 가 같은 표를 prompt 에 직접 붙여 검증했다` (WI-2026-09-17-harness-guidance-limits 에 남은 부채)
 
 ## 내 메모
 

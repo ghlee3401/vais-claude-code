@@ -1,0 +1,15 @@
+{
+  "check": "report-document",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/harness-guidance-limits/2026-09-17-harness-guidance-limits/05-report/main.md"
+  ],
+  "requirements": [],
+  "summary": "Canonical report document is complete",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/harness-guidance-limits/2026-09-17-harness-guidance-limits/05-report/main.md"
+  ]
+}

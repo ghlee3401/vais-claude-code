@@ -10,6 +10,7 @@ const { routePrompt } = require('../lib/workflow/v2/router');
 const { defaultAllowedPaths } = require('../lib/workflow/v2/write-policy');
 const { EVENTS, SLOT_HOLDING_STATUSES } = require('../lib/workflow/v2/state-machine');
 const { INTERNAL_COMMAND } = require('../scripts/vais-workflow-v2');
+const { REPORT_LIMITS } = require('../lib/workflow/v2/phase-transaction');
 const { captureRepoSnapshot, diffSnapshots, classifyDrift, filterExternalDrift } = require('../lib/workflow/v2/repo-drift');
 const { loadRoleCatalog, resolveRole, buildRolePrompt } = require('../lib/workflow/v2/role-registry');
 const { resolveProjectRoot, resolveStartDir, extractPrompt, resolveMode, warningLine } = require('./v2-project-context');
@@ -258,13 +259,14 @@ function phaseGuidance(item, sessionId, requestSlug = null, options = {}) {
       'Independent QA가 구현자 자기평가를 제외한 clean-room Context View로 검증하며 제품 코드는 수정하지 않는다.',
       `먼저 \`${INTERNAL_COMMAND} review prepare --id ${item.id} --session ${sessionId} --revision ${item.designRevision}\`를 실행해 Design-declared review evidence를 정확히 한 번 준비한다. Do와 identity가 같은 check receipt는 재사용한다.`,
       `evidence가 fail/blocked이고 independent QA가 같은 identity의 보충 검사를 요구한 경우에만 \`${INTERNAL_COMMAND} review prepare --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --supplemental-check <tool-id> --supplemental-reason "<reason>"\`을 실행한다. 보충 검사는 Design-declared check별 한 번만 허용한다.`,
-      `\`${INTERNAL_COMMAND} assignment --id ${item.id} --session ${sessionId} --role independent-qa --delegated-by ceo --phase review --mode verification --question "<question>" --code-write false --criterion "<criterion>" --ref <plan-ref> --ref <design-ref> --clean-room true\`로 정확히 한 번 위임한다. handoff는 Agent 종료 훅이 자동 저장한다. assignment.outputContract의 UTF-8 hard limit과 더 낮은 target을 지키고 로그·스크린샷은 짧은 경로나 receipt ID로만 참조한다.`,
+      `\`${INTERNAL_COMMAND} assignment --id ${item.id} --session ${sessionId} --role independent-qa --delegated-by ceo --phase review --mode verification --question "<question>" --code-write false --criterion "<criterion>" --ref <plan-ref> --ref <design-ref> --clean-room true\`로 정확히 한 번 위임한다. handoff는 Agent 종료 훅이 자동 저장한다. assignment 결과의 \`guidance\`(출력 계약 숫자 표)를 rolePrompt·assignment 와 함께 Agent prompt 에 그대로 붙인다. \`--code-write false\` 이므로 handoff 에 \`files\` 를 넣지 말라고 명시하고, 로그·스크린샷은 짧은 경로나 receipt ID로만 참조하게 한다.`,
       `Agent 도구가 launch receipt만 돌려주고 QA 결과가 나중에 task notification으로 오면, 그 raw handoff JSON을 \`${PHASE_FOLDERS.review}/handoff.json\`에 그대로 저장한 뒤 \`${INTERNAL_COMMAND} handoff --id ${item.id} --session ${sessionId} --assignment <AS-id> --handoff-file <path>\`를 한 번 실행하고 review decide로 이어간다.`,
       `REQ-001/TC-001처럼 접두사를 생략하지 않은 ID별로 입력·출력·기대·실제·판정·엣지/제한·evidence를 짧게 기록한 뒤 \`${INTERNAL_COMMAND} review decide --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --body-file <review-draft>\`을 한 번 실행한다. decide는 기존 receipt와 QA handoff만 검증하며 check를 재실행하지 않는다. 실제 QA FAIL/BLOCKED면 Report로 가지 않으며 FAIL은 Design으로 돌아간다.`,
     ],
     report: [
       'CEO는 AI QA PASS와 사용자 최종 승인 뒤에만 Report를 확정한다.',
       `\`${INTERNAL_COMMAND} report finalize --id ${item.id} --session ${sessionId} --revision ${item.designRevision} --outcome "<accepted outcome>" [--limitation "<remaining limitation>"]\`을 한 번 실행한다. 완료 Report는 수정하지 않는다.`,
+      `한도: --outcome 은 ${REPORT_LIMITS.outcome}자 이내 요약(세부는 Review 문서 링크로 충분), --limitation 은 각 ${REPORT_LIMITS.limitation}자 이내 한 줄이며 여러 개면 나눠 적는다. 넘기면 잘리지 않고 거부되므로 처음부터 안에 맞춘다.`,
     ],
   };
   const ownerByPhase = { plan: 'cpo', design: 'cto', do: 'cto', review: 'independent-qa', report: 'ceo' };

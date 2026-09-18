@@ -260,7 +260,7 @@ describe('commands REQ-008 H4 leftovers', () => {
     assert.notEqual(suggestKind('/vais 검색 기능 추가').kind, 'ui');
     assert.equal(suggestKind('/vais 버튼 색상을 파랑으로').kind, 'ui');
     const item = { id: 'WI-2026-09-16-r', title: 'r', primaryFeature: 'r', approvals: { final: 'approved' }, writeScopes: [] };
-    assert.throws(() => reportBody(os.tmpdir(), item, { outcome: 'x'.repeat(REPORT_OUTCOME_LIMIT + 1) }), /500자 이내/);
+    assert.throws(() => reportBody(os.tmpdir(), item, { outcome: 'x'.repeat(REPORT_OUTCOME_LIMIT + 1) }), new RegExp(`${REPORT_OUTCOME_LIMIT}자 이내`));
     assert.match(reportBody(os.tmpdir(), item, { outcome: 'x'.repeat(REPORT_OUTCOME_LIMIT) }), /## 최종 결과/);
   });
 });

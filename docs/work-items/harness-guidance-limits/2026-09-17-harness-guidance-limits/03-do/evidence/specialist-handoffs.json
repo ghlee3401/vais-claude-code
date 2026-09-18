@@ -1,0 +1,27 @@
+{
+  "check": "specialist-handoffs",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "hooks/workflow-v2-prompt.js",
+    "agents/v2-specialist.md",
+    "lib/workflow/v2/router.js",
+    "lib/workflow/v2/phase-transaction.js",
+    "lib/workflow/v2/contracts.js",
+    "scripts/vais-workflow-v2.js",
+    "tests/**",
+    "CLAUDE.md",
+    "README.md",
+    "docs/harness/design.md",
+    "CHANGELOG.md",
+    "package.json",
+    "package-lock.json",
+    "vais.config.json",
+    ".claude-plugin/**"
+  ],
+  "requirements": [],
+  "summary": "All Design-required specialist handoffs are uniquely consumed and complete",
+  "findings": [],
+  "evidence": []
+}

@@ -1,9 +1,14 @@
 # 제품 노트 — 왜
 
-> 자동 생성 (`.vais/v2/ledger.jsonl` 122건). 결정·피드백·취향·부채·리스크·이정표 순.
+> 자동 생성 (`.vais/v2/ledger.jsonl` 136건). 결정·피드백·취향·부채·리스크·이정표 순.
 
-## 결정 (47)
+## 결정 (52)
 
+- 2026-09-17 09:46 · WI-2026-09-17-harness-guidance-limits · 코드가 강제하는 한도는 지시문에 같은 숫자를 코드에서 끌어와 적는다. 복사한 숫자는 두지 않고 테스트로 대조한다. — Design revision 1 에서 확정
+- 2026-09-17 09:46 · WI-2026-09-17-harness-guidance-limits · outcome 한도는 700자로 올린다(사용자 논의 2026-09-17). limitation 은 300자 유지, 넘기면 잘라내지 않고 거부한다. — Design revision 1 에서 확정
+- 2026-09-17 09:46 · WI-2026-09-17-harness-guidance-limits · QA 출력 계약 숫자는 assignment 결과의 `guidance` 로 그 자리에서 생성해 Agent prompt 에 붙인다. specialist 지시문에는 원칙 세 줄만 둔다. — Design revision 1 에서 확정
+- 2026-09-17 09:46 · WI-2026-09-17-harness-guidance-limits · `이름:` 이 있으면 kebab 토큰 하나만 이름이다. 뒤 문장은 slug 에 붙지 않는다. — Design revision 1 에서 확정
+- 2026-09-17 09:46 · WI-2026-09-17-harness-guidance-limits · 버전 4.2.1. — Design revision 1 에서 확정
 - 2026-09-17 09:08 · WI-2026-09-17-harness-diagram-skill · 원본은 통째로 동기화하지 않고 우리 사정에 맞게 고친 스냅샷으로 갖는다. 출처는 파일 머리와 `LICENSE`(MIT) 로 남기고, 갱신은 필요할 때 사람이 원본과 비교한다. 릴리스가 없어 커밋 해시로 고정한다. — Design revision 1 에서 확정
 - 2026-09-17 09:08 · WI-2026-09-17-harness-diagram-skill · 유형은 개발 문서용 11종만 남긴다: 흐름도·유저 저니·스윔레인·시퀀스·상태 기계·구조도·상위 구조·데이터 흐름·ER·타임라인·트리. 나머지 29종은 요청 시 "지원 목록 + 가장 가까운 유형" 으로 안내한다. — Design revision 1 에서 확정
 - 2026-09-17 09:08 · WI-2026-09-17-harness-diagram-skill · Python·Playwright·가져오기·기하 검증은 가져오지 않는다. PNG 는 기존 Chrome 캡처, SVG 는 Node 추출 20줄로 대신한다. — Design revision 1 에서 확정
@@ -52,8 +57,16 @@
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 테스트는 stub 렌더러로 결정적으로 돌리고 receipt 에 stub 임을 남긴다. 실제 렌더 검증은 Chrome 이 있는 환경의 별도 테스트와 사용자 확인으로 한다. — Design revision 1 에서 확정
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · 취향은 제품 전체 속성이라 feature 를 넘어 주입한다. — Design revision 1 에서 확정
 
-## 부채 (35)
+## 피드백 (1)
 
+- 2026-09-17 09:39 · WI-2026-09-17-harness-guidance-limits · 잠시만, 500자가 너무 적은건 아닌지 한 번만 더 논의하자 — Plan Gate 에서 사용자가 수정을 요청했다
+
+## 부채 (39)
+
+- 2026-09-18 00:29 · WI-2026-09-17-harness-guidance-limits · 실증: 표를 받은 QA 도 첫 handoff 에서 한 칸을 한 글자 넘겨(20자 한도에 21자) 재출력 1회. files 오류와 큰 초과는 사라졌다. 다음은 specialist 가 반환 전에 스스로 돌리는 검증 명령(handoff validate --file)이다 — WI-2026-09-17-harness-guidance-limits Report 의 잔여 제한
+- 2026-09-18 00:29 · WI-2026-09-17-harness-guidance-limits · 새 지시문·guidance 는 플러그인 4.2.1 업데이트 뒤에야 hook 이 실제로 주입한다. 이번 Review 는 CTO 가 같은 표를 prompt 에 직접 붙여 검증했다 — WI-2026-09-17-harness-guidance-limits Report 의 잔여 제한
+- 2026-09-18 00:29 · WI-2026-09-17-harness-guidance-limits · 이름: bad name 은 이제 이름 bad 로 받는다(뒤 문장 무시의 결과). kebab 이 아닌 토큰만 거부된다 — WI-2026-09-17-harness-guidance-limits Report 의 잔여 제한
+- 2026-09-18 00:29 · WI-2026-09-17-harness-guidance-limits · 지난 작업의 부채는 그대로: drift 예외 경로·authorization TTL 30분, 원본 예제 HTML 미동봉, design.md 행의 docs/diagrams 단어 — WI-2026-09-17-harness-guidance-limits Report 의 잔여 제한
 - 2026-09-17 09:33 · WI-2026-09-17-harness-diagram-skill · 원본 예제 assets/example-*.html 은 authorization 30분 안에 복사하지 못해 동봉하지 않았다. 유형 참조의 Examples 줄이 없는 파일을 가리키므로 다음 작업에서 references/ 에서 복사하거나 그 줄을 지운다 — WI-2026-09-17-harness-diagram-skill Report 의 잔여 제한
 - 2026-09-17 09:33 · WI-2026-09-17-harness-diagram-skill · diagram export CLI 는 실행 중 캐시(4.1.0)에 없어 테스트로만 확인했다. push 와 플러그인 4.2.0 업데이트 뒤 실제 사용이 첫 실행이다 — WI-2026-09-17-harness-diagram-skill Report 의 잔여 제한
 - 2026-09-17 09:33 · WI-2026-09-17-harness-diagram-skill · 하네스 빈틈: Design 이 시킨 사용자 행동(clone, .gitignore)이 두 번 저장소 변경 감지로 잡혀 Do 가 Design 으로 되돌아갔고, authorization 30분(workflowV2.authorizationTtlMs)이 큰 Do 에 짧아 한 번 만료됐다. drift 예외 경로와 TTL 기본값 상향이 다음 하네스 작업 후보다 — WI-2026-09-17-harness-diagram-skill Report 의 잔여 제한
@@ -96,8 +109,12 @@
 - 2026-09-17 08:53 · WI-2026-09-17-harness-diagram-skill · Stop 잠금 경고 (통과): 기록되지 않은 변경 1개: references/diagram-design/ — 같은 턴에서 두 번째 Stop — 차단 대신 기록
 - 2026-09-16 11:16 · WI-2026-09-16-feature-bug-kinds · Do 준비 미달 1회: test — readiness 검사가 실패했다
 
-## 이정표 (37)
+## 이정표 (41)
 
+- 2026-09-18 00:29 · WI-2026-09-17-harness-guidance-limits · 작업 완료 — 코드 한도를 지시문에 그대로 — Report 가 확정되어 동결됐다
+- 2026-09-18 00:28 · WI-2026-09-17-harness-guidance-limits · 최종 승인 — 코드 한도를 지시문에 그대로 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
+- 2026-09-17 09:46 · WI-2026-09-17-harness-guidance-limits · Design 승인 (revision 1) — 코드 한도를 지시문에 그대로 — 사용자가 Design 을 승인했다
+- 2026-09-17 09:43 · WI-2026-09-17-harness-guidance-limits · Plan 승인 (revision 1) — 코드 한도를 지시문에 그대로 — 사용자가 Plan 을 승인했다
 - 2026-09-17 09:33 · WI-2026-09-17-harness-diagram-skill · 작업 완료 — 다이어그램 스킬 흡수 — Report 가 확정되어 동결됐다
 - 2026-09-17 09:32 · WI-2026-09-17-harness-diagram-skill · 최종 승인 — 다이어그램 스킬 흡수 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
 - 2026-09-17 09:08 · WI-2026-09-17-harness-diagram-skill · Design 승인 (revision 1) — 다이어그램 스킬 흡수 — 사용자가 Design 을 승인했다
