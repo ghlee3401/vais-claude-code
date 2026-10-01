@@ -569,17 +569,36 @@ describe('v2 phase transaction receipts', () => {
       /standard Design allows at most 2/);
   });
 
-  it('requires canonical three-digit REQ and TC identifiers at document preflight', t => {
+  it('normalizes loose REQ and TC identifiers and still rejects ambiguous ones at document preflight', t => {
+    // unattended-chain U1 REQ-002 (a): a missing hyphen or short number is corrected and recorded;
+    // a suffix letter would change meaning and stays a preflight finding.
     const root = fixture(t);
     new AuthorizationStore(root).grant({
       sessionId: SESSION, workItemId: null, phase: 'plan', action: 'start-request',
       allowedPaths: [], allowedCommands: [],
     });
-    const invalid = PLAN.replaceAll('REQ-001', 'REQ-1').replaceAll('TC-001', 'TC-1');
-    assert.throws(() => runPhaseTransaction(root, {
+    const loose = PLAN.replaceAll('REQ-001', 'REQ-1').replaceAll('TC-001', 'TC-1');
+    const receipt = runPhaseTransaction(root, {
       phase: 'plan', action: 'present', id: 'WI-2026-09-02-short-ids',
       title: 'Short IDs', primaryFeature: 'short-ids', scale: 'compact', kind: 'harness',
-      sessionId: SESSION, revision: 1, body: invalid, timestamp: T0,
+      sessionId: SESSION, revision: 1, body: loose, timestamp: T0,
+    });
+    assert.equal(receipt.verdict, 'PASS');
+    const canonical = fs.readFileSync(path.join(root, 'docs', 'work-items', 'short-ids', '2026-09-02-short-ids', '01-plan', 'main.md'), 'utf8');
+    assert.match(canonical, /REQ-001/);
+    assert.doesNotMatch(canonical, /REQ-1\b/);
+    const evidence = JSON.parse(fs.readFileSync(path.join(root, 'docs', 'work-items', 'short-ids', '2026-09-02-short-ids', '01-plan', 'evidence', 'identifier-normalization.json'), 'utf8'));
+    assert.equal(evidence.transactionId, receipt.id);
+    assert.ok(evidence.corrections.some(entry => entry.from === 'REQ-1' && entry.to === 'REQ-001'));
+
+    new AuthorizationStore(root).grant({
+      sessionId: 'session-ambiguous', workItemId: null, phase: 'plan', action: 'start-request',
+      allowedPaths: [], allowedCommands: [],
+    });
+    assert.throws(() => runPhaseTransaction(root, {
+      phase: 'plan', action: 'present', id: 'WI-2026-09-02-ambiguous-ids',
+      title: 'Ambiguous IDs', primaryFeature: 'ambiguous-ids', scale: 'compact', kind: 'harness',
+      sessionId: 'session-ambiguous', revision: 1, body: PLAN.replaceAll('REQ-001', 'REQ-1a'), timestamp: T0,
     }), /Canonical plan document preflight failed/);
   });
 

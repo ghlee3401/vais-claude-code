@@ -19,7 +19,7 @@ const { TOOL_DEFINITIONS, runCheck } = require('../lib/workflow/v2/tool-adapters
 const { captureRepoSnapshot, scopedSnapshotDigest } = require('../lib/workflow/v2/repo-drift');
 const { resolveProjectRoot } = require('../hooks/v2-project-context');
 const { buildContextCapsule, assertFreshCapsule } = require('../lib/workflow/v2/context-capsule');
-const { runPhaseTransaction, prepareReviewEvidence, canonicalWriteScopes } = require('../lib/workflow/v2/phase-transaction');
+const { runPhaseTransaction, prepareReviewEvidence, canonicalWriteScopes, readIdentifierNormalization } = require('../lib/workflow/v2/phase-transaction');
 const { buildCheckIdentity, reviewEvidenceManifest } = require('../lib/workflow/v2/check-evidence');
 const { recordDeferredHandoff } = require('../lib/workflow/v2/automatic-handoff');
 const { runDoctor } = require('../lib/workflow/v2/doctor');
@@ -35,6 +35,7 @@ const { explain } = require('../lib/workflow/v2/explain');
 const { propose } = require('../lib/workflow/v2/proposal');
 const ledger = require('../lib/workflow/v2/ledger');
 const vcs = require('../lib/workflow/v2/vcs');
+const { normalizeSentence } = require('../lib/workflow/v2/naming');
 
 const INTERNAL_COMMAND = `node ${JSON.stringify(__filename)}`;
 
@@ -671,9 +672,11 @@ function screensCapture(projectRoot, options) {
 function ledgerAdd(projectRoot, options) {
   const sessionId = requireOption(options, 'session');
   const kind = ledger.normalizeKind(requireOption(options, 'kind'));
-  const text = requireOption(options, 'text');
+  // The token and the argument are compared as one line: a pasted multi-line sentence must not
+  // fail on its line breaks (unattended-chain U1, REQ-004).
+  const text = normalizeSentence(requireOption(options, 'text'));
   if (!kind || !ledger.USER_KINDS.includes(kind)) throw new Error(`장부 종류는 ${ledger.USER_KINDS.join('·')} 중 하나다`);
-  vcs.requireConfirmation(projectRoot, sessionId, entry => entry.type === 'ledger' && entry.kind === kind && String(entry.text) === text, `/vais 기록 ${kind} ${text}`);
+  vcs.requireConfirmation(projectRoot, sessionId, entry => entry.type === 'ledger' && entry.kind === kind && normalizeSentence(entry.text) === text, `/vais 기록 ${kind} ${text}`);
   const item = new WorkItemStore(projectRoot).getCurrent();
   const entry = ledger.append(projectRoot, {
     workItemId: item?.id || null, feature: item?.primaryFeature || null, kind, text,
@@ -713,7 +716,12 @@ function phaseTransaction(projectRoot, phase, action, options) {
     if (!['new', 'existing'].includes(relation)) throw new Error('--relation must be new or existing');
     const slug = requireOption(options, 'slug');
     const feature = requireOption(options, 'feature');
-    const authorization = new AuthorizationStore(projectRoot).get(requireOption(options, 'session'));
+    const authorizations = new AuthorizationStore(projectRoot);
+    const granted = authorizations.get(requireOption(options, 'session'));
+    // `/vais 이름: X` is remembered per session, so a later `/vais 확인` or a read-only turn
+    // cannot lose it before the Work item exists (unattended-chain U1, REQ-005).
+    const pending = authorizations.pendingName(requireOption(options, 'session'));
+    const authorization = granted && !granted.requestSlug && pending ? { ...granted, requestSlug: pending } : granted;
     if (!store.get(id)) assertNewFeatureSlug(relation, slug, feature, authorization, options);
   }
   const receipt = runPhaseTransaction(projectRoot, {
@@ -741,7 +749,10 @@ function phaseTransaction(projectRoot, phase, action, options) {
   });
   const item = new WorkItemStore(projectRoot).get(receipt.workItemId);
   refreshAuthorization(projectRoot, requireOption(options, 'session'), item, 'continue-work');
-  return receipt;
+  // ID corrections the runtime made ride next to the receipt on stdout (the receipt file itself
+  // keeps its schema); the full list is in evidence/identifier-normalization.json.
+  const corrections = readIdentifierNormalization(projectRoot, item, phase, receipt.id);
+  return corrections.length ? { ...receipt, corrections } : receipt;
 }
 
 function reviewEvidencePrepare(projectRoot, options) {

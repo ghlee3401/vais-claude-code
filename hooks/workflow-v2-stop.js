@@ -7,7 +7,7 @@
 
 const { readStdin, outputStopBlock, outputEmpty } = require('../lib/io');
 const { WorkItemStore } = require('../lib/workflow/v2/work-item-store');
-const { AuthorizationStore } = require('../lib/workflow/v2/authorization-store');
+const { resolveSessionAuthorization } = require('../lib/workflow/v2/authorization-continuity');
 const { pathMatches } = require('../lib/workflow/v2/write-policy');
 const { captureRepoSnapshot, diffSnapshots, filterExternalDrift } = require('../lib/workflow/v2/repo-drift');
 const ledger = require('../lib/workflow/v2/ledger');
@@ -60,7 +60,7 @@ function stopDecision(projectRoot, input = {}, options = {}) {
   const item = store.getCurrent();
   if (!item) return { decision: 'allow', reason: '활성 작업 없음' };
   const sessionId = String(input.session_id || input.sessionId || '').trim();
-  const authorization = sessionId ? new AuthorizationStore(projectRoot).get(sessionId) : null;
+  const authorization = sessionId ? resolveSessionAuthorization(projectRoot, sessionId, { workItems: store }) : null;
   const { entries } = ledger.read(projectRoot);
   const reasons = [];
   const missing = missingRecord(registry, item, entries);

@@ -54,4 +54,19 @@ describe('scene F — harness failure is loud, never silent', () => {
     assert.match(context, /하네스 비활성/);
     assert.match(context, /VAIS_HARNESS_OFF/);
   });
+
+  // unattended-chain U1: friction is absorbed, the guard rails stay.
+  it('a composed read-only command passes while a hidden mutation in any piece still fails closed', t => {
+    const dir = root(t, { workflowV2: { mode: 'enforce' } });
+    assert.equal(authorizeCommand('cat a.log | grep FAIL', null, { projectRoot: dir, cwd: dir }).allowed, true);
+    assert.equal(authorizeCommand('git status; git diff', null, { projectRoot: dir, cwd: dir }).allowed, true);
+    const hidden = authorizeCommand('git status && rm -rf src', null, { projectRoot: dir, cwd: dir });
+    assert.equal(hidden.allowed, false);
+    assert.match(hidden.reason, /piece: rm -rf src/);
+    assert.equal(authorizeCommand('cat a > src/x.js', null, { projectRoot: dir, cwd: dir }).allowed, false);
+    assert.equal(authorizeCommand('cat x > ~/.bashrc', null, { projectRoot: dir, cwd: dir }).allowed, false, 'expansion targets are never literal paths');
+    assert.equal(authorizeCommand("cat $'\\''; touch M; cat \\'", null, { projectRoot: dir, cwd: dir }).allowed, false, 'ANSI-C quoting is refused whole');
+    assert.equal(authorizeCommand('sort -osrc/x.js a', null, { projectRoot: dir, cwd: dir }).allowed, false, 'tools with output-file modes are not read-only');
+    assert.equal(authorizeCommand('tr\\uncate -s0 src/x.js', null, { projectRoot: dir, cwd: dir }).allowed, false, 'the command word must be bare');
+  });
 });

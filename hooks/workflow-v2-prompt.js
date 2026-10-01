@@ -15,6 +15,8 @@ const { captureRepoSnapshot, diffSnapshots, classifyDrift, filterExternalDrift }
 const { loadRoleCatalog, resolveRole, buildRolePrompt } = require('../lib/workflow/v2/role-registry');
 const { resolveProjectRoot, resolveStartDir, extractPrompt, resolveMode, warningLine } = require('./v2-project-context');
 const { deterministicSlug } = require('../lib/workflow/v2/naming');
+const { describeRequiredSections } = require('../lib/workflow/v2/phase-check');
+const { resolveSessionAuthorization } = require('../lib/workflow/v2/authorization-continuity');
 const { PHASE_FOLDERS } = require('../lib/workflow/v2/document-manager');
 const { suggestKind, getKind, kindOf, isStageKind, stageOfKind } = require('../lib/workflow/v2/chain-registry');
 const { assertStageEntry } = require('../lib/workflow/v2/id-chain');
@@ -264,6 +266,7 @@ function phaseGuidance(item, sessionId, requestSlug = null, options = {}) {
       `\`${INTERNAL_COMMAND} plan present --slug ${requestSlug} --title "<title>" --feature <feature> --relation <new|existing> --scale <compact|standard|extended>${kindFlag} --session ${sessionId} --revision 1 --body-file .vais/v2/drafts/plan.md\`을 한 번 실행한다.`,
       '이 transaction이 Work item·Plan 검사·Gate를 처리한다. PASS일 때만 승인 요청하며, 실패하면 evidence finding만 고쳐 재실행한다.',
       'CPO Plan은 별도 Ideation 문서 없이 문제·목표·범위·REQ·흐름·엣지 케이스·완료 조건·영향만 담고 구현 결정은 Design에 남긴다. 요구사항 ID는 REQ-001처럼 3자리 형식으로 쓴다.',
+      describeRequiredSections({ kind: options.kindSuggestion?.kind || null, scale: null }, 'plan'),
     ];
   }
   const kind = kindOf(item);
@@ -314,6 +317,8 @@ function phaseGuidance(item, sessionId, requestSlug = null, options = {}) {
     `먼저 \`${INTERNAL_COMMAND} context --id ${item.id} --phase ${item.phase} --role ${ownerByPhase[item.phase]}\`로 bounded Context Capsule을 한 번 읽고, 원문 전체 재탐색은 capsule이 부족할 때만 한다.`,
     ...(ownerPrompt ? [`Current phase owner card (execute this responsibility in the main VAIS voice; do not spawn the owner as a specialist):\n${ownerPrompt}`] : []),
     ...phaseLines,
+    // The shape the runtime will check, shown before the document is written (U1 REQ-002 c).
+    ...(['plan', 'design', 'do', 'review'].includes(item.phase) ? [describeRequiredSections(item, item.phase)] : []),
   ];
 }
 
@@ -537,12 +542,14 @@ function inheritedScope(projectRoot) {
   return items.length ? String(items[0].primaryFeature).split('/')[0] : null;
 }
 
-function requestSlugFor(route, projectRoot = null) {
+// `pendingName` is the Feature name the user typed earlier in this session (`/vais 이름: X`):
+// a later `/vais 확인` or a request without English words keeps it (U1 REQ-005).
+function requestSlugFor(route, projectRoot = null, pendingName = null) {
   if (route.action === 'name-feature') return route.slug;
   if (route.action !== 'start-request') return null;
   // Stage kinds never take their name from the request text: the scope is given or inherited.
-  if (isStageKind(getKind(suggestKind(route.text).kind))) return inheritedScope(projectRoot);
-  return deterministicSlug(route.text);
+  if (isStageKind(getKind(suggestKind(route.text).kind))) return pendingName || inheritedScope(projectRoot);
+  return deterministicSlug(route.text) || pendingName || null;
 }
 
 // Kind suggestion for a new request, with the entry-lock reason when the stage cannot start.
@@ -578,7 +585,7 @@ function main() {
   const route = routePrompt(extractPrompt(input), routeItem);
 
   if (!route.managed || !route.mutationAllowed) {
-    const open = sessionId ? openAssignmentContinuation(store, authStore.get(sessionId)) : [];
+    const open = sessionId ? openAssignmentContinuation(store, resolveSessionAuthorization(projectRoot, sessionId, { authorizations: authStore, workItems: store })) : [];
     if (open.length > 0) {
       authStore.touch(sessionId);
       return emit(buildContext(route, routeItem, null, sessionId, { openAssignments: open }));
@@ -604,7 +611,8 @@ function main() {
       store.setRepoSnapshot(active.id, captureRepoSnapshot(projectRoot), { reason: `prompt-${route.action}` });
     }
     if (active && !SLOT_HOLDING_STATUSES.has(active.status)) active = null;
-    const requestSlug = requestSlugFor(route, projectRoot);
+    if (route.action === 'name-feature' && !active) authStore.rememberName(sessionId, route.slug);
+    const requestSlug = requestSlugFor(route, projectRoot, active ? null : authStore.pendingName(sessionId));
     const confirmations = confirmationsFor(route, projectRoot);
     authStore.grant({
       sessionId,

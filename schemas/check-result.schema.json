@@ -14,6 +14,7 @@
     "requirements": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^REQ-[0-9]{3}$" } },
     "summary": { "type": "string", "minLength": 1, "maxLength": 1000 },
     "findings": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "warnings": { "type": "array", "items": { "type": "string", "minLength": 1 } },
     "evidence": { "type": "array", "items": { "type": "string", "minLength": 1 } }
   }
 }

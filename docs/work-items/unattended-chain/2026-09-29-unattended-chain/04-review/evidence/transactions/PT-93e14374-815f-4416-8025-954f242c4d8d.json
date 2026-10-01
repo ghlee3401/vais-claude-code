@@ -1,0 +1,132 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-93e14374-815f-4416-8025-954f242c4d8d",
+  "workItemId": "WI-2026-09-29-unattended-chain",
+  "phase": "review",
+  "action": "decide",
+  "gate": {
+    "gate": "review",
+    "verdict": "FAIL",
+    "requiredChecks": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "independent-qa-handoff",
+      "secret-scan"
+    ],
+    "passed": [
+      "review-document",
+      "document-budget",
+      "document-repetition",
+      "secret-scan"
+    ],
+    "failed": [
+      "independent-qa-handoff"
+    ],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-29T08:57:08.599Z"
+  },
+  "checks": [
+    {
+      "check": "review-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical review document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 5037B is within the 9216B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+      ]
+    },
+    {
+      "check": "independent-qa-handoff",
+      "execution": "succeeded",
+      "verdict": "fail",
+      "required": true,
+      "scope": [],
+      "requirements": [
+        "REQ-003",
+        "REQ-002"
+      ],
+      "summary": "Independent QA reported failure",
+      "findings": [
+        "Inspect the canonical independent QA evidence"
+      ],
+      "evidence": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/evidence/handoffs/AS-52fafc4b-30da-4977-9a01-e2b4f9b95654.json"
+      ]
+    },
+    {
+      "check": "secret-scan",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/workflow/v2/**",
+        "hooks/**",
+        "scripts/vais-workflow-v2.js",
+        "schemas/check-result.schema.json",
+        "tests/**",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "docs/harness/**",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/evidence/logs/secret-scan.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "design",
+    "status": "active"
+  }
+}

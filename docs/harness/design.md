@@ -61,6 +61,9 @@
 | 기록 잠금 | 결정·변경·승인이 장부에 없으면 턴을 끝낼 수 없다 | Stop |
 | 오설정 잠금 | mode 값이 잘못되면 열리지 않고 enforce 로 닫힘으로 실패하며 매 프롬프트에 경고한다. 끄는 길은 정확한 `disabled` 와 `VAIS_HARNESS_OFF` 뿐 | CLI `resolveMode` + UserPromptSubmit |
 | 표시 | 현재 단계·상태·다음 행동을 항상 보인다 | 상태 줄 + 응답 첫 줄 |
+| 인가 연속성 (U1) | TTL 은 휴지 시간. 같은 세션·같은 current·active Work item·같은 phase·같은 write scope 면 만료된 인가를 되살린다. Work item 없는 인가만 TTL 로 끝난다 | `authorization-continuity.js` (PreToolUse·PostToolUse·Stop·CLI transaction 공통) |
+| 셸 조각 판정 (U1) | 합성 명령을 조각마다 판정. 리다이렉션은 대상 경로로, 파괴 명령은 명시 목록으로, 미분류 조각은 전체 거부 | PreToolUse (`shell-policy.js` + `write-policy.js`) |
+| 형식 보정 (U1) | 뜻이 명확한 ID 오류는 고쳐 저장하고 보정 내역을 보인다. Review 의 TC 추가는 경고. 필수 절·안 한도는 지시문에 미리 보인다 | CLI `present` (`normalizeIdentifiers`), UserPromptSubmit (`describeRequiredSections`) |
 
 단계별 저장 검사 (CLI 가 `contracts/chain-stages.json` 을 읽어 적용):
 
@@ -154,6 +157,7 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 코드 한도를 지시문에 그대로: Report outcome 700·limitation 300(거부, `REPORT_LIMITS` interpolation), QA `guidance`(`describeHandoffLimits`), `이름:` 뒤 문장 무시 | `phase-transaction.js`, `contracts.js`, `router.js`, prompt hook, CLI `assignment`, `agents/v2-specialist.md` | 완료 (4.2.1 `harness-guidance-limits`) |
 | 다이어그램 스킬(diagram-design MIT 스냅샷, 11종)·`/vais diagram` 산출 폴더 authorization·`diagram export`(SVG 추출 + Chrome PNG)·3단계 흐름 파일 `.html` 렌더(`renderArtifacts`·`diagram` 키) | `skills/diagram/**`, `router.js`, `config.js` (`loadDiagramConfig`), `diagram.js`, `write-policy.js`, prompt hook, CLI `diagram export`, `contracts/chain-stages.json` | 완료 (4.2.0 `harness-diagram-skill`) |
 | 범위 절(`scoped`·`scopeLines`, `## 범위:` 파싱·검증·`item.scope`·범위별 커버리지·`nextIds`)·단계 작업 이름(범위 = Feature, slug = 단계, 물려받기, 같은 날 `-2`)·`docs/README.md` "범위 · Feature"·제품 노트 `범위별` 표·`/vais 정리` 두 단계(제안·토큰·안전조건 넷·undo) | `contracts/chain-stages.json`, `schemas/chain-stage.schema.json`, `id-chain.js`, `router.js`(`범위`·`정리`), prompt hook(`stageStartGuidance`·`inheritedScope`), CLI `plan present`(`assertStageWorkItemNaming`)·`migrate propose/commit`, `migrate-scopes.js`, `product-note.js`, `document-manager.js`, `write-policy.js` | 완료 (4.3.0 `harness-scope-sections`) |
+| 인가 되살림(`peek`·`revive`·`resolveSessionAuthorization`)·이름 기억(`names` 절, `rememberName`·`pendingName`)·셸 조각 판정(`segmentCommand`·`parseRedirections`·`DESTRUCTIVE_COMMANDS`, 리다이렉션 경로 판정, scratchpad node 스크립트)·ID 보정(`normalizeIdentifiers`, `identifier-normalization.json`, CLI `corrections`)·Review TC 추가 경고(`warnings`)·필수 절·안 한도 지시(`describeRequiredSections`)·기록 문구 정규화(`normalizeSentence`) | `authorization-store.js`, `authorization-continuity.js`, `shell-policy.js`, `write-policy.js`, `phase-check.js`, `phase-transaction.js`, `naming.js`, `router.js`, `schemas/check-result.schema.json`, 4 hook, CLI `plan present`·`ledger add` | 완료 (4.4.0 `unattended-chain` U1) |
 | 화면 확인 정지점 (ui kind) | `state-machine.js` 이벤트 `USER_OPTION_CHOSEN` / `USER_SCREEN_CONFIRMED` / `USER_SCREEN_REVISED`, `router.js`, prompt hook | 완료 (H4) |
 | 수정 루프 상한 (kind 의 `repairLimit`, ui 5) | `state-machine.js`, `contracts/work-kinds.json` | 완료 (H2) |
 | 장부 | `lib/workflow/v2/ledger.js`, `schemas/ledger-entry.schema.json`, `.vais/v2/ledger.jsonl` (store 잠금 안에서 append) | 완료 (H3) |
@@ -231,7 +235,16 @@ UI kind 만 Do 뒤 "화면 확인 정지점" 이 있다. 규칙: Do 완료 → �
 | 10 | 기록·제안·브리핑·상태 줄 없음 | H3 |
 | 11 | UI 확인 정지점·시안·전/후 비교 없음 | H4 |
 | 12 | Stop 잠금·비상 스위치·doctor 없음 | H1, H3 |
+| 13 | 인가 30분 만료가 긴 Do 중 `do ready` 를 거부(po_report 4건), 사용자가 `/vais` 를 다시 쳐야 함 | U1 |
+| 14 | 문서 형식 거부 6건(ID 3자리·절 누락·Review TC 집합·안 개수)이 뜻이 같은 문서를 한 턴씩 되돌림 | U1 |
+| 15 | 셸 합성 일괄 차단이 QA 의 node 스크립트·파이프 검증을 막아 "코드 검토로만 확인" 부채 반복 | U1 |
+| 16 | 여러 줄 `/vais 기록` 문구가 hook 제안 명령에 `\n` 두 글자로 들어가 토큰과 불일치 | U1 |
+| 17 | `/vais 이름: X` 가 다음 `/vais 확인` 프롬프트에서 지워짐 | U1 |
+| 18 | 로그인 뒤 화면을 캡처하지 못해 인증 화면 증거가 0건 | U2 |
+| 19 | 단계 kind 마다 사람 승인이 필요해 사용자 대기가 소요 시간의 가장 큰 덩어리 | U3 |
 
 ## 13. 후속 로드맵
 
 [roadmap.md](roadmap.md) 참조 (H1 `harness-health` → H2 `chain-stages` → H3 `product-note` → H4 `ui-loop` → H5 `commands` → H6 `feature-bug-kinds` → H7 `regression-and-docs` → H8 `design-system-mcp`).
+
+**자동 진행 (범위 `unattended-chain`, 2026-09-29 장부 결정 LG-c98b7753)** — PRD 만 사용자와 대화로 만들고, 설계 문서 8개(기능 정의서·화면 설계서·와이어프레임·디자인·API 규약·시스템 아키텍처·SRD·DB 정책)와 구현은 agent 가 사람 인가 없이 진행한다. 확인점은 ① PRD 승인 ② 설계 묶음 + 열린 결정 목록 + 화면 PNG ③ 완성 화면·검수 결과 셋뿐이다. 단계마다 작성 agent 와 검수 agent 를 분리하고 검수는 PRD 와 직접 대조한다. agent 가 정한 것은 잠정 결정으로 대안과 함께 장부에 남겨 확인점에서 보인다. 멈추는 조건은 같은 단계 검수 2회 FAIL, PRD 모순, 범위 밖 쓰기, 토큰 예산 초과. 순서: U1 마찰 제거 → U2 로그인 fixture → U3 자동 진행 → U4 문서 9개와 확인점 (roadmap.md U 표).

@@ -1,0 +1,199 @@
+{
+  "schema": "phase-transaction-evidence/v1",
+  "id": "PT-01975dd6-bd67-41e3-8362-c8a61c2bd118",
+  "workItemId": "WI-2026-09-29-unattended-chain",
+  "phase": "do",
+  "action": "ready",
+  "gate": {
+    "gate": "readiness",
+    "verdict": "READY",
+    "requiredChecks": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "test",
+      "lint",
+      "plugin-validator"
+    ],
+    "passed": [
+      "do-document",
+      "document-budget",
+      "document-repetition",
+      "specialist-handoffs",
+      "test",
+      "lint",
+      "plugin-validator"
+    ],
+    "failed": [],
+    "blocked": [],
+    "missing": [],
+    "evaluatedAt": "2026-09-29T09:14:37.952Z"
+  },
+  "checks": [
+    {
+      "check": "do-document",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/03-do/main.md"
+      ],
+      "requirements": [],
+      "summary": "Canonical do document is complete",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-budget",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-009",
+        "REQ-026"
+      ],
+      "summary": "Authored Markdown 4846B is within the 5120B standard budget",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/03-do/main.md"
+      ]
+    },
+    {
+      "check": "document-repetition",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/03-do/main.md"
+      ],
+      "requirements": [
+        "REQ-026"
+      ],
+      "summary": "No long authored sentence is copied from an earlier phase",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/03-do/main.md"
+      ]
+    },
+    {
+      "check": "specialist-handoffs",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/workflow/v2/**",
+        "hooks/**",
+        "scripts/vais-workflow-v2.js",
+        "schemas/check-result.schema.json",
+        "tests/**",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "docs/harness/**",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**"
+      ],
+      "requirements": [],
+      "summary": "All Design-required specialist handoffs are uniquely consumed and complete",
+      "findings": [],
+      "evidence": []
+    },
+    {
+      "check": "test",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/workflow/v2/**",
+        "hooks/**",
+        "scripts/vais-workflow-v2.js",
+        "schemas/check-result.schema.json",
+        "tests/**",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "docs/harness/**",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/03-do/evidence/logs/test.log"
+      ]
+    },
+    {
+      "check": "lint",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/workflow/v2/**",
+        "hooks/**",
+        "scripts/vais-workflow-v2.js",
+        "schemas/check-result.schema.json",
+        "tests/**",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "docs/harness/**",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/03-do/evidence/logs/lint.log"
+      ]
+    },
+    {
+      "check": "plugin-validator",
+      "execution": "succeeded",
+      "verdict": "pass",
+      "required": true,
+      "scope": [
+        "lib/workflow/v2/**",
+        "hooks/**",
+        "scripts/vais-workflow-v2.js",
+        "schemas/check-result.schema.json",
+        "tests/**",
+        "README.md",
+        "CLAUDE.md",
+        "ONBOARDING.md",
+        "docs/harness/**",
+        "CHANGELOG.md",
+        "package.json",
+        "package-lock.json",
+        "vais.config.json",
+        ".claude-plugin/**"
+      ],
+      "requirements": [],
+      "summary": "Check passed",
+      "findings": [],
+      "evidence": [
+        "docs/work-items/unattended-chain/2026-09-29-unattended-chain/03-do/evidence/logs/plugin-validator.log"
+      ]
+    }
+  ],
+  "next": {
+    "phase": "review",
+    "status": "active"
+  }
+}

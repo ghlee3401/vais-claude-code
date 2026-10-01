@@ -2,7 +2,7 @@
 'use strict';
 
 const { readStdin, outputAllow, outputEmpty } = require('../lib/io');
-const { AuthorizationStore } = require('../lib/workflow/v2/authorization-store');
+const { resolveSessionAuthorization } = require('../lib/workflow/v2/authorization-continuity');
 const { WorkItemStore } = require('../lib/workflow/v2/work-item-store');
 const { pathMatches } = require('../lib/workflow/v2/write-policy');
 const { EVENTS } = require('../lib/workflow/v2/state-machine');
@@ -14,9 +14,9 @@ function main() {
   const projectRoot = resolveProjectRoot(resolveStartDir(input));
   if (!projectRoot || resolveMode(projectRoot).mode !== 'enforce') return outputEmpty();
   const sessionId = String(input.session_id || input.sessionId || '').trim();
-  const authorization = new AuthorizationStore(projectRoot).get(sessionId);
-  if (!authorization?.workItemId) return outputEmpty();
   const store = new WorkItemStore(projectRoot);
+  const authorization = resolveSessionAuthorization(projectRoot, sessionId, { workItems: store });
+  if (!authorization?.workItemId) return outputEmpty();
   const item = store.get(authorization.workItemId);
   const current = store.getCurrent();
   if (!item || !current || current.id !== item.id || item.status !== 'active' || authorization.phase !== item.phase) {

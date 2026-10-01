@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-4.3.0-blue?style=flat-square" alt="version" />
+  <img src="https://img.shields.io/badge/version-4.4.0-blue?style=flat-square" alt="version" />
   <img src="https://img.shields.io/badge/Claude_Code-plugin-7C3AED?style=flat-square" alt="Claude Code Plugin" />
   <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="license" />
 </p>
@@ -13,7 +13,7 @@
 
 ---
 
-> **현재 상태 (4.3.0, 2026-09-18)**: 로드맵 H1~H8 완료, 문서 예산 상향·설정화(`documentBudgets`), 다이어그램 스킬(`skills/diagram`, `/vais diagram`), 코드 한도를 지시문에 그대로(Report 700/300, QA `guidance`), 정본을 범위로 묶기(`## 범위: <이름>` 절, `/vais 범위:`, `/vais 정리`). 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌고, 쓰이지 않던 디자인 시스템 MCP·vendor·브랜드 카탈로그는 제거됐다(되살림: 커밋 `66d0f6b`). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
+> **현재 상태 (4.4.0, 2026-09-29)**: 로드맵 H1~H8 완료, 자동 진행 준비 U1(`unattended-chain`: 인가 되살림 · ID 보정 · 셸 조각 판정 · 기록 문구·이름 유지), 문서 예산 상향·설정화(`documentBudgets`), 다이어그램 스킬(`skills/diagram`, `/vais diagram`), 코드 한도를 지시문에 그대로(Report 700/300, QA `guidance`, 필수 절·안 한도), 정본을 범위로 묶기(`## 범위: <이름>` 절, `/vais 범위:`, `/vais 정리`). 사용자 루프 하나, 문서 양식 넷(전체·한 줄·안·인용), 제품 노트 3면, 명령 표, 작업 kind 14개가 한 벌로 맞춰졌고, 쓰이지 않던 디자인 시스템 MCP·vendor·브랜드 카탈로그는 제거됐다(되살림: 커밋 `66d0f6b`). 설계 정본 `docs/harness/design.md`, 순서 `docs/harness/roadmap.md`. 롤백: git 태그 `v3.0.1-legacy`.
 
 ## 무엇인가
 
@@ -186,6 +186,8 @@ Review: 검수 페이지(승인 시안 | 전 | 후) → 독립 QA → /vais 최�
 
 프로젝트는 `vais.config.json > documentBudgets` 로 칸 단위로 덮어쓴다 (`{ "standard": { "design": 20480 } }`). 양의 정수가 아닌 칸은 무시하고 기본값을 쓰며 `/vais doctor` 가 알린다. 한도를 넘기면 present 가 세 갈래를 말한다: ① 본문 줄이기 ② `--scale` 올리기(extended 는 frontmatter `budget_exception` + 사용자 승인) ③ 설정 올리기.
 
+형식은 뜻이 같으면 runtime 이 고친다(4.4.0). 하이픈이 빠지거나 자릿수가 모자란 ID 는 present 가 `REQ-001` 형으로 고쳐 저장하고 보정 내역을 CLI 출력 `corrections` 와 `evidence/identifier-normalization.json` 에 남긴다. 보정은 앞이 줄 처음·공백·문장 부호이고 뒤에 공백·줄 끝·문장 부호가 올 때만이라 백분율·범위·파일 이름·한글에 붙은 숫자는 그대로이고, 접미 글자·네 자리 숫자는 거부. Review 가 Design 에 없는 TC 를 더하면 경고(`warnings`)로 통과하고 Design 의 TC 를 빠뜨리면 거부. 단계마다 필수 절 이름과 규모별 안 한도는 hook 지시문에 미리 보인다.
+
 ## 다이어그램 — 그림은 같은 규칙으로
 
 `skills/diagram/` 은 [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design)(MIT)을 이 플러그인 사정에 맞게 고쳐 담은 스킬이다. 흐름도·유저 저니·스윔레인·시퀀스·상태 기계·구조도·상위 구조·데이터 흐름·ER·타임라인·트리 11종을 외부 의존성 없는 HTML + 인라인 SVG 한 파일로 그린다. Python·Playwright·가져오기(draw.io 등)는 가져오지 않았다.
@@ -249,6 +251,10 @@ npm run doctor      # 하네스 건강검진
 ```
 
 `workflowV2.mode` 는 `enforce` 가 정본이다. 대소문자·공백은 무시되고, 그 밖의 잘못된 값은 **닫힘으로 실패**한다 (guard 는 계속 막고 매 프롬프트 첫 줄에 경고). 하네스를 끄는 길은 정확한 `disabled` 와 비상 스위치 `VAIS_HARNESS_OFF=1` 둘뿐이다. 하네스 자체를 고칠 때만 내리고, 끝나면 되돌린다. 실행 중인 플러그인은 마켓플레이스 캐시 사본이므로 repo 변경은 push · 버전 bump · 플러그인 업데이트 뒤에 반영된다.
+
+**셸 정책 (4.4.0)** — 합성 명령은 조각마다 판정한다(`lib/workflow/v2/shell-policy.js`). `|`·`&&`·`||`·`;`·줄바꿈·`$( )`·백틱으로 나뉜 조각이 전부 읽기·검사·공개 runtime 명령이면 허용하고, 한 조각이라도 미분류면 전체를 거부하며 사유에 그 조각을 보인다. `>`·`>>` 는 대상 경로가 write scope 나 scratchpad 안일 때만, scratchpad 의 `node <스크립트>` 는 인가가 있을 때 검사 명령으로 허용한다. 리다이렉션·`cd`·스크립트 대상은 글자 그대로의 경로여야 하며 `~`·`$`·백틱·명령 치환·글롭·brace 가 든 대상과 인자 없는 `cd`·`cd -` 는 거부한다. `node` 스크립트는 플래그 없이 첫 인자가 scratchpad 경로일 때만 검사 명령이다. ANSI-C `$'…'`·로케일 `$"…"` 따옴표, 백그라운드 `&`, 서브셸, 프로세스 치환, heredoc, `>|`, 닫히지 않은 따옴표는 거부. 읽기 명령 목록은 4.3.0 그대로(`rg`·`grep`·`find`·`ls`·`pwd`·`cat`·`head`·`tail`·`wc`·`stat`·`which`, git 읽기 부명령, `sed -n Np`)이고 명령 단어는 역슬래시·따옴표·`$`·brace 없는 맨 식별자여야 한다. 검사 명령은 프로젝트 루트에서만 돌고 `--` 전달 인자와 코드를 읽는 플래그를 받지 않으며(eslint 는 경로만, `node --test` 는 `tests/` 아래 경로와 이름형 플래그만), 따옴표 밖의 역슬래시·brace 는 명령 전체를 거부하고, 붙여 쓴 `-o…`·약어 `--out…`·git `--ext…`·rg `--pre`/`--hostname-bin` 은 위험 플래그다. `rm -r/-f`, `git push --force`, `--no-verify`, `sudo`, `eval`, `xargs`, `env`, `source` 는 항상 거부.
+
+**인가는 휴지 시간 (4.4.0)** — `workflowV2.authorizationTtlMs`(기본 30분)는 만료가 아니라 휴지 시간이다. 같은 세션이 같은 current·active Work item 을 같은 phase·write scope 로 계속 다루면 hook 과 phase transaction 이 만료된 인가를 되살린다(`authorization-continuity.js`). Work item 없는 인가(요청 시작·기록·저장 토큰)만 TTL 로 끝난다. `/vais 이름: X` 는 세션 단위로 기억되어 `/vais 확인` 이나 읽기 명령이 지우지 않고, 여러 줄로 붙여 넣은 `/vais 기록`·`저장 확인:` 문구는 한 줄로 정규화된다.
 
 ## License
 

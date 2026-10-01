@@ -1,0 +1,68 @@
+{
+  "schema": "phase-transaction-failure/v1",
+  "transactionId": "PT-4a68ee69-a9c0-48ae-a11a-7d494ae5840f",
+  "workItemId": "WI-2026-09-29-unattended-chain",
+  "phase": "review",
+  "code": "DOCUMENT_PREFLIGHT_FAILED",
+  "finding": "Canonical review document preflight failed: review-document — Identifier must use exactly three digits: REQ 3",
+  "preflight": {
+    "schema": "document-preflight/v1",
+    "phase": "review",
+    "path": "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md",
+    "checks": [
+      {
+        "check": "review-document",
+        "execution": "succeeded",
+        "verdict": "fail",
+        "required": true,
+        "scope": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+        ],
+        "requirements": [],
+        "summary": "1 review document issue(s) found",
+        "findings": [
+          "Identifier must use exactly three digits: REQ 3"
+        ],
+        "evidence": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+        ]
+      },
+      {
+        "check": "document-budget",
+        "execution": "succeeded",
+        "verdict": "pass",
+        "required": true,
+        "scope": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+        ],
+        "requirements": [
+          "REQ-009",
+          "REQ-026"
+        ],
+        "summary": "Authored Markdown 4986B is within the 9216B standard budget",
+        "findings": [],
+        "evidence": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+        ]
+      },
+      {
+        "check": "document-repetition",
+        "execution": "succeeded",
+        "verdict": "pass",
+        "required": true,
+        "scope": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+        ],
+        "requirements": [
+          "REQ-026"
+        ],
+        "summary": "No long authored sentence is copied from an earlier phase",
+        "findings": [],
+        "evidence": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/04-review/main.md"
+        ]
+      }
+    ]
+  },
+  "recordedAt": "2026-09-29T08:56:53.072Z"
+}

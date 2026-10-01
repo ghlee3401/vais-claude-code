@@ -1,0 +1,73 @@
+{
+  "schema": "phase-transaction-failure/v1",
+  "transactionId": "PT-3b4a2f9f-dd45-482d-bb64-e07033c0c266",
+  "workItemId": "WI-2026-09-29-unattended-chain",
+  "phase": "design",
+  "code": "DOCUMENT_PREFLIGHT_FAILED",
+  "finding": "Canonical design document preflight failed: design-document — Identifier must use exactly three digits: REQ 16 / Identifier must use exactly three digits: TC-3 / Identifier must use exactly three digits: req_7",
+  "preflight": {
+    "schema": "document-preflight/v1",
+    "phase": "design",
+    "path": "docs/work-items/unattended-chain/2026-09-29-unattended-chain/02-design/main.md",
+    "checks": [
+      {
+        "check": "design-document",
+        "execution": "succeeded",
+        "verdict": "fail",
+        "required": true,
+        "scope": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/02-design/main.md"
+        ],
+        "requirements": [],
+        "summary": "6 design document issue(s) found",
+        "findings": [
+          "Identifier must use exactly three digits: REQ 16",
+          "Identifier must use exactly three digits: TC-3",
+          "Identifier must use exactly three digits: req_7",
+          "Identifier must use exactly three digits: REQ-16a",
+          "Identifier must use exactly three digits: REQ 1600",
+          "design REQ trace set contains untraced IDs: REQ-016"
+        ],
+        "evidence": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/02-design/main.md"
+        ]
+      },
+      {
+        "check": "document-budget",
+        "execution": "succeeded",
+        "verdict": "pass",
+        "required": true,
+        "scope": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/02-design/main.md"
+        ],
+        "requirements": [
+          "REQ-009",
+          "REQ-026"
+        ],
+        "summary": "Authored Markdown 9540B is within the 14336B standard budget",
+        "findings": [],
+        "evidence": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/02-design/main.md"
+        ]
+      },
+      {
+        "check": "document-repetition",
+        "execution": "succeeded",
+        "verdict": "pass",
+        "required": true,
+        "scope": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/02-design/main.md"
+        ],
+        "requirements": [
+          "REQ-026"
+        ],
+        "summary": "No long authored sentence is copied from an earlier phase",
+        "findings": [],
+        "evidence": [
+          "docs/work-items/unattended-chain/2026-09-29-unattended-chain/02-design/main.md"
+        ]
+      }
+    ]
+  },
+  "recordedAt": "2026-09-29T08:23:23.966Z"
+}

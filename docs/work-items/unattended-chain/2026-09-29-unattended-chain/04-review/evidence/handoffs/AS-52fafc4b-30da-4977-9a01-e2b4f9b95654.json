@@ -1,0 +1,64 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-29-unattended-chain",
+  "assignmentId": "AS-52fafc4b-30da-4977-9a01-e2b4f9b95654",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 0,
+  "assignmentDigest": "df28a6b1e7d9c06827f7f81ecdc9cfb271a473c1fca8f5c63784117bb0fbf199",
+  "handoffDigest": "4069d9b0e3c7d20a9e0924546747619ed01551b35453b4f5ee2188644cece4c6",
+  "persistedAt": "2026-09-29T08:56:27.104Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "fail",
+    "judgment": "FAIL: TC-003 리다이렉션·cd 대상의 ~·$VAR·$( )·bare cd·cd - 가 미확장이라 범위 밖(홈 포함) 쓰기가 허용되고 인가 없이도 통과. TC-002 보정기가 'REQ 3개' 를 REQ-003 으로 바꿈. TC-001·004·005·006 통과",
+    "decisions": [
+      "Design 으로 반환: 셸 대상 경로 확장 규칙",
+      "미확장 ~·$·치환·bare cd·cd - 는 거부",
+      "ID 보정은 한글·단위 접미 뒤도 제외"
+    ],
+    "behavior": {
+      "inputs": [
+        "합성 Bash 명령 + cwd",
+        "present --body-file",
+        "만료 인가·이름·기록 문구"
+      ],
+      "outputs": [
+        "TC-001·004·005·006 통과",
+        "TC-003 범위 밖 쓰기 허용",
+        "TC-002 산문 수치 오보정"
+      ],
+      "errors": [
+        "인가 없이 홈 디렉토리 쓰기 통과",
+        "cd -/bare cd cwd 추적 오류",
+        "validate 는 Do 증거로만 확인"
+      ]
+    },
+    "evidence": [
+      "test 271/0 · regression 11/0 · lint 0 · doctor fail 0 · 버전 4.4.0 7면 · 문서 grep OK",
+      "write-policy allows w/o auth: cd <scratch>; echo x > ~/.bashrc; $HOME·bare cd·cd -·$( ) 대상도",
+      "normalizeIdentifiers('REQ 3개') -> 'REQ-003개' (산문 개수가 ID 로 바뀜)"
+    ],
+    "affectedRequirements": [
+      "REQ-003",
+      "REQ-002"
+    ],
+    "risks": [
+      "홈·프로젝트 밖 파일 덮어쓰기",
+      "REQ 개수 문구가 trace 집합 오염",
+      "캐시 4.3.0 이라 실사용 미검증"
+    ],
+    "unverified": [
+      "npm run validate 직접 실행 불가",
+      "4.4.0 hook 경로 실세션 실행",
+      "po_report 13건 fixture 재현 없음"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator"
+    ]
+  }
+}

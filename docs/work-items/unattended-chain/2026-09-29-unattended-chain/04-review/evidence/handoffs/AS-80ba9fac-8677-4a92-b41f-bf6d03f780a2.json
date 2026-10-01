@@ -1,0 +1,63 @@
+{
+  "schema": "automatic-handoff-evidence/v1",
+  "workItemId": "WI-2026-09-29-unattended-chain",
+  "assignmentId": "AS-80ba9fac-8677-4a92-b41f-bf6d03f780a2",
+  "phase": "review",
+  "role": "independent-qa",
+  "designRevision": 1,
+  "repairCycle": 2,
+  "assignmentDigest": "3a22de043a0ccf35c1ec2444f36138d203d569bb03e2d04041fd70ab8173e379",
+  "handoffDigest": "668924ec92a2a779b0a1c702951377f859aa8c03ec6f9a4391b7a78687b14786",
+  "persistedAt": "2026-09-29T09:24:09.876Z",
+  "handoff": {
+    "schema": "specialist-handoff/v1",
+    "status": "completed",
+    "verdict": "fail",
+    "judgment": "회차2 지적 셋·TC-001~006 통과(test 271·회귀 11·lint·doctor 0)하나 read-only sort -o붙임·--out=·uniq a -- b 가 인가 없이 범위 밖 파일을 실제로 쓴다",
+    "decisions": [
+      "FAIL: sort·uniq 출력 우회를 Design 반환",
+      "회차2 ANSI-C·node 플래그·brace·ID 해결",
+      "git --ext 약어·eslint -c 는 부채 후보"
+    ],
+    "behavior": {
+      "inputs": [
+        "sort -osrc/x.js a (인가 없음)",
+        "sort --out=src/x.js a",
+        "uniq a -- src/x.js"
+      ],
+      "outputs": [
+        "allowed:true kind:read-only",
+        "실제 sort·uniq 가 파일 생성",
+        "회차2 거부 예는 전부 거부"
+      ],
+      "errors": [
+        "UNSAFE_WRITE_FLAGS -o 붙임 누락",
+        "긴 옵션 약어(--out=) 누락",
+        "UNIQ_TWO_FILES -- 뒤 누락"
+      ]
+    },
+    "evidence": [
+      "npm test 271/271 · regression 11/11 · lint 0 · validate 0 · doctor fail 0 warn 2 (QA 재실행)",
+      "scratchpad probe: sort -o붙임·--out=·uniq a -- b allowed:true, 실제 파일 생성",
+      "04-review/evidence/checks/secret-scan.json pass · v2-unattended-chain.test.js 12 suite 통과"
+    ],
+    "affectedRequirements": [
+      "REQ-003"
+    ],
+    "risks": [
+      "sort --compress-program 코드 실행",
+      "git diff --ext 약어(외부 diff)",
+      "한글TC 3·v1.TC 3 도 보정됨"
+    ],
+    "unverified": [
+      "캐시 4.3.0 상태의 실사용 hook",
+      "file -C 의 .mgc 생성 경로"
+    ],
+    "recommendedChecks": [
+      "test",
+      "lint",
+      "plugin-validator",
+      "secret-scan"
+    ]
+  }
+}

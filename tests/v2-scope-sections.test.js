@@ -221,19 +221,20 @@ describe('scope-sections REQ-004 indexes and notes', () => {
 });
 
 describe('scope-sections REQ-007 documents and version', () => {
-  it('TC-007 version 4.3.0 everywhere, TTL raised for this repository, docs mention scopes', () => {
+  it('TC-007 version is synchronized (4.3.0 or later), TTL raised for this repository, docs mention scopes', () => {
     const read = file => fs.readFileSync(path.join(REPO, file), 'utf8');
     const config = JSON.parse(read('vais.config.json'));
-    assert.equal(config.version, '4.3.0');
+    const version = JSON.parse(read('package.json')).version;
+    assert.ok(/^4\.(?:[3-9]|[1-9][0-9])\.\d+$/.test(version), version);
+    assert.equal(config.version, version);
     assert.equal(config.workflowV2.authorizationTtlMs, 7200000);
-    assert.equal(JSON.parse(read('package.json')).version, '4.3.0');
-    assert.equal(JSON.parse(read('package-lock.json')).version, '4.3.0');
+    assert.equal(JSON.parse(read('package-lock.json')).version, version);
     assert.match(read('CHANGELOG.md'), /## \[4\.3\.0\]/);
     assert.match(read('README.md'), /## 범위: <이름>/);
     assert.match(read('README.md'), /\/vais 정리: 범위 <이름>/);
     assert.match(read('CLAUDE.md'), /범위:/);
     assert.match(read('CLAUDE.md'), /정리 확인/);
-    assert.match(read('ONBOARDING.md'), /4\.3\.0/);
+    assert.match(read('ONBOARDING.md'), /정본을 범위 절로 묶기/);
     assert.match(read(path.join('docs', 'harness', 'design.md')), /harness-scope-sections/);
   });
 });

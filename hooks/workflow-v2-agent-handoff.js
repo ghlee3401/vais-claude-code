@@ -3,7 +3,7 @@
 
 const path = require('path');
 const { readStdin, outputAllow, outputEmpty } = require('../lib/io');
-const { AuthorizationStore } = require('../lib/workflow/v2/authorization-store');
+const { resolveSessionAuthorization } = require('../lib/workflow/v2/authorization-continuity');
 const { recordAutomaticHandoff, isDeferredAgentResult } = require('../lib/workflow/v2/automatic-handoff');
 const { extractAssignmentId } = require('../lib/workflow/v2/agent-policy');
 const { PHASE_FOLDERS } = require('../lib/workflow/v2/document-manager');
@@ -35,7 +35,7 @@ function persistFromHook(input, projectRoot) {
   const tool = String(input.tool_name || input.toolName || '').toLowerCase();
   if (tool !== 'agent') return null;
   const sessionId = String(input.session_id || input.sessionId || '').trim();
-  const authorization = new AuthorizationStore(projectRoot).get(sessionId);
+  const authorization = resolveSessionAuthorization(projectRoot, sessionId);
   const result = agentResult(input);
   const prompt = agentPrompt(input);
   if (isDeferredAgentResult(result)) {

@@ -1,5 +1,21 @@
 # Changelog
 
+## [4.4.0] - 2026-09-29
+
+> `unattended-chain` U1 마찰 제거. po_report 구성원 관리 21시간의 transaction 실패 13건은 전부 하네스 자신이 만든 것이었다(인가 만료 4, 문서 형식 6, 범위·파일 2). 자동 진행(U3)은 사람이 없는 동안 이런 거부가 나면 멈추므로, 뜻이 같은데 형식·시각 때문에 나는 거부를 runtime 이 흡수한다. 장부 결정 LG-c98b7753 · 부채 LG-0775d07a.
+
+### Added
+
+- **인가 되살림** — `authorization-continuity.js` `resolveSessionAuthorization`: 만료된 인가라도 같은 세션이 같은 current·active Work item 을 같은 phase·write scope 로 다루면 `revive` 한다. write guard·drift·stop·agent-handoff hook 과 phase transaction 이 모두 이 경로로 읽는다. 읽기 명령도 Work item 이 있으면 `touch`. `AuthorizationStore.peek`·`revive`
+- **ID 보정** — `phase-check.normalizeIdentifiers`: 하이픈 누락·밑줄·한두 자리·소문자 접두사 ID 를 `REQ-001` 형으로 고쳐 저장하고 `evidence/identifier-normalization.json` 과 CLI 출력 `corrections` 에 남긴다. 접미 글자·네 자리는 계속 finding. Review 가 Design 에 없는 TC 를 더하면 `warnings`(`schemas/check-result.schema.json` 선택 필드)로 통과, 누락만 finding. `describeRequiredSections` 가 phase 별 필수 절 이름과 규모별 안 한도를 hook 지시문에 보인다
+- **셸 조각 판정** — `shell-policy.js` `segmentCommand`(따옴표 존중, `$( )`·백틱 본문을 조각으로, 백그라운드 `&`·서브셸·프로세스 치환·닫히지 않은 따옴표 거부)·`parseRedirections`(`>|`·heredoc 거부, `N>&M` 무시). `write-policy.authorizeCommand` 가 조각마다 판정하고 리다이렉션 대상은 write scope 나 scratchpad 안일 때만, scratchpad 의 `node <스크립트>` 는 인가가 있을 때 검사 명령으로 허용한다. `DESTRUCTIVE_COMMANDS`(`rm -r/-f`, `git push --force`, `--no-verify`, `sudo`, `eval`, `xargs`, `env`, `source` …)는 항상 거부. 리다이렉션·`cd`·스크립트 대상은 셸이 쓸 그 경로여야 한다: `~`·`$`·백틱·명령 치환·글롭·brace 가 든 대상과 인자 없는 `cd`·`cd -` 는 거부(`isLiteralPath`). ANSI-C `$'…'`·로케일 `$"…"` 따옴표는 파서 상태가 bash 와 어긋날 수 있어 통째로 거부하고, scratchpad `node` 스크립트는 플래그 없이 첫 인자일 때만 검사 명령이다(독립 QA 두 회차의 발견). ID 보정은 앞이 줄 처음·공백·문장 부호이고 뒤에 공백·줄 끝·문장 부호가 올 때만이라 백분율·범위·파일 이름·한글에 붙은 숫자는 그대로다. 읽기 명령 목록은 4.3.0 그대로(독립 QA 네 회차가 더한 필터마다 파일 쓰기·코드 실행 경로를 찾아내 전부 되돌림), 명령 단어는 역슬래시·따옴표·`$`·brace 없는 맨 식별자만(`BARE_COMMAND_WORD`), 목록 단어 뒤는 공백이나 끝. 검사 명령은 프로젝트 루트에서만 돌고(`checkDirectoryReason`) `--` 전달 인자와 코드를 읽는 플래그를 받지 않는다(`checkArgumentsReason`: npm 스크립트는 플래그 없음, eslint 는 경로만, `node --test` 는 `tests/` 아래 경로와 이름형 플래그만). 따옴표 밖의 역슬래시·brace 는 `segmentCommand` 가 명령 전체를 거부한다. 붙여 쓴 짧은 옵션(`-o…`)·긴 옵션 약어(`--out…`)·git `--ext…`·rg `--pre`/`--hostname-bin` 도 위험 플래그로, `time`/`timeout` 래퍼는 벗겨서 판정, `cd` 는 뒤 조각의 기준 경로를 옮긴다
+- **문구·이름 유지** — `naming.normalizeSentence` 로 `/vais 기록`·`저장 확인:` 문장을 한 줄로 정규화해 토큰과 CLI 인자가 일치. `AuthorizationStore.rememberName`·`pendingName`(`authorizations.json` `names` 절): `/vais 이름: X` 가 `/vais 확인`·읽기 명령·`/vais` 없는 대화 뒤에도 살아 있고 Work item 이 생기면 지워진다. hook `requestSlugFor` 와 CLI `plan present` 가 이를 본다
+
+### Changed
+
+- CLAUDE 규칙 14(셸 조각 판정)·18(필수 절 지시)·19(형식 보정)·20(인가 휴지 시간), 10-1(이름 기억), README(셸 정책·인가·형식 보정 절), ONBOARDING, design.md §4 억지력 3행·§12 결함 13~19·§13 자동 진행·대응표, roadmap.md U1~U4 표
+- 새 테스트 `tests/v2-unattended-chain.test.js`(TC-001~006), 회귀 장면 F 에 셸 조각·인가 되살림 장면
+
 ## [4.3.0] - 2026-09-18
 
 > `harness-scope-sections`. 제품 정본을 "범위(제품 안의 기능 묶음)" 로 묶는다. 정본은 단계마다 파일 하나 그대로이고 그 안이 `## 범위: <이름>` 절로 나뉜다. 단계 작업의 회의록은 `docs/work-items/<범위>/<날짜>-<단계>/` 에 쌓인다. 사용자 지적: "로그인이라는 feature 단위로 다 뭉쳐 있어야 되는데 너무 산발적이다".

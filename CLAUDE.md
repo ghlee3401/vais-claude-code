@@ -2,7 +2,7 @@
 
 > **이 파일의 책임**: Claude Code 전용 지침. 세션 시작 시 자동 로드된다. 처음 본 AI/사람은 `ONBOARDING.md`(5분), 사용법은 `README.md`.
 >
-> 상태: **4.3.0 (2026-09-18) — 로드맵 H1~H8 완료, 문서 예산 상향·설정화, 다이어그램 스킬 흡수, 코드 한도를 지시문에 그대로, 정본을 범위 절로 묶기.** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md`. 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다. 이 저장소 자체 작업의 kind 는 `harness` 다.
+> 상태: **4.4.0 (2026-09-29) — 로드맵 H1~H8 완료, 자동 진행(unattended-chain U1~U4) 시작: U1 마찰 제거(인가 되살림 · ID 보정 · 셸 조각 판정 · 문구·이름 유지).** Legacy 를 전부 제거했고(롤백 태그 `v3.0.1-legacy`), 설계 정본은 `docs/harness/design.md`, 실행 순서는 `docs/harness/roadmap.md`. 모든 구현 작업은 이 두 문서의 ID·작업 번호를 인용한다. 이 저장소 자체 작업의 kind 는 `harness` 다.
 
 ## 이 플러그인이 만드는 것
 
@@ -32,7 +32,8 @@ vais-claude-code/
 │   ├── workflow-v2-drift.js          # 변경 경로 기록
 │   ├── workflow-v2-stop.js           # 기록 잠금 (장부 누락·미기록 변경 시 턴 종료 1회 거부)
 │   ├── v2-project-context.js · run-node.sh
-├── lib/workflow/v2/          # 39 모듈: config(mode·ui 설정) · doctor · chain-registry(단계·kind 카탈로그) · id-chain(ID 사슬·범위 절·stale·산출물 렌더) · citation(인용·신규·구현됨) · app-runner(ui.run) · migrate-scopes(범위 정리) ·
+├── lib/workflow/v2/          # 41 모듈: config(mode·ui 설정) · doctor · chain-registry(단계·kind 카탈로그) · id-chain(ID 사슬·범위 절·stale·산출물 렌더) · citation(인용·신규·구현됨) · app-runner(ui.run) · migrate-scopes(범위 정리) ·
+│                             #   shell-policy(셸 조각 판정) · authorization-continuity(인가 되살림·이름 기억) ·
 │                             #   ledger(장부) · product-note(노트 3면) · proposal(제안) · briefing(상태 문장) · explain(설명) · vcs(저장·되돌리기) ·
 │                             #   screen-capture(스크린샷) · diff-summary(회차 diff) · review-page(검수 페이지) ·
 │                             #   state-machine · work-item-store · phase-transaction · gate-engine · router · write-policy · tool-adapters ·
@@ -65,7 +66,7 @@ vais-claude-code/
 8. **write scope** — Do 는 Design 이 선언한 scope 안에서만. `.git`, `.vais`, `docs/work-items`, `docs/features`, `docs/README.md` 는 scope 불가.
 9. **`/vais` 없는 대화는 읽기 전용.**
 10. **산출물** — `docs/work-items/{feature}/{YYYY-MM-DD-slug}/01-plan|02-design|03-do|04-review|05-report/main.md`. 첫 Plan 초안만 `.vais/v2/drafts/plan.md`, 이후 모든 초안(Plan 수정 포함)은 해당 phase 폴더의 `draft.md` 에 두고 `--body-file` 로 넘긴다 (승격 시 자동 삭제).
-10-1. **Feature 이름** — runtime 이 요청의 영어 단어에서 발급한다. 영어 단어가 없으면 AI 가 이름을 만들지 않고 사용자에게 묻는다. 사용자가 `/vais 이름: <kebab-case>` 로 준 이름만 CLI 가 받고, 이름 뒤에 붙은 문장은 slug 에 들어가지 않는다(`이름: a-b 추려서 Plan` → `a-b`). **단계 kind 는 다르다**: Feature = 범위(기능 묶음) 이름이고 요청 문장에서 뽑지 않는다. 1단계는 사용자가 `/vais 범위: <kebab>` (문장 안 `범위: X` 도 됨)으로 주고, 2단계부터는 가장 최근 단계 작업의 범위를 물려받는다. `plan present` 는 `--slug <단계 이름: requirements·features…>` `--feature <범위>` 로 받아 회의록을 `docs/work-items/<범위>/<날짜>-<단계>/` 에 둔다(같은 날 같은 단계는 `-2`·`-3`).
+10-1. **Feature 이름** — runtime 이 요청의 영어 단어에서 발급한다. 영어 단어가 없으면 AI 가 이름을 만들지 않고 사용자에게 묻는다. 사용자가 `/vais 이름: <kebab-case>` 로 준 이름만 CLI 가 받고, 이름 뒤에 붙은 문장은 slug 에 들어가지 않는다(`이름: a-b 추려서 Plan` → `a-b`). 등록된 이름은 세션 단위로 기억되어 `/vais 확인`·읽기 명령·`/vais` 없는 대화 뒤에도 살아 있고, Work item 이 생기거나 다른 `이름:` 이 오면 지워진다. **단계 kind 는 다르다**: Feature = 범위(기능 묶음) 이름이고 요청 문장에서 뽑지 않는다. 1단계는 사용자가 `/vais 범위: <kebab>` (문장 안 `범위: X` 도 됨)으로 주고, 2단계부터는 가장 최근 단계 작업의 범위를 물려받는다. `plan present` 는 `--slug <단계 이름: requirements·features…>` `--feature <범위>` 로 받아 회의록을 `docs/work-items/<범위>/<날짜>-<단계>/` 에 둔다(같은 날 같은 단계는 `-2`·`-3`).
 10-2. **작업 kind** — 모든 Work item 은 `kind` 를 가진다 (`harness`·`feature`·`ui`·`bug`·`stage-*` 10, 정본 `contracts/work-kinds.json`). hook 이 제안하고 Plan 에 적어 사용자 확인 후 `plan present --kind` 로 넘긴다. 이 저장소 자체 작업은 `harness` 다.
 10-3. **제품 사슬** — `stage-*` kind 는 `docs/product/NN-*.md` 정본 하나를 만든다 (`contracts/chain-stages.json`). 항목은 `### F-003 ← REQ-002` 제목 + `| 항목 | 내용 |` 표. 앞 단계 승인·stale 없음이 진입 조건이고, `do ready` 의 `stage-document` 검사가 형식·부모·산출물·커버리지·예산·범위를 본다. `report finalize` 가 정본을 approved 로 표시한다. stale 해소는 재승인 또는 사용자의 `/vais 변경 없음 확인: <항목> ← <부모>` 뿐이다. **범위 절**: 항목형 단계 8개(01·02·03·04·06·07·08·10)의 항목은 `## 범위: <이름>` 절 아래에만 둔다(01 은 절 첫머리에 `문제:`·`목표:` 한 줄씩, 제품 절 `## 대상 사용자`·`## 제외` 는 위에 한 번). 작업은 자기 범위(= Feature)의 절만 쓴다 — 절이 없으면 문서 끝에 만들고, 새 번호는 `stage status` 의 `nextIds` 부터, 다른 범위의 항목은 한 글자도 바꾸지 않는다. 커버리지는 범위 안에서 본다. 05·09 는 절이 없다.
 10-4. **장부와 노트** — 승인·거절·QA FAIL·잔여 제한은 runtime 이 `.vais/v2/ledger.jsonl` 에 자동으로 남긴다(append-only, 손으로 쓰지 않음). Design 의 `## 결정` 불릿은 승인 때 decision 으로 기록되므로 결정은 그 절에 적는다. `docs/product/{README,roadmap,decisions}.md` 는 Report 마다 재생성되며 `roadmap.md` 의 `<!-- vais:user -->` 표식 사이만 손으로 고칠 수 있다. 세션 첫 줄의 브리핑과 Stop 잠금 사유는 그대로 사용자에게 보인다. Stop 이 턴을 막으면 해당 transaction·handoff 로 기록한 뒤 끝낸다.
@@ -74,17 +75,19 @@ vais-claude-code/
 11. **ID** — `REQ-001`, `TC-001` 3자리. Design REQ 집합 = Plan REQ 집합, Review TC 집합 = Design TC 집합.
 12. **문서 예산** — 단계 문서 byte 한도. 기본값(README "문서 예산" 표, `lib/workflow/v2/config.js`)은 compact / standard / extended × plan·design·do·review·report 와 stage 단계 문서용 한 줄이며, 프로젝트는 `vais.config.json > documentBudgets.{규모}.{단계}` 로 칸 단위로 덮어쓴다(잘못된 칸은 무시, `/vais doctor` 가 알림). 초과하면 present 가 "① 본문 줄이기 ② `--scale` 올리기(extended 는 `budget_exception` 예외 승인) ③ 설정 올리기" 를 안내한다. 이전 단계 문장(80자 이상) 복사 금지.
 13. **check id** — Tool 7종 `test, e2e, build, lint, plugin-validator, dependency-scan, secret-scan` + 내장 `stage-document`(단계 kind), `screen-capture`(ui kind), 예약 `screenshot-compare`.
-14. **Bash** — 한 번에 한 명령. `&&`, `|`, `;`, 리다이렉션, `$( )` 금지. 읽기는 Read/Grep 우선.
+14. **Bash** — 합성 명령은 조각마다 판정된다(`lib/workflow/v2/shell-policy.js`). `|`·`&&`·`||`·`;`·줄바꿈·`$( )`·백틱으로 나뉜 조각이 전부 읽기·검사·공개 runtime 명령이면 허용, 한 조각이라도 미분류면 전체 거부(사유에 조각 표시). `>`·`>>` 는 대상이 write scope 나 scratchpad 안일 때만, scratchpad 의 `node <스크립트>` 는 인가가 있을 때 검사 명령으로 허용. 리다이렉션·`cd`·스크립트 대상은 글자 그대로의 경로여야 하며 `~`·`$`·백틱·명령 치환·글롭·brace 가 든 대상과 인자 없는 `cd`·`cd -` 는 거부. `node` 스크립트는 플래그 없이 첫 인자가 scratchpad 경로일 때만 검사 명령. 검사 명령(`npm test`·`npm run lint/regression`·`node --test`·`npx eslint`)은 프로젝트 루트에서만 돌고 `--` 전달 인자와 코드를 읽는 플래그를 받지 않는다(eslint 는 경로만, `node --test` 는 `tests/` 아래 경로와 이름형 플래그만). 따옴표 밖의 역슬래시·brace 는 명령 전체를 거부한다. ANSI-C `$'…'`·로케일 `$"…"` 따옴표, 백그라운드 `&`, 서브셸 `( )`, 프로세스 치환, heredoc `<<`, `>|`, 닫히지 않은 따옴표는 거부. `rm -r/-f`, `git push --force`, `--no-verify`, `sudo`, `eval`, `xargs`, `env`, `source` 는 명시 목록으로 항상 거부. 읽기는 Read/Grep 우선.
 15. **위험 명령 금지** — `rm -rf`, `git push --force`, `git commit --no-verify`. 민감 정보는 환경 변수로만.
 16. **사용자 명령** — `/vais 상태`·`설명`·`제안`·`기록 보기`·`doctor` 는 읽기 전용이며 hook 이 지정한 CLI(`status`·`explain`·`propose`·`ledger list`·`doctor`)를 실행해 결과 문장을 그대로 보인다. `/vais 저장`·`되돌리기`·`기록`·`정리` 는 두 단계: 첫 명령은 제안만, 사용자가 확인 문구(`/vais 저장 확인`, `/vais 되돌리기 확인: <대상>`, `/vais 기록 <종류> <내용>`, `/vais 정리 확인`)를 직접 치면 runtime 이 토큰을 발급하고 `save commit`·`revert commit`·`ledger add`·`migrate commit` 이 실행된다. AI 가 `git commit` 을 직접 치거나 확인 문구를 대신 쓰지 않는다. push 는 사용자가 한다. `정리`(`migrate propose --scope X` → `migrate commit`)는 4.3.0 이전 구조를 범위 하나로 옮기며, 진행 중·paused 작업, 다른 세션 lease, 저장 안 된 변경, 정본·chain-index 불일치가 있으면 거부하고 중간 실패는 되돌린다.
 17. **다이어그램** — 그림은 `skills/diagram/SKILL.md` 규칙(11종, HTML + 인라인 SVG 한 파일)으로만 그린다. `/vais diagram <요청>` 은 그 턴의 write scope 에 `docs/diagrams/**`(`vais.config.json > diagrams.dir`)를 넣고 Work item 상태는 바꾸지 않는다. `/vais` 없는 "그려줘" 는 저장하지 않고 `/vais diagram` 을 안내한다. 3단계 화면 정의서의 흐름도 안은 `02-design/options/N/flow.html` + `screens capture` PNG 로 보이고, Do 의 흐름 파일은 `.html`(권장, `do ready` 가 PNG 렌더) 또는 `.mmd`. SVG·PNG 내보내기는 요청 시 `diagram export --file … --svg --png` 한 번. Python·Playwright 는 쓰지 않는다.
-18. **코드 한도는 지시문에 그대로** — runtime 이 거부하는 한도는 hook 지시문에 같은 숫자로 미리 보인다(복사가 아니라 상수 interpolation). Report `--outcome` 700자 이내 요약, `--limitation` 각 300자 한 줄, 넘기면 잘리지 않고 거부. QA handoff 숫자는 `assignment` 결과의 `guidance`. 한도를 넘겨 다시 시도하는 것은 낭비이므로 처음부터 안에 맞춘다.
+18. **코드 한도는 지시문에 그대로** — runtime 이 거부하는 한도는 hook 지시문에 같은 숫자로 미리 보인다(복사가 아니라 상수 interpolation). Report `--outcome` 700자 이내 요약, `--limitation` 각 300자 한 줄, 넘기면 잘리지 않고 거부. QA handoff 숫자는 `assignment` 결과의 `guidance`. 단계 문서의 필수 절 이름과 규모별 안 한도도 지시문에 보인다(`describeRequiredSections`). 한도를 넘겨 다시 시도하는 것은 낭비이므로 처음부터 안에 맞춘다.
+19. **형식 보정과 경고** — 뜻이 명확한 ID 형식 오류(하이픈 누락·밑줄·한두 자리·소문자 접두사)는 present 가 `REQ-001` 형으로 고쳐 저장하고 보정 내역을 CLI 출력 `corrections` 와 `evidence/identifier-normalization.json` 에 남긴다. 접미 글자·네 자리 숫자는 계속 거부. Review 가 Design 에 없는 TC 를 더하면 check `warnings` 로 통과하고, Design 의 TC 를 빠뜨리면 거부. 본문에 잘못된 형식을 "예시" 로 적어도 같은 규칙이 적용되므로 예시는 말로 쓴다.
+20. **인가는 휴지 시간** — `authorizationTtlMs` 는 만료가 아니라 휴지 시간이다. 같은 세션이 같은 current·active Work item 을 같은 phase·같은 write scope 로 계속 다루면 hook·transaction 이 만료된 인가를 되살린다(`authorization-continuity.js`). Work item 없는 인가(요청 시작·기록·저장 토큰)만 TTL 로 끝난다. 여러 줄로 붙여 넣은 `/vais 기록`·`저장 확인:` 문구는 hook 이 한 줄로 정규화해 토큰과 명령이 어긋나지 않는다.
 
 ## mode 와 비상 스위치
 
 - `enforce` (정본) / `disabled`. 대소문자·공백은 무시된다. **그 밖의 값과 읽기 실패는 enforce 로 취급(닫힘)** 되고 매 프롬프트 첫 줄에 `⚠ VAIS 하네스 경고: …` 가 주입된다. 경고를 보면 첫 줄에 그대로 표시하고 `/vais doctor` 를 안내한다.
 - `disabled` 또는 환경변수 `VAIS_HARNESS_OFF=1` 이면 하네스가 꺼진다. 첫 줄에 `[VAIS · 하네스 비활성]` 을 쓰고 승인·범위·기록이 강제되지 않음을 알린다. 이 상태는 **하네스 자체를 고칠 때만** 쓴다. 끝나면 되돌린다.
-- 읽기 전용 명령(`git -C … status/diff/log/show`, `ls`, `cat`, `wc`, `node --version`)과 Claude scratchpad 쓰기는 authorization 없이 허용된다. 그 밖의 쓰기는 write scope 안에서만.
+- 읽기 전용 명령(`rg`·`grep`·`find`·`ls`·`pwd`·`cat`·`head`·`tail`·`wc`·`stat`·`which`, `git -C … status/diff/log/show/rev-parse/ls-files`, `sed -n Np`, `node --version`)과 그 합성(`cat a | grep b`, `git status; git diff`), Claude scratchpad 쓰기·리다이렉션은 authorization 없이 허용된다. 목록 밖의 도구(`echo`·`sort`·`cut`·`tee`·`awk` …)는 읽기 명령이 아니며, 명령 단어는 역슬래시·따옴표·`$`·brace 없는 맨 식별자여야 한다. 그 밖의 쓰기는 write scope 안에서만.
 
 ## 자기 수정 시 주의
 

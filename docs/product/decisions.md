@@ -1,9 +1,26 @@
 # 제품 노트 — 왜
 
-> 자동 생성 (`.vais/v2/ledger.jsonl` 149건). 결정·피드백·취향·부채·리스크·이정표 순.
+> 자동 생성 (`.vais/v2/ledger.jsonl` 183건). 결정·피드백·취향·부채·리스크·이정표 순.
 
-## 결정 (58)
+## 결정 (75)
 
+- 2026-09-29 09:57 · WI-2026-09-29-unattended-chain · REQ-003 / TC-003: 검사 명령은 `--` 뒤 전달 인자를 받지 않고(`npm test -- …`·`npm run lint -- …` 거부), `npx eslint` 는 `-` 로 시작하는 인자를 하나도 받지 않는다(경로만). `node --test` 는 경로 인자만. — Design revision 1 에서 확정
+- 2026-09-29 09:57 · WI-2026-09-29-unattended-chain · TC-003 허용 예를 목록에 맞게 바꾸고(`cut`·`tr`·`echo` → `cat`·`head`·`wc`·`git`), 거부 예에 `tr\uncate -s0 src/x.js`, `tr{u,}ncate -s0 src/x.js`, `comm\and rm -rf /`, `"cat" a`, `c\at a`, `npx eslint -f /x/f.js src`, `npm run lint -- -c evil.js`, `npm test -- --x`, `rg --hostname-bin=touch x` 를 넣는다. — Design revision 1 에서 확정
+- 2026-09-29 09:57 · WI-2026-09-29-unattended-chain · 인가 TTL 은 "휴지 시간" 이다. 세션·Work item·phase·write scope 가 일치하는 활동은 만료 뒤에도 인가를 되살리며, Work item 없는 인가(요청 시작·기록 토큰)만 TTL 로 끝난다. — Design revision 1 에서 확정
+- 2026-09-29 09:57 · WI-2026-09-29-unattended-chain · 뜻이 명확한 ID 형식 오류(하이픈 누락·자릿수 부족)는 runtime 이 고쳐 저장하고 보정 내역을 보인다. 뜻이 바뀌는 오류(접미·4자리)는 계속 거부한다. — Design revision 1 에서 확정
+- 2026-09-29 09:57 · WI-2026-09-29-unattended-chain · Review 가 Design 에 없는 TC 를 더하는 것은 경고로 허용하고, Design 의 TC 를 빠뜨리는 것만 거부한다. — Design revision 1 에서 확정
+- 2026-09-29 09:57 · WI-2026-09-29-unattended-chain · 셸 정책은 합성 문자열 일괄 거부에서 조각 판정으로 바꾼다. 쓰기는 리다이렉션 대상 경로로 판정하고, 파괴 명령은 명시 목록으로 거부한다. — Design revision 1 에서 확정
+- 2026-09-29 09:57 · WI-2026-09-29-unattended-chain · 사용자 문구는 등록 전에 한 줄로 정규화하고, Feature 이름은 세션 단위로 기억해 읽기 명령·확인 프롬프트가 지우지 않는다. — Design revision 1 에서 확정
+- 2026-09-29 09:57 · WI-2026-09-29-unattended-chain · 범위 `unattended-chain` 은 U1(이 작업)·U2 로그인 fixture·U3 자동 진행·U4 문서 9개와 확인점 순서로 간다. 버전 4.4.0. — Design revision 1 에서 확정
+- 2026-09-29 09:57 · WI-2026-09-29-unattended-chain · REQ-003 / TC-003: 명령 단어 규칙. 조각의 첫 단어는 글자·숫자·`.`·`_`·`-` 만으로 된 맨 식별자여야 하고(`\`·따옴표·`$`·백틱·`{`·`}` 가 들어 있으면 거부), 읽기·검사 목록의 단어는 뒤에 공백이나 끝이 와야 한다(`\b` 대신 `(?:\s|$)`). — Design revision 1 에서 확정
+- 2026-09-29 09:57 · WI-2026-09-29-unattended-chain · REQ-003 / TC-003: 읽기 목록을 4.3.0 원래 목록(`rg`·`grep`·`find`·`ls`·`pwd`·`cat`·`head`·`tail`·`wc`·`stat`·`which`, git 읽기 부명령, `sed -n Np`, 안전한 `git branch`, `node --version`, doctor)으로 되돌린다. 회차 1~3 에서 더한 필터(`cut`·`tr`·`jq`·`diff`·`echo`·`printf`·`basename`·`dirname`·`realpath`·`readlink`·`date`·`true`·`false`·`md5sum`·`sha256sum`·`tac`·`nl`·`comm`·`column`·`du`·`df`)는 뺀다. `rg` 의 `--hostname-bin…` 을 위험 … — Design revision 1 에서 확정
+- 2026-09-29 08:28 · WI-2026-09-29-unattended-chain · 인가 TTL 은 "휴지 시간" 이다. 세션·Work item·phase·write scope 가 일치하는 활동은 만료 뒤에도 인가를 되살리며, Work item 없는 인가(요청 시작·기록 토큰)만 TTL 로 끝난다. — Design revision 1 에서 확정
+- 2026-09-29 08:28 · WI-2026-09-29-unattended-chain · 뜻이 명확한 ID 형식 오류(하이픈 누락·자릿수 부족)는 runtime 이 고쳐 저장하고 보정 내역을 보인다. 뜻이 바뀌는 오류(접미·4자리)는 계속 거부한다. — Design revision 1 에서 확정
+- 2026-09-29 08:28 · WI-2026-09-29-unattended-chain · Review 가 Design 에 없는 TC 를 더하는 것은 경고로 허용하고, Design 의 TC 를 빠뜨리는 것만 거부한다. — Design revision 1 에서 확정
+- 2026-09-29 08:28 · WI-2026-09-29-unattended-chain · 셸 정책은 합성 문자열 일괄 거부에서 조각 판정으로 바꾼다. 쓰기는 리다이렉션 대상 경로로 판정하고, 파괴 명령은 명시 목록으로 거부한다. — Design revision 1 에서 확정
+- 2026-09-29 08:28 · WI-2026-09-29-unattended-chain · 사용자 문구는 등록 전에 한 줄로 정규화하고, Feature 이름은 세션 단위로 기억해 읽기 명령·확인 프롬프트가 지우지 않는다. — Design revision 1 에서 확정
+- 2026-09-29 08:28 · WI-2026-09-29-unattended-chain · 범위 `unattended-chain` 은 U1(이 작업)·U2 로그인 fixture·U3 자동 진행·U4 문서 9개와 확인점 순서로 간다. 버전 4.4.0. — Design revision 1 에서 확정
+- 2026-09-29 08:07 · — · 플러그인 다음 방향: PRD 만 사용자와 대화로 만들고, 설계 문서 8개(기능 정의서·화면 설계서·와이어프레임·디자인·API 규약·시스템 아키텍처·SRD·DB 정책)와 구현은 agent 가 사람 인가 없이 진행한다. 확인점은 ① PRD 승인 ② 설계 묶음+열린 결정 목록+화면 PNG ③ 완성 화면·검수 결과 셋뿐이다. 단계마다 작성 agent 와 검수 agent 를 분리하고 검수는 PRD 와 직접 대조한다. agent 가 정한 것은 잠정 결정으로 대안과 함께 장부에 남겨 확인점에서 보인다. 디자인 시스템과 시안은 디자인 하나로 합치고, 테스트 계획은 기능 정의서에서 자동 생성해 QA 검수표로만 쓴다. 멈추는 조건은 같은 단계 검수 2회 FAIL, PRD 모순, 범위 밖 쓰기, 토큰 예산 초과. — 사용자가 직접 기록
 - 2026-09-18 02:11 · WI-2026-09-18-harness-scope-sections · 이전된 옛 작업의 Work item ID 는 유지하고 폴더만 `<범위>/<id>` 로 옮긴다(장부·chain-index 참조 안정). 새 작업부터 `<날짜>-<단계>` 이름이다. — Design revision 1 에서 확정
 - 2026-09-18 02:11 · WI-2026-09-18-harness-scope-sections · 이전은 활성 작업 없음 · 다른 세션 lease 없음 · git 깨끗함일 때만 실행하고, 실패하면 아무것도 바꾸지 않는다. — Design revision 1 에서 확정
 - 2026-09-18 02:11 · WI-2026-09-18-harness-scope-sections · 이 저장소의 authorization 을 2시간으로 올린다(큰 Do 의 만료 재발 방지). 다른 프로젝트 기본값은 그대로. — Design revision 1 에서 확정
@@ -67,8 +84,18 @@
 
 - 2026-09-17 09:39 · WI-2026-09-17-harness-guidance-limits · 잠시만, 500자가 너무 적은건 아닌지 한 번만 더 논의하자 — Plan Gate 에서 사용자가 수정을 요청했다
 
-## 부채 (42)
+## 부채 (52)
 
+- 2026-09-30 06:57 · WI-2026-09-29-unattended-chain · 회차 3 QA 의 bash 실증이 루트에 빈 파일 trncate 를 남겼다. write scope 밖이라 사용자가 지운다. QA 의 프로젝트 안 실증 금지는 assignment 지침으로만 막았고 runtime 규칙은 아니다. — WI-2026-09-29-unattended-chain Report 의 잔여 제한
+- 2026-09-30 06:57 · WI-2026-09-29-unattended-chain · receipt 스키마가 범위 밖이라 corrections 는 receipt 파일이 아니라 CLI stdout 과 evidence/identifier-normalization.json 에만 있다. — WI-2026-09-29-unattended-chain Report 의 잔여 제한
+- 2026-09-30 06:57 · WI-2026-09-29-unattended-chain · 실행 중 플러그인은 4.3.0 캐시 사본이라 새 guard·hook 규칙의 실사용은 이 세션에서 겪지 못했다. push·버전 업데이트 뒤 다음 작업(U2)에서 실사용을 확인한다. — WI-2026-09-29-unattended-chain Report 의 잔여 제한
+- 2026-09-30 06:57 · WI-2026-09-29-unattended-chain · 셸 정책 오탐: -o·-u 포괄 거부와 원래 읽기 목록 때문에 grep -o, find … -o …, diff -u, echo, cut 같은 읽기 명령이 거부된다. Read·Grep 도구나 인가 아래 write scope 명령으로 대체한다. — WI-2026-09-29-unattended-chain Report 의 잔여 제한
+- 2026-09-30 06:57 · WI-2026-09-29-unattended-chain · 인가 아래 scratchpad node 스크립트는 설계대로 무엇이든 할 수 있다. 범위 밖 변경은 drift hook 과 Stop 잠금이 잡는다. — WI-2026-09-29-unattended-chain Report 의 잔여 제한
+- 2026-09-30 06:57 · WI-2026-09-29-unattended-chain · QA handoff 가 길이 한도로 네 회차 모두 재제출됐고, QA 도중 drift 가 끼어들면 열린 assignment 때문에 같은 회차의 새 QA 를 발급할 수 없었다(같은 agent 를 이어서 검증). 둘 다 U3 자동 진행에서 runtime 보정으로 고친다. — WI-2026-09-29-unattended-chain Report 의 잔여 제한
+- 2026-09-29 09:24 · WI-2026-09-29-unattended-chain · QA FAIL: independent-qa-handoff — 독립 QA 가 independent-qa-handoff 를 실패로 판정했다 (수정 회차 3)
+- 2026-09-29 09:11 · WI-2026-09-29-unattended-chain · QA FAIL: independent-qa-handoff — 독립 QA 가 independent-qa-handoff 를 실패로 판정했다 (수정 회차 2)
+- 2026-09-29 08:57 · WI-2026-09-29-unattended-chain · QA FAIL: independent-qa-handoff — 독립 QA 가 independent-qa-handoff 를 실패로 판정했다 (수정 회차 1)
+- 2026-09-29 08:08 · — · 자동 진행 전에 고칠 하네스 마찰 4개 (po_report 실측): ① 인가 30분 만료로 do ready 실패 4건 → Do·Review 진행 중 자동 연장 ② 문서 형식 거부 6건(ID 3자리·절 누락·TC 집합·안 개수) → runtime 이 보정하고 경고로 낮춤 ③ 로그인 뒤 화면이 기능 6개 중 0개 찍힘 → ui.run 에 역할별 로그인 fixture ④ 셸 합성 차단이 QA 검증(node 스크립트·파이프)을 막음 → 쓰기 경로 검사로 좁힘. 자동 구간의 검수 agent 가 실행을 못 하면 품질을 보장할 수 없어 이 넷이 선행이다. — 사용자가 직접 기록
 - 2026-09-18 03:37 · WI-2026-09-18-harness-scope-sections · 실제 po_report 복사본 이전은 write guard 로 Do·QA 에서 실증하지 못했고 같은 형태의 fixture 로 대체했다. 플러그인 4.3.0 업데이트 뒤 po_report 에서 '/vais 정리: 범위 member-management' 를 실제로 돌려 확인한다. — WI-2026-09-18-harness-scope-sections Report 의 잔여 제한
 - 2026-09-18 03:37 · WI-2026-09-18-harness-scope-sections · 테스트용 실패 주입 옵션 failAfter·beforeApply 가 commitScopeMigration 에 남아 있다(운영 경로에서는 비어 있음). 이전 후 doctor 결과와 범위 인덱스의 작업 순서는 미검증. — WI-2026-09-18-harness-scope-sections Report 의 잔여 제한
 - 2026-09-18 03:37 · WI-2026-09-18-harness-scope-sections · 옛 정본은 4.3.0 업데이트 뒤 '/vais 정리' 전까지 항목형 단계·기능 작업의 stage-document 검사가 그 명령을 안내하며 막는다(05·09 단계는 영향 없음). — WI-2026-09-18-harness-scope-sections Report 의 잔여 제한
@@ -112,14 +139,20 @@
 - 2026-09-16 09:08 · WI-2026-09-16-ui-loop · do/blocked(수정 상한) 에서 수정 문장은 적용되지 않고 확인·취소만 유효하다. blocked 경로는 단위 테스트로만 검증(장면 C 미포함) — WI-2026-09-16-ui-loop Report 의 잔여 제한
 - 2026-09-16 08:43 · WI-2026-09-16-ui-loop · QA FAIL: independent-qa-handoff — 독립 QA 가 independent-qa-handoff 를 실패로 판정했다 (수정 회차 1)
 
-## 리스크 (3)
+## 리스크 (4)
 
+- 2026-09-29 09:42 · WI-2026-09-29-unattended-chain · Stop 잠금 경고 (통과): 기록되지 않은 변경 1개: docs/work-items/unattended-chain/2026-09-29-unattended-chain/main.md — 같은 턴에서 두 번째 Stop — 차단 대신 기록
 - 2026-09-17 09:01 · WI-2026-09-17-harness-diagram-skill · Stop 잠금 경고 (통과): 기록되지 않은 변경 1개: docs/work-items/harness-diagram-skill/2026-09-17-harness-diagram-skill/main.md — 같은 턴에서 두 번째 Stop — 차단 대신 기록
 - 2026-09-17 08:53 · WI-2026-09-17-harness-diagram-skill · Stop 잠금 경고 (통과): 기록되지 않은 변경 1개: references/diagram-design/ — 같은 턴에서 두 번째 Stop — 차단 대신 기록
 - 2026-09-16 11:16 · WI-2026-09-16-feature-bug-kinds · Do 준비 미달 1회: test — readiness 검사가 실패했다
 
-## 이정표 (45)
+## 이정표 (50)
 
+- 2026-09-30 06:57 · WI-2026-09-29-unattended-chain · 작업 완료 — 자동 진행 전 마찰 제거 (unattended-chain U1) — Report 가 확정되어 동결됐다
+- 2026-09-30 06:57 · WI-2026-09-29-unattended-chain · 최종 승인 — 자동 진행 전 마찰 제거 (unattended-chain U1) — 독립 QA PASS 뒤 사용자가 결과를 승인했다
+- 2026-09-29 09:57 · WI-2026-09-29-unattended-chain · Design 승인 (revision 1) — 자동 진행 전 마찰 제거 (unattended-chain U1) — 사용자가 Design 을 승인했다
+- 2026-09-29 08:28 · WI-2026-09-29-unattended-chain · Design 승인 (revision 1) — 자동 진행 전 마찰 제거 (unattended-chain U1) — 사용자가 Design 을 승인했다
+- 2026-09-29 08:19 · WI-2026-09-29-unattended-chain · Plan 승인 (revision 1) — 자동 진행 전 마찰 제거 (unattended-chain U1) — 사용자가 Plan 을 승인했다
 - 2026-09-18 03:37 · WI-2026-09-18-harness-scope-sections · 작업 완료 — 범위로 묶는 정본과 회의록 — Report 가 확정되어 동결됐다
 - 2026-09-18 03:36 · WI-2026-09-18-harness-scope-sections · 최종 승인 — 범위로 묶는 정본과 회의록 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
 - 2026-09-18 02:11 · WI-2026-09-18-harness-scope-sections · Design 승인 (revision 1) — 범위로 묶는 정본과 회의록 — 사용자가 Design 을 승인했다
@@ -165,4 +198,8 @@
 - 2026-09-16 09:07 · WI-2026-09-16-ui-loop · 최종 승인 — UI 루프 · 화면 확인 정지점 · 스크린샷 · 취향 장부 — 독립 QA PASS 뒤 사용자가 결과를 승인했다
 - 2026-09-16 08:17 · WI-2026-09-16-ui-loop · Design 승인 (revision 1) — UI 루프 · 화면 확인 정지점 · 스크린샷 · 취향 장부 — 사용자가 Design 을 승인했다
 - 2026-09-16 08:11 · WI-2026-09-16-ui-loop · Plan 승인 (revision 1) — UI 루프 · 화면 확인 정지점 · 스크린샷 · 취향 장부 — 사용자가 Plan 을 승인했다
+
+## 메모 (1)
+
+- 2026-09-29 08:08 · — · po_report 구성원 관리 21시간 분석: 가장 큰 덩어리는 사용자 대기였고 QA FAIL 3건은 전부 진짜 결함(문서 간 모순 2, 대문자 아이디 1)이며 수정 회차는 7분이었다. 사슬은 값을 했으므로 유지하고 인가만 뺀다. 소요·병목은 장부 승인 시각이 아니라 work-item 폴더의 transactions/*.failure.json 과 handoffs/*.json 의 시각·내용으로 잰다. — 사용자가 직접 기록
 

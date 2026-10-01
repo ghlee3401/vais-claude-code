@@ -1,0 +1,18 @@
+{
+  "check": "document-budget",
+  "execution": "succeeded",
+  "verdict": "pass",
+  "required": true,
+  "scope": [
+    "docs/work-items/unattended-chain/2026-09-29-unattended-chain/03-do/main.md"
+  ],
+  "requirements": [
+    "REQ-009",
+    "REQ-026"
+  ],
+  "summary": "Authored Markdown 4861B is within the 5120B standard budget",
+  "findings": [],
+  "evidence": [
+    "docs/work-items/unattended-chain/2026-09-29-unattended-chain/03-do/main.md"
+  ]
+}
